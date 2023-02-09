@@ -5,7 +5,7 @@
 \margl1440\margr1440\vieww17940\viewh12280\viewkind0
 \pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
 
-\f0\fs24 \cf0 Instruction set foe the CDC8512\
+\f0\fs24 \cf0 Instruction set for the CDC8512\
 \
 SX3 A3      # Copy a register to another\
 SX3 42      # Set a register to an 8-bit constant (Base-10, single character or 0x hex)\
@@ -15,9 +15,9 @@ ADD X1, 42  # Add a constant to a register\
 SUB X3, 42  # Subtract a constant from a register\
 CMP X3, 42  # Compare a register to a constant and set comparison status\
 JP 0x12     # Jump to a label\
-JL 0x12     # Jump to the label if the previous comparison was "less than"\
 JE 0x12     # Jump to the label if the previous comparison was equal\
 JG 0x12     # Jump to the label if the previous comparison was "greater than"\
+JL 0x12     # Jump to the label if the previous comparison was "less than"\
 PS          # Print data area as zero-terminated character string on a single line\
 DI          # Dump Instruction area in hex 16 per line - stop after two successive zeros are encountered in an output line\
 DD          # Dump data area in hex 16 per line - stop after two successive zeros are encountered in an output line\
