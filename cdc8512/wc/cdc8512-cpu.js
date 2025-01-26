@@ -1,4 +1,5 @@
-import {html, css, LitElement} from 'https://cdn.jsdelivr.net/gh/lit/dist@2.4.0/core/lit-core.min.js';
+import {html, css, LitElement} from 'https://cdn.jsdelivr.net/gh/lit/dist@2.7.4/core/lit-core.min.js';
+// import {html, css, LitElement} from 'https://unpkg.com/lit-html@2.7.4/lit-core.js';
 import { msg } from 'https://cdn.jsdelivr.net/npm/@lit/localize@0.12.2/lit-localize.min.js';
 import { repeat } from 'https://unpkg.com/lit-html@2.7.4/directives/repeat.js';
 
@@ -45,6 +46,14 @@ export class CDC8512CPU extends LitElement {
     }
   }
 
+  toHex(value) {
+    return ('0000' + value.toString(16).toUpperCase()).slice(-2);
+  }
+
+  toBinary(value) {
+    return ('00000000' + value.toString(2).toUpperCase()).slice(-8);
+  }
+
   createRenderRoot() { return this;}
 
   render() {
@@ -54,24 +63,55 @@ export class CDC8512CPU extends LitElement {
             @click=${this.toggleRunning}>
           ${this.running ? msg("Stop") : msg("Start")}
         </button>
-        <b>Memory</b>
-        <ul>
-          ${repeat(
-            this.memory,
-            (word, index) => html`
-            <li>${index}: <input type="text" value="${word}" @input=${this.changeMemory(index)}></li>
-            `
-          )}
-        </ul>
-        <b>Instructions</b>
-        <ul>
+          <div class="container">
+
+              <div class="row">
+            <div class="col">
+        <p>Instructions</p>
+        <ul style="list-style-type: none; font-family: monospace;">
           ${repeat(
             this.instructions,
-            (word, index) => html`
-            <li>${index}: <input type="text" value="${word}" @input=${this.changeInstruction(index)}></li>
-            `
+            (word, index) => (index>=0 && index<=15) ? html`
+            <li>0x${this.toHex(index)}: <input type="text" size="8" value="${this.toBinary(word)}" @input=${this.changeInstruction(index)}></li>
+            ` : html``
           )}
         </ul>
+        </div>
+        <div class="col">
+        <p>Instructions</p>
+        <ul style="list-style-type: none; font-family: monospace;">
+          ${repeat(
+            this.instructions,
+            (word, index) => (index>=16 && index<=31) ? html`
+            <li>0x${this.toHex(index)}: <input type="text" size="8" value="${this.toBinary(word)}" @input=${this.changeInstruction(index)}></li>
+            ` : html``
+          )}
+        </ul>
+        </div>
+        <div class="col">
+        <p>Memory</p>
+        <ul style="list-style-type: none; font-family: monospace;">
+          ${repeat(
+            this.memory,
+            (word, index) => (index>=0 && index<=15) ? html`
+            <li>0x${this.toHex(index)}: <input type="text" size="3" value="${this.toHex(word)}" @input=${this.changeMemory(index)}></li>
+            ` : html``
+          )}
+        </ul>
+        </div>
+        <div class="col">
+        <p>Memory</p>
+        <ul style="list-style-type: none; font-family: monospace;">
+          ${repeat(
+            this.memory,
+            (word, index) => (index>=16 && index<=31) ? html`
+            <li>0x${this.toHex(index)}: <input type="text" size="3" value="${this.toHex(word)}" @input=${this.changeMemory(index)}></li>
+            ` : html``
+          )}
+        </ul>
+        </div>
+      </div>
+    </div>
     `;
   }
 }
