@@ -17,11 +17,14 @@ code {
 </style>
 
 <div id="container">
-<!--
 <div style="margin-left: 10px; float:right">
+<a href="https://online.dr-chuck.com/" target="_blank">
+<img src="arduino-2713093_1280.jpg"  width="400" height="225"/>
+</a>
+<!--
 <iframe width="400" height="225" src="https://www.youtube.com/embed/oxJQB4f2MMs?rel=0" frameborder="0" allowfullscreen></iframe>
-</div>
 -->
+</div>
 <h1>Computer Architecture for Everybody</h1>
 <p>
 <b>This web site is under construction.</b>

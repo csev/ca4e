@@ -11,7 +11,7 @@ $CFG->servicedesc = false;
 
 // Theme like CC4E
 $CFG->theme = array(
-    "primary" => "#336791", //default color for nav background, splash background, buttons, text of tool menu
+    "primary" => "#115D33", //default color for nav background, splash background, buttons, text of tool menu
     "secondary" => "#EEEEEE", // Nav text and nav item border color, background of tool menu
     "text" => "#111111", // Standard copy color
     "text-light" => "#5E5E5E", // A lighter version of the standard text color for elements like "small"
