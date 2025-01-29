@@ -7,6 +7,17 @@ use \Tsugi\UI\Output;
 require "top.php";
 require "nav.php";
 
+$seconds = time();
+$val = intdiv($seconds, 5);
+$photos = [
+    "images/arduino-2713093_1280.jpg",
+    "images/seven-segment-957235_1280.jpg",
+    "images/vishnu-mohanan-O68LT-zCYFg-unsplash.jpg",
+    "images/wirth_interview.png",
+    "images/cdc_6500_cpu_living_computer.png",
+    "images/cdc_6500_console_living_computer.png",
+];
+$photo = $photos[intdiv(time(), 1) % count($photos)];
 ?>
 
 <!-- Fix for smartphone screen responsiveness -->
@@ -19,7 +30,7 @@ code {
 <div id="container">
 <div style="margin-left: 10px; float:right">
 <a href="https://online.dr-chuck.com/" target="_blank">
-<img src="images/arduino-2713093_1280.jpg"  width="400" height="225"/>
+<img src="<?= $photo ?>"  width="400" height="225"/>
 </a>
 <!--
 <iframe width="400" height="225" src="https://www.youtube.com/embed/oxJQB4f2MMs?rel=0" frameborder="0" allowfullscreen></iframe>
