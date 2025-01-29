@@ -52,13 +52,17 @@ As the course is developed, you can see some of
 the sample content:
 <ul>
 <li>
-<a href="cdc8512/index.html"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator Prototype</a> (Work in progress)
-</li>
-<li>A lecture on a microprocessor that will be developed for the course
-<a href="lectures/CDC8512.pptx" target="_blank" class="text-primary">CDC8512 Microprocessor</a>.
+<a href="cdc8512/index.html"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator Prototype</a> (A UI Mockup - not working)
 </li>
 <li>
-<a href="https://www.youtube.com/playlist?list=PLa58EAvBOOSJDJoRNd8q8t3U0dgRAgZ1e" target="_blank" class="text-primary">A YouTube Playlist of the Development of the Course Content</a> (Please like and subscribe)</li>
+<a href="cdc8512/instructions.txt"  target="_blank" class="text-primary">CDC8512 Instruction Set Documentation</a>
+</li>
+<li>
+<a href="https://www.youtube.com/playlist?list=PLa58EAvBOOSJDJoRNd8q8t3U0dgRAgZ1e" target="_blank" class="text-primary">A YouTube Playlist of the Development of the Course Content</a> (Please like and subscribe)
+</li>
+<li>Draft lecture on the CDC8512 microprocessor
+<a href="lectures/CDC8512.pptx" target="_blank" class="text-primary">CDC8512 Microprocessor</a>.
+</li>
 <li>You also can view the course that is a pre-requisite for this course
 <a href="http://www.cc4e.com/" target="_blank" class="text-primary">C Programming Everybody</a>
 </li>
