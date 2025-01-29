@@ -29,9 +29,27 @@ code {
 
 <div id="container">
 <div style="margin-left: 10px; float:right">
-<a href="https://online.dr-chuck.com/" target="_blank">
-<img src="<?= $photo ?>"  width="400" height="225"/>
+<div id="carousel" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <?php foreach($photos as $index => $img): ?>
+        <div class="carousel-item item <?= ($index === intdiv(time(), 1) % count($photos)) ? 'active' : '' ?>">
+            <img class="d-block" src="<?= $img ?>"  width="400" height="225"/>
+        </div>
+    <?php endforeach; ?>
+  </div>
+
+<!-- Previous/Next controls -->
+<a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
+<span class="icon-prev" aria-hidden="true"></span>
+<span class="sr-only">Previous</span>
 </a>
+<a class="right carousel-control" href="#carousel" role="button" data-slide="next">
+<span class="icon-next" aria-hidden="true"></span>
+<span class="sr-only">Next</span>
+</a>
+
+
+</div>
 <!--
 <iframe width="400" height="225" src="https://www.youtube.com/embed/oxJQB4f2MMs?rel=0" frameborder="0" allowfullscreen></iframe>
 -->
@@ -80,4 +98,21 @@ unless otherwise indicated.
 </p>
 </div>
 <?php
-require "footer.php";
+
+$foot = '
+<p style="font-size: 75%; margin-top: 5em;">
+Copyright Creative Commons Attribution 3.0
+</p>';
+
+$OUTPUT->setAppFooter($foot);
+
+$OUTPUT->footerStart();
+?>
+<script>
+$(document).ready( function () {
+    $('#carousel').carousel();
+});
+</script>
+
+<?php
+$OUTPUT->footerEnd();
