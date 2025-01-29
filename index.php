@@ -37,12 +37,11 @@ is, and how compiled languages like C work.
 As the course is developed, you can see some of
 the sample content:
 <ul>
+<li>
+<a href="cdc8512/index.html"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator Prototype</a> (Work in progress)
 </li>
 <li>A lecture on a microprocessor that will be developed for the course
 <a href="lectures/CDC8512.pptx" target="_blank" class="text-primary">CDC8512 Microprocessor</a>.
-</li>
-<li>
-<a href="cdc8512/index.html"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator Prototype</a>
 </li>
 <li>
 <a href="https://www.youtube.com/playlist?list=PLa58EAvBOOSJDJoRNd8q8t3U0dgRAgZ1e" target="_blank" class="text-primary">A YouTube Playlist of the Development of the Course Content</a> (Please like and subscribe)</li>
