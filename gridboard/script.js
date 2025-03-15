@@ -949,9 +949,35 @@ function findClosestDot(x, y) {
 
 // Event listeners
 canvas.addEventListener('mousedown', (e) => {
+    // Only handle left clicks
+    if (e.button !== 0) return;
+    
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
+    
+    // First check if we clicked on a switch
+    let clickedSwitch = false;
+    lines.forEach(line => {
+        if (line.type === 'switch_no' || line.type === 'switch_nc') {
+            // Calculate switch center
+            const dx = line.end.x - line.start.x;
+            const dy = line.end.y - line.start.y;
+            const switchCenterX = line.start.x + dx/2;
+            const switchCenterY = line.start.y + dy/2;
+            
+            // Check if click is near switch
+            const clickDist = Math.sqrt((x - switchCenterX)**2 + (y - switchCenterY)**2);
+            if (clickDist < 20) { // Click detection radius
+                clickedSwitch = true;
+            }
+        }
+    });
+
+    // If we clicked a switch, don't handle transistor placement
+    if (clickedSwitch) {
+        return;
+    }
     
     if (componentSelect.value === 'transistor' && !currentTransistor) {
         // Start placing a transistor
@@ -995,19 +1021,31 @@ canvas.addEventListener('mousemove', (e) => {
     currentMousePos.x = e.clientX - rect.left;
     currentMousePos.y = e.clientY - rect.top;
     
+    // Only redraw if we're actually doing something
     if (placingTransistor) {
         currentTransistor = { 
             x: currentMousePos.x, 
             y: currentMousePos.y 
         };
         drawGrid();
-    } else if (isDragging) {
+    } else if (isDragging && (startDot || selectedTransistorPoint)) {
+        // Only draw dragging line if we have a valid start point
         drawGrid();
     }
 });
 
 // Modify the mouseup event listener
 canvas.addEventListener('mouseup', (e) => {
+    // Store current states before resetting
+    const wasDragging = isDragging;
+    const hadStartDot = startDot;
+    const hadTransistorPoint = selectedTransistorPoint;
+    
+    // Reset all dragging states immediately
+    isDragging = false;
+    startDot = null;
+    selectedTransistorPoint = null;
+
     if (placingTransistor) {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -1027,7 +1065,7 @@ canvas.addEventListener('mouseup', (e) => {
         return;
     }
     
-    if (isDragging) {
+    if (wasDragging) {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
@@ -1035,15 +1073,15 @@ canvas.addEventListener('mouseup', (e) => {
         const endDot = findClosestDot(x, y);
         
         // Handle connections between dots and transistor points
-        if (selectedTransistorPoint && endDot) {
+        if (hadTransistorPoint && endDot) {
             // Connect from transistor to dot
-            const transistor = transistors.get(selectedTransistorPoint.id);
+            const transistor = transistors.get(hadTransistorPoint.id);
             if (transistor) {
                 // Check if there's already a connection to this terminal
                 const existingLineIndex = lines.findIndex(line => 
                     line.transistorConnection &&
-                    line.transistorConnection.id === selectedTransistorPoint.id &&
-                    line.transistorConnection.type === selectedTransistorPoint.type
+                    line.transistorConnection.id === hadTransistorPoint.id &&
+                    line.transistorConnection.type === hadTransistorPoint.type
                 );
                 
                 // Remove existing connection if there is one
@@ -1052,20 +1090,24 @@ canvas.addEventListener('mouseup', (e) => {
                 }
                 
                 const newLine = {
-                    start: { x: selectedTransistorPoint.x, y: selectedTransistorPoint.y },
+                    start: { x: hadTransistorPoint.x, y: hadTransistorPoint.y },
                     end: endDot,
                     type: 'wire',
                     transistorConnection: {
-                        id: selectedTransistorPoint.id,
-                        type: selectedTransistorPoint.type
+                        id: hadTransistorPoint.id,
+                        type: hadTransistorPoint.type
                     }
                 };
                 lines.push(newLine);
-                transistor.connections[selectedTransistorPoint.type] = endDot;
+                transistor.connections[hadTransistorPoint.type] = endDot;
             }
-        } else if (startDot && endDot && startDot !== endDot) {
+            
+            // Rebuild all connections after modifying transistor connections
+            initializeConnections();
+            rebuildAllConnections();
+        } else if (hadStartDot && endDot && hadStartDot !== endDot) {
             // Original dot-to-dot connection logic
-            const startIndex = dots.indexOf(startDot);
+            const startIndex = dots.indexOf(hadStartDot);
             const endIndex = dots.indexOf(endDot);
             const startConnections = connections.get(startIndex);
             const endConnections = connections.get(endIndex);
@@ -1078,7 +1120,7 @@ canvas.addEventListener('mouseup', (e) => {
             const isShortCircuit = (hasStartPower && hasEndGround) || (hasStartGround && hasEndPower);
             
             const newLine = {
-                start: startDot,
+                start: hadStartDot,
                 end: endDot,
                 type: componentSelect.value
             };
@@ -1095,23 +1137,13 @@ canvas.addEventListener('mouseup', (e) => {
                 }, 1000);
             } else {
                 lines.push(newLine);
-                if (componentSelect.value === 'wire') {
-                    connectDots(dots.indexOf(startDot), dots.indexOf(endDot));
-                } else if (componentSelect.value.startsWith('switch_')) {
-                    // Initialize switch state when a new switch is added
-                    const switchId = getSwitchId(startDot, endDot);
-                    switches.set(switchId, { pressed: false });
-                    // For normally closed switches, connect the dots initially
-                    if (componentSelect.value === 'switch_nc') {
-                        connectDots(dots.indexOf(startDot), dots.indexOf(endDot));
-                    }
-                }
+                
+                // Reinitialize and rebuild all connections
+                initializeConnections();
+                rebuildAllConnections();
             }
         }
         
-        isDragging = false;
-        startDot = null;
-        selectedTransistorPoint = null;
         drawGrid();
     }
 });
@@ -1126,12 +1158,17 @@ canvas.addEventListener('click', (e) => {
     lines.forEach(line => {
         if (line.type === 'switch_no' || line.type === 'switch_nc') {
             const switchId = getSwitchId(line.start, line.end);
+            
+            // Initialize switch state if it doesn't exist
+            if (!switches.has(switchId)) {
+                switches.set(switchId, { pressed: false });
+            }
+            
             const switchState = switches.get(switchId);
             
             // Calculate switch center
             const dx = line.end.x - line.start.x;
             const dy = line.end.y - line.start.y;
-            const length = Math.sqrt(dx * dx + dy * dy);
             const switchCenterX = line.start.x + dx/2;
             const switchCenterY = line.start.y + dy/2;
             
@@ -1141,48 +1178,72 @@ canvas.addEventListener('click', (e) => {
                 // Toggle switch state
                 switchState.pressed = !switchState.pressed;
                 
-                // Update connections based on switch type and state
-                const startIndex = dots.indexOf(line.start);
-                const endIndex = dots.indexOf(line.end);
+                // Reinitialize all connections
+                initializeConnections();
                 
-                if (line.type === 'switch_no') {
-                    if (switchState.pressed) {
-                        connectDots(startIndex, endIndex);
-                    } else {
-                        // Disconnect dots (recreate connections)
-                        initializeConnections();
-                        lines.forEach(l => {
-                            if (l !== line && l.type === 'wire') {
-                                connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
-                            } else if (l !== line && l.type === 'switch_nc' && !switches.get(getSwitchId(l.start, l.end)).pressed) {
-                                connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
-                            } else if (l !== line && l.type === 'switch_no' && switches.get(getSwitchId(l.start, l.end)).pressed) {
-                                connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
-                            }
-                        });
+                // Rebuild all connections
+                lines.forEach(l => {
+                    if (l.type === 'wire') {
+                        connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
+                    } else if (l.type === 'switch_nc' && !switches.get(getSwitchId(l.start, l.end)).pressed) {
+                        connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
+                    } else if (l.type === 'switch_no' && switches.get(getSwitchId(l.start, l.end)).pressed) {
+                        connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
                     }
-                } else { // switch_nc
-                    if (switchState.pressed) {
-                        // Disconnect dots (recreate connections)
-                        initializeConnections();
-                        lines.forEach(l => {
-                            if (l !== line && l.type === 'wire') {
-                                connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
-                            } else if (l !== line && l.type === 'switch_nc' && !switches.get(getSwitchId(l.start, l.end)).pressed) {
-                                connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
-                            } else if (l !== line && l.type === 'switch_no' && switches.get(getSwitchId(l.start, l.end)).pressed) {
-                                connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
-                            }
-                        });
-                    } else {
-                        connectDots(startIndex, endIndex);
-                    }
-                }
+                });
                 
                 drawGrid();
+                return; // Exit after handling the clicked switch
             }
         }
     });
+});
+
+// Prevent default context menu and handle deletion
+canvas.addEventListener('contextmenu', (e) => {
+    e.preventDefault();
+    
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    // Check for transistors first
+    for (const [id, transistor] of transistors.entries()) {
+        const distance = Math.sqrt((x - transistor.x) ** 2 + (y - transistor.y) ** 2);
+        if (distance < 30) { // Detection radius for transistor
+            // Delete all wires connected to this transistor
+            lines = lines.filter(line => !line.transistorConnection || 
+                line.transistorConnection.id !== id);
+            // Delete the transistor
+            transistors.delete(id);
+            // Reinitialize connections after deleting
+            initializeConnections();
+            rebuildAllConnections();
+            drawGrid();
+            return;
+        }
+    }
+    
+    // Check for other components (wires, resistors, LEDs, switches)
+    for (let i = lines.length - 1; i >= 0; i--) {
+        const line = lines[i];
+        // Calculate center point of the component
+        const centerX = (line.start.x + line.end.x) / 2;
+        const centerY = (line.start.y + line.end.y) / 2;
+        
+        // Calculate distance from click to component center
+        const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+        
+        // If click is close enough to component, delete it
+        if (distance < 20) { // Detection radius for components
+            lines.splice(i, 1);
+            // Reinitialize connections after deleting a component
+            initializeConnections();
+            rebuildAllConnections();
+            drawGrid();
+            break;
+        }
+    }
 });
 
 function getPointLabel(dot) {
@@ -1360,4 +1421,23 @@ function drawTransistor(x, y, isPlacing = false) {
         base: { x: x - size/2, y: y },
         emitter: { x: x, y: y + size/2 }
     };
+}
+
+// Add this helper function to rebuild all connections
+function rebuildAllConnections() {
+    // First handle all wire connections
+    lines.forEach(line => {
+        if (line.type === 'wire') {
+            connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
+        }
+    });
+    
+    // Then handle all switch connections
+    lines.forEach(line => {
+        if (line.type === 'switch_nc' && !switches.get(getSwitchId(line.start, line.end))?.pressed) {
+            connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
+        } else if (line.type === 'switch_no' && switches.get(getSwitchId(line.start, line.end))?.pressed) {
+            connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
+        }
+    });
 } 
