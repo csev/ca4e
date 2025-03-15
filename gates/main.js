@@ -446,7 +446,7 @@ class CircuitEditor {
             });
         });
 
-        // Process gates in order: INPUT -> NOT -> OUTPUT
+        // Process gates in order: INPUT -> LOGIC GATES -> OUTPUT
         // First, process INPUT gates
         this.gates.forEach(gate => {
             if (gate.type === 'INPUT') {
@@ -459,17 +459,25 @@ class CircuitEditor {
             wire.end.sourceValue = wire.start.sourceValue;
         });
 
-        // Process NOT gates
-        this.gates.forEach(gate => {
-            if (gate.type === 'NOT') {
-                gate.evaluate();
-            }
-        });
+        // Process all logic gates
+        let changed;
+        do {
+            changed = false;
+            this.gates.forEach(gate => {
+                if (gate.type !== 'INPUT' && gate.type !== 'OUTPUT') {
+                    const oldValue = gate.outputNodes[0]?.sourceValue;
+                    const newValue = gate.evaluate();
+                    if (oldValue !== newValue) {
+                        changed = true;
+                    }
+                }
+            });
 
-        // Propagate values again after NOT gates
-        this.wires.forEach(wire => {
-            wire.end.sourceValue = wire.start.sourceValue;
-        });
+            // Propagate values through wires after each iteration
+            this.wires.forEach(wire => {
+                wire.end.sourceValue = wire.start.sourceValue;
+            });
+        } while (changed); // Continue until no more changes occur
 
         // Update display
         this.render();

@@ -160,33 +160,30 @@ class Gate {
     }
 
     drawAND(ctx) {
-        ctx.beginPath();
-        ctx.moveTo(this.x - 20, this.y - 20);
-        ctx.lineTo(this.x, this.y - 20);
-        ctx.arc(this.x, this.y, 20, -Math.PI/2, Math.PI/2);
-        ctx.lineTo(this.x - 20, this.y + 20);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
-        
-        // Add AND label
-        ctx.fillStyle = '#000';
-        ctx.font = '12px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('AND', this.x, this.y);
+        const inputValues = this.inputNodes.map(node => node.sourceValue);
+        const hasAllInputs = inputValues.every(val => val !== undefined);
+        const outputValue = this.evaluate();
+
+        this.drawGate(ctx, (ctx) => {
+            ctx.moveTo(this.x - 20, this.y - 20);
+            ctx.lineTo(this.x, this.y - 20);
+            ctx.arc(this.x, this.y, 20, -Math.PI/2, Math.PI/2);
+            ctx.lineTo(this.x - 20, this.y + 20);
+            ctx.closePath();
+        }, outputValue, hasAllInputs);
     }
 
     drawOR(ctx) {
-        ctx.beginPath();
-        ctx.moveTo(this.x - 20, this.y - 20);
-        ctx.quadraticCurveTo(this.x, this.y - 20, this.x + 20, this.y);
-        ctx.quadraticCurveTo(this.x, this.y + 20, this.x - 20, this.y + 20);
-        ctx.quadraticCurveTo(this.x - 10, this.y, this.x - 20, this.y - 20);
-        ctx.fill();
-        ctx.stroke();
-        
-        ctx.fillStyle = '#000';
-        ctx.fillText('OR', this.x, this.y);
+        const inputValues = this.inputNodes.map(node => node.sourceValue);
+        const hasAllInputs = inputValues.every(val => val !== undefined);
+        const outputValue = this.evaluate();
+
+        this.drawGate(ctx, (ctx) => {
+            ctx.moveTo(this.x - 20, this.y - 20);
+            ctx.quadraticCurveTo(this.x, this.y - 20, this.x + 20, this.y);
+            ctx.quadraticCurveTo(this.x, this.y + 20, this.x - 20, this.y + 20);
+            ctx.quadraticCurveTo(this.x - 10, this.y, this.x - 20, this.y - 20);
+        }, outputValue, hasAllInputs);
     }
 
     drawNOT(ctx) {
@@ -235,39 +232,59 @@ class Gate {
     }
 
     drawNAND(ctx) {
-        this.drawAND(ctx);
-        // Add the NOT circle
+        const inputValues = this.inputNodes.map(node => node.sourceValue);
+        const hasAllInputs = inputValues.every(val => val !== undefined);
+        const outputValue = this.evaluate();
+
+        this.drawGate(ctx, (ctx) => {
+            ctx.moveTo(this.x - 20, this.y - 20);
+            ctx.lineTo(this.x, this.y - 20);
+            ctx.arc(this.x, this.y, 20, -Math.PI/2, Math.PI/2);
+            ctx.lineTo(this.x - 20, this.y + 20);
+            ctx.closePath();
+        }, outputValue, hasAllInputs);
+
+        // Add NOT circle
         ctx.beginPath();
         ctx.arc(this.x + 25, this.y, 5, 0, Math.PI * 2);
         ctx.stroke();
-        
-        ctx.fillStyle = '#000';
-        ctx.fillText('NAND', this.x, this.y);
     }
 
     drawNOR(ctx) {
-        this.drawOR(ctx);
-        // Add the NOT circle
+        const inputValues = this.inputNodes.map(node => node.sourceValue);
+        const hasAllInputs = inputValues.every(val => val !== undefined);
+        const outputValue = this.evaluate();
+
+        this.drawGate(ctx, (ctx) => {
+            ctx.moveTo(this.x - 20, this.y - 20);
+            ctx.quadraticCurveTo(this.x, this.y - 20, this.x + 20, this.y);
+            ctx.quadraticCurveTo(this.x, this.y + 20, this.x - 20, this.y + 20);
+            ctx.quadraticCurveTo(this.x - 10, this.y, this.x - 20, this.y - 20);
+        }, outputValue, hasAllInputs);
+
+        // Add NOT circle
         ctx.beginPath();
         ctx.arc(this.x + 25, this.y, 5, 0, Math.PI * 2);
         ctx.stroke();
-        
-        ctx.fillStyle = '#000';
-        ctx.fillText('NOR', this.x, this.y);
     }
 
     drawXOR(ctx) {
-        // Draw OR gate
-        this.drawOR(ctx);
-        
+        const inputValues = this.inputNodes.map(node => node.sourceValue);
+        const hasAllInputs = inputValues.every(val => val !== undefined);
+        const outputValue = this.evaluate();
+
+        this.drawGate(ctx, (ctx) => {
+            ctx.moveTo(this.x - 20, this.y - 20);
+            ctx.quadraticCurveTo(this.x, this.y - 20, this.x + 20, this.y);
+            ctx.quadraticCurveTo(this.x, this.y + 20, this.x - 20, this.y + 20);
+            ctx.quadraticCurveTo(this.x - 10, this.y, this.x - 20, this.y - 20);
+        }, outputValue, hasAllInputs);
+
         // Add extra curve for XOR
         ctx.beginPath();
         ctx.moveTo(this.x - 25, this.y - 20);
         ctx.quadraticCurveTo(this.x - 15, this.y, this.x - 25, this.y + 20);
         ctx.stroke();
-        
-        ctx.fillStyle = '#000';
-        ctx.fillText('XOR', this.x, this.y);
     }
 
     drawIO(ctx) {
@@ -379,26 +396,67 @@ class Gate {
 
     // Add method to evaluate gate output
     evaluate() {
-        if (this.type === 'NOT') {
-            const inputNode = this.inputNodes[0];
-            if (inputNode && inputNode.sourceValue !== undefined) {
-                const outputValue = !inputNode.sourceValue;
-                if (this.outputNodes[0]) {
-                    this.outputNodes[0].sourceValue = outputValue;
-                }
-                return outputValue;
-            }
-            // If no input, set output to undefined
-            if (this.outputNodes[0]) {
-                this.outputNodes[0].sourceValue = undefined;
-            }
-            return undefined;
-        } else if (this.type === 'INPUT') {
-            if (this.outputNodes[0]) {
-                this.outputNodes[0].sourceValue = this.state;
-            }
-            return this.state;
+        // Get input values
+        const inputValues = this.inputNodes.map(node => node.sourceValue);
+        const hasAllInputs = inputValues.every(val => val !== undefined);
+        let outputValue;
+
+        switch(this.type) {
+            case 'AND':
+                outputValue = hasAllInputs ? inputValues.every(val => val === true) : undefined;
+                break;
+            case 'OR':
+                outputValue = hasAllInputs ? inputValues.some(val => val === true) : undefined;
+                break;
+            case 'NOT':
+                outputValue = inputValues[0] !== undefined ? !inputValues[0] : undefined;
+                break;
+            case 'NAND':
+                outputValue = hasAllInputs ? !inputValues.every(val => val === true) : undefined;
+                break;
+            case 'NOR':
+                outputValue = hasAllInputs ? !inputValues.some(val => val === true) : undefined;
+                break;
+            case 'XOR':
+                outputValue = hasAllInputs ? inputValues.reduce((a, b) => a !== b) : undefined;
+                break;
+            case 'INPUT':
+                outputValue = this.state;
+                break;
         }
-        return undefined;
+
+        // Update output node value
+        if (this.outputNodes[0]) {
+            this.outputNodes[0].sourceValue = outputValue;
+        }
+        return outputValue;
+    }
+
+    drawGate(ctx, shape, outputValue, hasAllInputs) {
+        // Set fill color based on output state
+        if (!hasAllInputs) {
+            ctx.fillStyle = '#888888'; // Gray for unknown/unconnected
+        } else {
+            ctx.fillStyle = outputValue ? '#4CAF50' : '#f44336'; // Green for 1, Red for 0
+        }
+        
+        // Draw gate shape
+        ctx.beginPath();
+        shape(ctx); // Call the provided shape drawing function
+        ctx.fill();
+        ctx.strokeStyle = '#000';
+        ctx.stroke();
+
+        // Draw state value in center
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(hasAllInputs ? (outputValue ? '1' : '0') : '?', this.x, this.y);
+
+        // Draw gate label
+        ctx.fillStyle = '#000';
+        ctx.font = '12px Arial';
+        ctx.fillText(this.type, this.x, this.y - 25);
     }
 } 
