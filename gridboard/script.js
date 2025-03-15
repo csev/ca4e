@@ -362,15 +362,22 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
     const ledCenterY = ledStartY + Math.sin(angle) * radius;
     
     // Check if LED is properly connected through the breadboard
-    const startIndex = dots.indexOf(startDot);
-    const endIndex = dots.indexOf(endDot);
-    const startConnections = connections.get(startIndex);
-    const endConnections = connections.get(endIndex);
-    
-    const hasStartPower = Array.from(startConnections).some(i => dots[i].voltage === 9);
-    const hasEndGround = Array.from(endConnections).some(i => dots[i].voltage === 0);
-    
-    const isProperlyConnected = hasStartPower && hasEndGround;
+    let isProperlyConnected = false;
+    if (startDot && endDot) {
+        const startIndex = dots.indexOf(startDot);
+        const endIndex = dots.indexOf(endDot);
+        
+        if (startIndex !== -1 && endIndex !== -1) {
+            const startConnections = connections.get(startIndex);
+            const endConnections = connections.get(endIndex);
+            
+            if (startConnections && endConnections) {
+                const hasStartPower = Array.from(startConnections).some(i => dots[i].voltage === 9);
+                const hasEndGround = Array.from(endConnections).some(i => dots[i].voltage === 0);
+                isProperlyConnected = hasStartPower && hasEndGround;
+            }
+        }
+    }
     
     // Draw connecting wires
     ctx.beginPath();
@@ -520,17 +527,20 @@ function animateWireMelting(wireIndex) {
     animate();
 }
 
-// Modify the drawWire function to always draw the wire
+// Modify the drawWire function to handle undefined dots and connections safely
 function drawWire(startX, startY, endX, endY, startDot, endDot, isCurrentWire = false) {
-    const startIndex = dots.indexOf(startDot);
-    const endIndex = dots.indexOf(endDot);
-    const startConnections = connections.get(startIndex);
-    const endConnections = connections.get(endIndex);
+    // Handle case where dots might be undefined
+    let startIndex = startDot ? dots.indexOf(startDot) : -1;
+    let endIndex = endDot ? dots.indexOf(endDot) : -1;
     
-    const hasStartPower = Array.from(startConnections).some(i => dots[i].voltage === 9);
-    const hasStartGround = Array.from(startConnections).some(i => dots[i].voltage === 0);
-    const hasEndPower = Array.from(endConnections).some(i => dots[i].voltage === 9);
-    const hasEndGround = Array.from(endConnections).some(i => dots[i].voltage === 0);
+    let startConnections = startIndex !== -1 ? connections.get(startIndex) : new Set();
+    let endConnections = endIndex !== -1 ? connections.get(endIndex) : new Set();
+    
+    // Default to no power/ground if connections aren't available
+    const hasStartPower = startConnections ? Array.from(startConnections).some(i => dots[i].voltage === 9) : false;
+    const hasStartGround = startConnections ? Array.from(startConnections).some(i => dots[i].voltage === 0) : false;
+    const hasEndPower = endConnections ? Array.from(endConnections).some(i => dots[i].voltage === 9) : false;
+    const hasEndGround = endConnections ? Array.from(endConnections).some(i => dots[i].voltage === 0) : false;
     
     // Check for direct power to ground connection
     const isShortCircuit = (hasStartPower && hasEndGround) || (hasStartGround && hasEndPower);
@@ -1191,14 +1201,25 @@ canvas.addEventListener('click', (e) => {
                 
                 // Rebuild all connections
                 lines.forEach(l => {
-                    if (l.type === 'wire') {
-                        connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
-                    } else if (l.type === 'switch_nc' && !switches.get(getSwitchId(l.start, l.end)).pressed) {
-                        connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
-                    } else if (l.type === 'switch_no' && switches.get(getSwitchId(l.start, l.end)).pressed) {
-                        connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
+                    if (!l.transistorConnection) {  // Skip transistor connections
+                        const startIndex = dots.indexOf(l.start);
+                        const endIndex = dots.indexOf(l.end);
+                        
+                        // Only connect if both dots exist
+                        if (startIndex !== -1 && endIndex !== -1) {
+                            if (l.type === 'wire') {
+                                connectDots(startIndex, endIndex);
+                            } else if (l.type === 'switch_nc' && !switches.get(getSwitchId(l.start, l.end))?.pressed) {
+                                connectDots(startIndex, endIndex);
+                            } else if (l.type === 'switch_no' && switches.get(getSwitchId(l.start, l.end))?.pressed) {
+                                connectDots(startIndex, endIndex);
+                            }
+                        }
                     }
                 });
+                
+                // Handle transistor connections after regular connections are established
+                rebuildAllConnections();
                 
                 drawGrid();
                 return; // Exit after handling the clicked switch
@@ -1348,18 +1369,48 @@ function getDotVoltage(dot) {
     return null;
 }
 
+function getTransistorState(transistor) {
+    // Get voltages at each terminal
+    const collectorVoltage = transistor.connections.collector ? getDotVoltage(transistor.connections.collector) : null;
+    const baseVoltage = transistor.connections.base ? getDotVoltage(transistor.connections.base) : null;
+    const emitterVoltage = transistor.connections.emitter ? getDotVoltage(transistor.connections.emitter) : null;
+    
+    // Check if we have all necessary voltages
+    if (baseVoltage === null || emitterVoltage === null) {
+        return { conducting: false, baseEmitterVoltage: 0 };
+    }
+    
+    // Calculate base-emitter voltage
+    const vbe = baseVoltage - emitterVoltage;
+    
+    // Transistor conducts when Vbe > 0.7V
+    const conducting = vbe >= 0.7;
+    
+    return { conducting, baseEmitterVoltage: vbe };
+}
+
 function drawTransistor(x, y, isPlacing = false) {
     const size = 40; // Size of the transistor symbol
     const backgroundSize = size * 1.8; // Larger background to include labels
+    
+    // Get transistor instance if this isn't a new placement
+    let transistorState = { conducting: false, baseEmitterVoltage: 0 };
+    if (!isPlacing) {
+        const transistorId = Array.from(transistors.keys()).find(id => 
+            transistors.get(id).x === x && transistors.get(id).y === y);
+        if (transistorId) {
+            transistorState = getTransistorState(transistors.get(transistorId));
+        }
+    }
     
     // Save context
     ctx.save();
     ctx.translate(x, y);
     
-    // Draw large light green background circle
+    // Draw large background circle with color based on conduction state
     ctx.beginPath();
     ctx.arc(0, 0, backgroundSize/2, 0, Math.PI * 2);
-    ctx.fillStyle = '#e6ffe6';  // Light green color
+    ctx.fillStyle = transistorState.conducting ? '#e6ffe6' : '#ffe6e6';  // Green when conducting, red when off
     ctx.fill();
     
     // Draw transistor symbol circle
@@ -1430,6 +1481,14 @@ function drawTransistor(x, y, isPlacing = false) {
     ctx.font = '10px Arial';
     ctx.fillText('2N3904', 0, 0);
     
+    // Add conduction state and Vbe
+    ctx.font = '10px Arial';
+    ctx.fillStyle = '#000000';
+    if (!isPlacing) {
+        ctx.fillText(`Vbe: ${transistorState.baseEmitterVoltage.toFixed(1)}V`, 0, size/2 + 15);
+        ctx.fillText(transistorState.conducting ? 'ON' : 'OFF', 0, -size/2 - 15);
+    }
+    
     // Restore context
     ctx.restore();
     
@@ -1443,20 +1502,36 @@ function drawTransistor(x, y, isPlacing = false) {
 
 // Update rebuildAllConnections function
 function rebuildAllConnections() {
-    // First handle all wire connections between dots
+    // First clear all existing connections
+    initializeConnections();
+    
+    // Handle regular wire connections first
     lines.forEach(line => {
         if (!line.transistorConnection && line.type === 'wire') {
             connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
         }
     });
     
-    // Then handle all switch connections
+    // Handle switch connections
     lines.forEach(line => {
-        if (!line.transistorConnection) {  // Only for non-transistor connections
+        if (!line.transistorConnection) {
             if (line.type === 'switch_nc' && !switches.get(getSwitchId(line.start, line.end))?.pressed) {
                 connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
             } else if (line.type === 'switch_no' && switches.get(getSwitchId(line.start, line.end))?.pressed) {
                 connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
+            }
+        }
+    });
+    
+    // Handle transistor conduction
+    transistors.forEach((transistor, id) => {
+        const state = getTransistorState(transistor);
+        if (state.conducting && transistor.connections.collector && transistor.connections.emitter) {
+            // When conducting, connect collector to emitter through transistor
+            const collectorDotIndex = dots.indexOf(transistor.connections.collector);
+            const emitterDotIndex = dots.indexOf(transistor.connections.emitter);
+            if (collectorDotIndex !== -1 && emitterDotIndex !== -1) {
+                connectDots(collectorDotIndex, emitterDotIndex);
             }
         }
     });
