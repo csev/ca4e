@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grid Board</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .controls {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .controls label {
+            margin-right: 10px;
+        }
+        .controls button {
+            margin-left: 20px;
+            padding: 5px 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .controls button:hover {
+            background-color: #45a049;
+        }
+        canvas {
+            background-color: white;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #circuitInfo {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 800px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <label>Component:</label>
+        <select id="componentType">
+            <option value="resistor">Resistor</option>
+            <option value="led">LED</option>
+        </select>
+        <button id="showCircuit">Show Circuit Connections</button>
+    </div>
+    <canvas id="gridCanvas"></canvas>
+    <div id="circuitInfo"></div>
+    <script src="script.js"></script>
+</body>
+</html> 
