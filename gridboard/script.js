@@ -178,15 +178,9 @@ for (let row = 0; row < GRID_ROWS; row++) {
     for (let col = 0; col < GRID_COLS; col++) {
         // Add CENTER_GAP to y position for rows 8 and beyond
         const extraGap = row >= 7 ? CENTER_GAP : 0;
-        // Determine voltage based on row position
-        let voltage = null;
-        if (row === 0 || row === GRID_ROWS - 1) voltage = 9;  // VCC rows
-        if (row === 1 || row === GRID_ROWS - 2) voltage = 0;  // GND rows
-        
         dots.push({
             x: PADDING + col * CELL_WIDTH,
-            y: PADDING + row * CELL_HEIGHT + extraGap,
-            voltage: voltage
+            y: PADDING + row * CELL_HEIGHT + extraGap
         });
     }
 }
@@ -209,50 +203,14 @@ const RESISTOR_COLORS = {
 };
 
 // Draw functions
-function drawDot(x, y, isHighlighted = false, voltage = null, dotIndex = null) {
-    // Get connection status if dotIndex is provided
-    let isPowered = false;
-    let isGrounded = false;
-    
-    if (dotIndex !== null) {
-        const connectedDots = connections.get(dotIndex);
-        if (connectedDots) {
-            isPowered = Array.from(connectedDots).some(i => dots[i].voltage === 9);
-            isGrounded = Array.from(connectedDots).some(i => dots[i].voltage === 0);
-        }
-    }
-    
-    // Determine the dot's effective voltage status
-    const effectiveVoltage = voltage || (isPowered ? 9 : (isGrounded ? 0 : null));
-    
+function drawDot(x, y, isHighlighted = false) {
     ctx.beginPath();
     ctx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2);
-    
-    // Set fill color based on voltage/connection status
-    if (effectiveVoltage === 9 || isPowered) {
-        ctx.fillStyle = isHighlighted ? '#ff6666' : '#ff4444';  // Red for VCC
-    } else if (effectiveVoltage === 0 || isGrounded) {
-        ctx.fillStyle = isHighlighted ? '#6666ff' : '#4444ff';  // Blue for GND
-    } else {
-        ctx.fillStyle = isHighlighted ? '#ff4444' : '#333';     // Original colors
-    }
-    
+    ctx.fillStyle = isHighlighted ? '#ff4444' : '#333';
     ctx.fill();
-    
-    // Add glow effect for powered or grounded dots
-    if (effectiveVoltage !== null || isPowered || isGrounded) {
-        ctx.beginPath();
-        ctx.arc(x, y, DOT_RADIUS * 1.5, 0, Math.PI * 2);
-        if (effectiveVoltage === 9 || isPowered) {
-            ctx.fillStyle = 'rgba(255,0,0,0.1)';  // Red glow
-        } else {
-            ctx.fillStyle = 'rgba(0,0,255,0.1)';  // Blue glow
-        }
-        ctx.fill();
-    }
 }
 
-function drawLine(startX, startY, endX, endY, type = 'resistor', startDot = null, endDot = null) {
+function drawLine(startX, startY, endX, endY, type = 'resistor_1k') {
     // Calculate the angle and length of the line
     const dx = endX - startX;
     const dy = endY - startY;
@@ -269,22 +227,6 @@ function drawLine(startX, startY, endX, endY, type = 'resistor', startDot = null
     const startWireLength = (length - bodyLength) / 2;
     const resistorStartX = startX + Math.cos(angle) * startWireLength;
     const resistorStartY = startY + Math.sin(angle) * startWireLength;
-    
-    // Get voltage and current from voltage map
-    let voltage_drop = 0;
-    let current = 0;
-    
-    if (type.startsWith('resistor_') && startDot && endDot) {
-        const voltageMap = calculateIntermediateVoltages();
-        const startVoltage = getDotVoltage(startDot, voltageMap);
-        const endVoltage = getDotVoltage(endDot, voltageMap);
-        
-        if (startVoltage !== null && endVoltage !== null) {
-            voltage_drop = Math.abs(startVoltage - endVoltage);
-            const resistance = RESISTOR_VALUES[type];
-            current = voltage_drop / resistance;
-        }
-    }
     
     // Draw connecting wires
     ctx.beginPath();
@@ -318,21 +260,21 @@ function drawLine(startX, startY, endX, endY, type = 'resistor', startDot = null
     ctx.lineWidth = 1;
     ctx.stroke();
     
-    // Define color bands based on resistor type
+    // Define color bands based on resistor value
     let bandColors;
-    let resistanceLabel = '';
     if (type === 'resistor_1k') {
-        bandColors = ['#964B00', '#000000', '#FF0000', '#FFD700'];
-        resistanceLabel = '1kΩ';
-    } else if (type === 'resistor_10k') {
-        bandColors = ['#964B00', '#000000', '#FFA500', '#FFD700'];
-        resistanceLabel = '10kΩ';
-    } else {
         bandColors = [
-            RESISTOR_COLORS[Math.floor(Math.random() * 10)],
-            RESISTOR_COLORS[Math.floor(Math.random() * 10)],
-            RESISTOR_COLORS[Math.floor(Math.random() * 10)],
-            '#FFD700'
+            '#964B00', // Brown (1)
+            '#000000', // Black (0)
+            '#FF0000', // Red (2 zeros = 100)
+            '#FFD700'  // Gold (5% tolerance)
+        ];
+    } else if (type === 'resistor_10k') {
+        bandColors = [
+            '#964B00', // Brown (1)
+            '#000000', // Black (0)
+            '#FFA500', // Orange (3 zeros = 1000)
+            '#FFD700'  // Gold (5% tolerance)
         ];
     }
     
@@ -350,28 +292,6 @@ function drawLine(startX, startY, endX, endY, type = 'resistor', startDot = null
         ctx.fillStyle = bandColors[index];
         ctx.fill();
     });
-    
-    // Draw resistance label and electrical values
-    if (type.startsWith('resistor_')) {
-        ctx.font = 'bold 12px Arial';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        
-        // Add white background for better visibility
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.fillRect(bodyLength/2 - 40, -bodyWidth - 25, 80, 35);
-        
-        // Draw resistance value
-        ctx.fillStyle = '#000000';
-        ctx.fillText(resistanceLabel, bodyLength/2, -bodyWidth - 15);
-        
-        // Draw voltage and current if they exist
-        if (voltage_drop > 0) {
-            ctx.font = '10px Arial';
-            ctx.fillText(`${voltage_drop.toFixed(1)}V ${(current * 1000).toFixed(1)}mA`, 
-                        bodyLength/2, -bodyWidth - 3);
-        }
-    }
     
     // Restore context
     ctx.restore();
@@ -701,13 +621,18 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
     if (type === 'led') {
         drawLED(startX, startY, endX, endY, startDot, endDot);
     } else if (type === 'wire') {
-        drawWire(startX, startY, endX, endY, startDot, endDot);
+        ctx.beginPath();
+        ctx.moveTo(startX, startY);
+        ctx.lineTo(endX, endY);
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+        ctx.stroke();
     } else if (type === 'switch_no' || type === 'switch_nc') {
         const switchId = getSwitchId(startDot, endDot);
         const isPressed = switches.get(switchId)?.pressed || false;
         drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPressed);
-    } else {
-        drawLine(startX, startY, endX, endY, type, startDot, endDot);
+    } else if (type === 'resistor_1k' || type === 'resistor_10k') {
+        drawLine(startX, startY, endX, endY, type);
     }
 }
 
@@ -923,7 +848,7 @@ function drawGrid() {
     // Draw dots with their indices FIRST
     dots.forEach((dot, index) => {
         const isHighlighted = isDragging && isNearDot(currentMousePos.x, currentMousePos.y, dot);
-        drawDot(dot.x, dot.y, isHighlighted, dot.voltage, index);
+        drawDot(dot.x, dot.y, isHighlighted);
     });
     
     // Draw placed transistors SECOND (moved up before lines)
@@ -1344,19 +1269,12 @@ function getComponentInfo(line) {
     const startPoint = getPointLabel(line.start);
     const endPoint = getPointLabel(line.end);
     
-    if (line.type.startsWith('resistor_')) {
-        const resistance = RESISTOR_VALUES[line.type] / 1000; // Convert to kΩ
-        let info = `${resistance}kΩ Resistor from ${startPoint} to ${endPoint}`;
-        if (line.voltage_drop !== undefined && line.current !== undefined) {
-            info += ` (${line.voltage_drop.toFixed(1)}V, ${(line.current * 1000).toFixed(1)}mA)`;
-        }
-        return info;
+    if (line.type === 'resistor_1k') {
+        return `1kΩ Resistor from ${startPoint} to ${endPoint}`;
+    } else if (line.type === 'resistor_10k') {
+        return `10kΩ Resistor from ${startPoint} to ${endPoint}`;
     } else if (line.type === 'led') {
-        let info = `LED from ${startPoint} (anode/+) to ${endPoint} (cathode/-)`;
-        if (line.voltage_drop !== undefined && line.current !== undefined) {
-            info += ` (${line.voltage_drop.toFixed(1)}V, ${(line.current * 1000).toFixed(1)}mA)`;
-        }
-        return info;
+        return `LED from ${startPoint} (anode/+) to ${endPoint} (cathode/-)`;
     } else if (line.type === 'wire') {
         return `Wire from ${startPoint} to ${endPoint}`;
     } else if (line.type === 'switch_no' || line.type === 'switch_nc') {
@@ -1376,7 +1294,7 @@ function showCircuitConnections() {
     if (lines.length > 0) {
         html += '<h4>Components:</h4><ul>';
         lines.forEach((line, index) => {
-            if (!line.transistorConnection) {  // Skip transistor connections here
+            if (!line.transistorConnection) {
                 const info = getComponentInfo(line);
                 if (info) {
                     html += `<li>${info}</li>`;
@@ -1390,8 +1308,7 @@ function showCircuitConnections() {
     if (transistors.size > 0) {
         html += '<h4>Transistors:</h4><ul>';
         transistors.forEach((transistor, id) => {
-            const state = getTransistorState(transistor);
-            html += `<li>2N3904 NPN Transistor (${state.conducting ? 'ON' : 'OFF'}, Vbe: ${state.baseEmitterVoltage.toFixed(2)}V)<ul>`;
+            html += `<li>2N3904 NPN Transistor<ul>`;
             
             // Show collector connection
             if (transistor.connections.collector) {
@@ -1417,69 +1334,6 @@ function showCircuitConnections() {
             html += '</ul></li>';
         });
         html += '</ul>';
-    }
-    
-    // Calculate and show intermediate voltages
-    const voltageMap = calculateIntermediateVoltages();
-    if (voltageMap.size > 0) {
-        html += '<h4>Voltage Map:</h4>';
-        
-        // Create a 2D grid to store voltages
-        const voltageGrid = Array(GRID_ROWS).fill().map(() => Array(GRID_COLS).fill(null));
-        
-        // Fill the grid with voltages
-        voltageMap.forEach((voltage, dotIndex) => {
-            const { row, col } = getRowCol(dotIndex);
-            voltageGrid[row][col] = voltage;
-        });
-        
-        // Create a table to display the voltage grid
-        html += '<div style="overflow-x: auto;"><table style="border-collapse: collapse; margin: 10px 0;">';
-        
-        // Column headers
-        html += '<tr><th style="border: 1px solid #ccc; padding: 4px;">Row/Col</th>';
-        for (let col = 0; col < GRID_COLS; col++) {
-            html += `<th style="border: 1px solid #ccc; padding: 4px;">${col + 1}</th>`;
-        }
-        html += '</tr>';
-        
-        // Row data
-        for (let row = 0; row < GRID_ROWS; row++) {
-            html += '<tr>';
-            
-            // Row label
-            let rowLabel = '';
-            if (row === 0) rowLabel = 'VCC+';
-            else if (row === 1) rowLabel = 'GND';
-            else if (row === GRID_ROWS - 2) rowLabel = 'GND';
-            else if (row === GRID_ROWS - 1) rowLabel = 'VCC+';
-            else if (row >= 2 && row <= 6) rowLabel = String.fromCharCode(97 + row - 2); // a-e
-            else if (row >= 7 && row <= 11) rowLabel = String.fromCharCode(97 + row - 2); // f-j
-            
-            html += `<td style="border: 1px solid #ccc; padding: 4px; font-weight: bold;">${rowLabel}</td>`;
-            
-            // Voltage data
-            for (let col = 0; col < GRID_COLS; col++) {
-                const voltage = voltageGrid[row][col];
-                let cellStyle = 'border: 1px solid #ccc; padding: 4px; text-align: center;';
-                
-                // Color coding for voltages
-                if (voltage === 9) {
-                    cellStyle += ' background-color: #ffeeee;'; // Light red for VCC
-                } else if (voltage === 0) {
-                    cellStyle += ' background-color: #eeeeff;'; // Light blue for GND
-                } else if (voltage !== null) {
-                    const intensity = Math.floor((voltage / 9) * 255);
-                    cellStyle += ` background-color: rgb(${intensity}, ${intensity}, 255);`; // Gradient for intermediate
-                }
-                
-                html += `<td style="${cellStyle}">`;
-                html += voltage !== null ? voltage.toFixed(2) : '-';
-                html += '</td>';
-            }
-            html += '</tr>';
-        }
-        html += '</table></div>';
     }
     
     if (lines.length === 0 && transistors.size === 0) {
