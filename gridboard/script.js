@@ -6,15 +6,16 @@ const GRID_COLS = 30;  // Swapped with rows
 const GRID_ROWS = 14;  // Swapped with cols
 const DOT_RADIUS = 4;
 const PADDING = 40;
+const CENTER_GAP = 30; // Gap between rows 7 and 8
 
 // Calculate canvas size and grid spacing
 const CANVAS_WIDTH = 900;  // Swapped with height
-const CANVAS_HEIGHT = 504; // Swapped with width
+const CANVAS_HEIGHT = 504 + CENTER_GAP; // Added CENTER_GAP to total height
 canvas.width = CANVAS_WIDTH;
 canvas.height = CANVAS_HEIGHT;
 
 const CELL_WIDTH = (CANVAS_WIDTH - 2 * PADDING) / (GRID_COLS - 1);
-const CELL_HEIGHT = (CANVAS_HEIGHT - 2 * PADDING) / (GRID_ROWS - 1);
+const CELL_HEIGHT = (CANVAS_HEIGHT - 2 * PADDING - CENTER_GAP) / (GRID_ROWS - 1);
 
 // Store dots and lines
 const dots = [];
@@ -26,15 +27,138 @@ let currentMousePos = { x: 0, y: 0 };
 // Component type selector
 const componentSelect = document.getElementById('componentType');
 
+// Track electrical connections
+const connections = new Map(); // Map of dot index to set of connected dot indices
+
+// Add after the component type selector
+let meltingWire = null;
+let meltingProgress = 0;
+let meltingAnimationId = null;
+let smokeParticles = [];
+
+class SmokeParticle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.alpha = 1;
+        this.radius = Math.random() * 3 + 2;
+        this.vx = (Math.random() - 0.5) * 2;
+        this.vy = -Math.random() * 2 - 1;
+        this.life = 1;
+    }
+
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy *= 0.95; // Slow down vertical movement
+        this.life -= 0.02;
+        this.alpha = this.life;
+        this.radius += 0.1;
+    }
+
+    draw(ctx) {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(100, 100, 100, ${this.alpha})`;
+        ctx.fill();
+    }
+}
+
+let warningTimeout = null;
+
+// Helper function to get dot index from row and column
+function getDotIndex(row, col) {
+    return row * GRID_COLS + col;
+}
+
+// Helper function to get row and column from dot index
+function getRowCol(index) {
+    const row = Math.floor(index / GRID_COLS);
+    const col = index % GRID_COLS;
+    return { row, col };
+}
+
+// Initialize electrical connections for the breadboard
+function initializeConnections() {
+    connections.clear();
+    
+    // Initialize empty sets for each dot
+    for (let i = 0; i < dots.length; i++) {
+        connections.set(i, new Set([i]));
+    }
+    
+    // Connect power rails (rows 0 and 13)
+    for (let col = 0; col < GRID_COLS - 1; col++) {
+        connectDots(getDotIndex(0, col), getDotIndex(0, col + 1));  // Top +
+        connectDots(getDotIndex(GRID_ROWS - 1, col), getDotIndex(GRID_ROWS - 1, col + 1));  // Bottom +
+    }
+    
+    // Connect ground rails (rows 1 and 12)
+    for (let col = 0; col < GRID_COLS - 1; col++) {
+        connectDots(getDotIndex(1, col), getDotIndex(1, col + 1));  // Top ground
+        connectDots(getDotIndex(GRID_ROWS - 2, col), getDotIndex(GRID_ROWS - 2, col + 1));  // Bottom ground
+    }
+    
+    // Connect vertical columns in top half (rows a-e: 2-6)
+    for (let col = 0; col < GRID_COLS; col++) {
+        for (let row = 2; row < 7 - 1; row++) {
+            connectDots(getDotIndex(row, col), getDotIndex(row + 1, col));
+        }
+    }
+    
+    // Connect vertical columns in bottom half (rows f-j: 7-11)
+    for (let col = 0; col < GRID_COLS; col++) {
+        for (let row = 7; row < 12 - 1; row++) {
+            connectDots(getDotIndex(row, col), getDotIndex(row + 1, col));
+        }
+    }
+}
+
+// Connect two dots electrically
+function connectDots(index1, index2) {
+    const set1 = connections.get(index1);
+    const set2 = connections.get(index2);
+    
+    // Merge the two sets
+    const mergedSet = new Set([...set1, ...set2]);
+    
+    // Update all dots in both sets to point to the merged set
+    for (const dotIndex of mergedSet) {
+        connections.set(dotIndex, mergedSet);
+    }
+}
+
+// Check if two dots are electrically connected
+function areDotsConnected(dot1, dot2) {
+    const index1 = dots.indexOf(dot1);
+    const index2 = dots.indexOf(dot2);
+    if (index1 === -1 || index2 === -1) return false;
+    
+    const set1 = connections.get(index1);
+    return set1.has(index2);
+}
+
 // Initialize dots
+dots.length = 0; // Clear existing dots
 for (let row = 0; row < GRID_ROWS; row++) {
     for (let col = 0; col < GRID_COLS; col++) {
+        // Add CENTER_GAP to y position for rows 8 and beyond
+        const extraGap = row >= 7 ? CENTER_GAP : 0;
+        // Determine voltage based on row position
+        let voltage = null;
+        if (row === 0 || row === GRID_ROWS - 1) voltage = 9;  // VCC rows
+        if (row === 1 || row === GRID_ROWS - 2) voltage = 0;  // GND rows
+        
         dots.push({
             x: PADDING + col * CELL_WIDTH,
-            y: PADDING + row * CELL_HEIGHT
+            y: PADDING + row * CELL_HEIGHT + extraGap,
+            voltage: voltage
         });
     }
 }
+
+// Add to the end of the initialize dots section:
+initializeConnections();
 
 // Resistor color codes
 const RESISTOR_COLORS = {
@@ -51,11 +175,47 @@ const RESISTOR_COLORS = {
 };
 
 // Draw functions
-function drawDot(x, y, isHighlighted = false) {
+function drawDot(x, y, isHighlighted = false, voltage = null, dotIndex = null) {
+    // Get connection status if dotIndex is provided
+    let isPowered = false;
+    let isGrounded = false;
+    
+    if (dotIndex !== null) {
+        const connectedDots = connections.get(dotIndex);
+        if (connectedDots) {
+            isPowered = Array.from(connectedDots).some(i => dots[i].voltage === 9);
+            isGrounded = Array.from(connectedDots).some(i => dots[i].voltage === 0);
+        }
+    }
+    
+    // Determine the dot's effective voltage status
+    const effectiveVoltage = voltage || (isPowered ? 9 : (isGrounded ? 0 : null));
+    
     ctx.beginPath();
     ctx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2);
-    ctx.fillStyle = isHighlighted ? '#ff4444' : '#333';
+    
+    // Set fill color based on voltage/connection status
+    if (effectiveVoltage === 9 || isPowered) {
+        ctx.fillStyle = isHighlighted ? '#ff6666' : '#ff4444';  // Red for VCC
+    } else if (effectiveVoltage === 0 || isGrounded) {
+        ctx.fillStyle = isHighlighted ? '#6666ff' : '#4444ff';  // Blue for GND
+    } else {
+        ctx.fillStyle = isHighlighted ? '#ff4444' : '#333';     // Original colors
+    }
+    
     ctx.fill();
+    
+    // Add glow effect for powered or grounded dots
+    if (effectiveVoltage !== null || isPowered || isGrounded) {
+        ctx.beginPath();
+        ctx.arc(x, y, DOT_RADIUS * 1.5, 0, Math.PI * 2);
+        if (effectiveVoltage === 9 || isPowered) {
+            ctx.fillStyle = 'rgba(255,0,0,0.1)';  // Red glow
+        } else {
+            ctx.fillStyle = 'rgba(0,0,255,0.1)';  // Blue glow
+        }
+        ctx.fill();
+    }
 }
 
 function drawLine(startX, startY, endX, endY) {
@@ -135,7 +295,7 @@ function drawLine(startX, startY, endX, endY) {
     ctx.restore();
 }
 
-function drawLED(startX, startY, endX, endY) {
+function drawLED(startX, startY, endX, endY, startDot, endDot) {
     // Calculate the angle and length of the line
     const dx = endX - startX;
     const dy = endY - startY;
@@ -153,6 +313,17 @@ function drawLED(startX, startY, endX, endY) {
     const ledCenterX = ledStartX + Math.cos(angle) * radius;
     const ledCenterY = ledStartY + Math.sin(angle) * radius;
     
+    // Check if LED is properly connected through the breadboard
+    const startIndex = dots.indexOf(startDot);
+    const endIndex = dots.indexOf(endDot);
+    const startConnections = connections.get(startIndex);
+    const endConnections = connections.get(endIndex);
+    
+    const hasStartPower = Array.from(startConnections).some(i => dots[i].voltage === 9);
+    const hasEndGround = Array.from(endConnections).some(i => dots[i].voltage === 0);
+    
+    const isProperlyConnected = hasStartPower && hasEndGround;
+    
     // Draw connecting wires
     ctx.beginPath();
     ctx.moveTo(startX, startY);
@@ -169,6 +340,7 @@ function drawLED(startX, startY, endX, endY) {
     
     // Translate to LED center
     ctx.translate(ledCenterX, ledCenterY);
+    ctx.rotate(angle);
     
     // Draw LED body (main circle)
     ctx.beginPath();
@@ -179,9 +351,25 @@ function drawLED(startX, startY, endX, endY) {
         -radius * 0.3, -radius * 0.3, radius * 0.1,  // Inner circle (highlight)
         0, 0, radius                                  // Outer circle
     );
-    gradient.addColorStop(0, '#ff9999');    // Bright highlight
-    gradient.addColorStop(0.3, '#ff0000');  // Main red color
-    gradient.addColorStop(1, '#990000');    // Darker edge
+
+    if (isProperlyConnected) {
+        // Bright glowing LED when properly connected
+        gradient.addColorStop(0, '#ffffff');    // Bright white center
+        gradient.addColorStop(0.2, '#ffcccc');  // Very bright red
+        gradient.addColorStop(0.7, '#ff3333');  // Bright red
+        gradient.addColorStop(1, '#cc0000');    // Darker red edge
+        
+        // Add outer glow effect
+        ctx.shadowColor = '#ff0000';
+        ctx.shadowBlur = 15;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+    } else {
+        // Regular unlit LED
+        gradient.addColorStop(0, '#ff9999');    // Regular highlight
+        gradient.addColorStop(0.3, '#ff0000');  // Main red color
+        gradient.addColorStop(1, '#990000');    // Darker edge
+    }
     
     ctx.fillStyle = gradient;
     ctx.fill();
@@ -195,6 +383,7 @@ function drawLED(startX, startY, endX, endY) {
     const symbolSize = radius * 0.6;
     ctx.strokeStyle = '#800000';
     ctx.lineWidth = 2;
+    ctx.shadowBlur = 0;  // Reset shadow for symbols
     
     // Plus symbol
     ctx.beginPath();
@@ -221,9 +410,107 @@ function drawLED(startX, startY, endX, endY) {
     ctx.restore();
 }
 
-function drawComponent(startX, startY, endX, endY, type) {
+// Replace the animateWireMelting function
+function animateWireMelting(wireIndex) {
+    if (meltingAnimationId) {
+        cancelAnimationFrame(meltingAnimationId);
+    }
+    
+    meltingWire = lines[wireIndex];
+    meltingProgress = 0;
+    smokeParticles = [];
+    
+    // Create initial smoke particles
+    const startX = meltingWire.start.x;
+    const startY = meltingWire.start.y;
+    const endX = meltingWire.end.x;
+    const endY = meltingWire.end.y;
+    
+    // Add particles along the wire
+    for (let i = 0; i < 20; i++) {
+        const t = i / 19;
+        const x = startX + (endX - startX) * t;
+        const y = startY + (endY - startY) * t;
+        smokeParticles.push(new SmokeParticle(x, y));
+    }
+    
+    function animate() {
+        meltingProgress += 0.02;
+        
+        // Update existing particles
+        smokeParticles = smokeParticles.filter(particle => particle.life > 0);
+        smokeParticles.forEach(particle => particle.update());
+        
+        // Add new particles while the wire is "burning"
+        if (meltingProgress < 0.7) {
+            const t = Math.random();
+            const x = startX + (endX - startX) * t;
+            const y = startY + (endY - startY) * t;
+            if (Math.random() < 0.3) {
+                smokeParticles.push(new SmokeParticle(x, y));
+            }
+        }
+        
+        drawGrid();
+        
+        // Draw smoke particles
+        smokeParticles.forEach(particle => particle.draw(ctx));
+        
+        if (meltingProgress >= 1) {
+            // Remove the wire
+            lines.splice(wireIndex, 1);
+            meltingWire = null;
+            meltingProgress = 0;
+            smokeParticles = [];
+            drawGrid();
+            return;
+        }
+        
+        meltingAnimationId = requestAnimationFrame(animate);
+    }
+    
+    animate();
+}
+
+// Modify the drawWire function to always draw the wire
+function drawWire(startX, startY, endX, endY, startDot, endDot, isCurrentWire = false) {
+    const startIndex = dots.indexOf(startDot);
+    const endIndex = dots.indexOf(endDot);
+    const startConnections = connections.get(startIndex);
+    const endConnections = connections.get(endIndex);
+    
+    const hasStartPower = Array.from(startConnections).some(i => dots[i].voltage === 9);
+    const hasStartGround = Array.from(startConnections).some(i => dots[i].voltage === 0);
+    const hasEndPower = Array.from(endConnections).some(i => dots[i].voltage === 9);
+    const hasEndGround = Array.from(endConnections).some(i => dots[i].voltage === 0);
+    
+    // Check for direct power to ground connection
+    const isShortCircuit = (hasStartPower && hasEndGround) || (hasStartGround && hasEndPower);
+    
+    // Always draw the wire
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(endX, endY);
+    
+    if (hasStartPower || hasEndPower) {
+        ctx.strokeStyle = '#ff4444';  // Red for power
+    } else if (hasStartGround || hasEndGround) {
+        ctx.strokeStyle = '#4444ff';  // Blue for ground
+    } else {
+        ctx.strokeStyle = '#000000';  // Black for other connections
+    }
+    
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    return isShortCircuit;
+}
+
+function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot = null) {
     if (type === 'led') {
-        drawLED(startX, startY, endX, endY);
+        drawLED(startX, startY, endX, endY, startDot, endDot);
+    } else if (type === 'wire') {
+        drawWire(startX, startY, endX, endY, startDot, endDot);
     } else {
         drawLine(startX, startY, endX, endY); // Original resistor drawing function
     }
@@ -283,8 +570,8 @@ function drawPowerRails() {
     
     // Function to draw ground symbol
     function drawGroundSymbol(x, y) {
-        const symbolWidth = 12;  // Increased width
-        const lineSpacing = 4;   // Increased spacing
+        const symbolWidth = 8;   // Reduced from 12
+        const lineSpacing = 3;   // Reduced from 4
         
         ctx.beginPath();
         // Horizontal line (moved up by lineSpacing)
@@ -322,26 +609,138 @@ function drawPowerRails() {
     drawGroundSymbol(rightX, bottomGndY);
 }
 
+function drawCenterChannel() {
+    // Calculate the y position for the center channel
+    const row7Y = PADDING + 7 * CELL_HEIGHT;
+    const channelX = PADDING - 25;
+    const channelY = row7Y + CELL_HEIGHT/2 - 35;
+    const channelWidth = CANVAS_WIDTH - 2 * (PADDING - 25);
+    
+    // Create gradient for 3D effect
+    const gradient = ctx.createLinearGradient(0, channelY, 0, channelY + CENTER_GAP);
+    gradient.addColorStop(0, '#e8e8e8');    // Lighter at top
+    gradient.addColorStop(0.1, '#f8f8f8');  // Main color
+    gradient.addColorStop(0.9, '#f8f8f8');  // Main color
+    gradient.addColorStop(1, '#e0e0e0');    // Darker at bottom
+    
+    // Draw main channel with gradient
+    ctx.beginPath();
+    ctx.rect(channelX, channelY, channelWidth, CENTER_GAP);
+    ctx.fillStyle = gradient;
+    ctx.fill();
+    
+    // Add inner shadow at the top
+    ctx.beginPath();
+    ctx.rect(channelX, channelY, channelWidth, 2);
+    ctx.fillStyle = 'rgba(0,0,0,0.1)';
+    ctx.fill();
+    
+    // Add highlight at the bottom
+    ctx.beginPath();
+    ctx.rect(channelX, channelY + CENTER_GAP - 2, channelWidth, 2);
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.fill();
+    
+    // Add subtle side shadows
+    ctx.beginPath();
+    ctx.rect(channelX, channelY, 1, CENTER_GAP);
+    ctx.rect(channelX + channelWidth - 1, channelY, 1, CENTER_GAP);
+    ctx.fillStyle = 'rgba(0,0,0,0.05)';
+    ctx.fill();
+}
+
+function drawRowLabels() {
+    const labelPadding = 35;
+    ctx.font = 'bold 14px Arial';  // Made font bold
+    ctx.fillStyle = '#666666';
+    
+    // Letters for labels
+    const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+    
+    // Calculate center positions for labels
+    const leftLabelX = PADDING - labelPadding/2;
+    const rightLabelX = CANVAS_WIDTH - PADDING + labelPadding/2;
+    
+    // Draw labels for rows 3-6 (before gap)
+    for (let row = 2; row < 7; row++) {
+        const y = PADDING + row * CELL_HEIGHT + 5;
+        const letter = letters[row - 2];
+        
+        // Left side label
+        ctx.textAlign = 'center';
+        ctx.fillText(letter, leftLabelX, y);
+        
+        // Right side label
+        ctx.fillText(letter, rightLabelX, y);
+    }
+    
+    // Draw labels for rows 8-13 (after gap)
+    for (let row = 7; row < 12; row++) {
+        const y = PADDING + row * CELL_HEIGHT + CENTER_GAP + 5;
+        const letter = letters[row - 2];
+        
+        // Left side label
+        ctx.textAlign = 'center';
+        ctx.fillText(letter, leftLabelX, y);
+        
+        // Right side label
+        ctx.fillText(letter, rightLabelX, y);
+    }
+}
+
+function drawColumnLabels() {
+    ctx.font = 'bold 12px Arial';
+    ctx.fillStyle = '#666666';
+    ctx.textAlign = 'center';
+    
+    // Calculate vertical positions to center between dots and edge
+    const topLabelY = PADDING - 20;  // Moved down 5px (from -25 to -20)
+    const bottomLabelY = CANVAS_HEIGHT - PADDING + 30;
+    
+    // Draw numbers for each column
+    for (let col = 0; col < GRID_COLS; col++) {
+        const x = PADDING + col * CELL_WIDTH;
+        const number = col + 1;
+        
+        // Top numbers
+        ctx.fillText(number, x, topLabelY);
+        
+        // Bottom numbers
+        ctx.fillText(number, x, bottomLabelY);
+    }
+}
+
 function drawGrid() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     // Draw power rails first
     drawPowerRails();
     
+    // Draw center channel
+    drawCenterChannel();
+    
+    // Draw row labels
+    drawRowLabels();
+    
+    // Draw column labels
+    drawColumnLabels();
+    
     // Draw existing lines
     lines.forEach(line => {
-        drawComponent(line.start.x, line.start.y, line.end.x, line.end.y, line.type);
+        drawComponent(line.start.x, line.start.y, line.end.x, line.end.y, line.type, line.start, line.end);
     });
 
-    // Draw dots
-    dots.forEach(dot => {
+    // Draw dots with their indices
+    dots.forEach((dot, index) => {
         const isHighlighted = isDragging && isNearDot(currentMousePos.x, currentMousePos.y, dot);
-        drawDot(dot.x, dot.y, isHighlighted);
+        drawDot(dot.x, dot.y, isHighlighted, dot.voltage, index);
     });
 
     // Draw line being dragged
     if (isDragging && startDot) {
-        drawComponent(startDot.x, startDot.y, currentMousePos.x, currentMousePos.y, componentSelect.value);
+        const closestDot = findClosestDot(currentMousePos.x, currentMousePos.y);
+        drawComponent(startDot.x, startDot.y, currentMousePos.x, currentMousePos.y, 
+                     componentSelect.value, startDot, closestDot);
     }
 }
 
@@ -377,6 +776,7 @@ canvas.addEventListener('mousemove', (e) => {
     }
 });
 
+// Modify the mouseup event listener to handle short circuits
 canvas.addEventListener('mouseup', (e) => {
     if (isDragging) {
         const rect = canvas.getBoundingClientRect();
@@ -385,11 +785,46 @@ canvas.addEventListener('mouseup', (e) => {
         
         const endDot = findClosestDot(x, y);
         if (endDot && endDot !== startDot) {
-            lines.push({
+            const startIndex = dots.indexOf(startDot);
+            const endIndex = dots.indexOf(endDot);
+            const startConnections = connections.get(startIndex);
+            const endConnections = connections.get(endIndex);
+            
+            const hasStartPower = Array.from(startConnections).some(i => dots[i].voltage === 9);
+            const hasStartGround = Array.from(startConnections).some(i => dots[i].voltage === 0);
+            const hasEndPower = Array.from(endConnections).some(i => dots[i].voltage === 9);
+            const hasEndGround = Array.from(endConnections).some(i => dots[i].voltage === 0);
+            
+            const isShortCircuit = (hasStartPower && hasEndGround) || (hasStartGround && hasEndPower);
+            
+            const newLine = {
                 start: startDot,
                 end: endDot,
                 type: componentSelect.value
-            });
+            };
+            
+            if (componentSelect.value === 'wire' && isShortCircuit) {
+                // Show warning message
+                showWarningMessage();
+                
+                // Add the wire temporarily
+                lines.push(newLine);
+                
+                // Remove the wire after 1 second
+                setTimeout(() => {
+                    const index = lines.indexOf(newLine);
+                    if (index > -1) {
+                        lines.splice(index, 1);
+                        drawGrid();
+                    }
+                }, 1000);
+            } else {
+                lines.push(newLine);
+                // Update electrical connections when adding a wire
+                if (componentSelect.value === 'wire') {
+                    connectDots(dots.indexOf(startDot), dots.indexOf(endDot));
+                }
+            }
         }
         
         isDragging = false;
@@ -441,4 +876,22 @@ const showCircuitButton = document.getElementById('showCircuit');
 showCircuitButton.addEventListener('click', showCircuitConnections);
 
 // Initial draw
-drawGrid(); 
+drawGrid();
+
+function showWarningMessage() {
+    const warningMessage = document.getElementById('warningMessage');
+    
+    // Clear any existing timeout
+    if (warningTimeout) {
+        clearTimeout(warningTimeout);
+        warningMessage.style.opacity = '0';
+    }
+    
+    // Show the warning
+    warningMessage.style.opacity = '1';
+    
+    // Hide after 3 seconds
+    warningTimeout = setTimeout(() => {
+        warningMessage.style.opacity = '0';
+    }, 3000);
+} 

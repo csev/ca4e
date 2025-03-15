@@ -50,12 +50,29 @@
             max-width: 800px;
             display: none;
         }
+        .warning-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ff4444;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+            pointer-events: none;
+        }
     </style>
 </head>
 <body>
     <div class="controls">
         <label>Component:</label>
         <select id="componentType">
+            <option value="wire">Wire</option>
             <option value="resistor">Resistor</option>
             <option value="led">LED</option>
         </select>
@@ -63,6 +80,7 @@
     </div>
     <canvas id="gridCanvas"></canvas>
     <div id="circuitInfo"></div>
+    <div id="warningMessage" class="warning-message">⚡ Warning: Short Circuit Detected!</div>
     <script src="script.js"></script>
 </body>
 </html> 
