@@ -41,11 +41,16 @@ const switches = new Map(); // Map to track switch states (pressed or not)
 let nextSwitchId = 0;
 
 // Remove transistor tracking variables
-const transistors = new Map(); // Map to track transistor pins (collector, base, emitter)
+const transistors = new Map(); // Map to track transistor instances
+let placingTransistor = false;
+let currentTransistor = null;
 
 // Add transistor connection tracking
 let pendingTransistor = null;
 let transistorConnections = new Map();
+
+// Add this variable near the top with other state variables
+let selectedTransistorPoint = null;
 
 class SmokeParticle {
     constructor(x, y) {
@@ -768,7 +773,7 @@ function drawCenterChannel() {
     
     // Add highlight at the bottom
     ctx.beginPath();
-    ctx.rect(channelX, channelY + CENTER_GAP - 2, channelWidth, 2);
+    ctx.rect(channelX, channelY, channelWidth, 2);
     ctx.fillStyle = 'rgba(255,255,255,0.3)';
     ctx.fill();
     
@@ -856,22 +861,80 @@ function drawGrid() {
     // Draw column labels
     drawColumnLabels();
     
-    // Draw existing lines
-    lines.forEach(line => {
-        drawComponent(line.start.x, line.start.y, line.end.x, line.end.y, line.type, line.start, line.end);
-    });
-
-    // Draw dots with their indices
+    // Draw dots with their indices FIRST
     dots.forEach((dot, index) => {
         const isHighlighted = isDragging && isNearDot(currentMousePos.x, currentMousePos.y, dot);
         drawDot(dot.x, dot.y, isHighlighted, dot.voltage, index);
     });
-
-    // Draw line being dragged
-    if (isDragging && startDot) {
-        const closestDot = findClosestDot(currentMousePos.x, currentMousePos.y);
-        drawComponent(startDot.x, startDot.y, currentMousePos.x, currentMousePos.y, 
-                     componentSelect.value, startDot, closestDot);
+    
+    // Draw placed transistors SECOND (moved up before lines)
+    transistors.forEach((transistor, id) => {
+        drawTransistor(transistor.x, transistor.y);
+    });
+    
+    // Draw existing lines THIRD (after transistors)
+    lines.forEach(line => {
+        if (line.transistorConnection) {
+            // Draw wire to/from transistor connection point
+            ctx.beginPath();
+            ctx.moveTo(line.start.x, line.start.y);
+            ctx.lineTo(line.end.x, line.end.y);
+            
+            // Get the voltage of the connected dot
+            const connectedDot = line.end;
+            const voltage = getDotVoltage(connectedDot);
+            
+            // Set wire color based on voltage
+            if (voltage === 9) {
+                ctx.strokeStyle = '#ff4444';  // Red for VCC
+            } else if (voltage === 0) {
+                ctx.strokeStyle = '#4444ff';  // Blue for GND
+            } else {
+                ctx.strokeStyle = '#000000';  // Black for no voltage
+            }
+            
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        } else {
+            drawComponent(line.start.x, line.start.y, line.end.x, line.end.y, 
+                        line.type, line.start, line.end);
+        }
+    });
+    
+    // Draw transistor being placed LAST
+    if (placingTransistor && currentTransistor) {
+        drawTransistor(currentTransistor.x, currentTransistor.y, true);
+    }
+    
+    // Draw line being dragged (always on top)
+    if (isDragging) {
+        if (selectedTransistorPoint) {
+            const closestDot = findClosestDot(currentMousePos.x, currentMousePos.y);
+            ctx.beginPath();
+            ctx.moveTo(selectedTransistorPoint.x, selectedTransistorPoint.y);
+            ctx.lineTo(currentMousePos.x, currentMousePos.y);
+            
+            // Color the wire being dragged based on the closest dot's voltage
+            if (closestDot) {
+                const voltage = getDotVoltage(closestDot);
+                if (voltage === 9) {
+                    ctx.strokeStyle = '#ff4444';  // Red for VCC
+                } else if (voltage === 0) {
+                    ctx.strokeStyle = '#4444ff';  // Blue for GND
+                } else {
+                    ctx.strokeStyle = '#000000';  // Black for no voltage
+                }
+            } else {
+                ctx.strokeStyle = '#000000';  // Black when not near a dot
+            }
+            
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        } else if (startDot) {
+            const closestDot = findClosestDot(currentMousePos.x, currentMousePos.y);
+            drawComponent(startDot.x, startDot.y, currentMousePos.x, currentMousePos.y,
+                         componentSelect.value, startDot, closestDot);
+        }
     }
 }
 
@@ -890,10 +953,40 @@ canvas.addEventListener('mousedown', (e) => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     
-    const dot = findClosestDot(x, y);
-    if (dot) {
-        isDragging = true;
-        startDot = dot;
+    if (componentSelect.value === 'transistor' && !currentTransistor) {
+        // Start placing a transistor
+        placingTransistor = true;
+        currentTransistor = { x, y };
+        drawGrid();
+        return;
+    }
+    
+    // Check for transistor connection points first
+    selectedTransistorPoint = null;
+    transistors.forEach((transistor, id) => {
+        const points = {
+            collector: { x: transistor.x, y: transistor.y - 20 },
+            base: { x: transistor.x - 20, y: transistor.y },
+            emitter: { x: transistor.x, y: transistor.y + 20 }
+        };
+        
+        for (const [type, point] of Object.entries(points)) {
+            const distance = Math.sqrt((x - point.x) ** 2 + (y - point.y) ** 2);
+            if (distance < DOT_RADIUS * 2) {
+                selectedTransistorPoint = { id, type, x: point.x, y: point.y };
+                isDragging = true;
+                return;
+            }
+        }
+    });
+    
+    // If no transistor point was clicked, check for dots
+    if (!selectedTransistorPoint) {
+        const dot = findClosestDot(x, y);
+        if (dot) {
+            isDragging = true;
+            startDot = dot;
+        }
     }
 });
 
@@ -902,21 +995,76 @@ canvas.addEventListener('mousemove', (e) => {
     currentMousePos.x = e.clientX - rect.left;
     currentMousePos.y = e.clientY - rect.top;
     
-    if (isDragging) {
+    if (placingTransistor) {
+        currentTransistor = { 
+            x: currentMousePos.x, 
+            y: currentMousePos.y 
+        };
+        drawGrid();
+    } else if (isDragging) {
         drawGrid();
     }
 });
 
-// Modify the mouseup event listener for transistor handling
+// Modify the mouseup event listener
 canvas.addEventListener('mouseup', (e) => {
+    if (placingTransistor) {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        // Add transistor to the map
+        const transistorId = `transistor_${Date.now()}`;
+        transistors.set(transistorId, { 
+            x, 
+            y, 
+            connections: { collector: null, base: null, emitter: null }
+        });
+        
+        placingTransistor = false;
+        currentTransistor = null;
+        drawGrid();
+        return;
+    }
+    
     if (isDragging) {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         
         const endDot = findClosestDot(x, y);
-        if (endDot && endDot !== startDot) {
-            // Handle components
+        
+        // Handle connections between dots and transistor points
+        if (selectedTransistorPoint && endDot) {
+            // Connect from transistor to dot
+            const transistor = transistors.get(selectedTransistorPoint.id);
+            if (transistor) {
+                // Check if there's already a connection to this terminal
+                const existingLineIndex = lines.findIndex(line => 
+                    line.transistorConnection &&
+                    line.transistorConnection.id === selectedTransistorPoint.id &&
+                    line.transistorConnection.type === selectedTransistorPoint.type
+                );
+                
+                // Remove existing connection if there is one
+                if (existingLineIndex !== -1) {
+                    lines.splice(existingLineIndex, 1);
+                }
+                
+                const newLine = {
+                    start: { x: selectedTransistorPoint.x, y: selectedTransistorPoint.y },
+                    end: endDot,
+                    type: 'wire',
+                    transistorConnection: {
+                        id: selectedTransistorPoint.id,
+                        type: selectedTransistorPoint.type
+                    }
+                };
+                lines.push(newLine);
+                transistor.connections[selectedTransistorPoint.type] = endDot;
+            }
+        } else if (startDot && endDot && startDot !== endDot) {
+            // Original dot-to-dot connection logic
             const startIndex = dots.indexOf(startDot);
             const endIndex = dots.indexOf(endDot);
             const startConnections = connections.get(startIndex);
@@ -949,19 +1097,21 @@ canvas.addEventListener('mouseup', (e) => {
                 lines.push(newLine);
                 if (componentSelect.value === 'wire') {
                     connectDots(dots.indexOf(startDot), dots.indexOf(endDot));
-                } else if (componentSelect.value === 'switch_nc') {
+                } else if (componentSelect.value.startsWith('switch_')) {
+                    // Initialize switch state when a new switch is added
                     const switchId = getSwitchId(startDot, endDot);
                     switches.set(switchId, { pressed: false });
-                    connectDots(dots.indexOf(startDot), dots.indexOf(endDot));
-                } else if (componentSelect.value === 'switch_no') {
-                    const switchId = getSwitchId(startDot, endDot);
-                    switches.set(switchId, { pressed: false });
+                    // For normally closed switches, connect the dots initially
+                    if (componentSelect.value === 'switch_nc') {
+                        connectDots(dots.indexOf(startDot), dots.indexOf(endDot));
+                    }
                 }
             }
         }
         
         isDragging = false;
         startDot = null;
+        selectedTransistorPoint = null;
         drawGrid();
     }
 });
@@ -1100,4 +1250,114 @@ function showWarningMessage() {
 
 function getSwitchId(startDot, endDot) {
     return `switch_${dots.indexOf(startDot)}_${dots.indexOf(endDot)}`;
+}
+
+// Add this helper function to check dot voltage
+function getDotVoltage(dot) {
+    if (!dot) return null;
+    const dotIndex = dots.indexOf(dot);
+    if (dotIndex === -1) return null;
+    
+    const connectedDots = connections.get(dotIndex);
+    if (!connectedDots) return null;
+    
+    const hasVcc = Array.from(connectedDots).some(i => dots[i].voltage === 9);
+    const hasGnd = Array.from(connectedDots).some(i => dots[i].voltage === 0);
+    
+    if (hasVcc) return 9;
+    if (hasGnd) return 0;
+    return null;
+}
+
+function drawTransistor(x, y, isPlacing = false) {
+    const size = 40; // Size of the transistor symbol
+    const backgroundSize = size * 1.8; // Larger background to include labels
+    
+    // Save context
+    ctx.save();
+    ctx.translate(x, y);
+    
+    // Draw large light green background circle
+    ctx.beginPath();
+    ctx.arc(0, 0, backgroundSize/2, 0, Math.PI * 2);
+    ctx.fillStyle = '#e6ffe6';  // Light green color
+    ctx.fill();
+    
+    // Draw transistor symbol circle
+    ctx.beginPath();
+    ctx.arc(0, 0, size/2, 0, Math.PI * 2);
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Get transistor connections and their voltages
+    const transistorId = Array.from(transistors.keys()).find(id => 
+        transistors.get(id).x === x && transistors.get(id).y === y);
+    const transistor = transistors.get(transistorId);
+    const connections = transistor ? transistor.connections : { collector: null, base: null, emitter: null };
+    
+    // Function to determine connection point color
+    function getConnectionColor(connectedDot) {
+        if (!connectedDot) return isPlacing ? '#ff4444' : '#000000';
+        const voltage = getDotVoltage(connectedDot);
+        if (voltage === 9) return '#ff4444';  // Red for VCC
+        if (voltage === 0) return '#4444ff';  // Blue for GND
+        return '#000000';  // Black for no voltage
+    }
+    
+    // Draw connection points as small circles with appropriate colors
+    const connectionRadius = 4;
+    
+    // Collector connection point (top)
+    ctx.beginPath();
+    ctx.arc(0, -size/2, connectionRadius, 0, Math.PI * 2);
+    ctx.fillStyle = getConnectionColor(connections.collector);
+    ctx.fill();
+    
+    // Base connection point (left)
+    ctx.beginPath();
+    ctx.arc(-size/2, 0, connectionRadius, 0, Math.PI * 2);
+    ctx.fillStyle = getConnectionColor(connections.base);
+    ctx.fill();
+    
+    // Emitter connection point (bottom)
+    ctx.beginPath();
+    ctx.arc(0, size/2, connectionRadius, 0, Math.PI * 2);
+    ctx.fillStyle = getConnectionColor(connections.emitter);
+    ctx.fill();
+    
+    // Draw arrow for NPN
+    const arrowSize = 10;
+    ctx.beginPath();
+    ctx.moveTo(0, size/4);
+    ctx.lineTo(-arrowSize/2, size/4 - arrowSize);
+    ctx.moveTo(0, size/4);
+    ctx.lineTo(arrowSize/2, size/4 - arrowSize);
+    ctx.strokeStyle = '#000000';
+    ctx.stroke();
+    
+    // Add labels
+    ctx.font = '12px Arial';
+    ctx.fillStyle = '#000000';
+    ctx.textAlign = 'center';
+    
+    // Position labels closer to their connection points
+    const labelOffset = 8; // Reduced from 15
+    ctx.fillText('C', 0, -size/2 - labelOffset + 3); // Collector (moved down 3px)
+    ctx.fillText('B', -size/2 - labelOffset - 2, 0 + 5); // Base (moved down 5px and left 2px)
+    ctx.fillText('E', 0, size/2 + labelOffset + 6); // Emitter (moved down 6px total)
+    
+    // Add model number
+    ctx.font = '10px Arial';
+    ctx.fillText('2N3904', 0, 0);
+    
+    // Restore context
+    ctx.restore();
+    
+    // Return connection points coordinates
+    return {
+        collector: { x: x, y: y - size/2 },
+        base: { x: x - size/2, y: y },
+        emitter: { x: x, y: y + size/2 }
+    };
 } 
