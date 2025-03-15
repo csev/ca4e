@@ -40,6 +40,13 @@ let smokeParticles = [];
 const switches = new Map(); // Map to track switch states (pressed or not)
 let nextSwitchId = 0;
 
+// Remove transistor tracking variables
+const transistors = new Map(); // Map to track transistor pins (collector, base, emitter)
+
+// Add transistor connection tracking
+let pendingTransistor = null;
+let transistorConnections = new Map();
+
 class SmokeParticle {
     constructor(x, y) {
         this.x = x;
@@ -222,7 +229,7 @@ function drawDot(x, y, isHighlighted = false, voltage = null, dotIndex = null) {
     }
 }
 
-function drawLine(startX, startY, endX, endY) {
+function drawLine(startX, startY, endX, endY, type = 'resistor') {
     // Calculate the angle and length of the line
     const dx = endX - startX;
     const dy = endY - startY;
@@ -272,7 +279,28 @@ function drawLine(startX, startY, endX, endY) {
     ctx.lineWidth = 1;
     ctx.stroke();
     
-    // Generate random 4-band color code (for demonstration)
+    // Define color bands based on resistor type
+    let bandColors;
+    let resistanceLabel = '';
+    if (type === 'resistor_1k') {
+        // 1kΩ: Brown(1), Black(0), Red(×100), Gold(5%)
+        bandColors = ['#964B00', '#000000', '#FF0000', '#FFD700'];
+        resistanceLabel = '1kΩ';
+    } else if (type === 'resistor_10k') {
+        // 10kΩ: Brown(1), Black(0), Orange(×1000), Gold(5%)
+        bandColors = ['#964B00', '#000000', '#FFA500', '#FFD700'];
+        resistanceLabel = '10kΩ';
+    } else {
+        // Random resistor (original behavior)
+        bandColors = [
+            RESISTOR_COLORS[Math.floor(Math.random() * 10)],
+            RESISTOR_COLORS[Math.floor(Math.random() * 10)],
+            RESISTOR_COLORS[Math.floor(Math.random() * 10)],
+            '#FFD700'  // Gold band for 5% tolerance
+        ];
+    }
+    
+    // Draw the bands
     const bandPositions = [
         bandWidth/2,
         bandWidth/2 + bandWidth + bandGap,
@@ -280,20 +308,31 @@ function drawLine(startX, startY, endX, endY) {
         bodyLength - bandWidth * 1.5
     ];
     
-    // Draw the bands
-    const bandValues = [
-        Math.floor(Math.random() * 10),
-        Math.floor(Math.random() * 10),
-        Math.floor(Math.random() * 10),
-        2  // Gold band for 5% tolerance
-    ];
-    
     bandPositions.forEach((pos, index) => {
         ctx.beginPath();
         ctx.rect(pos, -bodyWidth/2, bandWidth, bodyWidth);
-        ctx.fillStyle = index === 3 ? '#FFD700' : RESISTOR_COLORS[bandValues[index]];
+        ctx.fillStyle = bandColors[index];
         ctx.fill();
     });
+    
+    // Draw resistance label if it exists
+    if (resistanceLabel) {
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 12px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        
+        // Draw label above the resistor
+        ctx.fillText(resistanceLabel, bodyLength/2, -bodyWidth);
+        
+        // Add a small white background to make the text more readable
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.fillRect(bodyLength/2 - 20, -bodyWidth - 8, 40, 16);
+        
+        // Redraw text on top of background
+        ctx.fillStyle = '#000000';
+        ctx.fillText(resistanceLabel, bodyLength/2, -bodyWidth);
+    }
     
     // Restore the context state
     ctx.restore();
@@ -604,7 +643,7 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
         const isPressed = switches.get(switchId)?.pressed || false;
         drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPressed);
     } else {
-        drawLine(startX, startY, endX, endY); // Original resistor drawing function
+        drawLine(startX, startY, endX, endY, type);
     }
 }
 
@@ -868,7 +907,7 @@ canvas.addEventListener('mousemove', (e) => {
     }
 });
 
-// Modify the mouseup event listener to handle switches
+// Modify the mouseup event listener for transistor handling
 canvas.addEventListener('mouseup', (e) => {
     if (isDragging) {
         const rect = canvas.getBoundingClientRect();
@@ -877,6 +916,7 @@ canvas.addEventListener('mouseup', (e) => {
         
         const endDot = findClosestDot(x, y);
         if (endDot && endDot !== startDot) {
+            // Handle components
             const startIndex = dots.indexOf(startDot);
             const endIndex = dots.indexOf(endDot);
             const startConnections = connections.get(startIndex);
@@ -910,12 +950,10 @@ canvas.addEventListener('mouseup', (e) => {
                 if (componentSelect.value === 'wire') {
                     connectDots(dots.indexOf(startDot), dots.indexOf(endDot));
                 } else if (componentSelect.value === 'switch_nc') {
-                    // For normally closed switch, connect dots initially
                     const switchId = getSwitchId(startDot, endDot);
                     switches.set(switchId, { pressed: false });
                     connectDots(dots.indexOf(startDot), dots.indexOf(endDot));
                 } else if (componentSelect.value === 'switch_no') {
-                    // For normally open switch, don't connect dots initially
                     const switchId = getSwitchId(startDot, endDot);
                     switches.set(switchId, { pressed: false });
                 }
