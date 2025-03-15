@@ -52,6 +52,19 @@ let transistorConnections = new Map();
 // Add this variable near the top with other state variables
 let selectedTransistorPoint = null;
 
+// Add after the RESISTOR_COLORS constant
+const RESISTOR_VALUES = {
+    'resistor_1k': 1000,    // 1kΩ
+    'resistor_10k': 10000   // 10kΩ
+};
+
+// Add LED electrical characteristics near RESISTOR_VALUES
+const LED_CHARACTERISTICS = {
+    forwardVoltage: 2.0,    // Forward voltage drop in volts
+    maxCurrent: 0.020,      // Maximum current in amperes (20mA)
+    minCurrent: 0.001       // Minimum visible current in amperes (1mA)
+};
+
 class SmokeParticle {
     constructor(x, y) {
         this.x = x;
@@ -234,7 +247,7 @@ function drawDot(x, y, isHighlighted = false, voltage = null, dotIndex = null) {
     }
 }
 
-function drawLine(startX, startY, endX, endY, type = 'resistor') {
+function drawLine(startX, startY, endX, endY, type = 'resistor', startDot = null, endDot = null) {
     // Calculate the angle and length of the line
     const dx = endX - startX;
     const dy = endY - startY;
@@ -245,12 +258,27 @@ function drawLine(startX, startY, endX, endY, type = 'resistor') {
     const bodyLength = Math.min(60, length * 0.6);
     const bodyWidth = 16;
     const bandWidth = 6;
-    const bandGap = (bodyLength - 5 * bandWidth) / 4; // Space between bands
+    const bandGap = (bodyLength - 5 * bandWidth) / 4;
     
     // Calculate resistor position
     const startWireLength = (length - bodyLength) / 2;
     const resistorStartX = startX + Math.cos(angle) * startWireLength;
     const resistorStartY = startY + Math.sin(angle) * startWireLength;
+    
+    // Calculate electrical values for resistors
+    let voltage_drop = 0;
+    let current = 0;
+    
+    if (type.startsWith('resistor_') && startDot && endDot) {
+        const startVoltage = getDotVoltage(startDot);
+        const endVoltage = getDotVoltage(endDot);
+        
+        if (startVoltage !== null && endVoltage !== null) {
+            voltage_drop = Math.abs(startVoltage - endVoltage);
+            const resistance = RESISTOR_VALUES[type];
+            current = voltage_drop / resistance; // Calculate current in amperes
+        }
+    }
     
     // Draw connecting wires
     ctx.beginPath();
@@ -263,14 +291,14 @@ function drawLine(startX, startY, endX, endY, type = 'resistor') {
     ctx.lineWidth = 2;
     ctx.stroke();
     
-    // Save the current context state
+    // Save context state
     ctx.save();
     
-    // Translate and rotate the context to draw the resistor body
+    // Translate and rotate for resistor body
     ctx.translate(resistorStartX, resistorStartY);
     ctx.rotate(angle);
     
-    // Draw resistor body (beige color with slight gradient for 3D effect)
+    // Draw resistor body with gradient
     const gradient = ctx.createLinearGradient(0, -bodyWidth/2, 0, bodyWidth/2);
     gradient.addColorStop(0, '#e6d5b8');
     gradient.addColorStop(0.5, '#f4e4cb');
@@ -288,24 +316,21 @@ function drawLine(startX, startY, endX, endY, type = 'resistor') {
     let bandColors;
     let resistanceLabel = '';
     if (type === 'resistor_1k') {
-        // 1kΩ: Brown(1), Black(0), Red(×100), Gold(5%)
         bandColors = ['#964B00', '#000000', '#FF0000', '#FFD700'];
         resistanceLabel = '1kΩ';
     } else if (type === 'resistor_10k') {
-        // 10kΩ: Brown(1), Black(0), Orange(×1000), Gold(5%)
         bandColors = ['#964B00', '#000000', '#FFA500', '#FFD700'];
         resistanceLabel = '10kΩ';
     } else {
-        // Random resistor (original behavior)
         bandColors = [
             RESISTOR_COLORS[Math.floor(Math.random() * 10)],
             RESISTOR_COLORS[Math.floor(Math.random() * 10)],
             RESISTOR_COLORS[Math.floor(Math.random() * 10)],
-            '#FFD700'  // Gold band for 5% tolerance
+            '#FFD700'
         ];
     }
     
-    // Draw the bands
+    // Draw color bands
     const bandPositions = [
         bandWidth/2,
         bandWidth/2 + bandWidth + bandGap,
@@ -320,26 +345,38 @@ function drawLine(startX, startY, endX, endY, type = 'resistor') {
         ctx.fill();
     });
     
-    // Draw resistance label if it exists
+    // Draw resistance label
     if (resistanceLabel) {
         ctx.fillStyle = '#000000';
         ctx.font = 'bold 12px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         
-        // Draw label above the resistor
-        ctx.fillText(resistanceLabel, bodyLength/2, -bodyWidth);
-        
-        // Add a small white background to make the text more readable
+        // Add white background for better visibility
         ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
         ctx.fillRect(bodyLength/2 - 20, -bodyWidth - 8, 40, 16);
         
-        // Redraw text on top of background
+        // Draw resistance value
         ctx.fillStyle = '#000000';
         ctx.fillText(resistanceLabel, bodyLength/2, -bodyWidth);
     }
     
-    // Restore the context state
+    // Draw electrical values if they exist
+    if (type.startsWith('resistor_') && voltage_drop > 0) {
+        ctx.font = '10px Arial';
+        ctx.fillStyle = '#000000';
+        ctx.textAlign = 'center';
+        
+        // Add white background for better visibility
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.fillRect(-20, -bodyWidth - 20, 80, 16);
+        
+        // Draw voltage and current values
+        ctx.fillStyle = '#000000';
+        ctx.fillText(`${voltage_drop.toFixed(1)}V ${(current * 1000).toFixed(1)}mA`, bodyLength/2, -bodyWidth - 10);
+    }
+    
+    // Restore context
     ctx.restore();
 }
 
@@ -361,8 +398,12 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
     const ledCenterX = ledStartX + Math.cos(angle) * radius;
     const ledCenterY = ledStartY + Math.sin(angle) * radius;
     
-    // Check if LED is properly connected through the breadboard
+    // Calculate LED electrical values
     let isProperlyConnected = false;
+    let current = 0;
+    let actualVoltage = 0;
+    let isReverse = false;
+
     if (startDot && endDot) {
         const startIndex = dots.indexOf(startDot);
         const endIndex = dots.indexOf(endDot);
@@ -372,9 +413,24 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
             const endConnections = connections.get(endIndex);
             
             if (startConnections && endConnections) {
-                const hasStartPower = Array.from(startConnections).some(i => dots[i].voltage === 9);
-                const hasEndGround = Array.from(endConnections).some(i => dots[i].voltage === 0);
-                isProperlyConnected = hasStartPower && hasEndGround;
+                const startVoltage = getDotVoltage(startDot);
+                const endVoltage = getDotVoltage(endDot);
+                
+                if (startVoltage !== null && endVoltage !== null) {
+                    const voltageDiff = startVoltage - endVoltage;
+                    isReverse = voltageDiff < 0;
+                    
+                    if (!isReverse && voltageDiff > LED_CHARACTERISTICS.forwardVoltage) {
+                        // LED is forward biased and has enough voltage
+                        actualVoltage = LED_CHARACTERISTICS.forwardVoltage;
+                        // Calculate current (simplified model)
+                        current = Math.min(
+                            (voltageDiff - LED_CHARACTERISTICS.forwardVoltage) / 1000, // Assume 1kΩ internal resistance
+                            LED_CHARACTERISTICS.maxCurrent
+                        );
+                        isProperlyConnected = current >= LED_CHARACTERISTICS.minCurrent;
+                    }
+                }
             }
         }
     }
@@ -403,27 +459,31 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
     
     // Create radial gradient for 3D effect
     const gradient = ctx.createRadialGradient(
-        -radius * 0.3, -radius * 0.3, radius * 0.1,  // Inner circle (highlight)
-        0, 0, radius                                  // Outer circle
+        -radius * 0.3, -radius * 0.3, radius * 0.1,
+        0, 0, radius
     );
 
     if (isProperlyConnected) {
-        // Bright glowing LED when properly connected
-        gradient.addColorStop(0, '#ffffff');    // Bright white center
-        gradient.addColorStop(0.2, '#ffcccc');  // Very bright red
-        gradient.addColorStop(0.7, '#ff3333');  // Bright red
-        gradient.addColorStop(1, '#cc0000');    // Darker red edge
+        // Calculate brightness based on current
+        const brightness = Math.min(1, current / LED_CHARACTERISTICS.maxCurrent);
+        const brightnessFactor = 0.3 + (0.7 * brightness); // Scale from 30% to 100%
         
-        // Add outer glow effect
+        // Bright glowing LED with brightness based on current
+        gradient.addColorStop(0, `rgba(255, 255, 255, ${brightnessFactor})`);
+        gradient.addColorStop(0.2, `rgba(255, 204, 204, ${brightnessFactor})`);
+        gradient.addColorStop(0.7, `rgba(255, 51, 51, ${brightnessFactor})`);
+        gradient.addColorStop(1, `rgba(204, 0, 0, ${brightnessFactor})`);
+        
+        // Add outer glow effect scaled with brightness
         ctx.shadowColor = '#ff0000';
-        ctx.shadowBlur = 15;
+        ctx.shadowBlur = 15 * brightnessFactor;
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
     } else {
         // Regular unlit LED
-        gradient.addColorStop(0, '#ff9999');    // Regular highlight
-        gradient.addColorStop(0.3, '#ff0000');  // Main red color
-        gradient.addColorStop(1, '#990000');    // Darker edge
+        gradient.addColorStop(0, '#ff9999');
+        gradient.addColorStop(0.3, '#ff0000');
+        gradient.addColorStop(1, '#990000');
     }
     
     ctx.fillStyle = gradient;
@@ -453,6 +513,20 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
     ctx.moveTo(radius * 1.4, 0);
     ctx.lineTo(radius * 1.8, 0);
     ctx.stroke();
+    
+    // Add electrical values display
+    if (startDot && endDot) {
+        ctx.font = '10px Arial';
+        ctx.fillStyle = '#000000';
+        ctx.textAlign = 'center';
+        
+        if (isReverse) {
+            ctx.fillText('Reverse', 0, -radius - 15);
+        } else if (isProperlyConnected) {
+            ctx.fillText(`${(current * 1000).toFixed(1)}mA`, 0, -radius - 15);
+            ctx.fillText(`${actualVoltage.toFixed(1)}V`, 0, -radius - 5);
+        }
+    }
     
     // Add a subtle inner shadow
     ctx.beginPath();
@@ -658,7 +732,7 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
         const isPressed = switches.get(switchId)?.pressed || false;
         drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPressed);
     } else {
-        drawLine(startX, startY, endX, endY, type);
+        drawLine(startX, startY, endX, endY, type, startDot, endDot);
     }
 }
 
@@ -1352,8 +1426,8 @@ function getSwitchId(startDot, endDot) {
     return `switch_${dots.indexOf(startDot)}_${dots.indexOf(endDot)}`;
 }
 
-// Add this helper function to check dot voltage
-function getDotVoltage(dot) {
+// Update getDotVoltage to use the voltage map
+function getDotVoltage(dot, voltageMap = null) {
     if (!dot) return null;
     const dotIndex = dots.indexOf(dot);
     if (dotIndex === -1) return null;
@@ -1361,12 +1435,178 @@ function getDotVoltage(dot) {
     const connectedDots = connections.get(dotIndex);
     if (!connectedDots) return null;
     
+    // First check direct power/ground connections
     const hasVcc = Array.from(connectedDots).some(i => dots[i].voltage === 9);
     const hasGnd = Array.from(connectedDots).some(i => dots[i].voltage === 0);
     
     if (hasVcc) return 9;
     if (hasGnd) return 0;
+    
+    // If a voltage map is provided, use it
+    if (voltageMap) {
+        if (voltageMap.has(dotIndex)) {
+            return voltageMap.get(dotIndex);
+        }
+        
+        // Check connected dots for intermediate voltages
+        for (const connectedDot of connectedDots) {
+            if (voltageMap.has(connectedDot)) {
+                return voltageMap.get(connectedDot);
+            }
+        }
+    }
+    
     return null;
+}
+
+// Add this function to calculate intermediate voltages for series components
+function calculateIntermediateVoltages() {
+    const voltageMap = new Map();
+    
+    // First identify power and ground connections
+    dots.forEach((dot, index) => {
+        const connectedDots = connections.get(index);
+        if (!connectedDots) return;
+        
+        const hasVcc = Array.from(connectedDots).some(i => dots[i].voltage === 9);
+        const hasGnd = Array.from(connectedDots).some(i => dots[i].voltage === 0);
+        
+        if (hasVcc) voltageMap.set(index, 9);
+        else if (hasGnd) voltageMap.set(index, 0);
+    });
+
+    // Find all components connected to power
+    const powerComponents = lines.filter(line => {
+        const startVoltage = getDotVoltage(line.start, voltageMap);
+        const endVoltage = getDotVoltage(line.end, voltageMap);
+        return startVoltage === 9 || endVoltage === 9;
+    });
+
+    // Process each power component
+    powerComponents.forEach(component => {
+        // Get the power end and ground end
+        let powerEnd = getDotVoltage(component.start, voltageMap) === 9 ? component.start : component.end;
+        let otherEnd = powerEnd === component.start ? component.end : component.start;
+        
+        // Calculate the total resistance and fixed voltage drops in this path
+        let totalResistance = 0;
+        let fixedVoltageDrops = 0;
+        let pathComponents = [];
+
+        // Add the first component
+        if (component.type.startsWith('resistor_')) {
+            totalResistance += RESISTOR_VALUES[component.type];
+        } else if (component.type === 'led') {
+            totalResistance += 1000; // LED internal resistance
+            fixedVoltageDrops += LED_CHARACTERISTICS.forwardVoltage;
+        }
+        pathComponents.push(component);
+
+        // Find connected components
+        let currentEnd = otherEnd;
+        let foundGround = false;
+        let visited = new Set([component]);
+
+        while (!foundGround) {
+            // Check if we've reached ground
+            if (getDotVoltage(currentEnd, voltageMap) === 0) {
+                foundGround = true;
+                break;
+            }
+
+            // Find next component connected to current end
+            let nextComponent = null;
+            for (const line of lines) {
+                if (visited.has(line)) continue;
+                
+                if (line.start === currentEnd || line.end === currentEnd) {
+                    nextComponent = line;
+                    visited.add(line);
+                    break;
+                }
+            }
+
+            if (!nextComponent) break;
+
+            // Add component to path
+            if (nextComponent.type.startsWith('resistor_')) {
+                totalResistance += RESISTOR_VALUES[nextComponent.type];
+            } else if (nextComponent.type === 'led') {
+                totalResistance += 1000;
+                fixedVoltageDrops += LED_CHARACTERISTICS.forwardVoltage;
+            }
+            pathComponents.push(nextComponent);
+
+            // Move to next end
+            currentEnd = nextComponent.start === currentEnd ? nextComponent.end : nextComponent.start;
+        }
+
+        // If we found a path to ground, calculate voltages and currents
+        if (foundGround) {
+            const availableVoltage = 9 - fixedVoltageDrops;
+            if (availableVoltage > 0) {
+                const current = Math.min(availableVoltage / totalResistance, LED_CHARACTERISTICS.maxCurrent);
+                
+                if (current >= LED_CHARACTERISTICS.minCurrent) {
+                    let currentVoltage = 9;
+                    
+                    // Apply voltage drops along the path
+                    pathComponents.forEach(comp => {
+                        let voltageDrop;
+                        if (comp.type === 'led') {
+                            voltageDrop = LED_CHARACTERISTICS.forwardVoltage;
+                            comp.current = current;
+                        } else if (comp.type.startsWith('resistor_')) {
+                            voltageDrop = current * RESISTOR_VALUES[comp.type];
+                            comp.current = current;
+                        }
+                        
+                        comp.voltage_drop = voltageDrop;
+                        currentVoltage -= voltageDrop;
+                        
+                        // Store the voltage at the end of this component
+                        const endDot = comp.end === powerEnd ? comp.start : comp.end;
+                        voltageMap.set(dots.indexOf(endDot), currentVoltage);
+                    });
+                }
+            }
+        }
+    });
+
+    return voltageMap;
+}
+
+// Update calculateCircuitValues to use the new voltage calculations
+function calculateCircuitValues() {
+    // Reset all calculated values
+    lines.forEach(line => {
+        if (line.type.startsWith('resistor_')) {
+            line.voltage_drop = 0;
+            line.current = 0;
+        }
+    });
+    
+    // Calculate intermediate voltages
+    const voltageMap = calculateIntermediateVoltages();
+    
+    // Calculate for each resistor
+    lines.forEach(line => {
+        if (line.type.startsWith('resistor_')) {
+            const startIndex = dots.indexOf(line.start);
+            const endIndex = dots.indexOf(line.end);
+            
+            if (startIndex !== -1 && endIndex !== -1) {
+                const startVoltage = getDotVoltage(line.start, voltageMap);
+                const endVoltage = getDotVoltage(line.end, voltageMap);
+                
+                if (startVoltage !== null && endVoltage !== null) {
+                    const resistance = RESISTOR_VALUES[line.type];
+                    line.voltage_drop = Math.abs(startVoltage - endVoltage);
+                    line.current = line.voltage_drop / resistance;
+                }
+            }
+        }
+    });
 }
 
 function getTransistorState(transistor) {
@@ -1527,7 +1767,6 @@ function rebuildAllConnections() {
     transistors.forEach((transistor, id) => {
         const state = getTransistorState(transistor);
         if (state.conducting && transistor.connections.collector && transistor.connections.emitter) {
-            // When conducting, connect collector to emitter through transistor
             const collectorDotIndex = dots.indexOf(transistor.connections.collector);
             const emitterDotIndex = dots.indexOf(transistor.connections.emitter);
             if (collectorDotIndex !== -1 && emitterDotIndex !== -1) {
@@ -1535,4 +1774,10 @@ function rebuildAllConnections() {
             }
         }
     });
+    
+    // Calculate voltage drops and currents for resistors and LEDs
+    calculateCircuitValues();
+    
+    // Redraw the grid to show updated values
+    drawGrid();
 } 
