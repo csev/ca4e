@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Circuit Editor</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .gate-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .gate-selector button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-weight: bold;
+        }
+
+        .gate-selector button:hover {
+            background-color: #45a049;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        #simulate {
+            background-color: #2196F3;
+        }
+
+        #clear {
+            background-color: #f44336;
+        }
+
+        #simulate, #clear {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-weight: bold;
+        }
+
+        #simulate:hover {
+            background-color: #1976D2;
+        }
+
+        #clear:hover {
+            background-color: #D32F2F;
+        }
+
+        #circuitCanvas {
+            margin-top: 60px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .status-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #333;
+            color: white;
+            padding: 5px 20px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+            display: none;
+        }
+
+        .validation-message {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: opacity 0.3s;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .validation-message.error {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .validation-message.info {
+            background-color: #2196F3;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <div class="gate-selector">
+            <button data-gate="INPUT" title="Input Node">INPUT</button>
+            <button data-gate="OUTPUT" title="Output Node">OUTPUT</button>
+            <button data-gate="NOT" title="NOT Gate">NOT</button>
+            <button data-gate="AND" title="AND Gate">AND</button>
+            <button data-gate="OR" title="OR Gate">OR</button>
+            <button data-gate="NAND" title="NAND Gate">NAND</button>
+            <button data-gate="NOR" title="NOR Gate">NOR</button>
+            <button data-gate="XOR" title="XOR Gate">XOR</button>
+        </div>
+        <div class="action-buttons">
+            <button id="simulate">Simulate</button>
+            <button id="clear">Clear</button>
+        </div>
+    </div>
+
+    <canvas id="circuitCanvas"></canvas>
+
+    <div class="status-bar">
+        <span id="coordinates">Position: 0, 0</span>
+        <span id="selectedTool">Selected: None</span>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <!-- Load the gate definitions first -->
+    <script src="gates.js"></script>
+    <!-- Then load the main editor code -->
+    <script src="main.js"></script>
+
+    <script>
+        // Add mouse coordinate tracking
+        const coordinates = document.getElementById('coordinates');
+        const selectedTool = document.getElementById('selectedTool');
+        const canvas = document.getElementById('circuitCanvas');
+
+        canvas.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.round(e.clientX - rect.left);
+            const y = Math.round(e.clientY - rect.top);
+            coordinates.textContent = `Position: ${x}, ${y}`;
+        });
+
+        // Update selected tool display
+        document.querySelectorAll('.gate-selector button').forEach(button => {
+            button.addEventListener('click', () => {
+                selectedTool.textContent = `Selected: ${button.dataset.gate}`;
+            });
+        });
+
+        // Add tooltips for buttons
+        document.querySelectorAll('[title]').forEach(element => {
+            const tooltip = document.getElementById('tooltip');
+            
+            element.addEventListener('mouseover', (e) => {
+                tooltip.style.display = 'block';
+                tooltip.style.left = e.pageX + 10 + 'px';
+                tooltip.style.top = e.pageY + 10 + 'px';
+                tooltip.textContent = element.getAttribute('title');
+            });
+
+            element.addEventListener('mouseout', () => {
+                tooltip.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html> 
