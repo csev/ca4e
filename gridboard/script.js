@@ -1773,4 +1773,32 @@ function rebuildAllConnections() {
     
     // Redraw the grid to show updated values
     drawGrid();
-} 
+}
+
+// Add emulation button handler
+document.getElementById('startEmulation').addEventListener('click', () => {
+    // Prepare circuit data for emulator
+    const circuitComponents = lines.map(line => ({
+        type: line.type,
+        start: getPointLabel(line.start),
+        end: getPointLabel(line.end),
+        transistorConnection: line.transistorConnection
+    }));
+
+    // Add transistors to components
+    transistors.forEach((transistor, id) => {
+        circuitComponents.push({
+            type: 'transistor',
+            id: id,
+            connections: {
+                collector: transistor.connections.collector ? getPointLabel(transistor.connections.collector) : null,
+                base: transistor.connections.base ? getPointLabel(transistor.connections.base) : null,
+                emitter: transistor.connections.emitter ? getPointLabel(transistor.connections.emitter) : null
+            }
+        });
+    });
+
+    // Pass the circuit data to the emulator
+    window.circuitEmulator.loadCircuit(circuitComponents, connections);
+    window.circuitEmulator.start();
+}); 
