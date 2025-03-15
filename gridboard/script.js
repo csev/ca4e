@@ -65,6 +65,11 @@ const LED_CHARACTERISTICS = {
     maxCurrent: 0.020    // Maximum current in amperes (20mA)
 };
 
+// Add after LED_CHARACTERISTICS
+const TRANSISTOR_CHARACTERISTICS = {
+    vbesat: 0.7        // Base-emitter saturation voltage
+};
+
 class SmokeParticle {
     constructor(x, y) {
         this.x = x;
@@ -1758,7 +1763,7 @@ function getTransistorState(transistor) {
     const vbe = baseVoltage - emitterVoltage;
     
     // Transistor conducts when Vbe > 0.7V
-    const conducting = vbe >= 0.7;
+    const conducting = vbe >= TRANSISTOR_CHARACTERISTICS.vbesat;
     
     return { conducting, baseEmitterVoltage: vbe };
 }
