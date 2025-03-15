@@ -1368,30 +1368,103 @@ function getPointLabel(dot) {
 function getComponentInfo(line) {
     const startPoint = getPointLabel(line.start);
     const endPoint = getPointLabel(line.end);
-    const type = line.type.charAt(0).toUpperCase() + line.type.slice(1);
     
-    if (line.type === 'resistor') {
-        return `${type} from ${startPoint} to ${endPoint}`;
+    if (line.type.startsWith('resistor_')) {
+        const resistance = RESISTOR_VALUES[line.type] / 1000; // Convert to kΩ
+        let info = `${resistance}kΩ Resistor from ${startPoint} to ${endPoint}`;
+        if (line.voltage_drop !== undefined && line.current !== undefined) {
+            info += ` (${line.voltage_drop.toFixed(1)}V, ${(line.current * 1000).toFixed(1)}mA)`;
+        }
+        return info;
     } else if (line.type === 'led') {
-        return `${type} from ${startPoint} (anode/+) to ${endPoint} (cathode/-)`;
+        let info = `LED from ${startPoint} (anode/+) to ${endPoint} (cathode/-)`;
+        if (line.voltage_drop !== undefined && line.current !== undefined) {
+            info += ` (${line.voltage_drop.toFixed(1)}V, ${(line.current * 1000).toFixed(1)}mA)`;
+        }
+        return info;
+    } else if (line.type === 'wire') {
+        return `Wire from ${startPoint} to ${endPoint}`;
+    } else if (line.type === 'switch_no' || line.type === 'switch_nc') {
+        const switchId = getSwitchId(line.start, line.end);
+        const isPressed = switches.get(switchId)?.pressed || false;
+        const switchType = line.type === 'switch_no' ? 'Normally Open' : 'Normally Closed';
+        return `${switchType} Switch from ${startPoint} to ${endPoint} (${isPressed ? 'Pressed' : 'Released'})`;
     }
     return '';
 }
 
 function showCircuitConnections() {
     const circuitInfo = document.getElementById('circuitInfo');
+    let html = '<h3>Circuit Connections:</h3>';
     
-    if (lines.length === 0) {
-        circuitInfo.innerHTML = '<p>No components in the circuit.</p>';
-        circuitInfo.style.display = 'block';
-        return;
+    // Show regular components
+    if (lines.length > 0) {
+        html += '<h4>Components:</h4><ul>';
+        lines.forEach((line, index) => {
+            if (!line.transistorConnection) {  // Skip transistor connections here
+                const info = getComponentInfo(line);
+                if (info) {
+                    html += `<li>${info}</li>`;
+                }
+            }
+        });
+        html += '</ul>';
     }
     
-    let html = '<h3>Circuit Connections:</h3><ul>';
-    lines.forEach((line, index) => {
-        html += `<li>${getComponentInfo(line)}</li>`;
+    // Show transistors and their connections
+    if (transistors.size > 0) {
+        html += '<h4>Transistors:</h4><ul>';
+        transistors.forEach((transistor, id) => {
+            const state = getTransistorState(transistor);
+            html += `<li>2N3904 NPN Transistor (${state.conducting ? 'ON' : 'OFF'}, Vbe: ${state.baseEmitterVoltage.toFixed(2)}V)<ul>`;
+            
+            // Show collector connection
+            if (transistor.connections.collector) {
+                html += `<li>Collector: Connected to ${getPointLabel(transistor.connections.collector)}</li>`;
+            } else {
+                html += '<li>Collector: Not connected</li>';
+            }
+            
+            // Show base connection
+            if (transistor.connections.base) {
+                html += `<li>Base: Connected to ${getPointLabel(transistor.connections.base)}</li>`;
+            } else {
+                html += '<li>Base: Not connected</li>';
+            }
+            
+            // Show emitter connection
+            if (transistor.connections.emitter) {
+                html += `<li>Emitter: Connected to ${getPointLabel(transistor.connections.emitter)}</li>`;
+            } else {
+                html += '<li>Emitter: Not connected</li>';
+            }
+            
+            html += '</ul></li>';
+        });
+        html += '</ul>';
+    }
+    
+    // Show power and ground connections
+    html += '<h4>Power Connections:</h4><ul>';
+    let powerConnections = 0;
+    dots.forEach((dot, index) => {
+        const voltage = getDotVoltage(dot);
+        if (voltage === 9) {
+            html += `<li>VCC (9V) at ${getPointLabel(dot)}</li>`;
+            powerConnections++;
+        } else if (voltage === 0) {
+            html += `<li>GND (0V) at ${getPointLabel(dot)}</li>`;
+            powerConnections++;
+        }
     });
+    if (powerConnections === 0) {
+        html += '<li>No power or ground connections</li>';
+    }
     html += '</ul>';
+    
+    if (lines.length === 0 && transistors.size === 0) {
+        html += '<p>No components in the circuit.</p>';
+    }
     
     circuitInfo.innerHTML = html;
     circuitInfo.style.display = 'block';
@@ -1462,7 +1535,38 @@ function getDotVoltage(dot, voltageMap = null) {
 // Add this function to calculate intermediate voltages for series components
 function calculateIntermediateVoltages() {
     const voltageMap = new Map();
-    
+    const processedComponents = new Set();
+
+    // Helper function to get all dots in a column
+    function getColumnDots(dot) {
+        const dotIndex = dots.indexOf(dot);
+        if (dotIndex === -1) return new Set([dot]);
+        
+        const { row, col } = getRowCol(dotIndex);
+        const columnDots = new Set([dot]);
+        
+        // If dot is in top half of breadboard (rows 2-6)
+        if (row >= 2 && row <= 6) {
+            for (let r = 2; r <= 6; r++) {
+                const connectedDotIndex = getDotIndex(r, col);
+                if (connectedDotIndex >= 0) {
+                    columnDots.add(dots[connectedDotIndex]);
+                }
+            }
+        }
+        // If dot is in bottom half of breadboard (rows 7-11)
+        else if (row >= 7 && row <= 11) {
+            for (let r = 7; r <= 11; r++) {
+                const connectedDotIndex = getDotIndex(r, col);
+                if (connectedDotIndex >= 0) {
+                    columnDots.add(dots[connectedDotIndex]);
+                }
+            }
+        }
+        
+        return columnDots;
+    }
+
     // First identify power and ground connections
     dots.forEach((dot, index) => {
         const connectedDots = connections.get(index);
@@ -1471,105 +1575,116 @@ function calculateIntermediateVoltages() {
         const hasVcc = Array.from(connectedDots).some(i => dots[i].voltage === 9);
         const hasGnd = Array.from(connectedDots).some(i => dots[i].voltage === 0);
         
-        if (hasVcc) voltageMap.set(index, 9);
-        else if (hasGnd) voltageMap.set(index, 0);
+        if (hasVcc) {
+            voltageMap.set(index, 9);
+            // Set voltage for all dots in the same column
+            getColumnDots(dot).forEach(columnDot => {
+                voltageMap.set(dots.indexOf(columnDot), 9);
+            });
+        }
+        else if (hasGnd) {
+            voltageMap.set(index, 0);
+            // Set voltage for all dots in the same column
+            getColumnDots(dot).forEach(columnDot => {
+                voltageMap.set(dots.indexOf(columnDot), 0);
+            });
+        }
     });
 
-    // Find all components connected to power
-    const powerComponents = lines.filter(line => {
-        const startVoltage = getDotVoltage(line.start, voltageMap);
-        const endVoltage = getDotVoltage(line.end, voltageMap);
-        return startVoltage === 9 || endVoltage === 9;
-    });
+    // Helper function to find all components connected to a dot or its column
+    function findConnectedComponents(dot) {
+        const columnDots = getColumnDots(dot);
+        return lines.filter(line => 
+            !processedComponents.has(line) && 
+            (columnDots.has(line.start) || columnDots.has(line.end))
+        );
+    }
 
-    // Process each power component
-    powerComponents.forEach(component => {
-        // Get the power end and ground end
-        let powerEnd = getDotVoltage(component.start, voltageMap) === 9 ? component.start : component.end;
-        let otherEnd = powerEnd === component.start ? component.end : component.start;
+    // Helper function to get the other end of a component
+    function getOtherEnd(component, dot) {
+        const columnDots = getColumnDots(dot);
+        return columnDots.has(component.start) ? component.end : component.start;
+    }
+
+    // Helper function to trace path to ground
+    function tracePath(startDot, pathSoFar = [], visited = new Set()) {
+        const startColumnDots = getColumnDots(startDot);
+        for (const dot of startColumnDots) {
+            if (visited.has(dot)) return null;
+            visited.add(dot);
+        }
+
+        // Check if we've reached ground
+        const startVoltage = getDotVoltage(startDot, voltageMap);
+        if (startVoltage === 0) {
+            return pathSoFar;
+        }
+
+        // Find all unprocessed components connected to this dot or its column
+        const connectedComponents = findConnectedComponents(startDot);
         
-        // Calculate the total resistance and fixed voltage drops in this path
-        let totalResistance = 0;
-        let fixedVoltageDrops = 0;
-        let pathComponents = [];
-
-        // Add the first component
-        if (component.type.startsWith('resistor_')) {
-            totalResistance += RESISTOR_VALUES[component.type];
-        } else if (component.type === 'led') {
-            totalResistance += 1000; // LED internal resistance
-            fixedVoltageDrops += LED_CHARACTERISTICS.forwardVoltage;
+        for (const component of connectedComponents) {
+            const otherEnd = getOtherEnd(component, startDot);
+            const newPath = [...pathSoFar, { component, startDot, endDot: otherEnd }];
+            const result = tracePath(otherEnd, newPath, visited);
+            if (result) return result;
         }
-        pathComponents.push(component);
 
-        // Find connected components
-        let currentEnd = otherEnd;
-        let foundGround = false;
-        let visited = new Set([component]);
+        return null;
+    }
 
-        while (!foundGround) {
-            // Check if we've reached ground
-            if (getDotVoltage(currentEnd, voltageMap) === 0) {
-                foundGround = true;
-                break;
-            }
+    // Process each power connection
+    dots.forEach((dot, index) => {
+        if (getDotVoltage(dot, voltageMap) === 9) {
+            const path = tracePath(dot);
+            if (!path) return;
 
-            // Find next component connected to current end
-            let nextComponent = null;
-            for (const line of lines) {
-                if (visited.has(line)) continue;
-                
-                if (line.start === currentEnd || line.end === currentEnd) {
-                    nextComponent = line;
-                    visited.add(line);
-                    break;
+            // Calculate total resistance and fixed voltage drops
+            let totalResistance = 0;
+            let fixedVoltageDrops = 0;
+
+            path.forEach(({ component }) => {
+                if (component.type.startsWith('resistor_')) {
+                    totalResistance += RESISTOR_VALUES[component.type];
+                } else if (component.type === 'led') {
+                    totalResistance += 1000; // LED internal resistance
+                    fixedVoltageDrops += LED_CHARACTERISTICS.forwardVoltage;
                 }
-            }
+                processedComponents.add(component);
+            });
 
-            if (!nextComponent) break;
-
-            // Add component to path
-            if (nextComponent.type.startsWith('resistor_')) {
-                totalResistance += RESISTOR_VALUES[nextComponent.type];
-            } else if (nextComponent.type === 'led') {
-                totalResistance += 1000;
-                fixedVoltageDrops += LED_CHARACTERISTICS.forwardVoltage;
-            }
-            pathComponents.push(nextComponent);
-
-            // Move to next end
-            currentEnd = nextComponent.start === currentEnd ? nextComponent.end : nextComponent.start;
-        }
-
-        // If we found a path to ground, calculate voltages and currents
-        if (foundGround) {
+            // Calculate current and voltage drops
             const availableVoltage = 9 - fixedVoltageDrops;
-            if (availableVoltage > 0) {
-                const current = Math.min(availableVoltage / totalResistance, LED_CHARACTERISTICS.maxCurrent);
-                
-                if (current >= LED_CHARACTERISTICS.minCurrent) {
-                    let currentVoltage = 9;
-                    
-                    // Apply voltage drops along the path
-                    pathComponents.forEach(comp => {
-                        let voltageDrop;
-                        if (comp.type === 'led') {
-                            voltageDrop = LED_CHARACTERISTICS.forwardVoltage;
-                            comp.current = current;
-                        } else if (comp.type.startsWith('resistor_')) {
-                            voltageDrop = current * RESISTOR_VALUES[comp.type];
-                            comp.current = current;
-                        }
-                        
-                        comp.voltage_drop = voltageDrop;
-                        currentVoltage -= voltageDrop;
-                        
-                        // Store the voltage at the end of this component
-                        const endDot = comp.end === powerEnd ? comp.start : comp.end;
-                        voltageMap.set(dots.indexOf(endDot), currentVoltage);
-                    });
+            if (availableVoltage <= 0) return;
+
+            const current = Math.min(
+                availableVoltage / totalResistance,
+                LED_CHARACTERISTICS.maxCurrent
+            );
+
+            if (current < LED_CHARACTERISTICS.minCurrent) return;
+
+            // Apply voltage drops along the path
+            let currentVoltage = 9;
+            path.forEach(({ component, startDot, endDot }) => {
+                let voltageDrop;
+                if (component.type === 'led') {
+                    voltageDrop = LED_CHARACTERISTICS.forwardVoltage;
+                    component.current = current;
+                } else if (component.type.startsWith('resistor_')) {
+                    voltageDrop = current * RESISTOR_VALUES[component.type];
+                    component.current = current;
                 }
-            }
+
+                component.voltage_drop = voltageDrop;
+                currentVoltage -= voltageDrop;
+
+                // Store intermediate voltage for all dots in the column
+                const endColumnDots = getColumnDots(endDot);
+                endColumnDots.forEach(columnDot => {
+                    voltageMap.set(dots.indexOf(columnDot), currentVoltage);
+                });
+            });
         }
     });
 
