@@ -27,13 +27,13 @@ class Gate {
             case 'OR':
             case 'NAND':
             case 'NOR':
+            case 'XOR':
                 this.inputNodes = [
-                    { x: this.x - 25, y: this.y - 15, value: false, connected: false },
-                    { x: this.x - 25, y: this.y, value: false, connected: false },
-                    { x: this.x - 25, y: this.y + 15, value: false, connected: false }
+                    { x: this.x - 20, y: this.y - 10, value: false, connected: false },
+                    { x: this.x - 20, y: this.y + 10, value: false, connected: false }
                 ];
                 this.outputNodes = [
-                    { x: this.x + 25, y: this.y, value: false, hasOutput: false }
+                    { x: this.x + 20, y: this.y, value: false, hasOutput: false }
                 ];
                 break;
             case 'NOT':
@@ -52,15 +52,6 @@ class Gate {
             case 'OUTPUT':
                 this.inputNodes = [
                     { x: this.x - 20, y: this.y, value: false, connected: false }
-                ];
-                break;
-            case 'XOR':
-                this.inputNodes = [
-                    { x: this.x - 20, y: this.y - 10, value: false, connected: false },
-                    { x: this.x - 20, y: this.y + 10, value: false, connected: false }
-                ];
-                this.outputNodes = [
-                    { x: this.x + 20, y: this.y, value: false, hasOutput: false }
                 ];
                 break;
         }
@@ -169,44 +160,30 @@ class Gate {
     }
 
     drawAND(ctx) {
-        const connectedInputs = this.inputNodes
-            .filter(node => node.sourceValue !== undefined)
-            .map(node => node.sourceValue);
-        const hasConnectedInputs = connectedInputs.length > 0;
+        const inputValues = this.inputNodes.map(node => node.sourceValue);
+        const hasAllInputs = inputValues.every(val => val !== undefined);
         const outputValue = this.evaluate();
 
-        // Draw gate body (moved in from connectors)
         this.drawGate(ctx, (ctx) => {
-            ctx.moveTo(this.x - 20, this.y - 25);
-            ctx.lineTo(this.x, this.y - 25);
-            ctx.arc(this.x, this.y, 25, -Math.PI/2, Math.PI/2);
-            ctx.lineTo(this.x - 20, this.y + 25);
+            ctx.moveTo(this.x - 20, this.y - 20);
+            ctx.lineTo(this.x, this.y - 20);
+            ctx.arc(this.x, this.y, 20, -Math.PI/2, Math.PI/2);
+            ctx.lineTo(this.x - 20, this.y + 20);
             ctx.closePath();
-        }, outputValue, hasConnectedInputs);
-
-        // Draw gate label (higher up)
-        ctx.fillStyle = '#000';
-        ctx.font = '12px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(this.type, this.x, this.y - 35);
-
-        // Draw nodes using existing node positions
-        this.drawNodes(ctx);
+        }, outputValue, hasAllInputs);
     }
 
     drawOR(ctx) {
-        const connectedInputs = this.inputNodes
-            .filter(node => node.sourceValue !== undefined)
-            .map(node => node.sourceValue);
-        const hasConnectedInputs = connectedInputs.length > 0;
+        const inputValues = this.inputNodes.map(node => node.sourceValue);
+        const hasAllInputs = inputValues.every(val => val !== undefined);
         const outputValue = this.evaluate();
 
         this.drawGate(ctx, (ctx) => {
-            ctx.moveTo(this.x - 25, this.y - 25);
-            ctx.quadraticCurveTo(this.x, this.y - 25, this.x + 25, this.y);
-            ctx.quadraticCurveTo(this.x, this.y + 25, this.x - 25, this.y + 25);
-            ctx.quadraticCurveTo(this.x - 15, this.y, this.x - 25, this.y - 25);
-        }, outputValue, hasConnectedInputs);
+            ctx.moveTo(this.x - 20, this.y - 20);
+            ctx.quadraticCurveTo(this.x, this.y - 20, this.x + 20, this.y);
+            ctx.quadraticCurveTo(this.x, this.y + 20, this.x - 20, this.y + 20);
+            ctx.quadraticCurveTo(this.x - 10, this.y, this.x - 20, this.y - 20);
+        }, outputValue, hasAllInputs);
     }
 
     drawNOT(ctx) {
@@ -255,43 +232,39 @@ class Gate {
     }
 
     drawNAND(ctx) {
-        const connectedInputs = this.inputNodes
-            .filter(node => node.sourceValue !== undefined)
-            .map(node => node.sourceValue);
-        const hasConnectedInputs = connectedInputs.length > 0;
+        const inputValues = this.inputNodes.map(node => node.sourceValue);
+        const hasAllInputs = inputValues.every(val => val !== undefined);
         const outputValue = this.evaluate();
 
         this.drawGate(ctx, (ctx) => {
-            ctx.moveTo(this.x - 25, this.y - 25);
-            ctx.lineTo(this.x, this.y - 25);
-            ctx.arc(this.x, this.y, 25, -Math.PI/2, Math.PI/2);
-            ctx.lineTo(this.x - 25, this.y + 25);
+            ctx.moveTo(this.x - 20, this.y - 20);
+            ctx.lineTo(this.x, this.y - 20);
+            ctx.arc(this.x, this.y, 20, -Math.PI/2, Math.PI/2);
+            ctx.lineTo(this.x - 20, this.y + 20);
             ctx.closePath();
-        }, outputValue, hasConnectedInputs);
+        }, outputValue, hasAllInputs);
 
         // Add NOT circle
         ctx.beginPath();
-        ctx.arc(this.x + 30, this.y, 5, 0, Math.PI * 2);
+        ctx.arc(this.x + 25, this.y, 5, 0, Math.PI * 2);
         ctx.stroke();
     }
 
     drawNOR(ctx) {
-        const connectedInputs = this.inputNodes
-            .filter(node => node.sourceValue !== undefined)
-            .map(node => node.sourceValue);
-        const hasConnectedInputs = connectedInputs.length > 0;
+        const inputValues = this.inputNodes.map(node => node.sourceValue);
+        const hasAllInputs = inputValues.every(val => val !== undefined);
         const outputValue = this.evaluate();
 
         this.drawGate(ctx, (ctx) => {
-            ctx.moveTo(this.x - 25, this.y - 25);
-            ctx.quadraticCurveTo(this.x, this.y - 25, this.x + 25, this.y);
-            ctx.quadraticCurveTo(this.x, this.y + 25, this.x - 25, this.y + 25);
-            ctx.quadraticCurveTo(this.x - 15, this.y, this.x - 25, this.y - 25);
-        }, outputValue, hasConnectedInputs);
+            ctx.moveTo(this.x - 20, this.y - 20);
+            ctx.quadraticCurveTo(this.x, this.y - 20, this.x + 20, this.y);
+            ctx.quadraticCurveTo(this.x, this.y + 20, this.x - 20, this.y + 20);
+            ctx.quadraticCurveTo(this.x - 10, this.y, this.x - 20, this.y - 20);
+        }, outputValue, hasAllInputs);
 
         // Add NOT circle
         ctx.beginPath();
-        ctx.arc(this.x + 30, this.y, 5, 0, Math.PI * 2);
+        ctx.arc(this.x + 25, this.y, 5, 0, Math.PI * 2);
         ctx.stroke();
     }
 
@@ -423,86 +396,39 @@ class Gate {
 
     // Add method to evaluate gate output
     evaluate() {
-        let outputValue; // Declare the variable first
+        // Get input values
+        const inputValues = this.inputNodes.map(node => node.sourceValue);
+        const hasAllInputs = inputValues.every(val => val !== undefined);
+        let outputValue;
 
         switch(this.type) {
             case 'AND':
-                // Get only connected input values
-                const connectedAndInputs = this.inputNodes
-                    .filter(node => node.sourceValue !== undefined)
-                    .map(node => node.sourceValue);
-                // If no inputs are connected, return undefined
-                if (connectedAndInputs.length === 0) {
-                    outputValue = undefined;
-                } else {
-                    // AND operation on connected inputs
-                    outputValue = connectedAndInputs.every(val => val === true);
-                }
+                outputValue = hasAllInputs ? inputValues.every(val => val === true) : undefined;
                 break;
-
             case 'OR':
-                const connectedOrInputs = this.inputNodes
-                    .filter(node => node.sourceValue !== undefined)
-                    .map(node => node.sourceValue);
-                if (connectedOrInputs.length === 0) {
-                    outputValue = undefined;
-                } else {
-                    outputValue = connectedOrInputs.some(val => val === true);
-                }
+                outputValue = hasAllInputs ? inputValues.some(val => val === true) : undefined;
                 break;
-
-            case 'NAND':
-                const connectedNandInputs = this.inputNodes
-                    .filter(node => node.sourceValue !== undefined)
-                    .map(node => node.sourceValue);
-                if (connectedNandInputs.length === 0) {
-                    outputValue = undefined;
-                } else {
-                    outputValue = !connectedNandInputs.every(val => val === true);
-                }
-                break;
-
-            case 'NOR':
-                const connectedNorInputs = this.inputNodes
-                    .filter(node => node.sourceValue !== undefined)
-                    .map(node => node.sourceValue);
-                if (connectedNorInputs.length === 0) {
-                    outputValue = undefined;
-                } else {
-                    outputValue = !connectedNorInputs.some(val => val === true);
-                }
-                break;
-
             case 'NOT':
-                const inputNode = this.inputNodes[0];
-                outputValue = inputNode && inputNode.sourceValue !== undefined ? 
-                    !inputNode.sourceValue : undefined;
+                outputValue = inputValues[0] !== undefined ? !inputValues[0] : undefined;
                 break;
-
+            case 'NAND':
+                outputValue = hasAllInputs ? !inputValues.every(val => val === true) : undefined;
+                break;
+            case 'NOR':
+                outputValue = hasAllInputs ? !inputValues.some(val => val === true) : undefined;
+                break;
             case 'XOR':
-                const connectedXorInputs = this.inputNodes
-                    .filter(node => node.sourceValue !== undefined)
-                    .map(node => node.sourceValue);
-                if (connectedXorInputs.length !== 2) {
-                    outputValue = undefined;
-                } else {
-                    outputValue = connectedXorInputs[0] !== connectedXorInputs[1];
-                }
+                outputValue = hasAllInputs ? inputValues.reduce((a, b) => a !== b) : undefined;
                 break;
-
             case 'INPUT':
                 outputValue = this.state;
                 break;
-
-            default:
-                outputValue = undefined;
         }
 
         // Update output node value
         if (this.outputNodes[0]) {
             this.outputNodes[0].sourceValue = outputValue;
         }
-
         return outputValue;
     }
 
