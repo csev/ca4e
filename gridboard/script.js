@@ -60,9 +60,9 @@ const RESISTOR_VALUES = {
 
 // Add LED electrical characteristics near RESISTOR_VALUES
 const LED_CHARACTERISTICS = {
-    forwardVoltage: 2.0,    // Forward voltage drop in volts
-    maxCurrent: 0.020,      // Maximum current in amperes (20mA)
-    minCurrent: 0.001       // Minimum visible current in amperes (1mA)
+    resistance: 200,      // Internal resistance in ohms
+    minCurrent: 0.001,   // Minimum visible current in amperes (1mA)
+    maxCurrent: 0.020    // Maximum current in amperes (20mA)
 };
 
 class SmokeParticle {
@@ -394,7 +394,6 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
     let isProperlyConnected = false;
     let current = 0;
     let actualVoltage = 0;
-    let isReverse = false;
 
     if (startDot && endDot) {
         const voltageMap = calculateIntermediateVoltages();
@@ -402,17 +401,10 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
         const endVoltage = getDotVoltage(endDot, voltageMap);
         
         if (startVoltage !== null && endVoltage !== null) {
-            const voltageDiff = startVoltage - endVoltage;
-            isReverse = voltageDiff < 0;
-            
-            if (!isReverse && voltageDiff > LED_CHARACTERISTICS.forwardVoltage) {
-                actualVoltage = LED_CHARACTERISTICS.forwardVoltage;
-                current = Math.min(
-                    (voltageDiff - LED_CHARACTERISTICS.forwardVoltage) / 1000,
-                    LED_CHARACTERISTICS.maxCurrent
-                );
-                isProperlyConnected = current >= LED_CHARACTERISTICS.minCurrent;
-            }
+            const voltageDiff = Math.abs(startVoltage - endVoltage);
+            actualVoltage = voltageDiff;
+            current = voltageDiff / LED_CHARACTERISTICS.resistance;
+            isProperlyConnected = current >= LED_CHARACTERISTICS.minCurrent;
         }
     }
     
@@ -496,18 +488,14 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
     ctx.font = '10px Arial';
     ctx.textAlign = 'center';
     
-    if (isReverse || isProperlyConnected) {
+    if (isProperlyConnected) {
         // Add white background for better visibility
         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
         ctx.fillRect(-20, -radius - 25, 40, 20);
         
         ctx.fillStyle = '#000000';
-        if (isReverse) {
-            ctx.fillText('Reverse', 0, -radius - 15);
-        } else {
-            ctx.fillText(`${(current * 1000).toFixed(1)}mA`, 0, -radius - 15);
-            ctx.fillText(`${actualVoltage.toFixed(1)}V`, 0, -radius - 5);
-        }
+        ctx.fillText(`${(current * 1000).toFixed(1)}mA`, 0, -radius - 15);
+        ctx.fillText(`${actualVoltage.toFixed(1)}V`, 0, -radius - 5);
     }
     
     // Add a subtle inner shadow
@@ -1674,42 +1662,47 @@ function calculateIntermediateVoltages() {
                 if (component.type.startsWith('resistor_')) {
                     totalResistance += RESISTOR_VALUES[component.type];
                 } else if (component.type === 'led') {
-                    totalResistance += 1000; // LED internal resistance
-                    fixedVoltageDrops += LED_CHARACTERISTICS.forwardVoltage;
+                    totalResistance += LED_CHARACTERISTICS.resistance;
                 }
                 processedComponents.add(component);
             });
 
-            // Calculate current and voltage drops
+            // Calculate current based on total resistance and available voltage
             const availableVoltage = 9 - fixedVoltageDrops;
-            if (availableVoltage <= 0) return;
+            const current = Math.min(availableVoltage / totalResistance, LED_CHARACTERISTICS.maxCurrent);
 
-            const current = Math.min(
-                availableVoltage / totalResistance,
-                LED_CHARACTERISTICS.maxCurrent
-            );
-
+            // Only proceed if current is sufficient
             if (current < LED_CHARACTERISTICS.minCurrent) return;
 
             // Apply voltage drops along the path
             let currentVoltage = 9;
             path.forEach(({ component, startDot, endDot }) => {
-                let voltageDrop;
-                if (component.type === 'led') {
-                    voltageDrop = LED_CHARACTERISTICS.forwardVoltage;
-                    component.current = current;
-                } else if (component.type.startsWith('resistor_')) {
+                let voltageDrop = 0;
+                if (component.type.startsWith('resistor_')) {
                     voltageDrop = current * RESISTOR_VALUES[component.type];
-                    component.current = current;
+                } else if (component.type === 'led') {
+                    voltageDrop = current * LED_CHARACTERISTICS.resistance;
                 }
 
+                // Store the voltage drop and current for the component
                 component.voltage_drop = voltageDrop;
+                component.current = current;
+
+                // Update the current voltage
                 currentVoltage -= voltageDrop;
 
                 // Store intermediate voltage for all dots in the column
                 const endColumnDots = getColumnDots(endDot);
                 endColumnDots.forEach(columnDot => {
                     voltageMap.set(dots.indexOf(columnDot), currentVoltage);
+                });
+
+                // Also store the voltage for the start dot's column if it's not already set
+                const startColumnDots = getColumnDots(startDot);
+                startColumnDots.forEach(columnDot => {
+                    if (!voltageMap.has(dots.indexOf(columnDot))) {
+                        voltageMap.set(dots.indexOf(columnDot), currentVoltage + voltageDrop);
+                    }
                 });
             });
         }
