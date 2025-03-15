@@ -1100,11 +1100,16 @@ canvas.addEventListener('mouseup', (e) => {
                 };
                 lines.push(newLine);
                 transistor.connections[hadTransistorPoint.type] = endDot;
+                
+                // Only rebuild regular connections, not transistor ones
+                initializeConnections();
+                lines.forEach(line => {
+                    if (!line.transistorConnection && line.type === 'wire') {
+                        connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
+                    }
+                });
+                drawGrid();
             }
-            
-            // Rebuild all connections after modifying transistor connections
-            initializeConnections();
-            rebuildAllConnections();
         } else if (hadStartDot && endDot && hadStartDot !== endDot) {
             // Original dot-to-dot connection logic
             const startIndex = dots.indexOf(hadStartDot);
@@ -1140,11 +1145,14 @@ canvas.addEventListener('mouseup', (e) => {
                 
                 // Reinitialize and rebuild all connections
                 initializeConnections();
-                rebuildAllConnections();
+                lines.forEach(line => {
+                    if (!line.transistorConnection && line.type === 'wire') {
+                        connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
+                    }
+                });
             }
+            drawGrid();
         }
-        
-        drawGrid();
     }
 });
 
@@ -1433,21 +1441,23 @@ function drawTransistor(x, y, isPlacing = false) {
     };
 }
 
-// Add this helper function to rebuild all connections
+// Update rebuildAllConnections function
 function rebuildAllConnections() {
-    // First handle all wire connections
+    // First handle all wire connections between dots
     lines.forEach(line => {
-        if (line.type === 'wire') {
+        if (!line.transistorConnection && line.type === 'wire') {
             connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
         }
     });
     
     // Then handle all switch connections
     lines.forEach(line => {
-        if (line.type === 'switch_nc' && !switches.get(getSwitchId(line.start, line.end))?.pressed) {
-            connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
-        } else if (line.type === 'switch_no' && switches.get(getSwitchId(line.start, line.end))?.pressed) {
-            connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
+        if (!line.transistorConnection) {  // Only for non-transistor connections
+            if (line.type === 'switch_nc' && !switches.get(getSwitchId(line.start, line.end))?.pressed) {
+                connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
+            } else if (line.type === 'switch_no' && switches.get(getSwitchId(line.start, line.end))?.pressed) {
+                connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
+            }
         }
     });
 } 
