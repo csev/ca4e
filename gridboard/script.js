@@ -1625,8 +1625,9 @@ function calculateIntermediateVoltages() {
     function tracePath(startDot, pathSoFar = [], visited = new Set()) {
         const startColumnDots = getColumnDots(startDot);
         for (const dot of startColumnDots) {
-            if (visited.has(dot)) return null;
-            visited.add(dot);
+            const dotIndex = dots.indexOf(dot);
+            if (visited.has(dotIndex)) return null;
+            visited.add(dotIndex);
         }
 
         // Check if we've reached ground
@@ -1640,9 +1641,12 @@ function calculateIntermediateVoltages() {
         
         for (const component of connectedComponents) {
             const otherEnd = getOtherEnd(component, startDot);
-            const newPath = [...pathSoFar, { component, startDot, endDot: otherEnd }];
-            const result = tracePath(otherEnd, newPath, visited);
-            if (result) return result;
+            const otherEndIndex = dots.indexOf(otherEnd);
+            if (!visited.has(otherEndIndex)) {
+                const newPath = [...pathSoFar, { component, startDot, endDot: otherEnd }];
+                const result = tracePath(otherEnd, newPath, visited);
+                if (result) return result;
+            }
         }
 
         return null;
@@ -1654,9 +1658,8 @@ function calculateIntermediateVoltages() {
             const path = tracePath(dot);
             if (!path) return;
 
-            // Calculate total resistance and fixed voltage drops
+            // Calculate total resistance
             let totalResistance = 0;
-            let fixedVoltageDrops = 0;
 
             path.forEach(({ component }) => {
                 if (component.type.startsWith('resistor_')) {
@@ -1667,12 +1670,8 @@ function calculateIntermediateVoltages() {
                 processedComponents.add(component);
             });
 
-            // Calculate current based on total resistance and available voltage
-            const availableVoltage = 9 - fixedVoltageDrops;
-            const current = Math.min(availableVoltage / totalResistance, LED_CHARACTERISTICS.maxCurrent);
-
-            // Only proceed if current is sufficient
-            if (current < LED_CHARACTERISTICS.minCurrent) return;
+            // Calculate current based on total resistance and supply voltage
+            const current = 9 / totalResistance;
 
             // Apply voltage drops along the path
             let currentVoltage = 9;
