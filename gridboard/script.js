@@ -1207,13 +1207,23 @@ canvas.addEventListener('contextmenu', (e) => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     
-    // Check for transistors first
-    for (const [id, transistor] of transistors.entries()) {
-        const distance = Math.sqrt((x - transistor.x) ** 2 + (y - transistor.y) ** 2);
-        if (distance < 30) { // Detection radius for transistor
-            // Delete all wires connected to this transistor
-            lines = lines.filter(line => !line.transistorConnection || 
-                line.transistorConnection.id !== id);
+    console.log('Right click at:', x, y);
+    console.log('Number of transistors:', transistors.size);
+    
+    // Check for transistors first with a larger detection radius
+    for (const [id, transistor] of transistors) {
+        console.log('Checking transistor:', id, 'at', transistor.x, transistor.y);
+        const centerDist = Math.sqrt((x - transistor.x) ** 2 + (y - transistor.y) ** 2);
+        console.log('Distance to transistor:', centerDist);
+        
+        if (centerDist < 50) { // Much larger radius for testing
+            console.log('Deleting transistor:', id);
+            // Remove all wires connected to this transistor
+            for (let i = lines.length - 1; i >= 0; i--) {
+                if (lines[i].transistorConnection && lines[i].transistorConnection.id === id) {
+                    lines.splice(i, 1);
+                }
+            }
             // Delete the transistor
             transistors.delete(id);
             // Reinitialize connections after deleting
