@@ -36,6 +36,10 @@ let meltingProgress = 0;
 let meltingAnimationId = null;
 let smokeParticles = [];
 
+// Add switch states tracking
+const switches = new Map(); // Map to track switch states (pressed or not)
+let nextSwitchId = 0;
+
 class SmokeParticle {
     constructor(x, y) {
         this.x = x;
@@ -506,11 +510,99 @@ function drawWire(startX, startY, endX, endY, startDot, endDot, isCurrentWire = 
     return isShortCircuit;
 }
 
+function drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPressed = false) {
+    // Calculate the angle and length of the line
+    const dx = endX - startX;
+    const dy = endY - startY;
+    const angle = Math.atan2(dy, dx);
+    const length = Math.sqrt(dx * dx + dy * dy);
+    
+    // Switch dimensions
+    const switchWidth = Math.min(40, length * 0.4);
+    const switchHeight = 20;
+    
+    // Calculate switch position
+    const startWireLength = (length - switchWidth) / 2;
+    const switchStartX = startX + Math.cos(angle) * startWireLength;
+    const switchStartY = startY + Math.sin(angle) * startWireLength;
+    
+    // Draw connecting wires
+    ctx.beginPath();
+    ctx.moveTo(startX, startY);
+    ctx.lineTo(switchStartX, switchStartY);
+    ctx.moveTo(endX, endY);
+    ctx.lineTo(switchStartX + Math.cos(angle) * switchWidth, 
+               switchStartY + Math.sin(angle) * switchWidth);
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Save context
+    ctx.save();
+    
+    // Translate and rotate for switch drawing
+    ctx.translate(switchStartX + Math.cos(angle) * (switchWidth/2), 
+                 switchStartY + Math.sin(angle) * (switchWidth/2));
+    ctx.rotate(angle);
+    
+    // Draw switch base (rectangle)
+    ctx.beginPath();
+    ctx.rect(-switchWidth/2, -switchHeight/2, switchWidth, switchHeight);
+    ctx.fillStyle = '#e0e0e0';
+    ctx.fill();
+    ctx.strokeStyle = '#666666';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    
+    // Draw switch lever
+    ctx.beginPath();
+    if (type === 'switch_no') {
+        // Normally Open: disconnected unless pressed
+        if (isPressed) {
+            // Connected position
+            ctx.moveTo(-switchWidth/4, -switchHeight/4);
+            ctx.lineTo(switchWidth/4, -switchHeight/4);
+        } else {
+            // Disconnected position
+            ctx.moveTo(-switchWidth/4, -switchHeight/4);
+            ctx.lineTo(switchWidth/4, switchHeight/4);
+        }
+    } else {
+        // Normally Closed: connected unless pressed
+        if (isPressed) {
+            // Disconnected position
+            ctx.moveTo(-switchWidth/4, -switchHeight/4);
+            ctx.lineTo(switchWidth/4, switchHeight/4);
+        } else {
+            // Connected position
+            ctx.moveTo(-switchWidth/4, -switchHeight/4);
+            ctx.lineTo(switchWidth/4, -switchHeight/4);
+        }
+    }
+    ctx.strokeStyle = '#000000';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Draw connection points
+    ctx.beginPath();
+    ctx.arc(-switchWidth/4, -switchHeight/4, 3, 0, Math.PI * 2);
+    ctx.arc(switchWidth/4, -switchHeight/4, 3, 0, Math.PI * 2);
+    ctx.fillStyle = '#000000';
+    ctx.fill();
+    
+    // Restore context
+    ctx.restore();
+}
+
 function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot = null) {
     if (type === 'led') {
         drawLED(startX, startY, endX, endY, startDot, endDot);
     } else if (type === 'wire') {
         drawWire(startX, startY, endX, endY, startDot, endDot);
+    } else if (type === 'switch_no' || type === 'switch_nc') {
+        const switchId = getSwitchId(startDot, endDot);
+        const isPressed = switches.get(switchId)?.pressed || false;
+        drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPressed);
     } else {
         drawLine(startX, startY, endX, endY); // Original resistor drawing function
     }
@@ -776,7 +868,7 @@ canvas.addEventListener('mousemove', (e) => {
     }
 });
 
-// Modify the mouseup event listener to handle short circuits
+// Modify the mouseup event listener to handle switches
 canvas.addEventListener('mouseup', (e) => {
     if (isDragging) {
         const rect = canvas.getBoundingClientRect();
@@ -804,13 +896,8 @@ canvas.addEventListener('mouseup', (e) => {
             };
             
             if (componentSelect.value === 'wire' && isShortCircuit) {
-                // Show warning message
                 showWarningMessage();
-                
-                // Add the wire temporarily
                 lines.push(newLine);
-                
-                // Remove the wire after 1 second
                 setTimeout(() => {
                     const index = lines.indexOf(newLine);
                     if (index > -1) {
@@ -820,9 +907,17 @@ canvas.addEventListener('mouseup', (e) => {
                 }, 1000);
             } else {
                 lines.push(newLine);
-                // Update electrical connections when adding a wire
                 if (componentSelect.value === 'wire') {
                     connectDots(dots.indexOf(startDot), dots.indexOf(endDot));
+                } else if (componentSelect.value === 'switch_nc') {
+                    // For normally closed switch, connect dots initially
+                    const switchId = getSwitchId(startDot, endDot);
+                    switches.set(switchId, { pressed: false });
+                    connectDots(dots.indexOf(startDot), dots.indexOf(endDot));
+                } else if (componentSelect.value === 'switch_no') {
+                    // For normally open switch, don't connect dots initially
+                    const switchId = getSwitchId(startDot, endDot);
+                    switches.set(switchId, { pressed: false });
                 }
             }
         }
@@ -831,6 +926,75 @@ canvas.addEventListener('mouseup', (e) => {
         startDot = null;
         drawGrid();
     }
+});
+
+// Add click handler for switches
+canvas.addEventListener('click', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
+    
+    // Check if click is near any switch
+    lines.forEach(line => {
+        if (line.type === 'switch_no' || line.type === 'switch_nc') {
+            const switchId = getSwitchId(line.start, line.end);
+            const switchState = switches.get(switchId);
+            
+            // Calculate switch center
+            const dx = line.end.x - line.start.x;
+            const dy = line.end.y - line.start.y;
+            const length = Math.sqrt(dx * dx + dy * dy);
+            const switchCenterX = line.start.x + dx/2;
+            const switchCenterY = line.start.y + dy/2;
+            
+            // Check if click is near switch
+            const clickDist = Math.sqrt((clickX - switchCenterX)**2 + (clickY - switchCenterY)**2);
+            if (clickDist < 20) { // Click detection radius
+                // Toggle switch state
+                switchState.pressed = !switchState.pressed;
+                
+                // Update connections based on switch type and state
+                const startIndex = dots.indexOf(line.start);
+                const endIndex = dots.indexOf(line.end);
+                
+                if (line.type === 'switch_no') {
+                    if (switchState.pressed) {
+                        connectDots(startIndex, endIndex);
+                    } else {
+                        // Disconnect dots (recreate connections)
+                        initializeConnections();
+                        lines.forEach(l => {
+                            if (l !== line && l.type === 'wire') {
+                                connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
+                            } else if (l !== line && l.type === 'switch_nc' && !switches.get(getSwitchId(l.start, l.end)).pressed) {
+                                connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
+                            } else if (l !== line && l.type === 'switch_no' && switches.get(getSwitchId(l.start, l.end)).pressed) {
+                                connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
+                            }
+                        });
+                    }
+                } else { // switch_nc
+                    if (switchState.pressed) {
+                        // Disconnect dots (recreate connections)
+                        initializeConnections();
+                        lines.forEach(l => {
+                            if (l !== line && l.type === 'wire') {
+                                connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
+                            } else if (l !== line && l.type === 'switch_nc' && !switches.get(getSwitchId(l.start, l.end)).pressed) {
+                                connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
+                            } else if (l !== line && l.type === 'switch_no' && switches.get(getSwitchId(l.start, l.end)).pressed) {
+                                connectDots(dots.indexOf(l.start), dots.indexOf(l.end));
+                            }
+                        });
+                    } else {
+                        connectDots(startIndex, endIndex);
+                    }
+                }
+                
+                drawGrid();
+            }
+        }
+    });
 });
 
 function getPointLabel(dot) {
@@ -894,4 +1058,8 @@ function showWarningMessage() {
     warningTimeout = setTimeout(() => {
         warningMessage.style.opacity = '0';
     }, 3000);
+}
+
+function getSwitchId(startDot, endDot) {
+    return `switch_${dots.indexOf(startDot)}_${dots.indexOf(endDot)}`;
 } 
