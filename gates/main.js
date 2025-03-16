@@ -92,12 +92,9 @@ class CircuitEditor {
             for (let i = this.wires.length - 1; i >= 0; i--) {
                 const wire = this.wires[i];
                 if (this.isPointNearWire(x, y, wire)) {
-                    // Disconnect nodes
                     wire.startGate.disconnectNode(wire.start, false);
                     wire.endGate.disconnectNode(wire.end, true);
-                    // Remove wire
                     this.wires.splice(i, 1);
-                    // Update values after wire removal
                     this.updateWireValues();
                     return;
                 }
@@ -109,21 +106,11 @@ class CircuitEditor {
 
             if (this.selectedTool) {
                 // Create new gate with reference to the editor
-                const newGate = new Gate(this.selectedTool, x, y, this); // Pass editor reference
+                const newGate = new Gate(this.selectedTool, x, y, this);
                 this.gates.push(newGate);
-                this.draggingGate = newGate;
                 this.selectedTool = null;
                 this.canvas.style.cursor = 'default';
             } else {
-                // Check if clicked on existing gate
-                this.gates.forEach(gate => {
-                    if (this.isPointInGate(x, y, gate)) {
-                        this.draggingGate = gate;
-                        this.selectedGate = gate;
-                        return;
-                    }
-                });
-
                 // Check if clicked on node (for wire creation)
                 const clickedNode = this.findClickedNode(x, y);
                 if (clickedNode) {
@@ -154,15 +141,8 @@ class CircuitEditor {
             }
         }
 
-        if (!overInput && !this.draggingGate && !this.wireStartNode) {
+        if (!overInput && !this.wireStartNode) {
             this.canvas.style.cursor = 'default';
-        }
-
-        if (this.draggingGate) {
-            this.draggingGate.x = x;
-            this.draggingGate.y = y;
-            this.draggingGate.initializeNodes(); // Update node positions
-            this.render();
         }
     }
 
