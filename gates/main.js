@@ -109,6 +109,25 @@ class CircuitEditor {
 
         // Modify the click handler to include delete functionality
         this.canvas.addEventListener('click', this.handleClick.bind(this));
+
+        // Add double-click handler for editing labels
+        this.canvas.addEventListener('dblclick', (e) => {
+            const rect = this.canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Check if clicked on an INPUT or OUTPUT gate
+            for (const gate of this.gates) {
+                if ((gate.type === 'INPUT' || gate.type === 'OUTPUT') && this.isPointInGate(x, y, gate)) {
+                    const newLabel = prompt('Enter new label:', gate.label);
+                    if (newLabel !== null) { // Check if user clicked Cancel
+                        gate.setLabel(newLabel);
+                        this.render();
+                    }
+                    break;
+                }
+            }
+        });
     }
 
     handleMouseDown(e) {

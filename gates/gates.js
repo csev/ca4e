@@ -9,6 +9,7 @@ class Gate {
         this.inputNodes = [];
         this.outputNodes = [];
         this.selected = false;
+        this.label = type; // Initialize with default label
         
         // Add state for INPUT and OUTPUT types
         if (type === 'INPUT') {
@@ -292,7 +293,7 @@ class Gate {
             // Draw main circle
             ctx.beginPath();
             ctx.arc(this.x, this.y, 15, 0, Math.PI * 2);
-            ctx.fillStyle = this.state ? '#4CAF50' : '#f44336'; // Green for 1, Red for 0
+            ctx.fillStyle = this.state ? '#4CAF50' : '#f44336';
             ctx.fill();
             ctx.strokeStyle = '#000';
             ctx.stroke();
@@ -304,10 +305,10 @@ class Gate {
             ctx.textBaseline = 'middle';
             ctx.fillText(this.state ? '1' : '0', this.x, this.y);
 
-            // Draw "INPUT" label above
+            // Draw label above (changed from "INPUT")
             ctx.fillStyle = '#000';
             ctx.font = '12px Arial';
-            ctx.fillText('INPUT', this.x, this.y - 25);
+            ctx.fillText(this.label, this.x, this.y - 25);
         } else if (this.type === 'OUTPUT') {
             // Get input value from connected wire
             const inputNode = this.inputNodes[0];
@@ -318,7 +319,6 @@ class Gate {
             ctx.beginPath();
             ctx.arc(this.x, this.y, 15, 0, Math.PI * 2);
             
-            // Color based on value (green for 1, red for 0, gray for unconnected)
             if (hasValue) {
                 ctx.fillStyle = value ? '#4CAF50' : '#f44336';
             } else {
@@ -339,10 +339,10 @@ class Gate {
                 ctx.fillText('?', this.x, this.y);
             }
 
-            // Draw "OUTPUT" label above
+            // Draw label above (changed from "OUTPUT")
             ctx.fillStyle = '#000';
             ctx.font = '12px Arial';
-            ctx.fillText('OUTPUT', this.x, this.y - 25);
+            ctx.fillText(this.label, this.x, this.y - 25);
         }
     }
 
@@ -457,5 +457,10 @@ class Gate {
         ctx.fillStyle = '#000';
         ctx.font = '12px Arial';
         ctx.fillText(this.type, this.x, this.y - 25);
+    }
+
+    // Add method to set label
+    setLabel(newLabel) {
+        this.label = newLabel || this.type; // If no label provided, use gate type
     }
 } 
