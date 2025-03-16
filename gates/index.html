@@ -56,11 +56,27 @@
             background-color: #2196F3;
         }
 
+        #delete {
+            background-color: #FF9800;
+        }
+
+        #delete:hover {
+            background-color: #F57C00;
+        }
+
+        #delete.active {
+            background-color: #f44336;
+        }
+
+        #delete.active:hover {
+            background-color: #d32f2f;
+        }
+
         #clear {
             background-color: #f44336;
         }
 
-        #simulate, #clear {
+        #simulate, #delete, #clear {
             padding: 8px 15px;
             border: none;
             border-radius: 4px;
@@ -148,6 +164,7 @@
         </div>
         <div class="action-buttons">
             <button id="simulate">Simulate</button>
+            <button id="delete" title="Delete Component (ESC to cancel)">Delete</button>
             <button id="clear">Clear</button>
         </div>
     </div>

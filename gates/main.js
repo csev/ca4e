@@ -22,6 +22,9 @@ class CircuitEditor {
         this.messageEl.className = 'validation-message';
         document.body.appendChild(this.messageEl);
         
+        // Add delete mode flag
+        this.deleteMode = false;
+        
         // Bind event listeners
         this.initializeEventListeners();
         
@@ -35,6 +38,7 @@ class CircuitEditor {
             button.addEventListener('click', () => {
                 this.selectedTool = button.dataset.gate;
                 this.canvas.style.cursor = 'crosshair';
+                document.getElementById('selectedTool').textContent = `Selected: ${button.dataset.gate}`;
             });
         });
 
@@ -77,7 +81,33 @@ class CircuitEditor {
             }
         });
 
-        // Add click handling for inputs
+        // Add delete button listener
+        document.getElementById('delete').addEventListener('click', () => {
+            this.setDeleteMode(!this.deleteMode);
+        });
+
+        // Update the ESC key listener to handle all cases
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                // Clear any selected tool
+                this.selectedTool = null;
+                // Clear delete mode if active
+                if (this.deleteMode) {
+                    this.setDeleteMode(false);
+                    this.showMessage('Delete mode cancelled');
+                }
+                // Reset cursor
+                this.canvas.style.cursor = 'default';
+                // Reset selected tool display
+                document.getElementById('selectedTool').textContent = 'Selected: None';
+                // Clear any wire drawing in progress
+                this.wireStartNode = null;
+                // Force a render to clear any temporary visual states
+                this.render();
+            }
+        });
+
+        // Modify the click handler to include delete functionality
         this.canvas.addEventListener('click', this.handleClick.bind(this));
     }
 
@@ -110,6 +140,8 @@ class CircuitEditor {
                 this.gates.push(newGate);
                 this.selectedTool = null;
                 this.canvas.style.cursor = 'default';
+                // Clear the selected tool status
+                document.getElementById('selectedTool').textContent = 'Selected: None';
             } else {
                 // Check if clicked on node (for wire creation)
                 const clickedNode = this.findClickedNode(x, y);
@@ -155,15 +187,28 @@ class CircuitEditor {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
-        // Check if we clicked on an input gate
-        for (const gate of this.gates) {
-            if (gate.type === 'INPUT' && this.isPointInGate(x, y, gate)) {
-                if (gate.toggleInput()) {
-                    this.showMessage(`Input set to ${gate.state ? '1' : '0'}`);
-                    this.updateWireValues();
-                    this.logCircuitState();
+        if (this.deleteMode) {
+            // Check if clicked on a gate
+            for (let i = this.gates.length - 1; i >= 0; i--) {
+                const gate = this.gates[i];
+                if (this.isPointInGate(x, y, gate)) {
+                    this.deleteGate(gate);
+                    this.showMessage('Component deleted');
+                    this.setDeleteMode(false);
+                    return;
                 }
-                break;
+            }
+        } else {
+            // Existing click handling for input gates
+            for (const gate of this.gates) {
+                if (gate.type === 'INPUT' && this.isPointInGate(x, y, gate)) {
+                    if (gate.toggleInput()) {
+                        this.showMessage(`Input set to ${gate.state ? '1' : '0'}`);
+                        this.updateWireValues();
+                        this.logCircuitState();
+                    }
+                    break;
+                }
             }
         }
     }
@@ -479,6 +524,43 @@ class CircuitEditor {
         this.wires.forEach(wire => {
             console.log(`  Wire: ${wire.start.sourceValue} -> ${wire.end.sourceValue}`);
         });
+    }
+
+    deleteGate(gate) {
+        // Remove all wires connected to this gate
+        this.wires = this.wires.filter(wire => {
+            if (wire.startGate === gate || wire.endGate === gate) {
+                // Disconnect the nodes on the other gate
+                if (wire.startGate === gate) {
+                    wire.endGate.disconnectNode(wire.end, true);
+                } else {
+                    wire.startGate.disconnectNode(wire.start, false);
+                }
+                return false; // Remove this wire
+            }
+            return true; // Keep wires not connected to this gate
+        });
+
+        // Remove the gate from the gates array
+        const index = this.gates.indexOf(gate);
+        if (index > -1) {
+            this.gates.splice(index, 1);
+        }
+
+        // Update the circuit
+        this.updateWireValues();
+        this.render();
+    }
+
+    setDeleteMode(enabled) {
+        this.deleteMode = enabled;
+        this.canvas.style.cursor = enabled ? 'not-allowed' : 'default';
+        document.getElementById('delete').classList.toggle('active', enabled);
+        if (!enabled) {
+            document.getElementById('selectedTool').textContent = 'Selected: None';
+        } else {
+            document.getElementById('selectedTool').textContent = 'Selected: Delete Mode';
+        }
     }
 }
 
