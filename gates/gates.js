@@ -396,29 +396,28 @@ class Gate {
 
     // Add method to evaluate gate output
     evaluate() {
-        // Get input values
-        const inputValues = this.inputNodes.map(node => node.sourceValue);
-        const hasAllInputs = inputValues.every(val => val !== undefined);
         let outputValue;
 
         switch(this.type) {
             case 'AND':
-                outputValue = hasAllInputs ? inputValues.every(val => val === true) : undefined;
+                const inputValues = this.inputNodes.map(node => node.sourceValue);
+                outputValue = inputValues.every(val => val === true);
                 break;
             case 'OR':
-                outputValue = hasAllInputs ? inputValues.some(val => val === true) : undefined;
+                outputValue = this.inputNodes.map(node => node.sourceValue).some(val => val === true);
                 break;
             case 'NOT':
-                outputValue = inputValues[0] !== undefined ? !inputValues[0] : undefined;
+                outputValue = this.inputNodes[0]?.sourceValue !== undefined ? !this.inputNodes[0].sourceValue : undefined;
                 break;
             case 'NAND':
-                outputValue = hasAllInputs ? !inputValues.every(val => val === true) : undefined;
+                outputValue = !this.inputNodes.map(node => node.sourceValue).every(val => val === true);
                 break;
             case 'NOR':
-                outputValue = hasAllInputs ? !inputValues.some(val => val === true) : undefined;
+                outputValue = !this.inputNodes.map(node => node.sourceValue).some(val => val === true);
                 break;
             case 'XOR':
-                outputValue = hasAllInputs ? inputValues.reduce((a, b) => a !== b) : undefined;
+                const xorInputs = this.inputNodes.map(node => node.sourceValue);
+                outputValue = xorInputs.reduce((a, b) => a !== b);
                 break;
             case 'INPUT':
                 outputValue = this.state;
