@@ -288,11 +288,7 @@ class CircuitEditor {
             [startNode, endNode] = [endNode, startNode];
         }
 
-        // Check if nodes can accept connections
-        if (!startNode.gate.canAcceptConnection(startNode.node, false)) {
-            this.showMessage('Output is already connected', true);
-            return;
-        }
+        // Check if input node can accept connections
         if (!endNode.gate.canAcceptConnection(endNode.node, true)) {
             this.showMessage('Input is already connected', true);
             return;
