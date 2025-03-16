@@ -33,7 +33,7 @@ class Gate {
                     { x: this.x - 20, y: this.y + 10, value: false, connected: false }
                 ];
                 this.outputNodes = [
-                    { x: this.x + 20, y: this.y, value: false, outputConnections: [] }
+                    { x: this.x + 20, y: this.y, value: false, hasOutput: false }
                 ];
                 break;
             case 'NOT':
@@ -41,12 +41,12 @@ class Gate {
                     { x: this.x - 20, y: this.y, value: false, connected: false }
                 ];
                 this.outputNodes = [
-                    { x: this.x + 20, y: this.y, value: false, outputConnections: [] }
+                    { x: this.x + 20, y: this.y, value: false, hasOutput: false }
                 ];
                 break;
             case 'INPUT':
                 this.outputNodes = [
-                    { x: this.x + 20, y: this.y, value: false, outputConnections: [] }
+                    { x: this.x + 20, y: this.y, value: false, hasOutput: false }
                 ];
                 break;
             case 'OUTPUT':
@@ -136,7 +136,7 @@ class Gate {
             
             if (isHovered) {
                 ctx.fillStyle = '#2196F3'; // Blue when hovered
-            } else if (node.outputConnections.length > 0) {
+            } else if (node.hasOutput) {
                 ctx.fillStyle = '#4CAF50'; // Green when connected
             } else {
                 ctx.fillStyle = '#000000'; // Black when disconnected
@@ -359,30 +359,25 @@ class Gate {
         if (isInput) {
             return this.inputNodes.includes(node) && !node.connected;
         } else {
-            return this.outputNodes.includes(node); // Always allow output connections
+            return this.outputNodes.includes(node) && !node.hasOutput;
         }
     }
 
     // Update node states when connected
-    connectNode(node, isInput, targetNode) {
+    connectNode(node, isInput) {
         if (isInput) {
             node.connected = true;
         } else {
-            if (!node.outputConnections) {
-                node.outputConnections = [];
-            }
-            node.outputConnections.push(targetNode);
+            node.hasOutput = true;
         }
     }
 
     // Update node states when disconnected
-    disconnectNode(node, isInput, targetNode) {
+    disconnectNode(node, isInput) {
         if (isInput) {
             node.connected = false;
         } else {
-            if (node.outputConnections) {
-                node.outputConnections = node.outputConnections.filter(n => n !== targetNode);
-            }
+            node.hasOutput = false;
         }
     }
 
