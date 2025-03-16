@@ -56,7 +56,7 @@ code {
 </div>
 <h1>Computer Architecture for Everybody</h1>
 <p>
-<b>This web site is under construction.</b>
+<b>This web site and all the tools are under construction.</b>
 </p>
 <p>
 This course will
