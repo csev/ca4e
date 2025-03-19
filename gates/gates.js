@@ -694,6 +694,29 @@ class NixieDisplay extends Gate {
         ctx.lineWidth = 2;
         ctx.stroke();
 
+        // Draw the glass nipple at the top
+        ctx.beginPath();
+        ctx.moveTo(this.x - 7, this.y - 40);
+        ctx.lineTo(this.x + 7, this.y - 40);
+        // Curved transition at the bottom
+        ctx.quadraticCurveTo(this.x + 6, this.y - 42, this.x + 4, this.y - 43);
+        // Main curved sides
+        ctx.quadraticCurveTo(this.x + 4, this.y - 50, this.x, this.y - 55);
+        ctx.quadraticCurveTo(this.x - 4, this.y - 50, this.x - 4, this.y - 43);
+        // Curved transition at the bottom
+        ctx.quadraticCurveTo(this.x - 6, this.y - 42, this.x - 7, this.y - 40);
+        ctx.closePath();
+        ctx.fillStyle = '#1a1a2e'; // Match the tube body color
+        ctx.fill();
+        ctx.stroke();
+
+        // Add rounded top cap
+        ctx.beginPath();
+        ctx.arc(this.x, this.y - 55, 2, 0, Math.PI * 2);
+        ctx.fillStyle = '#1a1a2e'; // Match the tube body color
+        ctx.fill();
+        ctx.stroke();
+
         // Draw the digit with enhanced glow effect
         ctx.shadowColor = 'rgba(255, 165, 0, 0.8)';
         ctx.shadowBlur = 15;
