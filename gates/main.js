@@ -54,13 +54,6 @@ class CircuitEditor {
         this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
         this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
         
-        // Clear button
-        document.getElementById('clear').addEventListener('click', () => {
-            this.gates = [];
-            this.wires = [];
-            this.render();
-        });
-
         // Add mousemove event for node and wire hovering
         this.canvas.addEventListener('mousemove', (e) => {
             const rect = this.canvas.getBoundingClientRect();
@@ -618,6 +611,12 @@ class CircuitEditor {
         } else {
             document.getElementById('selectedTool').textContent = 'Selected: Delete Mode';
         }
+    }
+
+    clear() {
+        this.gates = [];
+        this.wires = [];
+        this.render();
     }
 }
 

@@ -146,6 +146,71 @@
             background-color: #2196F3;
             color: white;
         }
+
+        /* Add modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .modal-content p {
+            margin: 15px 0;
+            color: #666;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .modal-buttons button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        #confirmDeleteAll {
+            background-color: #f44336;
+            color: white;
+        }
+
+        #confirmDeleteAll:hover {
+            background-color: #d32f2f;
+        }
+
+        #cancelDeleteAll {
+            background-color: #9e9e9e;
+            color: white;
+        }
+
+        #cancelDeleteAll:hover {
+            background-color: #757575;
+        }
     </style>
 </head>
 <body>
@@ -178,6 +243,18 @@
 
     <div class="tooltip" id="tooltip"></div>
 
+    <!-- Add confirmation modal -->
+    <div id="confirmModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Delete All Gates?</h3>
+            <p>Are you sure you want to delete all gates? This action cannot be undone.</p>
+            <div class="modal-buttons">
+                <button id="confirmDeleteAll">Yes, Delete All</button>
+                <button id="cancelDeleteAll">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Load the gate definitions first -->
     <script src="gates.js"></script>
     <!-- Then load the main editor code -->
@@ -190,6 +267,39 @@
         const coordinates = document.getElementById('coordinates');
         const selectedTool = document.getElementById('selectedTool');
         const canvas = document.getElementById('circuitCanvas');
+        const confirmModal = document.getElementById('confirmModal');
+        const confirmDeleteAll = document.getElementById('confirmDeleteAll');
+        const cancelDeleteAll = document.getElementById('cancelDeleteAll');
+        const clearButton = document.getElementById('clear');
+
+        // Handle Delete All button click
+        clearButton.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent default clear behavior
+            e.stopPropagation(); // Stop event from bubbling up
+            confirmModal.style.display = 'block';
+        });
+
+        // Handle confirmation
+        confirmDeleteAll.addEventListener('click', () => {
+            confirmModal.style.display = 'none';
+            // Get the editor instance and call clear directly
+            const editor = window.circuitEditor;
+            if (editor) {
+                editor.clear();
+            }
+        });
+
+        // Handle cancellation
+        cancelDeleteAll.addEventListener('click', () => {
+            confirmModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === confirmModal) {
+                confirmModal.style.display = 'none';
+            }
+        });
 
         canvas.addEventListener('mousemove', (e) => {
             const rect = canvas.getBoundingClientRect();
