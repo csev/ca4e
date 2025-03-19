@@ -8,6 +8,10 @@ class CircuitEditor {
         this.draggingGate = null;
         this.selectedTool = null;
         this.wireStartNode = null;
+        this.dragStartX = 0;
+        this.dragStartY = 0;
+        this.dragStartGateX = 0;
+        this.dragStartGateY = 0;
         
         // Create circuit instance for computations with message display function
         this.circuit = new Circuit(this.showMessage.bind(this));
@@ -170,6 +174,28 @@ class CircuitEditor {
                 // Clear the selected tool status
                 document.getElementById('selectedTool').textContent = 'Selected: None';
             } else {
+                // Check if clicked on a gate for dragging
+                for (const gate of this.gates) {
+                    if (this.isPointInGate(x, y, gate)) {
+                        this.draggingGate = gate;
+                        this.dragStartX = x;
+                        this.dragStartY = y;
+                        this.dragStartGateX = gate.x;
+                        this.dragStartGateY = gate.y;
+                        // Store initial relative positions of nodes
+                        this.dragStartNodePositions = {
+                            inputs: gate.inputNodes.map(node => ({
+                                relativeY: node.y - gate.y
+                            })),
+                            outputs: gate.outputNodes.map(node => ({
+                                relativeY: node.y - gate.y
+                            }))
+                        };
+                        this.canvas.style.cursor = 'grabbing';
+                        return;
+                    }
+                }
+
                 // Check if clicked on node (for wire creation)
                 const clickedNode = this.findClickedNode(x, y);
                 if (clickedNode) {
@@ -190,6 +216,30 @@ class CircuitEditor {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
 
+        // Handle gate dragging
+        if (this.draggingGate) {
+            const dx = x - this.dragStartX;
+            const dy = y - this.dragStartY;
+            
+            // Update gate position
+            this.draggingGate.x = this.dragStartGateX + dx;
+            this.draggingGate.y = this.dragStartGateY + dy;
+            
+            // Update all node positions using stored relative positions
+            this.draggingGate.inputNodes.forEach((node, index) => {
+                node.x = this.draggingGate.x - 20;
+                node.y = this.draggingGate.y + this.dragStartNodePositions.inputs[index].relativeY;
+            });
+            this.draggingGate.outputNodes.forEach((node, index) => {
+                node.x = this.draggingGate.x + 20;
+                node.y = this.draggingGate.y + this.dragStartNodePositions.outputs[index].relativeY;
+            });
+            
+            // Force a render
+            this.render();
+            return;
+        }
+
         // Update cursor for input gates
         let overInput = false;
         for (const gate of this.gates) {
@@ -206,7 +256,10 @@ class CircuitEditor {
     }
 
     handleMouseUp() {
-        this.draggingGate = null;
+        if (this.draggingGate) {
+            this.draggingGate = null;
+            this.canvas.style.cursor = 'default';
+        }
     }
 
     handleClick(e) {

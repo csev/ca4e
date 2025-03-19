@@ -540,7 +540,7 @@ class FullAdder extends Gate {
 
     evaluate() {
         // Get input values
-        const carryIn = this.inputNodes[0].sourceValue; // Cin is first input
+        const carryIn = this.inputNodes[0].connected ? this.inputNodes[0].sourceValue : false; // Default to false if not connected
         const inputA = this.inputNodes[1].sourceValue;  // A is second input
         const inputB = this.inputNodes[2].sourceValue;  // B is third input
 
