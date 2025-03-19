@@ -559,12 +559,12 @@ class FullAdder extends Gate {
     }
 }
 
-class OctalDisplay extends Gate {
+class NixieDisplay extends Gate {
     constructor(x, y, editor) {
-        super('OCTAL_DISPLAY', x, y, editor);
-        this.label = 'OCTAL';
+        super('NIXIE_DISPLAY', x, y, editor);
+        this.label = 'Nixie';
         
-        // Override input nodes for octal display - moved outside the rectangle
+        // Override input nodes for nixie display - moved outside the rectangle
         this.inputNodes = [
             { x: this.x - 40, y: this.y - 20, value: false, connected: false }, // 1s place
             { x: this.x - 40, y: this.y, value: false, connected: false },      // 2s place
@@ -584,7 +584,7 @@ class OctalDisplay extends Gate {
         } else if (!this.inputNodes.every(node => node.connected)) {
             ctx.fillStyle = '#888888'; // Grey for unconnected
         } else {
-            ctx.fillStyle = '#ffffff'; // White for normal state
+            ctx.fillStyle = '#1a1a2e'; // Dark blue background for normal state
         }
         
         // Draw organic rectangle shape with curved corners
@@ -643,42 +643,43 @@ class OctalDisplay extends Gate {
         const fours = this.inputNodes[2].connected ? (this.inputNodes[2].sourceValue ? 4 : 0) : 0;
         const value = ones + twos + fours;
 
-        // Draw the outer glow
-        const gradient = ctx.createRadialGradient(
+        // Draw the outer glow for the entire tube
+        const outerGlow = ctx.createRadialGradient(
             this.x, this.y, 25,
-            this.x, this.y, 35
+            this.x, this.y, 40
         );
-        gradient.addColorStop(0, 'rgba(255, 165, 0, 0.3)');  // Orange glow
-        gradient.addColorStop(1, 'rgba(255, 165, 0, 0)');    // Fade to transparent
+        outerGlow.addColorStop(0, 'rgba(255, 165, 0, 0.4)');  // Stronger orange glow
+        outerGlow.addColorStop(1, 'rgba(255, 165, 0, 0)');    // Fade to transparent
         
         ctx.beginPath();
-        ctx.arc(this.x, this.y, 35, 0, Math.PI * 2);
-        ctx.fillStyle = gradient;
+        ctx.arc(this.x, this.y, 40, 0, Math.PI * 2);
+        ctx.fillStyle = outerGlow;
         ctx.fill();
 
-        // Draw the Nixie tube glass
+        // Draw the main tube background
         ctx.beginPath();
         ctx.arc(this.x, this.y, 25, 0, Math.PI * 2);
-        ctx.fillStyle = '#2c3e50'; // Dark blue background
+        ctx.fillStyle = '#1a1a2e'; // Darker blue background
         ctx.fill();
         
-        // Add glass reflection
+        // Add glass reflection effect
         const glassGradient = ctx.createRadialGradient(
             this.x - 5, this.y - 5, 0,
             this.x, this.y, 25
         );
-        glassGradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
+        glassGradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)');
         glassGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
         ctx.fillStyle = glassGradient;
         ctx.fill();
         
+        // Draw the tube border
         ctx.strokeStyle = '#34495e';
+        ctx.lineWidth = 2;
         ctx.stroke();
 
-        // Draw the digit with glow effect
-        // Draw digit glow
-        ctx.shadowColor = 'rgba(255, 165, 0, 0.5)';
-        ctx.shadowBlur = 10;
+        // Draw the digit with enhanced glow effect
+        ctx.shadowColor = 'rgba(255, 165, 0, 0.8)';
+        ctx.shadowBlur = 15;
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
         

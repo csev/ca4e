@@ -165,8 +165,8 @@ class CircuitEditor {
                 let newGate;
                 if (this.selectedTool === 'FULL_ADDER') {
                     newGate = new FullAdder(x, y, this);
-                } else if (this.selectedTool === 'OCTAL_DISPLAY') {
-                    newGate = new OctalDisplay(x, y, this);
+                } else if (this.selectedTool === 'NIXIE_DISPLAY') {
+                    newGate = new NixieDisplay(x, y, this);
                 } else {
                     newGate = new Gate(this.selectedTool, x, y, this);
                 }
@@ -229,7 +229,12 @@ class CircuitEditor {
             
             // Update all node positions using stored relative positions
             this.draggingGate.inputNodes.forEach((node, index) => {
-                node.x = this.draggingGate.x - 20;
+                // Special handling for NixieDisplay
+                if (this.draggingGate.type === 'NIXIE_DISPLAY') {
+                    node.x = this.draggingGate.x - 40;
+                } else {
+                    node.x = this.draggingGate.x - 20;
+                }
                 node.y = this.draggingGate.y + this.dragStartNodePositions.inputs[index].relativeY;
             });
             this.draggingGate.outputNodes.forEach((node, index) => {
