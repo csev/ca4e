@@ -10,6 +10,7 @@ class Gate {
         this.outputNodes = [];
         this.selected = false;
         this.label = type; // Initialize with default label
+        this.isUnstable = false; // Add flag for unstable state
         
         // Add state for INPUT and OUTPUT types
         if (type === 'INPUT') {
@@ -432,9 +433,11 @@ class Gate {
     }
 
     drawGate(ctx, shape, outputValue, hasAllInputs) {
-        // Set fill color based on output state
-        if (!hasAllInputs) {
-            ctx.fillStyle = '#888888'; // Gray for unknown/unconnected
+        // Set fill color based on output state and unstable state
+        if (this.isUnstable) {
+            ctx.fillStyle = '#888888'; // Grey for unstable gates
+        } else if (!hasAllInputs) {
+            ctx.fillStyle = '#888888'; // Grey for unknown/unconnected
         } else {
             ctx.fillStyle = outputValue ? '#4CAF50' : '#f44336'; // Green for 1, Red for 0
         }
@@ -451,16 +454,25 @@ class Gate {
         ctx.font = 'bold 14px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(hasAllInputs ? (outputValue ? '1' : '0') : '?', this.x, this.y);
+        if (this.isUnstable) {
+            ctx.fillText('?', this.x, this.y);
+        } else {
+            ctx.fillText(hasAllInputs ? (outputValue ? '1' : '0') : '?', this.x, this.y);
+        }
 
         // Draw gate label
         ctx.fillStyle = '#000';
         ctx.font = '12px Arial';
-        ctx.fillText(this.type, this.x, this.y - 25);
+        ctx.fillText(this.label, this.x, this.y - 25);
     }
 
     // Add method to set label
     setLabel(newLabel) {
         this.label = newLabel || this.type; // If no label provided, use gate type
+    }
+
+    // Add method to set unstable state
+    setUnstable(unstable) {
+        this.isUnstable = unstable;
     }
 } 

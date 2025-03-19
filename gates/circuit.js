@@ -14,7 +14,7 @@ class Circuit {
 
     // Update all wire values and gate states
     update() {
-        // Reset all node source values
+        // Reset all node source values and unstable states
         this.gates.forEach(gate => {
             gate.inputNodes.forEach(node => {
                 node.sourceValue = undefined;
@@ -22,6 +22,7 @@ class Circuit {
             gate.outputNodes.forEach(node => {
                 node.sourceValue = undefined;
             });
+            gate.setUnstable(false); // Reset unstable state
         });
 
         // Process gates in order: INPUT -> LOGIC GATES -> OUTPUT
@@ -69,6 +70,41 @@ class Circuit {
             iteration++;
             if (iteration >= this.maxIterations) {
                 this.showMessage('Circuit simulation reached maximum iterations. Circuit may be unstable.', true);
+                
+                // Track gates that change in additional iterations
+                const unstableGates = new Set();
+                const additionalIterations = 10;
+                
+                // Run additional iterations and track changes
+                for (let i = 0; i < additionalIterations; i++) {
+                    this.gates.forEach(gate => {
+                        if (gate.type !== 'INPUT' && gate.type !== 'OUTPUT') {
+                            const oldValue = gate.outputNodes[0]?.sourceValue;
+                            const newValue = gate.evaluate();
+                            if (oldValue !== newValue) {
+                                console.log('Gate', gate.label, 'changed in additional iteration', i + 1);
+                                unstableGates.add(gate);
+                            }
+                        }
+                    });
+                    
+                    // Propagate values through wires
+                    this.wires.forEach(wire => {
+                        wire.end.sourceValue = wire.start.sourceValue;
+                    });
+                }
+                
+                // Log unstable gates
+                console.log('Unstable gates:', unstableGates);
+                
+                // Mark unstable gates
+                unstableGates.forEach(gate => {
+                    gate.setUnstable(true);
+                    if (gate.outputNodes[0]) {
+                        gate.outputNodes[0].sourceValue = undefined;
+                    }
+                });
+                
                 break;
             }
         } while (changed); // Continue until no more changes occur or max iterations reached
