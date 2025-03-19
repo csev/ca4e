@@ -596,9 +596,9 @@ class NixieDisplay extends Gate {
         
         // Set fill color based on state
         if (this.isUnstable) {
-            ctx.fillStyle = '#888888'; // Grey for unstable
+            ctx.fillStyle = '#000000'; // Black for unstable
         } else if (!this.inputNodes.every(node => node.connected)) {
-            ctx.fillStyle = '#888888'; // Grey for unconnected
+            ctx.fillStyle = '#000000'; // Black for unconnected
         } else {
             ctx.fillStyle = '#1a1a2e'; // Dark blue background for normal state
         }
@@ -641,9 +641,10 @@ class NixieDisplay extends Gate {
         ctx.fillText('2s', this.x - 40, this.y);
         ctx.fillText('4s', this.x - 40, this.y + 20);
 
-        // Draw component label
+        // Draw component label inside the rectangle at the bottom
         ctx.textAlign = 'center';
-        ctx.fillText(this.label, this.x, this.y - 45);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillText(this.label, this.x, this.y + 35);
 
         // Draw input nodes
         this.drawNodes(ctx);
@@ -661,27 +662,27 @@ class NixieDisplay extends Gate {
 
         // Draw the outer glow for the entire tube
         const outerGlow = ctx.createRadialGradient(
-            this.x, this.y, 25,
-            this.x, this.y, 40
+            this.x, this.y - 5, 25,
+            this.x, this.y - 5, 40
         );
         outerGlow.addColorStop(0, 'rgba(255, 165, 0, 0.4)');  // Stronger orange glow
         outerGlow.addColorStop(1, 'rgba(255, 165, 0, 0)');    // Fade to transparent
         
         ctx.beginPath();
-        ctx.arc(this.x, this.y, 40, 0, Math.PI * 2);
+        ctx.arc(this.x, this.y - 5, 40, 0, Math.PI * 2);
         ctx.fillStyle = outerGlow;
         ctx.fill();
 
         // Draw the main tube background
         ctx.beginPath();
-        ctx.arc(this.x, this.y, 25, 0, Math.PI * 2);
+        ctx.arc(this.x, this.y - 5, 25, 0, Math.PI * 2);
         ctx.fillStyle = '#1a1a2e'; // Darker blue background
         ctx.fill();
         
         // Add glass reflection effect
         const glassGradient = ctx.createRadialGradient(
-            this.x - 5, this.y - 5, 0,
-            this.x, this.y, 25
+            this.x - 5, this.y - 10, 0,
+            this.x, this.y - 5, 25
         );
         glassGradient.addColorStop(0, 'rgba(255, 255, 255, 0.15)');
         glassGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
@@ -703,7 +704,7 @@ class NixieDisplay extends Gate {
         ctx.font = 'bold 32px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(value.toString(), this.x, this.y);
+        ctx.fillText(value.toString(), this.x, this.y - 5);
         
         // Reset shadow
         ctx.shadowColor = 'transparent';
