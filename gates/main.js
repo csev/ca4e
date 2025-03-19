@@ -158,7 +158,12 @@ class CircuitEditor {
 
             if (this.selectedTool) {
                 // Create new gate with reference to the editor
-                const newGate = new Gate(this.selectedTool, x, y, this);
+                let newGate;
+                if (this.selectedTool === 'FULL_ADDER') {
+                    newGate = new FullAdder(x, y, this);
+                } else {
+                    newGate = new Gate(this.selectedTool, x, y, this);
+                }
                 this.gates.push(newGate);
                 this.selectedTool = null;
                 this.canvas.style.cursor = 'default';

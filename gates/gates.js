@@ -475,4 +475,86 @@ class Gate {
     setUnstable(unstable) {
         this.isUnstable = unstable;
     }
+}
+
+class FullAdder extends Gate {
+    constructor(x, y, editor) {
+        super('FULL_ADDER', x, y, editor);
+        this.label = 'FULL';
+        
+        // Override input/output nodes for full adder
+        this.inputNodes = [
+            { x: this.x - 20, y: this.y - 20, value: false, connected: false }, // Cin input (aligned with S)
+            { x: this.x - 20, y: this.y, value: false, connected: false },      // A input (aligned with Cout)
+            { x: this.x - 20, y: this.y + 20, value: false, connected: false }   // B input (below)
+        ];
+        this.outputNodes = [
+            { x: this.x + 20, y: this.y - 20, value: false, hasOutput: false }, // Sum output
+            { x: this.x + 20, y: this.y, value: false, hasOutput: false }       // Carry-out
+        ];
+    }
+
+    draw(ctx) {
+        // Draw full adder body
+        ctx.beginPath();
+        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000';
+        
+        // Set fill color based on state
+        if (this.isUnstable) {
+            ctx.fillStyle = '#888888'; // Grey for unstable
+        } else if (!this.inputNodes.every(node => node.connected)) {
+            ctx.fillStyle = '#888888'; // Grey for unconnected
+        } else {
+            ctx.fillStyle = '#ffffff'; // White for normal state
+        }
+        
+        // Draw main body as a rectangle
+        ctx.moveTo(this.x - 20, this.y - 35);
+        ctx.lineTo(this.x + 20, this.y - 35);
+        ctx.lineTo(this.x + 20, this.y + 35);
+        ctx.lineTo(this.x - 20, this.y + 35);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Draw input labels
+        ctx.fillStyle = '#000';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'right';
+        ctx.fillText('Cin', this.x - 25, this.y - 20); // Aligned with S
+        ctx.fillText('A', this.x - 25, this.y);        // Aligned with Cout
+        ctx.fillText('B', this.x - 25, this.y + 20);   // Below
+
+        // Draw output labels
+        ctx.textAlign = 'left';
+        ctx.fillText('S', this.x + 25, this.y - 20);
+        ctx.fillText('Cout', this.x + 25, this.y);
+
+        // Draw component label
+        ctx.textAlign = 'center';
+        ctx.fillText(this.label, this.x, this.y - 40);
+
+        // Draw input/output nodes
+        this.drawNodes(ctx);
+    }
+
+    evaluate() {
+        // Get input values
+        const carryIn = this.inputNodes[0].sourceValue; // Cin is first input
+        const inputA = this.inputNodes[1].sourceValue;  // A is second input
+        const inputB = this.inputNodes[2].sourceValue;  // B is third input
+
+        // Calculate outputs
+        // Sum is XOR of all three inputs
+        const sum = (inputA !== inputB) !== carryIn;
+        
+        // Carry-out is majority function (at least two inputs are 1)
+        const carryOut = (inputA && inputB) || (inputB && carryIn) || (inputA && carryIn);
+
+        // Update output nodes
+        if (this.outputNodes[0]) this.outputNodes[0].sourceValue = sum;
+        if (this.outputNodes[1]) this.outputNodes[1].sourceValue = carryOut;
+
+        return sum; // Return sum as primary output
+    }
 } 
