@@ -500,13 +500,13 @@ class FullAdder extends Gate {
         
         // Override input/output nodes for full adder
         this.inputNodes = [
-            { x: this.x - 20, y: this.y - 20, value: false, connected: false }, // Cin input (aligned with S)
-            { x: this.x - 20, y: this.y, value: false, connected: false },      // A input (aligned with Cout)
-            { x: this.x - 20, y: this.y + 20, value: false, connected: false }   // B input (below)
+            { x: this.x - 25, y: this.y - 20, value: false, connected: false }, // Cin input (aligned with S)
+            { x: this.x - 25, y: this.y, value: false, connected: false },      // A input (aligned with Cout)
+            { x: this.x - 25, y: this.y + 20, value: false, connected: false }   // B input (below)
         ];
         this.outputNodes = [
-            { x: this.x + 20, y: this.y - 20, value: false, hasOutput: false }, // Sum output
-            { x: this.x + 20, y: this.y, value: false, hasOutput: false }       // Carry-out
+            { x: this.x + 25, y: this.y - 20, value: false, hasOutput: false }, // Sum output
+            { x: this.x + 25, y: this.y, value: false, hasOutput: false }       // Carry-out
         ];
     }
 
@@ -537,14 +537,14 @@ class FullAdder extends Gate {
         ctx.fillStyle = '#000';
         ctx.font = '12px Arial';
         ctx.textAlign = 'right';
-        ctx.fillText('Cin', this.x - 25, this.y - 20); // Aligned with S
-        ctx.fillText('A', this.x - 25, this.y);        // Aligned with Cout
-        ctx.fillText('B', this.x - 25, this.y + 20);   // Below
+        ctx.fillText('Cin', this.x - 35, this.y - 17); // Aligned with S
+        ctx.fillText('A', this.x - 35, this.y + 3);        // Aligned with Cout
+        ctx.fillText('B', this.x - 35, this.y + 23);   // Below
 
         // Draw output labels
         ctx.textAlign = 'left';
-        ctx.fillText('S', this.x + 25, this.y - 20);
-        ctx.fillText('Cout', this.x + 25, this.y);
+        ctx.fillText('S', this.x + 35, this.y - 17);
+        ctx.fillText('Cout', this.x + 35, this.y + 3);
 
         // Draw component label
         ctx.textAlign = 'center';
