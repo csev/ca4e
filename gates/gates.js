@@ -56,10 +56,10 @@ class Gate {
                 break;
             case 'NOT':
                 this.inputNodes = [
-                    { x: this.x - 20, y: this.y, value: false, connected: false }
+                    { x: this.x - 27, y: this.y, value: false, connected: false }
                 ];
                 this.outputNodes = [
-                    { x: this.x + 20, y: this.y, value: false, hasOutput: false }
+                    { x: this.x + 27, y: this.y, value: false, hasOutput: false }
                 ];
                 break;
             case 'INPUT':
@@ -213,7 +213,7 @@ class Gate {
         // Draw NOT triangle
         ctx.beginPath();
         ctx.moveTo(this.x - 20, this.y - 20);
-        ctx.lineTo(this.x + 10, this.y);
+        ctx.lineTo(this.x + 20, this.y);
         ctx.lineTo(this.x - 20, this.y + 20);
         ctx.closePath();
         
@@ -227,20 +227,20 @@ class Gate {
         ctx.strokeStyle = '#000';
         ctx.stroke();
         
-        // Draw the NOT circle - adjusted position
+        // Draw the NOT circle
         ctx.beginPath();
-        ctx.arc(this.x + 20, this.y, 5, 0, Math.PI * 2);
+        ctx.arc(this.x + 25, this.y, 3, 0, Math.PI * 2);
         ctx.stroke();
         
-        // Draw value in center of triangle (moved 5px left)
+        // Draw value in center of triangle
         ctx.fillStyle = '#fff';
         ctx.font = 'bold 14px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         if (hasInput) {
-            ctx.fillText(outputValue ? '1' : '0', this.x - 10, this.y); // Changed from x-5 to x-10
+            ctx.fillText(outputValue ? '1' : '0', this.x - 5, this.y);
         } else {
-            ctx.fillText('?', this.x - 10, this.y); // Changed from x-5 to x-10
+            ctx.fillText('?', this.x - 5, this.y);
         }
         
         // Draw gate label
