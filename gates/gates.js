@@ -211,9 +211,9 @@ class Gate {
         ctx.strokeStyle = '#000';
         ctx.stroke();
         
-        // Draw the NOT circle
+        // Draw the NOT circle - adjusted position
         ctx.beginPath();
-        ctx.arc(this.x + 15, this.y, 5, 0, Math.PI * 2);
+        ctx.arc(this.x + 20, this.y, 5, 0, Math.PI * 2);
         ctx.stroke();
         
         // Draw value in center of triangle (moved 5px left)
@@ -246,9 +246,9 @@ class Gate {
             ctx.closePath();
         }, outputValue, hasAllInputs);
 
-        // Add NOT circle
+        // Add NOT circle - adjusted position
         ctx.beginPath();
-        ctx.arc(this.x + 25, this.y, 5, 0, Math.PI * 2);
+        ctx.arc(this.x + 20, this.y, 5, 0, Math.PI * 2);
         ctx.stroke();
     }
 
@@ -264,9 +264,9 @@ class Gate {
             ctx.quadraticCurveTo(this.x - 10, this.y, this.x - 20, this.y - 20);
         }, outputValue, hasAllInputs);
 
-        // Add NOT circle
+        // Add NOT circle - adjusted position
         ctx.beginPath();
-        ctx.arc(this.x + 25, this.y, 5, 0, Math.PI * 2);
+        ctx.arc(this.x + 20, this.y, 5, 0, Math.PI * 2);
         ctx.stroke();
     }
 
