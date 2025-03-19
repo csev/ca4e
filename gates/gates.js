@@ -26,6 +26,14 @@ class Gate {
     initializeNodes() {
         switch(this.type) {
             case 'AND':
+                this.inputNodes = [
+                    { x: this.x - 25, y: this.y - 10, value: false, connected: false },
+                    { x: this.x - 25, y: this.y + 10, value: false, connected: false }
+                ];
+                this.outputNodes = [
+                    { x: this.x + 20, y: this.y, value: false, hasOutput: false }
+                ];
+                break;
             case 'OR':
             case 'NAND':
             case 'NOR':
@@ -40,7 +48,7 @@ class Gate {
                 break;
             case 'NOT':
                 this.inputNodes = [
-                    { x: this.x - 20, y: this.y, value: false, connected: false }
+                    { x: this.x - 25, y: this.y, value: false, connected: false }
                 ];
                 this.outputNodes = [
                     { x: this.x + 20, y: this.y, value: false, hasOutput: false }
