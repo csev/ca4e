@@ -69,8 +69,6 @@ class Circuit {
 
             iteration++;
             if (iteration >= this.maxIterations) {
-                this.showMessage('Circuit simulation reached maximum iterations. Circuit may be unstable.', true);
-                
                 // Track gates that change in additional iterations
                 const unstableGates = new Set();
                 const additionalIterations = 10;
