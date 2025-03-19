@@ -1,7 +1,9 @@
 class Circuit {
-    constructor() {
+    constructor(messageDisplay) {
         this.gates = [];
         this.wires = [];
+        this.maxIterations = 100; // Maximum number of iterations to prevent infinite loops
+        this.showMessage = messageDisplay || (() => {}); // Default to no-op if no message display provided
     }
 
     // Set the circuit layout from the editor
@@ -35,8 +37,11 @@ class Circuit {
             wire.end.sourceValue = wire.start.sourceValue;
         });
 
-        // Process all logic gates
+        // Process all logic gates with iteration limit
+        let iteration = 0;
         let changed;
+        let lastState = this.getCircuitState();
+
         do {
             changed = false;
             this.gates.forEach(gate => {
@@ -53,9 +58,55 @@ class Circuit {
             this.wires.forEach(wire => {
                 wire.end.sourceValue = wire.start.sourceValue;
             });
-        } while (changed); // Continue until no more changes occur
+
+            // Check if circuit has stabilized
+            const currentState = this.getCircuitState();
+            if (this.areStatesEqual(lastState, currentState)) {
+                changed = false; // Circuit has stabilized
+            }
+            lastState = currentState;
+
+            iteration++;
+            if (iteration >= this.maxIterations) {
+                this.showMessage('Circuit simulation reached maximum iterations. Circuit may be unstable.', true);
+                break;
+            }
+        } while (changed); // Continue until no more changes occur or max iterations reached
 
         return this.getCircuitState();
+    }
+
+    // Compare two circuit states to check for stabilization
+    areStatesEqual(state1, state2) {
+        if (state1.gates.length !== state2.gates.length) return false;
+        if (state1.wires.length !== state2.wires.length) return false;
+
+        for (let i = 0; i < state1.gates.length; i++) {
+            const gate1 = state1.gates[i];
+            const gate2 = state2.gates[i];
+            if (gate1.type !== gate2.type) return false;
+            if (gate1.label !== gate2.label) return false;
+            if (!this.arraysEqual(gate1.inputs, gate2.inputs)) return false;
+            if (!this.arraysEqual(gate1.outputs, gate2.outputs)) return false;
+        }
+
+        for (let i = 0; i < state1.wires.length; i++) {
+            const wire1 = state1.wires[i];
+            const wire2 = state2.wires[i];
+            if (wire1.start !== wire2.start) return false;
+            if (wire1.end !== wire2.end) return false;
+        }
+
+        return true;
+    }
+
+    // Helper function to compare arrays
+    arraysEqual(arr1, arr2) {
+        if (arr1.length !== arr2.length) return false;
+        for (let i = 0; i < arr1.length; i++) {
+            if (arr1[i] !== arr2[i]) return false;
+        }
+        return true;
     }
 
     // Get the current state of the circuit

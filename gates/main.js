@@ -9,8 +9,8 @@ class CircuitEditor {
         this.selectedTool = null;
         this.wireStartNode = null;
         
-        // Create circuit instance for computations
-        this.circuit = new Circuit();
+        // Create circuit instance for computations with message display function
+        this.circuit = new Circuit(this.showMessage.bind(this));
         
         // Set canvas size
         this.canvas.width = window.innerWidth - 40;
