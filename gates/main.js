@@ -165,6 +165,8 @@ class CircuitEditor {
                 let newGate;
                 if (this.selectedTool === 'FULL_ADDER') {
                     newGate = new FullAdder(x, y, this);
+                } else if (this.selectedTool === 'OCTAL_DISPLAY') {
+                    newGate = new OctalDisplay(x, y, this);
                 } else {
                     newGate = new Gate(this.selectedTool, x, y, this);
                 }

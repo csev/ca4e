@@ -557,4 +557,124 @@ class FullAdder extends Gate {
 
         return sum; // Return sum as primary output
     }
+}
+
+class OctalDisplay extends Gate {
+    constructor(x, y, editor) {
+        super('OCTAL_DISPLAY', x, y, editor);
+        this.label = 'OCTAL';
+        
+        // Override input nodes for octal display - moved outside the rectangle
+        this.inputNodes = [
+            { x: this.x - 40, y: this.y - 20, value: false, connected: false }, // 1s place
+            { x: this.x - 40, y: this.y, value: false, connected: false },      // 2s place
+            { x: this.x - 40, y: this.y + 20, value: false, connected: false }   // 4s place
+        ];
+        this.outputNodes = []; // No outputs needed for display
+    }
+
+    draw(ctx) {
+        // Draw display body
+        ctx.beginPath();
+        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000';
+        
+        // Set fill color based on state
+        if (this.isUnstable) {
+            ctx.fillStyle = '#888888'; // Grey for unstable
+        } else if (!this.inputNodes.every(node => node.connected)) {
+            ctx.fillStyle = '#888888'; // Grey for unconnected
+        } else {
+            ctx.fillStyle = '#ffffff'; // White for normal state
+        }
+        
+        // Draw main body as a rounded rectangle
+        const radius = 10;
+        ctx.moveTo(this.x - 30, this.y - 40);
+        ctx.lineTo(this.x + 30, this.y - 40);
+        ctx.lineTo(this.x + 30, this.y + 40);
+        ctx.lineTo(this.x - 30, this.y + 40);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Draw input labels - moved outside the rectangle
+        ctx.fillStyle = '#000';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'right';
+        ctx.fillText('1s', this.x - 45, this.y - 20);
+        ctx.fillText('2s', this.x - 45, this.y);
+        ctx.fillText('4s', this.x - 45, this.y + 20);
+
+        // Draw component label
+        ctx.textAlign = 'center';
+        ctx.fillText(this.label, this.x, this.y - 45);
+
+        // Draw input nodes
+        this.drawNodes(ctx);
+
+        // Draw the Nixie tube display
+        this.drawNixieDisplay(ctx);
+    }
+
+    drawNixieDisplay(ctx) {
+        // Calculate the octal value from inputs - treat non-connected inputs as zero
+        const ones = this.inputNodes[0].connected ? (this.inputNodes[0].sourceValue ? 1 : 0) : 0;
+        const twos = this.inputNodes[1].connected ? (this.inputNodes[1].sourceValue ? 2 : 0) : 0;
+        const fours = this.inputNodes[2].connected ? (this.inputNodes[2].sourceValue ? 4 : 0) : 0;
+        const value = ones + twos + fours;
+
+        // Draw the outer glow
+        const gradient = ctx.createRadialGradient(
+            this.x, this.y, 25,
+            this.x, this.y, 35
+        );
+        gradient.addColorStop(0, 'rgba(255, 165, 0, 0.3)');  // Orange glow
+        gradient.addColorStop(1, 'rgba(255, 165, 0, 0)');    // Fade to transparent
+        
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 35, 0, Math.PI * 2);
+        ctx.fillStyle = gradient;
+        ctx.fill();
+
+        // Draw the Nixie tube glass
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, 25, 0, Math.PI * 2);
+        ctx.fillStyle = '#2c3e50'; // Dark blue background
+        ctx.fill();
+        
+        // Add glass reflection
+        const glassGradient = ctx.createRadialGradient(
+            this.x - 5, this.y - 5, 0,
+            this.x, this.y, 25
+        );
+        glassGradient.addColorStop(0, 'rgba(255, 255, 255, 0.2)');
+        glassGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        ctx.fillStyle = glassGradient;
+        ctx.fill();
+        
+        ctx.strokeStyle = '#34495e';
+        ctx.stroke();
+
+        // Draw the digit with glow effect
+        // Draw digit glow
+        ctx.shadowColor = 'rgba(255, 165, 0, 0.5)';
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        
+        ctx.fillStyle = '#ffa500'; // Orange color for the digit
+        ctx.font = 'bold 32px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(value.toString(), this.x, this.y);
+        
+        // Reset shadow
+        ctx.shadowColor = 'transparent';
+        ctx.shadowBlur = 0;
+    }
+
+    evaluate() {
+        // Display components don't need to return a value
+        return undefined;
+    }
 } 
