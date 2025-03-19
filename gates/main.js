@@ -396,13 +396,71 @@ class CircuitEditor {
             this.ctx.beginPath();
             this.ctx.moveTo(wire.start.x, wire.start.y);
             
-            // Create a smooth curve for the wire
-            const midX = (wire.start.x + wire.end.x) / 2;
-            this.ctx.bezierCurveTo(
-                midX, wire.start.y,
-                midX, wire.end.y,
-                wire.end.x, wire.end.y
-            );
+            // Calculate wire path based on relative positions
+            if (wire.start.x < wire.end.x) {
+                // If output is to the left of input, create a structured path
+                const midX = wire.start.x + 50; // Extend 50px to the right from output
+                const midY = wire.start.y;
+                const endX = wire.end.x - 50; // Come in 50px from the left for input
+                const endY = wire.end.y;
+                
+                // Draw horizontal line from output
+                this.ctx.lineTo(midX, midY);
+                
+                // Draw vertical line to align with input
+                this.ctx.lineTo(midX, endY);
+                
+                // Draw horizontal line to input
+                this.ctx.lineTo(endX, endY);
+                
+                // Draw final line to input
+                this.ctx.lineTo(wire.end.x, wire.end.y);
+            } else {
+                // If output is to the right of input or at same x position
+                const dx = wire.end.x - wire.start.x;
+                const dy = wire.end.y - wire.start.y;
+                const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+                
+                // Calculate control points to ensure proper angles
+                let cp1x, cp1y, cp2x, cp2y;
+                
+                if (Math.abs(angle) <= 20) {
+                    // If angle is within limits, use direct curve
+                    const midX = (wire.start.x + wire.end.x) / 2;
+                    cp1x = midX;
+                    cp1y = wire.start.y;
+                    cp2x = midX;
+                    cp2y = wire.end.y;
+                } else {
+                    // If angle is outside limits, create intermediate points
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const maxAngle = 20 * Math.PI / 180;
+                    
+                    // Calculate intermediate points to maintain angle limits
+                    if (angle > 20) {
+                        // Angle is too steep upward
+                        const yOffset = distance * Math.sin(maxAngle);
+                        cp1x = wire.start.x + distance * 0.3;
+                        cp1y = wire.start.y + yOffset;
+                        cp2x = wire.end.x - distance * 0.3;
+                        cp2y = wire.end.y - yOffset;
+                    } else {
+                        // Angle is too steep downward
+                        const yOffset = distance * Math.sin(maxAngle);
+                        cp1x = wire.start.x + distance * 0.3;
+                        cp1y = wire.start.y - yOffset;
+                        cp2x = wire.end.x - distance * 0.3;
+                        cp2y = wire.end.y + yOffset;
+                    }
+                }
+                
+                // Draw the curve with calculated control points
+                this.ctx.bezierCurveTo(
+                    cp1x, cp1y,
+                    cp2x, cp2y,
+                    wire.end.x, wire.end.y
+                );
+            }
             
             // Set wire style based on hover/selected state
             if (wire === this.hoveredWire) {
