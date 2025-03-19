@@ -587,12 +587,32 @@ class OctalDisplay extends Gate {
             ctx.fillStyle = '#ffffff'; // White for normal state
         }
         
-        // Draw main body as a rounded rectangle
-        const radius = 10;
-        ctx.moveTo(this.x - 30, this.y - 40);
-        ctx.lineTo(this.x + 30, this.y - 40);
-        ctx.lineTo(this.x + 30, this.y + 40);
-        ctx.lineTo(this.x - 30, this.y + 40);
+        // Draw organic rectangle shape with curved corners
+        const radius = 15; // Corner radius
+        
+        // Start from top-left corner
+        ctx.moveTo(this.x - 30 + radius, this.y - 40);
+        
+        // Top edge
+        ctx.lineTo(this.x + 30 - radius, this.y - 40);
+        // Top-right corner
+        ctx.quadraticCurveTo(this.x + 30, this.y - 40, this.x + 30, this.y - 40 + radius);
+        
+        // Right edge
+        ctx.lineTo(this.x + 30, this.y + 40 - radius);
+        // Bottom-right corner
+        ctx.quadraticCurveTo(this.x + 30, this.y + 40, this.x + 30 - radius, this.y + 40);
+        
+        // Bottom edge
+        ctx.lineTo(this.x - 30 + radius, this.y + 40);
+        // Bottom-left corner
+        ctx.quadraticCurveTo(this.x - 30, this.y + 40, this.x - 30, this.y + 40 - radius);
+        
+        // Left edge
+        ctx.lineTo(this.x - 30, this.y - 40 + radius);
+        // Top-left corner
+        ctx.quadraticCurveTo(this.x - 30, this.y - 40, this.x - 30 + radius, this.y - 40);
+        
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
