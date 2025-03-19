@@ -9,6 +9,9 @@ class CircuitEditor {
         this.selectedTool = null;
         this.wireStartNode = null;
         
+        // Create circuit instance for computations
+        this.circuit = new Circuit();
+        
         // Set canvas size
         this.canvas.width = window.innerWidth - 40;
         this.canvas.height = window.innerHeight - 100;
@@ -224,7 +227,6 @@ class CircuitEditor {
                     if (gate.toggleInput()) {
                         this.showMessage(`Input set to ${gate.state ? '1' : '0'}`);
                         this.updateWireValues();
-                        this.logCircuitState();
                     }
                     break;
                 }
@@ -232,9 +234,17 @@ class CircuitEditor {
         }
     }
 
-    updateSimulation() {
-        // This will be implemented later when we add circuit simulation
-        // For now, just update the display
+    updateWireValues() {
+        // Update the circuit layout
+        this.circuit.setLayout(this.gates, this.wires);
+        
+        // Update the circuit state
+        const state = this.circuit.update();
+        
+        // Log the state if needed
+        this.circuit.logState();
+        
+        // Update display
         this.render();
     }
 
@@ -328,9 +338,6 @@ class CircuitEditor {
         
         // Update wire values and log state
         this.updateWireValues();
-        this.logCircuitState();
-        
-        this.showMessage('Connection created successfully');
     }
 
     render() {
@@ -472,73 +479,6 @@ class CircuitEditor {
         const dx = x - xx;
         const dy = y - yy;
         return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    // Add method to update wire values
-    updateWireValues() {
-        // Reset all node source values
-        this.gates.forEach(gate => {
-            gate.inputNodes.forEach(node => {
-                node.sourceValue = undefined;
-            });
-            gate.outputNodes.forEach(node => {
-                node.sourceValue = undefined;
-            });
-        });
-
-        // Process gates in order: INPUT -> LOGIC GATES -> OUTPUT
-        // First, process INPUT gates
-        this.gates.forEach(gate => {
-            if (gate.type === 'INPUT') {
-                gate.evaluate();
-            }
-        });
-
-        // Propagate values through wires
-        this.wires.forEach(wire => {
-            wire.end.sourceValue = wire.start.sourceValue;
-        });
-
-        // Process all logic gates
-        let changed;
-        do {
-            changed = false;
-            this.gates.forEach(gate => {
-                if (gate.type !== 'INPUT' && gate.type !== 'OUTPUT') {
-                    const oldValue = gate.outputNodes[0]?.sourceValue;
-                    const newValue = gate.evaluate();
-                    if (oldValue !== newValue) {
-                        changed = true;
-                    }
-                }
-            });
-
-            // Propagate values through wires after each iteration
-            this.wires.forEach(wire => {
-                wire.end.sourceValue = wire.start.sourceValue;
-            });
-        } while (changed); // Continue until no more changes occur
-
-        // Update display
-        this.render();
-    }
-
-    // Add debug logging
-    logCircuitState() {
-        console.log('Circuit State:');
-        this.gates.forEach(gate => {
-            console.log(`Gate Type: ${gate.type}`);
-            if (gate.inputNodes.length > 0) {
-                console.log('  Input Values:', gate.inputNodes.map(n => n.sourceValue));
-            }
-            if (gate.outputNodes.length > 0) {
-                console.log('  Output Values:', gate.outputNodes.map(n => n.sourceValue));
-            }
-        });
-        console.log('Wires:');
-        this.wires.forEach(wire => {
-            console.log(`  Wire: ${wire.start.sourceValue} -> ${wire.end.sourceValue}`);
-        });
     }
 
     deleteGate(gate) {

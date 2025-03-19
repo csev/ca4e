@@ -47,13 +47,15 @@
             background-color: #45a049;
         }
 
-        .action-buttons {
+        .right-section {
             display: flex;
-            gap: 10px;
+            align-items: center;
+            gap: 20px;
         }
 
-        #simulate {
-            background-color: #2196F3;
+        #selectedTool {
+            font-weight: bold;
+            color: #333;
         }
 
         #delete {
@@ -76,7 +78,7 @@
             background-color: #f44336;
         }
 
-        #simulate, #delete, #clear {
+        #delete, #clear {
             padding: 8px 15px;
             border: none;
             border-radius: 4px;
@@ -84,10 +86,6 @@
             cursor: pointer;
             transition: background-color 0.2s;
             font-weight: bold;
-        }
-
-        #simulate:hover {
-            background-color: #1976D2;
         }
 
         #clear:hover {
@@ -153,19 +151,19 @@
 <body>
     <div class="toolbar">
         <div class="gate-selector">
-            <button data-gate="INPUT" title="Input Node">INPUT</button>
-            <button data-gate="OUTPUT" title="Output Node">OUTPUT</button>
-            <button data-gate="NOT" title="NOT Gate">NOT</button>
-            <button data-gate="AND" title="AND Gate">AND</button>
-            <button data-gate="OR" title="OR Gate">OR</button>
-            <button data-gate="NAND" title="NAND Gate">NAND</button>
-            <button data-gate="NOR" title="NOR Gate">NOR</button>
-            <button data-gate="XOR" title="XOR Gate">XOR</button>
+            <button data-gate="INPUT">Input</button>
+            <button data-gate="OUTPUT">Output</button>
+            <button data-gate="AND">AND</button>
+            <button data-gate="OR">OR</button>
+            <button data-gate="NOT">NOT</button>
+            <button data-gate="NAND">NAND</button>
+            <button data-gate="NOR">NOR</button>
+            <button data-gate="XOR">XOR</button>
         </div>
-        <div class="action-buttons">
-            <button id="simulate">Simulate</button>
-            <button id="delete" title="Delete Component (ESC to cancel)">Delete</button>
-            <button id="clear">Clear</button>
+        <div class="right-section">
+            <span id="selectedTool">Selected: None</span>
+            <button id="delete">Delete Gate</button>
+            <button id="clear">Delete All</button>
         </div>
     </div>
 
@@ -182,6 +180,8 @@
     <script src="gates.js"></script>
     <!-- Then load the main editor code -->
     <script src="main.js"></script>
+    <!-- Then load the circuit.js script -->
+    <script src="circuit.js"></script>
 
     <script>
         // Add mouse coordinate tracking
