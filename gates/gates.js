@@ -34,8 +34,16 @@ class Gate {
                     { x: this.x + 20, y: this.y, value: false, hasOutput: false }
                 ];
                 break;
-            case 'OR':
             case 'NAND':
+                this.inputNodes = [
+                    { x: this.x - 25, y: this.y - 10, value: false, connected: false },
+                    { x: this.x - 25, y: this.y + 10, value: false, connected: false }
+                ];
+                this.outputNodes = [
+                    { x: this.x + 20, y: this.y, value: false, hasOutput: false }
+                ];
+                break;
+            case 'OR':
             case 'NOR':
             case 'XOR':
                 this.inputNodes = [
@@ -48,7 +56,7 @@ class Gate {
                 break;
             case 'NOT':
                 this.inputNodes = [
-                    { x: this.x - 25, y: this.y, value: false, connected: false }
+                    { x: this.x - 20, y: this.y, value: false, connected: false }
                 ];
                 this.outputNodes = [
                     { x: this.x + 20, y: this.y, value: false, hasOutput: false }
@@ -574,9 +582,9 @@ class NixieDisplay extends Gate {
         
         // Override input nodes for nixie display - moved outside the rectangle
         this.inputNodes = [
-            { x: this.x - 40, y: this.y - 20, value: false, connected: false }, // 1s place
-            { x: this.x - 40, y: this.y, value: false, connected: false },      // 2s place
-            { x: this.x - 40, y: this.y + 20, value: false, connected: false }   // 4s place
+            { x: this.x - 35, y: this.y - 20, value: false, connected: false }, // 1s place
+            { x: this.x - 35, y: this.y, value: false, connected: false },      // 2s place
+            { x: this.x - 35, y: this.y + 20, value: false, connected: false }   // 4s place
         ];
         this.outputNodes = []; // No outputs needed for display
     }
@@ -629,9 +637,9 @@ class NixieDisplay extends Gate {
         ctx.fillStyle = '#000';
         ctx.font = '12px Arial';
         ctx.textAlign = 'right';
-        ctx.fillText('1s', this.x - 45, this.y - 20);
-        ctx.fillText('2s', this.x - 45, this.y);
-        ctx.fillText('4s', this.x - 45, this.y + 20);
+        ctx.fillText('1s', this.x - 40, this.y - 20);
+        ctx.fillText('2s', this.x - 40, this.y);
+        ctx.fillText('4s', this.x - 40, this.y + 20);
 
         // Draw component label
         ctx.textAlign = 'center';
