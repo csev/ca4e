@@ -732,17 +732,15 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
     ctx.stroke();
     
     // Add electrical values display with background
-    ctx.font = '10px Arial';
-    ctx.textAlign = 'center';
-    
     if (isProperlyConnected) {
         // Add white background for better visibility
         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.fillRect(-20, -radius - 35, 40, 30);
+        ctx.fillRect(-20, -radius - 25, 40, 20);
         
         ctx.fillStyle = '#000000';
-        ctx.fillText(`${(current * 1000).toFixed(1)}mA`, 0, -radius - 25);
-        ctx.fillText(`${actualVoltage.toFixed(1)}V`, 0, -radius - 15);
+        ctx.font = '10px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(`${(current * 1000).toFixed(1)}mA`, 0, -radius - 15);
         ctx.fillText(`Vf=${LED_CHARACTERISTICS.vf}V`, 0, -radius - 5);
     }
     
