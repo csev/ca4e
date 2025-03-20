@@ -272,7 +272,7 @@ function showVoltages() {
                 
                 // Get the voltage directly from the dot
                 const voltage = dot.voltage;
-                console.log(`Dot at row ${label}, col ${col + 1}: voltage = ${voltage}`);
+                if ( voltage != null) console.log(`Dot at row ${label}, col ${col + 1}: voltage = ${voltage}`);
                 
                 if (voltage === 9) {
                     cell.textContent = 'VCC';
