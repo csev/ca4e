@@ -60,9 +60,10 @@ const RESISTOR_VALUES = {
 
 // Add LED electrical characteristics near RESISTOR_VALUES
 const LED_CHARACTERISTICS = {
-    resistance: 200,      // Internal resistance in ohms
-    minCurrent: 0.001,   // Minimum visible current in amperes (1mA)
-    maxCurrent: 0.020    // Maximum current in amperes (20mA)
+    vf: 2.0,          // Forward voltage drop in volts (typical for red LED)
+    minCurrent: 0.001, // Minimum visible current in amperes (1mA)
+    maxCurrent: 0.020, // Maximum current in amperes (20mA)
+    resistance: 100    // Series resistance after forward voltage drop (ohms)
 };
 
 // Add after LED_CHARACTERISTICS
@@ -563,8 +564,14 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
         if (startVoltage !== null && endVoltage !== null) {
             const voltageDiff = Math.abs(startVoltage - endVoltage);
             actualVoltage = voltageDiff;
-            current = voltageDiff / LED_CHARACTERISTICS.resistance;
-            isProperlyConnected = current >= LED_CHARACTERISTICS.minCurrent;
+            
+            // Check if voltage is sufficient to overcome forward voltage
+            if (voltageDiff >= LED_CHARACTERISTICS.vf) {
+                // Calculate current based on remaining voltage after Vf
+                const remainingVoltage = voltageDiff - LED_CHARACTERISTICS.vf;
+                current = remainingVoltage / LED_CHARACTERISTICS.resistance;
+                isProperlyConnected = current >= LED_CHARACTERISTICS.minCurrent;
+            }
         }
     }
     
@@ -651,11 +658,12 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
     if (isProperlyConnected) {
         // Add white background for better visibility
         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.fillRect(-20, -radius - 25, 40, 20);
+        ctx.fillRect(-20, -radius - 35, 40, 30);
         
         ctx.fillStyle = '#000000';
-        ctx.fillText(`${(current * 1000).toFixed(1)}mA`, 0, -radius - 15);
-        ctx.fillText(`${actualVoltage.toFixed(1)}V`, 0, -radius - 5);
+        ctx.fillText(`${(current * 1000).toFixed(1)}mA`, 0, -radius - 25);
+        ctx.fillText(`${actualVoltage.toFixed(1)}V`, 0, -radius - 15);
+        ctx.fillText(`Vf=${LED_CHARACTERISTICS.vf}V`, 0, -radius - 5);
     }
     
     // Add a subtle inner shadow
@@ -1141,6 +1149,7 @@ function drawColumnLabels() {
 }
 
 function drawGrid() {
+    // Clear the entire canvas first
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     // Draw power rails first
@@ -1231,8 +1240,12 @@ function drawGrid() {
         }
     }
 
-    // Draw computation overlay if computing
+    // Draw computation overlay only if computing
     if (isComputing) {
+        // Save the current context state
+        ctx.save();
+        
+        // Add semi-transparent overlay
         ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
@@ -1240,13 +1253,16 @@ function drawGrid() {
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
         const radius = 20;
-        const startAngle = Date.now() / 1000;
+        const startAngle = (Date.now() / 1000) % (2 * Math.PI);
         
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, startAngle, startAngle + Math.PI * 1.5);
         ctx.strokeStyle = '#4CAF50';
         ctx.lineWidth = 3;
         ctx.stroke();
+        
+        // Restore the context state
+        ctx.restore();
     }
 }
 
@@ -1851,20 +1867,23 @@ function calculateIntermediateVoltages() {
             const path = tracePath(dot);
             if (!path) return;
 
-            // Calculate total resistance
+            // Calculate total resistance and voltage drops
             let totalResistance = 0;
+            let totalFixedVoltageDrops = 0;
 
             path.forEach(({ component }) => {
                 if (component.type.startsWith('resistor_')) {
                     totalResistance += RESISTOR_VALUES[component.type];
                 } else if (component.type === 'led') {
                     totalResistance += LED_CHARACTERISTICS.resistance;
+                    totalFixedVoltageDrops += LED_CHARACTERISTICS.vf;
                 }
                 processedComponents.add(component);
             });
 
-            // Calculate current based on total resistance and supply voltage
-            const current = 9 / totalResistance;
+            // Calculate current based on total resistance and remaining voltage after fixed drops
+            const remainingVoltage = 9 - totalFixedVoltageDrops;
+            const current = remainingVoltage > 0 ? remainingVoltage / totalResistance : 0;
 
             // Apply voltage drops along the path
             let currentVoltage = 9;
@@ -1873,7 +1892,8 @@ function calculateIntermediateVoltages() {
                 if (component.type.startsWith('resistor_')) {
                     voltageDrop = current * RESISTOR_VALUES[component.type];
                 } else if (component.type === 'led') {
-                    voltageDrop = current * LED_CHARACTERISTICS.resistance;
+                    // LED voltage drop is the forward voltage plus any additional drop across internal resistance
+                    voltageDrop = LED_CHARACTERISTICS.vf + (current * LED_CHARACTERISTICS.resistance);
                 }
 
                 // Store the voltage drop and current for the component
@@ -2116,46 +2136,44 @@ function updateCircuitEmulator() {
     isComputing = true;
     computationFeedback.style.display = 'block';
     
-    // Add a small delay to show the computing state
-    setTimeout(() => {
-        // Prepare circuit data for emulator
-        const circuitComponents = lines.map(line => ({
-            type: line.type,
-            start: getPointLabel(line.start),
-            end: getPointLabel(line.end),
-            transistorConnection: line.transistorConnection
-        }));
+    // Prepare circuit data for emulator
+    const circuitComponents = lines.map(line => ({
+        type: line.type,
+        start: getPointLabel(line.start),
+        end: getPointLabel(line.end),
+        transistorConnection: line.transistorConnection
+    }));
 
-        // Add transistors to components
-        transistors.forEach((transistor, id) => {
-            circuitComponents.push({
-                type: 'transistor',
-                id: id,
-                connections: {
-                    collector: transistor.connections.collector ? getPointLabel(transistor.connections.collector) : null,
-                    base: transistor.connections.base ? getPointLabel(transistor.connections.base) : null,
-                    emitter: transistor.connections.emitter ? getPointLabel(transistor.connections.emitter) : null
-                }
-            });
+    // Add transistors to components
+    transistors.forEach((transistor, id) => {
+        circuitComponents.push({
+            type: 'transistor',
+            id: id,
+            connections: {
+                collector: transistor.connections.collector ? getPointLabel(transistor.connections.collector) : null,
+                base: transistor.connections.base ? getPointLabel(transistor.connections.base) : null,
+                emitter: transistor.connections.emitter ? getPointLabel(transistor.connections.emitter) : null
+            }
         });
+    });
 
-        // Pass the circuit data to the emulator and start computation
-        window.circuitEmulator.loadCircuit(circuitComponents, connections);
-        window.circuitEmulator.start();
-        
-        // Rebuild all connections and recalculate voltages
-        rebuildAllConnections();
-        
-        // Calculate and store voltages for all dots
-        const voltageMap = calculateIntermediateVoltages();
-        dots.forEach((dot, index) => {
-            dot.voltage = getDotVoltage(dot, voltageMap);
-        });
-        
-        // Hide the computing feedback after a short delay
-        setTimeout(() => {
-            isComputing = false;
-            computationFeedback.style.display = 'none';
-        }, 500);
-    }, 100);
+    // Pass the circuit data to the emulator and start computation
+    window.circuitEmulator.loadCircuit(circuitComponents, connections);
+    window.circuitEmulator.start();
+    
+    // Rebuild all connections and recalculate voltages
+    rebuildAllConnections();
+    
+    // Calculate and store voltages for all dots
+    const voltageMap = calculateIntermediateVoltages();
+    dots.forEach((dot, index) => {
+        dot.voltage = getDotVoltage(dot, voltageMap);
+    });
+    
+    // Reset computing state and hide feedback immediately
+    isComputing = false;
+    computationFeedback.style.display = 'none';
+    
+    // Force a final redraw to clear the overlay
+    drawGrid();
 } 
