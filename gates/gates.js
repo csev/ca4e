@@ -586,7 +586,13 @@ class NixieDisplay extends Gate {
             { x: this.x - 37, y: this.y + 1, value: false, connected: false },      // 2s place
             { x: this.x - 37, y: this.y + 21, value: false, connected: false }   // 4s place
         ];
-        this.outputNodes = []; // No outputs needed for display
+
+        // Add output nodes that mirror the inputs
+        this.outputNodes = [
+            { x: this.x + 37, y: this.y - 19, value: false, hasOutput: false }, // 1s place output
+            { x: this.x + 37, y: this.y + 1, value: false, hasOutput: false },      // 2s place output
+            { x: this.x + 37, y: this.y + 21, value: false, hasOutput: false }   // 4s place output
+        ];
     }
 
     draw(ctx) {
@@ -641,12 +647,18 @@ class NixieDisplay extends Gate {
         ctx.fillText('2', this.inputNodes[1].x - 7, this.inputNodes[1].y + 2);
         ctx.fillText('4', this.inputNodes[2].x - 7, this.inputNodes[2].y + 2);
 
+        // Draw output labels
+        ctx.textAlign = 'left';
+        ctx.fillText('1', this.outputNodes[0].x + 7, this.outputNodes[0].y + 2);
+        ctx.fillText('2', this.outputNodes[1].x + 7, this.outputNodes[1].y + 2);
+        ctx.fillText('4', this.outputNodes[2].x + 7, this.outputNodes[2].y + 2);
+
         // Draw component label inside the rectangle at the bottom
         ctx.textAlign = 'center';
         ctx.fillStyle = '#ffffff';
         ctx.fillText(this.label, this.x, this.y + 35);
 
-        // Draw input nodes
+        // Draw input and output nodes
         this.drawNodes(ctx);
 
         // Draw the Nixie tube display
@@ -735,6 +747,15 @@ class NixieDisplay extends Gate {
     }
 
     evaluate() {
+        // Copy input values to output nodes
+        for (let i = 0; i < this.inputNodes.length; i++) {
+            if (this.inputNodes[i].connected) {
+                this.outputNodes[i].sourceValue = this.inputNodes[i].sourceValue;
+            } else {
+                this.outputNodes[i].sourceValue = undefined;
+            }
+        }
+        
         // Display components don't need to return a value
         return undefined;
     }
