@@ -335,10 +335,6 @@ class CircuitEditor {
                     // NOT gate has a single output at a specific position
                     node.x = this.draggingGate.x + 27;
                     node.y = this.draggingGate.y;
-                } else if (this.draggingGate.type === 'NIXIE_DISPLAY') {
-                    // Nixie display has three outputs at different heights
-                    node.x = this.draggingGate.x + 40; // Match the input offset
-                    node.y = this.draggingGate.y + (index - 1) * 20; // -20, 0, +20
                 } else {
                     node.x = this.draggingGate.x + 20;
                     node.y = this.draggingGate.y + this.dragStartNodePositions.outputs[index].relativeY;

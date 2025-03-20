@@ -152,4 +152,15 @@ class CircuitEmulator {
 }
 
 // Create a global instance
-window.circuitEmulator = new CircuitEmulator(); 
+window.circuitEmulator = new CircuitEmulator();
+
+document.getElementById('startEmulation').addEventListener('click', () => {
+    // Prepare circuit data for emulator
+    const circuitComponents = lines.map(line => ({
+        type: line.type,
+        start: getPointLabel(line.start),
+        end: getPointLabel(line.end),
+        transistorConnection: line.transistorConnection
+    }));
+    // ...
+}); 
