@@ -23,6 +23,7 @@ const lines = [];
 let isDragging = false;
 let startDot = null;
 let currentMousePos = { x: 0, y: 0 };
+let warningTimeout = null;  // Add warning timeout variable here
 
 // Component type selector
 const componentSelect = document.getElementById('componentType');
@@ -333,8 +334,6 @@ class SmokeParticle {
         ctx.fill();
     }
 }
-
-let warningTimeout = null;
 
 // Helper function to get dot index from row and column
 function getDotIndex(row, col) {
@@ -1560,98 +1559,48 @@ canvas.addEventListener('mouseup', (e) => {
         return;
     }
     
-    if (wasDragging) {
+    if (wasDragging && hadStartDot) {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         
         const endDot = findClosestDot(x, y);
         
-        // Handle connections between dots and transistor points
-        if (hadTransistorPoint && endDot) {
-            // Connect from transistor to dot
-            const transistor = transistors.get(hadTransistorPoint.id);
-            if (transistor) {
-                // Check if there's already a connection to this terminal
-                const existingLineIndex = lines.findIndex(line => 
-                    line.transistorConnection &&
-                    line.transistorConnection.id === hadTransistorPoint.id &&
-                    line.transistorConnection.type === hadTransistorPoint.type
-                );
-                
-                // Remove existing connection if there is one
-                if (existingLineIndex !== -1) {
-                    lines.splice(existingLineIndex, 1);
-                }
-                
+        if (endDot && hadStartDot !== endDot) {
+            // Check for short circuit before adding the wire
+            if (componentSelect.value === 'wire' && isShortCircuit(hadStartDot, endDot)) {
+                showWarningMessage();
+                // Create the wire temporarily to show it melting
                 const newLine = {
-                    start: { x: hadTransistorPoint.x, y: hadTransistorPoint.y },
+                    start: hadStartDot,
                     end: endDot,
-                    type: 'wire',
-                    transistorConnection: {
-                        id: hadTransistorPoint.id,
-                        type: hadTransistorPoint.type
-                    }
+                    type: 'wire'
                 };
                 lines.push(newLine);
-                transistor.connections[hadTransistorPoint.type] = endDot;
                 
-                // Only rebuild regular connections, not transistor ones
-                initializeConnections();
-                lines.forEach(line => {
-                    if (!line.transistorConnection && line.type === 'wire') {
-                        connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
-                    }
-                });
-                drawGrid();
-                updateCircuitEmulator();
-            }
-        } else if (hadStartDot && endDot && hadStartDot !== endDot) {
-            // Original dot-to-dot connection logic
-            const startIndex = dots.indexOf(hadStartDot);
-            const endIndex = dots.indexOf(endDot);
-            const startConnections = connections.get(startIndex);
-            const endConnections = connections.get(endIndex);
-            
-            const hasStartPower = Array.from(startConnections).some(i => dots[i].voltage === 9);
-            const hasStartGround = Array.from(startConnections).some(i => dots[i].voltage === 0);
-            const hasEndPower = Array.from(endConnections).some(i => dots[i].voltage === 9);
-            const hasEndGround = Array.from(endConnections).some(i => dots[i].voltage === 0);
-            
-            const isShortCircuit = (hasStartPower && hasEndGround) || (hasStartGround && hasEndPower);
-            
-            const newLine = {
-                start: hadStartDot,
-                end: endDot,
-                type: componentSelect.value
-            };
-            
-            if (componentSelect.value === 'wire' && isShortCircuit) {
-                showWarningMessage();
-                lines.push(newLine);
-                setTimeout(() => {
-                    const index = lines.indexOf(newLine);
-                    if (index > -1) {
-                        lines.splice(index, 1);
-                        drawGrid();
-                        updateCircuitEmulator();
-                    }
-                }, 1000);
+                // Start melting animation
+                const wireIndex = lines.length - 1;
+                animateWireMelting(wireIndex);
             } else {
+                // Add the component normally
+                const newLine = {
+                    start: hadStartDot,
+                    end: endDot,
+                    type: componentSelect.value
+                };
                 lines.push(newLine);
                 
                 // Reinitialize and rebuild all connections
                 initializeConnections();
-                lines.forEach(line => {
-                    if (!line.transistorConnection && line.type === 'wire') {
-                        connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
-                    }
-                });
+                rebuildAllConnections();
                 drawGrid();
                 updateCircuitEmulator();
             }
         }
     }
+    
+    startDot = null;
+    selectedTransistorPoint = null;
 });
 
 // Add click handler for switches
@@ -1867,9 +1816,24 @@ showCircuitButton.addEventListener('click', showCircuitConnections);
 // Initial draw
 drawGrid();
 
+// Add warning message element
+const warningMessage = document.createElement('div');
+warningMessage.id = 'warningMessage';
+warningMessage.style.position = 'fixed';
+warningMessage.style.top = '20px';
+warningMessage.style.left = '50%';
+warningMessage.style.transform = 'translateX(-50%)';
+warningMessage.style.backgroundColor = '#ff4444';
+warningMessage.style.color = 'white';
+warningMessage.style.padding = '10px 20px';
+warningMessage.style.borderRadius = '4px';
+warningMessage.style.opacity = '0';
+warningMessage.style.transition = 'opacity 0.3s ease';
+warningMessage.style.zIndex = '1000';
+warningMessage.textContent = '⚠️ Warning: Short Circuit Detected!';
+document.body.appendChild(warningMessage);
+
 function showWarningMessage() {
-    const warningMessage = document.getElementById('warningMessage');
-    
     // Clear any existing timeout
     if (warningTimeout) {
         clearTimeout(warningTimeout);
@@ -2220,9 +2184,62 @@ function calculateCircuitValues() {
     // Calculate intermediate voltages
     const voltageMap = calculateIntermediateVoltages();
     
-    // Calculate for each component
+    // Find parallel and series resistor groups
+    const parallelGroups = findParallelResistors(lines);
+    const seriesGroups = findSeriesResistors(lines);
+    
+    // First handle series combinations
+    seriesGroups.forEach((resistors, key) => {
+        // Get the total voltage across the series combination
+        const r1 = resistors[0];
+        const r2 = resistors[1];
+        const startVoltage = getDotVoltage(r1.start, voltageMap);
+        const endVoltage = getDotVoltage(r2.end, voltageMap);
+        
+        if (startVoltage !== null && endVoltage !== null) {
+            const totalVoltageDiff = Math.abs(startVoltage - endVoltage);
+            const r1Value = RESISTOR_VALUES[r1.type];
+            const r2Value = RESISTOR_VALUES[r2.type];
+            const totalResistance = r1Value + r2Value;
+            
+            // Calculate current (same through both resistors)
+            const current = totalVoltageDiff / totalResistance;
+            
+            // Calculate individual voltage drops
+            r1.voltage_drop = current * r1Value;
+            r2.voltage_drop = current * r2Value;
+            r1.current = current;
+            r2.current = current;
+        }
+    });
+    
+    // Then handle parallel combinations
+    parallelGroups.forEach((resistors, key) => {
+        const [startIndex, endIndex] = key.split('_').map(Number);
+        const startDot = dots[startIndex];
+        const endDot = dots[endIndex];
+        const startVoltage = getDotVoltage(startDot, voltageMap);
+        const endVoltage = getDotVoltage(endDot, voltageMap);
+        
+        if (startVoltage !== null && endVoltage !== null) {
+            const voltageDiff = Math.abs(startVoltage - endVoltage);
+            const equivalentResistance = calculateEquivalentResistance(resistors);
+            const totalCurrent = voltageDiff / equivalentResistance;
+            
+            // Distribute current among parallel resistors
+            resistors.forEach(resistor => {
+                const resistance = RESISTOR_VALUES[resistor.type];
+                resistor.voltage_drop = voltageDiff;
+                resistor.current = voltageDiff / resistance;
+            });
+        }
+    });
+    
+    // Finally handle individual components not in series or parallel
     lines.forEach(line => {
-        if (line.type.startsWith('resistor_') || line.type === 'led') {
+        if ((line.type.startsWith('resistor_') || line.type === 'led') && 
+            !line.current && !line.voltage_drop) {  // Only if not already calculated
+            
             const startVoltage = getDotVoltage(line.start, voltageMap);
             const endVoltage = getDotVoltage(line.end, voltageMap);
             
@@ -2230,14 +2247,12 @@ function calculateCircuitValues() {
                 const voltageDiff = Math.abs(startVoltage - endVoltage);
                 
                 if (line.type === 'led') {
-                    // LED calculations
                     if (voltageDiff >= LED_CHARACTERISTICS.vf) {
                         line.voltage_drop = LED_CHARACTERISTICS.vf;
                         const remainingVoltage = voltageDiff - LED_CHARACTERISTICS.vf;
                         line.current = remainingVoltage / LED_CHARACTERISTICS.resistance;
                     }
                 } else {
-                    // Resistor calculations
                     const resistance = RESISTOR_VALUES[line.type];
                     line.voltage_drop = voltageDiff;
                     line.current = voltageDiff / resistance;
@@ -2393,3 +2408,102 @@ document.addEventListener('DOMContentLoaded', () => {
         controls.appendChild(deleteModeButton);
     }
 });
+
+// Add helper function to find parallel resistors
+function findParallelResistors(lines) {
+    const parallelGroups = new Map(); // Map of "startDot_endDot" to array of resistors
+    
+    lines.forEach(line => {
+        if (line.type.startsWith('resistor_')) {
+            // Create a unique key for each pair of points, regardless of direction
+            const startIndex = dots.indexOf(line.start);
+            const endIndex = dots.indexOf(line.end);
+            const key = [startIndex, endIndex].sort().join('_');
+            
+            if (!parallelGroups.has(key)) {
+                parallelGroups.set(key, []);
+            }
+            parallelGroups.get(key).push(line);
+        }
+    });
+    
+    // Filter out groups that don't have parallel resistors
+    return new Map([...parallelGroups].filter(([_, group]) => group.length > 1));
+}
+
+// Add helper function to calculate equivalent resistance
+function calculateEquivalentResistance(resistors) {
+    // For parallel resistors, 1/R_total = 1/R1 + 1/R2 + ...
+    const reciprocalSum = resistors.reduce((sum, resistor) => {
+        const resistance = RESISTOR_VALUES[resistor.type];
+        return sum + 1/resistance;
+    }, 0);
+    
+    return 1/reciprocalSum;
+}
+
+// Add helper function to find series resistors
+function findSeriesResistors(lines) {
+    const seriesGroups = new Map(); // Map of dot index to array of connected resistors
+    
+    // First, create a map of dots to their connected resistors
+    const dotToResistors = new Map();
+    lines.forEach(line => {
+        if (line.type.startsWith('resistor_')) {
+            const startIndex = dots.indexOf(line.start);
+            const endIndex = dots.indexOf(line.end);
+            
+            if (!dotToResistors.has(startIndex)) dotToResistors.set(startIndex, []);
+            if (!dotToResistors.has(endIndex)) dotToResistors.set(endIndex, []);
+            
+            dotToResistors.get(startIndex).push(line);
+            dotToResistors.get(endIndex).push(line);
+        }
+    });
+    
+    // Find series connections (dots that connect exactly two resistors)
+    dotToResistors.forEach((resistors, dotIndex) => {
+        if (resistors.length === 2) {
+            const key = `series_${dotIndex}`;
+            seriesGroups.set(key, resistors);
+        }
+    });
+    
+    return seriesGroups;
+}
+
+// Add short circuit detection function
+function isShortCircuit(startDot, endDot) {
+    if (!startDot || !endDot) return false;
+    
+    const startIndex = dots.indexOf(startDot);
+    const endIndex = dots.indexOf(endDot);
+    if (startIndex === -1 || endIndex === -1) return false;
+    
+    const startConnections = connections.get(startIndex);
+    const endConnections = connections.get(endIndex);
+    if (!startConnections || !endConnections) return false;
+    
+    // Check if one end is connected to VCC and the other to GND
+    const hasStartVcc = Array.from(startConnections).some(i => {
+        const row = Math.floor(i / GRID_COLS);
+        return row === 0 || row === GRID_ROWS - 1;  // VCC rows
+    });
+    
+    const hasStartGnd = Array.from(startConnections).some(i => {
+        const row = Math.floor(i / GRID_COLS);
+        return row === 1 || row === GRID_ROWS - 2;  // GND rows
+    });
+    
+    const hasEndVcc = Array.from(endConnections).some(i => {
+        const row = Math.floor(i / GRID_COLS);
+        return row === 0 || row === GRID_ROWS - 1;  // VCC rows
+    });
+    
+    const hasEndGnd = Array.from(endConnections).some(i => {
+        const row = Math.floor(i / GRID_COLS);
+        return row === 1 || row === GRID_ROWS - 2;  // GND rows
+    });
+    
+    return (hasStartVcc && hasEndGnd) || (hasStartGnd && hasEndVcc);
+}
