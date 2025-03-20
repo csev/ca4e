@@ -2401,19 +2401,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Add helper function to find parallel resistors
 function findParallelResistors(lines) {
-    const parallelGroups = new Map(); // Map of "startDot_endDot" to array of resistors
+    const parallelGroups = new Map(); // Map of "startGroup_endGroup" to array of resistors
     
-    lines.forEach(line => {
-        if (line.type.startsWith('resistor_')) {
-            // Create a unique key for each pair of points, regardless of direction
-            const startIndex = dots.indexOf(line.start);
-            const endIndex = dots.indexOf(line.end);
-            const key = [startIndex, endIndex].sort().join('_');
-            
-            if (!parallelGroups.has(key)) {
-                parallelGroups.set(key, []);
+    // Helper function to get all connected dots for a point
+    function getConnectedDots(dot) {
+        const connectedDots = new Set([dot]);
+        dots.forEach(otherDot => {
+            if (areDotsConnectedInBreadboard(dot, otherDot)) {
+                connectedDots.add(otherDot);
             }
-            parallelGroups.get(key).push(line);
+        });
+        return connectedDots;
+    }
+    
+    // Helper function to create a unique key for a set of dots
+    function createDotSetKey(dotSet) {
+        return Array.from(dotSet)
+            .map(dot => dots.indexOf(dot))
+            .sort((a, b) => a - b)
+            .join('_');
+    }
+
+    lines.forEach((line1, i) => {
+        if (line1.type.startsWith('resistor_')) {
+            // Get all dots connected to line1's endpoints
+            const line1StartDots = getConnectedDots(line1.start);
+            const line1EndDots = getConnectedDots(line1.end);
+            
+            // Create unique keys for the start and end groups
+            const startKey = createDotSetKey(line1StartDots);
+            const endKey = createDotSetKey(line1EndDots);
+            
+            // Create a unique key for this connection pattern
+            const connectionKey = [startKey, endKey].sort().join('__');
+            
+            if (!parallelGroups.has(connectionKey)) {
+                parallelGroups.set(connectionKey, []);
+            }
+            parallelGroups.get(connectionKey).push(line1);
         }
     });
     
@@ -2432,80 +2457,114 @@ function calculateEquivalentResistance(resistors) {
     return 1/reciprocalSum;
 }
 
-// Add helper function to find series resistors
-function findSeriesResistors(lines) {
+function areDotsConnectedInBreadboard(dot1, dot2) {
+    // If dots are the same, they're connected
+    if (dot1 === dot2) return true;
+    
+    // If either dot is not in the breadboard, they're only connected if they're the same dot
+    if (!dot1.breadboardPosition || !dot2.breadboardPosition) return false;
+    
+    // Check if dots are in the same column
+    return dot1.breadboardPosition.row === dot2.breadboardPosition.row &&
+           dot1.breadboardPosition.col === dot2.breadboardPosition.col;
+}
+
+function findConnectedComponents(dot) {
+    // Find all components connected to this dot or its breadboard column
+    return lines.filter(line => {
+        if (!line.type.startsWith('resistor_')) return false;
+        return areDotsConnectedInBreadboard(line.start, dot) || 
+               areDotsConnectedInBreadboard(line.end, dot);
+    });
+}
+
+function findSeriesResistors(components) {
     const seriesGroups = new Map();
-    
-    // Find all resistors
-    const resistors = lines.filter(line => line.type.startsWith('resistor_'));
-    
-    // For each resistor, try to find series connections
-    resistors.forEach((r1, i) => {
-        resistors.forEach((r2, j) => {
-            if (i >= j) return; // Only check each pair once
-            
-            // Check if they share a common point
-            const r1StartIndex = dots.indexOf(r1.start);
-            const r1EndIndex = dots.indexOf(r1.end);
-            const r2StartIndex = dots.indexOf(r2.start);
-            const r2EndIndex = dots.indexOf(r2.end);
-            
-            // Check if they share exactly one point
-            let sharedPoint = null;
-            let r1Terminal = null;
-            let r2Terminal = null;
-            
-            if (r1EndIndex === r2StartIndex) {
-                sharedPoint = r1.end;
-                r1Terminal = r1.start;
-                r2Terminal = r2.end;
-            } else if (r1StartIndex === r2EndIndex) {
-                sharedPoint = r1.start;
-                r1Terminal = r1.end;
-                r2Terminal = r2.start;
-            } else if (r1StartIndex === r2StartIndex) {
-                sharedPoint = r1.start;
-                r1Terminal = r1.end;
-                r2Terminal = r2.end;
-            } else if (r1EndIndex === r2EndIndex) {
-                sharedPoint = r1.end;
-                r1Terminal = r1.start;
-                r2Terminal = r2.start;
-            }
-            
-            if (sharedPoint) {
-                // Check if the shared point only connects these two resistors
-                const sharedPointIndex = dots.indexOf(sharedPoint);
-                const connectedComponents = lines.filter(line => 
-                    (dots.indexOf(line.start) === sharedPointIndex || 
-                     dots.indexOf(line.end) === sharedPointIndex) &&
-                    line.type.startsWith('resistor_')
-                );
-                
-                if (connectedComponents.length === 2) {
-                    // Get voltages at terminals
-                    const r1TerminalVoltage = getDotVoltage(r1Terminal);
-                    const r2TerminalVoltage = getDotVoltage(r2Terminal);
-                    
-                    // Only add if we can determine voltage direction
-                    if (r1TerminalVoltage !== null && r2TerminalVoltage !== null) {
-                        // Create a unique key based on voltage levels
-                        const key = r1TerminalVoltage > r2TerminalVoltage ? 
-                            `${r1Terminal.x}_${r2Terminal.x}` : 
-                            `${r2Terminal.x}_${r1Terminal.x}`;
-                        
-                        if (!seriesGroups.has(key)) {
-                            // Order resistors based on voltage direction
-                            const [firstR, secondR] = r1TerminalVoltage > r2TerminalVoltage ? 
-                                [r1, r2] : [r2, r1];
-                            seriesGroups.set(key, [firstR, secondR]);
-                        }
+    let groupId = 0;
+
+    // Helper function to get all dots connected to a component
+    function getComponentDots(component) {
+        const connectedDots = new Set();
+        // Add the direct connection points
+        connectedDots.add(component.start);
+        connectedDots.add(component.end);
+        
+        // Get all dots in the same breadboard columns
+        dots.forEach(dot => {
+            // Check both start and end points for breadboard column connections
+            if (areDotsConnectedInBreadboard(dot, component.start)) {
+                connectedDots.add(dot);
+                // Also add any dots that are connected to this dot through the breadboard
+                dots.forEach(otherDot => {
+                    if (areDotsConnectedInBreadboard(dot, otherDot)) {
+                        connectedDots.add(otherDot);
                     }
+                });
+            }
+            if (areDotsConnectedInBreadboard(dot, component.end)) {
+                connectedDots.add(dot);
+                // Also add any dots that are connected to this dot through the breadboard
+                dots.forEach(otherDot => {
+                    if (areDotsConnectedInBreadboard(dot, otherDot)) {
+                        connectedDots.add(otherDot);
+                    }
+                });
+            }
+        });
+        return connectedDots;
+    }
+
+    // Look for resistors that share exactly one connection point through breadboard columns
+    components.forEach((r1, i) => {
+        if (!r1.type.startsWith('resistor_')) return;
+        
+        components.forEach((r2, j) => {
+            if (i >= j || !r2.type.startsWith('resistor_')) return;
+            
+            // Get all dots connected to each resistor (including through breadboard)
+            const r1StartDots = getComponentDots({ start: r1.start, end: r1.start });
+            const r1EndDots = getComponentDots({ start: r1.end, end: r1.end });
+            const r2StartDots = getComponentDots({ start: r2.start, end: r2.start });
+            const r2EndDots = getComponentDots({ start: r2.end, end: r2.end });
+            
+            // Find common dots between any end of r1 and any end of r2
+            const commonDotsStartStart = new Set([...r1StartDots].filter(dot1 => 
+                [...r2StartDots].some(dot2 => areDotsConnectedInBreadboard(dot1, dot2))));
+            const commonDotsStartEnd = new Set([...r1StartDots].filter(dot1 => 
+                [...r2EndDots].some(dot2 => areDotsConnectedInBreadboard(dot1, dot2))));
+            const commonDotsEndStart = new Set([...r1EndDots].filter(dot1 => 
+                [...r2StartDots].some(dot2 => areDotsConnectedInBreadboard(dot1, dot2))));
+            const commonDotsEndEnd = new Set([...r1EndDots].filter(dot1 => 
+                [...r2EndDots].some(dot2 => areDotsConnectedInBreadboard(dot1, dot2))));
+
+            // Check if exactly one set of ends is connected
+            const connections = [
+                { dots: commonDotsStartStart, type: 'start-start' },
+                { dots: commonDotsStartEnd, type: 'start-end' },
+                { dots: commonDotsEndStart, type: 'end-start' },
+                { dots: commonDotsEndEnd, type: 'end-end' }
+            ].filter(conn => conn.dots.size > 0);
+
+            if (connections.length === 1) {
+                // We found exactly one connection point
+                const connection = connections[0];
+                const commonPoint = Array.from(connection.dots)[0];
+                
+                // Check that this common point only connects these two resistors
+                const connectedComponents = findConnectedComponents(commonPoint);
+                const otherComponents = connectedComponents.filter(comp => 
+                    comp !== r1 && comp !== r2 && comp.type.startsWith('resistor_')
+                );
+
+                if (otherComponents.length === 0) {
+                    // Create the series pair based on the connection type
+                    const key = `series_${groupId++}`;
+                    seriesGroups.set(key, [r1, r2]);
                 }
             }
         });
     });
-    
+
     return seriesGroups;
 }
 
