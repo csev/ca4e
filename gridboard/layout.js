@@ -438,11 +438,53 @@ const RESISTOR_COLORS = {
     9: '#FFFFFF'  // White
 };
 
+// Add helper function for color interpolation
+function interpolateColor(voltage) {
+    if (voltage === null) return '#333333';  // Default gray for no voltage
+    if (voltage === 9) return '#ff4444';     // VCC - red
+    if (voltage === 0) return '#4444ff';     // GND - blue
+    
+    // Normalize voltage to 0-1 range
+    const t = voltage / 9;
+    
+    // RGB components for interpolation
+    const r = Math.round(68 + (255 - 68) * t);    // 68 to 255  (from blue to red)
+    const g = Math.round(68 + (68 - 68) * t);     // 68 to 68   (keep green low)
+    const b = Math.round(255 - (255 - 68) * t);   // 255 to 68  (from blue to red)
+    
+    return `rgb(${r}, ${g}, ${b})`;
+}
+
 // Draw functions
 function drawDot(x, y, isHighlighted = false) {
     ctx.beginPath();
     ctx.arc(x, y, DOT_RADIUS, 0, Math.PI * 2);
-    ctx.fillStyle = isHighlighted ? '#ff4444' : '#333';
+    
+    // Get the dot from coordinates
+    const dot = dots.find(d => d.x === x && d.y === y);
+    if (dot) {
+        // Get the dot's row
+        const dotIndex = dots.indexOf(dot);
+        const row = Math.floor(dotIndex / GRID_COLS);
+        
+        if (isHighlighted) {
+            ctx.fillStyle = '#ff4444';  // Keep highlighted dots red
+        } else if (row === 0 || row === GRID_ROWS - 1) {
+            ctx.fillStyle = '#ff4444';  // VCC rails always red
+        } else if (row === 1 || row === GRID_ROWS - 2) {
+            ctx.fillStyle = '#4444ff';  // GND rails always blue
+        } else {
+            // For middle rows (a-j), only color if they have a voltage
+            if (dot.voltage !== undefined && dot.voltage !== null) {
+                ctx.fillStyle = interpolateColor(dot.voltage);
+            } else {
+                ctx.fillStyle = '#333333';  // Default gray for unconnected dots
+            }
+        }
+    } else {
+        ctx.fillStyle = isHighlighted ? '#ff4444' : '#333333';
+    }
+    
     ctx.fill();
 }
 
