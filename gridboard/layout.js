@@ -70,6 +70,241 @@ const TRANSISTOR_CHARACTERISTICS = {
     vbesat: 0.7        // Base-emitter saturation voltage
 };
 
+// Add after the existing state variables at the top
+let isComputing = false;
+let autoCompute = true; // Default to true for automatic computation
+
+// Add after the existing HTML elements
+const autoComputeToggle = document.createElement('button');
+autoComputeToggle.textContent = 'Auto Compute: ON';
+autoComputeToggle.style.marginLeft = '20px';  // Match existing button margin
+autoComputeToggle.style.padding = '5px 10px';  // Match existing button padding
+autoComputeToggle.style.backgroundColor = '#4CAF50';  // Match existing button color
+autoComputeToggle.style.color = 'white';
+autoComputeToggle.style.border = 'none';
+autoComputeToggle.style.borderRadius = '3px';  // Match existing button border radius
+autoComputeToggle.style.cursor = 'pointer';
+
+// Add hover effects to match existing buttons
+autoComputeToggle.addEventListener('mouseover', () => {
+    autoComputeToggle.style.backgroundColor = '#45a049';
+});
+
+autoComputeToggle.addEventListener('mouseout', () => {
+    autoComputeToggle.style.backgroundColor = autoCompute ? '#4CAF50' : '#f44336';
+});
+
+// Add toggle handler
+autoComputeToggle.addEventListener('click', () => {
+    autoCompute = !autoCompute;
+    autoComputeToggle.textContent = `Auto Compute: ${autoCompute ? 'ON' : 'OFF'}`;
+    autoComputeToggle.style.backgroundColor = autoCompute ? '#4CAF50' : '#f44336';
+});
+
+// Add after the existing HTML elements
+const showVoltagesButton = document.createElement('button');
+showVoltagesButton.textContent = 'Show Voltages';
+showVoltagesButton.style.marginLeft = '20px';  // Match existing button margin
+showVoltagesButton.style.padding = '5px 10px';  // Match existing button padding
+showVoltagesButton.style.backgroundColor = '#4CAF50';  // Match existing button color
+showVoltagesButton.style.color = 'white';
+showVoltagesButton.style.border = 'none';
+showVoltagesButton.style.borderRadius = '3px';  // Match existing button border radius
+showVoltagesButton.style.cursor = 'pointer';
+
+// Add hover effects to match existing buttons
+showVoltagesButton.addEventListener('mouseover', () => {
+    showVoltagesButton.style.backgroundColor = '#45a049';
+});
+
+showVoltagesButton.addEventListener('mouseout', () => {
+    showVoltagesButton.style.backgroundColor = '#4CAF50';
+});
+
+// Add the voltages display element
+const voltagesDisplay = document.createElement('div');
+voltagesDisplay.style.position = 'fixed';
+voltagesDisplay.style.top = '50%';
+voltagesDisplay.style.left = '50%';
+voltagesDisplay.style.transform = 'translate(-50%, -50%)';
+voltagesDisplay.style.backgroundColor = 'white';
+voltagesDisplay.style.padding = '20px';
+voltagesDisplay.style.borderRadius = '8px';
+voltagesDisplay.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+voltagesDisplay.style.display = 'none';
+voltagesDisplay.style.zIndex = '1000';
+voltagesDisplay.style.maxHeight = '80vh';
+voltagesDisplay.style.overflow = 'auto';
+
+// Add close button
+const closeVoltagesButton = document.createElement('button');
+closeVoltagesButton.textContent = '×';
+closeVoltagesButton.style.position = 'absolute';
+closeVoltagesButton.style.top = '10px';
+closeVoltagesButton.style.right = '10px';
+closeVoltagesButton.style.border = 'none';
+closeVoltagesButton.style.background = 'none';
+closeVoltagesButton.style.fontSize = '20px';
+closeVoltagesButton.style.cursor = 'pointer';
+closeVoltagesButton.style.color = '#666';
+voltagesDisplay.appendChild(closeVoltagesButton);
+
+// Add title
+const voltagesTitle = document.createElement('h3');
+voltagesTitle.textContent = 'Voltages at Each Point';
+voltagesTitle.style.marginTop = '0';
+voltagesTitle.style.marginBottom = '15px';
+voltagesTitle.style.color = '#333';
+voltagesDisplay.appendChild(voltagesTitle);
+
+// Add the table container
+const voltagesTable = document.createElement('div');
+voltagesTable.style.overflow = 'auto';
+voltagesDisplay.appendChild(voltagesTable);
+
+document.body.appendChild(voltagesDisplay);
+
+// Wait for DOM to be fully loaded before adding the button
+document.addEventListener('DOMContentLoaded', () => {
+    const controls = document.querySelector('.controls');
+    if (controls) {
+        // Add auto-compute toggle
+        controls.appendChild(autoComputeToggle);
+        
+        // Add show voltages button
+        controls.appendChild(showVoltagesButton);
+        
+        // Add event listeners
+        showVoltagesButton.addEventListener('click', showVoltages);
+        closeVoltagesButton.addEventListener('click', () => {
+            voltagesDisplay.style.display = 'none';
+        });
+    } else {
+        console.warn('Controls element not found. Buttons not added.');
+    }
+});
+
+// Add the computation feedback element
+const computationFeedback = document.createElement('div');
+computationFeedback.style.position = 'fixed';
+computationFeedback.style.top = '20px';
+computationFeedback.style.right = '20px';
+computationFeedback.style.padding = '10px 20px';
+computationFeedback.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+computationFeedback.style.color = 'white';
+computationFeedback.style.borderRadius = '4px';
+computationFeedback.style.display = 'none';
+computationFeedback.style.zIndex = '1000';
+computationFeedback.textContent = 'Computing circuit...';
+document.body.appendChild(computationFeedback);
+
+// Add button handlers
+showVoltagesButton.addEventListener('click', showVoltages);
+closeVoltagesButton.addEventListener('click', () => {
+    voltagesDisplay.style.display = 'none';
+});
+
+// Add function to show voltages
+function showVoltages() {
+    console.log('Starting showVoltages function');
+    
+    // Force a circuit computation to get latest voltages
+    console.log('Forcing circuit computation...');
+    updateCircuitEmulator();
+    
+    // Wait for computation to complete before showing voltages
+    setTimeout(() => {
+        console.log('Circuit computation complete, creating voltage table');
+        
+        // Create table
+        const table = document.createElement('table');
+        table.style.borderCollapse = 'collapse';
+        table.style.width = '100%';
+        table.style.minWidth = '800px';
+        table.style.marginTop = '20px';
+        
+        // Add header row with column numbers
+        const header = table.insertRow();
+        header.style.backgroundColor = '#f5f5f5';
+        header.style.fontWeight = 'bold';
+        
+        // Add empty cell for row labels
+        const emptyCell = document.createElement('th');
+        emptyCell.textContent = '';
+        emptyCell.style.padding = '8px';
+        emptyCell.style.textAlign = 'center';
+        emptyCell.style.borderBottom = '2px solid #ddd';
+        emptyCell.style.borderRight = '2px solid #ddd';
+        header.appendChild(emptyCell);
+        
+        // Add column numbers
+        for (let col = 1; col <= 30; col++) {
+            const th = document.createElement('th');
+            th.textContent = col;
+            th.style.padding = '8px';
+            th.style.textAlign = 'center';
+            th.style.borderBottom = '2px solid #ddd';
+            th.style.minWidth = '30px';
+            header.appendChild(th);
+        }
+        
+        // Add data rows (a-j)
+        const rowLabels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+        rowLabels.forEach((label, rowIndex) => {
+            const row = table.insertRow();
+            
+            // Add row label
+            const labelCell = row.insertCell();
+            labelCell.textContent = label;
+            labelCell.style.padding = '8px';
+            labelCell.style.textAlign = 'center';
+            labelCell.style.fontWeight = 'bold';
+            labelCell.style.borderRight = '2px solid #ddd';
+            labelCell.style.backgroundColor = '#f5f5f5';
+            
+            // Add voltage cells for each column
+            for (let col = 0; col < 30; col++) {
+                const cell = row.insertCell();
+                const dotIndex = (rowIndex + 2) * 30 + col; // +2 because first two rows are power rails
+                const dot = dots[dotIndex];
+                
+                // Get the voltage directly from the dot
+                const voltage = dot.voltage;
+                console.log(`Dot at row ${label}, col ${col + 1}: voltage = ${voltage}`);
+                
+                if (voltage === 9) {
+                    cell.textContent = 'VCC';
+                    cell.style.color = '#ff4444';
+                    cell.style.backgroundColor = '#ffeeee';
+                } else if (voltage === 0) {
+                    cell.textContent = 'GND';
+                    cell.style.color = '#4444ff';
+                    cell.style.backgroundColor = '#eeeeff';
+                } else if (voltage !== null) {
+                    cell.textContent = voltage.toFixed(1);
+                    cell.style.color = '#000000';
+                } else {
+                    cell.textContent = '-';
+                    cell.style.color = '#999';
+                }
+                
+                cell.style.padding = '8px';
+                cell.style.textAlign = 'center';
+                cell.style.border = '1px solid #eee';
+            }
+        });
+        
+        // Clear and update table
+        console.log('Updating voltage table in DOM');
+        voltagesTable.innerHTML = '';
+        voltagesTable.appendChild(table);
+        
+        // Show the display
+        console.log('Showing voltage display');
+        voltagesDisplay.style.display = 'block';
+    }, 600); // Wait for computation to complete
+}
+
 class SmokeParticle {
     constructor(x, y) {
         this.x = x;
@@ -678,6 +913,37 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
         // Restore context
         ctx.restore();
     }
+
+    // Check if component is short-circuited
+    const isShortCircuit = window.circuitEmulator.shortCircuits.has(getSwitchId(startDot, endDot));
+
+    // Draw short circuit warning indicator
+    if (isShortCircuit) {
+        ctx.restore();
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(angle);
+        ctx.translate(0, -25); // Position warning above voltage indicator
+
+        // Draw warning triangle
+        ctx.beginPath();
+        ctx.moveTo(0, -10);
+        ctx.lineTo(8, 10);
+        ctx.lineTo(-8, 10);
+        ctx.closePath();
+        ctx.fillStyle = '#ff0000';
+        ctx.fill();
+        ctx.strokeStyle = '#ffffff';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Draw exclamation mark
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 12px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('!', 0, 0);
+    }
 }
 
 function drawPowerRails() {
@@ -964,6 +1230,24 @@ function drawGrid() {
                          componentSelect.value, startDot, closestDot);
         }
     }
+
+    // Draw computation overlay if computing
+    if (isComputing) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw loading spinner
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const radius = 20;
+        const startAngle = Date.now() / 1000;
+        
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, radius, startAngle, startAngle + Math.PI * 1.5);
+        ctx.strokeStyle = '#4CAF50';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+    }
 }
 
 function isNearDot(x, y, dot) {
@@ -1090,6 +1374,7 @@ canvas.addEventListener('mouseup', (e) => {
         placingTransistor = false;
         currentTransistor = null;
         drawGrid();
+        updateCircuitEmulator();
         return;
     }
     
@@ -1137,6 +1422,7 @@ canvas.addEventListener('mouseup', (e) => {
                     }
                 });
                 drawGrid();
+                updateCircuitEmulator();
             }
         } else if (hadStartDot && endDot && hadStartDot !== endDot) {
             // Original dot-to-dot connection logic
@@ -1166,6 +1452,7 @@ canvas.addEventListener('mouseup', (e) => {
                     if (index > -1) {
                         lines.splice(index, 1);
                         drawGrid();
+                        updateCircuitEmulator();
                     }
                 }, 1000);
             } else {
@@ -1178,8 +1465,9 @@ canvas.addEventListener('mouseup', (e) => {
                         connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
                     }
                 });
+                drawGrid();
+                updateCircuitEmulator();
             }
-            drawGrid();
         }
     }
 });
@@ -1210,7 +1498,7 @@ canvas.addEventListener('click', (e) => {
             
             // Check if click is near switch
             const clickDist = Math.sqrt((clickX - switchCenterX)**2 + (clickY - switchCenterY)**2);
-            if (clickDist < 20) { // Click detection radius
+            if (clickDist < 20) {
                 // Toggle switch state
                 switchState.pressed = !switchState.pressed;
                 
@@ -1219,11 +1507,10 @@ canvas.addEventListener('click', (e) => {
                 
                 // Rebuild all connections
                 lines.forEach(l => {
-                    if (!l.transistorConnection) {  // Skip transistor connections
+                    if (!l.transistorConnection) {
                         const startIndex = dots.indexOf(l.start);
                         const endIndex = dots.indexOf(l.end);
                         
-                        // Only connect if both dots exist
                         if (startIndex !== -1 && endIndex !== -1) {
                             if (l.type === 'wire') {
                                 connectDots(startIndex, endIndex);
@@ -1240,7 +1527,8 @@ canvas.addEventListener('click', (e) => {
                 rebuildAllConnections();
                 
                 drawGrid();
-                return; // Exit after handling the clicked switch
+                updateCircuitEmulator();
+                return;
             }
         }
     });
@@ -1277,6 +1565,7 @@ canvas.addEventListener('contextmenu', (e) => {
             initializeConnections();
             rebuildAllConnections();
             drawGrid();
+            updateCircuitEmulator();
             return;
         }
     }
@@ -1298,6 +1587,7 @@ canvas.addEventListener('contextmenu', (e) => {
             initializeConnections();
             rebuildAllConnections();
             drawGrid();
+            updateCircuitEmulator();
             break;
         }
     }
@@ -1819,30 +2109,53 @@ function rebuildAllConnections() {
     drawGrid();
 }
 
-// Add emulation button handler
-document.getElementById('startEmulation').addEventListener('click', () => {
-    // Prepare circuit data for emulator
-    const circuitComponents = lines.map(line => ({
-        type: line.type,
-        start: getPointLabel(line.start),
-        end: getPointLabel(line.end),
-        transistorConnection: line.transistorConnection
-    }));
+// Modify the updateCircuitEmulator function
+function updateCircuitEmulator() {
+    if (!autoCompute) return;
+    
+    isComputing = true;
+    computationFeedback.style.display = 'block';
+    
+    // Add a small delay to show the computing state
+    setTimeout(() => {
+        // Prepare circuit data for emulator
+        const circuitComponents = lines.map(line => ({
+            type: line.type,
+            start: getPointLabel(line.start),
+            end: getPointLabel(line.end),
+            transistorConnection: line.transistorConnection
+        }));
 
-    // Add transistors to components
-    transistors.forEach((transistor, id) => {
-        circuitComponents.push({
-            type: 'transistor',
-            id: id,
-            connections: {
-                collector: transistor.connections.collector ? getPointLabel(transistor.connections.collector) : null,
-                base: transistor.connections.base ? getPointLabel(transistor.connections.base) : null,
-                emitter: transistor.connections.emitter ? getPointLabel(transistor.connections.emitter) : null
-            }
+        // Add transistors to components
+        transistors.forEach((transistor, id) => {
+            circuitComponents.push({
+                type: 'transistor',
+                id: id,
+                connections: {
+                    collector: transistor.connections.collector ? getPointLabel(transistor.connections.collector) : null,
+                    base: transistor.connections.base ? getPointLabel(transistor.connections.base) : null,
+                    emitter: transistor.connections.emitter ? getPointLabel(transistor.connections.emitter) : null
+                }
+            });
         });
-    });
 
-    // Pass the circuit data to the emulator
-    window.circuitEmulator.loadCircuit(circuitComponents, connections);
-    window.circuitEmulator.start();
-}); 
+        // Pass the circuit data to the emulator and start computation
+        window.circuitEmulator.loadCircuit(circuitComponents, connections);
+        window.circuitEmulator.start();
+        
+        // Rebuild all connections and recalculate voltages
+        rebuildAllConnections();
+        
+        // Calculate and store voltages for all dots
+        const voltageMap = calculateIntermediateVoltages();
+        dots.forEach((dot, index) => {
+            dot.voltage = getDotVoltage(dot, voltageMap);
+        });
+        
+        // Hide the computing feedback after a short delay
+        setTimeout(() => {
+            isComputing = false;
+            computationFeedback.style.display = 'none';
+        }, 500);
+    }, 100);
+} 
