@@ -728,7 +728,7 @@ class CircuitEditor {
      * 2. Double-click the INPUT component to set its label
      * 3. Call this function from external JavaScript:
      *    window.circuitEditor.setInputByLabel("A", true);  // Set input "A" to 1
-     *    window.circuitEditor.setInputByLabel("B", false); // Set input "B" to 0
+     *    window.circuitEditor.setInputByLabel("A", false); // Set input "A" to 0
      * 
      * @param {string} label - The label of the input component to find
      * @param {boolean} value - The value to set (true for 1, false for 0)
@@ -762,7 +762,7 @@ class CircuitEditor {
      * 1. First create an OUTPUT component in the circuit editor
      * 2. Double-click the OUTPUT component to set its label
      * 3. Call this function from external JavaScript:
-     *    const value = window.circuitEditor.getOutputByLabel("Result");
+     *    const value = window.circuitEditor.getOutputByLabel("B");
      *    console.log(value); // true for 1, false for 0, undefined if not connected
      * 
      * @param {string} label - The label of the output component to find
