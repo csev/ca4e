@@ -341,7 +341,6 @@ class CircuitEditor {
             for (const gate of this.gates) {
                 if (gate.type === 'INPUT' && this.isPointInGate(x, y, gate)) {
                     if (gate.toggleInput()) {
-                        this.showMessage(`Input set to ${gate.state ? '1' : '0'}`);
                         this.updateWireValues();
                     }
                     break;
