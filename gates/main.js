@@ -719,6 +719,74 @@ class CircuitEditor {
         this.circuitHash = newHash;
         return changed;
     }
+
+    /**
+     * Sets the value of an input component by its label.
+     * 
+     * Usage:
+     * 1. First create an INPUT component in the circuit editor
+     * 2. Double-click the INPUT component to set its label
+     * 3. Call this function from external JavaScript:
+     *    window.circuitEditor.setInputByLabel("A", true);  // Set input "A" to 1
+     *    window.circuitEditor.setInputByLabel("B", false); // Set input "B" to 0
+     * 
+     * @param {string} label - The label of the input component to find
+     * @param {boolean} value - The value to set (true for 1, false for 0)
+     * @returns {boolean} - true if input was found and set, false if not found
+     */
+    setInputByLabel(label, value) {
+        // Find the input gate with matching label
+        const inputGate = this.gates.find(gate => 
+            gate.type === 'INPUT' && gate.label === label
+        );
+
+        if (!inputGate) {
+            this.showMessage(`Input component with label "${label}" not found`, true);
+            return false;
+        }
+
+        // Set the input value
+        inputGate.state = value;
+        
+        // Update the circuit
+        this.updateWireValues();
+        
+        this.showMessage(`Set input "${label}" to ${value ? '1' : '0'}`);
+        return true;
+    }
+
+    /**
+     * Gets the current value of an output component by its label.
+     * 
+     * Usage:
+     * 1. First create an OUTPUT component in the circuit editor
+     * 2. Double-click the OUTPUT component to set its label
+     * 3. Call this function from external JavaScript:
+     *    const value = window.circuitEditor.getOutputByLabel("Result");
+     *    console.log(value); // true for 1, false for 0, undefined if not connected
+     * 
+     * @param {string} label - The label of the output component to find
+     * @returns {boolean|undefined} - The current value of the output (true for 1, false for 0, undefined if not connected)
+     */
+    getOutputByLabel(label) {
+        // Find the output gate with matching label
+        const outputGate = this.gates.find(gate => 
+            gate.type === 'OUTPUT' && gate.label === label
+        );
+
+        if (!outputGate) {
+            this.showMessage(`Output component with label "${label}" not found`, true);
+            return undefined;
+        }
+
+        // Get the input node value (outputs only have one input node)
+        const inputNode = outputGate.inputNodes[0];
+        if (!inputNode || !inputNode.connected) {
+            return undefined;
+        }
+
+        return inputNode.sourceValue;
+    }
 }
 
 // Initialize the circuit editor when the page loads
