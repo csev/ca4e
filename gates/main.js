@@ -259,14 +259,14 @@ class CircuitEditor {
                     // NOT gate has a single input at a specific position
                     node.x = this.draggingGate.x - 27;
                     node.y = this.draggingGate.y;
-                } else if (this.draggingGate.type === 'AND') {
-                    // AND gate has two inputs at specific positions
+                } else if (this.draggingGate.type === 'AND' || this.draggingGate.type === 'NAND') {
+                    // AND and NAND gates have two inputs at specific positions
                     node.x = this.draggingGate.x - 25;
                     node.y = this.draggingGate.y + (index === 0 ? -10 : 10); // First input at -10, second at +10
                 } else {
                     node.x = this.draggingGate.x - 20;
                 }
-                if (this.draggingGate.type !== 'FULL_ADDER' && this.draggingGate.type !== 'NOT' && this.draggingGate.type !== 'AND') {
+                if (this.draggingGate.type !== 'FULL_ADDER' && this.draggingGate.type !== 'NOT' && this.draggingGate.type !== 'AND' && this.draggingGate.type !== 'NAND') {
                     node.y = this.draggingGate.y + this.dragStartNodePositions.inputs[index].relativeY;
                 }
             });
