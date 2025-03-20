@@ -80,7 +80,6 @@ class Circuit {
                             const oldValue = gate.outputNodes[0]?.sourceValue;
                             const newValue = gate.evaluate();
                             if (oldValue !== newValue) {
-                                console.log('Gate', gate.label, 'changed in additional iteration', i + 1);
                                 unstableGates.add(gate);
                             }
                         }
@@ -162,7 +161,8 @@ class Circuit {
 
     // Log the current circuit state
     logState() {
-        console.log('Circuit State:');
+        return;
+        /* console.log('Circuit State:');
         this.gates.forEach(gate => {
             console.log(`Gate Type: ${gate.type}`);
             if (gate.inputNodes.length > 0) {
@@ -176,5 +176,6 @@ class Circuit {
         this.wires.forEach(wire => {
             console.log(`  Wire: ${wire.start.sourceValue} -> ${wire.end.sourceValue}`);
         });
+        */
     }
 } 

@@ -13,6 +13,17 @@ class CircuitEditor {
         this.dragStartGateX = 0;
         this.dragStartGateY = 0;
         
+        // Add mouse interaction tracking
+        this.isMouseMoving = false;
+        this.isMouseDown = false;
+        this.mouseMoveTimeout = null;
+        this.lastUpdateTime = 0;
+        this.updateDebounceTime = 100; // ms to wait after mouse stops moving
+        
+        // Add circuit change tracking
+        this.circuitHash = '';
+        this.lastCircuitState = null;
+        
         // Create circuit instance for computations with message display function
         this.circuit = new Circuit(this.showMessage.bind(this));
         
@@ -131,6 +142,7 @@ class CircuitEditor {
     }
 
     handleMouseDown(e) {
+        this.isMouseDown = true;
         if (e.button === 2) { // Right click
             e.preventDefault();
             const rect = this.canvas.getBoundingClientRect();
@@ -207,9 +219,23 @@ class CircuitEditor {
     }
 
     handleMouseMove(e) {
+        this.isMouseMoving = true;
         const rect = this.canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
+
+        // Clear any existing timeout
+        if (this.mouseMoveTimeout) {
+            clearTimeout(this.mouseMoveTimeout);
+        }
+
+        // Set new timeout to update circuit after mouse stops moving
+        this.mouseMoveTimeout = setTimeout(() => {
+            this.isMouseMoving = false;
+            if (!this.isMouseDown) {
+                this.updateWireValues();
+            }
+        }, this.updateDebounceTime);
 
         // Handle gate dragging
         if (this.draggingGate) {
@@ -256,7 +282,14 @@ class CircuitEditor {
     }
 
     handleMouseUp() {
+        this.isMouseDown = false;
         if (this.draggingGate) {
+            // Check if gate position actually changed
+            const dx = this.dragStartX - this.draggingGate.x;
+            const dy = this.dragStartY - this.draggingGate.y;
+            if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
+                this.updateWireValues();
+            }
             this.draggingGate = null;
             this.canvas.style.cursor = 'default';
         }
@@ -293,6 +326,18 @@ class CircuitEditor {
     }
 
     updateWireValues() {
+        // Skip update if mouse is moving or down
+        if (this.isMouseMoving || this.isMouseDown) {
+            return;
+        }
+
+        // Check if circuit has actually changed
+        if (!this.hasCircuitChanged()) {
+            return;
+        }
+
+        const startTime = performance.now();
+        
         // Update the circuit layout
         this.circuit.setLayout(this.gates, this.wires);
         
@@ -304,6 +349,10 @@ class CircuitEditor {
         
         // Update display
         this.render();
+
+        const endTime = performance.now();
+        const elapsedTime = endTime - startTime;
+        console.log(`Circuit recomputation completed in ${elapsedTime.toFixed(2)}ms`);
     }
 
     isPointInGate(x, y, gate) {
@@ -394,7 +443,7 @@ class CircuitEditor {
 
         this.wires.push(wire);
         
-        // Update wire values and log state
+        // Force circuit update since we added a wire
         this.updateWireValues();
     }
 
@@ -597,7 +646,7 @@ class CircuitEditor {
             this.gates.splice(index, 1);
         }
 
-        // Update the circuit
+        // Force circuit update since we deleted a gate
         this.updateWireValues();
         this.render();
     }
@@ -617,6 +666,34 @@ class CircuitEditor {
         this.gates = [];
         this.wires = [];
         this.render();
+    }
+
+    // Add method to compute circuit hash
+    computeCircuitHash() {
+        const state = {
+            gates: this.gates.map(gate => ({
+                type: gate.type,
+                label: gate.label,
+                x: gate.x,
+                y: gate.y,
+                state: gate.state,
+                inputs: gate.inputNodes.map(n => n.sourceValue),
+                outputs: gate.outputNodes.map(n => n.sourceValue)
+            })),
+            wires: this.wires.map(wire => ({
+                start: wire.start.sourceValue,
+                end: wire.end.sourceValue
+            }))
+        };
+        return JSON.stringify(state);
+    }
+
+    // Add method to check if circuit has changed
+    hasCircuitChanged() {
+        const newHash = this.computeCircuitHash();
+        const changed = newHash !== this.circuitHash;
+        this.circuitHash = newHash;
+        return changed;
     }
 }
 
