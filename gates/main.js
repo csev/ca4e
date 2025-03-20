@@ -248,17 +248,30 @@ class CircuitEditor {
             
             // Update all node positions using stored relative positions
             this.draggingGate.inputNodes.forEach((node, index) => {
-                // Special handling for NixieDisplay
+                // Special handling for different gate types
                 if (this.draggingGate.type === 'NIXIE_DISPLAY') {
                     node.x = this.draggingGate.x - 40;
+                } else if (this.draggingGate.type === 'FULL_ADDER') {
+                    // Full adder has three inputs at different heights
+                    node.x = this.draggingGate.x - 25;
+                    node.y = this.draggingGate.y + (index - 1) * 20; // -20, 0, +20
                 } else {
                     node.x = this.draggingGate.x - 20;
                 }
-                node.y = this.draggingGate.y + this.dragStartNodePositions.inputs[index].relativeY;
+                if (this.draggingGate.type !== 'FULL_ADDER') {
+                    node.y = this.draggingGate.y + this.dragStartNodePositions.inputs[index].relativeY;
+                }
             });
             this.draggingGate.outputNodes.forEach((node, index) => {
-                node.x = this.draggingGate.x + 20;
-                node.y = this.draggingGate.y + this.dragStartNodePositions.outputs[index].relativeY;
+                if (this.draggingGate.type === 'FULL_ADDER') {
+                    // Full adder has two outputs at different heights
+                    node.x = this.draggingGate.x + 25; // Match the input offset
+                    // Keep the outputs at fixed heights relative to the gate center
+                    node.y = this.draggingGate.y + (index === 0 ? -10 : 10); // First output at -10, second at +10
+                } else {
+                    node.x = this.draggingGate.x + 20;
+                    node.y = this.draggingGate.y + this.dragStartNodePositions.outputs[index].relativeY;
+                }
             });
             
             // Force a render
