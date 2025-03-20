@@ -940,7 +940,19 @@ function drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPresse
 function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot = null) {
     // Calculate voltage across component
     let voltage = 0;
-    if (startDot && endDot) {
+    
+    // For resistors, use the calculated voltage_drop if available
+    if (type.startsWith('resistor_')) {
+        // Find the matching resistor in lines array
+        const resistor = lines.find(line => 
+            line.type === type && 
+            line.start === startDot && 
+            line.end === endDot
+        );
+        if (resistor && resistor.voltage_drop !== undefined) {
+            voltage = resistor.voltage_drop;
+        }
+    } else if (startDot && endDot) {
         const startVoltage = getDotVoltage(startDot);
         const endVoltage = getDotVoltage(endDot);
         if (startVoltage !== null && endVoltage !== null) {
@@ -967,7 +979,7 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
         drawLine(startX, startY, endX, endY, type);
     }
 
-    // Draw voltage indicator
+    // Draw voltage indicator if we have a voltage to display
     if (voltage > 0) {
         const centerX = (startX + endX) / 2;
         const centerY = (startY + endY) / 2;
@@ -983,7 +995,7 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
         // Translate to component center and rotate, then move up by 15 pixels
         ctx.translate(centerX, centerY);
         ctx.rotate(angle);
-        ctx.translate(0, -20); // Move up by 15 pixels
+        ctx.translate(0, -20); // Move up by 20 pixels
         
         // Draw background for voltage text
         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
@@ -995,39 +1007,24 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
         ctx.textAlign = 'center';
         ctx.fillText(`${voltage.toFixed(1)}V`, 0, 4);
         
+        // If it's a resistor, also show current
+        if (type.startsWith('resistor_')) {
+            const resistor = lines.find(line => 
+                line.type === type && 
+                line.start === startDot && 
+                line.end === endDot
+            );
+            if (resistor && resistor.current) {
+                ctx.translate(0, 15); // Move down for current display
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.fillRect(-20, -10, 40, 20);
+                ctx.fillStyle = '#000000';
+                ctx.fillText(`${(resistor.current * 1000).toFixed(1)}mA`, 0, 4);
+            }
+        }
+        
         // Restore context
         ctx.restore();
-    }
-
-    // Check if component is short-circuited
-    const isShortCircuit = window.circuitEmulator.shortCircuits.has(getSwitchId(startDot, endDot));
-
-    // Draw short circuit warning indicator
-    if (isShortCircuit) {
-        ctx.restore();
-        ctx.save();
-        ctx.translate(centerX, centerY);
-        ctx.rotate(angle);
-        ctx.translate(0, -25); // Position warning above voltage indicator
-
-        // Draw warning triangle
-        ctx.beginPath();
-        ctx.moveTo(0, -10);
-        ctx.lineTo(8, 10);
-        ctx.lineTo(-8, 10);
-        ctx.closePath();
-        ctx.fillStyle = '#ff0000';
-        ctx.fill();
-        ctx.strokeStyle = '#ffffff';
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        // Draw exclamation mark
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 12px Arial';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText('!', 0, 0);
     }
 }
 
@@ -1890,58 +1887,28 @@ function getDotVoltage(dot, voltageMap = null) {
     if (dotIndex === -1) return null;
     
     // Get row and column of the dot
-    const { row, col } = getRowCol(dotIndex);
+    const { row } = getRowCol(dotIndex);
     
-    // Get all dots in the same column if this is a breadboard row (not power rails)
-    let dotsToCheck = new Set([dotIndex]);
-    if (row >= 2 && row <= 6) {  // Top half of breadboard
-        for (let r = 2; r <= 6; r++) {
-            dotsToCheck.add(getDotIndex(r, col));
-        }
-    } else if (row >= 7 && row <= 11) {  // Bottom half of breadboard
-        for (let r = 7; r <= 11; r++) {
-            dotsToCheck.add(getDotIndex(r, col));
-        }
-    }
-    
-    // Check all relevant dots for power/ground connections
-    for (const checkDotIndex of dotsToCheck) {
-        const connectedDots = connections.get(checkDotIndex);
-        if (!connectedDots) continue;
-        
-        // Check for VCC or GND connections
-        for (const connectedIndex of connectedDots) {
-            const connectedRow = Math.floor(connectedIndex / GRID_COLS);
-            if (connectedRow === 0 || connectedRow === GRID_ROWS - 1) {  // VCC rows
-                return 9;
-            }
-            if (connectedRow === 1 || connectedRow === GRID_ROWS - 2) {  // GND rows
-                return 0;
-            }
-        }
-    }
+    // Check power rails first
+    if (row === 0 || row === GRID_ROWS - 1) return 9;  // VCC rails
+    if (row === 1 || row === GRID_ROWS - 2) return 0;  // GND rails
     
     // If a voltage map is provided, use it
-    if (voltageMap) {
-        // First check the dot itself
-        if (voltageMap.has(dotIndex)) {
-            return voltageMap.get(dotIndex);
-        }
-        
-        // Then check all dots in the same column
-        for (const checkDotIndex of dotsToCheck) {
-            if (voltageMap.has(checkDotIndex)) {
-                return voltageMap.get(checkDotIndex);
-            }
+    if (voltageMap && voltageMap.has(dotIndex)) {
+        return voltageMap.get(dotIndex);
+    }
+    
+    // Check connected dots for power/ground connections
+    const connectedDots = connections.get(dotIndex);
+    if (connectedDots) {
+        for (const connectedIndex of connectedDots) {
+            const connectedRow = Math.floor(connectedIndex / GRID_COLS);
+            if (connectedRow === 0 || connectedRow === GRID_ROWS - 1) return 9;  // VCC
+            if (connectedRow === 1 || connectedRow === GRID_ROWS - 2) return 0;  // GND
             
-            // Check connected dots
-            const connectedDots = connections.get(checkDotIndex);
-            if (connectedDots) {
-                for (const connectedIndex of connectedDots) {
-                    if (voltageMap.has(connectedIndex)) {
-                        return voltageMap.get(connectedIndex);
-                    }
-                }
+            // If voltage map exists, check voltages of connected dots
+            if (voltageMap && voltageMap.has(connectedIndex)) {
+                return voltageMap.get(connectedIndex);
             }
         }
     }
@@ -2184,20 +2151,38 @@ function calculateCircuitValues() {
     // Calculate intermediate voltages
     const voltageMap = calculateIntermediateVoltages();
     
-    // Find parallel and series resistor groups
-    const parallelGroups = findParallelResistors(lines);
+    // Find series combinations
     const seriesGroups = findSeriesResistors(lines);
     
-    // First handle series combinations
+    // Show debug information
+    showSeriesDebug(seriesGroups);
+    
+    // Process series combinations
     seriesGroups.forEach((resistors, key) => {
-        // Get the total voltage across the series combination
-        const r1 = resistors[0];
-        const r2 = resistors[1];
-        const startVoltage = getDotVoltage(r1.start, voltageMap);
-        const endVoltage = getDotVoltage(r2.end, voltageMap);
+        const [r1, r2] = resistors;
         
-        if (startVoltage !== null && endVoltage !== null) {
-            const totalVoltageDiff = Math.abs(startVoltage - endVoltage);
+        // Get voltages at all points
+        const r1StartVoltage = getDotVoltage(r1.start, voltageMap);
+        const r1EndVoltage = getDotVoltage(r1.end, voltageMap);
+        const r2StartVoltage = getDotVoltage(r2.start, voltageMap);
+        const r2EndVoltage = getDotVoltage(r2.end, voltageMap);
+        
+        // Find the highest and lowest voltages
+        const voltages = [
+            { point: 'r1start', voltage: r1StartVoltage, dot: r1.start },
+            { point: 'r1end', voltage: r1EndVoltage, dot: r1.end },
+            { point: 'r2start', voltage: r2StartVoltage, dot: r2.start },
+            { point: 'r2end', voltage: r2EndVoltage, dot: r2.end }
+        ].filter(v => v.voltage !== null);
+        
+        if (voltages.length >= 2) {
+            // Sort by voltage, highest first
+            voltages.sort((a, b) => b.voltage - a.voltage);
+            const startVoltage = voltages[0].voltage;
+            const endVoltage = voltages[voltages.length - 1].voltage;
+            
+            // Calculate total voltage difference and resistance
+            const totalVoltageDiff = startVoltage - endVoltage;
             const r1Value = RESISTOR_VALUES[r1.type];
             const r2Value = RESISTOR_VALUES[r2.type];
             const totalResistance = r1Value + r2Value;
@@ -2205,59 +2190,64 @@ function calculateCircuitValues() {
             // Calculate current (same through both resistors)
             const current = totalVoltageDiff / totalResistance;
             
-            // Calculate individual voltage drops
-            r1.voltage_drop = current * r1Value;
-            r2.voltage_drop = current * r2Value;
+            // Calculate individual voltage drops proportional to resistance
+            const v1Drop = (r1Value / totalResistance) * totalVoltageDiff;
+            const v2Drop = (r2Value / totalResistance) * totalVoltageDiff;
+            
+            // Assign voltage drops and currents
+            r1.voltage_drop = v1Drop;
+            r2.voltage_drop = v2Drop;
             r1.current = current;
             r2.current = current;
-        }
-    });
-    
-    // Then handle parallel combinations
-    parallelGroups.forEach((resistors, key) => {
-        const [startIndex, endIndex] = key.split('_').map(Number);
-        const startDot = dots[startIndex];
-        const endDot = dots[endIndex];
-        const startVoltage = getDotVoltage(startDot, voltageMap);
-        const endVoltage = getDotVoltage(endDot, voltageMap);
-        
-        if (startVoltage !== null && endVoltage !== null) {
-            const voltageDiff = Math.abs(startVoltage - endVoltage);
-            const equivalentResistance = calculateEquivalentResistance(resistors);
-            const totalCurrent = voltageDiff / equivalentResistance;
             
-            // Distribute current among parallel resistors
-            resistors.forEach(resistor => {
-                const resistance = RESISTOR_VALUES[resistor.type];
-                resistor.voltage_drop = voltageDiff;
-                resistor.current = voltageDiff / resistance;
-            });
+            // Calculate and set middle point voltage
+            const middleVoltage = startVoltage - v1Drop;
+            
+            // Update voltage map with all points
+            const r1StartIndex = dots.indexOf(r1.start);
+            const r1EndIndex = dots.indexOf(r1.end);
+            const r2StartIndex = dots.indexOf(r2.start);
+            const r2EndIndex = dots.indexOf(r2.end);
+            
+            // Set voltages in the map
+            voltageMap.set(r1StartIndex, startVoltage);
+            voltageMap.set(r1EndIndex, middleVoltage);
+            voltageMap.set(r2StartIndex, middleVoltage);
+            voltageMap.set(r2EndIndex, endVoltage);
+            
+            // Update dot voltages
+            dots[r1StartIndex].voltage = startVoltage;
+            dots[r1EndIndex].voltage = middleVoltage;
+            dots[r2StartIndex].voltage = middleVoltage;
+            dots[r2EndIndex].voltage = endVoltage;
         }
     });
     
-    // Finally handle individual components not in series or parallel
+    // Handle individual resistors not in series
     lines.forEach(line => {
-        if ((line.type.startsWith('resistor_') || line.type === 'led') && 
-            !line.current && !line.voltage_drop) {  // Only if not already calculated
-            
+        if (line.type.startsWith('resistor_') && !line.current && !line.voltage_drop) {
             const startVoltage = getDotVoltage(line.start, voltageMap);
             const endVoltage = getDotVoltage(line.end, voltageMap);
             
             if (startVoltage !== null && endVoltage !== null) {
                 const voltageDiff = Math.abs(startVoltage - endVoltage);
+                const resistance = RESISTOR_VALUES[line.type];
+                line.voltage_drop = voltageDiff;
+                line.current = voltageDiff / resistance;
                 
-                if (line.type === 'led') {
-                    if (voltageDiff >= LED_CHARACTERISTICS.vf) {
-                        line.voltage_drop = LED_CHARACTERISTICS.vf;
-                        const remainingVoltage = voltageDiff - LED_CHARACTERISTICS.vf;
-                        line.current = remainingVoltage / LED_CHARACTERISTICS.resistance;
-                    }
-                } else {
-                    const resistance = RESISTOR_VALUES[line.type];
-                    line.voltage_drop = voltageDiff;
-                    line.current = voltageDiff / resistance;
-                }
+                // Update dot voltages
+                const startIndex = dots.indexOf(line.start);
+                const endIndex = dots.indexOf(line.end);
+                dots[startIndex].voltage = startVoltage;
+                dots[endIndex].voltage = endVoltage;
             }
+        }
+    });
+    
+    // Update all dots with their voltages from the voltage map
+    dots.forEach((dot, index) => {
+        if (voltageMap.has(index)) {
+            dot.voltage = voltageMap.get(index);
         }
     });
 }
@@ -2444,29 +2434,76 @@ function calculateEquivalentResistance(resistors) {
 
 // Add helper function to find series resistors
 function findSeriesResistors(lines) {
-    const seriesGroups = new Map(); // Map of dot index to array of connected resistors
+    const seriesGroups = new Map();
     
-    // First, create a map of dots to their connected resistors
-    const dotToResistors = new Map();
-    lines.forEach(line => {
-        if (line.type.startsWith('resistor_')) {
-            const startIndex = dots.indexOf(line.start);
-            const endIndex = dots.indexOf(line.end);
-            
-            if (!dotToResistors.has(startIndex)) dotToResistors.set(startIndex, []);
-            if (!dotToResistors.has(endIndex)) dotToResistors.set(endIndex, []);
-            
-            dotToResistors.get(startIndex).push(line);
-            dotToResistors.get(endIndex).push(line);
-        }
-    });
+    // Find all resistors
+    const resistors = lines.filter(line => line.type.startsWith('resistor_'));
     
-    // Find series connections (dots that connect exactly two resistors)
-    dotToResistors.forEach((resistors, dotIndex) => {
-        if (resistors.length === 2) {
-            const key = `series_${dotIndex}`;
-            seriesGroups.set(key, resistors);
-        }
+    // For each resistor, try to find series connections
+    resistors.forEach((r1, i) => {
+        resistors.forEach((r2, j) => {
+            if (i >= j) return; // Only check each pair once
+            
+            // Check if they share a common point
+            const r1StartIndex = dots.indexOf(r1.start);
+            const r1EndIndex = dots.indexOf(r1.end);
+            const r2StartIndex = dots.indexOf(r2.start);
+            const r2EndIndex = dots.indexOf(r2.end);
+            
+            // Check if they share exactly one point
+            let sharedPoint = null;
+            let r1Terminal = null;
+            let r2Terminal = null;
+            
+            if (r1EndIndex === r2StartIndex) {
+                sharedPoint = r1.end;
+                r1Terminal = r1.start;
+                r2Terminal = r2.end;
+            } else if (r1StartIndex === r2EndIndex) {
+                sharedPoint = r1.start;
+                r1Terminal = r1.end;
+                r2Terminal = r2.start;
+            } else if (r1StartIndex === r2StartIndex) {
+                sharedPoint = r1.start;
+                r1Terminal = r1.end;
+                r2Terminal = r2.end;
+            } else if (r1EndIndex === r2EndIndex) {
+                sharedPoint = r1.end;
+                r1Terminal = r1.start;
+                r2Terminal = r2.start;
+            }
+            
+            if (sharedPoint) {
+                // Check if the shared point only connects these two resistors
+                const sharedPointIndex = dots.indexOf(sharedPoint);
+                const connectedComponents = lines.filter(line => 
+                    (dots.indexOf(line.start) === sharedPointIndex || 
+                     dots.indexOf(line.end) === sharedPointIndex) &&
+                    line.type.startsWith('resistor_')
+                );
+                
+                if (connectedComponents.length === 2) {
+                    // Get voltages at terminals
+                    const r1TerminalVoltage = getDotVoltage(r1Terminal);
+                    const r2TerminalVoltage = getDotVoltage(r2Terminal);
+                    
+                    // Only add if we can determine voltage direction
+                    if (r1TerminalVoltage !== null && r2TerminalVoltage !== null) {
+                        // Create a unique key based on voltage levels
+                        const key = r1TerminalVoltage > r2TerminalVoltage ? 
+                            `${r1Terminal.x}_${r2Terminal.x}` : 
+                            `${r2Terminal.x}_${r1Terminal.x}`;
+                        
+                        if (!seriesGroups.has(key)) {
+                            // Order resistors based on voltage direction
+                            const [firstR, secondR] = r1TerminalVoltage > r2TerminalVoltage ? 
+                                [r1, r2] : [r2, r1];
+                            seriesGroups.set(key, [firstR, secondR]);
+                        }
+                    }
+                }
+            }
+        });
     });
     
     return seriesGroups;
@@ -2506,4 +2543,82 @@ function isShortCircuit(startDot, endDot) {
     });
     
     return (hasStartVcc && hasEndGnd) || (hasStartGnd && hasEndVcc);
+}
+
+// Add debug display element after other UI elements
+const debugDisplay = document.createElement('div');
+debugDisplay.style.position = 'fixed';
+debugDisplay.style.bottom = '20px';
+debugDisplay.style.left = '20px';
+debugDisplay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+debugDisplay.style.color = 'white';
+debugDisplay.style.padding = '10px';
+debugDisplay.style.borderRadius = '4px';
+debugDisplay.style.fontFamily = 'monospace';
+debugDisplay.style.fontSize = '12px';
+debugDisplay.style.maxWidth = '400px';
+debugDisplay.style.maxHeight = '200px';
+debugDisplay.style.overflowY = 'auto';
+debugDisplay.style.display = 'none';
+document.body.appendChild(debugDisplay);
+
+// Add debug function
+function showSeriesDebug(seriesGroups) {
+    let debugText = '<strong>Series Resistors Found:</strong><br>';
+    
+    if (seriesGroups.size === 0) {
+        debugText += 'No series resistors detected';
+    } else {
+        seriesGroups.forEach((resistors, key) => {
+            const [r1, r2] = resistors;
+            const r1Value = RESISTOR_VALUES[r1.type] / 1000; // Convert to kΩ
+            const r2Value = RESISTOR_VALUES[r2.type] / 1000; // Convert to kΩ
+            const totalResistance = (r1Value + r2Value);
+            
+            // Get voltages at all points
+            const r1StartVoltage = getDotVoltage(r1.start);
+            const r1EndVoltage = getDotVoltage(r1.end);
+            const r2StartVoltage = getDotVoltage(r2.start);
+            const r2EndVoltage = getDotVoltage(r2.end);
+            
+            // Find the highest and lowest voltages
+            const voltages = [
+                { point: 'r1start', voltage: r1StartVoltage },
+                { point: 'r1end', voltage: r1EndVoltage },
+                { point: 'r2start', voltage: r2StartVoltage },
+                { point: 'r2end', voltage: r2EndVoltage }
+            ].filter(v => v.voltage !== null);
+            
+            if (voltages.length >= 2) {
+                voltages.sort((a, b) => b.voltage - a.voltage);
+                const startVoltage = voltages[0].voltage;
+                const endVoltage = voltages[voltages.length - 1].voltage;
+                const totalVoltageDiff = startVoltage - endVoltage;
+                
+                // Calculate voltage drops
+                const v1Drop = (r1Value / totalResistance) * totalVoltageDiff;
+                const v2Drop = (r2Value / totalResistance) * totalVoltageDiff;
+                const middleVoltage = startVoltage - v1Drop;
+                
+                debugText += `<br>Series Pair:<br>`;
+                debugText += `- ${r1.type}: ${r1Value}kΩ<br>`;
+                debugText += `- ${r2.type}: ${r2Value}kΩ<br>`;
+                debugText += `Total: ${totalResistance}kΩ<br>`;
+                debugText += `Voltages:<br>`;
+                debugText += `- Start: ${startVoltage.toFixed(2)}V<br>`;
+                debugText += `- Middle: ${middleVoltage.toFixed(2)}V<br>`;
+                debugText += `- End: ${endVoltage.toFixed(2)}V<br>`;
+                debugText += `Voltage drops:<br>`;
+                debugText += `- ${r1.type}: ${v1Drop.toFixed(2)}V<br>`;
+                debugText += `- ${r2.type}: ${v2Drop.toFixed(2)}V<br>`;
+                if (r1.current) {
+                    debugText += `Current: ${(r1.current * 1000).toFixed(2)}mA<br>`;
+                }
+            }
+            debugText += '-------------------<br>';
+        });
+    }
+    
+    debugDisplay.innerHTML = debugText;
+    debugDisplay.style.display = 'block';
 }
