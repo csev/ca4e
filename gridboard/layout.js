@@ -2618,7 +2618,8 @@ debugDisplay.style.fontSize = '12px';
 debugDisplay.style.maxWidth = '400px';
 debugDisplay.style.maxHeight = '200px';
 debugDisplay.style.overflowY = 'auto';
-debugDisplay.style.display = 'none';
+debugDisplay.style.display = 'none';  // Keep this as 'none'
+debugDisplay.style.visibility = 'hidden';  // Add visibility hidden to ensure it's not visible
 document.body.appendChild(debugDisplay);
 
 // Add debug function
@@ -2679,5 +2680,6 @@ function showSeriesDebug(seriesGroups) {
     }
     
     debugDisplay.innerHTML = debugText;
-    debugDisplay.style.display = 'block';
+    // Remove this line to keep the debug display hidden
+    // debugDisplay.style.display = 'block';
 }
