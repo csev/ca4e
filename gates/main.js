@@ -43,8 +43,33 @@ class CircuitEditor {
         // Add delete mode flag
         this.deleteMode = false;
         
+        // Add screen reader mode flag
+        this.screenReaderMode = false;
+        
+        // Add last announced element to prevent duplicate announcements
+        this.lastAnnouncedElement = null;
+        
+        // Add announcement element
+        this.announcementEl = document.createElement('div');
+        this.announcementEl.className = 'screen-reader-announcement';
+        this.announcementEl.setAttribute('aria-live', 'polite');
+        document.body.appendChild(this.announcementEl);
+        
+        // Add screen reader toggle button
+        this.addScreenReaderToggle();
+        
+        // Add speech synthesis
+        this.speechSynthesis = window.speechSynthesis;
+        this.speechUtterance = null;
+        
+        // Initialize speech synthesis
+        this.initializeSpeechSynthesis();
+        
         // Bind event listeners
         this.initializeEventListeners();
+        
+        // Add gate ordinal tracking
+        this.gateOrdinals = new Map();
         
         // Start render loop
         this.render();
@@ -53,11 +78,39 @@ class CircuitEditor {
     initializeEventListeners() {
         // Gate selection buttons
         document.querySelectorAll('.gate-selector button').forEach(button => {
+            // Add hover announcement
+            button.addEventListener('mouseenter', () => {
+                if (this.screenReaderMode) {
+                    this.announce(`Toolbar button: ${button.dataset.gate} gate`);
+                }
+            });
+
             button.addEventListener('click', () => {
                 this.selectedTool = button.dataset.gate;
                 this.canvas.style.cursor = 'crosshair';
                 document.getElementById('selectedTool').textContent = `Selected: ${button.dataset.gate}`;
+                
+                // Announce tool selection
+                if (this.screenReaderMode) {
+                    this.announce(`Selected ${button.dataset.gate} gate tool`);
+                }
             });
+        });
+
+        // Add hover announcement for delete button
+        const deleteButton = document.getElementById('delete');
+        deleteButton.addEventListener('mouseenter', () => {
+            if (this.screenReaderMode) {
+                this.announce('Delete mode button');
+            }
+        });
+
+        // Add hover announcement for screen reader toggle
+        const screenReaderButton = document.getElementById('screenReaderToggle');
+        screenReaderButton.addEventListener('mouseenter', () => {
+            if (this.screenReaderMode) {
+                this.announce('Screen reader toggle button');
+            }
         });
 
         // Canvas mouse events
@@ -175,6 +228,8 @@ class CircuitEditor {
                 } else {
                     newGate = new Gate(this.selectedTool, x, y, this);
                 }
+                // Assign ordinal to the new gate
+                newGate.ordinal = this.getGateOrdinal(newGate);
                 this.gates.push(newGate);
                 this.selectedTool = null;
                 this.canvas.style.cursor = 'default';
@@ -289,6 +344,50 @@ class CircuitEditor {
             // Force a render
             this.render();
             return;
+        }
+
+        // Check for hovered elements and announce them
+        if (this.screenReaderMode) {
+            // Check for node hover
+            const hoveredNode = this.findClickedNode(x, y);
+            if (hoveredNode) {
+                const gate = hoveredNode.gate;
+                const nodeType = hoveredNode.type;
+                const nodeIndex = hoveredNode.type === 'input' ? 
+                    gate.inputNodes.indexOf(hoveredNode.node) : 
+                    gate.outputNodes.indexOf(hoveredNode.node);
+                
+                let announcement = `${gate.type} gate ${gate.ordinal} "${gate.label}" ${nodeType} ${nodeIndex + 1}`;
+                if (hoveredNode.node.connected || hoveredNode.node.hasOutput) {
+                    announcement += ' (connected)';
+                }
+                this.announce(announcement);
+                return;
+            }
+
+            // Check for wire hover
+            const hoveredWire = this.findHoveredWire(x, y);
+            if (hoveredWire) {
+                const startGate = hoveredWire.startGate;
+                const endGate = hoveredWire.endGate;
+                this.announce(`Wire from ${startGate.type} gate ${startGate.ordinal} "${startGate.label}" to ${endGate.type} gate ${endGate.ordinal} "${endGate.label}"`);
+                return;
+            }
+
+            // Check for gate hover
+            for (const gate of this.gates) {
+                if (this.isPointInGate(x, y, gate)) {
+                    let announcement = `${gate.type} gate ${gate.ordinal} "${gate.label}"`;
+                    if (gate.type === 'INPUT') {
+                        announcement += ` (value: ${gate.state ? '1' : '0'})`;
+                    } else if (gate.type === 'OUTPUT') {
+                        const value = gate.inputNodes[0]?.sourceValue;
+                        announcement += ` (value: ${value === undefined ? '?' : value ? '1' : '0'})`;
+                    }
+                    this.announce(announcement);
+                    return;
+                }
+            }
         }
 
         // Update cursor for input gates
@@ -681,14 +780,21 @@ class CircuitEditor {
         document.getElementById('delete').classList.toggle('active', enabled);
         if (!enabled) {
             document.getElementById('selectedTool').textContent = 'Selected: None';
+            if (this.screenReaderMode) {
+                this.announce('Delete mode cancelled');
+            }
         } else {
             document.getElementById('selectedTool').textContent = 'Selected: Delete Mode';
+            if (this.screenReaderMode) {
+                this.announce('Delete mode activated');
+            }
         }
     }
 
     clear() {
         this.gates = [];
         this.wires = [];
+        this.gateOrdinals.clear(); // Reset all ordinals
         this.render();
     }
 
@@ -787,9 +893,133 @@ class CircuitEditor {
 
         return inputNode.sourceValue;
     }
+
+    addScreenReaderToggle() {
+        const button = document.createElement('button');
+        button.id = 'screenReaderToggle';
+        button.className = 'screen-reader-toggle';
+        button.innerHTML = '🔊 Screen Reader';
+        button.onclick = () => this.toggleScreenReader();
+        
+        // Add to toolbar
+        document.querySelector('.right-section').appendChild(button);
+    }
+
+    toggleScreenReader() {
+        this.screenReaderMode = !this.screenReaderMode;
+        const button = document.getElementById('screenReaderToggle');
+        button.classList.toggle('active', this.screenReaderMode);
+        button.innerHTML = this.screenReaderMode ? '🔊 Screen Reader On' : '🔊 Screen Reader Off';
+        
+        // Cancel any ongoing speech when toggling off
+        if (!this.screenReaderMode) {
+            this.speechSynthesis.cancel();
+        }
+        
+        const message = this.screenReaderMode ? 'Screen reader mode enabled' : 'Screen reader mode disabled';
+        this.showMessage(message);
+        this.announce(message);
+    }
+
+    initializeSpeechSynthesis() {
+        // Cancel any existing speech
+        if (this.speechUtterance) {
+            this.speechSynthesis.cancel();
+        }
+        
+        // Create new utterance
+        this.speechUtterance = new SpeechSynthesisUtterance();
+        
+        // Configure speech settings
+        this.speechUtterance.rate = 1.0;  // Speed of speech
+        this.speechUtterance.pitch = 1.0; // Pitch of voice
+        this.speechUtterance.volume = 1.0; // Volume (0 to 1)
+        
+        // Set voice if available
+        const voices = this.speechSynthesis.getVoices();
+        if (voices.length > 0) {
+            // Try to find a female voice
+            const femaleVoice = voices.find(voice => voice.name.includes('Female'));
+            if (femaleVoice) {
+                this.speechUtterance.voice = femaleVoice;
+            } else {
+                this.speechUtterance.voice = voices[0];
+            }
+        }
+    }
+
+    announce(text) {
+        if (!this.screenReaderMode) return;
+        
+        // Only announce if text is different from last announcement
+        if (text === this.lastAnnouncedElement) return;
+        
+        this.lastAnnouncedElement = text;
+        
+        // Update ARIA live region
+        this.announcementEl.textContent = text;
+        
+        // Cancel any ongoing speech
+        this.speechSynthesis.cancel();
+        
+        // Set new text and speak
+        this.speechUtterance.text = text;
+        this.speechSynthesis.speak(this.speechUtterance);
+        
+        // Clear the announcement after a short delay
+        setTimeout(() => {
+            this.announcementEl.textContent = '';
+            this.lastAnnouncedElement = null;
+        }, 1000);
+    }
+
+    // Add method to get ordinal for a gate
+    getGateOrdinal(gate) {
+        if (!this.gateOrdinals.has(gate.type)) {
+            this.gateOrdinals.set(gate.type, 0);
+        }
+        const currentOrdinal = this.gateOrdinals.get(gate.type);
+        this.gateOrdinals.set(gate.type, currentOrdinal + 1);
+        return currentOrdinal + 1;
+    }
 }
 
 // Initialize the circuit editor when the page loads
 window.addEventListener('load', () => {
     window.circuitEditor = new CircuitEditor();
-}); 
+});
+
+// Add styles for screen reader elements
+const style = document.createElement('style');
+style.textContent = `
+    .screen-reader-announcement {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        border: 0;
+    }
+
+    .screen-reader-toggle {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        background-color: #2196F3;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        font-weight: bold;
+    }
+
+    .screen-reader-toggle:hover {
+        background-color: #1976D2;
+    }
+
+    .screen-reader-toggle.active {
+        background-color: #1565C0;
+    }
+`;
+document.head.appendChild(style); 
