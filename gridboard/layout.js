@@ -386,13 +386,51 @@ function initializeConnections() {
 
 // Connect two dots electrically
 function connectDots(index1, index2) {
+    // Get row and column for both dots
+    const { row: row1, col: col1 } = getRowCol(index1);
+    const { row: row2, col: col2 } = getRowCol(index2);
+    
+    // Get the initial sets
     const set1 = connections.get(index1);
     const set2 = connections.get(index2);
     
-    // Merge the two sets
+    // Create the merged set
     const mergedSet = new Set([...set1, ...set2]);
     
-    // Update all dots in both sets to point to the merged set
+    // If either dot is in a breadboard row (not power rails), connect all dots in that column
+    if ((row1 >= 2 && row1 <= 6) || (row1 >= 7 && row1 <= 11)) {
+        // Add all dots in the same column for the first dot
+        const startRow = row1 >= 7 ? 7 : 2;
+        const endRow = row1 >= 7 ? 11 : 6;
+        for (let r = startRow; r <= endRow; r++) {
+            const columnDotIndex = getDotIndex(r, col1);
+            mergedSet.add(columnDotIndex);
+            const columnDotSet = connections.get(columnDotIndex);
+            if (columnDotSet) {
+                for (const dotIndex of columnDotSet) {
+                    mergedSet.add(dotIndex);
+                }
+            }
+        }
+    }
+    
+    if ((row2 >= 2 && row2 <= 6) || (row2 >= 7 && row2 <= 11)) {
+        // Add all dots in the same column for the second dot
+        const startRow = row2 >= 7 ? 7 : 2;
+        const endRow = row2 >= 7 ? 11 : 6;
+        for (let r = startRow; r <= endRow; r++) {
+            const columnDotIndex = getDotIndex(r, col2);
+            mergedSet.add(columnDotIndex);
+            const columnDotSet = connections.get(columnDotIndex);
+            if (columnDotSet) {
+                for (const dotIndex of columnDotSet) {
+                    mergedSet.add(dotIndex);
+                }
+            }
+        }
+    }
+    
+    // Update all dots in the merged set to point to the new merged set
     for (const dotIndex of mergedSet) {
         connections.set(dotIndex, mergedSet);
     }
@@ -1765,237 +1803,100 @@ function getSwitchId(startDot, endDot) {
     return `switch_${dots.indexOf(startDot)}_${dots.indexOf(endDot)}`;
 }
 
-// Update getDotVoltage to use the voltage map
+// Helper function to get all dots in a column
+function getColumnDots(dot) {
+    const dotIndex = dots.indexOf(dot);
+    if (dotIndex === -1) return new Set([dot]);
+    
+    const { row, col } = getRowCol(dotIndex);
+    const columnDots = new Set([dot]);
+    
+    // If dot is in top half of breadboard (rows 2-6)
+    if (row >= 2 && row <= 6) {
+        for (let r = 2; r <= 6; r++) {
+            const connectedDotIndex = getDotIndex(r, col);
+            if (connectedDotIndex >= 0) {
+                columnDots.add(dots[connectedDotIndex]);
+            }
+        }
+    }
+    // If dot is in bottom half of breadboard (rows 7-11)
+    else if (row >= 7 && row <= 11) {
+        for (let r = 7; r <= 11; r++) {
+            const connectedDotIndex = getDotIndex(r, col);
+            if (connectedDotIndex >= 0) {
+                columnDots.add(dots[connectedDotIndex]);
+            }
+        }
+    }
+    
+    return columnDots;
+}
+
+// Update getDotVoltage to handle column connections
 function getDotVoltage(dot, voltageMap = null) {
     if (!dot) return null;
     const dotIndex = dots.indexOf(dot);
     if (dotIndex === -1) return null;
     
-    const connectedDots = connections.get(dotIndex);
-    if (!connectedDots) return null;
+    // Get row and column of the dot
+    const { row, col } = getRowCol(dotIndex);
     
-    // First check direct power/ground connections
-    const hasVcc = Array.from(connectedDots).some(i => dots[i].voltage === 9);
-    const hasGnd = Array.from(connectedDots).some(i => dots[i].voltage === 0);
+    // Get all dots in the same column if this is a breadboard row (not power rails)
+    let dotsToCheck = new Set([dotIndex]);
+    if (row >= 2 && row <= 6) {  // Top half of breadboard
+        for (let r = 2; r <= 6; r++) {
+            dotsToCheck.add(getDotIndex(r, col));
+        }
+    } else if (row >= 7 && row <= 11) {  // Bottom half of breadboard
+        for (let r = 7; r <= 11; r++) {
+            dotsToCheck.add(getDotIndex(r, col));
+        }
+    }
     
-    if (hasVcc) return 9;
-    if (hasGnd) return 0;
+    // Check all relevant dots for power/ground connections
+    for (const checkDotIndex of dotsToCheck) {
+        const connectedDots = connections.get(checkDotIndex);
+        if (!connectedDots) continue;
+        
+        // Check for VCC or GND connections
+        for (const connectedIndex of connectedDots) {
+            const connectedRow = Math.floor(connectedIndex / GRID_COLS);
+            if (connectedRow === 0 || connectedRow === GRID_ROWS - 1) {  // VCC rows
+                return 9;
+            }
+            if (connectedRow === 1 || connectedRow === GRID_ROWS - 2) {  // GND rows
+                return 0;
+            }
+        }
+    }
     
     // If a voltage map is provided, use it
     if (voltageMap) {
+        // First check the dot itself
         if (voltageMap.has(dotIndex)) {
             return voltageMap.get(dotIndex);
         }
         
-        // Check connected dots for intermediate voltages
-        for (const connectedDot of connectedDots) {
-            if (voltageMap.has(connectedDot)) {
-                return voltageMap.get(connectedDot);
+        // Then check all dots in the same column
+        for (const checkDotIndex of dotsToCheck) {
+            if (voltageMap.has(checkDotIndex)) {
+                return voltageMap.get(checkDotIndex);
+            }
+            
+            // Check connected dots
+            const connectedDots = connections.get(checkDotIndex);
+            if (connectedDots) {
+                for (const connectedIndex of connectedDots) {
+                    if (voltageMap.has(connectedIndex)) {
+                        return voltageMap.get(connectedIndex);
+                    }
+                }
             }
         }
     }
     
     return null;
-}
-
-// Add this function to calculate intermediate voltages for series components
-function calculateIntermediateVoltages() {
-    const voltageMap = new Map();
-    const processedComponents = new Set();
-
-    // Helper function to get all dots in a column
-    function getColumnDots(dot) {
-        const dotIndex = dots.indexOf(dot);
-        if (dotIndex === -1) return new Set([dot]);
-        
-        const { row, col } = getRowCol(dotIndex);
-        const columnDots = new Set([dot]);
-        
-        // If dot is in top half of breadboard (rows 2-6)
-        if (row >= 2 && row <= 6) {
-            for (let r = 2; r <= 6; r++) {
-                const connectedDotIndex = getDotIndex(r, col);
-                if (connectedDotIndex >= 0) {
-                    columnDots.add(dots[connectedDotIndex]);
-                }
-            }
-        }
-        // If dot is in bottom half of breadboard (rows 7-11)
-        else if (row >= 7 && row <= 11) {
-            for (let r = 7; r <= 11; r++) {
-                const connectedDotIndex = getDotIndex(r, col);
-                if (connectedDotIndex >= 0) {
-                    columnDots.add(dots[connectedDotIndex]);
-                }
-            }
-        }
-        
-        return columnDots;
-    }
-
-    // First identify power and ground connections
-    dots.forEach((dot, index) => {
-        const connectedDots = connections.get(index);
-        if (!connectedDots) return;
-        
-        const hasVcc = Array.from(connectedDots).some(i => dots[i].voltage === 9);
-        const hasGnd = Array.from(connectedDots).some(i => dots[i].voltage === 0);
-        
-        if (hasVcc) {
-            voltageMap.set(index, 9);
-            // Set voltage for all dots in the same column
-            getColumnDots(dot).forEach(columnDot => {
-                voltageMap.set(dots.indexOf(columnDot), 9);
-            });
-        }
-        else if (hasGnd) {
-            voltageMap.set(index, 0);
-            // Set voltage for all dots in the same column
-            getColumnDots(dot).forEach(columnDot => {
-                voltageMap.set(dots.indexOf(columnDot), 0);
-            });
-        }
-    });
-
-    // Helper function to find all components connected to a dot or its column
-    function findConnectedComponents(dot) {
-        const columnDots = getColumnDots(dot);
-        return lines.filter(line => 
-            !processedComponents.has(line) && 
-            (columnDots.has(line.start) || columnDots.has(line.end))
-        );
-    }
-
-    // Helper function to get the other end of a component
-    function getOtherEnd(component, dot) {
-        const columnDots = getColumnDots(dot);
-        return columnDots.has(component.start) ? component.end : component.start;
-    }
-
-    // Helper function to trace path to ground
-    function tracePath(startDot, pathSoFar = [], visited = new Set()) {
-        const startColumnDots = getColumnDots(startDot);
-        for (const dot of startColumnDots) {
-            const dotIndex = dots.indexOf(dot);
-            if (visited.has(dotIndex)) return null;
-            visited.add(dotIndex);
-        }
-
-        // Check if we've reached ground
-        const startVoltage = getDotVoltage(startDot, voltageMap);
-        if (startVoltage === 0) {
-            return pathSoFar;
-        }
-
-        // Find all unprocessed components connected to this dot or its column
-        const connectedComponents = findConnectedComponents(startDot);
-        
-        for (const component of connectedComponents) {
-            const otherEnd = getOtherEnd(component, startDot);
-            const otherEndIndex = dots.indexOf(otherEnd);
-            if (!visited.has(otherEndIndex)) {
-                const newPath = [...pathSoFar, { component, startDot, endDot: otherEnd }];
-                const result = tracePath(otherEnd, newPath, visited);
-                if (result) return result;
-            }
-        }
-
-        return null;
-    }
-
-    // Process each power connection
-    dots.forEach((dot, index) => {
-        if (getDotVoltage(dot, voltageMap) === 9) {
-            const path = tracePath(dot);
-            if (!path) return;
-
-            // Calculate total resistance and voltage drops
-            let totalResistance = 0;
-            let totalFixedVoltageDrops = 0;
-
-            path.forEach(({ component }) => {
-                if (component.type.startsWith('resistor_')) {
-                    totalResistance += RESISTOR_VALUES[component.type];
-                } else if (component.type === 'led') {
-                    totalResistance += LED_CHARACTERISTICS.resistance;
-                    totalFixedVoltageDrops += LED_CHARACTERISTICS.vf;
-                }
-                processedComponents.add(component);
-            });
-
-            // Calculate current based on total resistance and remaining voltage after fixed drops
-            const remainingVoltage = 9 - totalFixedVoltageDrops;
-            const current = remainingVoltage > 0 ? remainingVoltage / totalResistance : 0;
-
-            // Apply voltage drops along the path
-            let currentVoltage = 9;
-            path.forEach(({ component, startDot, endDot }) => {
-                let voltageDrop = 0;
-                if (component.type.startsWith('resistor_')) {
-                    voltageDrop = current * RESISTOR_VALUES[component.type];
-                } else if (component.type === 'led') {
-                    // LED voltage drop is the forward voltage plus any additional drop across internal resistance
-                    voltageDrop = LED_CHARACTERISTICS.vf + (current * LED_CHARACTERISTICS.resistance);
-                }
-
-                // Store the voltage drop and current for the component
-                component.voltage_drop = voltageDrop;
-                component.current = current;
-
-                // Update the current voltage
-                currentVoltage -= voltageDrop;
-
-                // Store intermediate voltage for all dots in the column
-                const endColumnDots = getColumnDots(endDot);
-                endColumnDots.forEach(columnDot => {
-                    voltageMap.set(dots.indexOf(columnDot), currentVoltage);
-                });
-
-                // Also store the voltage for the start dot's column if it's not already set
-                const startColumnDots = getColumnDots(startDot);
-                startColumnDots.forEach(columnDot => {
-                    if (!voltageMap.has(dots.indexOf(columnDot))) {
-                        voltageMap.set(dots.indexOf(columnDot), currentVoltage + voltageDrop);
-                    }
-                });
-            });
-        }
-    });
-
-    return voltageMap;
-}
-
-// Update calculateCircuitValues to use the new voltage calculations
-function calculateCircuitValues() {
-    // Reset all calculated values
-    lines.forEach(line => {
-        if (line.type.startsWith('resistor_')) {
-            line.voltage_drop = 0;
-            line.current = 0;
-        }
-    });
-    
-    // Calculate intermediate voltages
-    const voltageMap = calculateIntermediateVoltages();
-    
-    // Calculate for each resistor
-    lines.forEach(line => {
-        if (line.type.startsWith('resistor_')) {
-            const startIndex = dots.indexOf(line.start);
-            const endIndex = dots.indexOf(line.end);
-            
-            if (startIndex !== -1 && endIndex !== -1) {
-                const startVoltage = getDotVoltage(line.start, voltageMap);
-                const endVoltage = getDotVoltage(line.end, voltageMap);
-                
-                if (startVoltage !== null && endVoltage !== null) {
-                    const resistance = RESISTOR_VALUES[line.type];
-                    line.voltage_drop = Math.abs(startVoltage - endVoltage);
-                    line.current = line.voltage_drop / resistance;
-                }
-            }
-        }
-    });
 }
 
 function getTransistorState(transistor) {
@@ -2218,4 +2119,102 @@ function updateCircuitEmulator() {
     
     // Force a final redraw to clear the overlay
     drawGrid();
+}
+
+// Add calculateCircuitValues function
+function calculateCircuitValues() {
+    // Reset all calculated values
+    lines.forEach(line => {
+        if (line.type.startsWith('resistor_') || line.type === 'led') {
+            line.voltage_drop = 0;
+            line.current = 0;
+        }
+    });
+    
+    // Calculate intermediate voltages
+    const voltageMap = calculateIntermediateVoltages();
+    
+    // Calculate for each component
+    lines.forEach(line => {
+        if (line.type.startsWith('resistor_') || line.type === 'led') {
+            const startVoltage = getDotVoltage(line.start, voltageMap);
+            const endVoltage = getDotVoltage(line.end, voltageMap);
+            
+            if (startVoltage !== null && endVoltage !== null) {
+                const voltageDiff = Math.abs(startVoltage - endVoltage);
+                
+                if (line.type === 'led') {
+                    // LED calculations
+                    if (voltageDiff >= LED_CHARACTERISTICS.vf) {
+                        line.voltage_drop = LED_CHARACTERISTICS.vf;
+                        const remainingVoltage = voltageDiff - LED_CHARACTERISTICS.vf;
+                        line.current = remainingVoltage / LED_CHARACTERISTICS.resistance;
+                    }
+                } else {
+                    // Resistor calculations
+                    const resistance = RESISTOR_VALUES[line.type];
+                    line.voltage_drop = voltageDiff;
+                    line.current = voltageDiff / resistance;
+                }
+            }
+        }
+    });
+}
+
+// Add calculateIntermediateVoltages function
+function calculateIntermediateVoltages() {
+    const voltageMap = new Map();
+    
+    // First pass: Set power rail voltages
+    dots.forEach((dot, index) => {
+        const row = Math.floor(index / GRID_COLS);
+        if (row === 0 || row === GRID_ROWS - 1) {
+            voltageMap.set(index, 9);  // VCC rails
+        } else if (row === 1 || row === GRID_ROWS - 2) {
+            voltageMap.set(index, 0);  // GND rails
+        }
+    });
+    
+    // Second pass: Propagate voltages through connections
+    let changed = true;
+    while (changed) {
+        changed = false;
+        connections.forEach((connectedDots, dotIndex) => {
+            // Skip if this dot already has a voltage
+            if (voltageMap.has(dotIndex)) return;
+            
+            // Check connected dots for a known voltage
+            for (const connectedIndex of connectedDots) {
+                if (voltageMap.has(connectedIndex)) {
+                    voltageMap.set(dotIndex, voltageMap.get(connectedIndex));
+                    changed = true;
+                    break;
+                }
+            }
+        });
+    }
+    
+    // Handle transistor conduction
+    transistors.forEach((transistor, id) => {
+        const state = getTransistorState(transistor);
+        if (state.conducting) {
+            // If transistor is conducting, collector and emitter should have same voltage
+            const collectorIndex = dots.indexOf(transistor.connections.collector);
+            const emitterIndex = dots.indexOf(transistor.connections.emitter);
+            
+            if (collectorIndex !== -1 && emitterIndex !== -1) {
+                const collectorVoltage = voltageMap.get(collectorIndex);
+                const emitterVoltage = voltageMap.get(emitterIndex);
+                
+                // If either has a voltage, propagate it
+                if (collectorVoltage !== undefined) {
+                    voltageMap.set(emitterIndex, collectorVoltage);
+                } else if (emitterVoltage !== undefined) {
+                    voltageMap.set(collectorIndex, emitterVoltage);
+                }
+            }
+        }
+    });
+    
+    return voltageMap;
 } 
