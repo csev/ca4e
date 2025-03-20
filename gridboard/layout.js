@@ -1362,6 +1362,63 @@ canvas.addEventListener('mousedown', (e) => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     
+    if (deleteMode) {
+        let componentDeleted = false;
+        
+        // Check for transistors first with a larger detection radius
+        for (const [id, transistor] of transistors) {
+            const centerDist = Math.sqrt((x - transistor.x) ** 2 + (y - transistor.y) ** 2);
+            
+            if (centerDist < 50) {
+                // Remove all wires connected to this transistor
+                for (let i = lines.length - 1; i >= 0; i--) {
+                    if (lines[i].transistorConnection && lines[i].transistorConnection.id === id) {
+                        lines.splice(i, 1);
+                    }
+                }
+                // Delete the transistor
+                transistors.delete(id);
+                componentDeleted = true;
+                break;
+            }
+        }
+        
+        // If no transistor was deleted, check for other components
+        if (!componentDeleted) {
+            for (let i = lines.length - 1; i >= 0; i--) {
+                const line = lines[i];
+                // Calculate center point of the component
+                const centerX = (line.start.x + line.end.x) / 2;
+                const centerY = (line.start.y + line.end.y) / 2;
+                
+                // Calculate distance from click to component center
+                const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+                
+                // If click is close enough to component, delete it
+                if (distance < 20) {
+                    lines.splice(i, 1);
+                    componentDeleted = true;
+                    break;
+                }
+            }
+        }
+        
+        // If we deleted something, turn off delete mode and update UI
+        if (componentDeleted) {
+            deleteMode = false;
+            deleteModeButton.style.backgroundColor = '#4CAF50';
+            deleteModeButton.title = 'Delete Mode (Off)';
+            canvas.style.cursor = 'default';
+            
+            // Reinitialize connections and update display
+            initializeConnections();
+            rebuildAllConnections();
+            drawGrid();
+            updateCircuitEmulator();
+        }
+        return;
+    }
+    
     // First check if we clicked on a switch
     let clickedSwitch = false;
     lines.forEach(line => {
@@ -2215,4 +2272,93 @@ function calculateIntermediateVoltages() {
     });
     
     return voltageMap;
-} 
+}
+
+// Add delete mode state variable
+let deleteMode = false;
+
+// Add delete mode button
+const deleteModeButton = document.createElement('button');
+deleteModeButton.innerHTML = '<i class="fas fa-trash"></i>';  // Using Font Awesome trash icon
+deleteModeButton.style.marginLeft = '20px';
+deleteModeButton.style.padding = '8px 12px';
+deleteModeButton.style.backgroundColor = '#4CAF50';  // Green when off
+deleteModeButton.style.color = 'white';
+deleteModeButton.style.border = 'none';
+deleteModeButton.style.borderRadius = '3px';
+deleteModeButton.style.cursor = 'pointer';
+deleteModeButton.style.display = 'inline-flex';
+deleteModeButton.style.alignItems = 'center';
+deleteModeButton.style.justifyContent = 'center';
+deleteModeButton.style.width = '40px';
+deleteModeButton.style.height = '40px';
+deleteModeButton.title = 'Delete Mode (Off)';  // Tooltip
+
+// Function to turn off delete mode
+function turnOffDeleteMode() {
+    if (deleteMode) {
+        deleteMode = false;
+        deleteModeButton.style.backgroundColor = '#4CAF50';
+        deleteModeButton.title = 'Delete Mode (Off)';
+        canvas.style.cursor = 'default';
+    }
+}
+
+// Add escape key listener
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        turnOffDeleteMode();
+    }
+});
+
+// Add hover effects
+deleteModeButton.addEventListener('mouseover', () => {
+    deleteModeButton.style.backgroundColor = deleteMode ? '#d32f2f' : '#45a049';
+});
+
+deleteModeButton.addEventListener('mouseout', () => {
+    deleteModeButton.style.backgroundColor = deleteMode ? '#f44336' : '#4CAF50';
+});
+
+// Add toggle handler
+deleteModeButton.addEventListener('click', () => {
+    deleteMode = !deleteMode;
+    deleteModeButton.style.backgroundColor = deleteMode ? '#f44336' : '#4CAF50';
+    deleteModeButton.title = `Delete Mode (${deleteMode ? 'On' : 'Off'})`;
+    canvas.style.cursor = deleteMode ? 'crosshair' : 'default';
+    
+    // Add shake animation when activated
+    if (deleteMode) {
+        deleteModeButton.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+            deleteModeButton.style.animation = '';
+        }, 500);
+    }
+});
+
+// Add to DOM after auto-compute toggle
+document.addEventListener('DOMContentLoaded', () => {
+    // Add Font Awesome CSS
+    const fontAwesome = document.createElement('link');
+    fontAwesome.rel = 'stylesheet';
+    fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
+    document.head.appendChild(fontAwesome);
+    
+    // Add shake animation keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes shake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+            75% { transform: rotate(-5deg); }
+            100% { transform: rotate(0deg); }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    const controls = document.querySelector('.controls');
+    if (controls) {
+        controls.appendChild(deleteModeButton);
+    }
+});
