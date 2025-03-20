@@ -582,9 +582,9 @@ class NixieDisplay extends Gate {
         
         // Override input nodes for nixie display - moved outside the rectangle
         this.inputNodes = [
-            { x: this.x - 35, y: this.y - 20, value: false, connected: false }, // 1s place
-            { x: this.x - 35, y: this.y, value: false, connected: false },      // 2s place
-            { x: this.x - 35, y: this.y + 20, value: false, connected: false }   // 4s place
+            { x: this.x - 37, y: this.y - 19, value: false, connected: false }, // 1s place
+            { x: this.x - 37, y: this.y + 1, value: false, connected: false },      // 2s place
+            { x: this.x - 37, y: this.y + 21, value: false, connected: false }   // 4s place
         ];
         this.outputNodes = []; // No outputs needed for display
     }
@@ -637,9 +637,9 @@ class NixieDisplay extends Gate {
         ctx.fillStyle = '#000';
         ctx.font = '12px Arial';
         ctx.textAlign = 'right';
-        ctx.fillText('1s', this.x - 40, this.y - 20);
-        ctx.fillText('2s', this.x - 40, this.y);
-        ctx.fillText('4s', this.x - 40, this.y + 20);
+        ctx.fillText('1', this.inputNodes[0].x - 7, this.inputNodes[0].y + 2);
+        ctx.fillText('2', this.inputNodes[1].x - 7, this.inputNodes[1].y + 2);
+        ctx.fillText('4', this.inputNodes[2].x - 7, this.inputNodes[2].y + 2);
 
         // Draw component label inside the rectangle at the bottom
         ctx.textAlign = 'center';
