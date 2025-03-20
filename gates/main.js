@@ -255,10 +255,14 @@ class CircuitEditor {
                     // Full adder has three inputs at different heights
                     node.x = this.draggingGate.x - 25;
                     node.y = this.draggingGate.y + (index - 1) * 20; // -20, 0, +20
+                } else if (this.draggingGate.type === 'NOT') {
+                    // NOT gate has a single input at a specific position
+                    node.x = this.draggingGate.x - 27;
+                    node.y = this.draggingGate.y;
                 } else {
                     node.x = this.draggingGate.x - 20;
                 }
-                if (this.draggingGate.type !== 'FULL_ADDER') {
+                if (this.draggingGate.type !== 'FULL_ADDER' && this.draggingGate.type !== 'NOT') {
                     node.y = this.draggingGate.y + this.dragStartNodePositions.inputs[index].relativeY;
                 }
             });
@@ -268,6 +272,10 @@ class CircuitEditor {
                     node.x = this.draggingGate.x + 25; // Match the input offset
                     // Keep the outputs at fixed heights relative to the gate center
                     node.y = this.draggingGate.y + (index === 0 ? -10 : 10); // First output at -10, second at +10
+                } else if (this.draggingGate.type === 'NOT') {
+                    // NOT gate has a single output at a specific position
+                    node.x = this.draggingGate.x + 27;
+                    node.y = this.draggingGate.y;
                 } else {
                     node.x = this.draggingGate.x + 20;
                     node.y = this.draggingGate.y + this.dragStartNodePositions.outputs[index].relativeY;
