@@ -2281,7 +2281,7 @@ let deleteMode = false;
 const deleteModeButton = document.createElement('button');
 deleteModeButton.innerHTML = '<i class="fas fa-trash"></i>';  // Using Font Awesome trash icon
 deleteModeButton.style.marginLeft = '20px';
-deleteModeButton.style.padding = '8px 12px';
+deleteModeButton.style.padding = '5px 10px';  // Match other buttons
 deleteModeButton.style.backgroundColor = '#4CAF50';  // Green when off
 deleteModeButton.style.color = 'white';
 deleteModeButton.style.border = 'none';
@@ -2290,8 +2290,8 @@ deleteModeButton.style.cursor = 'pointer';
 deleteModeButton.style.display = 'inline-flex';
 deleteModeButton.style.alignItems = 'center';
 deleteModeButton.style.justifyContent = 'center';
-deleteModeButton.style.width = '40px';
-deleteModeButton.style.height = '40px';
+deleteModeButton.style.width = 'auto';  // Let width be determined by content
+deleteModeButton.style.height = 'auto';  // Let height be determined by content
 deleteModeButton.title = 'Delete Mode (Off)';  // Tooltip
 
 // Function to turn off delete mode
