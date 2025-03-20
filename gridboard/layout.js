@@ -649,7 +649,7 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
                 // Calculate current based on remaining voltage after Vf
                 const remainingVoltage = voltageDiff - LED_CHARACTERISTICS.vf;
                 current = remainingVoltage / LED_CHARACTERISTICS.resistance;
-                isProperlyConnected = current >= LED_CHARACTERISTICS.minCurrent;
+            isProperlyConnected = current >= LED_CHARACTERISTICS.minCurrent;
             }
         }
     }
@@ -992,10 +992,10 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
         // Save context
         ctx.save();
         
-        // Translate to component center and rotate, then move up by 15 pixels
+        // Translate to component center and rotate, then move up by 30 pixels (increased from 20)
         ctx.translate(centerX, centerY);
         ctx.rotate(angle);
-        ctx.translate(0, -20); // Move up by 20 pixels
+        ctx.translate(0, -30); // Increased distance from center
         
         // Draw background for voltage text
         ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
@@ -1580,20 +1580,20 @@ canvas.addEventListener('mouseup', (e) => {
                 animateWireMelting(wireIndex);
             } else {
                 // Add the component normally
-                const newLine = {
-                    start: hadStartDot,
-                    end: endDot,
-                    type: componentSelect.value
-                };
+            const newLine = {
+                start: hadStartDot,
+                end: endDot,
+                type: componentSelect.value
+            };
                 lines.push(newLine);
                 
                 // Reinitialize and rebuild all connections
                 initializeConnections();
                 rebuildAllConnections();
-                drawGrid();
+            drawGrid();
                 updateCircuitEmulator();
-            }
         }
+    }
     }
     
     startDot = null;
@@ -1850,35 +1850,35 @@ function getSwitchId(startDot, endDot) {
     return `switch_${dots.indexOf(startDot)}_${dots.indexOf(endDot)}`;
 }
 
-// Helper function to get all dots in a column
-function getColumnDots(dot) {
-    const dotIndex = dots.indexOf(dot);
-    if (dotIndex === -1) return new Set([dot]);
-    
-    const { row, col } = getRowCol(dotIndex);
-    const columnDots = new Set([dot]);
-    
-    // If dot is in top half of breadboard (rows 2-6)
-    if (row >= 2 && row <= 6) {
-        for (let r = 2; r <= 6; r++) {
-            const connectedDotIndex = getDotIndex(r, col);
-            if (connectedDotIndex >= 0) {
-                columnDots.add(dots[connectedDotIndex]);
+    // Helper function to get all dots in a column
+    function getColumnDots(dot) {
+        const dotIndex = dots.indexOf(dot);
+        if (dotIndex === -1) return new Set([dot]);
+        
+        const { row, col } = getRowCol(dotIndex);
+        const columnDots = new Set([dot]);
+        
+        // If dot is in top half of breadboard (rows 2-6)
+        if (row >= 2 && row <= 6) {
+            for (let r = 2; r <= 6; r++) {
+                const connectedDotIndex = getDotIndex(r, col);
+                if (connectedDotIndex >= 0) {
+                    columnDots.add(dots[connectedDotIndex]);
+                }
             }
         }
-    }
-    // If dot is in bottom half of breadboard (rows 7-11)
-    else if (row >= 7 && row <= 11) {
-        for (let r = 7; r <= 11; r++) {
-            const connectedDotIndex = getDotIndex(r, col);
-            if (connectedDotIndex >= 0) {
-                columnDots.add(dots[connectedDotIndex]);
+        // If dot is in bottom half of breadboard (rows 7-11)
+        else if (row >= 7 && row <= 11) {
+            for (let r = 7; r <= 11; r++) {
+                const connectedDotIndex = getDotIndex(r, col);
+                if (connectedDotIndex >= 0) {
+                    columnDots.add(dots[connectedDotIndex]);
+                }
             }
         }
+        
+        return columnDots;
     }
-    
-    return columnDots;
-}
 
 // Update getDotVoltage to handle column connections
 function getDotVoltage(dot, voltageMap = null) {
@@ -1910,10 +1910,10 @@ function getDotVoltage(dot, voltageMap = null) {
             if (voltageMap && voltageMap.has(connectedIndex)) {
                 return voltageMap.get(connectedIndex);
             }
+            }
         }
-    }
-    
-    return null;
+
+        return null;
 }
 
 function getTransistorState(transistor) {
