@@ -618,6 +618,16 @@ function drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPresse
 }
 
 function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot = null) {
+    // Calculate voltage across component
+    let voltage = 0;
+    if (startDot && endDot) {
+        const startVoltage = getDotVoltage(startDot);
+        const endVoltage = getDotVoltage(endDot);
+        if (startVoltage !== null && endVoltage !== null) {
+            voltage = Math.abs(startVoltage - endVoltage);
+        }
+    }
+
     if (type === 'led') {
         drawLED(startX, startY, endX, endY, startDot, endDot);
     } else if (type === 'wire') {
@@ -627,12 +637,46 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 2;
         ctx.stroke();
+        return;
     } else if (type === 'switch_no' || type === 'switch_nc') {
         const switchId = getSwitchId(startDot, endDot);
         const isPressed = switches.get(switchId)?.pressed || false;
         drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPressed);
+        return; // Skip voltage indicator for switches
     } else if (type === 'resistor_1k' || type === 'resistor_10k') {
         drawLine(startX, startY, endX, endY, type);
+    }
+
+    // Draw voltage indicator
+    if (voltage > 0) {
+        const centerX = (startX + endX) / 2;
+        const centerY = (startY + endY) / 2;
+        
+        // Calculate angle of the component
+        const dx = endX - startX;
+        const dy = endY - startY;
+        const angle = Math.atan2(dy, dx);
+        
+        // Save context
+        ctx.save();
+        
+        // Translate to component center and rotate, then move up by 15 pixels
+        ctx.translate(centerX, centerY);
+        ctx.rotate(angle);
+        ctx.translate(0, -20); // Move up by 15 pixels
+        
+        // Draw background for voltage text
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.fillRect(-20, -10, 40, 20);
+        
+        // Draw voltage text
+        ctx.fillStyle = '#000000';
+        ctx.font = '10px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(`${voltage.toFixed(1)}V`, 0, 4);
+        
+        // Restore context
+        ctx.restore();
     }
 }
 
