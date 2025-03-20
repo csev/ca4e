@@ -1387,18 +1387,49 @@ canvas.addEventListener('mousedown', (e) => {
         if (!componentDeleted) {
             for (let i = lines.length - 1; i >= 0; i--) {
                 const line = lines[i];
-                // Calculate center point of the component
-                const centerX = (line.start.x + line.end.x) / 2;
-                const centerY = (line.start.y + line.end.y) / 2;
                 
-                // Calculate distance from click to component center
-                const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
-                
-                // If click is close enough to component, delete it
-                if (distance < 20) {
-                    lines.splice(i, 1);
-                    componentDeleted = true;
-                    break;
+                // For wires, check if click is near any point along the wire
+                if (line.type === 'wire') {
+                    // Calculate distance from click to wire line segment
+                    const dx = line.end.x - line.start.x;
+                    const dy = line.end.y - line.start.y;
+                    const length = Math.sqrt(dx * dx + dy * dy);
+                    
+                    // Calculate normalized vector along wire
+                    const nx = dx / length;
+                    const ny = dy / length;
+                    
+                    // Calculate vector from start point to click
+                    const px = x - line.start.x;
+                    const py = y - line.start.y;
+                    
+                    // Calculate projection of click point onto wire line
+                    const projection = px * nx + py * ny;
+                    
+                    // If projection is between 0 and wire length, calculate perpendicular distance
+                    if (projection >= 0 && projection <= length) {
+                        // Calculate perpendicular distance from click to wire
+                        const perpX = line.start.x + projection * nx;
+                        const perpY = line.start.y + projection * ny;
+                        const distance = Math.sqrt((x - perpX) ** 2 + (y - perpY) ** 2);
+                        
+                        if (distance < 10) {  // Increased detection radius for wires
+                            lines.splice(i, 1);
+                            componentDeleted = true;
+                            break;
+                        }
+                    }
+                } else {
+                    // For other components, check distance to center point
+                    const centerX = (line.start.x + line.end.x) / 2;
+                    const centerY = (line.start.y + line.end.y) / 2;
+                    const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+                    
+                    if (distance < 20) {
+                        lines.splice(i, 1);
+                        componentDeleted = true;
+                        break;
+                    }
                 }
             }
         }
