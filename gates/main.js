@@ -566,6 +566,16 @@ class CircuitEditor {
 
         this.wires.push(wire);
         
+        // Announce successful connection if screen reader is enabled
+        if (this.screenReaderMode) {
+            const startGate = startNode.gate;
+            const endGate = endNode.gate;
+            const startNodeIndex = startGate.outputNodes.indexOf(startNode.node) + 1;
+            const endNodeIndex = endGate.inputNodes.indexOf(endNode.node) + 1;
+            
+            this.announce(`Connected output ${startNodeIndex} of ${startGate.type} gate ${startGate.ordinal} "${startGate.label}" to input ${endNodeIndex} of ${endGate.type} gate ${endGate.ordinal} "${endGate.label}"`);
+        }
+        
         // Force circuit update since we added a wire
         this.updateWireValues();
     }
@@ -1021,5 +1031,96 @@ style.textContent = `
     .screen-reader-toggle.active {
         background-color: #1565C0;
     }
+
+    /* Responsive toolbar styles */
+    .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 10px;
+        background-color: #f5f5f5;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .gate-selector {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .gate-selector button {
+        padding: 8px 12px;
+        font-size: 14px;
+        white-space: nowrap;
+        min-width: 40px;
+    }
+
+    .right-section {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    #selectedTool {
+        padding: 8px 12px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        min-width: 120px;
+    }
+
+    /* Responsive breakpoints */
+    @media (max-width: 768px) {
+        .toolbar {
+            flex-direction: column;
+        }
+
+        .gate-selector {
+            justify-content: center;
+        }
+
+        .right-section {
+            justify-content: center;
+            width: 100%;
+        }
+
+        .gate-selector button {
+            padding: 6px 10px;
+            font-size: 12px;
+        }
+
+        #selectedTool {
+            font-size: 12px;
+            min-width: 100px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .gate-selector button {
+            padding: 4px 8px;
+            font-size: 11px;
+        }
+
+        #selectedTool {
+            font-size: 11px;
+            min-width: 80px;
+        }
+
+        .screen-reader-toggle {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+    }
 `;
-document.head.appendChild(style); 
+document.head.appendChild(style);
+
+// Add window resize handler
+window.addEventListener('resize', () => {
+    if (window.circuitEditor) {
+        window.circuitEditor.canvas.width = window.innerWidth - 40;
+        window.circuitEditor.canvas.height = window.innerHeight - 100;
+        window.circuitEditor.render();
+    }
+}); 
