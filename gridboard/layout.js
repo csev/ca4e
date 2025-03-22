@@ -1490,10 +1490,6 @@ function showCircuitConnections() {
     circuitInfo.style.display = 'block';
 }
 
-// Add button event listener
-const showCircuitButton = document.getElementById('showCircuit');
-showCircuitButton.addEventListener('click', showCircuitConnections);
-
 // Initial draw
 drawGrid();
 
