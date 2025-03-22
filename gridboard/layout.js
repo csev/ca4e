@@ -1229,7 +1229,7 @@ function drawGrid() {
     
     // Draw existing lines 
     lines.forEach(line => {
-        drawComponent(line.start.x, line.start.y, line.end.x, line.end.y, 
+            drawComponent(line.start.x, line.start.y, line.end.x, line.end.y, 
                         line.type, line.start, line.end);
     });
     
@@ -1262,7 +1262,7 @@ function drawGrid() {
         ctx.arc(centerX, centerY, radius, startAngle, startAngle + Math.PI * 1.5);
         ctx.strokeStyle = '#4CAF50';
         ctx.lineWidth = 3;
-        ctx.stroke();
+            ctx.stroke();
         
         // Restore the context state
         ctx.restore();
@@ -1491,16 +1491,16 @@ canvas.addEventListener('click', (e) => {
                 
                 // Rebuild all connections
                 lines.forEach(l => {
-                    const startIndex = dots.indexOf(l.start);
-                    const endIndex = dots.indexOf(l.end);
-                    
-                    if (startIndex !== -1 && endIndex !== -1) {
-                        if (l.type === 'wire') {
-                            connectDots(startIndex, endIndex);
-                        } else if (l.type === 'switch_nc' && !switches.get(getSwitchId(l.start, l.end))?.pressed) {
-                            connectDots(startIndex, endIndex);
-                        } else if (l.type === 'switch_no' && switches.get(getSwitchId(l.start, l.end))?.pressed) {
-                            connectDots(startIndex, endIndex);
+                        const startIndex = dots.indexOf(l.start);
+                        const endIndex = dots.indexOf(l.end);
+                        
+                        if (startIndex !== -1 && endIndex !== -1) {
+                            if (l.type === 'wire') {
+                                connectDots(startIndex, endIndex);
+                            } else if (l.type === 'switch_nc' && !switches.get(getSwitchId(l.start, l.end))?.pressed) {
+                                connectDots(startIndex, endIndex);
+                            } else if (l.type === 'switch_no' && switches.get(getSwitchId(l.start, l.end))?.pressed) {
+                                connectDots(startIndex, endIndex);
                         }
                     }
                 });
@@ -1758,11 +1758,12 @@ function getDotVoltage(dot, voltageMap = null) {
         }
 
         return null;
-}
+    }
 
 
 // Update rebuildAllConnections function
 function rebuildAllConnections() {
+    console.log('rebuildAllConnections');
     // First clear all existing connections
     initializeConnections();
     
@@ -1791,7 +1792,8 @@ function rebuildAllConnections() {
 
 // Modify the updateCircuitEmulator function
 function updateCircuitEmulator() {
-    if (!autoCompute) return;
+    if ( !autoCompute) return;
+    console.log('updateCircuitEmulator');
     
     isComputing = true;
     computationFeedback.style.display = 'block';
@@ -1826,7 +1828,7 @@ function updateCircuitEmulator() {
 
 // Add calculateCircuitValues function
 function calculateCircuitValues() {
-    return; // Debugging
+    console.log('calculateCircuitValues');
     // Reset all calculated values
     lines.forEach(line => {
         if (line.type.startsWith('resistor_') || line.type === 'led') {
@@ -1913,12 +1915,12 @@ function calculateCircuitValues() {
     // Handle individual resistors not in series
     lines.forEach(line => {
         if (line.type.startsWith('resistor_') && !line.current && !line.voltage_drop) {
-            const startVoltage = getDotVoltage(line.start, voltageMap);
-            const endVoltage = getDotVoltage(line.end, voltageMap);
-            
-            if (startVoltage !== null && endVoltage !== null) {
+                const startVoltage = getDotVoltage(line.start, voltageMap);
+                const endVoltage = getDotVoltage(line.end, voltageMap);
+                
+                if (startVoltage !== null && endVoltage !== null) {
                 const voltageDiff = Math.abs(startVoltage - endVoltage);
-                const resistance = RESISTOR_VALUES[line.type];
+                    const resistance = RESISTOR_VALUES[line.type];
                 line.voltage_drop = voltageDiff;
                 line.current = voltageDiff / resistance;
                 
