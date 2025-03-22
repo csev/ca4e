@@ -1315,6 +1315,8 @@ canvas.addEventListener('mousedown', (e) => {
     
     // Handle delete mode first
     if (deleteMode) {
+        let componentDeleted = false;
+
         // Check for transistors to delete
         for (const [id, transistor] of transistors) {
             const dx = x - transistor.x;
@@ -1333,19 +1335,75 @@ canvas.addEventListener('mousedown', (e) => {
                         lines.splice(i, 1);
                     }
                 }
-                
-                // Turn off delete mode
-                deleteMode = false;
-                deleteModeButton.style.backgroundColor = '#4CAF50';
-                deleteModeButton.title = 'Delete Mode (Off)';
-                canvas.style.cursor = 'default';
-                
-                // Update display
-                drawGrid();
-                return;
+                componentDeleted = true;
+                break;
             }
         }
-        return; // Exit if in delete mode, even if nothing was deleted
+
+        // If no transistor was deleted, check for other components
+        if (!componentDeleted) {
+            for (let i = lines.length - 1; i >= 0; i--) {
+                const line = lines[i];
+                
+                // For wires, check if click is near any point along the wire
+                if (line.type === 'wire') {
+                    // Calculate distance from click to wire line segment
+                    const dx = line.end.x - line.start.x;
+                    const dy = line.end.y - line.start.y;
+                    const length = Math.sqrt(dx * dx + dy * dy);
+                    
+                    // Calculate normalized vector along wire
+                    const nx = dx / length;
+                    const ny = dy / length;
+                    
+                    // Calculate vector from start point to click
+                    const px = x - line.start.x;
+                    const py = y - line.start.y;
+                    
+                    // Calculate projection of click point onto wire line
+                    const projection = px * nx + py * ny;
+                    
+                    // If projection is between 0 and wire length, calculate perpendicular distance
+                    if (projection >= 0 && projection <= length) {
+                        // Calculate perpendicular distance from click to wire
+                        const perpX = line.start.x + projection * nx;
+                        const perpY = line.start.y + projection * ny;
+                        const distance = Math.sqrt((x - perpX) ** 2 + (y - perpY) ** 2);
+                        
+                        if (distance < 10) {  // Detection radius for wires
+                            lines.splice(i, 1);
+                            componentDeleted = true;
+                            break;
+                        }
+                    }
+                } else {
+                    // For other components, check distance to center point
+                    const centerX = (line.start.x + line.end.x) / 2;
+                    const centerY = (line.start.y + line.end.y) / 2;
+                    const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+                    
+                    if (distance < 20) {  // Detection radius for components
+                        lines.splice(i, 1);
+                        componentDeleted = true;
+                        break;
+                    }
+                }
+            }
+        }
+
+        // If anything was deleted, turn off delete mode and update
+        if (componentDeleted) {
+            deleteMode = false;
+            deleteModeButton.style.backgroundColor = '#4CAF50';
+            deleteModeButton.title = 'Delete Mode (Off)';
+            canvas.style.cursor = 'default';
+            
+            // Reinitialize connections and update display
+            initializeConnections();
+            rebuildAllConnections();
+            drawGrid();
+        }
+        return;
     }
     
     // Handle transistor placement only if not in delete mode
