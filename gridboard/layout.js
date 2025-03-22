@@ -102,89 +102,6 @@ autoComputeToggle.addEventListener('click', () => {
     autoComputeToggle.style.backgroundColor = autoCompute ? '#4CAF50' : '#f44336';
 });
 
-// Add after the existing HTML elements
-const showVoltagesButton = document.createElement('button');
-showVoltagesButton.textContent = 'Show Voltages';
-showVoltagesButton.style.marginLeft = '20px';  // Match existing button margin
-showVoltagesButton.style.padding = '5px 10px';  // Match existing button padding
-showVoltagesButton.style.backgroundColor = '#4CAF50';  // Match existing button color
-showVoltagesButton.style.color = 'white';
-showVoltagesButton.style.border = 'none';
-showVoltagesButton.style.borderRadius = '3px';  // Match existing button border radius
-showVoltagesButton.style.cursor = 'pointer';
-
-// Add hover effects to match existing buttons
-showVoltagesButton.addEventListener('mouseover', () => {
-    showVoltagesButton.style.backgroundColor = '#45a049';
-});
-
-showVoltagesButton.addEventListener('mouseout', () => {
-    showVoltagesButton.style.backgroundColor = '#4CAF50';
-});
-
-// Add the voltages display element
-const voltagesDisplay = document.createElement('div');
-voltagesDisplay.style.position = 'fixed';
-voltagesDisplay.style.top = '50%';
-voltagesDisplay.style.left = '50%';
-voltagesDisplay.style.transform = 'translate(-50%, -50%)';
-voltagesDisplay.style.backgroundColor = 'white';
-voltagesDisplay.style.padding = '20px';
-voltagesDisplay.style.borderRadius = '8px';
-voltagesDisplay.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
-voltagesDisplay.style.display = 'none';
-voltagesDisplay.style.zIndex = '1000';
-voltagesDisplay.style.maxHeight = '80vh';
-voltagesDisplay.style.overflow = 'auto';
-
-// Add close button
-const closeVoltagesButton = document.createElement('button');
-closeVoltagesButton.textContent = '×';
-closeVoltagesButton.style.position = 'absolute';
-closeVoltagesButton.style.top = '10px';
-closeVoltagesButton.style.right = '10px';
-closeVoltagesButton.style.border = 'none';
-closeVoltagesButton.style.background = 'none';
-closeVoltagesButton.style.fontSize = '20px';
-closeVoltagesButton.style.cursor = 'pointer';
-closeVoltagesButton.style.color = '#666';
-voltagesDisplay.appendChild(closeVoltagesButton);
-
-// Add title
-const voltagesTitle = document.createElement('h3');
-voltagesTitle.textContent = 'Voltages at Each Point';
-voltagesTitle.style.marginTop = '0';
-voltagesTitle.style.marginBottom = '15px';
-voltagesTitle.style.color = '#333';
-voltagesDisplay.appendChild(voltagesTitle);
-
-// Add the table container
-const voltagesTable = document.createElement('div');
-voltagesTable.style.overflow = 'auto';
-voltagesDisplay.appendChild(voltagesTable);
-
-document.body.appendChild(voltagesDisplay);
-
-// Wait for DOM to be fully loaded before adding the button
-document.addEventListener('DOMContentLoaded', () => {
-    const controls = document.querySelector('.controls');
-    if (controls) {
-        // Add auto-compute toggle
-        controls.appendChild(autoComputeToggle);
-        
-        // Add show voltages button
-        controls.appendChild(showVoltagesButton);
-        
-        // Add event listeners
-        showVoltagesButton.addEventListener('click', showVoltages);
-        closeVoltagesButton.addEventListener('click', () => {
-            voltagesDisplay.style.display = 'none';
-        });
-    } else {
-        console.warn('Controls element not found. Buttons not added.');
-    }
-});
-
 // Add the computation feedback element
 const computationFeedback = document.createElement('div');
 computationFeedback.style.position = 'fixed';
@@ -198,12 +115,6 @@ computationFeedback.style.display = 'none';
 computationFeedback.style.zIndex = '1000';
 computationFeedback.textContent = 'Computing circuit...';
 document.body.appendChild(computationFeedback);
-
-// Add button handlers
-showVoltagesButton.addEventListener('click', showVoltages);
-closeVoltagesButton.addEventListener('click', () => {
-    voltagesDisplay.style.display = 'none';
-});
 
 // Add function to show voltages
 function showVoltages() {
@@ -917,12 +828,10 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 2;
         ctx.stroke();
-        return;
     } else if (type === 'switch_no' || type === 'switch_nc') {
         const switchId = getSwitchId(startDot, endDot);
         const isPressed = switches.get(switchId)?.pressed || false;
         drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPressed);
-        return;
     }
 }
 

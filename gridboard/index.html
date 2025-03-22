@@ -118,7 +118,7 @@
     <div id="circuitInfo"></div>
 
     <script>
-        // Add listener to show/hide transistor instructions
+        // Only keep the transistor instructions listener
         document.getElementById('componentType').addEventListener('change', function(e) {
             const instructions = document.getElementById('transistorInstructions');
             if (e.target.value === 'nmos' || e.target.value === 'pmos') {
