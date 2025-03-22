@@ -1195,7 +1195,6 @@ canvas.addEventListener('mousedown', (e) => {
             initializeConnections();
             rebuildAllConnections();
             drawGrid();
-            updateCircuitEmulator();
         }
         return;
     }
@@ -1293,10 +1292,9 @@ canvas.addEventListener('mouseup', (e) => {
                 // Reinitialize and rebuild all connections
                 initializeConnections();
                 rebuildAllConnections();
-            drawGrid();
-                updateCircuitEmulator();
+                drawGrid();
+            }
         }
-    }
     }
     
     startDot = null;
@@ -1354,7 +1352,6 @@ canvas.addEventListener('click', (e) => {
                 rebuildAllConnections();
                 
                 drawGrid();
-                updateCircuitEmulator();
                 return;
             }
         }
@@ -1391,7 +1388,6 @@ canvas.addEventListener('contextmenu', (e) => {
             initializeConnections();
             rebuildAllConnections();
             drawGrid();
-            updateCircuitEmulator();
             return;
         }
     }
@@ -1416,7 +1412,6 @@ canvas.addEventListener('contextmenu', (e) => {
             initializeConnections();
             rebuildAllConnections();
             drawGrid();
-            updateCircuitEmulator();
             return;
         }
     }
@@ -1438,7 +1433,6 @@ canvas.addEventListener('contextmenu', (e) => {
             initializeConnections();
             rebuildAllConnections();
             drawGrid();
-            updateCircuitEmulator();
             break;
         }
     }
@@ -1623,42 +1617,6 @@ function rebuildAllConnections() {
     calculateCircuitValues();
     
     // Redraw the grid to show updated values
-    drawGrid();
-}
-
-// Modify the updateCircuitEmulator function
-function updateCircuitEmulator() {
-    if ( !autoCompute) return;
-    console.log('updateCircuitEmulator');
-    
-    isComputing = true;
-    computationFeedback.style.display = 'block';
-    
-    // Prepare circuit data for emulator
-    const circuitComponents = lines.map(line => ({
-        type: line.type,
-        start: getPointLabel(line.start),
-        end: getPointLabel(line.end),
-    }));
-
-    // Pass the circuit data to the emulator and start computation
-    window.circuitEmulator.loadCircuit(circuitComponents, connections);
-    window.circuitEmulator.start();
-    
-    // Rebuild all connections and recalculate voltages
-    rebuildAllConnections();
-    
-    // Calculate and store voltages for all dots
-    const voltageMap = calculateIntermediateVoltages();
-    dots.forEach((dot, index) => {
-        dot.voltage = getDotVoltage(dot, voltageMap);
-    });
-    
-    // Reset computing state and hide feedback immediately
-    isComputing = false;
-    computationFeedback.style.display = 'none';
-    
-    // Force a final redraw to clear the overlay
     drawGrid();
 }
 
