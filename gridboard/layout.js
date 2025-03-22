@@ -1006,7 +1006,22 @@ function findClosestDot(x, y) {
     return dots.find(dot => isNearDot(x, y, dot));
 }
 
-// Event listeners
+// Add this helper function to check if a point is near a switch
+function isNearSwitch(x, y) {
+    for (const line of lines) {
+        if (line.type === 'switch_no' || line.type === 'switch_nc') {
+            const switchCenterX = (line.start.x + line.end.x) / 2;
+            const switchCenterY = (line.start.y + line.end.y) / 2;
+            const distance = Math.sqrt((x - switchCenterX)**2 + (y - switchCenterY)**2);
+            if (distance < 20) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+// Update the mousedown handler
 canvas.addEventListener('mousedown', (e) => {
     // Only handle left clicks
     if (e.button !== 0) return;
@@ -1014,8 +1029,13 @@ canvas.addEventListener('mousedown', (e) => {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
-    
-    // Handle delete mode first
+
+    // Check if we're clicking a switch first
+    if (isNearSwitch(x, y)) {
+        return; // Don't do anything else if we're clicking a switch
+    }
+
+    // Handle delete mode
     if (deleteMode) {
         let componentDeleted = false;
 
