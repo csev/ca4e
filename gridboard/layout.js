@@ -116,107 +116,6 @@ computationFeedback.style.zIndex = '1000';
 computationFeedback.textContent = 'Computing circuit...';
 document.body.appendChild(computationFeedback);
 
-// Add function to show voltages
-function showVoltages() {
-    console.log('Starting showVoltages function');
-    
-    // Force a circuit computation to get latest voltages
-    console.log('Forcing circuit computation...');
-    updateCircuitEmulator();
-    
-    // Wait for computation to complete before showing voltages
-    setTimeout(() => {
-        console.log('Circuit computation complete, creating voltage table');
-        
-        // Create table
-        const table = document.createElement('table');
-        table.style.borderCollapse = 'collapse';
-        table.style.width = '100%';
-        table.style.minWidth = '800px';
-        table.style.marginTop = '20px';
-        
-        // Add header row with column numbers
-        const header = table.insertRow();
-        header.style.backgroundColor = '#f5f5f5';
-        header.style.fontWeight = 'bold';
-        
-        // Add empty cell for row labels
-        const emptyCell = document.createElement('th');
-        emptyCell.textContent = '';
-        emptyCell.style.padding = '8px';
-        emptyCell.style.textAlign = 'center';
-        emptyCell.style.borderBottom = '2px solid #ddd';
-        emptyCell.style.borderRight = '2px solid #ddd';
-        header.appendChild(emptyCell);
-        
-        // Add column numbers
-        for (let col = 1; col <= 30; col++) {
-            const th = document.createElement('th');
-            th.textContent = col;
-            th.style.padding = '8px';
-            th.style.textAlign = 'center';
-            th.style.borderBottom = '2px solid #ddd';
-            th.style.minWidth = '30px';
-            header.appendChild(th);
-        }
-        
-        // Add data rows (a-j)
-        const rowLabels = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
-        rowLabels.forEach((label, rowIndex) => {
-            const row = table.insertRow();
-            
-            // Add row label
-            const labelCell = row.insertCell();
-            labelCell.textContent = label;
-            labelCell.style.padding = '8px';
-            labelCell.style.textAlign = 'center';
-            labelCell.style.fontWeight = 'bold';
-            labelCell.style.borderRight = '2px solid #ddd';
-            labelCell.style.backgroundColor = '#f5f5f5';
-            
-            // Add voltage cells for each column
-            for (let col = 0; col < 30; col++) {
-                const cell = row.insertCell();
-                const dotIndex = (rowIndex + 2) * 30 + col; // +2 because first two rows are power rails
-                const dot = dots[dotIndex];
-                
-                // Get the voltage directly from the dot
-                const voltage = dot.voltage;
-                if ( voltage != null) console.log(`Dot at row ${label}, col ${col + 1}: voltage = ${voltage}`);
-                
-                if (voltage === 9) {
-                    cell.textContent = 'VCC';
-                    cell.style.color = '#ff4444';
-                    cell.style.backgroundColor = '#ffeeee';
-                } else if (voltage === 0) {
-                    cell.textContent = 'GND';
-                    cell.style.color = '#4444ff';
-                    cell.style.backgroundColor = '#eeeeff';
-                } else if (voltage !== null) {
-                    cell.textContent = voltage.toFixed(1);
-                    cell.style.color = '#000000';
-                } else {
-                    cell.textContent = '-';
-                    cell.style.color = '#999';
-                }
-                
-                cell.style.padding = '8px';
-                cell.style.textAlign = 'center';
-                cell.style.border = '1px solid #eee';
-            }
-        });
-        
-        // Clear and update table
-        console.log('Updating voltage table in DOM');
-        voltagesTable.innerHTML = '';
-        voltagesTable.appendChild(table);
-        
-        // Show the display
-        console.log('Showing voltage display');
-        voltagesDisplay.style.display = 'block';
-    }, 600); // Wait for computation to complete
-}
-
 class SmokeParticle {
     constructor(x, y) {
         this.x = x;
@@ -1209,7 +1108,7 @@ canvas.addEventListener('mousedown', (e) => {
         return;
     }
     
-    // Handle transistor placement only if not in delete mode
+    // Handle transistor placement
     const componentType = componentSelect.value;
     if (componentType === 'nmos' || componentType === 'pmos') {
         const id = nextTransistorId++;
@@ -1225,6 +1124,10 @@ canvas.addEventListener('mousedown', (e) => {
             drain: { x: x, y: y - TRANSISTOR_CHARACTERISTICS.channelLength/2 },
             source: { x: x, y: y + TRANSISTOR_CHARACTERISTICS.channelLength/2 }
         });
+        
+        // Reset placement state
+        placingTransistor = false;
+        currentTransistor = null;
         
         drawGrid();
         return;

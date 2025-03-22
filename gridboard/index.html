@@ -92,15 +92,11 @@
         <label>Component:</label>
         <select id="componentType">
             <option value="wire">Wire</option>
-            <optgroup label="Basic Components">
-                <option value="led">LED</option>
-                <option value="switch_no">Switch (Normally Open)</option>
-                <option value="switch_nc">Switch (Normally Closed)</option>
-            </optgroup>
-            <optgroup label="Transistors">
-                <option value="nmos">NMOS Transistor</option>
-                <option value="pmos">PMOS Transistor</option>
-            </optgroup>
+            <option value="led">LED</option>
+            <option value="switch_no">Switch (Normally Open)</option>
+            <option value="switch_nc">Switch (Normally Closed)</option>
+            <option value="nmos">NMOS Transistor</option>
+            <option value="pmos">PMOS Transistor</option>
         </select>
         <button id="showCircuit">Show Circuit Connections</button>
     </div>
@@ -126,7 +122,6 @@
     <div id="circuitInfo"></div>
 
     <script>
-        // Only keep the transistor instructions listener
         document.getElementById('componentType').addEventListener('change', function(e) {
             const instructions = document.getElementById('transistorInstructions');
             if (e.target.value === 'nmos' || e.target.value === 'pmos') {
