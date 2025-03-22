@@ -924,26 +924,6 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
         drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPressed);
         return;
     }
-
-    // Only show voltage indicator for wires and switches (not LEDs)
-    if (type !== 'led' && startDot && endDot) {
-        const startVoltage = getDotVoltage(startDot);
-        const endVoltage = getDotVoltage(endDot);
-        if (startVoltage !== null && endVoltage !== null) {
-            const voltage = Math.abs(startVoltage - endVoltage);
-            if (voltage > 0) {
-                const centerX = (startX + endX) / 2;
-                const centerY = (startY + endY) / 2;
-                ctx.save();
-                ctx.translate(centerX, centerY);
-                ctx.fillStyle = '#000000';
-                ctx.font = '10px Arial';
-                ctx.textAlign = 'center';
-                ctx.fillText(`${voltage.toFixed(1)}V`, 0, -10);
-                ctx.restore();
-            }
-        }
-    }
 }
 
 function drawPowerRails() {
