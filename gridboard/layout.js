@@ -2307,7 +2307,7 @@ function drawTransistor(x, y, id) {
     ctx.fillText('S', 5, channelLength/3 + 5);
     
     // Add type and state indicator
-    if (transistor?.conducting || true) {
+    if (transistor?.conducting) {
         ctx.fillStyle = '#FF0000';
         ctx.fillText('ON', 8, 3);
     }
