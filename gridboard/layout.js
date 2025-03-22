@@ -1335,22 +1335,29 @@ canvas.addEventListener('click', (e) => {
                 
                 // Rebuild all connections
                 lines.forEach(l => {
-                        const startIndex = dots.indexOf(l.start);
-                        const endIndex = dots.indexOf(l.end);
-                        
-                        if (startIndex !== -1 && endIndex !== -1) {
-                            if (l.type === 'wire') {
-                                connectDots(startIndex, endIndex);
-                            } else if (l.type === 'switch_nc' && !switches.get(getSwitchId(l.start, l.end))?.pressed) {
-                                connectDots(startIndex, endIndex);
-                            } else if (l.type === 'switch_no' && switches.get(getSwitchId(l.start, l.end))?.pressed) {
-                                connectDots(startIndex, endIndex);
+                    const startIndex = dots.indexOf(l.start);
+                    const endIndex = dots.indexOf(l.end);
+                    
+                    if (startIndex !== -1 && endIndex !== -1) {
+                        if (l.type === 'wire') {
+                            connectDots(startIndex, endIndex);
+                        } else if (l.type === 'switch_nc' && !switches.get(getSwitchId(l.start, l.end))?.pressed) {
+                            connectDots(startIndex, endIndex);
+                        } else if (l.type === 'switch_no' && switches.get(getSwitchId(l.start, l.end))?.pressed) {
+                            connectDots(startIndex, endIndex);
                         }
                     }
                 });
                 
-                rebuildAllConnections();
+                // Reset all dot voltages
+                dots.forEach(dot => {
+                    dot.voltage = null;
+                });
                 
+                // Recalculate voltages
+                calculateCircuitValues();
+                
+                // Redraw the grid
                 drawGrid();
                 return;
             }
