@@ -925,14 +925,13 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
         return;
     }
 
-    // Show voltage indicator if we have a voltage
-    if (startDot && endDot) {
+    // Only show voltage indicator for wires and switches (not LEDs)
+    if (type !== 'led' && startDot && endDot) {
         const startVoltage = getDotVoltage(startDot);
         const endVoltage = getDotVoltage(endDot);
         if (startVoltage !== null && endVoltage !== null) {
             const voltage = Math.abs(startVoltage - endVoltage);
             if (voltage > 0) {
-                // Draw voltage indicator
                 const centerX = (startX + endX) / 2;
                 const centerY = (startY + endY) / 2;
                 ctx.save();
