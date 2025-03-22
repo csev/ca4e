@@ -19,7 +19,7 @@ const CELL_HEIGHT = (CANVAS_HEIGHT - 2 * PADDING - CENTER_GAP) / (GRID_ROWS - 1)
 
 // Store dots and lines
 const dots = [];
-const lines = [];
+let lines = [];
 let isDragging = false;
 let startDot = null;
 let currentMousePos = { x: 0, y: 0 };
@@ -40,6 +40,27 @@ let smokeParticles = [];
 // Add switch states tracking
 const switches = new Map(); // Map to track switch states (pressed or not)
 let nextSwitchId = 0;
+
+const transistors = new Map(); // Map to track transistor states (on or off)
+let nextTransistorId = 0;
+
+const transistorTerminals = new Map();
+
+// Update transistor characteristics to focus on switching behavior
+const TRANSISTOR_CHARACTERISTICS = {
+    nmos: {
+        vth: 2.0,          // Threshold voltage
+        onResistance: 100, // Resistance when ON (ohms)
+        offResistance: 1e6 // Resistance when OFF (mega ohm)
+    },
+    pmos: {
+        vth: 7.0,          // Threshold voltage (for 9V system)
+        onResistance: 100, 
+        offResistance: 1e6
+    },
+    channelLength: 30,  // Visual length of the channel
+    gateWidth: 20      // Visual width of the gate
+};
 
 // Add after the RESISTOR_COLORS constant
 const RESISTOR_VALUES = {
@@ -1229,8 +1250,7 @@ function drawGrid() {
     
     // Draw existing lines 
     lines.forEach(line => {
-            drawComponent(line.start.x, line.start.y, line.end.x, line.end.y, 
-                        line.type, line.start, line.end);
+        drawComponent(line.start.x, line.start.y, line.end.x, line.end.y, line.type, line.start, line.end);
     });
     
     
@@ -1267,6 +1287,12 @@ function drawGrid() {
         // Restore the context state
         ctx.restore();
     }
+    
+    // Draw transistors
+    transistors.forEach((transistor, id) => {
+        console.log('Drawing transistor:', transistor); // Debug log
+        drawTransistor(transistor.x, transistor.y, id);
+    });
 }
 
 function isNearDot(x, y, dot) {
@@ -1286,6 +1312,62 @@ canvas.addEventListener('mousedown', (e) => {
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
+    
+    // Handle delete mode first
+    if (deleteMode) {
+        // Check for transistors to delete
+        for (const [id, transistor] of transistors) {
+            const dx = x - transistor.x;
+            const dy = y - transistor.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < TRANSISTOR_CHARACTERISTICS.gateWidth) {
+                // Delete the transistor
+                transistors.delete(id);
+                transistorTerminals.delete(id);
+                
+                // Delete any connected wires
+                for (let i = lines.length - 1; i >= 0; i--) {
+                    if (lines[i].transistorConnection && 
+                        lines[i].transistorConnection.id === id) {
+                        lines.splice(i, 1);
+                    }
+                }
+                
+                // Turn off delete mode
+                deleteMode = false;
+                deleteModeButton.style.backgroundColor = '#4CAF50';
+                deleteModeButton.title = 'Delete Mode (Off)';
+                canvas.style.cursor = 'default';
+                
+                // Update display
+                drawGrid();
+                return;
+            }
+        }
+        return; // Exit if in delete mode, even if nothing was deleted
+    }
+    
+    // Handle transistor placement only if not in delete mode
+    const componentType = componentSelect.value;
+    if (componentType === 'nmos' || componentType === 'pmos') {
+        const id = nextTransistorId++;
+        transistors.set(id, {
+            x: x,
+            y: y,
+            type: componentType,
+            conducting: false
+        });
+        
+        transistorTerminals.set(id, {
+            gate: { x: x - TRANSISTOR_CHARACTERISTICS.gateWidth, y: y },
+            drain: { x: x, y: y - TRANSISTOR_CHARACTERISTICS.channelLength/2 },
+            source: { x: x, y: y + TRANSISTOR_CHARACTERISTICS.channelLength/2 }
+        });
+        
+        drawGrid();
+        return;
+    }
     
     if (deleteMode) {
         let componentDeleted = false;
@@ -1524,7 +1606,6 @@ canvas.addEventListener('contextmenu', (e) => {
     const y = e.clientY - rect.top;
     
     console.log('Right click at:', x, y);
-    
     
     // Check for transistors first with a larger detection radius
     for (const [id, transistor] of transistors) {
@@ -2126,3 +2207,89 @@ debugDisplay.style.overflowY = 'auto';
 debugDisplay.style.display = 'none';  // Keep this as 'none'
 debugDisplay.style.visibility = 'hidden';  // Add visibility hidden to ensure it's not visible
 document.body.appendChild(debugDisplay);
+
+// Add drawTransistor function
+function drawTransistor(x, y, id) {
+    const { channelLength, gateWidth } = TRANSISTOR_CHARACTERISTICS;
+    const transistor = transistors.get(id);
+    const isConnecting = transistor?.conducting;
+    const isPMOS = transistor?.type === 'pmos';
+    
+    // Save context
+    ctx.save();
+    
+    // Translate to transistor center
+    ctx.translate(x, y);
+
+    // Add opaque background circle
+    const circleRadius = Math.max(channelLength, gateWidth) * 0.7;
+    ctx.beginPath();
+    ctx.arc(0, 0, circleRadius, 0, Math.PI * 2);
+    ctx.fillStyle = '#ff0000'; // Solid red
+    ctx.fill();
+    
+    // Draw drain (top)
+    ctx.beginPath();
+    ctx.moveTo(0, -channelLength/2);
+    ctx.lineTo(0, -channelLength/6);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Draw source (bottom)
+    ctx.beginPath();
+    ctx.moveTo(0, channelLength/6);
+    ctx.lineTo(0, channelLength/2);
+    ctx.stroke();
+    
+    // Draw channel with conducting state indication
+    ctx.beginPath();
+    ctx.moveTo(0, -channelLength/6);
+    ctx.lineTo(0, channelLength/6);
+    ctx.strokeStyle = isConnecting ? '#4CAF50' : '#666';
+    ctx.lineWidth = 3;
+    ctx.stroke();
+    
+    // Draw gate
+    ctx.beginPath();
+    ctx.moveTo(-gateWidth/2, 0);
+    ctx.lineTo(gateWidth/2, 0);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Draw gate terminal
+    ctx.beginPath();
+    ctx.moveTo(-gateWidth/2, 0);
+    ctx.lineTo(-gateWidth, 0);
+    ctx.stroke();
+    
+    // Add PMOS circle at gate if PMOS
+    if (isPMOS) {
+        ctx.beginPath();
+        ctx.arc(-gateWidth/2, 0, 3, 0, Math.PI * 2);
+        ctx.fillStyle = '#000';
+        ctx.fill();
+    }
+    
+    // Add terminal indicators
+    ctx.fillStyle = '#000';
+    ctx.font = '10px Arial';
+    ctx.textAlign = 'left';
+    ctx.fillText('G', -gateWidth - 15, 4);
+    ctx.fillText('D', 5, -channelLength/2 + 4);
+    ctx.fillText('S', 5, channelLength/2 + 4);
+    
+    // Add type and state indicator
+    if (transistor?.conducting) {
+        ctx.fillStyle = '#4CAF50';
+        ctx.fillText('ON', -gateWidth/2 - 10, -10);
+    }
+    ctx.fillStyle = '#666';
+    ctx.fillText(isPMOS ? 'P' : 'N', -gateWidth/2 - 10, 15);
+    
+    // Restore context
+    ctx.restore();
+}
+
+

@@ -50,6 +50,33 @@
             max-width: 800px;
             display: none;
         }
+        /* Update placement instructions styles */
+        .placement-instructions {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            font-size: 0.9em;
+            display: none;
+            max-width: 800px;
+        }
+        /* Style for the instruction list */
+        .placement-instructions ul {
+            margin: 5px 0 10px 20px;
+            padding-left: 0;
+        }
+        .placement-instructions li {
+            margin: 5px 0;
+        }
+        /* Add styles for transistor options */
+        optgroup.transistors {
+            font-style: normal;
+            color: #333;
+        }
+        optgroup.transistors option {
+            padding-left: 20px;
+        }
     </style>
 </head>
 <body>
@@ -57,16 +84,52 @@
         <label>Component:</label>
         <select id="componentType">
             <option value="wire">Wire</option>
-            <option value="resistor_1k">Resistor (1kΩ)</option>
-            <option value="resistor_10k">Resistor (10kΩ)</option>
-            <option value="led">LED</option>
-            <option value="switch_no">Switch (Normally Open)</option>
-            <option value="switch_nc">Switch (Normally Closed)</option>
+            <optgroup label="Basic Components" class="basic-components">
+                <option value="resistor_1k">Resistor (1kΩ)</option>
+                <option value="resistor_10k">Resistor (10kΩ)</option>
+                <option value="led">LED</option>
+                <option value="switch_no">Switch (Normally Open)</option>
+                <option value="switch_nc">Switch (Normally Closed)</option>
+            </optgroup>
+            <optgroup label="Transistors" class="transistors">
+                <option value="nmos">NMOS Transistor</option>
+                <option value="pmos">PMOS Transistor</option>
+            </optgroup>
         </select>
         <button id="showCircuit">Show Circuit Connections</button>
     </div>
+
     <canvas id="gridCanvas"></canvas>
+    
+    <!-- Moved placement instructions below canvas -->
+    <div id="transistorInstructions" class="placement-instructions">
+        <strong>Transistor Placement Instructions:</strong>
+        <ol>
+            <li>Click to place the transistor body</li>
+            <li>Connect wires to the terminals:</li>
+            <ul>
+                <li>G: Gate (control input)</li>
+                <li>D: Drain (top)</li>
+                <li>S: Source (bottom)</li>
+            </ul>
+            <li>For NMOS: ON when Gate is HIGH</li>
+            <li>For PMOS: ON when Gate is LOW</li>
+        </ol>
+    </div>
+
     <div id="circuitInfo"></div>
+
+    <script>
+        // Add listener to show/hide transistor instructions
+        document.getElementById('componentType').addEventListener('change', function(e) {
+            const instructions = document.getElementById('transistorInstructions');
+            if (e.target.value === 'nmos' || e.target.value === 'pmos') {
+                instructions.style.display = 'block';
+            } else {
+                instructions.style.display = 'none';
+            }
+        });
+    </script>
     <script src="circuit_emulator.js"></script>
     <script src="layout.js"></script>
 </body>
