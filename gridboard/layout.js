@@ -37,6 +37,15 @@ let meltingProgress = 0;
 let meltingAnimationId = null;
 let smokeParticles = [];
 
+
+// Add this with other constants at the top of the file
+const LED_CHARACTERISTICS = {
+    vf: 2.0,          // Forward voltage drop in volts (typical for red LED)
+    minCurrent: 0.001, // Minimum visible current in amperes (1mA)
+    maxCurrent: 0.020, // Maximum current in amperes (20mA)
+    resistance: 100    // Series resistance after forward voltage drop (ohms)
+};
+
 // Add switch states tracking
 const switches = new Map(); // Map to track switch states (pressed or not)
 let nextSwitchId = 0;
@@ -60,20 +69,6 @@ const TRANSISTOR_CHARACTERISTICS = {
     },
     channelLength: 40,  // Visual length of the channel
     gateWidth: 30      // Visual width of the gate
-};
-
-// Add after the RESISTOR_COLORS constant
-const RESISTOR_VALUES = {
-    'resistor_1k': 1000,    // 1kΩ
-    'resistor_10k': 10000   // 10kΩ
-};
-
-// Add LED electrical characteristics near RESISTOR_VALUES
-const LED_CHARACTERISTICS = {
-    vf: 2.0,          // Forward voltage drop in volts (typical for red LED)
-    minCurrent: 0.001, // Minimum visible current in amperes (1mA)
-    maxCurrent: 0.020, // Maximum current in amperes (20mA)
-    resistance: 100    // Series resistance after forward voltage drop (ohms)
 };
 
 // Add after the existing state variables at the top
@@ -465,20 +460,6 @@ for (let row = 0; row < GRID_ROWS; row++) {
 // Add to the end of the initialize dots section:
 initializeConnections();
 
-// Resistor color codes
-const RESISTOR_COLORS = {
-    0: '#000000', // Black
-    1: '#964B00', // Brown
-    2: '#FF0000', // Red
-    3: '#FFA500', // Orange
-    4: '#FFFF00', // Yellow
-    5: '#00FF00', // Green
-    6: '#0000FF', // Blue
-    7: '#800080', // Violet
-    8: '#808080', // Gray
-    9: '#FFFFFF'  // White
-};
-
 // Add helper function for color interpolation
 function interpolateColor(voltage) {
     if (voltage === null) return '#333333';  // Default gray for no voltage
@@ -648,12 +629,10 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
             const voltageDiff = Math.abs(startVoltage - endVoltage);
             actualVoltage = voltageDiff;
             
-            // Check if voltage is sufficient to overcome forward voltage
             if (voltageDiff >= LED_CHARACTERISTICS.vf) {
-                // Calculate current based on remaining voltage after Vf
                 const remainingVoltage = voltageDiff - LED_CHARACTERISTICS.vf;
                 current = remainingVoltage / LED_CHARACTERISTICS.resistance;
-            isProperlyConnected = current >= LED_CHARACTERISTICS.minCurrent;
+                isProperlyConnected = current >= LED_CHARACTERISTICS.minCurrent;
             }
         }
     }
@@ -669,7 +648,7 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
     ctx.lineWidth = 2;
     ctx.stroke();
     
-    // Save the current context state
+    // Save context
     ctx.save();
     
     // Translate to LED center
@@ -734,19 +713,6 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
     ctx.lineTo(radius * 1.8, 0);
     ctx.stroke();
     
-    // Add electrical values display with background
-    if (isProperlyConnected) {
-        // Add white background for better visibility
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.fillRect(-20, -radius - 25, 40, 20);
-        
-        ctx.fillStyle = '#000000';
-        ctx.font = '10px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(`${(current * 1000).toFixed(1)}mA`, 0, -radius - 15);
-        ctx.fillText(`Vf=${LED_CHARACTERISTICS.vf}V`, 0, -radius - 5);
-    }
-    
     // Add a subtle inner shadow
     ctx.beginPath();
     ctx.arc(0, 0, radius * 0.9, 0, Math.PI * 2);
@@ -754,7 +720,7 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
     ctx.lineWidth = radius * 0.2;
     ctx.stroke();
     
-    // Restore the context state
+    // Restore context
     ctx.restore();
 }
 
@@ -942,28 +908,6 @@ function drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPresse
 }
 
 function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot = null) {
-    // Calculate voltage across component
-    let voltage = 0;
-    
-    // For resistors, use the calculated voltage_drop if available
-    if (type.startsWith('resistor_')) {
-        // Find the matching resistor in lines array
-        const resistor = lines.find(line => 
-            line.type === type && 
-            line.start === startDot && 
-            line.end === endDot
-        );
-        if (resistor && resistor.voltage_drop !== undefined) {
-            voltage = resistor.voltage_drop;
-        }
-    } else if (startDot && endDot) {
-        const startVoltage = getDotVoltage(startDot);
-        const endVoltage = getDotVoltage(endDot);
-        if (startVoltage !== null && endVoltage !== null) {
-            voltage = Math.abs(startVoltage - endVoltage);
-        }
-    }
-
     if (type === 'led') {
         drawLED(startX, startY, endX, endY, startDot, endDot);
     } else if (type === 'wire') {
@@ -978,57 +922,28 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
         const switchId = getSwitchId(startDot, endDot);
         const isPressed = switches.get(switchId)?.pressed || false;
         drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPressed);
-        return; // Skip voltage indicator for switches
-    } else if (type === 'resistor_1k' || type === 'resistor_10k') {
-        drawLine(startX, startY, endX, endY, type);
+        return;
     }
 
-    // Draw voltage indicator if we have a voltage to display
-    if (voltage > 0) {
-        const centerX = (startX + endX) / 2;
-        const centerY = (startY + endY) / 2;
-        
-        // Calculate angle of the component
-        const dx = endX - startX;
-        const dy = endY - startY;
-        const angle = Math.atan2(dy, dx);
-        
-        // Save context
-        ctx.save();
-        
-        // Translate to component center and rotate, then move up by 30 pixels (increased from 20)
-        ctx.translate(centerX, centerY);
-        ctx.rotate(angle);
-        ctx.translate(0, -30); // Increased distance from center
-        
-        // Draw background for voltage text
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.fillRect(-20, -10, 40, 20);
-        
-        // Draw voltage text
-        ctx.fillStyle = '#000000';
-        ctx.font = '10px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(`${voltage.toFixed(1)}V`, 0, 4);
-        
-        // If it's a resistor, also show current
-        if (type.startsWith('resistor_')) {
-            const resistor = lines.find(line => 
-                line.type === type && 
-                line.start === startDot && 
-                line.end === endDot
-            );
-            if (resistor && resistor.current) {
-                ctx.translate(0, 15); // Move down for current display
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                ctx.fillRect(-20, -10, 40, 20);
+    // Show voltage indicator if we have a voltage
+    if (startDot && endDot) {
+        const startVoltage = getDotVoltage(startDot);
+        const endVoltage = getDotVoltage(endDot);
+        if (startVoltage !== null && endVoltage !== null) {
+            const voltage = Math.abs(startVoltage - endVoltage);
+            if (voltage > 0) {
+                // Draw voltage indicator
+                const centerX = (startX + endX) / 2;
+                const centerY = (startY + endY) / 2;
+                ctx.save();
+                ctx.translate(centerX, centerY);
                 ctx.fillStyle = '#000000';
-                ctx.fillText(`${(resistor.current * 1000).toFixed(1)}mA`, 0, 4);
+                ctx.font = '10px Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(`${voltage.toFixed(1)}V`, 0, -10);
+                ctx.restore();
             }
         }
-        
-        // Restore context
-        ctx.restore();
     }
 }
 
@@ -1748,11 +1663,7 @@ function getComponentInfo(line) {
     const startPoint = getPointLabel(line.start);
     const endPoint = getPointLabel(line.end);
     
-    if (line.type === 'resistor_1k') {
-        return `1kΩ Resistor from ${startPoint} to ${endPoint}`;
-    } else if (line.type === 'resistor_10k') {
-        return `10kΩ Resistor from ${startPoint} to ${endPoint}`;
-    } else if (line.type === 'led') {
+    if (line.type === 'led') {
         return `LED from ${startPoint} (anode/+) to ${endPoint} (cathode/-)`;
     } else if (line.type === 'wire') {
         return `Wire from ${startPoint} to ${endPoint}`;
@@ -1766,13 +1677,12 @@ function getComponentInfo(line) {
 }
 
 function showCircuitConnections() {
-    const circuitInfo = document.getElementById('circuitInfo');
     let html = '<h3>Circuit Connections:</h3>';
     
-    // Show regular components
+    // Show components
     if (lines.length > 0) {
         html += '<h4>Components:</h4><ul>';
-        lines.forEach((line, index) => {
+        lines.forEach(line => {
             const info = getComponentInfo(line);
             if (info) {
                 html += `<li>${info}</li>`;
@@ -2375,5 +2285,6 @@ function drawTransistor(x, y, id) {
     // Restore context
     ctx.restore();
 }
+
 
 
