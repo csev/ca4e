@@ -58,8 +58,8 @@ const TRANSISTOR_CHARACTERISTICS = {
         onResistance: 100, 
         offResistance: 1e6
     },
-    channelLength: 30,  // Visual length of the channel
-    gateWidth: 20      // Visual width of the gate
+    channelLength: 40,  // Visual length of the channel
+    gateWidth: 30      // Visual width of the gate
 };
 
 // Add after the RESISTOR_COLORS constant
@@ -2225,12 +2225,16 @@ function drawTransistor(x, y, id) {
     const circleRadius = Math.max(channelLength, gateWidth) * 0.7;
     ctx.beginPath();
     ctx.arc(0, 0, circleRadius, 0, Math.PI * 2);
-    ctx.fillStyle = '#ff0000'; // Solid red
+    if (isPMOS) {
+        ctx.fillStyle = '#3CB371'; // Solid green
+    } else {
+        ctx.fillStyle = '#FFA500'; // Solid Orange
+    }
     ctx.fill();
     
     // Draw drain (top)
     ctx.beginPath();
-    ctx.moveTo(0, -channelLength/2);
+    ctx.moveTo(0, -channelLength/2-5);
     ctx.lineTo(0, -channelLength/6);
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 2;
@@ -2239,21 +2243,43 @@ function drawTransistor(x, y, id) {
     // Draw source (bottom)
     ctx.beginPath();
     ctx.moveTo(0, channelLength/6);
-    ctx.lineTo(0, channelLength/2);
+    ctx.lineTo(0, channelLength/2+5);
     ctx.stroke();
     
-    // Draw channel with conducting state indication
+    // Draw upper left leg
     ctx.beginPath();
     ctx.moveTo(0, -channelLength/6);
-    ctx.lineTo(0, channelLength/6);
+    ctx.lineTo(-channelLength/6, -channelLength/6);
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Draw lower left leg
+    ctx.beginPath();
+    ctx.moveTo(0, channelLength/6);
+    ctx.lineTo(-channelLength/6, channelLength/6);
+    ctx.lineWidth = 3;
+    ctx.stroke();
+
+    // Draw connected gate with indication of conducting state
+    ctx.beginPath();
+    ctx.moveTo(-channelLength/6, -channelLength/6);
+    ctx.lineTo(-channelLength/6, channelLength/6);
     ctx.strokeStyle = isConnecting ? '#4CAF50' : '#666';
     ctx.lineWidth = 3;
     ctx.stroke();
-    
+
+    // Draw  gate connection
+    ctx.beginPath();
+    ctx.moveTo((-channelLength/6)-5, -channelLength/6);
+    ctx.lineTo((-channelLength/6)-5, channelLength/6);
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
     // Draw gate
     ctx.beginPath();
-    ctx.moveTo(-gateWidth/2, 0);
-    ctx.lineTo(gateWidth/2, 0);
+    ctx.moveTo((-channelLength/6)-15, 0);
+    ctx.lineTo((-channelLength/6)-5, 0);
     ctx.strokeStyle = '#000';
     ctx.lineWidth = 2;
     ctx.stroke();
@@ -2261,7 +2287,7 @@ function drawTransistor(x, y, id) {
     // Draw gate terminal
     ctx.beginPath();
     ctx.moveTo(-gateWidth/2, 0);
-    ctx.lineTo(-gateWidth, 0);
+    ctx.lineTo(-gateWidth+5, 0);
     ctx.stroke();
     
     // Add PMOS circle at gate if PMOS
@@ -2276,17 +2302,17 @@ function drawTransistor(x, y, id) {
     ctx.fillStyle = '#000';
     ctx.font = '10px Arial';
     ctx.textAlign = 'left';
-    ctx.fillText('G', -gateWidth - 15, 4);
-    ctx.fillText('D', 5, -channelLength/2 + 4);
-    ctx.fillText('S', 5, channelLength/2 + 4);
+    ctx.fillText('G', -gateWidth+7, -7);
+    ctx.fillText('D', 5, -channelLength/3);
+    ctx.fillText('S', 5, channelLength/3 + 5);
     
     // Add type and state indicator
-    if (transistor?.conducting) {
-        ctx.fillStyle = '#4CAF50';
-        ctx.fillText('ON', -gateWidth/2 - 10, -10);
+    if (transistor?.conducting || true) {
+        ctx.fillStyle = '#FF0000';
+        ctx.fillText('ON', 8, 3);
     }
-    ctx.fillStyle = '#666';
-    ctx.fillText(isPMOS ? 'P' : 'N', -gateWidth/2 - 10, 15);
+    ctx.fillStyle = '#000';
+    ctx.fillText(isPMOS ? 'P' : 'N', -3, 3.5);
     
     // Restore context
     ctx.restore();
