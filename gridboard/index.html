@@ -36,6 +36,14 @@
         .controls button:hover {
             background-color: #45a049;
         }
+        .controls select {
+            padding: 5px;
+            border-radius: 3px;
+            border: 1px solid #ccc;
+        }
+        .controls select option {
+            padding: 5px;
+        }
         canvas {
             background-color: white;
             border: 1px solid #ccc;
@@ -84,12 +92,12 @@
         <label>Component:</label>
         <select id="componentType">
             <option value="wire">Wire</option>
-            <optgroup label="Basic Components" class="basic-components">
+            <optgroup label="Basic Components">
                 <option value="led">LED</option>
                 <option value="switch_no">Switch (Normally Open)</option>
                 <option value="switch_nc">Switch (Normally Closed)</option>
             </optgroup>
-            <optgroup label="Transistors" class="transistors">
+            <optgroup label="Transistors">
                 <option value="nmos">NMOS Transistor</option>
                 <option value="pmos">PMOS Transistor</option>
             </optgroup>
