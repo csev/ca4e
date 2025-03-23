@@ -193,13 +193,19 @@ function initializeConnections() {
 
 // Connect two dots electrically
 function connectDots(index1, index2) {
-    // Get row and column for both dots
-    const { row: row1, col: col1 } = getRowCol(index1);
-    const { row: row2, col: col2 } = getRowCol(index2);
+    // Check if indices are valid
+    if (index1 === -1 || index2 === -1) return;
     
     // Get the initial sets
     const set1 = connections.get(index1);
     const set2 = connections.get(index2);
+    
+    // If either set doesn't exist, we can't make a connection
+    if (!set1 || !set2) return;
+    
+    // Get row and column for both dots
+    const { row: row1, col: col1 } = getRowCol(index1);
+    const { row: row2, col: col2 } = getRowCol(index2);
     
     // Create the merged set
     const mergedSet = new Set([...set1, ...set2]);
@@ -873,7 +879,6 @@ function drawGrid() {
     
     // Draw transistors
     transistors.forEach((transistor, id) => {
-        console.log('Drawing transistor:', transistor); // Debug log
         drawTransistor(transistor.x, transistor.y, id);
     });
 }
@@ -902,237 +907,125 @@ function isNearSwitch(x, y) {
     return false;
 }
 
+// Add helper function to find closest transistor terminal
+function findClosestTransistorTerminal(x, y) {
+    const detectionRadius = 10; // Detection radius for terminals
+    
+    for (const [id, transistor] of transistors) {
+        const terminals = transistorTerminals.get(id);
+        if (!terminals) continue;
+        
+        // Check each terminal (gate, drain, source)
+        for (const [type, pos] of Object.entries(terminals)) {
+            const distance = Math.sqrt((x - pos.x) ** 2 + (y - pos.y) ** 2);
+            if (distance < detectionRadius) {
+                return { id, type, pos, transistor };
+            }
+        }
+    }
+    return null;
+}
+
 // Update the mousedown handler
 canvas.addEventListener('mousedown', (e) => {
-    // Only handle left clicks
-    if (e.button !== 0) return;
+    if (e.button !== 0) return; // Only handle left clicks
     
     const rect = canvas.getBoundingClientRect();
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    // Check if we're clicking a switch first
-    if (isNearSwitch(x, y)) {
-        return; // Don't do anything else if we're clicking a switch
-    }
-
-    // Handle delete mode
+    // Handle delete mode first
     if (deleteMode) {
-        let componentDeleted = false;
-
-        // Check for transistors to delete
+        // Check for transistors
         for (const [id, transistor] of transistors) {
-            const dx = x - transistor.x;
-            const dy = y - transistor.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-            
-            if (distance < TRANSISTOR_CHARACTERISTICS.gateWidth) {
+            const centerDist = Math.sqrt((x - transistor.x) ** 2 + (y - transistor.y) ** 2);
+            if (centerDist < 50) {
+                // Remove all wires connected to this transistor
+                for (let i = lines.length - 1; i >= 0; i--) {
+                    if (lines[i].transistorConnection && lines[i].transistorConnection.id === id) {
+                        lines.splice(i, 1);
+                    }
+                }
                 // Delete the transistor
                 transistors.delete(id);
                 transistorTerminals.delete(id);
-                
-                // Delete any connected wires
-                for (let i = lines.length - 1; i >= 0; i--) {
-                    if (lines[i].transistorConnection && 
-                        lines[i].transistorConnection.id === id) {
-                        lines.splice(i, 1);
-                    }
-                }
-                componentDeleted = true;
-                break;
+                initializeConnections();
+                resetDotVoltages();
+                rebuildAllConnections();
+                drawGrid();
+                // Turn off delete mode after successful deletion
+                turnOffDeleteMode();
+                return;
             }
         }
 
-        // If no transistor was deleted, check for other components
-        if (!componentDeleted) {
-            for (let i = lines.length - 1; i >= 0; i--) {
-                const line = lines[i];
-                
-                // For wires, check if click is near any point along the wire
-                if (line.type === 'wire') {
-                    // Calculate distance from click to wire line segment
-                    const dx = line.end.x - line.start.x;
-                    const dy = line.end.y - line.start.y;
-                    const length = Math.sqrt(dx * dx + dy * dy);
-                    
-                    // Calculate normalized vector along wire
-                    const nx = dx / length;
-                    const ny = dy / length;
-                    
-                    // Calculate vector from start point to click
-                    const px = x - line.start.x;
-                    const py = y - line.start.y;
-                    
-                    // Calculate projection of click point onto wire line
-                    const projection = px * nx + py * ny;
-                    
-                    // If projection is between 0 and wire length, calculate perpendicular distance
-                    if (projection >= 0 && projection <= length) {
-                        // Calculate perpendicular distance from click to wire
-                        const perpX = line.start.x + projection * nx;
-                        const perpY = line.start.y + projection * ny;
-                        const distance = Math.sqrt((x - perpX) ** 2 + (y - perpY) ** 2);
-                        
-                        if (distance < 10) {  // Detection radius for wires
-                            lines.splice(i, 1);
-                            componentDeleted = true;
-                            break;
-                        }
-                    }
-                } else {
-                    // For other components, check distance to center point
-                    const centerX = (line.start.x + line.end.x) / 2;
-                    const centerY = (line.start.y + line.end.y) / 2;
-                    const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
-                    
-                    if (distance < 20) {  // Detection radius for components
-                        lines.splice(i, 1);
-                        componentDeleted = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        // If anything was deleted, reset and recalculate
-        if (componentDeleted) {
-            deleteMode = false;
-            deleteModeButton.style.backgroundColor = '#4CAF50';
-            deleteModeButton.title = 'Delete Mode (Off)';
-            canvas.style.cursor = 'default';
+        // Check for other components
+        for (let i = lines.length - 1; i >= 0; i--) {
+            const line = lines[i];
+            const centerX = (line.start.x + line.end.x) / 2;
+            const centerY = (line.start.y + line.end.y) / 2;
+            const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
             
-            // Reset all connections and voltages
-            initializeConnections();
-            resetDotVoltages();
-            rebuildAllConnections();
-            drawGrid();
+            if (distance < 20) {
+                lines.splice(i, 1);
+                initializeConnections();
+                resetDotVoltages();
+                rebuildAllConnections();
+                drawGrid();
+                // Turn off delete mode after successful deletion
+                turnOffDeleteMode();
+                return;
+            }
         }
         return;
     }
-    
+
+    // Check if we're clicking a switch first
+    if (isNearSwitch(x, y)) {
+        return;
+    }
+
     // Handle transistor placement
-    const componentType = componentSelect.value;
-    if (componentType === 'nmos' || componentType === 'pmos') {
+    if (componentSelect.value === 'nmos' || componentSelect.value === 'pmos') {
         const id = nextTransistorId++;
         transistors.set(id, {
             x: x,
             y: y,
-            type: componentType,
+            type: componentSelect.value,
             conducting: false
         });
         
+        // Calculate terminal positions correctly
+        const { channelLength, gateWidth } = TRANSISTOR_CHARACTERISTICS;
+        const circleRadius = Math.max(channelLength, gateWidth) * 0.7;
+        
+        // Set up the transistor terminals with correct positions
         transistorTerminals.set(id, {
-            gate: { x: x - TRANSISTOR_CHARACTERISTICS.gateWidth, y: y },
-            drain: { x: x, y: y - TRANSISTOR_CHARACTERISTICS.channelLength/2 },
-            source: { x: x, y: y + TRANSISTOR_CHARACTERISTICS.channelLength/2 }
+            gate: { x: x - circleRadius, y: y },
+            drain: { x: x, y: y - circleRadius },
+            source: { x: x, y: y + circleRadius }
         });
         
-        // Reset placement state
-        placingTransistor = false;
-        currentTransistor = null;
-        
         drawGrid();
         return;
     }
-    
-    if (deleteMode) {
-        let componentDeleted = false;
-        
-        for (let i = lines.length - 1; i >= 0; i--) {
-            const line = lines[i];
-            
-            // For wires, check if click is near any point along the wire
-            if (line.type === 'wire') {
-                // Calculate distance from click to wire line segment
-                const dx = line.end.x - line.start.x;
-                const dy = line.end.y - line.start.y;
-                const length = Math.sqrt(dx * dx + dy * dy);
-                
-                // Calculate normalized vector along wire
-                const nx = dx / length;
-                const ny = dy / length;
-                
-                // Calculate vector from start point to click
-                const px = x - line.start.x;
-                const py = y - line.start.y;
-                
-                // Calculate projection of click point onto wire line
-                const projection = px * nx + py * ny;
-                
-                // If projection is between 0 and wire length, calculate perpendicular distance
-                if (projection >= 0 && projection <= length) {
-                    // Calculate perpendicular distance from click to wire
-                    const perpX = line.start.x + projection * nx;
-                    const perpY = line.start.y + projection * ny;
-                    const distance = Math.sqrt((x - perpX) ** 2 + (y - perpY) ** 2);
-                    
-                    if (distance < 10) {  // Increased detection radius for wires
-                        lines.splice(i, 1);
-                        componentDeleted = true;
-                        break;
-                    }
-                }
-            } else {
-                // For other components, check distance to center point
-                const centerX = (line.start.x + line.end.x) / 2;
-                const centerY = (line.start.y + line.end.y) / 2;
-                const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
-                
-                if (distance < 20) {
-                    lines.splice(i, 1);
-                    componentDeleted = true;
-                    break;
-                }
-            }
-        }
-        
-        // If we deleted something, reset and recalculate
-        if (componentDeleted) {
-            deleteMode = false;
-            deleteModeButton.style.backgroundColor = '#4CAF50';
-            deleteModeButton.title = 'Delete Mode (Off)';
-            canvas.style.cursor = 'default';
-            
-            // Reset all connections and voltages
-            initializeConnections();
-            resetDotVoltages();
-            rebuildAllConnections();
-            drawGrid();
-        }
-        return;
-    }
-    
-    // First check if we clicked on a switch
-    let clickedSwitch = false;
-    lines.forEach(line => {
-        if (line.type === 'switch_no' || line.type === 'switch_nc') {
-            // Calculate switch center
-            const dx = line.end.x - line.start.x;
-            const dy = line.end.y - line.start.y;
-            const switchCenterX = line.start.x + dx/2;
-            const switchCenterY = line.start.y + dy/2;
-            
-            // Check if click is near switch
-            const clickDist = Math.sqrt((x - switchCenterX)**2 + (y - switchCenterY)**2);
-            if (clickDist < 20) { // Click detection radius
-                clickedSwitch = true;
-            }
-        }
-    });
 
-    // If we clicked a switch
-    if (clickedSwitch) {
-        return;
+    // Check for transistor terminals when wire tool is selected
+    if (componentSelect.value === 'wire') {
+        const terminal = findClosestTransistorTerminal(x, y);
+        if (terminal) {
+            isDragging = true;
+            startDot = {
+                x: terminal.pos.x,
+                y: terminal.pos.y,
+                isTransistorTerminal: true,
+                transistorConnection: { id: terminal.id, type: terminal.type }
+            };
+            return;
+        }
     }
-    
-    if (componentSelect.value === 'transistor' && !currentTransistor) {
-        // Start placing a transistor
-        placingTransistor = true;
-        currentTransistor = { x, y };
-        drawGrid();
-        return;
-    }
-    
+
+    // Handle regular dot connections
     const dot = findClosestDot(x, y);
     if (dot) {
         isDragging = true;
@@ -1151,52 +1044,51 @@ canvas.addEventListener('mousemove', (e) => {
     }
 });
 
-// Modify the mouseup event listener
+// Update the mouseup handler
 canvas.addEventListener('mouseup', (e) => {
-    // Store current states before resetting
     const wasDragging = isDragging;
     const hadStartDot = startDot;
     
-    // Reset all dragging states immediately
     isDragging = false;
-    startDot = null;
     
     if (wasDragging && hadStartDot) {
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         
-        const endDot = findClosestDot(x, y);
+        // Check if we're ending on a transistor terminal
+        const endTerminal = findClosestTransistorTerminal(x, y);
+        let endDot;
+        
+        if (endTerminal) {
+            endDot = {
+                x: endTerminal.pos.x,
+                y: endTerminal.pos.y,
+                isTransistorTerminal: true,
+                transistorConnection: { id: endTerminal.id, type: endTerminal.type }
+            };
+        } else {
+            endDot = findClosestDot(x, y);
+        }
         
         if (endDot && hadStartDot !== endDot) {
-            // Check for short circuit before adding the wire
-            if (componentSelect.value === 'wire' && isShortCircuit(hadStartDot, endDot)) {
-                showWarningMessage();
-                // Create the wire temporarily to show it melting
-                const newLine = {
-                    start: hadStartDot,
-                    end: endDot,
-                    type: 'wire'
-                };
-                lines.push(newLine);
-                
-                // Start melting animation
-                const wireIndex = lines.length - 1;
-                animateWireMelting(wireIndex);
-            } else {
-                // Add the component normally
             const newLine = {
                 start: hadStartDot,
                 end: endDot,
                 type: componentSelect.value
             };
-                lines.push(newLine);
-                
-                // Reinitialize and rebuild all connections
-                initializeConnections();
-                rebuildAllConnections();
-                drawGrid();
+            
+            // Add transistor connection information
+            if (hadStartDot.isTransistorTerminal) {
+                newLine.transistorConnection = hadStartDot.transistorConnection;
+            } else if (endDot.isTransistorTerminal) {
+                newLine.transistorConnection = endDot.transistorConnection;
             }
+            
+            lines.push(newLine);
+            initializeConnections();
+            rebuildAllConnections();
+            drawGrid();
         }
     }
     
@@ -1276,16 +1168,10 @@ canvas.addEventListener('contextmenu', (e) => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
     
-    console.log('Right click at:', x, y);
-    
-    // Check for transistors first with a larger detection radius
+    // Check for transistors
     for (const [id, transistor] of transistors) {
-        console.log('Checking transistor:', id, 'at', transistor.x, transistor.y);
         const centerDist = Math.sqrt((x - transistor.x) ** 2 + (y - transistor.y) ** 2);
-        console.log('Distance to transistor:', centerDist);
-        
-        if (centerDist < 50) { // Much larger radius for testing
-            console.log('Deleting transistor:', id);
+        if (centerDist < 50) {
             // Remove all wires connected to this transistor
             for (let i = lines.length - 1; i >= 0; i--) {
                 if (lines[i].transistorConnection && lines[i].transistorConnection.id === id) {
@@ -1294,34 +1180,33 @@ canvas.addEventListener('contextmenu', (e) => {
             }
             // Delete the transistor
             transistors.delete(id);
-            // Reinitialize connections after deleting
+            transistorTerminals.delete(id);
             initializeConnections();
             resetDotVoltages();
             rebuildAllConnections();
             drawGrid();
+            // Turn off delete mode if it was on
+            turnOffDeleteMode();
             return;
         }
     }
 
-    // Check for other components (wires, LEDs, switches)
+    // Check for other components
     for (let i = lines.length - 1; i >= 0; i--) {
         const line = lines[i];
-        // Calculate center point of the component
         const centerX = (line.start.x + line.end.x) / 2;
         const centerY = (line.start.y + line.end.y) / 2;
-        
-        // Calculate distance from click to component center
         const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
         
-        // If click is close enough to component, delete it
-        if (distance < 20) { // Detection radius for components
+        if (distance < 20) {
             lines.splice(i, 1);
-            // Reset all connections and voltages
             initializeConnections();
             resetDotVoltages();
             rebuildAllConnections();
             drawGrid();
-            break;
+            // Turn off delete mode if it was on
+            turnOffDeleteMode();
+            return;
         }
     }
 });
@@ -1488,17 +1373,30 @@ function rebuildAllConnections() {
     // Handle regular wire connections first
     lines.forEach(line => {
         if (line.type === 'wire') {
-            connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
+            const startIndex = line.start.isTransistorTerminal ? -1 : dots.indexOf(line.start);
+            const endIndex = line.end.isTransistorTerminal ? -1 : dots.indexOf(line.end);
+            
+            // Only connect if both points are regular dots
+            if (startIndex !== -1 && endIndex !== -1) {
+                connectDots(startIndex, endIndex);
+            }
         }
     });
     
     // Handle switch connections
     lines.forEach(line => {
-            if (line.type === 'switch_nc' && !switches.get(getSwitchId(line.start, line.end))?.pressed) {
-                connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
-            } else if (line.type === 'switch_no' && switches.get(getSwitchId(line.start, line.end))?.pressed) {
-                connectDots(dots.indexOf(line.start), dots.indexOf(line.end));
+        if (line.type === 'switch_no' || line.type === 'switch_nc') {
+            const startIndex = dots.indexOf(line.start);
+            const endIndex = dots.indexOf(line.end);
+            
+            if (startIndex !== -1 && endIndex !== -1) {
+                if (line.type === 'switch_nc' && !switches.get(getSwitchId(line.start, line.end))?.pressed) {
+                    connectDots(startIndex, endIndex);
+                } else if (line.type === 'switch_no' && switches.get(getSwitchId(line.start, line.end))?.pressed) {
+                    connectDots(startIndex, endIndex);
+                }
             }
+        }
     });
     
     calculateCircuitValues();
@@ -1521,12 +1419,96 @@ function calculateCircuitValues() {
     // Calculate intermediate voltages
     const voltageMap = calculateIntermediateVoltages();
     
+    // Debug header for transistor calculations
+    console.log('\nTransistor State Calculations:');
+    console.log('------------------------------');
+    
+    // Update transistor states based on gate voltages
+    for (const [id, transistor] of transistors) {
+        console.log(`\nTransistor #${id} (${transistor.type.toUpperCase()}):`);
+        
+        const terminals = transistorTerminals.get(id);
+        if (!terminals) {
+            console.log('  No terminals found for transistor');
+            continue;
+        }
+        
+        // Find connected wires to get gate voltage
+        let gateVoltage = null;
+        let sourceVoltage = null;
+        let drainVoltage = null;
+        
+        // Find wires connected to terminals
+        lines.forEach(line => {
+            if (line.transistorConnection && line.transistorConnection.id === id) {
+                const terminal = line.transistorConnection.type;
+                const otherEnd = line.start.isTransistorTerminal ? line.end : line.start;
+                const voltage = getDotVoltage(otherEnd, voltageMap);
+                
+                switch(terminal) {
+                    case 'gate':
+                        gateVoltage = voltage;
+                        console.log(`  Gate voltage: ${voltage !== null ? voltage.toFixed(1) + 'V' : 'disconnected'}`);
+                        break;
+                    case 'source':
+                        sourceVoltage = voltage;
+                        console.log(`  Source voltage: ${voltage !== null ? voltage.toFixed(1) + 'V' : 'disconnected'}`);
+                        break;
+                    case 'drain':
+                        drainVoltage = voltage;
+                        console.log(`  Drain voltage: ${voltage !== null ? voltage.toFixed(1) + 'V' : 'disconnected'}`);
+                        break;
+                }
+            }
+        });
+        
+        // Determine if transistor is conducting based on type and voltages
+        const characteristics = TRANSISTOR_CHARACTERISTICS[transistor.type];
+        const oldState = transistor.conducting;
+        
+        if (gateVoltage !== null && sourceVoltage !== null) {
+            if (transistor.type === 'nmos') {
+                // NMOS conducts when gate voltage is higher than source voltage + threshold
+                const threshold = sourceVoltage + characteristics.vth;
+                transistor.conducting = gateVoltage > threshold;
+                console.log(`  NMOS threshold: ${threshold.toFixed(1)}V`);
+                console.log(`  Gate voltage must be > threshold to conduct`);
+            } else if (transistor.type === 'pmos') {
+                // PMOS conducts when gate voltage is lower than source voltage - threshold
+                const threshold = sourceVoltage - characteristics.vth;
+                transistor.conducting = gateVoltage < threshold;
+                console.log(`  PMOS threshold: ${threshold.toFixed(1)}V`);
+                console.log(`  Gate voltage must be < threshold to conduct`);
+            }
+            
+            console.log(`  Conducting: ${transistor.conducting} (${oldState === transistor.conducting ? 'unchanged' : 'changed'})`);
+            
+            if (transistor.conducting) {
+                console.log(`  Channel resistance: ${characteristics.onResistance}Ω`);
+            } else {
+                console.log(`  Channel resistance: ${characteristics.offResistance}Ω`);
+            }
+        } else {
+            transistor.conducting = false;
+            console.log('  Not conducting: Missing gate or source voltage');
+        }
+        
+        // Log voltage drop across transistor if both drain and source are connected
+        if (drainVoltage !== null && sourceVoltage !== null) {
+            const vds = Math.abs(drainVoltage - sourceVoltage);
+            console.log(`  Drain-Source voltage: ${vds.toFixed(1)}V`);
+        }
+    }
+    
     // Update all dots with their voltages from the voltage map
     dots.forEach((dot, index) => {
         if (voltageMap.has(index)) {
             dot.voltage = voltageMap.get(index);
         }
     });
+    
+    // Redraw to show updated transistor states
+    drawGrid();
 }
 
 // Add calculateIntermediateVoltages function
