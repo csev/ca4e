@@ -321,6 +321,7 @@ function drawDot(x, y, isHighlighted = false) {
 }
 
 function drawLine(startX, startY, endX, endY, type = 'resistor_1k') {
+    console.log('drawLine', startX, startY, endX, endY, type);
     // Calculate the angle and length of the line
     const dx = endX - startX;
     const dy = endY - startY;
@@ -369,39 +370,6 @@ function drawLine(startX, startY, endX, endY, type = 'resistor_1k') {
     ctx.strokeStyle = '#d4c4a8';
     ctx.lineWidth = 1;
     ctx.stroke();
-    
-    // Define color bands based on resistor value
-    let bandColors;
-    if (type === 'resistor_1k') {
-        bandColors = [
-            '#964B00', // Brown (1)
-            '#000000', // Black (0)
-            '#FF0000', // Red (2 zeros = 100)
-            '#FFD700'  // Gold (5% tolerance)
-        ];
-    } else if (type === 'resistor_10k') {
-        bandColors = [
-            '#964B00', // Brown (1)
-            '#000000', // Black (0)
-            '#FFA500', // Orange (3 zeros = 1000)
-            '#FFD700'  // Gold (5% tolerance)
-        ];
-    }
-    
-    // Draw color bands
-    const bandPositions = [
-        bandWidth/2,
-        bandWidth/2 + bandWidth + bandGap,
-        bandWidth/2 + 2 * (bandWidth + bandGap),
-        bodyLength - bandWidth * 1.5
-    ];
-    
-    bandPositions.forEach((pos, index) => {
-        ctx.beginPath();
-        ctx.rect(pos, -bodyWidth/2, bandWidth, bodyWidth);
-        ctx.fillStyle = bandColors[index];
-        ctx.fill();
-    });
     
     // Restore context
     ctx.restore();
@@ -1443,7 +1411,7 @@ canvas.addEventListener('contextmenu', (e) => {
         }
     }
     
-    // Check for other components (wires, resistors, LEDs, switches)
+    // Check for other components (wires, LEDs, switches)
     for (let i = lines.length - 1; i >= 0; i--) {
         const line = lines[i];
         // Calculate center point of the component
@@ -1640,7 +1608,6 @@ function rebuildAllConnections() {
             }
     });
     
-    // Calculate voltage drops and currents for resistors and LEDs
     calculateCircuitValues();
     
     // Redraw the grid to show updated values
@@ -1652,7 +1619,7 @@ function calculateCircuitValues() {
     console.log('calculateCircuitValues');
     // Reset all calculated values
     lines.forEach(line => {
-        if (line.type.startsWith('resistor_') || line.type === 'led') {
+        if (line.type === 'led') {
             line.voltage_drop = 0;
             line.current = 0;
         }
@@ -1660,27 +1627,6 @@ function calculateCircuitValues() {
     
     // Calculate intermediate voltages
     const voltageMap = calculateIntermediateVoltages();
-    
-    // Handle individual
-    lines.forEach(line => {
-        if (line.type.startsWith('resistor_') && !line.current && !line.voltage_drop) {
-                const startVoltage = getDotVoltage(line.start, voltageMap);
-                const endVoltage = getDotVoltage(line.end, voltageMap);
-                
-                if (startVoltage !== null && endVoltage !== null) {
-                const voltageDiff = Math.abs(startVoltage - endVoltage);
-                    const resistance = RESISTOR_VALUES[line.type];
-                line.voltage_drop = voltageDiff;
-                line.current = voltageDiff / resistance;
-                
-                // Update dot voltages
-                const startIndex = dots.indexOf(line.start);
-                const endIndex = dots.indexOf(line.end);
-                dots[startIndex].voltage = startVoltage;
-                dots[endIndex].voltage = endVoltage;
-            }
-        }
-    });
     
     // Update all dots with their voltages from the voltage map
     dots.forEach((dot, index) => {
@@ -1814,64 +1760,6 @@ document.addEventListener('DOMContentLoaded', () => {
         controls.appendChild(deleteModeButton);
     }
 });
-
-// Add helper function to find parallel resistors
-function findParallelResistors(lines) {
-    const parallelGroups = new Map(); // Map of "startGroup_endGroup" to array of resistors
-    
-    // Helper function to get all connected dots for a point
-    function getConnectedDots(dot) {
-        const connectedDots = new Set([dot]);
-        dots.forEach(otherDot => {
-            if (areDotsConnectedInBreadboard(dot, otherDot)) {
-                connectedDots.add(otherDot);
-            }
-        });
-        return connectedDots;
-    }
-    
-    // Helper function to create a unique key for a set of dots
-    function createDotSetKey(dotSet) {
-        return Array.from(dotSet)
-            .map(dot => dots.indexOf(dot))
-            .sort((a, b) => a - b)
-            .join('_');
-    }
-
-    lines.forEach((line1, i) => {
-        if (line1.type.startsWith('resistor_')) {
-            // Get all dots connected to line1's endpoints
-            const line1StartDots = getConnectedDots(line1.start);
-            const line1EndDots = getConnectedDots(line1.end);
-            
-            // Create unique keys for the start and end groups
-            const startKey = createDotSetKey(line1StartDots);
-            const endKey = createDotSetKey(line1EndDots);
-            
-            // Create a unique key for this connection pattern
-            const connectionKey = [startKey, endKey].sort().join('__');
-            
-            if (!parallelGroups.has(connectionKey)) {
-                parallelGroups.set(connectionKey, []);
-            }
-            parallelGroups.get(connectionKey).push(line1);
-        }
-    });
-    
-    // Filter out groups that don't have parallel resistors
-    return new Map([...parallelGroups].filter(([_, group]) => group.length > 1));
-}
-
-// Add helper function to calculate equivalent resistance
-function calculateEquivalentResistance(resistors) {
-    // For parallel resistors, 1/R_total = 1/R1 + 1/R2 + ...
-    const reciprocalSum = resistors.reduce((sum, resistor) => {
-        const resistance = RESISTOR_VALUES[resistor.type];
-        return sum + 1/resistance;
-    }, 0);
-    
-    return 1/reciprocalSum;
-}
 
 function areDotsConnectedInBreadboard(dot1, dot2) {
     // If dots are the same, they're connected
