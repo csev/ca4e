@@ -936,7 +936,7 @@ function findClosestTransistorTerminal(x, y) {
     return null;
 }
 
-// Update the mousedown handler
+// Update the mousedown handler's delete mode section
 canvas.addEventListener('mousedown', (e) => {
     if (e.button !== 0) return; // Only handle left clicks
     
@@ -944,9 +944,9 @@ canvas.addEventListener('mousedown', (e) => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
-    // Handle delete mode first
+    // Handle delete mode
     if (deleteMode) {
-        // Check for transistors
+        // Check for transistors and single-point components
         for (const [id, transistor] of transistors) {
             const centerDist = Math.sqrt((x - transistor.x) ** 2 + (y - transistor.y) ** 2);
             if (centerDist < 50) {
@@ -956,35 +956,56 @@ canvas.addEventListener('mousedown', (e) => {
                         lines.splice(i, 1);
                     }
                 }
-                // Delete the transistor
                 transistors.delete(id);
                 transistorTerminals.delete(id);
                 initializeConnections();
                 resetDotVoltages();
                 rebuildAllConnections();
                 drawGrid();
-                // Turn off delete mode after successful deletion
                 turnOffDeleteMode();
                 return;
             }
         }
 
-        // Check for other components
+        // Check for voltage indicators
         for (let i = lines.length - 1; i >= 0; i--) {
             const line = lines[i];
-            const centerX = (line.start.x + line.end.x) / 2;
-            const centerY = (line.start.y + line.end.y) / 2;
-            const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
-            
-            if (distance < 20) {
-                lines.splice(i, 1);
-                initializeConnections();
-                resetDotVoltages();
-                rebuildAllConnections();
-                drawGrid();
-                // Turn off delete mode after successful deletion
-                turnOffDeleteMode();
-                return;
+            if (line.type === 'voltage_indicator') {
+                const centerDist = Math.sqrt((x - line.x) ** 2 + (y - line.y) ** 2);
+                console.log(centerDist,x,y,line.x, line.y);
+                if (centerDist < 20) { // Using same detection radius as other components
+                    console.log("deleting voltage indicator",i, lines);
+                    lines.splice(i, 1);
+                    console.log("after deleting voltage indicator",i, lines);
+                    initializeConnections();
+                    resetDotVoltages();
+                    rebuildAllConnections();
+                    drawGrid();
+                    turnOffDeleteMode();
+                    return;
+                }
+            }
+        }
+
+        // Check for other components (wires, LEDs, switches)
+        for (let i = lines.length - 1; i >= 0; i--) {
+            const line = lines[i];
+            if (line.type !== 'voltage_indicator') {
+                const centerX = (line.start.x + line.end.x) / 2;
+                const centerY = (line.start.y + line.end.y) / 2;
+                const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+                
+                if (distance < 20) {
+                    console.log("deleting line",i, lines);
+                    lines.splice(i, 1);
+                    console.log("after deleting line",i, lines);
+                    initializeConnections();
+                    resetDotVoltages();
+                    rebuildAllConnections();
+                    drawGrid();
+                    turnOffDeleteMode();
+                    return;
+                }
             }
         }
         return;
@@ -1099,7 +1120,7 @@ canvas.addEventListener('mouseup', (e) => {
             } else if (endDot.isTransistorTerminal) {
                 newLine.transistorConnection = endDot.transistorConnection;
             }
-            
+            console.log("adding line up",newLine);
             lines.push(newLine);
             initializeConnections();
             rebuildAllConnections();
@@ -1918,6 +1939,144 @@ function resetDotVoltages() {
             dot.voltage = null;  // Reset all other dots
         }
     });
+}
+
+// Add after other characteristics constants
+const VOLTAGE_INDICATOR_CHARACTERISTICS = {
+    radius: 12,
+    colors: {
+        border: '#666666',
+        background: '#f0f0f0',
+        text: '#000000'
+    }
+};
+
+// Add the voltage indicator drawing function
+function drawVoltageIndicator(x, y, dot) {
+    // Get voltage from the connected point
+    let voltage = null;
+    if (dot) {
+        const voltageMap = calculateIntermediateVoltages();
+        voltage = getDotVoltage(dot, voltageMap);
+    }
+    
+    // Save context
+    ctx.save();
+    
+    // Draw indicator body (circle) - now centered exactly on the dot
+    ctx.beginPath();
+    ctx.arc(x, y, VOLTAGE_INDICATOR_CHARACTERISTICS.radius, 0, Math.PI * 2);
+    ctx.fillStyle = VOLTAGE_INDICATOR_CHARACTERISTICS.colors.background;
+    ctx.fill();
+    ctx.strokeStyle = VOLTAGE_INDICATOR_CHARACTERISTICS.colors.border;
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    
+    // Draw voltage value - centered in the circle
+    ctx.font = '10px Arial';
+    ctx.fillStyle = VOLTAGE_INDICATOR_CHARACTERISTICS.colors.text;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    if (voltage !== null) {
+        ctx.fillText(`${voltage.toFixed(1)}V`, x, y);
+    } else {
+        ctx.fillText('--V', x, y);
+    }
+    
+    // No need for connection line since it's centered on the dot
+    
+    // Restore context
+    ctx.restore();
+}
+
+// Update drawComponent function to include voltage indicator
+function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot = null) {
+    if (type === 'voltage_indicator') {
+        drawVoltageIndicator(startX, startY, startDot);
+    } else if (type === 'toggle') {
+        drawToggle(startX, startY, startDot);
+    } else if (type === 'voltmeter') {
+        drawVoltmeter(startX, startY, startDot);
+    } else if (type === 'led') {
+        drawLED(startX, startY, endX, endY, startDot, endDot);
+    } else if (type === 'wire') {
+        drawWire(startX, startY, endX, endY, startDot, endDot);
+    } else if (type === 'switch_no' || type === 'switch_nc') {
+        const switchId = getSwitchId(startDot, endDot);
+        const isPressed = switches.get(switchId)?.pressed || false;
+        drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPressed);
+    }
+}
+
+// Update mousedown handler to handle voltage indicator placement
+canvas.addEventListener('mousedown', (e) => {
+    if (e.button !== 0) return; // Only handle left clicks
+    
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Handle voltage indicator placement
+    if (componentSelect.value === 'voltage_indicator') {
+        const dot = findClosestDot(x, y);
+        if (dot) {
+            const newLine = {
+                start: dot,
+                end: dot,
+                x: dot.x,
+                y: dot.y,
+                type: 'voltage_indicator'
+            };
+            lines.push(newLine);
+            initializeConnections();
+            resetDotVoltages();
+            calculateCircuitValues();
+            drawGrid();
+            
+            // Switch back to wire mode
+            componentSelect.value = 'wire';
+            // Trigger the change event
+            componentSelect.dispatchEvent(new Event('change'));
+            return;
+        }
+    }
+
+    // ... rest of existing mousedown handler ...
+});
+
+function checkComponentDeletion(x, y) {
+    for (let i = lines.length - 1; i >= 0; i--) {
+        const line = lines[i];
+        
+        // Handle single-point components (voltage indicators, voltmeters, etc.)
+            if (line.type === 'voltage_indicator') {
+                const distance = Math.sqrt((x - line.x) ** 2 + (y - line.y) ** 2);
+                if (distance < VOLTAGE_INDICATOR_CHARACTERISTICS.radius) {
+                lines.splice(i, 1);
+                initializeConnections();
+                resetDotVoltages();
+                rebuildAllConnections();
+                drawGrid();
+                return true;
+            }
+        }
+        // Handle two-point components (wires, LEDs, switches)
+        else {
+            const centerX = (line.start.x + line.end.x) / 2;
+            const centerY = (line.start.y + line.end.y) / 2;
+            const distance = Math.sqrt((x - centerX) ** 2 + (y - centerY) ** 2);
+            
+            if (distance < 20) {
+                lines.splice(i, 1);
+                initializeConnections();
+                resetDotVoltages();
+                rebuildAllConnections();
+                drawGrid();
+                return true;
+            }
+        }
+    }
+    return false;
 }
 
 
