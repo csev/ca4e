@@ -376,10 +376,10 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
     ctx.lineWidth = 2;
     ctx.stroke();
     
-    // Save context
+    // Save context for LED drawing
     ctx.save();
     
-    // Translate to LED center
+    // Translate to LED center and rotate
     ctx.translate(ledCenterX, ledCenterY);
     ctx.rotate(angle);
     
@@ -421,14 +421,24 @@ function drawLED(startX, startY, endX, endY, startDot, endDot) {
     ctx.lineWidth = 1;
     ctx.stroke();
     
-    // Draw polarity symbols
+    // Draw enhanced polarity indicators
     const symbolSize = radius * 0.6;
     ctx.strokeStyle = '#800000';
+    ctx.fillStyle = '#800000';
     ctx.lineWidth = 2;
     ctx.shadowBlur = 0;
     
-    // Plus symbol
+    // Plus symbol (anode)
     ctx.beginPath();
+    ctx.arc(-radius * 1.6, 0, 8, 0, Math.PI * 2);
+    ctx.fillStyle = 'white';
+    ctx.fill();
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(-radius * 1.6 - 4, 0);
+    ctx.lineTo(-radius * 1.6 + 4, 0);
+    ctx.moveTo(-radius * 1.6, -4);
+    ctx.lineTo(-radius * 1.6, 4);
     ctx.moveTo(-radius * 1.4, 0);
     ctx.lineTo(-radius * 1.8, 0);
     ctx.moveTo(-radius * 1.6, -symbolSize * 0.2);
