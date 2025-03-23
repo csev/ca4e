@@ -72,7 +72,6 @@ const TRANSISTOR_CHARACTERISTICS = {
 };
 
 // Add after the existing state variables at the top
-let isComputing = false;
 let autoCompute = true; // Default to true for automatic computation
 
 // Add after the existing HTML elements
@@ -318,61 +317,6 @@ function drawDot(x, y, isHighlighted = false) {
     }
     
     ctx.fill();
-}
-
-function drawLine(startX, startY, endX, endY, type = 'resistor_1k') {
-    console.log('drawLine', startX, startY, endX, endY, type);
-    // Calculate the angle and length of the line
-    const dx = endX - startX;
-    const dy = endY - startY;
-    const angle = Math.atan2(dy, dx);
-    const length = Math.sqrt(dx * dx + dy * dy);
-    
-    // Resistor dimensions
-    const bodyLength = Math.min(60, length * 0.6);
-    const bodyWidth = 16;
-    const bandWidth = 6;
-    const bandGap = (bodyLength - 5 * bandWidth) / 4;
-    
-    // Calculate resistor position
-    const startWireLength = (length - bodyLength) / 2;
-    const resistorStartX = startX + Math.cos(angle) * startWireLength;
-    const resistorStartY = startY + Math.sin(angle) * startWireLength;
-    
-    // Draw connecting wires
-    ctx.beginPath();
-    ctx.moveTo(startX, startY);
-    ctx.lineTo(resistorStartX, resistorStartY);
-    ctx.moveTo(endX, endY);
-    ctx.lineTo(resistorStartX + Math.cos(angle) * bodyLength, 
-               resistorStartY + Math.sin(angle) * bodyLength);
-    ctx.strokeStyle = '#000000';
-    ctx.lineWidth = 2;
-    ctx.stroke();
-    
-    // Save context state
-    ctx.save();
-    
-    // Translate and rotate for resistor body
-    ctx.translate(resistorStartX, resistorStartY);
-    ctx.rotate(angle);
-    
-    // Draw resistor body with gradient
-    const gradient = ctx.createLinearGradient(0, -bodyWidth/2, 0, bodyWidth/2);
-    gradient.addColorStop(0, '#e6d5b8');
-    gradient.addColorStop(0.5, '#f4e4cb');
-    gradient.addColorStop(1, '#e6d5b8');
-    
-    ctx.beginPath();
-    ctx.roundRect(0, -bodyWidth/2, bodyLength, bodyWidth, bodyWidth/2);
-    ctx.fillStyle = gradient;
-    ctx.fill();
-    ctx.strokeStyle = '#d4c4a8';
-    ctx.lineWidth = 1;
-    ctx.stroke();
-    
-    // Restore context
-    ctx.restore();
 }
 
 function drawLED(startX, startY, endX, endY, startDot, endDot) {
@@ -689,12 +633,7 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
     if (type === 'led') {
         drawLED(startX, startY, endX, endY, startDot, endDot);
     } else if (type === 'wire') {
-        ctx.beginPath();
-        ctx.moveTo(startX, startY);
-        ctx.lineTo(endX, endY);
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        drawWire(startX, startY, endX, endY, startDot, endDot);
     } else if (type === 'switch_no' || type === 'switch_nc') {
         const switchId = getSwitchId(startDot, endDot);
         const isPressed = switches.get(switchId)?.pressed || false;
@@ -931,31 +870,6 @@ function drawGrid() {
             drawComponent(startDot.x, startDot.y, currentMousePos.x, currentMousePos.y,
                          componentSelect.value, startDot, closestDot);
         }
-    }
-
-    // Draw computation overlay only if computing
-    if (isComputing) {
-        // Save the current context state
-        ctx.save();
-        
-        // Add semi-transparent overlay
-        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        // Draw loading spinner
-        const centerX = canvas.width / 2;
-        const centerY = canvas.height / 2;
-        const radius = 20;
-        const startAngle = (Date.now() / 1000) % (2 * Math.PI);
-        
-        ctx.beginPath();
-        ctx.arc(centerX, centerY, radius, startAngle, startAngle + Math.PI * 1.5);
-        ctx.strokeStyle = '#4CAF50';
-        ctx.lineWidth = 3;
-            ctx.stroke();
-        
-        // Restore the context state
-        ctx.restore();
     }
     
     // Draw transistors
