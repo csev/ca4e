@@ -862,7 +862,6 @@ function drawGrid() {
         drawComponent(line.start.x, line.start.y, line.end.x, line.end.y, line.type, line.start, line.end);
     });
     
-    
     // Draw line being dragged (always on top)
     if (isDragging) {
         if (startDot) {
@@ -1690,7 +1689,7 @@ function areDotsConnectedInBreadboard(dot1, dot2) {
 function findConnectedComponents(dot) {
     // Find all components connected to this dot or its breadboard column
     return lines.filter(line => {
-        if (!line.type.startsWith('resistor_')) return false;
+        // if (!line.type.startsWith('resistor_')) return false;
         return areDotsConnectedInBreadboard(line.start, dot) || 
                areDotsConnectedInBreadboard(line.end, dot);
     });
