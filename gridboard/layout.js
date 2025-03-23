@@ -1753,7 +1753,37 @@ function drawTransistor(x, y, id) {
     }
     ctx.fill();
     
-    // Draw drain (top)
+    // Add connection points on the circle edge
+    const connectionRadius = 4;
+    
+    // Draw Drain connection point (top)
+    ctx.beginPath();
+    ctx.arc(0, -circleRadius, connectionRadius, 0, Math.PI * 2);
+    ctx.fillStyle = '#000';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Draw Source connection point (bottom)
+    ctx.beginPath();
+    ctx.arc(0, circleRadius, connectionRadius, 0, Math.PI * 2);
+    ctx.fillStyle = '#000';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Draw Gate connection point (left)
+    ctx.beginPath();
+    ctx.arc(-circleRadius, 0, connectionRadius, 0, Math.PI * 2);
+    ctx.fillStyle = '#000';
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    
+    // Continue with existing transistor drawing code
     ctx.beginPath();
     ctx.moveTo(0, -channelLength/2-5);
     ctx.lineTo(0, -channelLength/6);
