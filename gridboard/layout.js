@@ -1017,6 +1017,11 @@ canvas.addEventListener('mousedown', (e) => {
         });
         
         drawGrid();
+        
+        // Switch to wire mode after placing transistor
+        componentSelect.value = 'wire';
+        // Trigger the change event
+        componentSelect.dispatchEvent(new Event('change'));
         return;
     }
 
