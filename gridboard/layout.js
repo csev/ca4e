@@ -1419,6 +1419,34 @@ function calculateCircuitValues() {
     // Calculate intermediate voltages
     const voltageMap = calculateIntermediateVoltages();
     
+    // First pass: Calculate LED voltage drops
+    lines.forEach(line => {
+        if (line.type === 'led') {
+            const startVoltage = getDotVoltage(line.start, voltageMap);
+            const endVoltage = getDotVoltage(line.end, voltageMap);
+            
+            if (startVoltage !== null && endVoltage !== null) {
+                const voltageDiff = Math.abs(startVoltage - endVoltage);
+                if (voltageDiff >= LED_CHARACTERISTICS.vf) {
+                    line.voltage_drop = LED_CHARACTERISTICS.vf;
+                    // If LED is connected to a transistor terminal, update the voltage map
+                    if (line.start.isTransistorTerminal || line.end.isTransistorTerminal) {
+                        const terminal = line.start.isTransistorTerminal ? line.start : line.end;
+                        const otherEnd = line.start.isTransistorTerminal ? line.end : line.start;
+                        const otherEndVoltage = getDotVoltage(otherEnd, voltageMap);
+                        
+                        // Create a virtual voltage point for the transistor terminal
+                        if (otherEndVoltage === 0) { // If connected to ground
+                            voltageMap.set(`transistor_${terminal.transistorConnection.id}_${terminal.transistorConnection.type}`, LED_CHARACTERISTICS.vf);
+                        } else if (otherEndVoltage === 9) { // If connected to VCC
+                            voltageMap.set(`transistor_${terminal.transistorConnection.id}_${terminal.transistorConnection.type}`, 9 - LED_CHARACTERISTICS.vf);
+                        }
+                    }
+                }
+            }
+        }
+    });
+
     // Debug header for transistor calculations
     console.log('\nTransistor State Calculations:');
     console.log('------------------------------');
@@ -1433,17 +1461,32 @@ function calculateCircuitValues() {
             continue;
         }
         
-        // Find connected wires to get gate voltage
         let gateVoltage = null;
         let sourceVoltage = null;
         let drainVoltage = null;
         
-        // Find wires connected to terminals
+        // Find wires connected to terminals and check for LED-modified voltages
         lines.forEach(line => {
             if (line.transistorConnection && line.transistorConnection.id === id) {
                 const terminal = line.transistorConnection.type;
+                const virtualVoltage = voltageMap.get(`transistor_${id}_${terminal}`);
                 const otherEnd = line.start.isTransistorTerminal ? line.end : line.start;
-                const voltage = getDotVoltage(otherEnd, voltageMap);
+                let voltage;
+                
+                // If this is an LED connection
+                if (line.type === 'led') {
+                    const otherEndVoltage = getDotVoltage(otherEnd, voltageMap);
+                    if (otherEndVoltage === 0) { // LED to ground
+                        voltage = LED_CHARACTERISTICS.vf;
+                    } else if (otherEndVoltage === 9) { // LED to VCC
+                        voltage = 9 - LED_CHARACTERISTICS.vf;
+                    } else {
+                        voltage = otherEndVoltage;
+                    }
+                } else {
+                    // For regular wires, use virtual voltage or get from other end
+                    voltage = virtualVoltage !== undefined ? virtualVoltage : getDotVoltage(otherEnd, voltageMap);
+                }
                 
                 switch(terminal) {
                     case 'gate':
@@ -1452,7 +1495,7 @@ function calculateCircuitValues() {
                         break;
                     case 'source':
                         sourceVoltage = voltage;
-                        console.log(`  Source voltage: ${voltage !== null ? voltage.toFixed(1) + 'V' : 'disconnected'}`);
+                        console.log(`  Source voltage: ${voltage !== null ? voltage.toFixed(1) + 'V' : 'disconnected'} ${line.type === 'led' ? '(LED)' : ''}`);
                         break;
                     case 'drain':
                         drainVoltage = voltage;
