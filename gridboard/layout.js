@@ -994,15 +994,16 @@ canvas.addEventListener('mousedown', (e) => {
             }
         }
 
-        // If anything was deleted, turn off delete mode and update
+        // If anything was deleted, reset and recalculate
         if (componentDeleted) {
             deleteMode = false;
             deleteModeButton.style.backgroundColor = '#4CAF50';
             deleteModeButton.title = 'Delete Mode (Off)';
             canvas.style.cursor = 'default';
             
-            // Reinitialize connections and update display
+            // Reset all connections and voltages
             initializeConnections();
+            resetDotVoltages();
             rebuildAllConnections();
             drawGrid();
         }
@@ -1085,15 +1086,16 @@ canvas.addEventListener('mousedown', (e) => {
             }
         }
         
-        // If we deleted something, turn off delete mode and update UI
+        // If we deleted something, reset and recalculate
         if (componentDeleted) {
             deleteMode = false;
             deleteModeButton.style.backgroundColor = '#4CAF50';
             deleteModeButton.title = 'Delete Mode (Off)';
             canvas.style.cursor = 'default';
             
-            // Reinitialize connections and update display
+            // Reset all connections and voltages
             initializeConnections();
+            resetDotVoltages();
             rebuildAllConnections();
             drawGrid();
         }
@@ -1294,36 +1296,13 @@ canvas.addEventListener('contextmenu', (e) => {
             transistors.delete(id);
             // Reinitialize connections after deleting
             initializeConnections();
+            resetDotVoltages();
             rebuildAllConnections();
             drawGrid();
             return;
         }
     }
 
-    // Check for transistors first with a larger detection radius
-    for (const [id, transistor] of transistors) {
-        console.log('Checking transistor:', id, 'at', transistor.x, transistor.y);
-        const centerDist = Math.sqrt((x - transistor.x) ** 2 + (y - transistor.y) ** 2);
-        console.log('Distance to transistor:', centerDist);
-        
-        if (centerDist < 50) { // Much larger radius for testing
-            console.log('Deleting transistor:', id);
-            // Remove all wires connected to this transistor
-            for (let i = lines.length - 1; i >= 0; i--) {
-                if (lines[i].transistorConnection && lines[i].transistorConnection.id === id) {
-                    lines.splice(i, 1);
-                }
-            }
-            // Delete the transistor
-            transistors.delete(id);
-            // Reinitialize connections after deleting
-            initializeConnections();
-            rebuildAllConnections();
-            drawGrid();
-            return;
-        }
-    }
-    
     // Check for other components (wires, LEDs, switches)
     for (let i = lines.length - 1; i >= 0; i--) {
         const line = lines[i];
@@ -1337,8 +1316,9 @@ canvas.addEventListener('contextmenu', (e) => {
         // If click is close enough to component, delete it
         if (distance < 20) { // Detection radius for components
             lines.splice(i, 1);
-            // Reinitialize connections after deleting a component
+            // Reset all connections and voltages
             initializeConnections();
+            resetDotVoltages();
             rebuildAllConnections();
             drawGrid();
             break;
@@ -1857,6 +1837,23 @@ function drawTransistor(x, y, id) {
     
     // Restore context
     ctx.restore();
+}
+
+// Add this helper function to reset all dot voltages
+function resetDotVoltages() {
+    dots.forEach(dot => {
+        const dotIndex = dots.indexOf(dot);
+        const { row } = getRowCol(dotIndex);
+        
+        // Keep power rails at their fixed voltages
+        if (row === 0 || row === GRID_ROWS - 1) {
+            dot.voltage = 9;  // VCC rails
+        } else if (row === 1 || row === GRID_ROWS - 2) {
+            dot.voltage = 0;  // GND rails
+        } else {
+            dot.voltage = null;  // Reset all other dots
+        }
+    });
 }
 
 
