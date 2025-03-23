@@ -1521,19 +1521,11 @@ function calculateCircuitValues() {
         
         if (gateVoltage !== null && sourceVoltage !== null) {
             if (transistor.type === 'nmos') {
-                // NMOS logic stays the same
                 const threshold = sourceVoltage + characteristics.vth;
                 transistor.conducting = gateVoltage > threshold;
-                console.log(`  NMOS threshold: ${threshold.toFixed(1)}V`);
-                console.log(`  Gate voltage must be > threshold to conduct`);
             } else if (transistor.type === 'pmos') {
-                // Fix PMOS logic - it should conduct when gate is lower than source - threshold
                 const threshold = characteristics.vth;  // 2.0V
-                console.log('threshold', threshold, 'gate', gateVoltage, 'source', sourceVoltage, 'drain', drainVoltage);
                 transistor.conducting = gateVoltage < threshold;
-                console.log(`  PMOS threshold: Vg < ${sourceVoltage.toFixed(1)}V - ${threshold.toFixed(1)}V = ${(sourceVoltage - threshold).toFixed(1)}V`);
-                console.log(`  Gate voltage: ${gateVoltage !== null ? gateVoltage.toFixed(1) + 'V' : 'disconnected'}`);
-                console.log(`  Source voltage: ${sourceVoltage.toFixed(1)}V`);
             }
             
             console.log(`  Conducting: ${transistor.conducting} (${oldState === transistor.conducting ? 'unchanged' : 'changed'})`);
