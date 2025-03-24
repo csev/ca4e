@@ -316,10 +316,11 @@ class Probe extends Component {
     constructor(x, y) {
         super('PROBE', x, y);
         this.voltage = 0;
-        this.inputs = [{ x: this.x, y: this.y + 20, name: 'input', voltage: 0 }];
         this.width = 30;
         this.height = 24;
         this.cornerRadius = 6;
+        // Move input to left side instead of bottom
+        this.inputs = [{ x: this.x - this.width/2 - 5, y: this.y, name: 'input', voltage: 0 }];
     }
 
     // Helper function to get color based on voltage
@@ -385,25 +386,14 @@ class Probe extends Component {
         ctx.fill();
         ctx.stroke();
 
-        // Add slight inner shadow for depth
-        ctx.save();
-        ctx.clip();
-        ctx.shadowBlur = 4;
-        ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
-        ctx.shadowOffsetX = 2;
-        ctx.shadowOffsetY = 2;
-        ctx.fillStyle = 'rgba(0, 0, 0, 0)';
-        ctx.fill();
-        ctx.restore();
-
-        // Draw voltage value with contrasting text color
+        // Draw voltage value
         ctx.fillStyle = displayVoltage > 2.5 ? '#000000' : '#ffffff';
         ctx.font = 'bold 12px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(displayVoltage.toFixed(1) + 'V', this.x, this.y);
 
-        // Draw connection point
+        // Draw connection point on left side
         ctx.beginPath();
         ctx.arc(this.inputs[0].x, this.inputs[0].y, 3, 0, Math.PI * 2);
         ctx.fillStyle = '#000000';
@@ -412,7 +402,13 @@ class Probe extends Component {
     }
 
     updateConnectionPoints() {
-        this.inputs[0] = { x: this.x, y: this.y + 20, name: 'input', voltage: this.inputs[0].voltage };
+        // Update input position to left side
+        this.inputs[0] = { 
+            x: this.x - this.width/2 - 5, 
+            y: this.y, 
+            name: 'input', 
+            voltage: this.inputs[0].voltage 
+        };
     }
 
     isPointInside(x, y) {
@@ -468,8 +464,9 @@ class Switch extends Component {
         super('SWITCH', x, y);
         this.voltage = 5; // Start at 5V
         this.isVDD = true; // Track state
-        this.outputs = [{ x: this.x, y: this.y + 20, voltage: this.voltage }];
         this.radius = 15; // Store radius for consistent size
+        // Move output to right side instead of bottom
+        this.outputs = [{ x: this.x + this.radius + 5, y: this.y, voltage: this.voltage }];
     }
 
     draw(ctx) {
@@ -489,7 +486,7 @@ class Switch extends Component {
         ctx.textBaseline = 'middle';
         ctx.fillText(this.isVDD ? '5V' : '0V', this.x, this.y);
 
-        // Draw output connection point
+        // Draw output connection point on right side
         ctx.beginPath();
         ctx.arc(this.outputs[0].x, this.outputs[0].y, 3, 0, Math.PI * 2);
         ctx.fillStyle = '#000000';
@@ -504,7 +501,309 @@ class Switch extends Component {
     }
 
     updateConnectionPoints() {
-        this.outputs[0] = { x: this.x, y: this.y + 20, voltage: this.voltage };
+        // Update output position to right side
+        this.outputs[0] = { x: this.x + this.radius + 5, y: this.y, voltage: this.voltage };
+    }
+}
+
+class VDDBar extends Component {
+    constructor(canvasWidth) {
+        super('VDD_BAR', 0, 40);
+        this.numPoints = 10; // Fixed number of points
+        this.updateDimensions(canvasWidth);
+    }
+
+    updateDimensions(canvasWidth) {
+        this.margin = Math.max(80, canvasWidth * 0.1); // Responsive margin, minimum 80px
+        this.width = canvasWidth - (this.margin * 2);
+        this.height = 30;
+        this.voltage = 5;
+        
+        // Recalculate connection points
+        this.outputs = [];
+        const totalSpace = this.width - 40; // Leave a bit of space from edges of bar
+        const spacing = totalSpace / (this.numPoints - 1); // Space between points
+        
+        for (let i = 0; i < this.numPoints; i++) {
+            const relativePosition = i / (this.numPoints - 1); // Position from 0 to 1
+            this.outputs.push({
+                x: this.margin + 20 + (i * spacing),
+                y: this.y + this.height/2,
+                voltage: this.voltage,
+                relativePosition: relativePosition // Store relative position
+            });
+        }
+    }
+
+    draw(ctx) {
+        // Draw the VDD bar
+        ctx.beginPath();
+        ctx.strokeStyle = '#000000';
+        ctx.fillStyle = '#4CAF50';
+        
+        // Draw bar with rounded corners
+        const radius = 10;
+        ctx.beginPath();
+        ctx.moveTo(this.margin + radius, this.y - this.height/2);
+        // Top right corner
+        ctx.lineTo(this.margin + this.width - radius, this.y - this.height/2);
+        ctx.arcTo(
+            this.margin + this.width, this.y - this.height/2,
+            this.margin + this.width, this.y - this.height/2 + radius,
+            radius
+        );
+        // Bottom right corner
+        ctx.lineTo(this.margin + this.width, this.y + this.height/2 - radius);
+        ctx.arcTo(
+            this.margin + this.width, this.y + this.height/2,
+            this.margin + this.width - radius, this.y + this.height/2,
+            radius
+        );
+        // Bottom left corner
+        ctx.lineTo(this.margin + radius, this.y + this.height/2);
+        ctx.arcTo(
+            this.margin, this.y + this.height/2,
+            this.margin, this.y + this.height/2 - radius,
+            radius
+        );
+        // Top left corner
+        ctx.lineTo(this.margin, this.y - this.height/2 + radius);
+        ctx.arcTo(
+            this.margin, this.y - this.height/2,
+            this.margin + radius, this.y - this.height/2,
+            radius
+        );
+        
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Draw VDD label
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('VDD (5V)', this.margin + 20, this.y);
+
+        // Draw connection points
+        this.outputs.forEach(output => {
+            // Draw white background circle
+            ctx.beginPath();
+            ctx.arc(output.x, output.y, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.stroke();
+            
+            // Draw smaller filled black circle
+            ctx.beginPath();
+            ctx.arc(output.x, output.y, 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = '#000000';
+            ctx.fill();
+        });
+    }
+
+    // Override these methods to prevent movement
+    startDrag() { }
+    drag() { }
+    endDrag() { }
+    
+    // The bar can't be selected
+    isPointInside() {
+        return false;
+    }
+}
+
+class GNDBar extends Component {
+    constructor(canvasWidth, canvasHeight) {
+        super('GND_BAR', 0, canvasHeight - 40); // Position from bottom
+        this.numPoints = 10;
+        this.updateDimensions(canvasWidth, canvasHeight);
+    }
+
+    updateDimensions(canvasWidth, canvasHeight) {
+        this.margin = Math.max(80, canvasWidth * 0.1); // Responsive margin
+        this.width = canvasWidth - (this.margin * 2);
+        this.height = 30;
+        this.y = canvasHeight - 40; // Update vertical position
+        this.voltage = 0;
+        
+        // Recalculate connection points
+        this.inputs = []; // Using inputs instead of outputs for GND
+        const totalSpace = this.width - 40;
+        const spacing = totalSpace / (this.numPoints - 1);
+        
+        for (let i = 0; i < this.numPoints; i++) {
+            const relativePosition = i / (this.numPoints - 1);
+            this.inputs.push({
+                x: this.margin + 20 + (i * spacing),
+                y: this.y - this.height/2, // Connect from top of bar
+                voltage: this.voltage,
+                relativePosition: relativePosition
+            });
+        }
+    }
+
+    draw(ctx) {
+        // Draw the GND bar
+        ctx.beginPath();
+        ctx.strokeStyle = '#000000';
+        ctx.fillStyle = '#f44336'; // Red for GND
+        
+        // Draw bar with rounded corners
+        const radius = 10;
+        ctx.beginPath();
+        ctx.moveTo(this.margin + radius, this.y - this.height/2);
+        // Top right corner
+        ctx.lineTo(this.margin + this.width - radius, this.y - this.height/2);
+        ctx.arcTo(
+            this.margin + this.width, this.y - this.height/2,
+            this.margin + this.width, this.y - this.height/2 + radius,
+            radius
+        );
+        // Bottom right corner
+        ctx.lineTo(this.margin + this.width, this.y + this.height/2 - radius);
+        ctx.arcTo(
+            this.margin + this.width, this.y + this.height/2,
+            this.margin + this.width - radius, this.y + this.height/2,
+            radius
+        );
+        // Bottom left corner
+        ctx.lineTo(this.margin + radius, this.y + this.height/2);
+        ctx.arcTo(
+            this.margin, this.y + this.height/2,
+            this.margin, this.y + this.height/2 - radius,
+            radius
+        );
+        // Top left corner
+        ctx.lineTo(this.margin, this.y - this.height/2 + radius);
+        ctx.arcTo(
+            this.margin, this.y - this.height/2,
+            this.margin + radius, this.y - this.height/2,
+            radius
+        );
+        
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Draw GND label
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('GND (0V)', this.margin + 20, this.y);
+
+        // Draw connection points
+        this.inputs.forEach(input => {
+            // Draw white background circle
+            ctx.beginPath();
+            ctx.arc(input.x, input.y, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.stroke();
+            
+            // Draw smaller filled black circle
+            ctx.beginPath();
+            ctx.arc(input.x, input.y, 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = '#000000';
+            ctx.fill();
+        });
+    }
+
+    // Override these methods to prevent movement
+    startDrag() { }
+    drag() { }
+    endDrag() { }
+    
+    // The bar can't be selected
+    isPointInside() {
+        return false;
+    }
+}
+
+class BatterySymbol {
+    constructor(vddBar, gndBar) {
+        this.vddBar = vddBar;
+        this.gndBar = gndBar;
+        this.updatePosition();
+    }
+
+    updatePosition() {
+        // Position battery to the right of the bars, moved 20px left
+        this.rightMargin = 40;
+        this.width = 30;
+        // Position x coordinate at the right edge of the bars plus margin, minus 20px
+        this.x = this.vddBar.margin + this.vddBar.width + 40; // Reduced from 60 to 40
+        
+        // Calculate vertical positions using the actual bar positions
+        this.topY = this.vddBar.y;      // Center of VDD bar
+        this.bottomY = this.gndBar.y;    // Center of GND bar
+        
+        // Battery cell dimensions
+        this.cellHeight = 60;
+        this.cellSpacing = 20; // Space between positive and negative terminals
+        this.cellY = (this.topY + this.bottomY) / 2; // Center point of battery
+        this.longLineLength = 40;
+        this.shortLineLength = 20;
+    }
+
+    draw(ctx) {
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 2;
+
+        // Draw horizontal lines from bars to battery vertical connection
+        ctx.beginPath();
+        // Top horizontal line from VDD bar to battery connection
+        ctx.moveTo(this.vddBar.margin + this.vddBar.width, this.vddBar.y);
+        ctx.lineTo(this.x, this.vddBar.y);
+        
+        // Bottom horizontal line from GND bar to battery connection
+        ctx.moveTo(this.vddBar.margin + this.vddBar.width, this.gndBar.y);
+        ctx.lineTo(this.x, this.gndBar.y);
+        ctx.stroke();
+
+        // Draw vertical lines connecting to battery center
+        ctx.beginPath();
+        // Top connection - from horizontal line to battery center
+        ctx.moveTo(this.x, this.vddBar.y);
+        ctx.lineTo(this.x, this.cellY);
+        
+        // Bottom connection - from horizontal line to battery center
+        ctx.moveTo(this.x, this.gndBar.y);
+        ctx.lineTo(this.x, this.cellY);
+        ctx.stroke();
+
+        // Draw battery symbol
+        // Positive terminal (longer line)
+        ctx.beginPath();
+        ctx.moveTo(this.x - this.longLineLength/2, this.cellY - this.cellSpacing/2);
+        ctx.lineTo(this.x + this.longLineLength/2, this.cellY - this.cellSpacing/2);
+        ctx.stroke();
+
+        // Negative terminal (shorter line)
+        ctx.beginPath();
+        ctx.moveTo(this.x - this.shortLineLength/2, this.cellY + this.cellSpacing/2);
+        ctx.lineTo(this.x + this.shortLineLength/2, this.cellY + this.cellSpacing/2);
+        ctx.stroke();
+
+        // Draw + and - symbols
+        ctx.fillStyle = '#000000';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        
+        // + symbol
+        ctx.fillText('+', this.x + this.longLineLength/2 + 5, this.cellY - this.cellSpacing/2);
+        
+        // - symbol
+        ctx.fillText('−', this.x + this.shortLineLength/2 + 5, this.cellY + this.cellSpacing/2);
+
+        // Draw voltage value
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('5V', this.x + 25, this.cellY);
+
+        ctx.lineWidth = 1; // Reset line width
     }
 }
 

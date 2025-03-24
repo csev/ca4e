@@ -25,18 +25,83 @@ class CircuitEditor {
         // Add flag to track if we're clicking a switch
         this.clickedSwitch = null;
 
+        // Store references to both bars
+        this.vddBar = null;
+        this.gndBar = null;
+        this.batterySymbol = null;
+
         this.initializeCanvas();
         this.setupEventListeners();
+
+        // Add the bars
+        this.initializeBars();
     }
 
     initializeCanvas() {
-        // Set canvas size to match window size
         const updateCanvasSize = () => {
             this.canvas.width = window.innerWidth - 40;
             this.canvas.height = window.innerHeight - 100;
+            
+            // Update bars and battery
+            if (this.vddBar) {
+                this.vddBar.updateDimensions(this.canvas.width);
+            }
+            if (this.gndBar) {
+                this.gndBar.updateDimensions(this.canvas.width, this.canvas.height);
+            }
+            if (this.batterySymbol) {
+                this.batterySymbol.updatePosition();
+            }
+            
+            // Update connected wires
+            this.circuit.wires.forEach(wire => {
+                const startComponent = wire.startComponent;
+                const endComponent = wire.endComponent;
+                
+                // Update VDD connections
+                if (startComponent === this.vddBar) {
+                    const output = startComponent.outputs.find(o => 
+                        Math.abs(o.relativePosition - wire.startPoint.relativePosition) < 0.01
+                    );
+                    if (output) {
+                        wire.startPoint.x = output.x;
+                        wire.startPoint.y = output.y;
+                    }
+                }
+                
+                // Update GND connections
+                if (startComponent === this.gndBar || endComponent === this.gndBar) {
+                    const point = startComponent === this.gndBar ? wire.startPoint : wire.endPoint;
+                    const input = this.gndBar.inputs.find(i => 
+                        Math.abs(i.relativePosition - point.relativePosition) < 0.01
+                    );
+                    if (input) {
+                        point.x = input.x;
+                        point.y = input.y;
+                    }
+                }
+            });
+            
+            this.draw();
         };
+        
         updateCanvasSize();
         window.addEventListener('resize', updateCanvasSize);
+    }
+
+    initializeBars() {
+        // Remove any existing bars
+        this.circuit.components = this.circuit.components.filter(c => 
+            !(c instanceof VDDBar) && !(c instanceof GNDBar)
+        );
+        
+        // Add new bars
+        this.vddBar = new VDDBar(this.canvas.width);
+        this.gndBar = new GNDBar(this.canvas.width, this.canvas.height);
+        this.batterySymbol = new BatterySymbol(this.vddBar, this.gndBar);
+        
+        this.circuit.addComponent(this.vddBar);
+        this.circuit.addComponent(this.gndBar);
     }
 
     setupEventListeners() {
@@ -206,21 +271,19 @@ class CircuitEditor {
     findConnectionPoint(x, y) {
         for (const component of this.circuit.components) {
             // Check input connection points
-            for (const input of component.inputs) {
+            for (const input of component.inputs || []) {
                 const dx = x - input.x;
                 const dy = y - input.y;
                 if (dx * dx + dy * dy < 25) { // 5px radius
                     return { component, point: input, type: 'input' };
                 }
             }
-            // Check output connection points if they exist
-            if (component.outputs) {
-                for (const output of component.outputs) {
-                    const dx = x - output.x;
-                    const dy = y - output.y;
-                    if (dx * dx + dy * dy < 25) { // 5px radius
-                        return { component, point: output, type: 'output' };
-                    }
+            // Check output connection points
+            for (const output of component.outputs || []) {
+                const dx = x - output.x;
+                const dy = y - output.y;
+                if (dx * dx + dy * dy < 25) { // 5px radius
+                    return { component, point: output, type: 'output' };
                 }
             }
         }
@@ -262,6 +325,11 @@ class CircuitEditor {
             component.selected = component === this.selectedComponent;
             component.draw(this.ctx);
         });
+
+        // Draw battery symbol
+        if (this.batterySymbol) {
+            this.batterySymbol.draw(this.ctx);
+        }
 
         // Draw hover effect for connection points
         if (this.hoveredConnectionPoint) {
