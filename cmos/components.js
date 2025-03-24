@@ -491,11 +491,14 @@ class Wire {
 class Switch extends Component {
     constructor(x, y) {
         super('SWITCH', x, y);
-        this.voltage = 5; // Start at 5V
+        this.voltage = Component.VDD_VOLTAGE; // Start at 5V
         this.isOn = true; // Track state
         this.radius = 15; // Store radius for consistent size
-        // Move output to right side instead of bottom
-        this.outputs = [{ x: this.x + this.radius + 5, y: this.y, voltage: this.voltage }];
+        this.outputs = [{ 
+            x: this.x + this.radius + 5, 
+            y: this.y, 
+            voltage: this.voltage 
+        }];
     }
 
     draw(ctx) {
@@ -534,22 +537,23 @@ class Switch extends Component {
     toggle() {
         this.isOn = !this.isOn;
         this.voltage = this.isOn ? Component.VDD_VOLTAGE : 0;
-        
-        // Update all valid outputs with the new voltage
-        this.outputs.forEach(output => {
-            if (output && output.component) {  // Check if output and component exist
-                output.component.voltage = this.voltage;
-                // If the connected component is a probe, trigger its update
-                if (output.component.type === 'probe') {
-                    output.component.updateValue(this.voltage);
-                }
-            }
+        // Update output voltage
+        if (this.outputs && this.outputs.length > 0) {
+            this.outputs[0].voltage = this.voltage;
+        }
+        console.log('Switch toggled:', {
+            isOn: this.isOn,
+            voltage: this.voltage,
+            outputVoltage: this.outputs[0].voltage
         });
     }
 
     updateConnectionPoints() {
-        // Update output position to right side
-        this.outputs[0] = { x: this.x + this.radius + 5, y: this.y, voltage: this.voltage };
+        this.outputs[0] = { 
+            x: this.x + this.radius + 5, 
+            y: this.y, 
+            voltage: this.voltage 
+        };
     }
 }
 
