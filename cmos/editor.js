@@ -243,11 +243,28 @@ class CircuitEditor {
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
 
+        // Check for double click
+        const currentTime = Date.now();
+        const timeDiff = currentTime - this.lastClickTime;
+        this.lastClickTime = currentTime;
+
         // Clear any existing selection first
         this.selectedComponent = null;
 
         // Get clicked component
         const clickedComponent = this.findComponentAt(x, y);
+
+        if (clickedComponent && timeDiff < this.doubleClickDelay) {
+            // Handle double click for Switch and Probe
+            if (clickedComponent instanceof Switch || clickedComponent instanceof Probe) {
+                const label = prompt("Enter label for the component:", clickedComponent.label || "");
+                if (label !== null) {  // Check if user didn't cancel
+                    clickedComponent.label = label;
+                    this.draw();
+                }
+                return;
+            }
+        }
 
         if (clickedComponent) {
             if (this.deleteMode) {
@@ -522,9 +539,9 @@ class CircuitEditor {
     updateStatusBar() {
         const toolDisplay = document.getElementById('selectedTool');
         if (this.deleteMode) {
-            toolDisplay.textContent = 'Click to delete or ESC';
+            toolDisplay.textContent = 'Click to Delete or ESC';
         } else if (this.moveMode) {
-            toolDisplay.textContent = 'Click to move or ESC';
+            toolDisplay.textContent = 'Click to Move or ESC';
         } else if (this.selectedTool) {
             toolDisplay.textContent = `Selected: ${this.selectedTool}`;
         } else {

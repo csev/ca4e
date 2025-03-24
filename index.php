@@ -73,8 +73,8 @@ the sample content:
       <a href="gates/index.html" target="_blank" class="text-primary">Digital Logic Builder</a>
     </li>
     <li>
-      <a href="gridboard/index.html" target="_blank" class="text-primary">DC Logic Builder</a>
-</li>
+      <a href="cmos/index.html" target="_blank" class="text-primary">DC Logic Builder</a>
+    </li>
 <li>
 <a href="cdc8512/index.html"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator Prototype</a> (A UI Mockup - not working)
 </li>

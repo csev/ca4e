@@ -357,6 +357,7 @@ class Probe extends Component {
         // Add both input and output
         this.inputs = [{ x: this.x - this.width/2 - 5, y: this.y, name: 'input', voltage: 0 }];
         this.outputs = [{ x: this.x + this.width/2 + 5, y: this.y, name: 'output', voltage: 0 }];
+        this.label = "";
     }
 
     getVoltageColor(voltage) {
@@ -416,11 +417,22 @@ class Probe extends Component {
         ctx.fill();
         ctx.stroke();
 
-        // Update voltage display with white text
+        // Draw the label if it exists
+        if (this.label) {
+            ctx.save();
+            ctx.font = '12px Arial';
+            ctx.fillStyle = '#000000';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.fillText(this.label, this.x, this.y - this.height/2 - 5);
+            ctx.restore();
+        }
+
+        // Draw voltage display
         ctx.font = '14px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillStyle = '#ffffff';  // Always use white text
+        ctx.fillStyle = '#ffffff';
         ctx.fillText(this.voltage.toFixed(1) + 'V', this.x, this.y);
 
         // Draw both input and output connection points
@@ -517,6 +529,7 @@ class Switch extends Component {
             voltage: this.voltage 
         }];
         this.isDragging = false; // Add dragging flag
+        this.label = "";
     }
 
     draw(ctx) {
@@ -535,8 +548,19 @@ class Switch extends Component {
         ctx.fill();
         ctx.stroke();
 
-        // Draw text
-        ctx.fillStyle = '#ffffff'; // White text
+        // Draw the label if it exists
+        if (this.label) {
+            ctx.save();
+            ctx.font = '12px Arial';
+            ctx.fillStyle = '#000000';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.fillText(this.label, this.x, this.y - this.radius - 10);
+            ctx.restore();
+        }
+
+        // Draw voltage text
+        ctx.fillStyle = '#ffffff';
         ctx.font = 'bold 12px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
