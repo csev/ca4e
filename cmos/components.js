@@ -125,15 +125,29 @@ class NMOS extends Component {
     constructor(x, y) {
         super('NMOS', x, y);
         this.inputs = [
-            { x: this.x - 20, y: this.y, name: 'gate', value: 0 },     // Gate
-            { x: this.x, y: this.y - 20, name: 'drain', value: 0 },    // Drain
-            { x: this.x, y: this.y + 20, name: 'source', value: 0 }    // Source
+            { x: this.x - 20, y: this.y, name: 'gate', voltage: 0 },     // Gate
+            { x: this.x, y: this.y - 20, name: 'drain', voltage: 0 },    // Drain
+            { x: this.x, y: this.y + 20, name: 'source', voltage: 0 }    // Source
         ];
         this.width = 40;
         this.height = 60;
+        this.conducting = false;
     }
 
     draw(ctx) {
+        // Update conducting state based on gate voltage
+        const gateVoltage = this.inputs[0].voltage;
+        this.conducting = gateVoltage >= 2.5;
+        
+        console.log('NMOS State:', {
+            gateVoltage: gateVoltage,
+            conducting: this.conducting,
+            inputs: this.inputs.map(input => ({
+                name: input.name,
+                voltage: input.voltage
+            }))
+        });
+
         ctx.strokeStyle = this.selected ? '#ff0000' : '#000000';
         ctx.fillStyle = '#ffffff';
         
@@ -143,24 +157,26 @@ class NMOS extends Component {
         ctx.lineTo(this.x - 5, this.y);
         ctx.stroke();
 
-        // Draw vertical channel line
+        // Draw vertical channel line with conducting indicator
         ctx.beginPath();
+        if (this.conducting) {
+            ctx.strokeStyle = '#00ff00'; // Green for conducting
+            ctx.lineWidth = 3; // Thicker line when conducting
+        }
         ctx.moveTo(this.x, this.y - 15);
         ctx.lineTo(this.x, this.y + 15);
         ctx.stroke();
+        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000'; // Reset stroke style
+        ctx.lineWidth = 1; // Reset line width
 
-        // Draw drain connection (with horizontal segment)
+        // Draw drain and source connections
         ctx.beginPath();
         ctx.moveTo(this.x, this.y - 15);
-        ctx.lineTo(this.x + 7, this.y - 15);  // Horizontal segment
-        ctx.lineTo(this.x + 7, this.y - 20);  // Vertical segment
-        ctx.stroke();
-
-        // Draw source connection (with horizontal segment)
-        ctx.beginPath();
+        ctx.lineTo(this.x + 7, this.y - 15);
+        ctx.lineTo(this.x + 7, this.y - 20);
         ctx.moveTo(this.x, this.y + 15);
-        ctx.lineTo(this.x + 7, this.y + 15);  // Horizontal segment
-        ctx.lineTo(this.x + 7, this.y + 20);  // Vertical segment
+        ctx.lineTo(this.x + 7, this.y + 15);
+        ctx.lineTo(this.x + 7, this.y + 20);
         ctx.stroke();
 
         // Draw gate symbol (vertical lines)
@@ -177,20 +193,14 @@ class NMOS extends Component {
         ctx.closePath();
         ctx.fill();
 
-        // Update connection point positions to match new geometry
-        this.inputs[1].x = this.x + 7;  // Update drain x position
-        this.inputs[2].x = this.x + 7;  // Update source x position
-
-        // Draw connection points with filled circles
+        // Draw connection points
         this.inputs.forEach(input => {
-            // Draw white background circle
             ctx.beginPath();
             ctx.arc(input.x, input.y, 4, 0, Math.PI * 2);
             ctx.fillStyle = '#ffffff';
             ctx.fill();
             ctx.stroke();
             
-            // Draw smaller filled black circle
             ctx.beginPath();
             ctx.arc(input.x, input.y, 2.5, 0, Math.PI * 2);
             ctx.fillStyle = '#000000';
@@ -205,6 +215,14 @@ class NMOS extends Component {
         ctx.textAlign = 'left';
         ctx.fillText('D', this.x + 12, this.y - 25);
         ctx.fillText('S', this.x + 12, this.y + 25);
+
+        // Add conducting indicator text
+        if (this.conducting) {
+            ctx.fillStyle = '#00aa00';
+            ctx.font = 'bold 10px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText('ON', this.x + 15, this.y);
+        }
     }
 
     updateConnectionPoints() {
@@ -231,9 +249,13 @@ class PMOS extends Component {
         ];
         this.width = 40;
         this.height = 60;
+        this.conducting = false; // Add conducting state
     }
 
     draw(ctx) {
+        // Update conducting state based on gate voltage (PMOS conducts when gate is LOW)
+        this.conducting = this.inputs[0].voltage < 2.5;
+        
         ctx.strokeStyle = this.selected ? '#ff0000' : '#000000';
         ctx.fillStyle = '#ffffff';
         
@@ -243,24 +265,26 @@ class PMOS extends Component {
         ctx.lineTo(this.x - 5, this.y);
         ctx.stroke();
 
-        // Draw vertical channel line
+        // Draw vertical channel line with conducting indicator
         ctx.beginPath();
+        if (this.conducting) {
+            ctx.strokeStyle = '#00ff00'; // Green for conducting
+            ctx.lineWidth = 3; // Thicker line when conducting
+        }
         ctx.moveTo(this.x, this.y - 15);
         ctx.lineTo(this.x, this.y + 15);
         ctx.stroke();
+        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000'; // Reset stroke style
+        ctx.lineWidth = 1; // Reset line width
 
-        // Draw drain connection (with horizontal segment)
+        // Draw drain and source connections
         ctx.beginPath();
         ctx.moveTo(this.x, this.y - 15);
-        ctx.lineTo(this.x + 7, this.y - 15);  // Horizontal segment
-        ctx.lineTo(this.x + 7, this.y - 20);  // Vertical segment
-        ctx.stroke();
-
-        // Draw source connection (with horizontal segment)
-        ctx.beginPath();
+        ctx.lineTo(this.x + 7, this.y - 15);
+        ctx.lineTo(this.x + 7, this.y - 20);
         ctx.moveTo(this.x, this.y + 15);
-        ctx.lineTo(this.x + 7, this.y + 15);  // Horizontal segment
-        ctx.lineTo(this.x + 7, this.y + 20);  // Vertical segment
+        ctx.lineTo(this.x + 7, this.y + 15);
+        ctx.lineTo(this.x + 7, this.y + 20);
         ctx.stroke();
 
         // Draw gate symbol (vertical lines)
@@ -274,20 +298,14 @@ class PMOS extends Component {
         ctx.arc(this.x - 8, this.y, 5, 0, Math.PI * 2);
         ctx.stroke();
 
-        // Update connection point positions to match new geometry
-        this.inputs[1].x = this.x + 7;  // Update drain x position
-        this.inputs[2].x = this.x + 7;  // Update source x position
-
-        // Draw connection points with filled circles
+        // Draw connection points
         this.inputs.forEach(input => {
-            // Draw white background circle
             ctx.beginPath();
             ctx.arc(input.x, input.y, 4, 0, Math.PI * 2);
             ctx.fillStyle = '#ffffff';
             ctx.fill();
             ctx.stroke();
             
-            // Draw smaller filled black circle
             ctx.beginPath();
             ctx.arc(input.x, input.y, 2.5, 0, Math.PI * 2);
             ctx.fillStyle = '#000000';
@@ -302,6 +320,14 @@ class PMOS extends Component {
         ctx.textAlign = 'left';
         ctx.fillText('D', this.x + 12, this.y - 25);
         ctx.fillText('S', this.x + 12, this.y + 25);
+
+        // Add conducting indicator text
+        if (this.conducting) {
+            ctx.fillStyle = '#00aa00';
+            ctx.font = 'bold 10px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText('ON', this.x + 15, this.y);
+        }
     }
 
     updateConnectionPoints() {

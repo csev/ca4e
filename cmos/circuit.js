@@ -38,6 +38,8 @@ class Circuit {
 
     // Basic voltage propagation (to be expanded)
     simulate() {
+        console.log('Starting circuit simulation');
+        
         // Reset all voltages except sources and switches
         this.components.forEach(component => {
             if (component.type !== 'VDD' && 
@@ -48,47 +50,36 @@ class Circuit {
             }
         });
 
-        // Ensure VDD_BAR voltage is set
-        this.components.forEach(component => {
-            if (component.type === 'VDD_BAR') {
-                component.voltage = Component.VDD_VOLTAGE;
-                component.outputs.forEach(output => {
-                    output.voltage = Component.VDD_VOLTAGE;
-                });
-            }
-        });
-
-        // Propagate voltages through the circuit
-        for (let i = 0; i < this.maxIterations; i++) {
-            let changed = false;
+        // Process each wire
+        this.wires.forEach(wire => {
+            const startComponent = wire.startComponent;
+            const endComponent = wire.endComponent;
             
-            // Process each wire
-            this.wires.forEach(wire => {
-                const startComponent = wire.startComponent;
-                const endComponent = wire.endComponent;
-                
-                // Special handling for VDD_BAR connections
-                if (startComponent.type === 'VDD_BAR') {
-                    wire.voltage = Component.VDD_VOLTAGE;
-                    if (endComponent.voltage !== Component.VDD_VOLTAGE) {
-                        endComponent.voltage = Component.VDD_VOLTAGE;
-                        changed = true;
-                    }
-                    return;
-                }
-                
-                // Handle other components
-                if (typeof startComponent.voltage === 'number') {
-                    wire.voltage = startComponent.voltage;
-                    if (endComponent.voltage !== startComponent.voltage) {
-                        endComponent.voltage = startComponent.voltage;
-                        changed = true;
-                    }
-                }
+            console.log('Wire connection:', {
+                from: startComponent.type,
+                to: endComponent.type,
+                startVoltage: startComponent.voltage,
+                wireVoltage: wire.voltage
             });
 
-            if (!changed) break;
-        }
+            // If this is a connection to a transistor's input
+            if (endComponent.type === 'NMOS' || endComponent.type === 'PMOS') {
+                // Find which input this wire connects to
+                const connectionPoint = wire.endPoint;
+                const input = endComponent.inputs.find(input => 
+                    input.x === connectionPoint.x && input.y === connectionPoint.y
+                );
+                
+                if (input) {
+                    input.voltage = startComponent.voltage;
+                    console.log('Updating transistor input:', {
+                        transistorType: endComponent.type,
+                        inputName: input.name,
+                        newVoltage: input.voltage
+                    });
+                }
+            }
+        });
 
         // Update probe readings
         this.components.forEach(component => {
@@ -97,12 +88,8 @@ class Circuit {
                     wire.endComponent === component || wire.startComponent === component
                 );
                 if (connectedWire) {
-                    // Set probe voltage from wire
                     component.voltage = connectedWire.voltage;
-                    // Also update the probe's inputs
-                    if (component.inputs && component.inputs.length > 0) {
-                        component.inputs[0].voltage = connectedWire.voltage;
-                    }
+                    console.log('Probe reading:', component.voltage);
                 }
             }
         });
