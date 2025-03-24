@@ -50,11 +50,17 @@ class CircuitEditor {
         // Add delete mode state
         this.deleteMode = false;
 
+        // Add label mode state
+        this.labelMode = false;
+
         // Setup move mode
         this.setupMoveMode();
 
         // Setup additional event listeners
         this.setupDeleteMode();
+
+        // Setup label mode
+        this.setupLabelMode();
 
         this.initializeCanvas();
         this.setupEventListeners();
@@ -181,6 +187,7 @@ class CircuitEditor {
             if (event.key === 'Escape') {
                 this.exitMoveMode();
                 this.exitDeleteMode();
+                this.exitLabelMode();
             }
         });
     }
@@ -216,6 +223,10 @@ class CircuitEditor {
         // Update delete mode button - only toggle the active class
         const deleteButton = document.getElementById('deleteMode');
         deleteButton.classList.toggle('active', this.deleteMode);
+
+        // Add label mode button update
+        const labelButton = document.getElementById('labelMode');
+        labelButton.classList.toggle('active', this.labelMode);
     }
 
     setupDeleteMode() {
@@ -241,6 +252,30 @@ class CircuitEditor {
         }
     }
 
+    setupLabelMode() {
+        const labelButton = document.getElementById('labelMode');
+        labelButton.addEventListener('click', () => this.toggleLabelMode());
+    }
+
+    toggleLabelMode() {
+        this.labelMode = !this.labelMode;
+        this.moveMode = false; // Exit move mode if active
+        this.deleteMode = false; // Exit delete mode if active
+        this.selectedTool = null;
+        this.updateModeButtons();
+        this.updateStatusBar();
+        this.canvas.style.cursor = this.labelMode ? 'crosshair' : 'default';
+    }
+
+    exitLabelMode() {
+        if (this.labelMode) {
+            this.labelMode = false;
+            this.updateModeButtons();
+            this.updateStatusBar();
+            this.canvas.style.cursor = 'default';
+        }
+    }
+
     handleMouseDown(event) {
         const rect = this.canvas.getBoundingClientRect();
         const x = event.clientX - rect.left;
@@ -257,16 +292,16 @@ class CircuitEditor {
         // Get clicked component
         const clickedComponent = this.findComponentAt(x, y);
 
-        if (clickedComponent && timeDiff < this.doubleClickDelay) {
-            // Handle double click for Switch and Probe
-            if (clickedComponent instanceof Switch || clickedComponent instanceof Probe) {
-                const label = prompt("Enter label for the component:", clickedComponent.label || "");
-                if (label !== null) {  // Check if user didn't cancel
-                    clickedComponent.label = label;
-                    this.draw();
-                }
-                return;
+        // Add label mode handling
+        if (this.labelMode && clickedComponent) {
+            const label = prompt("Enter label for the component:", clickedComponent.label || "");
+            if (label !== null) {  // Check if user didn't cancel
+                clickedComponent.label = label;
+                this.draw();
             }
+            // Exit label mode after labeling one component
+            this.exitLabelMode();
+            return;
         }
 
         if (clickedComponent) {
@@ -541,7 +576,9 @@ class CircuitEditor {
 
     updateStatusBar() {
         const toolDisplay = document.getElementById('selectedTool');
-        if (this.deleteMode) {
+        if (this.labelMode) {
+            toolDisplay.textContent = 'Click component to label or ESC';
+        } else if (this.deleteMode) {
             toolDisplay.textContent = 'Click to Delete or ESC';
         } else if (this.moveMode) {
             toolDisplay.textContent = 'Click to Move or ESC';
