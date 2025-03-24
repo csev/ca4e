@@ -395,24 +395,35 @@ class CircuitEditor {
         if (this.isDrawingWire) {
             const endConnectionPoint = this.findConnectionPoint(x, y);
             if (endConnectionPoint && endConnectionPoint.component !== this.wireStartComponent) {
-                // Store relative positions for VDD/GND connections
-                let startPoint = { x: this.wireStartPoint.x, y: this.wireStartPoint.y };
-                let endPoint = { x: endConnectionPoint.point.x, y: endConnectionPoint.point.y };
+                // Check if we need to flip the connection direction
+                let startComp = this.wireStartComponent;
+                let startPt = { x: this.wireStartPoint.x, y: this.wireStartPoint.y };
+                let endComp = endConnectionPoint.component;
+                let endPt = { x: endConnectionPoint.point.x, y: endConnectionPoint.point.y };
+
+                // If ending at a voltage source or switch, flip the connection
+                if (endComp instanceof VDDBar || 
+                    endComp instanceof GNDBar || 
+                    endComp instanceof Switch) {
+                    console.log('Flipping wire direction:', {
+                        from: startComp.type,
+                        to: endComp.type,
+                        flipping: true
+                    });
+                    // Swap start and end
+                    [startComp, endComp] = [endComp, startComp];
+                    [startPt, endPt] = [endPt, startPt];
+                }
 
                 // Add relative position for VDD/GND connections
-                if (this.wireStartComponent === this.vddBar || this.wireStartComponent === this.gndBar) {
-                    startPoint.relativePosition = this.wireStartConnectionPoint.point.relativePosition;
+                if (startComp === this.vddBar || startComp === this.gndBar) {
+                    startPt.relativePosition = this.wireStartConnectionPoint?.point.relativePosition;
                 }
-                if (endConnectionPoint.component === this.vddBar || endConnectionPoint.component === this.gndBar) {
-                    endPoint.relativePosition = endConnectionPoint.point.relativePosition;
+                if (endComp === this.vddBar || endComp === this.gndBar) {
+                    endPt.relativePosition = endConnectionPoint.point.relativePosition;
                 }
 
-                const wire = new Wire(
-                    this.wireStartComponent,
-                    startPoint,
-                    endConnectionPoint.component,
-                    endPoint
-                );
+                const wire = new Wire(startComp, startPt, endComp, endPt);
                 this.circuit.addWire(wire);
             }
             this.isDrawingWire = false;
