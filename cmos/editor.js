@@ -47,8 +47,14 @@ class CircuitEditor {
         // Add move mode state
         this.moveMode = false;
 
+        // Add delete mode state
+        this.deleteMode = false;
+
         // Setup move mode
         this.setupMoveMode();
+
+        // Setup additional event listeners
+        this.setupDeleteMode();
 
         this.initializeCanvas();
         this.setupEventListeners();
@@ -135,7 +141,7 @@ class CircuitEditor {
         });
 
         // Delete button
-        document.getElementById('delete').addEventListener('click', () => {
+        document.getElementById('deleteMode').addEventListener('click', () => {
             if (this.selectedComponent) {
                 this.circuit.removeComponent(this.selectedComponent);
                 this.selectedComponent = null;
@@ -167,10 +173,11 @@ class CircuitEditor {
         this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
         this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
 
-        // Add ESC key listener
+        // Add ESC key listener for both move and delete modes
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape') {
                 this.exitMoveMode();
+                this.exitDeleteMode();
             }
         });
     }
@@ -184,7 +191,7 @@ class CircuitEditor {
     toggleMoveMode() {
         this.moveMode = !this.moveMode;
         this.selectedTool = null;
-        this.updateMoveButton();
+        this.updateModeButtons();
         this.updateStatusBar();
         this.canvas.style.cursor = this.moveMode ? 'move' : 'default';
     }
@@ -192,16 +199,43 @@ class CircuitEditor {
     exitMoveMode() {
         if (this.moveMode) {
             this.moveMode = false;
-            this.updateMoveButton();
+            this.updateModeButtons();
             this.updateStatusBar();
             this.canvas.style.cursor = 'default';
         }
     }
 
-    updateMoveButton() {
+    updateModeButtons() {
+        // Update move mode button - only toggle the active class
         const moveButton = document.getElementById('moveMode');
         moveButton.classList.toggle('active', this.moveMode);
-        moveButton.textContent = this.moveMode ? 'Exit Move Mode (ESC)' : 'Move Mode';
+
+        // Update delete mode button - only toggle the active class
+        const deleteButton = document.getElementById('deleteMode');
+        deleteButton.classList.toggle('active', this.deleteMode);
+    }
+
+    setupDeleteMode() {
+        const deleteButton = document.getElementById('deleteMode');
+        deleteButton.addEventListener('click', () => this.toggleDeleteMode());
+    }
+
+    toggleDeleteMode() {
+        this.deleteMode = !this.deleteMode;
+        this.moveMode = false; // Exit move mode if active
+        this.selectedTool = null;
+        this.updateModeButtons();
+        this.updateStatusBar();
+        this.canvas.style.cursor = this.deleteMode ? 'not-allowed' : 'default';
+    }
+
+    exitDeleteMode() {
+        if (this.deleteMode) {
+            this.deleteMode = false;
+            this.updateModeButtons();
+            this.updateStatusBar();
+            this.canvas.style.cursor = 'default';
+        }
     }
 
     handleMouseDown(event) {
@@ -212,9 +246,32 @@ class CircuitEditor {
         // Clear any existing selection first
         this.selectedComponent = null;
 
-        // Check if clicking on a connection point
+        // Get clicked component
+        const clickedComponent = this.findComponentAt(x, y);
+
+        if (clickedComponent) {
+            if (this.deleteMode) {
+                // In delete mode, remove clicked component if it's not a VDD/GND bar
+                if (clickedComponent.type !== 'VDD_BAR' && clickedComponent.type !== 'GND_BAR') {
+                    this.deleteComponent(clickedComponent);
+                }
+                return;
+            } else if (this.moveMode) {
+                // In move mode, start dragging
+                this.startComponentDragging(clickedComponent, x, y);
+                return;
+            } else if (clickedComponent instanceof Switch) {
+                // Normal mode, toggle switch
+                clickedComponent.toggle();
+                this.circuit.simulate();
+                this.draw();
+                return;
+            }
+        }
+
+        // Check if clicking on a connection point for wire drawing
         const connectionPoint = this.findConnectionPoint(x, y);
-        if (connectionPoint) {
+        if (connectionPoint && !this.deleteMode && !this.moveMode) {
             this.isDrawingWire = true;
             this.wireStartComponent = connectionPoint.component;
             this.wireStartConnectionPoint = connectionPoint;
@@ -223,24 +280,8 @@ class CircuitEditor {
             return;
         }
 
-        // Get clicked component
-        const clickedComponent = this.findComponentAt(x, y);
-
-        if (clickedComponent) {
-            if (this.moveMode) {
-                // In move mode, start dragging any component
-                this.startComponentDragging(clickedComponent, x, y);
-            } else if (clickedComponent instanceof Switch) {
-                // Not in move mode, toggle switch
-                clickedComponent.toggle();
-                this.circuit.simulate();
-                this.draw();
-                return;
-            }
-        }
-
         // Handle tool selection and component placement
-        if (this.selectedTool && !this.moveMode) {
+        if (this.selectedTool && !this.moveMode && !this.deleteMode) {
             let component;
             switch (this.selectedTool) {
                 case 'NMOS':
@@ -473,8 +514,10 @@ class CircuitEditor {
 
     updateStatusBar() {
         const toolDisplay = document.getElementById('selectedTool');
-        if (this.moveMode) {
-            toolDisplay.textContent = 'MOVE MODE - Click and drag components (ESC to exit)';
+        if (this.deleteMode) {
+            toolDisplay.textContent = 'Click to delete or ESC';
+        } else if (this.moveMode) {
+            toolDisplay.textContent = 'Click to move or ESC';
         } else if (this.selectedTool) {
             toolDisplay.textContent = `Selected: ${this.selectedTool}`;
         } else {
@@ -514,6 +557,20 @@ class CircuitEditor {
         const dy = Math.abs((newPoint.y - this.draggingComponent.y) - 
                           (originalPoint.y - this.draggingComponent.y));
         return dx < 1 && dy < 1;
+    }
+
+    deleteComponent(component) {
+        // Remove all wires connected to this component
+        this.circuit.wires = this.circuit.wires.filter(wire => 
+            wire.startComponent !== component && wire.endComponent !== component
+        );
+        
+        // Remove the component
+        this.circuit.removeComponent(component);
+        
+        // Simulate and redraw
+        this.circuit.simulate();
+        this.draw();
     }
 }
 
