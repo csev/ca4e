@@ -531,6 +531,7 @@ class VDDBar extends Component {
     constructor(canvasWidth) {
         super('VDD_BAR', 0, 40);
         this.numPoints = 10; // Fixed number of points
+        this.voltage = Component.VDD_VOLTAGE; // Explicitly set voltage
         this.updateDimensions(canvasWidth);
     }
 
@@ -538,7 +539,6 @@ class VDDBar extends Component {
         this.margin = Math.max(80, canvasWidth * 0.1); // Responsive margin, minimum 80px
         this.width = canvasWidth - (this.margin * 2);
         this.height = 30;
-        this.voltage = 5;
         
         // Recalculate connection points
         this.outputs = [];
@@ -550,7 +550,7 @@ class VDDBar extends Component {
             this.outputs.push({
                 x: this.margin + 20 + (i * spacing),
                 y: this.y + this.height/2,
-                voltage: this.voltage,
+                voltage: Component.VDD_VOLTAGE, // Explicitly set voltage for each output
                 relativePosition: relativePosition // Store relative position
             });
         }

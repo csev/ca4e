@@ -42,8 +42,19 @@ class Circuit {
         this.components.forEach(component => {
             if (component.type !== 'VDD' && 
                 component.type !== 'GND' && 
-                component.type !== 'SWITCH') {
+                component.type !== 'SWITCH' &&
+                component.type !== 'VDD_BAR') {
                 component.voltage = 0;
+            }
+        });
+
+        // Ensure VDD_BAR voltage is set
+        this.components.forEach(component => {
+            if (component.type === 'VDD_BAR') {
+                component.voltage = Component.VDD_VOLTAGE;
+                component.outputs.forEach(output => {
+                    output.voltage = Component.VDD_VOLTAGE;
+                });
             }
         });
 
@@ -56,7 +67,17 @@ class Circuit {
                 const startComponent = wire.startComponent;
                 const endComponent = wire.endComponent;
                 
-                // If start component has a defined voltage, propagate it
+                // Special handling for VDD_BAR connections
+                if (startComponent.type === 'VDD_BAR') {
+                    wire.voltage = Component.VDD_VOLTAGE;
+                    if (endComponent.voltage !== Component.VDD_VOLTAGE) {
+                        endComponent.voltage = Component.VDD_VOLTAGE;
+                        changed = true;
+                    }
+                    return;
+                }
+                
+                // Handle other components
                 if (typeof startComponent.voltage === 'number') {
                     wire.voltage = startComponent.voltage;
                     if (endComponent.voltage !== startComponent.voltage) {
@@ -76,9 +97,12 @@ class Circuit {
                     wire.endComponent === component || wire.startComponent === component
                 );
                 if (connectedWire) {
-                    const sourceComponent = connectedWire.startComponent === component ? 
-                        connectedWire.endComponent : connectedWire.startComponent;
-                    component.voltage = sourceComponent.voltage;
+                    // Set probe voltage from wire
+                    component.voltage = connectedWire.voltage;
+                    // Also update the probe's inputs
+                    if (component.inputs && component.inputs.length > 0) {
+                        component.inputs[0].voltage = connectedWire.voltage;
+                    }
                 }
             }
         });
