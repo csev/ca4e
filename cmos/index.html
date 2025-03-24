@@ -230,10 +230,7 @@
         // Example usage:
         // const voltage = getProbeVoltage('output1');
         // const allLabels = getAllProbeLabels();
-    </script>
 
-    <!-- Add this before the closing </body> tag -->
-    <script>
         // Function to read probe voltage - call from browser console
         function getProbeVoltage(label) {
             return window.circuitEditor.getProbeVoltageByLabel(label);
@@ -241,6 +238,19 @@
 
         // Example usage from browser console:
         // getProbeVoltage('output1')  // Returns voltage of probe labeled 'output1'
+
+        // Functions to control switches - call from browser console
+        function setSwitchHigh(label) {
+            return window.circuitEditor.setSwitchHigh(label);
+        }
+
+        function setSwitchLow(label) {
+            return window.circuitEditor.setSwitchLow(label);
+        }
+
+        // Example usage from browser console:
+        // setSwitchHigh('input1')  // Sets switch labeled 'input1' to VCC (5V)
+        // setSwitchLow('input1')   // Sets switch labeled 'input1' to GND (0V)
     </script>
 </body>
 </html> 

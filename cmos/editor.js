@@ -619,6 +619,34 @@ class CircuitEditor {
             .filter(component => component instanceof Probe && component.label)
             .map(probe => probe.label);
     }
+
+    getSwitchByLabel(label) {
+        return this.circuit.components.find(component => 
+            component instanceof Switch && 
+            component.label === label
+        );
+    }
+
+    setSwitchVoltage(label, isHigh) {
+        const switchComponent = this.getSwitchByLabel(label);
+        if (switchComponent) {
+            if (isHigh !== switchComponent.isOn) {
+                switchComponent.toggle();
+                this.circuit.fullRecompute();
+                this.draw();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    setSwitchHigh(label) {
+        return this.setSwitchVoltage(label, true);
+    }
+
+    setSwitchLow(label) {
+        return this.setSwitchVoltage(label, false);
+    }
 }
 
 // Modify initialization to make editor globally accessible
