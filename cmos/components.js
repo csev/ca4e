@@ -118,93 +118,10 @@ class Ground extends Component {
 class NMOS extends Component {
     constructor(x, y) {
         super('NMOS', x, y);
-        this.voltage = 0;
         this.inputs = [
-            { x: this.x - 20, y: this.y, name: 'gate', voltage: 0 },     // Gate
-            { x: this.x, y: this.y - 20, name: 'drain', voltage: 0 },    // Drain
-            { x: this.x, y: this.y + 20, name: 'source', voltage: 0 }    // Source
-        ];
-        this.width = 40;  // Width of the transistor symbol
-        this.height = 60; // Height of the transistor symbol
-    }
-
-    draw(ctx) {
-        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000';
-        ctx.fillStyle = '#ffffff';
-        
-        // Draw gate line
-        ctx.beginPath();
-        ctx.moveTo(this.x - 20, this.y);
-        ctx.lineTo(this.x - 5, this.y);
-        ctx.stroke();
-
-        // Draw vertical channel line
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y - 15);
-        ctx.lineTo(this.x, this.y + 15);
-        ctx.stroke();
-
-        // Draw source and drain connections
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y - 20);
-        ctx.lineTo(this.x, this.y - 15);
-        ctx.moveTo(this.x, this.y + 15);
-        ctx.lineTo(this.x, this.y + 20);
-        ctx.stroke();
-
-        // Draw gate symbol (vertical lines)
-        ctx.beginPath();
-        ctx.moveTo(this.x - 5, this.y - 10);
-        ctx.lineTo(this.x - 5, this.y + 10);
-        ctx.stroke();
-
-        // Draw arrow (for NMOS)
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y);
-        ctx.lineTo(this.x - 8, this.y + 5);
-        ctx.lineTo(this.x - 8, this.y - 5);
-        ctx.closePath();
-        ctx.fill();
-
-        // Draw connection points
-        this.inputs.forEach(input => {
-            ctx.beginPath();
-            ctx.arc(input.x, input.y, 3, 0, Math.PI * 2);
-            ctx.fill();
-        });
-
-        // Draw labels
-        ctx.fillStyle = '#000000';
-        ctx.font = '10px Arial';
-        ctx.textAlign = 'right';
-        ctx.fillText('G', this.x - 25, this.y + 4);
-        ctx.textAlign = 'center';
-        ctx.fillText('D', this.x, this.y - 25);
-        ctx.fillText('S', this.x, this.y + 25);
-    }
-
-    updateConnectionPoints() {
-        this.inputs[0] = { x: this.x - 20, y: this.y, name: 'gate', voltage: this.inputs[0].voltage };
-        this.inputs[1] = { x: this.x, y: this.y - 20, name: 'drain', voltage: this.inputs[1].voltage };
-        this.inputs[2] = { x: this.x, y: this.y + 20, name: 'source', voltage: this.inputs[2].voltage };
-    }
-
-    isPointInside(x, y) {
-        return x >= this.x - this.width/2 && 
-               x <= this.x + this.width/2 && 
-               y >= this.y - this.height/2 && 
-               y <= this.y + this.height/2;
-    }
-}
-
-class PMOS extends Component {
-    constructor(x, y) {
-        super('PMOS', x, y);
-        this.voltage = 0;
-        this.inputs = [
-            { x: this.x - 20, y: this.y, name: 'gate', voltage: 0 },     // Gate
-            { x: this.x, y: this.y - 20, name: 'drain', voltage: 0 },    // Drain
-            { x: this.x, y: this.y + 20, name: 'source', voltage: 0 }    // Source
+            { x: this.x - 20, y: this.y, name: 'gate', value: 0 },     // Gate
+            { x: this.x, y: this.y - 20, name: 'drain', value: 0 },    // Drain
+            { x: this.x, y: this.y + 20, name: 'source', value: 0 }    // Source
         ];
         this.width = 40;
         this.height = 60;
@@ -226,12 +143,118 @@ class PMOS extends Component {
         ctx.lineTo(this.x, this.y + 15);
         ctx.stroke();
 
-        // Draw source and drain connections
+        // Draw drain connection (with horizontal segment)
         ctx.beginPath();
-        ctx.moveTo(this.x, this.y - 20);
-        ctx.lineTo(this.x, this.y - 15);
+        ctx.moveTo(this.x, this.y - 15);
+        ctx.lineTo(this.x + 7, this.y - 15);  // Horizontal segment
+        ctx.lineTo(this.x + 7, this.y - 20);  // Vertical segment
+        ctx.stroke();
+
+        // Draw source connection (with horizontal segment)
+        ctx.beginPath();
         ctx.moveTo(this.x, this.y + 15);
-        ctx.lineTo(this.x, this.y + 20);
+        ctx.lineTo(this.x + 7, this.y + 15);  // Horizontal segment
+        ctx.lineTo(this.x + 7, this.y + 20);  // Vertical segment
+        ctx.stroke();
+
+        // Draw gate symbol (vertical lines)
+        ctx.beginPath();
+        ctx.moveTo(this.x - 5, this.y - 10);
+        ctx.lineTo(this.x - 5, this.y + 10);
+        ctx.stroke();
+
+        // Draw arrow (for NMOS)
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x - 8, this.y + 5);
+        ctx.lineTo(this.x - 8, this.y - 5);
+        ctx.closePath();
+        ctx.fill();
+
+        // Update connection point positions to match new geometry
+        this.inputs[1].x = this.x + 7;  // Update drain x position
+        this.inputs[2].x = this.x + 7;  // Update source x position
+
+        // Draw connection points with filled circles
+        this.inputs.forEach(input => {
+            // Draw white background circle
+            ctx.beginPath();
+            ctx.arc(input.x, input.y, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.stroke();
+            
+            // Draw smaller filled black circle
+            ctx.beginPath();
+            ctx.arc(input.x, input.y, 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = '#000000';
+            ctx.fill();
+        });
+
+        // Draw labels
+        ctx.fillStyle = '#000000';
+        ctx.font = '10px Arial';
+        ctx.textAlign = 'right';
+        ctx.fillText('G', this.x - 25, this.y + 4);
+        ctx.textAlign = 'left';
+        ctx.fillText('D', this.x + 12, this.y - 25);
+        ctx.fillText('S', this.x + 12, this.y + 25);
+    }
+
+    updateConnectionPoints() {
+        this.inputs[0] = { x: this.x - 20, y: this.y, name: 'gate', value: this.inputs[0].value };
+        this.inputs[1] = { x: this.x + 7, y: this.y - 20, name: 'drain', value: this.inputs[1].value };
+        this.inputs[2] = { x: this.x + 7, y: this.y + 20, name: 'source', value: this.inputs[2].value };
+    }
+
+    isPointInside(x, y) {
+        return x >= this.x - this.width/2 && 
+               x <= this.x + this.width/2 && 
+               y >= this.y - this.height/2 && 
+               y <= this.y + this.height/2;
+    }
+}
+
+class PMOS extends Component {
+    constructor(x, y) {
+        super('PMOS', x, y);
+        this.inputs = [
+            { x: this.x - 20, y: this.y, name: 'gate', value: 0 },     // Gate
+            { x: this.x, y: this.y - 20, name: 'drain', value: 0 },    // Drain
+            { x: this.x, y: this.y + 20, name: 'source', value: 0 }    // Source
+        ];
+        this.width = 40;
+        this.height = 60;
+    }
+
+    draw(ctx) {
+        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000';
+        ctx.fillStyle = '#ffffff';
+        
+        // Draw gate line
+        ctx.beginPath();
+        ctx.moveTo(this.x - 20, this.y);
+        ctx.lineTo(this.x - 5, this.y);
+        ctx.stroke();
+
+        // Draw vertical channel line
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y - 15);
+        ctx.lineTo(this.x, this.y + 15);
+        ctx.stroke();
+
+        // Draw drain connection (with horizontal segment)
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y - 15);
+        ctx.lineTo(this.x + 7, this.y - 15);  // Horizontal segment
+        ctx.lineTo(this.x + 7, this.y - 20);  // Vertical segment
+        ctx.stroke();
+
+        // Draw source connection (with horizontal segment)
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y + 15);
+        ctx.lineTo(this.x + 7, this.y + 15);  // Horizontal segment
+        ctx.lineTo(this.x + 7, this.y + 20);  // Vertical segment
         ctx.stroke();
 
         // Draw gate symbol (vertical lines)
@@ -245,10 +268,23 @@ class PMOS extends Component {
         ctx.arc(this.x - 8, this.y, 5, 0, Math.PI * 2);
         ctx.stroke();
 
-        // Draw connection points
+        // Update connection point positions to match new geometry
+        this.inputs[1].x = this.x + 7;  // Update drain x position
+        this.inputs[2].x = this.x + 7;  // Update source x position
+
+        // Draw connection points with filled circles
         this.inputs.forEach(input => {
+            // Draw white background circle
             ctx.beginPath();
-            ctx.arc(input.x, input.y, 3, 0, Math.PI * 2);
+            ctx.arc(input.x, input.y, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.stroke();
+            
+            // Draw smaller filled black circle
+            ctx.beginPath();
+            ctx.arc(input.x, input.y, 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = '#000000';
             ctx.fill();
         });
 
@@ -257,15 +293,15 @@ class PMOS extends Component {
         ctx.font = '10px Arial';
         ctx.textAlign = 'right';
         ctx.fillText('G', this.x - 25, this.y + 4);
-        ctx.textAlign = 'center';
-        ctx.fillText('D', this.x, this.y - 25);
-        ctx.fillText('S', this.x, this.y + 25);
+        ctx.textAlign = 'left';
+        ctx.fillText('D', this.x + 12, this.y - 25);
+        ctx.fillText('S', this.x + 12, this.y + 25);
     }
 
     updateConnectionPoints() {
-        this.inputs[0] = { x: this.x - 20, y: this.y, name: 'gate', voltage: this.inputs[0].voltage };
-        this.inputs[1] = { x: this.x, y: this.y - 20, name: 'drain', voltage: this.inputs[1].voltage };
-        this.inputs[2] = { x: this.x, y: this.y + 20, name: 'source', voltage: this.inputs[2].voltage };
+        this.inputs[0] = { x: this.x - 20, y: this.y, name: 'gate', value: this.inputs[0].value };
+        this.inputs[1] = { x: this.x + 7, y: this.y - 20, name: 'drain', value: this.inputs[1].value };
+        this.inputs[2] = { x: this.x + 7, y: this.y + 20, name: 'source', value: this.inputs[2].value };
     }
 
     isPointInside(x, y) {

@@ -78,11 +78,12 @@ class CircuitEditor {
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
 
+        // Clear any existing selection first
+        this.selectedComponent = null;
+
         // Check if clicking on a connection point
         const connectionPoint = this.findConnectionPoint(x, y);
-        
         if (connectionPoint) {
-            // Start wire drawing
             this.isDrawingWire = true;
             this.wireStartComponent = connectionPoint.component;
             this.wireStartConnectionPoint = connectionPoint;
@@ -96,13 +97,11 @@ class CircuitEditor {
         if (clickedComponent && clickedComponent instanceof Switch) {
             this.clickedSwitch = clickedComponent;
             clickedComponent.toggle();
-            // Simulate the circuit after toggling the switch
             this.circuit.simulate();
             this.draw();
             return;
         }
 
-        // Handle other mouse down events
         if (this.selectedTool) {
             // Create new component
             let component;
@@ -132,7 +131,7 @@ class CircuitEditor {
                 this.draw();
             }
         } else {
-            // Check for component selection
+            // Check for component selection or dragging
             const clickedComponent = this.findComponentAt(x, y);
             if (clickedComponent) {
                 this.startComponentDragging(clickedComponent, x, y);
@@ -175,7 +174,6 @@ class CircuitEditor {
         if (this.isDrawingWire) {
             const endConnectionPoint = this.findConnectionPoint(x, y);
             if (endConnectionPoint && endConnectionPoint.component !== this.wireStartComponent) {
-                // Create wire between connection points
                 const wire = new Wire(
                     this.wireStartComponent,
                     this.wireStartPoint,
@@ -193,17 +191,14 @@ class CircuitEditor {
 
         if (this.draggingComponent) {
             this.draggingComponent.endDrag();
+            this.selectedComponent = null;  // Clear selection when drag ends
             this.draggingComponent = null;
         }
-
-        // Reset clicked switch
-        this.clickedSwitch = null;
 
         this.draw();
     }
 
     startComponentDragging(component, x, y) {
-        this.selectedComponent = component;
         this.draggingComponent = component;
         component.startDrag(x, y);
     }
