@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMOS Circuit Editor</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .toolbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            padding: 10px 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .component-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .component-selector button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #2196F3;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-weight: bold;
+        }
+
+        .component-selector button:hover {
+            background-color: #1976D2;
+        }
+
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        #selectedTool {
+            font-weight: bold;
+            color: #333;
+        }
+
+        #delete {
+            background-color: #FF9800;
+        }
+
+        #delete:hover {
+            background-color: #F57C00;
+        }
+
+        #clear {
+            background-color: #f44336;
+        }
+
+        #circuitCanvas {
+            margin-top: 60px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .status-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #333;
+            color: white;
+            padding: 5px 20px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <div class="component-selector">
+            <button data-component="VDD">VDD</button>
+            <button data-component="GND">GND</button>
+            <button data-component="SWITCH">Switch</button>
+            <button data-component="NMOS">NMOS</button>
+            <button data-component="PMOS">PMOS</button>
+            <button data-component="PROBE">Probe</button>
+        </div>
+        <div class="right-section">
+            <span id="selectedTool">Selected: None</span>
+            <button id="delete">Delete</button>
+            <button id="clear">Clear All</button>
+        </div>
+    </div>
+
+    <canvas id="circuitCanvas"></canvas>
+
+    <div class="status-bar">
+        <span id="coordinates">Position: 0, 0</span>
+        <span id="voltage">Voltage: N/A</span>
+    </div>
+
+    <script src="components.js"></script>
+    <script src="circuit.js"></script>
+    <script src="editor.js"></script>
+</body>
+</html> 
