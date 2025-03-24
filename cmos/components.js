@@ -60,10 +60,24 @@ class Component {
 class MOSTransistor extends Component {
     constructor(type, x, y) {
         super(type, x, y);
+        this.gate_con_x = - 22;
+        this.gate_con_y = 0;
+        this.source_con_x = 8;
+        this.source_con_y = 25;
+        this.drain_con_x = this.source_con_x;
+        this.drain_con_y = - this.source_con_y;
+        
+        this.gate_label_x = -20;
+        this.gate_label_y = 13;
+        this.source_label_x = -6;
+        this.source_label_y = 25;
+        this.drain_label_x = this.source_label_x;
+        this.drain_label_y = - this.source_label_y;
+
         this.inputs = [
-            { x: this.x - 22, y: this.y - 2, name: 'gate', voltage: 0 },     // Gate
-            { x: this.x + 9, y: this.y - 26, name: 'drain', voltage: 0 },    // Drain
-            { x: this.x + 9, y: this.y + 26, name: 'source', voltage: 0 }    // Source
+            { x: this.x + this.gate_con_x, y: this.y + this.gate_con_y, name: 'gate', voltage: 0 },     // Gate
+            { x: this.x + this.drain_con_x, y: this.y + this.drain_con_y, name: 'drain', voltage: 0 },    // Drain
+            { x: this.x + this.source_con_x, y: this.y + this.source_con_y, name: 'source', voltage: 0 }    // Source
         ];
         this.width = 40;
         this.height = 60;
@@ -131,10 +145,10 @@ class MOSTransistor extends Component {
         ctx.fillStyle = '#000000';
         ctx.font = '10px Arial';
         ctx.textAlign = 'right';
-        ctx.fillText('G', this.x - 25, this.y + 4);
+        ctx.fillText('G', this.x + this.gate_label_x, this.y + this.gate_label_y);
         ctx.textAlign = 'left';
-        ctx.fillText('D', this.x + 12, this.y - 25);
-        ctx.fillText('S', this.x + 12, this.y + 25);
+        ctx.fillText('D', this.x + this.drain_label_x, this.y + this.drain_label_y);
+        ctx.fillText('S', this.x + this.source_label_x, this.y + this.source_label_y);
 
         // Add conducting indicator text
         if (this.conducting) {
@@ -146,9 +160,9 @@ class MOSTransistor extends Component {
     }
 
     updateConnectionPoints() {
-        this.inputs[0] = { x: this.x - 22, y: this.y - 2, name: 'gate', value: this.inputs[0].value };
-        this.inputs[1] = { x: this.x + 9, y: this.y - 26, name: 'drain', value: this.inputs[1].value };
-        this.inputs[2] = { x: this.x + 9, y: this.y + 26, name: 'source', value: this.inputs[2].value };
+        this.inputs[0] = { x: this.x + this.gate_con_x, y: this.y + this.gate_con_y, name: 'gate', value: this.inputs[0].value };
+        this.inputs[1] = { x: this.x + this.drain_con_x, y: this.y + this.drain_con_y, name: 'drain', value: this.inputs[1].value };
+        this.inputs[2] = { x: this.x + this.source_con_x, y: this.y + this.source_con_y, name: 'source', value: this.inputs[2].value };
     }
 
     isPointInside(x, y) {
