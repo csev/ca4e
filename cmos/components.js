@@ -729,79 +729,101 @@ class BatterySymbol {
     }
 
     updatePosition() {
-        // Position battery to the right of the bars, moved 20px left
+        // Position battery to the right of the bars
         this.rightMargin = 40;
         this.width = 30;
-        // Position x coordinate at the right edge of the bars plus margin, minus 20px
-        this.x = this.vddBar.margin + this.vddBar.width + 40; // Reduced from 60 to 40
+        this.x = this.vddBar.margin + this.vddBar.width + 40;
         
-        // Calculate vertical positions using the actual bar positions
-        this.topY = this.vddBar.y;      // Center of VDD bar
-        this.bottomY = this.gndBar.y;    // Center of GND bar
+        // Calculate vertical positions
+        this.topY = this.vddBar.y;
+        this.bottomY = this.gndBar.y;
         
         // Battery cell dimensions
-        this.cellHeight = 60;
-        this.cellSpacing = 20; // Space between positive and negative terminals
+        this.cellSpacing = 10;  // Doubled from 5 to 10 (space between + and - terminals within each cell)
+        this.cellGap = 10;      // Doubled from 5 to 10 (gap between the two cells)
         this.cellY = (this.topY + this.bottomY) / 2; // Center point of battery
         this.longLineLength = 40;
         this.shortLineLength = 20;
+
+        // Calculate positions for each cell relative to center
+        this.upperCellBottom = this.cellY - this.cellGap/2;
+        this.lowerCellTop = this.cellY + this.cellGap/2;
     }
 
     draw(ctx) {
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 2;
 
-        // Draw horizontal lines from bars to battery vertical connection
+        // Draw horizontal lines from bars to battery
         ctx.beginPath();
-        // Top horizontal line from VDD bar to battery connection
         ctx.moveTo(this.vddBar.margin + this.vddBar.width, this.vddBar.y);
         ctx.lineTo(this.x, this.vddBar.y);
         
-        // Bottom horizontal line from GND bar to battery connection
         ctx.moveTo(this.vddBar.margin + this.vddBar.width, this.gndBar.y);
         ctx.lineTo(this.x, this.gndBar.y);
         ctx.stroke();
 
-        // Draw vertical lines connecting to battery center
+        // Draw vertical lines connecting to battery
         ctx.beginPath();
-        // Top connection - from horizontal line to battery center
         ctx.moveTo(this.x, this.vddBar.y);
-        ctx.lineTo(this.x, this.cellY);
+        ctx.lineTo(this.x, this.upperCellBottom - this.cellSpacing);
         
-        // Bottom connection - from horizontal line to battery center
         ctx.moveTo(this.x, this.gndBar.y);
-        ctx.lineTo(this.x, this.cellY);
+        ctx.lineTo(this.x, this.lowerCellTop + this.cellSpacing);
         ctx.stroke();
 
-        // Draw battery symbol
+        // Draw upper cell
         // Positive terminal (longer line)
         ctx.beginPath();
-        ctx.moveTo(this.x - this.longLineLength/2, this.cellY - this.cellSpacing/2);
-        ctx.lineTo(this.x + this.longLineLength/2, this.cellY - this.cellSpacing/2);
+        ctx.moveTo(this.x - this.longLineLength/2, this.upperCellBottom - this.cellSpacing);
+        ctx.lineTo(this.x + this.longLineLength/2, this.upperCellBottom - this.cellSpacing);
         ctx.stroke();
 
         // Negative terminal (shorter line)
         ctx.beginPath();
-        ctx.moveTo(this.x - this.shortLineLength/2, this.cellY + this.cellSpacing/2);
-        ctx.lineTo(this.x + this.shortLineLength/2, this.cellY + this.cellSpacing/2);
+        ctx.moveTo(this.x - this.shortLineLength/2, this.upperCellBottom);
+        ctx.lineTo(this.x + this.shortLineLength/2, this.upperCellBottom);
         ctx.stroke();
 
-        // Draw + and - symbols
+        // Draw lower cell
+        // Positive terminal (longer line)
+        ctx.beginPath();
+        ctx.moveTo(this.x - this.longLineLength/2, this.lowerCellTop);
+        ctx.lineTo(this.x + this.longLineLength/2, this.lowerCellTop);
+        ctx.stroke();
+
+        // Negative terminal (shorter line)
+        ctx.beginPath();
+        ctx.moveTo(this.x - this.shortLineLength/2, this.lowerCellTop + this.cellSpacing);
+        ctx.lineTo(this.x + this.shortLineLength/2, this.lowerCellTop + this.cellSpacing);
+        ctx.stroke();
+
+        // Draw vertical connection between cells
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.upperCellBottom);
+        ctx.lineTo(this.x, this.lowerCellTop);
+        ctx.stroke();
+
+        // Draw + and - symbols and voltage label
         ctx.fillStyle = '#000000';
         ctx.font = 'bold 16px Arial';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
         
-        // + symbol
-        ctx.fillText('+', this.x + this.longLineLength/2 + 5, this.cellY - this.cellSpacing/2);
+        // Calculate position for + symbol
+        const symbolX = this.x + this.longLineLength/2 + 5;
         
-        // - symbol
-        ctx.fillText('−', this.x + this.shortLineLength/2 + 5, this.cellY + this.cellSpacing/2);
-
-        // Draw voltage value
+        // Draw voltage value above + symbol
         ctx.font = 'bold 14px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('5V', this.x + 25, this.cellY);
+        ctx.textAlign = 'left';
+        ctx.fillText('5V', symbolX, this.upperCellBottom - this.cellSpacing - 20);
+        
+        // Draw + symbol
+        ctx.font = 'bold 16px Arial';
+        ctx.fillText('+', symbolX, this.upperCellBottom - this.cellSpacing);
+        
+        // Draw - symbol aligned with +
+        ctx.fillText('−', symbolX, this.lowerCellTop + this.cellSpacing);
 
         ctx.lineWidth = 1; // Reset line width
     }
