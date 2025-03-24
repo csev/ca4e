@@ -1622,35 +1622,60 @@ function calculateIntermediateVoltages() {
     
     // Second pass: Propagate voltages through connections
     let iterationCount = 0;
-    let changed = true;
-    const MAX_ITERATIONS = 1000; // Prevent infinite loops
+    const MAX_ITERATIONS = 250; // Changed from 1000 to 250
+    let changes = new Map(); // Track changes per iteration
     
-    while (changed && iterationCount < MAX_ITERATIONS) {
-        changed = false;
+    function getComponentDescription(dotIndex) {
+        const { row, col } = getRowCol(dotIndex);
+        
+        // Check if it's a power rail
+        if (row === 0 || row === GRID_ROWS - 1) return `VCC rail at column ${col + 1}`;
+        if (row === 1 || row === GRID_ROWS - 2) return `GND rail at column ${col + 1}`;
+        
+        // Check if it's a voltage source
+        const sourceId = `voltage_source_${dotIndex}`;
+        if (voltageSources.has(sourceId)) {
+            return `Voltage source at (${col + 1}, ${row + 1}) [${voltageSources.get(sourceId).isVcc ? 'VCC' : 'GND'}]`;
+        }
+        
+        // Regular breadboard position
+        return `Breadboard point (${col + 1}, ${row + 1})`;
+    }
+    
+    while (iterationCount < MAX_ITERATIONS) {
         iterationCount++;
+        let changesThisIteration = {
+            count: 0,
+            components: new Set()
+        };
         
         // Handle regular connections
         connections.forEach((connectedDots, dotIndex) => {
-            // Skip if this dot already has a voltage
             if (voltageMap.has(dotIndex)) return;
             
-            // Look for a voltage in connected dots
             for (const connectedIndex of connectedDots) {
                 if (voltageMap.has(connectedIndex)) {
-                    voltageMap.set(dotIndex, voltageMap.get(connectedIndex));
-                    changed = true;
+                    const oldVoltage = voltageMap.get(dotIndex);
+                    const newVoltage = voltageMap.get(connectedIndex);
+                    
+                    if (oldVoltage !== newVoltage) {
+                        voltageMap.set(dotIndex, newVoltage);
+                        changesThisIteration.count++;
+                        changesThisIteration.components.add(getComponentDescription(dotIndex));
+                    }
                     break;
                 }
             }
         });
         
-        // Handle transistor connections if transistor is conducting
+        // Handle transistor connections
         transistors.forEach((transistor, id) => {
             if (!transistor.conducting) return;
             
-            // Find drain and source connections
             let drainVoltage = null;
             let sourceVoltage = null;
+            let drainDesc = '';
+            let sourceDesc = '';
             
             lines.forEach(line => {
                 if (line.transistorConnection && line.transistorConnection.id === id) {
@@ -1658,24 +1683,50 @@ function calculateIntermediateVoltages() {
                     const otherEnd = line.start.isTransistorTerminal ? line.end : line.start;
                     const voltage = getDotVoltage(otherEnd, voltageMap);
                     
-                    if (terminal === 'drain') drainVoltage = voltage;
-                    if (terminal === 'source') sourceVoltage = voltage;
+                    if (terminal === 'drain') {
+                        drainVoltage = voltage;
+                        drainDesc = `Transistor ${id} (${transistor.type}) drain`;
+                    }
+                    if (terminal === 'source') {
+                        sourceVoltage = voltage;
+                        sourceDesc = `Transistor ${id} (${transistor.type}) source`;
+                    }
                 }
             });
             
-            // Only propagate if we have one voltage but not the other
             if (drainVoltage !== null && sourceVoltage === null) {
                 voltageMap.set(`transistor_${id}_source`, drainVoltage);
-                changed = true;
+                changesThisIteration.count++;
+                changesThisIteration.components.add(sourceDesc);
             } else if (sourceVoltage !== null && drainVoltage === null) {
                 voltageMap.set(`transistor_${id}_drain`, sourceVoltage);
-                changed = true;
+                changesThisIteration.count++;
+                changesThisIteration.components.add(drainDesc);
             }
         });
+        
+        // Store changes for this iteration
+        changes.set(iterationCount, changesThisIteration);
+        
+        // If no changes this iteration, we're done
+        if (changesThisIteration.count === 0) {
+            console.log(`Circuit stabilized after ${iterationCount} iterations`);
+            console.log('Changes per iteration:');
+            Array.from(changes.entries()).forEach(([iteration, data]) => {
+                if (data.count > 0) {
+                    console.log(`\nIteration ${iteration}:`);
+                    console.log(`- ${data.count} changes`);
+                    console.log('- Components affected:');
+                    data.components.forEach(comp => console.log(`  * ${comp}`));
+                }
+            });
+            break;
+        }
     }
     
     if (iterationCount >= MAX_ITERATIONS) {
         console.warn('Maximum iterations reached in voltage calculation');
+        console.log('Final changes per iteration:', changes);
     }
     
     return voltageMap;
