@@ -90,6 +90,26 @@
             display: flex;
             justify-content: space-between;
         }
+
+        #moveMode {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #2196F3;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        #moveMode:hover {
+            background-color: #1976D2;
+        }
+
+        #moveMode.active {
+            background-color: #ff9800;
+        }
     </style>
 </head>
 <body>
@@ -101,6 +121,7 @@
             <button data-component="PROBE">Probe</button>
         </div>
         <div class="right-section">
+            <button id="moveMode">Move Mode</button>
             <span id="selectedTool">Selected: None</span>
             <button id="delete">Delete</button>
             <button id="clear">Clear All</button>

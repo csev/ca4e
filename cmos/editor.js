@@ -44,6 +44,12 @@ class CircuitEditor {
         this.lastClickTime = 0;
         this.doubleClickDelay = 300; // milliseconds
 
+        // Add move mode state
+        this.moveMode = false;
+
+        // Setup move mode
+        this.setupMoveMode();
+
         this.initializeCanvas();
         this.setupEventListeners();
 
@@ -140,7 +146,17 @@ class CircuitEditor {
         // Clear button
         document.getElementById('clear').addEventListener('click', () => {
             if (confirm('Are you sure you want to clear the circuit?')) {
+                // Store references to bars before clearing
+                const vddBar = this.circuit.components.find(c => c.type === 'VDD_BAR');
+                const gndBar = this.circuit.components.find(c => c.type === 'GND_BAR');
+                
+                // Clear the circuit
                 this.circuit.clear();
+                
+                // Update the bars' dimensions if needed
+                if (vddBar) vddBar.updateDimensions(this.canvas.width);
+                if (gndBar) gndBar.updateDimensions(this.canvas.width, this.canvas.height);
+                
                 this.selectedComponent = null;
                 this.draw();
             }
@@ -150,6 +166,42 @@ class CircuitEditor {
         this.canvas.addEventListener('mousedown', this.handleMouseDown.bind(this));
         this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
         this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
+
+        // Add ESC key listener
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape') {
+                this.exitMoveMode();
+            }
+        });
+    }
+
+    setupMoveMode() {
+        // Set up move mode button listener
+        const moveButton = document.getElementById('moveMode');
+        moveButton.addEventListener('click', () => this.toggleMoveMode());
+    }
+
+    toggleMoveMode() {
+        this.moveMode = !this.moveMode;
+        this.selectedTool = null;
+        this.updateMoveButton();
+        this.updateStatusBar();
+        this.canvas.style.cursor = this.moveMode ? 'move' : 'default';
+    }
+
+    exitMoveMode() {
+        if (this.moveMode) {
+            this.moveMode = false;
+            this.updateMoveButton();
+            this.updateStatusBar();
+            this.canvas.style.cursor = 'default';
+        }
+    }
+
+    updateMoveButton() {
+        const moveButton = document.getElementById('moveMode');
+        moveButton.classList.toggle('active', this.moveMode);
+        moveButton.textContent = this.moveMode ? 'Exit Move Mode (ESC)' : 'Move Mode';
     }
 
     handleMouseDown(event) {
@@ -171,24 +223,24 @@ class CircuitEditor {
             return;
         }
 
-        // Check for double click on switch
+        // Get clicked component
         const clickedComponent = this.findComponentAt(x, y);
-        if (clickedComponent && clickedComponent instanceof Switch) {
-            const currentTime = Date.now();
-            if (currentTime - this.lastClickTime < this.doubleClickDelay) {
-                // Double click detected - toggle switch
+
+        if (clickedComponent) {
+            if (this.moveMode) {
+                // In move mode, start dragging any component
+                this.startComponentDragging(clickedComponent, x, y);
+            } else if (clickedComponent instanceof Switch) {
+                // Not in move mode, toggle switch
                 clickedComponent.toggle();
                 this.circuit.simulate();
                 this.draw();
-                this.lastClickTime = 0; // Reset last click time
                 return;
             }
-            this.lastClickTime = currentTime;
         }
 
         // Handle tool selection and component placement
-        if (this.selectedTool) {
-            // Create new component
+        if (this.selectedTool && !this.moveMode) {
             let component;
             switch (this.selectedTool) {
                 case 'NMOS':
@@ -208,11 +260,6 @@ class CircuitEditor {
                 this.circuit.addComponent(component);
                 this.selectedTool = null;
                 this.draw();
-            }
-        } else {
-            // Handle component dragging (including switches)
-            if (clickedComponent) {
-                this.startComponentDragging(clickedComponent, x, y);
             }
         }
         
@@ -426,10 +473,12 @@ class CircuitEditor {
 
     updateStatusBar() {
         const toolDisplay = document.getElementById('selectedTool');
-        if (this.selectedTool) {
+        if (this.moveMode) {
+            toolDisplay.textContent = 'MOVE MODE - Click and drag components (ESC to exit)';
+        } else if (this.selectedTool) {
             toolDisplay.textContent = `Selected: ${this.selectedTool}`;
         } else {
-            toolDisplay.textContent = 'Selected: None (Double-click switches to toggle)';
+            toolDisplay.textContent = 'Selected: None';
         }
     }
 

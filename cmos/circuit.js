@@ -32,7 +32,10 @@ class Circuit {
     }
 
     clear() {
-        this.components = [];
+        // Keep VDD and GND bars, remove everything else
+        this.components = this.components.filter(component => 
+            component.type === 'VDD_BAR' || component.type === 'GND_BAR'
+        );
         this.wires = [];
     }
 
