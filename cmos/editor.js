@@ -401,15 +401,20 @@ class CircuitEditor {
                 let endComp = endConnectionPoint.component;
                 let endPt = { x: endConnectionPoint.point.x, y: endConnectionPoint.point.y };
 
-                // If ending at a voltage source or switch, flip the connection
-                if (endComp instanceof VDDBar || 
+                // If ending at a voltage source or switch, or starting from source and ending at drain, flip the connection
+                const shouldFlip = endComp instanceof VDDBar || 
                     endComp instanceof GNDBar || 
                     endComp instanceof Switch ||
-                    startComp instanceof Probe) {  // Add condition for Probe as start component
+                    startComp instanceof Probe ||
+                    (this.wireStartConnectionPoint?.point?.name === 'drain' && 
+                     endConnectionPoint?.point?.name === 'source');
+
+                if (shouldFlip) {
                     console.log('Flipping wire direction:', {
                         from: startComp.type,
                         to: endComp.type,
-                        reason: startComp instanceof Probe ? 'Probe as start' : 'VDD/GND/Switch as end',
+                        reason: startComp instanceof Probe ? 'Probe as start' : 
+                               (this.wireStartConnectionPoint?.point?.name === 'drain' ? 'Drain to Source' : 'VDD/GND/Switch as end'),
                         flipping: true
                     });
                     // Swap start and end
