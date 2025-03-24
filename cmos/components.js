@@ -185,15 +185,6 @@ class NMOS extends MOSTransistor {
     updateConductingState() {
         const gateVoltage = this.inputs[0].voltage;
         this.conducting = gateVoltage >= 2.5;
-        
-        console.log('NMOS State:', {
-            gateVoltage: gateVoltage,
-            conducting: this.conducting,
-            inputs: this.inputs.map(input => ({
-                name: input.name,
-                voltage: input.voltage
-            }))
-        });
     }
 
     drawTypeSymbol(ctx) {

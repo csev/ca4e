@@ -83,8 +83,6 @@ class Circuit {
     }
 
     simulate() {
-        console.log('Starting circuit simulation');
-        
         // Reset all voltages except sources and switches
         this.components.forEach(component => {
             if (component.type !== 'VDD' && 
@@ -221,20 +219,8 @@ class Circuit {
                 }
             });
 
-            console.log(`Simulation iteration ${i}, changed: ${changed}`);
             if (!changed) break;
         }
-
-        // Log final probe states
-        this.components.forEach(component => {
-            if (component.type === 'PROBE') {
-                console.log('Final Probe state:', {
-                    voltage: component.voltage,
-                    inputVoltage: component.inputs[0].voltage,
-                    outputVoltage: component.outputs[0].voltage
-                });
-            }
-        });
     }
 
     getOutputVoltage(component, point) {

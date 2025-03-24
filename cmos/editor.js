@@ -509,8 +509,10 @@ class CircuitEditor {
         // Draw grid
         this.drawGrid();
 
-        // Simulate circuit before drawing
-        this.circuit.simulate();
+        // Only simulate if not drawing a wire
+        if (!this.isDrawingWire) {
+            this.circuit.simulate();
+        }
 
         // Draw all wires
         this.circuit.wires.forEach(wire => wire.draw(this.ctx));
