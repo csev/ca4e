@@ -387,6 +387,14 @@ class CircuitEditor {
             this.selectedComponent = null;
             this.draggingComponent = null;
             this.connectedWires = [];
+            
+            // Exit move mode after moving one component
+            if (this.moveMode) {
+                this.moveMode = false;
+                this.updateModeButtons();
+                this.updateStatusBar();
+                this.canvas.style.cursor = 'default';
+            }
         }
 
         this.draw();
@@ -566,6 +574,12 @@ class CircuitEditor {
         
         // Remove the component
         this.circuit.removeComponent(component);
+        
+        // Exit delete mode after deleting one component
+        this.deleteMode = false;
+        this.updateModeButtons();
+        this.updateStatusBar();
+        this.canvas.style.cursor = 'default';
         
         // Simulate and redraw
         this.circuit.simulate();
