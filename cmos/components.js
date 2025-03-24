@@ -57,6 +57,159 @@ class Component {
     }
 }
 
+class MOSTransistor extends Component {
+    constructor(type, x, y) {
+        super(type, x, y);
+        this.inputs = [
+            { x: this.x - 22, y: this.y - 2, name: 'gate', voltage: 0 },     // Gate
+            { x: this.x + 9, y: this.y - 26, name: 'drain', voltage: 0 },    // Drain
+            { x: this.x + 9, y: this.y + 26, name: 'source', voltage: 0 }    // Source
+        ];
+        this.width = 40;
+        this.height = 60;
+        this.conducting = false;
+    }
+
+    draw(ctx) {
+        this.updateConductingState();
+        
+        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000';
+        ctx.fillStyle = '#ffffff';
+        
+        // Draw gate line
+        ctx.beginPath();
+        ctx.moveTo(this.x - 20, this.y);
+        ctx.lineTo(this.x - 5, this.y);
+        ctx.stroke();
+
+        // Draw vertical channel line with conducting indicator
+        ctx.beginPath();
+        if (this.conducting) {
+            ctx.strokeStyle = '#00ff00'; // Green for conducting
+            ctx.lineWidth = 3; // Thicker line when conducting
+        }
+        ctx.moveTo(this.x, this.y - 15);
+        ctx.lineTo(this.x, this.y + 15);
+        ctx.stroke();
+        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000'; // Reset stroke style
+        ctx.lineWidth = 1; // Reset line width
+
+        // Draw drain and source connections
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y - 15);
+        ctx.lineTo(this.x + 7, this.y - 15);
+        ctx.lineTo(this.x + 7, this.y - 20);
+        ctx.moveTo(this.x, this.y + 15);
+        ctx.lineTo(this.x + 7, this.y + 15);
+        ctx.lineTo(this.x + 7, this.y + 20);
+        ctx.stroke();
+
+        // Draw gate symbol (vertical lines)
+        ctx.beginPath();
+        ctx.moveTo(this.x - 5, this.y - 10);
+        ctx.lineTo(this.x - 5, this.y + 10);
+        ctx.stroke();
+
+        // Draw type-specific symbol (arrow or circle)
+        this.drawTypeSymbol(ctx);
+
+        // Draw connection points
+        this.inputs.forEach(input => {
+            ctx.beginPath();
+            ctx.arc(input.x, input.y, 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff';
+            ctx.fill();
+            ctx.stroke();
+            
+            ctx.beginPath();
+            ctx.arc(input.x, input.y, 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = '#000000';
+            ctx.fill();
+        });
+
+        // Draw labels
+        ctx.fillStyle = '#000000';
+        ctx.font = '10px Arial';
+        ctx.textAlign = 'right';
+        ctx.fillText('G', this.x - 25, this.y + 4);
+        ctx.textAlign = 'left';
+        ctx.fillText('D', this.x + 12, this.y - 25);
+        ctx.fillText('S', this.x + 12, this.y + 25);
+
+        // Add conducting indicator text
+        if (this.conducting) {
+            ctx.fillStyle = '#00aa00';
+            ctx.font = 'bold 10px Arial';
+            ctx.textAlign = 'left';
+            ctx.fillText('ON', this.x + 15, this.y);
+        }
+    }
+
+    updateConnectionPoints() {
+        this.inputs[0] = { x: this.x - 22, y: this.y - 2, name: 'gate', value: this.inputs[0].value };
+        this.inputs[1] = { x: this.x + 9, y: this.y - 26, name: 'drain', value: this.inputs[1].value };
+        this.inputs[2] = { x: this.x + 9, y: this.y + 26, name: 'source', value: this.inputs[2].value };
+    }
+
+    isPointInside(x, y) {
+        return x >= this.x - this.width/2 && 
+               x <= this.x + this.width/2 && 
+               y >= this.y - this.height/2 && 
+               y <= this.y + this.height/2;
+    }
+
+    // These methods must be implemented by subclasses
+    updateConductingState() { }
+    drawTypeSymbol(ctx) { }
+}
+
+class NMOS extends MOSTransistor {
+    constructor(x, y) {
+        super('NMOS', x, y);
+    }
+
+    updateConductingState() {
+        const gateVoltage = this.inputs[0].voltage;
+        this.conducting = gateVoltage >= 2.5;
+        
+        console.log('NMOS State:', {
+            gateVoltage: gateVoltage,
+            conducting: this.conducting,
+            inputs: this.inputs.map(input => ({
+                name: input.name,
+                voltage: input.voltage
+            }))
+        });
+    }
+
+    drawTypeSymbol(ctx) {
+        // Draw arrow (for NMOS)
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x - 8, this.y + 5);
+        ctx.lineTo(this.x - 8, this.y - 5);
+        ctx.closePath();
+        ctx.fill();
+    }
+}
+
+class PMOS extends MOSTransistor {
+    constructor(x, y) {
+        super('PMOS', x, y);
+    }
+
+    updateConductingState() {
+        this.conducting = this.inputs[0].voltage < 2.5;
+    }
+
+    drawTypeSymbol(ctx) {
+        // Draw circle (for PMOS)
+        ctx.beginPath();
+        ctx.arc(this.x - 8, this.y, 5, 0, Math.PI * 2);
+        ctx.stroke();
+    }
+}
+
 class VoltageSource extends Component {
     constructor(x, y, voltage = 5) {
         super('VDD', x, y);
@@ -120,229 +273,6 @@ class Ground extends Component {
 
     updateConnectionPoints() {
         this.inputs[0] = { x: this.x, y: this.y - 20, voltage: this.voltage };
-    }
-}
-
-class NMOS extends Component {
-    constructor(x, y) {
-        super('NMOS', x, y);
-        this.inputs = [
-            { x: this.x - 20, y: this.y, name: 'gate', voltage: 0 },     // Gate
-            { x: this.x, y: this.y - 20, name: 'drain', voltage: 0 },    // Drain
-            { x: this.x, y: this.y + 20, name: 'source', voltage: 0 }    // Source
-        ];
-        this.width = 40;
-        this.height = 60;
-        this.conducting = false;
-    }
-
-    draw(ctx) {
-        // Update conducting state based on gate voltage
-        const gateVoltage = this.inputs[0].voltage;
-        this.conducting = gateVoltage >= 2.5;
-        
-        console.log('NMOS State:', {
-            gateVoltage: gateVoltage,
-            conducting: this.conducting,
-            inputs: this.inputs.map(input => ({
-                name: input.name,
-                voltage: input.voltage
-            }))
-        });
-
-        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000';
-        ctx.fillStyle = '#ffffff';
-        
-        // Draw gate line
-        ctx.beginPath();
-        ctx.moveTo(this.x - 20, this.y);
-        ctx.lineTo(this.x - 5, this.y);
-        ctx.stroke();
-
-        // Draw vertical channel line with conducting indicator
-        ctx.beginPath();
-        if (this.conducting) {
-            ctx.strokeStyle = '#00ff00'; // Green for conducting
-            ctx.lineWidth = 3; // Thicker line when conducting
-        }
-        ctx.moveTo(this.x, this.y - 15);
-        ctx.lineTo(this.x, this.y + 15);
-        ctx.stroke();
-        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000'; // Reset stroke style
-        ctx.lineWidth = 1; // Reset line width
-
-        // Draw drain and source connections
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y - 15);
-        ctx.lineTo(this.x + 7, this.y - 15);
-        ctx.lineTo(this.x + 7, this.y - 20);
-        ctx.moveTo(this.x, this.y + 15);
-        ctx.lineTo(this.x + 7, this.y + 15);
-        ctx.lineTo(this.x + 7, this.y + 20);
-        ctx.stroke();
-
-        // Draw gate symbol (vertical lines)
-        ctx.beginPath();
-        ctx.moveTo(this.x - 5, this.y - 10);
-        ctx.lineTo(this.x - 5, this.y + 10);
-        ctx.stroke();
-
-        // Draw arrow (for NMOS)
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y);
-        ctx.lineTo(this.x - 8, this.y + 5);
-        ctx.lineTo(this.x - 8, this.y - 5);
-        ctx.closePath();
-        ctx.fill();
-
-        // Draw connection points
-        this.inputs.forEach(input => {
-            ctx.beginPath();
-            ctx.arc(input.x, input.y, 4, 0, Math.PI * 2);
-            ctx.fillStyle = '#ffffff';
-            ctx.fill();
-            ctx.stroke();
-            
-            ctx.beginPath();
-            ctx.arc(input.x, input.y, 2.5, 0, Math.PI * 2);
-            ctx.fillStyle = '#000000';
-            ctx.fill();
-        });
-
-        // Draw labels
-        ctx.fillStyle = '#000000';
-        ctx.font = '10px Arial';
-        ctx.textAlign = 'right';
-        ctx.fillText('G', this.x - 25, this.y + 4);
-        ctx.textAlign = 'left';
-        ctx.fillText('D', this.x + 12, this.y - 25);
-        ctx.fillText('S', this.x + 12, this.y + 25);
-
-        // Add conducting indicator text
-        if (this.conducting) {
-            ctx.fillStyle = '#00aa00';
-            ctx.font = 'bold 10px Arial';
-            ctx.textAlign = 'left';
-            ctx.fillText('ON', this.x + 15, this.y);
-        }
-    }
-
-    updateConnectionPoints() {
-        this.inputs[0] = { x: this.x - 20, y: this.y, name: 'gate', value: this.inputs[0].value };
-        this.inputs[1] = { x: this.x + 7, y: this.y - 20, name: 'drain', value: this.inputs[1].value };
-        this.inputs[2] = { x: this.x + 7, y: this.y + 20, name: 'source', value: this.inputs[2].value };
-    }
-
-    isPointInside(x, y) {
-        return x >= this.x - this.width/2 && 
-               x <= this.x + this.width/2 && 
-               y >= this.y - this.height/2 && 
-               y <= this.y + this.height/2;
-    }
-}
-
-class PMOS extends Component {
-    constructor(x, y) {
-        super('PMOS', x, y);
-        this.inputs = [
-            { x: this.x - 20, y: this.y, name: 'gate', value: 0 },     // Gate
-            { x: this.x, y: this.y - 20, name: 'drain', value: 0 },    // Drain
-            { x: this.x, y: this.y + 20, name: 'source', value: 0 }    // Source
-        ];
-        this.width = 40;
-        this.height = 60;
-        this.conducting = false; // Add conducting state
-    }
-
-    draw(ctx) {
-        // Update conducting state based on gate voltage (PMOS conducts when gate is LOW)
-        this.conducting = this.inputs[0].voltage < 2.5;
-        
-        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000';
-        ctx.fillStyle = '#ffffff';
-        
-        // Draw gate line
-        ctx.beginPath();
-        ctx.moveTo(this.x - 20, this.y);
-        ctx.lineTo(this.x - 5, this.y);
-        ctx.stroke();
-
-        // Draw vertical channel line with conducting indicator
-        ctx.beginPath();
-        if (this.conducting) {
-            ctx.strokeStyle = '#00ff00'; // Green for conducting
-            ctx.lineWidth = 3; // Thicker line when conducting
-        }
-        ctx.moveTo(this.x, this.y - 15);
-        ctx.lineTo(this.x, this.y + 15);
-        ctx.stroke();
-        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000'; // Reset stroke style
-        ctx.lineWidth = 1; // Reset line width
-
-        // Draw drain and source connections
-        ctx.beginPath();
-        ctx.moveTo(this.x, this.y - 15);
-        ctx.lineTo(this.x + 7, this.y - 15);
-        ctx.lineTo(this.x + 7, this.y - 20);
-        ctx.moveTo(this.x, this.y + 15);
-        ctx.lineTo(this.x + 7, this.y + 15);
-        ctx.lineTo(this.x + 7, this.y + 20);
-        ctx.stroke();
-
-        // Draw gate symbol (vertical lines)
-        ctx.beginPath();
-        ctx.moveTo(this.x - 5, this.y - 10);
-        ctx.lineTo(this.x - 5, this.y + 10);
-        ctx.stroke();
-
-        // Draw circle (for PMOS)
-        ctx.beginPath();
-        ctx.arc(this.x - 8, this.y, 5, 0, Math.PI * 2);
-        ctx.stroke();
-
-        // Draw connection points
-        this.inputs.forEach(input => {
-            ctx.beginPath();
-            ctx.arc(input.x, input.y, 4, 0, Math.PI * 2);
-            ctx.fillStyle = '#ffffff';
-            ctx.fill();
-            ctx.stroke();
-            
-            ctx.beginPath();
-            ctx.arc(input.x, input.y, 2.5, 0, Math.PI * 2);
-            ctx.fillStyle = '#000000';
-            ctx.fill();
-        });
-
-        // Draw labels
-        ctx.fillStyle = '#000000';
-        ctx.font = '10px Arial';
-        ctx.textAlign = 'right';
-        ctx.fillText('G', this.x - 25, this.y + 4);
-        ctx.textAlign = 'left';
-        ctx.fillText('D', this.x + 12, this.y - 25);
-        ctx.fillText('S', this.x + 12, this.y + 25);
-
-        // Add conducting indicator text
-        if (this.conducting) {
-            ctx.fillStyle = '#00aa00';
-            ctx.font = 'bold 10px Arial';
-            ctx.textAlign = 'left';
-            ctx.fillText('ON', this.x + 15, this.y);
-        }
-    }
-
-    updateConnectionPoints() {
-        this.inputs[0] = { x: this.x - 20, y: this.y, name: 'gate', value: this.inputs[0].value };
-        this.inputs[1] = { x: this.x + 7, y: this.y - 20, name: 'drain', value: this.inputs[1].value };
-        this.inputs[2] = { x: this.x + 7, y: this.y + 20, name: 'source', value: this.inputs[2].value };
-    }
-
-    isPointInside(x, y) {
-        return x >= this.x - this.width/2 && 
-               x <= this.x + this.width/2 && 
-               y >= this.y - this.height/2 && 
-               y <= this.y + this.height/2;
     }
 }
 
