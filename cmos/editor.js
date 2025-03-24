@@ -143,8 +143,10 @@ class CircuitEditor {
         // Tool selection
         document.querySelectorAll('.component-selector button').forEach(button => {
             button.addEventListener('click', () => {
+                // Clear all modes
+                this.exitAllModes();
+                // Set the new tool
                 this.selectedTool = button.dataset.component;
-                this.selectedComponent = null;
                 this.updateStatusBar();
             });
         });
@@ -182,37 +184,55 @@ class CircuitEditor {
         this.canvas.addEventListener('mousemove', this.handleMouseMove.bind(this));
         this.canvas.addEventListener('mouseup', this.handleMouseUp.bind(this));
 
-        // Add ESC key listener for both move and delete modes
+        // Add ESC key listener
         document.addEventListener('keydown', (event) => {
             if (event.key === 'Escape') {
-                this.exitMoveMode();
-                this.exitDeleteMode();
-                this.exitLabelMode();
+                this.exitAllModes();
             }
         });
     }
 
     setupMoveMode() {
-        // Set up move mode button listener
         const moveButton = document.getElementById('moveMode');
-        moveButton.addEventListener('click', () => this.toggleMoveMode());
+        moveButton.addEventListener('click', () => {
+            this.exitAllModes();
+            this.moveMode = true;
+            this.updateModeButtons();
+            this.updateStatusBar();
+            this.canvas.style.cursor = 'move';
+        });
     }
 
-    toggleMoveMode() {
-        this.moveMode = !this.moveMode;
+    setupDeleteMode() {
+        const deleteButton = document.getElementById('deleteMode');
+        deleteButton.addEventListener('click', () => {
+            this.exitAllModes();
+            this.deleteMode = true;
+            this.updateModeButtons();
+            this.updateStatusBar();
+            this.canvas.style.cursor = 'not-allowed';
+        });
+    }
+
+    setupLabelMode() {
+        const labelButton = document.getElementById('labelMode');
+        labelButton.addEventListener('click', () => {
+            this.exitAllModes();
+            this.labelMode = true;
+            this.updateModeButtons();
+            this.updateStatusBar();
+            this.canvas.style.cursor = 'crosshair';
+        });
+    }
+
+    exitAllModes() {
+        this.moveMode = false;
+        this.deleteMode = false;
+        this.labelMode = false;
         this.selectedTool = null;
         this.updateModeButtons();
         this.updateStatusBar();
-        this.canvas.style.cursor = this.moveMode ? 'move' : 'default';
-    }
-
-    exitMoveMode() {
-        if (this.moveMode) {
-            this.moveMode = false;
-            this.updateModeButtons();
-            this.updateStatusBar();
-            this.canvas.style.cursor = 'default';
-        }
+        this.canvas.style.cursor = 'default';
     }
 
     updateModeButtons() {
@@ -227,53 +247,6 @@ class CircuitEditor {
         // Add label mode button update
         const labelButton = document.getElementById('labelMode');
         labelButton.classList.toggle('active', this.labelMode);
-    }
-
-    setupDeleteMode() {
-        const deleteButton = document.getElementById('deleteMode');
-        deleteButton.addEventListener('click', () => this.toggleDeleteMode());
-    }
-
-    toggleDeleteMode() {
-        this.deleteMode = !this.deleteMode;
-        this.moveMode = false; // Exit move mode if active
-        this.selectedTool = null;
-        this.updateModeButtons();
-        this.updateStatusBar();
-        this.canvas.style.cursor = this.deleteMode ? 'not-allowed' : 'default';
-    }
-
-    exitDeleteMode() {
-        if (this.deleteMode) {
-            this.deleteMode = false;
-            this.updateModeButtons();
-            this.updateStatusBar();
-            this.canvas.style.cursor = 'default';
-        }
-    }
-
-    setupLabelMode() {
-        const labelButton = document.getElementById('labelMode');
-        labelButton.addEventListener('click', () => this.toggleLabelMode());
-    }
-
-    toggleLabelMode() {
-        this.labelMode = !this.labelMode;
-        this.moveMode = false; // Exit move mode if active
-        this.deleteMode = false; // Exit delete mode if active
-        this.selectedTool = null;
-        this.updateModeButtons();
-        this.updateStatusBar();
-        this.canvas.style.cursor = this.labelMode ? 'crosshair' : 'default';
-    }
-
-    exitLabelMode() {
-        if (this.labelMode) {
-            this.labelMode = false;
-            this.updateModeButtons();
-            this.updateStatusBar();
-            this.canvas.style.cursor = 'default';
-        }
     }
 
     handleMouseDown(event) {
@@ -300,7 +273,7 @@ class CircuitEditor {
                 this.draw();
             }
             // Exit label mode after labeling one component
-            this.exitLabelMode();
+            this.exitAllModes();
             return;
         }
 
