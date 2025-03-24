@@ -30,6 +30,10 @@ class CircuitEditor {
         this.gndBar = null;
         this.batterySymbol = null;
 
+        // Add wire tracking to dragging component
+        this.connectedWires = [];
+        this.dragStartPos = null;
+
         this.initializeCanvas();
         this.setupEventListeners();
 
@@ -152,7 +156,12 @@ class CircuitEditor {
             this.isDrawingWire = true;
             this.wireStartComponent = connectionPoint.component;
             this.wireStartConnectionPoint = connectionPoint;
-            this.wireStartPoint = { x: connectionPoint.point.x, y: connectionPoint.point.y };
+            this.wireStartPoint = { 
+                x: connectionPoint.point.x, 
+                y: connectionPoint.point.y,
+                _relX: connectionPoint.point.x - connectionPoint.component.x,
+                _relY: connectionPoint.point.y - connectionPoint.component.y
+            };
             this.wireEndPoint = { x, y };
             return;
         }
@@ -218,7 +227,23 @@ class CircuitEditor {
         this.hoveredConnectionPoint = this.findConnectionPoint(this.mouseX, this.mouseY);
 
         if (this.draggingComponent) {
+            // First drag the component
             this.draggingComponent.drag(this.mouseX, this.mouseY);
+            
+            // Then update all connected wires
+            this.connectedWires.forEach(wire => {
+                if (wire.startComponent === this.draggingComponent) {
+                    // Update start point based on stored relative position
+                    wire.startPoint.x = this.draggingComponent.x + wire.startPoint._relX;
+                    wire.startPoint.y = this.draggingComponent.y + wire.startPoint._relY;
+                }
+                if (wire.endComponent === this.draggingComponent) {
+                    // Update end point based on stored relative position
+                    wire.endPoint.x = this.draggingComponent.x + wire.endPoint._relX;
+                    wire.endPoint.y = this.draggingComponent.y + wire.endPoint._relY;
+                }
+            });
+            
             this.draw();
         } else if (this.isDrawingWire) {
             this.wireEndPoint = { x: this.mouseX, y: this.mouseY };
@@ -256,8 +281,10 @@ class CircuitEditor {
 
         if (this.draggingComponent) {
             this.draggingComponent.endDrag();
-            this.selectedComponent = null;  // Clear selection when drag ends
+            this.selectedComponent = null;
             this.draggingComponent = null;
+            this.connectedWires = [];
+            this.dragStartPos = null;
         }
 
         this.draw();
@@ -266,6 +293,24 @@ class CircuitEditor {
     startComponentDragging(component, x, y) {
         this.draggingComponent = component;
         component.startDrag(x, y);
+        this.dragStartPos = { x: component.x, y: component.y };
+        
+        // Store all wires connected to this component
+        this.connectedWires = this.circuit.wires.filter(wire => 
+            wire.startComponent === component || wire.endComponent === component
+        );
+
+        // Store the initial relative positions of wire endpoints
+        this.connectedWires.forEach(wire => {
+            if (wire.startComponent === component) {
+                wire.startPoint._relX = wire.startPoint.x - component.x;
+                wire.startPoint._relY = wire.startPoint.y - component.y;
+            }
+            if (wire.endComponent === component) {
+                wire.endPoint._relX = wire.endPoint.x - component.x;
+                wire.endPoint._relY = wire.endPoint.y - component.y;
+            }
+        });
     }
 
     findConnectionPoint(x, y) {
@@ -369,6 +414,40 @@ class CircuitEditor {
         toolDisplay.textContent = this.selectedTool ? 
             `Selected: ${this.selectedTool}` : 
             'Selected: None';
+    }
+
+    findMatchingConnectionPoint(component, point) {
+        // Try to find the matching connection point based on relative position
+        if (component.inputs) {
+            const input = component.inputs.find(input => 
+                this.isNearOriginalPoint(input, point)
+            );
+            if (input) return input;
+        }
+        if (component.outputs) {
+            const output = component.outputs.find(output => 
+                this.isNearOriginalPoint(output, point)
+            );
+            if (output) return output;
+        }
+        return null;
+    }
+
+    isNearOriginalPoint(newPoint, originalPoint) {
+        // Helper function to determine if this is the same connection point
+        // Use relative position for VDD/GND bars
+        if (newPoint.hasOwnProperty('relativePosition') && 
+            originalPoint.hasOwnProperty('relativePosition')) {
+            return Math.abs(newPoint.relativePosition - originalPoint.relativePosition) < 0.01;
+        }
+        
+        // For other components, use the original coordinates to identify the point
+        // We compare the relative position of the point to the component
+        const dx = Math.abs((newPoint.x - this.draggingComponent.x) - 
+                          (originalPoint.x - this.draggingComponent.x));
+        const dy = Math.abs((newPoint.y - this.draggingComponent.y) - 
+                          (originalPoint.y - this.draggingComponent.y));
+        return dx < 1 && dy < 1;
     }
 }
 

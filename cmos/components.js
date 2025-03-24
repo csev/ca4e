@@ -38,8 +38,10 @@ class Component {
 
     drag(mouseX, mouseY) {
         if (this.dragging) {
+            // Update component position
             this.x = mouseX - this.dragOffset.x;
             this.y = mouseY - this.dragOffset.y;
+            
             // Update connection points
             this.updateConnectionPoints();
         }
@@ -50,8 +52,8 @@ class Component {
     }
 
     updateConnectionPoints() {
-        // Update positions of input and output connection points
-        // To be implemented in specific component classes
+        // This should be implemented by each component type
+        // Base implementation does nothing
     }
 }
 
