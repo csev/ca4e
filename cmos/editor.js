@@ -34,6 +34,16 @@ class CircuitEditor {
         this.connectedWires = [];
         this.dragStartPos = null;
 
+        // Add variables to track mouse movement
+        this.mouseDownPos = null;
+        this.mouseDownTime = null;
+        this.dragThreshold = 5; // pixels of movement before considered a drag
+        this.clickThreshold = 200; // milliseconds before considered a drag
+
+        // Add double click tracking
+        this.lastClickTime = 0;
+        this.doubleClickDelay = 300; // milliseconds
+
         this.initializeCanvas();
         this.setupEventListeners();
 
@@ -156,36 +166,31 @@ class CircuitEditor {
             this.isDrawingWire = true;
             this.wireStartComponent = connectionPoint.component;
             this.wireStartConnectionPoint = connectionPoint;
-            this.wireStartPoint = { 
-                x: connectionPoint.point.x, 
-                y: connectionPoint.point.y,
-                _relX: connectionPoint.point.x - connectionPoint.component.x,
-                _relY: connectionPoint.point.y - connectionPoint.component.y
-            };
+            this.wireStartPoint = { x: connectionPoint.point.x, y: connectionPoint.point.y };
             this.wireEndPoint = { x, y };
             return;
         }
 
-        // Check if clicking on a switch
+        // Check for double click on switch
         const clickedComponent = this.findComponentAt(x, y);
         if (clickedComponent && clickedComponent instanceof Switch) {
-            this.clickedSwitch = clickedComponent;
-            clickedComponent.toggle();
-            this.circuit.simulate();
-            this.draw();
-            return;
+            const currentTime = Date.now();
+            if (currentTime - this.lastClickTime < this.doubleClickDelay) {
+                // Double click detected - toggle switch
+                clickedComponent.toggle();
+                this.circuit.simulate();
+                this.draw();
+                this.lastClickTime = 0; // Reset last click time
+                return;
+            }
+            this.lastClickTime = currentTime;
         }
 
+        // Handle tool selection and component placement
         if (this.selectedTool) {
             // Create new component
             let component;
             switch (this.selectedTool) {
-                case 'VDD':
-                    component = new VoltageSource(x, y);
-                    break;
-                case 'GND':
-                    component = new Ground(x, y);
-                    break;
                 case 'NMOS':
                     component = new NMOS(x, y);
                     break;
@@ -205,30 +210,41 @@ class CircuitEditor {
                 this.draw();
             }
         } else {
-            // Check for component selection or dragging
-            const clickedComponent = this.findComponentAt(x, y);
+            // Handle component dragging (including switches)
             if (clickedComponent) {
                 this.startComponentDragging(clickedComponent, x, y);
             }
         }
+        
         this.updateStatusBar();
     }
 
     handleMouseMove(event) {
         const rect = this.canvas.getBoundingClientRect();
-        this.mouseX = event.clientX - rect.left;
-        this.mouseY = event.clientY - rect.top;
+        const x = event.clientX - rect.left;
+        const y = event.clientY - rect.top;
+
+        // If mouse has moved beyond threshold, it's definitely a drag
+        if (this.mouseDownPos && this.draggingComponent) {
+            const dx = x - this.mouseDownPos.x;
+            const dy = y - this.mouseDownPos.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance > this.dragThreshold) {
+                this.draggingComponent.isDragging = true;
+            }
+        }
 
         // Update coordinates display
         document.getElementById('coordinates').textContent = 
-            `Position: ${Math.round(this.mouseX)}, ${Math.round(this.mouseY)}`;
+            `Position: ${Math.round(x)}, ${Math.round(y)}`;
 
         // Check for connection point hovering
-        this.hoveredConnectionPoint = this.findConnectionPoint(this.mouseX, this.mouseY);
+        this.hoveredConnectionPoint = this.findConnectionPoint(x, y);
 
         if (this.draggingComponent) {
             // First drag the component
-            this.draggingComponent.drag(this.mouseX, this.mouseY);
+            this.draggingComponent.drag(x, y);
             
             // Then update all connected wires
             this.connectedWires.forEach(wire => {
@@ -246,7 +262,7 @@ class CircuitEditor {
             
             this.draw();
         } else if (this.isDrawingWire) {
-            this.wireEndPoint = { x: this.mouseX, y: this.mouseY };
+            this.wireEndPoint = { x, y };
             this.draw();
         }
 
@@ -284,7 +300,6 @@ class CircuitEditor {
             this.selectedComponent = null;
             this.draggingComponent = null;
             this.connectedWires = [];
-            this.dragStartPos = null;
         }
 
         this.draw();
@@ -411,9 +426,11 @@ class CircuitEditor {
 
     updateStatusBar() {
         const toolDisplay = document.getElementById('selectedTool');
-        toolDisplay.textContent = this.selectedTool ? 
-            `Selected: ${this.selectedTool}` : 
-            'Selected: None';
+        if (this.selectedTool) {
+            toolDisplay.textContent = `Selected: ${this.selectedTool}`;
+        } else {
+            toolDisplay.textContent = 'Selected: None (Double-click switches to toggle)';
+        }
     }
 
     findMatchingConnectionPoint(component, point) {

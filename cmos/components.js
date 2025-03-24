@@ -493,26 +493,25 @@ class Wire {
 class Switch extends Component {
     constructor(x, y) {
         super('SWITCH', x, y);
-        this.voltage = Component.VDD_VOLTAGE; // Start at 5V
-        this.isOn = true; // Track state
-        this.radius = 15; // Store radius for consistent size
+        this.voltage = Component.VDD_VOLTAGE;
+        this.isOn = true;
+        this.radius = 15;
         this.outputs = [{ 
             x: this.x + this.radius + 5, 
             y: this.y, 
             voltage: this.voltage 
         }];
+        this.isDragging = false; // Add dragging flag
     }
 
     draw(ctx) {
         // Update color based on state
         if (this.isOn) {
             ctx.strokeStyle = Component.VDD_COLOR;
-            ctx.fillStyle = Component.VDD_COLOR;  // Red fill when on (5V)
-            this.voltage = Component.VDD_VOLTAGE;
+            ctx.fillStyle = Component.VDD_COLOR;
         } else {
             ctx.strokeStyle = Component.GND_COLOR;
-            ctx.fillStyle = Component.GND_COLOR;  // Blue fill when off (0V)
-            this.voltage = 0;
+            ctx.fillStyle = Component.GND_COLOR;
         }
 
         // Draw the circle
@@ -528,7 +527,11 @@ class Switch extends Component {
         ctx.textBaseline = 'middle';
         ctx.fillText(this.isOn ? '5V' : '0V', this.x, this.y);
 
-        // Draw output connection point on right side
+        // Draw small "double-click" hint
+        ctx.font = '8px Arial';
+        ctx.fillText('(dbl-click)', this.x, this.y + this.radius + 10);
+
+        // Draw output connection point
         ctx.beginPath();
         ctx.arc(this.outputs[0].x, this.outputs[0].y, 3, 0, Math.PI * 2);
         ctx.fillStyle = '#000000';
@@ -556,6 +559,22 @@ class Switch extends Component {
             y: this.y, 
             voltage: this.voltage 
         };
+    }
+
+    startDrag(mouseX, mouseY) {
+        super.startDrag(mouseX, mouseY);
+        this.isDragging = false; // Reset drag flag
+    }
+
+    endDrag() {
+        super.endDrag();
+        this.isDragging = false;
+    }
+
+    isPointInside(x, y) {
+        const dx = x - this.x;
+        const dy = y - this.y;
+        return dx * dx + dy * dy <= this.radius * this.radius;
     }
 }
 
