@@ -325,22 +325,17 @@ class Probe extends Component {
 
     // Helper function to get color based on voltage
     getVoltageColor(voltage) {
-        // Ensure voltage is between 0 and 5
+        // Update color scheme to use red for high voltage and blue for low voltage
         const normalizedVoltage = Math.max(0, Math.min(5, voltage));
         
-        // Calculate color components
-        if (normalizedVoltage <= 2.5) {
-            // Red (5V) to Yellow (2.5V)
-            const ratio = normalizedVoltage / 2.5;
-            const red = 255;
-            const green = Math.round(255 * ratio);
-            return `rgb(${red}, ${green}, 0)`;
-        } else {
-            // Yellow (2.5V) to Green (5V)
+        if (normalizedVoltage >= 2.5) {
+            // Scale from neutral to red
             const ratio = (normalizedVoltage - 2.5) / 2.5;
-            const red = Math.round(255 * (1 - ratio));
-            const green = 255;
-            return `rgb(${red}, ${green}, 0)`;
+            return `rgb(${Math.round(255 * ratio)}, 0, 0)`;
+        } else {
+            // Scale from blue to neutral
+            const ratio = normalizedVoltage / 2.5;
+            return `rgb(0, 0, ${Math.round(255 * (1 - ratio))})`;
         }
     }
 
@@ -539,7 +534,7 @@ class VDDBar extends Component {
         // Draw the VDD bar
         ctx.beginPath();
         ctx.strokeStyle = '#000000';
-        ctx.fillStyle = '#4CAF50';
+        ctx.fillStyle = '#ff0000'; // Changed to red (from green)
         
         // Draw bar with rounded corners
         const radius = 10;
@@ -647,7 +642,7 @@ class GNDBar extends Component {
         // Draw the GND bar
         ctx.beginPath();
         ctx.strokeStyle = '#000000';
-        ctx.fillStyle = '#f44336'; // Red for GND
+        ctx.fillStyle = '#0000ff'; // Changed to blue (from red)
         
         // Draw bar with rounded corners
         const radius = 10;
@@ -754,25 +749,41 @@ class BatterySymbol {
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 2;
 
-        // Draw horizontal lines from bars to battery
+        // Draw horizontal lines from bars to battery with colors
         ctx.beginPath();
+        ctx.strokeStyle = '#ff0000'; // VDD connection in red
         ctx.moveTo(this.vddBar.margin + this.vddBar.width, this.vddBar.y);
         ctx.lineTo(this.x, this.vddBar.y);
+        ctx.stroke();
         
+        ctx.beginPath();
+        ctx.strokeStyle = '#0000ff'; // GND connection in blue
         ctx.moveTo(this.vddBar.margin + this.vddBar.width, this.gndBar.y);
         ctx.lineTo(this.x, this.gndBar.y);
         ctx.stroke();
 
-        // Draw vertical lines connecting to battery
+        // Draw vertical lines connecting to battery with colors
         ctx.beginPath();
+        ctx.strokeStyle = '#ff0000'; // VDD side in red
         ctx.moveTo(this.x, this.vddBar.y);
         ctx.lineTo(this.x, this.upperCellBottom - this.cellSpacing);
+        ctx.stroke();
         
+        ctx.beginPath();
+        ctx.strokeStyle = '#0000ff'; // GND side in blue
         ctx.moveTo(this.x, this.gndBar.y);
         ctx.lineTo(this.x, this.lowerCellTop + this.cellSpacing);
         ctx.stroke();
 
+        // Battery symbol in black
+        ctx.strokeStyle = '#000000';
+        
         // Draw upper cell
+        ctx.beginPath();
+        ctx.moveTo(this.x - this.longLineLength/2, this.upperCellBottom - this.cellSpacing);
+        ctx.lineTo(this.x + this.longLineLength/2, this.upperCellBottom - this.cellSpacing);
+        ctx.stroke();
+
         // Positive terminal (longer line)
         ctx.beginPath();
         ctx.moveTo(this.x - this.longLineLength/2, this.upperCellBottom - this.cellSpacing);
@@ -805,24 +816,20 @@ class BatterySymbol {
         ctx.stroke();
 
         // Draw + and - symbols and voltage label
-        ctx.fillStyle = '#000000';
-        ctx.font = 'bold 16px Arial';
+        ctx.fillStyle = '#ff0000'; // VDD voltage and + symbol in red
+        ctx.font = 'bold 14px Arial';
         ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
         
         // Calculate position for + symbol
         const symbolX = this.x + this.longLineLength/2 + 5;
         
-        // Draw voltage value above + symbol
-        ctx.font = 'bold 14px Arial';
-        ctx.textAlign = 'left';
+        // Draw voltage value and + symbol in red
         ctx.fillText('5V', symbolX, this.upperCellBottom - this.cellSpacing - 20);
-        
-        // Draw + symbol
         ctx.font = 'bold 16px Arial';
         ctx.fillText('+', symbolX, this.upperCellBottom - this.cellSpacing);
         
-        // Draw - symbol aligned with +
+        // Draw - symbol in blue
+        ctx.fillStyle = '#0000ff';
         ctx.fillText('−', symbolX, this.lowerCellTop + this.cellSpacing);
 
         ctx.lineWidth = 1; // Reset line width
