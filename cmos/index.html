@@ -205,5 +205,42 @@
     <script src="components.js"></script>
     <script src="circuit.js"></script>
     <script src="editor.js"></script>
+    <script>
+        // Utility functions to read probe values
+        function getProbeVoltage(label) {
+            if (!window.circuitEditor) {
+                console.error('Circuit editor not initialized');
+                return null;
+            }
+            const voltage = window.circuitEditor.getProbeVoltageByLabel(label);
+            if (voltage === null) {
+                console.warn(`No probe found with label "${label}"`);
+            }
+            return voltage;
+        }
+
+        function getAllProbeLabels() {
+            if (!window.circuitEditor) {
+                console.error('Circuit editor not initialized');
+                return [];
+            }
+            return window.circuitEditor.getAllProbeLabels();
+        }
+
+        // Example usage:
+        // const voltage = getProbeVoltage('output1');
+        // const allLabels = getAllProbeLabels();
+    </script>
+
+    <!-- Add this before the closing </body> tag -->
+    <script>
+        // Function to read probe voltage - call from browser console
+        function getProbeVoltage(label) {
+            return window.circuitEditor.getProbeVoltageByLabel(label);
+        }
+
+        // Example usage from browser console:
+        // getProbeVoltage('output1')  // Returns voltage of probe labeled 'output1'
+    </script>
 </body>
 </html> 

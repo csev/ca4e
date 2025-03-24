@@ -61,6 +61,9 @@ class CircuitEditor {
 
         // Add the bars
         this.initializeBars();
+
+        // Store canvas reference for external access
+        this.canvasId = canvasId;
     }
 
     initializeCanvas() {
@@ -602,10 +605,25 @@ class CircuitEditor {
         this.circuit.simulate();
         this.draw();
     }
+
+    getProbeVoltageByLabel(label) {
+        const probe = this.circuit.components.find(component => 
+            component instanceof Probe && 
+            component.label === label
+        );
+        return probe ? probe.voltage : null;
+    }
+
+    getAllProbeLabels() {
+        return this.circuit.components
+            .filter(component => component instanceof Probe && component.label)
+            .map(probe => probe.label);
+    }
 }
 
-// Initialize the editor when the page loads
+// Modify initialization to make editor globally accessible
 window.addEventListener('load', () => {
-    const editor = new CircuitEditor('circuitCanvas');
-    editor.draw();
+    const canvas = document.getElementById('circuitCanvas');
+    window.circuitEditor = new CircuitEditor('circuitCanvas');
+    window.circuitEditor.draw();
 }); 
