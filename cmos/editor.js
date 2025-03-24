@@ -395,11 +395,23 @@ class CircuitEditor {
         if (this.isDrawingWire) {
             const endConnectionPoint = this.findConnectionPoint(x, y);
             if (endConnectionPoint && endConnectionPoint.component !== this.wireStartComponent) {
+                // Store relative positions for VDD/GND connections
+                let startPoint = { x: this.wireStartPoint.x, y: this.wireStartPoint.y };
+                let endPoint = { x: endConnectionPoint.point.x, y: endConnectionPoint.point.y };
+
+                // Add relative position for VDD/GND connections
+                if (this.wireStartComponent === this.vddBar || this.wireStartComponent === this.gndBar) {
+                    startPoint.relativePosition = this.wireStartConnectionPoint.point.relativePosition;
+                }
+                if (endConnectionPoint.component === this.vddBar || endConnectionPoint.component === this.gndBar) {
+                    endPoint.relativePosition = endConnectionPoint.point.relativePosition;
+                }
+
                 const wire = new Wire(
                     this.wireStartComponent,
-                    this.wireStartPoint,
+                    startPoint,
                     endConnectionPoint.component,
-                    { x: endConnectionPoint.point.x, y: endConnectionPoint.point.y }
+                    endPoint
                 );
                 this.circuit.addWire(wire);
             }
@@ -664,4 +676,39 @@ window.addEventListener('load', () => {
     const canvas = document.getElementById('circuitCanvas');
     window.circuitEditor = new CircuitEditor('circuitCanvas');
     window.circuitEditor.draw();
+});
+
+window.addEventListener('resize', () => {
+    const width = window.innerWidth - 40;
+    const height = window.innerHeight - 100;
+    
+    this.canvas.width = width;
+    this.canvas.height = height;
+    
+    // Update VDD and GND bars
+    this.vddBar.updateDimensions(width);
+    this.gndBar.updateDimensions(width, height);
+    this.batterySymbol.updatePosition();
+
+    // Only update wire positions
+    this.circuit.wires.forEach(wire => {
+        if (wire.startComponent === this.vddBar) {
+            wire.startPoint.x = this.vddBar.margin + 20 + ((this.vddBar.width - 40) * wire.startPoint.relativePosition);
+            wire.startPoint.y = this.vddBar.y + this.vddBar.height/2;
+        }
+        if (wire.endComponent === this.vddBar) {
+            wire.endPoint.x = this.vddBar.margin + 20 + ((this.vddBar.width - 40) * wire.endPoint.relativePosition);
+            wire.endPoint.y = this.vddBar.y + this.vddBar.height/2;
+        }
+        if (wire.startComponent === this.gndBar) {
+            wire.startPoint.x = this.gndBar.margin + 20 + ((this.gndBar.width - 40) * wire.startPoint.relativePosition);
+            wire.startPoint.y = this.gndBar.y - this.gndBar.height/2;
+        }
+        if (wire.endComponent === this.gndBar) {
+            wire.endPoint.x = this.gndBar.margin + 20 + ((this.gndBar.width - 40) * wire.endPoint.relativePosition);
+            wire.endPoint.y = this.gndBar.y - this.gndBar.height/2;
+        }
+    });
+
+    this.draw();
 }); 
