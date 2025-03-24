@@ -1,4 +1,10 @@
 class Component {
+    // Add static color properties
+    static get VDD_COLOR() { return '#ff0000'; }  // Red
+    static get GND_COLOR() { return '#0000ff'; }  // Blue
+    static get NEUTRAL_COLOR() { return '#000000'; } // Black
+    static get VDD_VOLTAGE() { return 5; }  // Add VDD voltage constant
+
     constructor(type, x, y) {
         this.type = type;
         this.x = x;
@@ -314,27 +320,27 @@ class PMOS extends Component {
 
 class Probe extends Component {
     constructor(x, y) {
-        super('PROBE', x, y);
+        super('probe', x, y);
+        this.size = 30;  // Single size value for both width and height
+        this.width = this.size;  // Width matches size
+        this.height = this.size; // Height matches size
         this.voltage = 0;
-        this.width = 30;
-        this.height = 24;
         this.cornerRadius = 6;
         // Move input to left side instead of bottom
         this.inputs = [{ x: this.x - this.width/2 - 5, y: this.y, name: 'input', voltage: 0 }];
     }
 
-    // Helper function to get color based on voltage
     getVoltageColor(voltage) {
-        // Update color scheme to use red for high voltage and blue for low voltage
-        const normalizedVoltage = Math.max(0, Math.min(5, voltage));
+        const normalizedVoltage = Math.max(0, Math.min(Component.VDD_VOLTAGE, voltage));
+        const midpoint = Component.VDD_VOLTAGE / 2;
         
-        if (normalizedVoltage >= 2.5) {
-            // Scale from neutral to red
-            const ratio = (normalizedVoltage - 2.5) / 2.5;
+        if (normalizedVoltage >= midpoint) {
+            // Scale from neutral to VDD color (red)
+            const ratio = (normalizedVoltage - midpoint) / midpoint;
             return `rgb(${Math.round(255 * ratio)}, 0, 0)`;
         } else {
-            // Scale from blue to neutral
-            const ratio = normalizedVoltage / 2.5;
+            // Scale from GND color (blue) to neutral
+            const ratio = normalizedVoltage / midpoint;
             return `rgb(0, 0, ${Math.round(255 * (1 - ratio))})`;
         }
     }
@@ -381,12 +387,12 @@ class Probe extends Component {
         ctx.fill();
         ctx.stroke();
 
-        // Draw voltage value
-        ctx.fillStyle = displayVoltage > 2.5 ? '#000000' : '#ffffff';
-        ctx.font = 'bold 12px Arial';
+        // Update voltage display with white text
+        ctx.font = '14px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(displayVoltage.toFixed(1) + 'V', this.x, this.y);
+        ctx.fillStyle = '#ffffff';  // Always use white text
+        ctx.fillText(this.voltage.toFixed(1) + 'V', this.x, this.y);
 
         // Draw connection point on left side
         ctx.beginPath();
@@ -425,9 +431,11 @@ class Wire {
     }
 
     draw(ctx) {
-        ctx.beginPath();
-        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000';
+        // Determine wire color based on voltage
+        ctx.strokeStyle = this.voltage >= 2.5 ? Component.VDD_COLOR : Component.GND_COLOR;
         ctx.lineWidth = 2;
+        
+        ctx.beginPath();
         ctx.moveTo(this.startPoint.x, this.startPoint.y);
         ctx.lineTo(this.endPoint.x, this.endPoint.y);
         ctx.stroke();
@@ -458,19 +466,27 @@ class Switch extends Component {
     constructor(x, y) {
         super('SWITCH', x, y);
         this.voltage = 5; // Start at 5V
-        this.isVDD = true; // Track state
+        this.isOn = true; // Track state
         this.radius = 15; // Store radius for consistent size
         // Move output to right side instead of bottom
         this.outputs = [{ x: this.x + this.radius + 5, y: this.y, voltage: this.voltage }];
     }
 
     draw(ctx) {
-        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000';
-        
-        // Draw switch body with full color
+        // Update color based on state
+        if (this.isOn) {
+            ctx.strokeStyle = Component.VDD_COLOR;
+            ctx.fillStyle = Component.VDD_COLOR;  // Red fill when on (5V)
+            this.voltage = Component.VDD_VOLTAGE;
+        } else {
+            ctx.strokeStyle = Component.GND_COLOR;
+            ctx.fillStyle = Component.GND_COLOR;  // Blue fill when off (0V)
+            this.voltage = 0;
+        }
+
+        // Draw the circle
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.isVDD ? '#4CAF50' : '#f44336'; // Green for 5V, Red for 0V
         ctx.fill();
         ctx.stroke();
 
@@ -479,7 +495,7 @@ class Switch extends Component {
         ctx.font = 'bold 12px Arial';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(this.isVDD ? '5V' : '0V', this.x, this.y);
+        ctx.fillText(this.isOn ? '5V' : '0V', this.x, this.y);
 
         // Draw output connection point on right side
         ctx.beginPath();
@@ -490,9 +506,19 @@ class Switch extends Component {
     }
 
     toggle() {
-        this.isVDD = !this.isVDD;
-        this.voltage = this.isVDD ? 5 : 0;
-        this.outputs[0].voltage = this.voltage;
+        this.isOn = !this.isOn;
+        this.voltage = this.isOn ? Component.VDD_VOLTAGE : 0;
+        
+        // Update all valid outputs with the new voltage
+        this.outputs.forEach(output => {
+            if (output && output.component) {  // Check if output and component exist
+                output.component.voltage = this.voltage;
+                // If the connected component is a probe, trigger its update
+                if (output.component.type === 'probe') {
+                    output.component.updateValue(this.voltage);
+                }
+            }
+        });
     }
 
     updateConnectionPoints() {
@@ -531,10 +557,9 @@ class VDDBar extends Component {
     }
 
     draw(ctx) {
-        // Draw the VDD bar
         ctx.beginPath();
-        ctx.strokeStyle = '#000000';
-        ctx.fillStyle = '#ff0000'; // Changed to red (from green)
+        ctx.strokeStyle = Component.NEUTRAL_COLOR;
+        ctx.fillStyle = Component.VDD_COLOR; // Use VDD color
         
         // Draw bar with rounded corners
         const radius = 10;
@@ -578,7 +603,7 @@ class VDDBar extends Component {
         ctx.font = 'bold 16px Arial';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
-        ctx.fillText('VDD (5V)', this.margin + 20, this.y);
+        ctx.fillText(`VDD (${Component.VDD_VOLTAGE}V)`, this.margin + 20, this.y);
 
         // Draw connection points
         this.outputs.forEach(output => {
@@ -639,10 +664,9 @@ class GNDBar extends Component {
     }
 
     draw(ctx) {
-        // Draw the GND bar
         ctx.beginPath();
-        ctx.strokeStyle = '#000000';
-        ctx.fillStyle = '#0000ff'; // Changed to blue (from red)
+        ctx.strokeStyle = Component.NEUTRAL_COLOR;
+        ctx.fillStyle = Component.GND_COLOR; // Use GND color
         
         // Draw bar with rounded corners
         const radius = 10;
@@ -746,37 +770,37 @@ class BatterySymbol {
     }
 
     draw(ctx) {
-        ctx.strokeStyle = '#000000';
+        ctx.strokeStyle = Component.NEUTRAL_COLOR;
         ctx.lineWidth = 2;
 
         // Draw horizontal lines from bars to battery with colors
         ctx.beginPath();
-        ctx.strokeStyle = '#ff0000'; // VDD connection in red
+        ctx.strokeStyle = Component.VDD_COLOR; // VDD connection
         ctx.moveTo(this.vddBar.margin + this.vddBar.width, this.vddBar.y);
         ctx.lineTo(this.x, this.vddBar.y);
         ctx.stroke();
         
         ctx.beginPath();
-        ctx.strokeStyle = '#0000ff'; // GND connection in blue
+        ctx.strokeStyle = Component.GND_COLOR; // GND connection
         ctx.moveTo(this.vddBar.margin + this.vddBar.width, this.gndBar.y);
         ctx.lineTo(this.x, this.gndBar.y);
         ctx.stroke();
 
         // Draw vertical lines connecting to battery with colors
         ctx.beginPath();
-        ctx.strokeStyle = '#ff0000'; // VDD side in red
+        ctx.strokeStyle = Component.VDD_COLOR; // VDD side
         ctx.moveTo(this.x, this.vddBar.y);
         ctx.lineTo(this.x, this.upperCellBottom - this.cellSpacing);
         ctx.stroke();
         
         ctx.beginPath();
-        ctx.strokeStyle = '#0000ff'; // GND side in blue
+        ctx.strokeStyle = Component.GND_COLOR; // GND side
         ctx.moveTo(this.x, this.gndBar.y);
         ctx.lineTo(this.x, this.lowerCellTop + this.cellSpacing);
         ctx.stroke();
 
-        // Battery symbol in black
-        ctx.strokeStyle = '#000000';
+        // Battery symbol in neutral color
+        ctx.strokeStyle = Component.NEUTRAL_COLOR;
         
         // Draw upper cell
         ctx.beginPath();
@@ -816,20 +840,20 @@ class BatterySymbol {
         ctx.stroke();
 
         // Draw + and - symbols and voltage label
-        ctx.fillStyle = '#ff0000'; // VDD voltage and + symbol in red
+        ctx.fillStyle = Component.VDD_COLOR;
         ctx.font = 'bold 14px Arial';
         ctx.textAlign = 'left';
         
         // Calculate position for + symbol
         const symbolX = this.x + this.longLineLength/2 + 5;
         
-        // Draw voltage value and + symbol in red
-        ctx.fillText('5V', symbolX, this.upperCellBottom - this.cellSpacing - 20);
+        // Draw voltage value and + symbol in VDD color
+        ctx.fillText(`${Component.VDD_VOLTAGE}V`, symbolX, this.upperCellBottom - this.cellSpacing - 20);
         ctx.font = 'bold 16px Arial';
         ctx.fillText('+', symbolX, this.upperCellBottom - this.cellSpacing);
         
-        // Draw - symbol in blue
-        ctx.fillStyle = '#0000ff';
+        // Draw - symbol in GND color
+        ctx.fillStyle = Component.GND_COLOR;
         ctx.fillText('−', symbolX, this.lowerCellTop + this.cellSpacing);
 
         ctx.lineWidth = 1; // Reset line width
