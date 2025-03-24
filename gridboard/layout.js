@@ -58,13 +58,13 @@ const transistorTerminals = new Map();
 // Update transistor characteristics to focus on switching behavior
 const TRANSISTOR_CHARACTERISTICS = {
     nmos: {
-        vth: 2.0,          // Threshold voltage
-        onResistance: 100, // Resistance when ON (ohms)
-        offResistance: 1e6 // Resistance when OFF (mega ohm)
+        threshold: 4.5,        // Simple threshold - if gate > 4.5V, conducts
+        onResistance: 1,      // Very low resistance when ON (ohms)
+        offResistance: 1e6    // Very high resistance when OFF (mega ohm)
     },
     pmos: {
-        vth: 7.0,          // Threshold voltage (for 9V system)
-        onResistance: 100, 
+        threshold: 4.5,        // Simple threshold - if gate < 4.5V, conducts
+        onResistance: 1,
         offResistance: 1e6
     },
     channelLength: 40,  // Visual length of the channel
@@ -189,6 +189,25 @@ function initializeConnections() {
             connectDots(getDotIndex(row, col), getDotIndex(row + 1, col));
         }
     }
+    
+    // Add connections for voltage sources
+    lines.forEach(line => {
+        if (line.type === 'voltage_source') {
+            const dotIndex = dots.indexOf(line.start);
+            if (dotIndex !== -1) {
+                // Make sure the voltage source dot is connected to its column
+        const { row, col } = getRowCol(dotIndex);
+                if ((row >= 2 && row <= 6) || (row >= 7 && row <= 11)) {
+                    // Connect to all dots in the same column
+                    const startRow = row >= 7 ? 7 : 2;
+                    const endRow = row >= 7 ? 11 : 6;
+                    for (let r = startRow; r <= endRow; r++) {
+                        connectDots(dotIndex, getDotIndex(r, col));
+                    }
+                }
+            }
+        }
+    });
 }
 
 // Connect two dots electrically
@@ -654,6 +673,14 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
         const switchId = getSwitchId(startDot, endDot);
         const isPressed = switches.get(switchId)?.pressed || false;
         drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPressed);
+    } else if (type === 'voltage_indicator') {
+        drawVoltageIndicator(startX, startY, startDot);
+    } else if (type === 'toggle') {
+        drawToggle(startX, startY, startDot);
+    } else if (type === 'voltmeter') {
+        drawVoltmeter(startX, startY, startDot);
+    } else if (type === 'voltage_source') {
+        drawVoltageSource(startX, startY, startDot);
     }
 }
 
@@ -1137,6 +1164,28 @@ canvas.addEventListener('click', (e) => {
     const clickX = e.clientX - rect.left;
     const clickY = e.clientY - rect.top;
     
+    // Check for voltage source clicks first
+    for (const line of lines) {
+        if (line.type === 'voltage_source') {
+            const distance = Math.sqrt((clickX - line.x) ** 2 + (clickY - line.y) ** 2);
+            if (distance < VOLTAGE_SOURCE_CHARACTERISTICS.radius) {
+                // Toggle the voltage source
+                const sourceId = `voltage_source_${dots.indexOf(line.start)}`;
+                const source = voltageSources.get(sourceId);
+                if (source) {
+                    source.isVcc = !source.isVcc;
+                    
+                    // Recalculate circuit
+                    initializeConnections();
+                    resetDotVoltages();
+                    calculateCircuitValues();
+                    drawGrid();
+                }
+                return;
+            }
+        }
+    }
+    
     // Check if click is near any switch
     lines.forEach(line => {
         if (line.type === 'switch_no' || line.type === 'switch_nc') {
@@ -1369,6 +1418,12 @@ function getDotVoltage(dot, voltageMap = null) {
     const dotIndex = dots.indexOf(dot);
     if (dotIndex === -1) return null;
     
+    // Check if there's a voltage source at this dot
+    const sourceId = `voltage_source_${dotIndex}`;
+    if (voltageSources.has(sourceId)) {
+        return voltageSources.get(sourceId).isVcc ? 9 : 0;
+    }
+    
     // Get row and column of the dot
     const { row } = getRowCol(dotIndex);
     
@@ -1498,78 +1553,39 @@ function calculateCircuitValues() {
         }
         
         let gateVoltage = null;
-        let sourceVoltage = null;
-        let drainVoltage = null;
         
-        // Find wires connected to terminals and check for LED-modified voltages
+        // Find gate voltage
         lines.forEach(line => {
-            if (line.transistorConnection && line.transistorConnection.id === id) {
-                const terminal = line.transistorConnection.type;
-                const virtualVoltage = voltageMap.get(`transistor_${id}_${terminal}`);
+            if (line.transistorConnection && 
+                line.transistorConnection.id === id && 
+                line.transistorConnection.type === 'gate') {
                 const otherEnd = line.start.isTransistorTerminal ? line.end : line.start;
-                let voltage;
-                
-                // If this is an LED connection
-                if (line.type === 'led') {
-                    const otherEndVoltage = getDotVoltage(otherEnd, voltageMap);
-                    if (otherEndVoltage === 0) { // LED to ground
-                        voltage = LED_CHARACTERISTICS.vf;
-                    } else if (otherEndVoltage === 9) { // LED to VCC
-                        voltage = 9 - LED_CHARACTERISTICS.vf;
-                    } else {
-                        voltage = otherEndVoltage;
-                    }
-                } else {
-                    // For regular wires, use virtual voltage or get from other end
-                    voltage = virtualVoltage !== undefined ? virtualVoltage : getDotVoltage(otherEnd, voltageMap);
-                }
-                
-                switch(terminal) {
-                    case 'gate':
-                        gateVoltage = voltage;
-                        console.log(`  Gate voltage: ${voltage !== null ? voltage.toFixed(1) + 'V' : 'disconnected'}`);
-                        break;
-                    case 'source':
-                        sourceVoltage = voltage;
-                        console.log(`  Source voltage: ${voltage !== null ? voltage.toFixed(1) + 'V' : 'disconnected'} ${line.type === 'led' ? '(LED)' : ''}`);
-                        break;
-                    case 'drain':
-                        drainVoltage = voltage;
-                        console.log(`  Drain voltage: ${voltage !== null ? voltage.toFixed(1) + 'V' : 'disconnected'}`);
-                        break;
-                }
+                gateVoltage = getDotVoltage(otherEnd, voltageMap);
             }
         });
         
-        // Determine if transistor is conducting based on type and voltages
-        const characteristics = TRANSISTOR_CHARACTERISTICS[transistor.type];
+        // Simple relay-like behavior
         const oldState = transistor.conducting;
-        
-        if (gateVoltage !== null && sourceVoltage !== null) {
+        if (gateVoltage !== null) {
             if (transistor.type === 'nmos') {
-                const threshold = sourceVoltage + characteristics.vth;
-                transistor.conducting = gateVoltage > threshold;
+                // NMOS conducts when gate voltage is HIGH
+                transistor.conducting = gateVoltage >= TRANSISTOR_CHARACTERISTICS.nmos.threshold;
             } else if (transistor.type === 'pmos') {
-                const threshold = characteristics.vth;  // 2.0V
-                transistor.conducting = gateVoltage < threshold;
+                // PMOS conducts when gate voltage is LOW
+                transistor.conducting = gateVoltage <= TRANSISTOR_CHARACTERISTICS.pmos.threshold;
             }
             
+            console.log(`  Gate voltage: ${gateVoltage !== null ? gateVoltage.toFixed(1) + 'V' : 'disconnected'}`);
             console.log(`  Conducting: ${transistor.conducting} (${oldState === transistor.conducting ? 'unchanged' : 'changed'})`);
             
             if (transistor.conducting) {
-                console.log(`  Channel resistance: ${characteristics.onResistance}Ω`);
+                console.log(`  Channel resistance: ${TRANSISTOR_CHARACTERISTICS[transistor.type].onResistance}Ω (ON)`);
             } else {
-                console.log(`  Channel resistance: ${characteristics.offResistance}Ω`);
+                console.log(`  Channel resistance: ${TRANSISTOR_CHARACTERISTICS[transistor.type].offResistance}Ω (OFF)`);
             }
         } else {
             transistor.conducting = false;
-            console.log('  Not conducting: Missing gate or source voltage');
-        }
-        
-        // Log voltage drop across transistor if both drain and source are connected
-        if (drainVoltage !== null && sourceVoltage !== null) {
-            const vds = Math.abs(drainVoltage - sourceVoltage);
-            console.log(`  Drain-Source voltage: ${vds.toFixed(1)}V`);
+            console.log('  Not conducting: No gate voltage');
         }
     }
     
@@ -1588,7 +1604,7 @@ function calculateCircuitValues() {
 function calculateIntermediateVoltages() {
     const voltageMap = new Map();
     
-    // First pass: Set power rail voltages
+    // First pass: Set power rail and voltage source voltages
     dots.forEach((dot, index) => {
         const row = Math.floor(index / GRID_COLS);
         if (row === 0 || row === GRID_ROWS - 1) {
@@ -1596,17 +1612,29 @@ function calculateIntermediateVoltages() {
         } else if (row === 1 || row === GRID_ROWS - 2) {
             voltageMap.set(index, 0);  // GND rails
         }
+        
+        // Check for voltage source
+        const sourceId = `voltage_source_${index}`;
+        if (voltageSources.has(sourceId)) {
+            voltageMap.set(index, voltageSources.get(sourceId).isVcc ? 9 : 0);
+        }
     });
     
     // Second pass: Propagate voltages through connections
+    let iterationCount = 0;
     let changed = true;
-    while (changed) {
+    const MAX_ITERATIONS = 1000; // Prevent infinite loops
+    
+    while (changed && iterationCount < MAX_ITERATIONS) {
         changed = false;
+        iterationCount++;
+        
+        // Handle regular connections
         connections.forEach((connectedDots, dotIndex) => {
             // Skip if this dot already has a voltage
             if (voltageMap.has(dotIndex)) return;
             
-            // Check connected dots for a known voltage
+            // Look for a voltage in connected dots
             for (const connectedIndex of connectedDots) {
                 if (voltageMap.has(connectedIndex)) {
                     voltageMap.set(dotIndex, voltageMap.get(connectedIndex));
@@ -1615,6 +1643,39 @@ function calculateIntermediateVoltages() {
                 }
             }
         });
+        
+        // Handle transistor connections if transistor is conducting
+        transistors.forEach((transistor, id) => {
+            if (!transistor.conducting) return;
+            
+            // Find drain and source connections
+            let drainVoltage = null;
+            let sourceVoltage = null;
+            
+            lines.forEach(line => {
+                if (line.transistorConnection && line.transistorConnection.id === id) {
+                    const terminal = line.transistorConnection.type;
+                    const otherEnd = line.start.isTransistorTerminal ? line.end : line.start;
+                    const voltage = getDotVoltage(otherEnd, voltageMap);
+                    
+                    if (terminal === 'drain') drainVoltage = voltage;
+                    if (terminal === 'source') sourceVoltage = voltage;
+                }
+            });
+            
+            // Only propagate if we have one voltage but not the other
+            if (drainVoltage !== null && sourceVoltage === null) {
+                voltageMap.set(`transistor_${id}_source`, drainVoltage);
+                changed = true;
+            } else if (sourceVoltage !== null && drainVoltage === null) {
+                voltageMap.set(`transistor_${id}_drain`, sourceVoltage);
+                changed = true;
+            }
+        });
+    }
+    
+    if (iterationCount >= MAX_ITERATIONS) {
+        console.warn('Maximum iterations reached in voltage calculation');
     }
     
     return voltageMap;
@@ -2005,6 +2066,8 @@ function drawComponent(startX, startY, endX, endY, type, startDot = null, endDot
         const switchId = getSwitchId(startDot, endDot);
         const isPressed = switches.get(switchId)?.pressed || false;
         drawSwitch(startX, startY, endX, endY, type, startDot, endDot, isPressed);
+    } else if (type === 'voltage_source') {
+        drawVoltageSource(startX, startY, startDot);
     }
 }
 
@@ -2016,10 +2079,21 @@ canvas.addEventListener('mousedown', (e) => {
     const x = e.clientX - rect.left;
     const y = e.clientY - rect.top;
 
+    // Handle delete mode
+    if (deleteMode) {
+        return;
+    }
+
+    // Check if we're clicking a switch first
+    if (isNearSwitch(x, y)) {
+        return;
+    }
+
     // Handle voltage indicator placement
     if (componentSelect.value === 'voltage_indicator') {
         const dot = findClosestDot(x, y);
         if (dot) {
+            // Create new voltage indicator
             const newLine = {
                 start: dot,
                 end: dot,
@@ -2028,6 +2102,8 @@ canvas.addEventListener('mousedown', (e) => {
                 type: 'voltage_indicator'
             };
             lines.push(newLine);
+            
+            // Recalculate circuit
             initializeConnections();
             resetDotVoltages();
             calculateCircuitValues();
@@ -2035,13 +2111,23 @@ canvas.addEventListener('mousedown', (e) => {
             
             // Switch back to wire mode
             componentSelect.value = 'wire';
-            // Trigger the change event
             componentSelect.dispatchEvent(new Event('change'));
             return;
         }
     }
 
-    // ... rest of existing mousedown handler ...
+    // Handle transistor placement
+    if (componentSelect.value === 'nmos' || componentSelect.value === 'pmos') {
+        // ... existing transistor placement code ...
+        return;
+    }
+
+    // Handle regular dot connections
+    const dot = findClosestDot(x, y);
+    if (dot) {
+        isDragging = true;
+        startDot = dot;
+    }
 });
 
 function checkComponentDeletion(x, y) {
@@ -2075,6 +2161,158 @@ function checkComponentDeletion(x, y) {
                 return true;
             }
         }
+    }
+    return false;
+}
+
+// Add after other constants
+const VOLTAGE_SOURCE_CHARACTERISTICS = {
+    radius: 15,
+    colors: {
+        vcc: {
+            fill: '#ffeeee',
+            border: '#ff4444',
+            text: '#ff0000'
+        },
+        gnd: {
+            fill: '#eeeeff', 
+            border: '#4444ff',
+            text: '#0000ff'
+        }
+    }
+};
+
+// Add to track voltage source states
+const voltageSources = new Map(); // Map to track voltage source states (VCC or GND)
+let nextVoltageSourceId = 0;
+
+function drawVoltageSource(x, y, dot) {
+    const sourceId = `voltage_source_${dots.indexOf(dot)}`;
+    
+    // Initialize state if it doesn't exist
+    if (!voltageSources.has(sourceId)) {
+        voltageSources.set(sourceId, { isVcc: true });
+    }
+    
+    const isVcc = voltageSources.get(sourceId).isVcc;
+    const colors = isVcc ? 
+        VOLTAGE_SOURCE_CHARACTERISTICS.colors.vcc : 
+        VOLTAGE_SOURCE_CHARACTERISTICS.colors.gnd;
+    
+    // Save context
+    ctx.save();
+    
+    // Draw source body (circle)
+    ctx.beginPath();
+    ctx.arc(x, y, VOLTAGE_SOURCE_CHARACTERISTICS.radius, 0, Math.PI * 2);
+    ctx.fillStyle = colors.fill;
+    ctx.fill();
+    ctx.strokeStyle = colors.border;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    
+    // Draw voltage indicator text
+    ctx.font = 'bold 12px Arial';
+    ctx.fillStyle = colors.text;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(isVcc ? 'VCC' : 'GND', x, y);
+    
+    // Restore context
+    ctx.restore();
+}
+
+// Update mousedown handler to handle voltage source placement and toggling
+canvas.addEventListener('mousedown', (e) => {
+    if (e.button !== 0) return; // Only handle left clicks
+    
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    
+    // Handle delete mode
+    if (deleteMode) {
+        // ... existing delete mode code ...
+        return;
+    }
+
+    // Check if we're clicking a switch first
+    if (isNearSwitch(x, y)) {
+        return;
+    }
+
+    // Handle voltage source placement/toggling
+    if (componentSelect.value === 'voltage_source') {
+        const dot = findClosestDot(x, y);
+        if (dot) {
+            const sourceId = `voltage_source_${dots.indexOf(dot)}`;
+            
+            // If source exists, toggle it
+            if (voltageSources.has(sourceId)) {
+                const source = voltageSources.get(sourceId);
+                source.isVcc = !source.isVcc;
+            } else {
+                // Create new source
+                const newLine = {
+                    start: dot,
+                    end: dot,
+                    x: dot.x,
+                    y: dot.y,
+                    type: 'voltage_source'
+                };
+                lines.push(newLine);
+                voltageSources.set(sourceId, { isVcc: true });
+            }
+            
+            // Recalculate circuit
+            initializeConnections();
+            resetDotVoltages();
+            calculateCircuitValues();
+            drawGrid();
+            
+            // Switch back to wire mode
+            componentSelect.value = 'wire';
+            componentSelect.dispatchEvent(new Event('change'));
+            return;
+        }
+    }
+
+    // Handle transistor placement
+    if (componentSelect.value === 'nmos' || componentSelect.value === 'pmos') {
+        // ... existing transistor placement code ...
+        return;
+    }
+
+    // Handle regular dot connections
+    const dot = findClosestDot(x, y);
+    if (dot) {
+        isDragging = true;
+        startDot = dot;
+    }
+});
+
+// Update checkComponentDeletion to handle voltage sources
+function checkComponentDeletion(x, y) {
+    for (let i = lines.length - 1; i >= 0; i--) {
+        const line = lines[i];
+        
+        if (line.type === 'voltage_source') {
+            const distance = Math.sqrt((x - line.x) ** 2 + (y - line.y) ** 2);
+            if (distance < VOLTAGE_SOURCE_CHARACTERISTICS.radius) {
+                // Remove the voltage source state
+                const sourceId = `voltage_source_${dots.indexOf(line.start)}`;
+                voltageSources.delete(sourceId);
+                
+                // Remove the line
+                lines.splice(i, 1);
+                initializeConnections();
+                resetDotVoltages();
+                rebuildAllConnections();
+                drawGrid();
+                return true;
+            }
+        }
+        // ... rest of existing checkComponentDeletion code ...
     }
     return false;
 }
