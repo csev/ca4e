@@ -404,10 +404,12 @@ class CircuitEditor {
                 // If ending at a voltage source or switch, flip the connection
                 if (endComp instanceof VDDBar || 
                     endComp instanceof GNDBar || 
-                    endComp instanceof Switch) {
+                    endComp instanceof Switch ||
+                    startComp instanceof Probe) {  // Add condition for Probe as start component
                     console.log('Flipping wire direction:', {
                         from: startComp.type,
                         to: endComp.type,
+                        reason: startComp instanceof Probe ? 'Probe as start' : 'VDD/GND/Switch as end',
                         flipping: true
                     });
                     // Swap start and end
