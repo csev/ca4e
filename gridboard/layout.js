@@ -2075,27 +2075,67 @@ function drawVoltageIndicator(x, y, dot) {
     // Save context
     ctx.save();
     
-    // Draw indicator body (circle) - now centered exactly on the dot
+    // Create gradient for 3D effect
+    const gradient = ctx.createRadialGradient(
+        x - VOLTAGE_INDICATOR_CHARACTERISTICS.radius * 0.3,
+        y - VOLTAGE_INDICATOR_CHARACTERISTICS.radius * 0.3,
+        VOLTAGE_INDICATOR_CHARACTERISTICS.radius * 0.1,
+        x,
+        y,
+        VOLTAGE_INDICATOR_CHARACTERISTICS.radius
+    );
+
+    // Use the same color interpolation as the dots
+    const bgColor = interpolateColor(voltage);
+    const lighterColor = voltage === null ? '#666666' : 
+                        voltage === 9 ? '#ffaaaa' : 
+                        voltage === 0 ? '#aaaaff' : 
+                        bgColor.replace('rgb(', 'rgba(').replace(')', ',0.7)');
+    
+    gradient.addColorStop(0, lighterColor);
+    gradient.addColorStop(1, bgColor);
+    
+    // Draw indicator body (circle) with gradient
     ctx.beginPath();
     ctx.arc(x, y, VOLTAGE_INDICATOR_CHARACTERISTICS.radius, 0, Math.PI * 2);
-    ctx.fillStyle = VOLTAGE_INDICATOR_CHARACTERISTICS.colors.background;
+    ctx.fillStyle = gradient;
     ctx.fill();
-    ctx.strokeStyle = VOLTAGE_INDICATOR_CHARACTERISTICS.colors.border;
+    
+    // Add a subtle border
+    ctx.strokeStyle = voltage === null ? '#444444' :
+                     voltage === 9 ? '#ff0000' :
+                     voltage === 0 ? '#0000ff' :
+                     '#666666';
     ctx.lineWidth = 1;
     ctx.stroke();
     
-    // Draw voltage value - centered in the circle
-    ctx.font = '10px Arial';
-    ctx.fillStyle = VOLTAGE_INDICATOR_CHARACTERISTICS.colors.text;
+    // Draw voltage value with contrasting text color
+    ctx.font = 'bold 10px Arial';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
+    
+    // Set text color based on background brightness
+    if (voltage === null) {
+        ctx.fillStyle = '#ffffff';
+    } else if (voltage === 9) {
+        ctx.fillStyle = '#ffffff';
+    } else if (voltage === 0) {
+        ctx.fillStyle = '#ffffff';
+    } else {
+        ctx.fillStyle = '#ffffff';
+    }
+    
+    // Add text shadow for better readability
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+    ctx.shadowBlur = 2;
+    ctx.shadowOffsetX = 1;
+    ctx.shadowOffsetY = 1;
+    
     if (voltage !== null) {
         ctx.fillText(`${voltage.toFixed(1)}V`, x, y);
     } else {
         ctx.fillText('--V', x, y);
     }
-    
-    // No need for connection line since it's centered on the dot
     
     // Restore context
     ctx.restore();
@@ -2154,9 +2194,10 @@ canvas.addEventListener('mousedown', (e) => {
             };
             lines.push(newLine);
             
-            // Recalculate circuit
+            // Full circuit recalculation
             initializeConnections();
             resetDotVoltages();
+            rebuildAllConnections(); // This ensures all connections are properly rebuilt
             calculateCircuitValues();
             drawGrid();
             
