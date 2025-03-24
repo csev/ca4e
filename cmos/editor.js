@@ -261,9 +261,8 @@ class CircuitEditor {
                 this.startComponentDragging(clickedComponent, x, y);
                 return;
             } else if (clickedComponent instanceof Switch) {
-                // Normal mode, toggle switch
                 clickedComponent.toggle();
-                this.circuit.simulate();
+                this.circuit.fullRecompute();
                 this.draw();
                 return;
             }

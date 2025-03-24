@@ -3,6 +3,7 @@ class Circuit {
         this.components = [];
         this.wires = [];
         this.maxIterations = 100;
+        this.convergenceThreshold = 0.1; // Voltage difference threshold for convergence
     }
 
     addComponent(component) {
@@ -39,7 +40,48 @@ class Circuit {
         this.wires = [];
     }
 
-    // Basic voltage propagation (to be expanded)
+    fullRecompute() {
+        console.log('Starting full recomputation');
+        
+        // Reset ALL voltages except VDD/GND bars
+        this.components.forEach(component => {
+            if (component.type !== 'VDD_BAR' && component.type !== 'GND_BAR') {
+                // Reset component voltage
+                component.voltage = 0;
+                
+                // Reset all connection points
+                if (component.inputs) {
+                    component.inputs.forEach(input => {
+                        input.voltage = 0;
+                    });
+                }
+                if (component.outputs) {
+                    component.outputs.forEach(output => {
+                        output.voltage = 0;
+                    });
+                }
+            }
+        });
+
+        // Reset all wire voltages
+        this.wires.forEach(wire => {
+            wire.voltage = 0;
+        });
+
+        // Restore switch states
+        this.components.forEach(component => {
+            if (component.type === 'SWITCH') {
+                component.voltage = component.isOn ? Component.VDD_VOLTAGE : 0;
+                if (component.outputs && component.outputs.length > 0) {
+                    component.outputs[0].voltage = component.voltage;
+                }
+            }
+        });
+
+        // Run simulation
+        this.simulate();
+    }
+
     simulate() {
         console.log('Starting circuit simulation');
         
@@ -50,10 +92,10 @@ class Circuit {
                 component.type !== 'SWITCH' &&
                 component.type !== 'VDD_BAR') {
                 component.voltage = 0;
-                // Reset transistor input voltages except gate
+                // Only reset drain and source, preserve gate voltage
                 if (component.inputs) {
                     component.inputs.forEach(input => {
-                        if (input.name !== 'gate') {
+                        if (input.name === 'drain' || input.name === 'source') {
                             input.voltage = 0;
                         }
                     });
@@ -90,9 +132,31 @@ class Circuit {
                         changed = true;
                     }
                 }
+
+                // Handle transistor outputs
+                if (startComponent.type === 'NMOS' || startComponent.type === 'PMOS') {
+                    const output = startComponent.inputs.find(input => 
+                        input.x === wire.startPoint.x && input.y === wire.startPoint.y
+                    );
+                    if (output && output.voltage !== wire.voltage) {
+                        wire.voltage = output.voltage;
+                        if (endComponent.type === 'NMOS' || endComponent.type === 'PMOS') {
+                            const input = endComponent.inputs.find(input => 
+                                input.x === wire.endPoint.x && input.y === wire.endPoint.y
+                            );
+                            if (input) {
+                                input.voltage = output.voltage;
+                                changed = true;
+                            }
+                        } else {
+                            endComponent.voltage = output.voltage;
+                            changed = true;
+                        }
+                    }
+                }
             }
 
-            // Second pass: Handle transistor conduction
+            // Second pass: Update transistor states and propagate through conducting channels
             this.components.forEach(component => {
                 if (component.type === 'NMOS' || component.type === 'PMOS') {
                     const gate = component.inputs.find(input => input.name === 'gate');
@@ -113,46 +177,20 @@ class Circuit {
                     });
 
                     // If conducting, propagate drain voltage to source
-                    if (conducting) {
-                        if (source.voltage !== drain.voltage) {
-                            source.voltage = drain.voltage;
-                            component.voltage = drain.voltage; // Update component voltage too
-                            changed = true;
-                            console.log(`${component.type} conducting: D->S = ${drain.voltage}V`);
-                            
-                            // Update any wires connected to the source
-                            this.wires.forEach(wire => {
-                                if (wire.startComponent === component && 
-                                    wire.startPoint.x === source.x && 
-                                    wire.startPoint.y === source.y) {
-                                    wire.voltage = source.voltage;
-                                    wire.endComponent.voltage = source.voltage;
-                                    changed = true;
-                                    console.log(`Updated wire and connected component to ${source.voltage}V`);
-                                }
-                            });
-                        }
-                    }
-                }
-            });
-
-            // Third pass: Update components connected to transistor outputs
-            this.wires.forEach(wire => {
-                const startComponent = wire.startComponent;
-                const endComponent = wire.endComponent;
-
-                if (startComponent.type === 'NMOS' || startComponent.type === 'PMOS') {
-                    const sourcePin = startComponent.inputs.find(input => 
-                        input.name === 'source' &&
-                        input.x === wire.startPoint.x &&
-                        input.y === wire.startPoint.y
-                    );
-                    
-                    if (sourcePin && wire.voltage !== sourcePin.voltage) {
-                        wire.voltage = sourcePin.voltage;
-                        endComponent.voltage = sourcePin.voltage;
+                    if (conducting && drain.voltage !== source.voltage) {
+                        source.voltage = drain.voltage;
                         changed = true;
-                        console.log(`Updated component connected to ${startComponent.type} source: ${sourcePin.voltage}V`);
+                        
+                        // Update any wires connected to the source
+                        this.wires.forEach(wire => {
+                            if (wire.startComponent === component && 
+                                wire.startPoint.x === source.x && 
+                                wire.startPoint.y === source.y) {
+                                wire.voltage = source.voltage;
+                                wire.endComponent.voltage = source.voltage;
+                                changed = true;
+                            }
+                        });
                     }
                 }
             });
@@ -160,37 +198,64 @@ class Circuit {
             if (!changed) break;
         }
 
-        // Final pass: Update probe readings
+        // Update probe readings
         this.components.forEach(component => {
             if (component.type === 'PROBE') {
                 const connectedWire = this.wires.find(wire => 
                     wire.endComponent === component || wire.startComponent === component
                 );
                 if (connectedWire) {
-                    const sourceComponent = wire.startComponent === component ? 
-                        wire.endComponent : wire.startComponent;
                     component.voltage = connectedWire.voltage;
                     console.log('Probe update:', {
-                        sourceComponent: sourceComponent.type,
                         wireVoltage: connectedWire.voltage,
                         probeVoltage: component.voltage
                     });
                 }
             }
         });
+    }
 
-        // Log component states for debugging
-        this.components.forEach(component => {
-            console.log(`Component ${component.type} state:`, {
-                voltage: component.voltage,
-                inputs: component.inputs ? component.inputs.map(i => ({
-                    name: i.name,
-                    voltage: i.voltage
-                })) : 'no inputs',
-                outputs: component.outputs ? component.outputs.map(o => ({
-                    voltage: o.voltage
-                })) : 'no outputs'
-            });
-        });
+    getOutputVoltage(component, point) {
+        if (!component) return null;
+
+        // Handle voltage sources
+        if (component.type === 'VDD_BAR') return Component.VDD_VOLTAGE;
+        if (component.type === 'GND_BAR') return 0;
+        if (component.type === 'SWITCH') return component.voltage;
+
+        // Handle transistors
+        if (component.type === 'NMOS' || component.type === 'PMOS') {
+            const matchingInput = component.inputs.find(input => 
+                input.x === point.x && input.y === point.y
+            );
+            if (matchingInput) return matchingInput.voltage;
+        }
+
+        return component.voltage;
+    }
+
+    applyVoltageToComponent(component, point, voltage) {
+        if (!component) return;
+
+        // Find matching input/output point
+        if (component.inputs) {
+            const input = component.inputs.find(input => 
+                input.x === point.x && input.y === point.y
+            );
+            if (input) input.voltage = voltage;
+        }
+        if (component.outputs) {
+            const output = component.outputs.find(output => 
+                output.x === point.x && output.y === point.y
+            );
+            if (output) output.voltage = voltage;
+        }
+
+        // Update component voltage if necessary
+        if (component.type !== 'VDD_BAR' && 
+            component.type !== 'GND_BAR' && 
+            component.type !== 'SWITCH') {
+            component.voltage = voltage;
+        }
     }
 } 
