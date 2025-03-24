@@ -348,14 +348,15 @@ class PMOS extends Component {
 
 class Probe extends Component {
     constructor(x, y) {
-        super('probe', x, y);
-        this.size = 30;  // Single size value for both width and height
-        this.width = this.size;  // Width matches size
-        this.height = this.size; // Height matches size
+        super('PROBE', x, y);
+        this.size = 30;
+        this.width = this.size;
+        this.height = this.size;
         this.voltage = 0;
         this.cornerRadius = 6;
-        // Move input to left side instead of bottom
+        // Add both input and output
         this.inputs = [{ x: this.x - this.width/2 - 5, y: this.y, name: 'input', voltage: 0 }];
+        this.outputs = [{ x: this.x + this.width/2 + 5, y: this.y, name: 'output', voltage: 0 }];
     }
 
     getVoltageColor(voltage) {
@@ -422,9 +423,16 @@ class Probe extends Component {
         ctx.fillStyle = '#ffffff';  // Always use white text
         ctx.fillText(this.voltage.toFixed(1) + 'V', this.x, this.y);
 
-        // Draw connection point on left side
+        // Draw both input and output connection points
         ctx.beginPath();
         ctx.arc(this.inputs[0].x, this.inputs[0].y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = '#000000';
+        ctx.fill();
+        ctx.stroke();
+
+        // Draw output connection point
+        ctx.beginPath();
+        ctx.arc(this.outputs[0].x, this.outputs[0].y, 3, 0, Math.PI * 2);
         ctx.fillStyle = '#000000';
         ctx.fill();
         ctx.stroke();
@@ -437,6 +445,13 @@ class Probe extends Component {
             y: this.y, 
             name: 'input', 
             voltage: this.inputs[0].voltage 
+        };
+        // Update output position to right side
+        this.outputs[0] = {
+            x: this.x + this.width/2 + 5,
+            y: this.y,
+            name: 'output',
+            voltage: this.inputs[0].voltage // Copy input voltage to output
         };
     }
 

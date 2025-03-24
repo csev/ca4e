@@ -112,44 +112,44 @@ class Circuit {
                 const startComponent = wire.startComponent;
                 const endComponent = wire.endComponent;
                 
-                // Handle voltage sources (VDD_BAR and Switch)
-                if (startComponent.type === 'VDD_BAR' || startComponent.type === 'SWITCH') {
-                    const sourceVoltage = startComponent.voltage;
-                    wire.voltage = sourceVoltage;
+                // Handle voltage sources and transistor connections
+                if (startComponent.type === 'VDD_BAR' || 
+                    startComponent.type === 'SWITCH' || 
+                    startComponent.type === 'NMOS' || 
+                    startComponent.type === 'PMOS') {
                     
-                    // Update the endpoint
-                    if (endComponent.type === 'NMOS' || endComponent.type === 'PMOS') {
-                        const input = endComponent.inputs.find(input => 
-                            input.x === wire.endPoint.x && input.y === wire.endPoint.y
+                    let sourceVoltage;
+                    if (startComponent.type === 'VDD_BAR' || startComponent.type === 'SWITCH') {
+                        sourceVoltage = startComponent.voltage;
+                    } else {
+                        // For transistors, get the specific pin voltage
+                        const output = startComponent.inputs.find(input => 
+                            input.x === wire.startPoint.x && input.y === wire.startPoint.y
                         );
-                        if (input && input.voltage !== sourceVoltage) {
-                            input.voltage = sourceVoltage;
-                            changed = true;
-                            console.log(`Updated ${endComponent.type} ${input.name} to ${sourceVoltage}V`);
-                        }
-                    } else if (endComponent.voltage !== sourceVoltage) {
-                        endComponent.voltage = sourceVoltage;
-                        changed = true;
+                        sourceVoltage = output ? output.voltage : null;
                     }
-                }
 
-                // Handle transistor outputs
-                if (startComponent.type === 'NMOS' || startComponent.type === 'PMOS') {
-                    const output = startComponent.inputs.find(input => 
-                        input.x === wire.startPoint.x && input.y === wire.startPoint.y
-                    );
-                    if (output && output.voltage !== wire.voltage) {
-                        wire.voltage = output.voltage;
+                    if (sourceVoltage !== null) {
+                        wire.voltage = sourceVoltage;
+                        
+                        // Update the endpoint
                         if (endComponent.type === 'NMOS' || endComponent.type === 'PMOS') {
                             const input = endComponent.inputs.find(input => 
                                 input.x === wire.endPoint.x && input.y === wire.endPoint.y
                             );
-                            if (input) {
-                                input.voltage = output.voltage;
+                            if (input && input.voltage !== sourceVoltage) {
+                                input.voltage = sourceVoltage;
                                 changed = true;
                             }
-                        } else {
-                            endComponent.voltage = output.voltage;
+                        } else if (endComponent.type === 'PROBE') {
+                            if (endComponent.voltage !== sourceVoltage) {
+                                endComponent.voltage = sourceVoltage;
+                                endComponent.inputs[0].voltage = sourceVoltage;
+                                endComponent.outputs[0].voltage = sourceVoltage; // Propagate to output
+                                changed = true;
+                            }
+                        } else if (endComponent.voltage !== sourceVoltage) {
+                            endComponent.voltage = sourceVoltage;
                             changed = true;
                         }
                     }
@@ -163,31 +163,30 @@ class Circuit {
                     const drain = component.inputs.find(input => input.name === 'drain');
                     const source = component.inputs.find(input => input.name === 'source');
                     
-                    // Check if transistor is conducting
                     const isNMOS = component.type === 'NMOS';
                     const conducting = isNMOS ? 
-                        gate.voltage >= 2.5 :  // NMOS conducts when gate is high
-                        gate.voltage < 2.5;    // PMOS conducts when gate is low
+                        gate.voltage >= 2.5 : 
+                        gate.voltage < 2.5;
 
-                    console.log(`${component.type} state:`, {
-                        gate: gate.voltage,
-                        drain: drain.voltage,
-                        source: source.voltage,
-                        conducting
-                    });
-
-                    // If conducting, propagate drain voltage to source
                     if (conducting && drain.voltage !== source.voltage) {
                         source.voltage = drain.voltage;
                         changed = true;
                         
-                        // Update any wires connected to the source
+                        // Update any wires and components connected to the source
                         this.wires.forEach(wire => {
                             if (wire.startComponent === component && 
                                 wire.startPoint.x === source.x && 
                                 wire.startPoint.y === source.y) {
                                 wire.voltage = source.voltage;
-                                wire.endComponent.voltage = source.voltage;
+                                
+                                // Update connected component
+                                if (wire.endComponent.type === 'PROBE') {
+                                    wire.endComponent.voltage = source.voltage;
+                                    wire.endComponent.inputs[0].voltage = source.voltage;
+                                    wire.endComponent.outputs[0].voltage = source.voltage;
+                                } else {
+                                    wire.endComponent.voltage = source.voltage;
+                                }
                                 changed = true;
                             }
                         });
@@ -195,22 +194,45 @@ class Circuit {
                 }
             });
 
+            // Third pass: Propagate probe outputs
+            this.components.forEach(component => {
+                if (component.type === 'PROBE' && component.outputs[0].voltage !== null) {
+                    this.wires.forEach(wire => {
+                        if (wire.startComponent === component) {
+                            wire.voltage = component.outputs[0].voltage;
+                            if (wire.endComponent) {
+                                if (wire.endComponent.type === 'NMOS' || 
+                                    wire.endComponent.type === 'PMOS') {
+                                    const input = wire.endComponent.inputs.find(input => 
+                                        input.x === wire.endPoint.x && 
+                                        input.y === wire.endPoint.y
+                                    );
+                                    if (input) {
+                                        input.voltage = wire.voltage;
+                                        changed = true;
+                                    }
+                                } else {
+                                    wire.endComponent.voltage = wire.voltage;
+                                    changed = true;
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+
+            console.log(`Simulation iteration ${i}, changed: ${changed}`);
             if (!changed) break;
         }
 
-        // Update probe readings
+        // Log final probe states
         this.components.forEach(component => {
             if (component.type === 'PROBE') {
-                const connectedWire = this.wires.find(wire => 
-                    wire.endComponent === component || wire.startComponent === component
-                );
-                if (connectedWire) {
-                    component.voltage = connectedWire.voltage;
-                    console.log('Probe update:', {
-                        wireVoltage: connectedWire.voltage,
-                        probeVoltage: component.voltage
-                    });
-                }
+                console.log('Final Probe state:', {
+                    voltage: component.voltage,
+                    inputVoltage: component.inputs[0].voltage,
+                    outputVoltage: component.outputs[0].voltage
+                });
             }
         });
     }
