@@ -80,6 +80,14 @@ class CircuitEditor {
             this.canvas.width = window.innerWidth - 40;
             this.canvas.height = window.innerHeight - 100;
             
+            // Get toolbar height and add smaller padding (reduced from 15 to 5)
+            const toolbar = document.querySelector('.toolbar');
+            const toolbarHeight = toolbar ? toolbar.getBoundingClientRect().height : 0;
+            const canvasTopMargin = toolbarHeight + 5; // Reduced to 5px padding
+
+            // Update canvas position
+            this.canvas.style.marginTop = `${canvasTopMargin}px`;
+            
             // Update bars and battery
             if (this.vddBar) {
                 // On narrow screens, use full canvas width
@@ -818,6 +826,12 @@ window.addEventListener('resize', () => {
             wire.endPoint.y = this.gndBar.y - this.gndBar.height/2;
         }
     });
+
+    // Update canvas margin with smaller padding
+    const toolbar = document.querySelector('.toolbar');
+    const toolbarHeight = toolbar ? toolbar.getBoundingClientRect().height : 0;
+    const canvasTopMargin = toolbarHeight + 5; // Reduced to 5px padding
+    this.canvas.style.marginTop = `${canvasTopMargin}px`;
 
     this.draw();
 }); 
