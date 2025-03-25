@@ -561,21 +561,21 @@ class VDDBar extends Component {
     }
 
     updateDimensions(canvasWidth) {
-        // On narrow screens, use no margin
+        // On narrow screens, use small margin instead of zero
         const isNarrowScreen = window.innerWidth <= 768;
-        this.margin = isNarrowScreen ? 0 : Math.max(80, canvasWidth * 0.1);
+        this.margin = isNarrowScreen ? 15 : Math.max(80, canvasWidth * 0.1);
         this.width = canvasWidth - (this.margin * 2);
         this.height = 30;
         
         // Recalculate connection points
         this.outputs = [];
-        const totalSpace = this.width - (isNarrowScreen ? 0 : 40); // No edge space on narrow screens
+        const totalSpace = this.width - (isNarrowScreen ? 30 : 40); // Adjust edge space
         const spacing = totalSpace / (this.numPoints - 1);
         
         for (let i = 0; i < this.numPoints; i++) {
             const relativePosition = i / (this.numPoints - 1);
             this.outputs.push({
-                x: this.margin + (isNarrowScreen ? 0 : 20) + (i * spacing),
+                x: this.margin + (isNarrowScreen ? 15 : 20) + (i * spacing),
                 y: this.y + this.height/2,
                 voltage: Component.VDD_VOLTAGE,
                 relativePosition: relativePosition
@@ -668,28 +668,27 @@ class GNDBar extends Component {
     }
 
     updateDimensions(canvasWidth, canvasHeight) {
-        // On narrow screens, use no margin
+        // On narrow screens, use small margin instead of zero
         const isNarrowScreen = window.innerWidth <= 768;
-        this.margin = isNarrowScreen ? 0 : Math.max(80, canvasWidth * 0.1);
+        this.margin = isNarrowScreen ? 15 : Math.max(80, canvasWidth * 0.1);
         this.width = canvasWidth - (this.margin * 2);
         this.height = 30;
         
         // Keep the bar at a fixed distance from the bottom of the canvas
-        // Increase bottom padding to move the bar higher
-        const bottomPadding = 80; // Increased from 60 to 80 to move bar higher
+        const bottomPadding = 80;
         this.y = canvasHeight - bottomPadding;
         
         this.voltage = 0;
         
         // Recalculate connection points
         this.inputs = [];
-        const totalSpace = this.width - (isNarrowScreen ? 0 : 40);
+        const totalSpace = this.width - (isNarrowScreen ? 30 : 40); // Adjust edge space
         const spacing = totalSpace / (this.numPoints - 1);
         
         for (let i = 0; i < this.numPoints; i++) {
             const relativePosition = i / (this.numPoints - 1);
             this.inputs.push({
-                x: this.margin + (isNarrowScreen ? 0 : 20) + (i * spacing),
+                x: this.margin + (isNarrowScreen ? 15 : 20) + (i * spacing),
                 y: this.y - this.height/2,
                 voltage: this.voltage,
                 relativePosition: relativePosition
