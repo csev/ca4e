@@ -75,6 +75,9 @@ the sample content:
     <li>
       <a href="gates/index.html" target="_blank" class="text-primary">Digital Logic Builder</a>
     </li>
+    <li>
+      Building a Computer with Gates (TBD)
+    </li>
 <li>
 <a href="cdc8512/index.html"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator Prototype</a> (A UI Mockup - not working)
 </li>
