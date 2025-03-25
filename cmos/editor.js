@@ -82,9 +82,27 @@ class CircuitEditor {
             
             // Update bars and battery
             if (this.vddBar) {
+                // On narrow screens, use full canvas width
+                const isNarrowScreen = window.innerWidth <= 768;
+                if (isNarrowScreen) {
+                    this.vddBar.margin = 0;
+                    this.vddBar.width = this.canvas.width; // Match canvas width exactly
+                } else {
+                    this.vddBar.margin = 40;
+                    this.vddBar.width = this.canvas.width - (2 * this.vddBar.margin);
+                }
                 this.vddBar.updateDimensions(this.canvas.width);
             }
             if (this.gndBar) {
+                // On narrow screens, use full canvas width
+                const isNarrowScreen = window.innerWidth <= 768;
+                if (isNarrowScreen) {
+                    this.gndBar.margin = 0;
+                    this.gndBar.width = this.canvas.width; // Match canvas width exactly
+                } else {
+                    this.gndBar.margin = 40;
+                    this.gndBar.width = this.canvas.width - (2 * this.gndBar.margin);
+                }
                 this.gndBar.updateDimensions(this.canvas.width, this.canvas.height);
             }
             if (this.batterySymbol) {
@@ -574,8 +592,8 @@ class CircuitEditor {
             component.draw(this.ctx);
         });
 
-        // Draw battery symbol
-        if (this.batterySymbol) {
+        // Draw battery symbol only if screen is wide enough (>768px)
+        if (this.batterySymbol && window.innerWidth > 768) {
             this.batterySymbol.draw(this.ctx);
         }
 
@@ -738,27 +756,40 @@ window.addEventListener('resize', () => {
     this.canvas.width = width;
     this.canvas.height = height;
     
-    // Update VDD and GND bars
+    // Update VDD and GND bars to match canvas width exactly on mobile
+    const isNarrowScreen = window.innerWidth <= 768;
+    if (isNarrowScreen) {
+        this.vddBar.margin = 0;
+        this.gndBar.margin = 0;
+        this.vddBar.width = this.canvas.width; // Match canvas width exactly
+        this.gndBar.width = this.canvas.width; // Match canvas width exactly
+    } else {
+        this.vddBar.margin = 40;
+        this.gndBar.margin = 40;
+        this.vddBar.width = width - (2 * this.vddBar.margin);
+        this.gndBar.width = width - (2 * this.gndBar.margin);
+    }
+    
     this.vddBar.updateDimensions(width);
     this.gndBar.updateDimensions(width, height);
     this.batterySymbol.updatePosition();
 
-    // Only update wire positions
+    // Update wire positions for full-width bars
     this.circuit.wires.forEach(wire => {
         if (wire.startComponent === this.vddBar) {
-            wire.startPoint.x = this.vddBar.margin + 20 + ((this.vddBar.width - 40) * wire.startPoint.relativePosition);
+            wire.startPoint.x = wire.startPoint.relativePosition * this.vddBar.width;
             wire.startPoint.y = this.vddBar.y + this.vddBar.height/2;
         }
         if (wire.endComponent === this.vddBar) {
-            wire.endPoint.x = this.vddBar.margin + 20 + ((this.vddBar.width - 40) * wire.endPoint.relativePosition);
+            wire.endPoint.x = wire.endPoint.relativePosition * this.vddBar.width;
             wire.endPoint.y = this.vddBar.y + this.vddBar.height/2;
         }
         if (wire.startComponent === this.gndBar) {
-            wire.startPoint.x = this.gndBar.margin + 20 + ((this.gndBar.width - 40) * wire.startPoint.relativePosition);
+            wire.startPoint.x = wire.startPoint.relativePosition * this.gndBar.width;
             wire.startPoint.y = this.gndBar.y - this.gndBar.height/2;
         }
         if (wire.endComponent === this.gndBar) {
-            wire.endPoint.x = this.gndBar.margin + 20 + ((this.gndBar.width - 40) * wire.endPoint.relativePosition);
+            wire.endPoint.x = wire.endPoint.relativePosition * this.gndBar.width;
             wire.endPoint.y = this.gndBar.y - this.gndBar.height/2;
         }
     });

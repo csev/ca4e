@@ -561,22 +561,24 @@ class VDDBar extends Component {
     }
 
     updateDimensions(canvasWidth) {
-        this.margin = Math.max(80, canvasWidth * 0.1); // Responsive margin, minimum 80px
+        // On narrow screens, use no margin
+        const isNarrowScreen = window.innerWidth <= 768;
+        this.margin = isNarrowScreen ? 0 : Math.max(80, canvasWidth * 0.1);
         this.width = canvasWidth - (this.margin * 2);
         this.height = 30;
         
         // Recalculate connection points
         this.outputs = [];
-        const totalSpace = this.width - 40; // Leave a bit of space from edges of bar
-        const spacing = totalSpace / (this.numPoints - 1); // Space between points
+        const totalSpace = this.width - (isNarrowScreen ? 0 : 40); // No edge space on narrow screens
+        const spacing = totalSpace / (this.numPoints - 1);
         
         for (let i = 0; i < this.numPoints; i++) {
-            const relativePosition = i / (this.numPoints - 1); // Position from 0 to 1
+            const relativePosition = i / (this.numPoints - 1);
             this.outputs.push({
-                x: this.margin + 20 + (i * spacing),
+                x: this.margin + (isNarrowScreen ? 0 : 20) + (i * spacing),
                 y: this.y + this.height/2,
-                voltage: Component.VDD_VOLTAGE, // Explicitly set voltage for each output
-                relativePosition: relativePosition // Store relative position
+                voltage: Component.VDD_VOLTAGE,
+                relativePosition: relativePosition
             });
         }
     }
@@ -666,22 +668,29 @@ class GNDBar extends Component {
     }
 
     updateDimensions(canvasWidth, canvasHeight) {
-        this.margin = Math.max(80, canvasWidth * 0.1); // Responsive margin
+        // On narrow screens, use no margin
+        const isNarrowScreen = window.innerWidth <= 768;
+        this.margin = isNarrowScreen ? 0 : Math.max(80, canvasWidth * 0.1);
         this.width = canvasWidth - (this.margin * 2);
         this.height = 30;
-        this.y = canvasHeight - 40; // Update vertical position
+        
+        // Keep the bar at a fixed distance from the bottom of the canvas
+        // Increase bottom padding to move the bar higher
+        const bottomPadding = 80; // Increased from 60 to 80 to move bar higher
+        this.y = canvasHeight - bottomPadding;
+        
         this.voltage = 0;
         
         // Recalculate connection points
-        this.inputs = []; // Using inputs instead of outputs for GND
-        const totalSpace = this.width - 40;
+        this.inputs = [];
+        const totalSpace = this.width - (isNarrowScreen ? 0 : 40);
         const spacing = totalSpace / (this.numPoints - 1);
         
         for (let i = 0; i < this.numPoints; i++) {
             const relativePosition = i / (this.numPoints - 1);
             this.inputs.push({
-                x: this.margin + 20 + (i * spacing),
-                y: this.y - this.height/2, // Connect from top of bar
+                x: this.margin + (isNarrowScreen ? 0 : 20) + (i * spacing),
+                y: this.y - this.height/2,
                 voltage: this.voltage,
                 relativePosition: relativePosition
             });

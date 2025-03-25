@@ -27,12 +27,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .component-selector {
             display: flex;
             gap: 10px;
             align-items: center;
+            flex-wrap: wrap;
         }
 
         .component-selector button {
@@ -234,6 +237,45 @@
 
         .modal-content ul {
             padding-left: 20px;
+        }
+
+        /* Make buttons more compact on mobile */
+        @media (max-width: 768px) {
+            .toolbar {
+                padding: 10px;
+            }
+
+            .toolbar-button {
+                padding: 6px 10px;
+                font-size: 14px;
+                height: 35px;
+                margin-right: 5px;
+            }
+
+            .mode-button {
+                padding: 6px;
+                height: 35px;
+                width: 35px;
+            }
+
+            #selectedTool {
+                width: 100%;
+                text-align: center;
+                margin: 5px 0;
+                order: -1;
+            }
+
+            .component-selector, .right-section {
+                justify-content: center;
+                width: 100%;
+            }
+        }
+
+        /* Adjust canvas margin for wrapped toolbar */
+        @media (max-width: 768px) {
+            #circuitCanvas {
+                margin-top: 120px;
+            }
         }
     </style>
 </head>
