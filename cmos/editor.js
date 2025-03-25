@@ -163,12 +163,18 @@ class CircuitEditor {
     setupEventListeners() {
         // Tool selection
         document.querySelectorAll('.component-selector button').forEach(button => {
-            button.addEventListener('click', () => {
+            button.addEventListener('click', (event) => {
                 // Clear all modes
                 this.exitAllModes();
+                
+                // Update button states immediately
+                document.querySelectorAll('.component-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                button.classList.add('active');
+                
                 // Set the new tool
                 this.selectedTool = button.dataset.component;
-                this.updateStatusBar();
             });
         });
 
@@ -282,7 +288,7 @@ class CircuitEditor {
         this.labelMode = false;
         this.selectedTool = null;
         this.updateModeButtons();
-        this.updateStatusBar();
+        this.updateComponentButtons();
         this.canvas.style.cursor = 'default';
     }
 
@@ -377,7 +383,11 @@ class CircuitEditor {
             }
             if (component) {
                 this.circuit.addComponent(component);
+                // Clear selection and update button state
                 this.selectedTool = null;
+                document.querySelectorAll('.component-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
                 this.draw();
             }
         }
@@ -739,6 +749,21 @@ class CircuitEditor {
 
     setSwitchLow(label) {
         return this.setSwitchVoltage(label, false);
+    }
+
+    updateComponentButtons() {
+        // Remove active class from all component buttons
+        document.querySelectorAll('.component-button').forEach(button => {
+            button.classList.remove('active');
+        });
+        
+        // Add active class to selected component button
+        if (this.selectedTool) {
+            const activeButton = document.querySelector(`[data-component="${this.selectedTool}"]`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
     }
 }
 
