@@ -70,10 +70,10 @@ As the course is developed, you can see some of
 the sample content:
 <ul>
     <li>
-      <a href="gates/index.html" target="_blank" class="text-primary">Digital Logic Builder</a>
+      <a href="cmos/index.html" target="_blank" class="text-primary">DC Logic Builder</a>
     </li>
     <li>
-      <a href="cmos/index.html" target="_blank" class="text-primary">DC Logic Builder</a>
+      <a href="gates/index.html" target="_blank" class="text-primary">Digital Logic Builder</a>
     </li>
 <li>
 <a href="cdc8512/index.html"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator Prototype</a> (A UI Mockup - not working)
