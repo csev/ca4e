@@ -1153,4 +1153,94 @@ class ThreeBitAdder extends Gate {
         this.outputNodes[3].x = this.x;
         this.outputNodes[3].y = this.y - this.height/2;
     }
+}
+
+class ClockPulse extends Gate {
+    constructor(x, y, editor) {
+        super('CLOCK_PULSE', x, y, editor);
+        this.label = 'CLK';
+        this.width = 60;
+        this.height = 60;
+        this.state = false;
+        
+        this.outputNodes = [
+            { x: x + this.width/2, y: y - 15, name: 'high', value: false, hasOutput: false },
+            { x: x + this.width/2, y: y + 15, name: 'low', value: true, hasOutput: false }
+        ];
+        this.inputNodes = [];
+    }
+
+    draw(ctx) {
+        // Draw the main rectangle
+        ctx.fillStyle = 'white';
+        ctx.strokeStyle = 'black';
+        ctx.beginPath();
+        ctx.rect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+        ctx.fill();
+        ctx.stroke();
+
+        // Draw the clock icon in center
+        ctx.strokeStyle = 'black';
+        ctx.beginPath();
+        ctx.moveTo(this.x - 15, this.y);
+        ctx.lineTo(this.x - 5, this.y);
+        ctx.lineTo(this.x - 5, this.y - 10);
+        ctx.lineTo(this.x + 5, this.y - 10);
+        ctx.lineTo(this.x + 5, this.y);
+        ctx.lineTo(this.x + 15, this.y);
+        ctx.stroke();
+
+        // Draw "CLK" (moved down from -25 to -20)
+        ctx.fillStyle = 'black';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText("CLK", this.x, this.y - 20);
+
+        // Draw state text
+        ctx.fillText(this.state ? "HIGH" : "LOW", this.x, this.y + 20);
+
+        // Draw nodes with their colored circles
+        this.drawNodes(ctx);
+    }
+
+    toggleState() {
+        this.state = !this.state;
+        this.evaluate();
+        return true;
+    }
+
+    evaluate() {
+        // Set output values based on state
+        this.outputNodes[0].sourceValue = this.state;      // High output
+        this.outputNodes[1].sourceValue = !this.state;     // Low output
+        return this.state;
+    }
+
+    updateConnectionPoints() {
+        // Update output positions
+        this.outputNodes[0].x = this.x + this.width/2;  // High output
+        this.outputNodes[0].y = this.y - 15;
+        
+        this.outputNodes[1].x = this.x + this.width/2;  // Low output
+        this.outputNodes[1].y = this.y + 15;
+    }
+
+    drawNodes(ctx) {
+        // Draw output nodes with their colors based on values
+        this.outputNodes.forEach((node, i) => {
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = node.sourceValue ? 'green' : 'red';
+            if (node.isHovered) {
+                ctx.fillStyle = 'blue';
+            }
+            ctx.fill();
+            ctx.stroke();
+
+            // Draw H/L labels next to the nodes
+            ctx.fillStyle = 'black';
+            ctx.textAlign = 'right';
+            ctx.fillText(i === 0 ? "H" : "L", node.x - 8, node.y);
+        });
+    }
 } 

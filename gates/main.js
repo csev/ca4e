@@ -220,7 +220,9 @@ class CircuitEditor {
 
             if (this.selectedTool) {
                 let newGate;
-                if (this.selectedTool === 'FULL_ADDER') {
+                if (this.selectedTool === 'CLOCK_PULSE') {
+                    newGate = new ClockPulse(x, y, this);
+                } else if (this.selectedTool === 'FULL_ADDER') {
                     newGate = new FullAdder(x, y, this);
                 } else if (this.selectedTool === 'NIXIE_DISPLAY') {
                     newGate = new NixieDisplay(x, y, this);
@@ -306,7 +308,9 @@ class CircuitEditor {
             
             // Update all node positions using stored relative positions
             this.draggingGate.inputNodes.forEach((node, index) => {
-                if (this.draggingGate.type === 'THREE_BIT_ADDER') {
+                if (this.draggingGate.type === 'CLOCK_PULSE') {
+                    // Clock pulse has no input nodes, but include for completeness
+                } else if (this.draggingGate.type === 'THREE_BIT_ADDER') {
                     node.x = this.draggingGate.x - this.draggingGate.width/2;
                     if (index < 3) {  // A inputs (0-2)
                         node.y = this.draggingGate.y - 45 + (index * 15);  // -45, -30, -15
@@ -343,7 +347,10 @@ class CircuitEditor {
                 }
             });
             this.draggingGate.outputNodes.forEach((node, index) => {
-                if (this.draggingGate.type === 'THREE_BIT_ADDER') {
+                if (this.draggingGate.type === 'CLOCK_PULSE') {
+                    node.x = this.draggingGate.x + this.draggingGate.width/2;
+                    node.y = this.draggingGate.y + (index === 0 ? -15 : 15);  // High at -15, Low at +15
+                } else if (this.draggingGate.type === 'THREE_BIT_ADDER') {
                     if (index === 3) {  // Overflow output at top
                         node.x = this.draggingGate.x;
                         node.y = this.draggingGate.y - this.draggingGate.height/2;
@@ -464,10 +471,11 @@ class CircuitEditor {
                 }
             }
         } else {
-            // Existing click handling for input gates
+            // Handle clicks for input gates and clock pulse
             for (const gate of this.gates) {
-                if (gate.type === 'INPUT' && this.isPointInGate(x, y, gate)) {
-                    if (gate.toggleInput()) {
+                if ((gate.type === 'INPUT' || gate.type === 'CLOCK_PULSE') && 
+                    this.isPointInGate(x, y, gate)) {
+                    if (gate.toggleInput?.() || gate.toggleState?.()) {
                         this.updateWireValues();
                     }
                     break;
