@@ -219,12 +219,15 @@ class CircuitEditor {
             const y = e.clientY - rect.top;
 
             if (this.selectedTool) {
-                // Create new gate with reference to the editor
                 let newGate;
                 if (this.selectedTool === 'FULL_ADDER') {
                     newGate = new FullAdder(x, y, this);
                 } else if (this.selectedTool === 'NIXIE_DISPLAY') {
                     newGate = new NixieDisplay(x, y, this);
+                } else if (this.selectedTool === 'THREE_BIT_ADDER') {
+                    newGate = new ThreeBitAdder(x, y, this);
+                } else if (this.selectedTool === 'THREE_BIT_LATCH') {
+                    newGate = new ThreeBitLatch(x, y, this);
                 } else {
                     newGate = new Gate(this.selectedTool, x, y, this);
                 }
@@ -303,8 +306,22 @@ class CircuitEditor {
             
             // Update all node positions using stored relative positions
             this.draggingGate.inputNodes.forEach((node, index) => {
-                // Special handling for different gate types
-                if (this.draggingGate.type === 'NIXIE_DISPLAY') {
+                if (this.draggingGate.type === 'THREE_BIT_ADDER') {
+                    node.x = this.draggingGate.x - this.draggingGate.width/2;
+                    if (index < 3) {  // A inputs (0-2)
+                        node.y = this.draggingGate.y - 45 + (index * 15);  // -45, -30, -15
+                    } else {          // B inputs (3-5)
+                        node.y = this.draggingGate.y + 15 + ((index-3) * 15);  // +15, +30, +45
+                    }
+                } else if (this.draggingGate.type === 'THREE_BIT_LATCH') {
+                    if (index === 0) {  // Clock input
+                        node.x = this.draggingGate.x;
+                        node.y = this.draggingGate.y - this.draggingGate.height/2;
+                    } else {  // Data inputs
+                        node.x = this.draggingGate.x - this.draggingGate.width/2;
+                        node.y = this.draggingGate.y + ((index - 2) * 15);  // -15, 0, +15
+                    }
+                } else if (this.draggingGate.type === 'NIXIE_DISPLAY') {
                     node.x = this.draggingGate.x - 40;
                 } else if (this.draggingGate.type === 'FULL_ADDER') {
                     // Full adder has three inputs at different heights
@@ -326,7 +343,18 @@ class CircuitEditor {
                 }
             });
             this.draggingGate.outputNodes.forEach((node, index) => {
-                if (this.draggingGate.type === 'FULL_ADDER') {
+                if (this.draggingGate.type === 'THREE_BIT_ADDER') {
+                    if (index === 3) {  // Overflow output at top
+                        node.x = this.draggingGate.x;
+                        node.y = this.draggingGate.y - this.draggingGate.height/2;
+                    } else {            // Sum outputs at bottom (S1-S4)
+                        node.x = this.draggingGate.x + ((index - 1) * 15);  // -15, 0, +15
+                        node.y = this.draggingGate.y + this.draggingGate.height/2;
+                    }
+                } else if (this.draggingGate.type === 'THREE_BIT_LATCH') {
+                    node.x = this.draggingGate.x + this.draggingGate.width/2;
+                    node.y = this.draggingGate.y + ((index - 1) * 15);  // -15, 0, +15
+                } else if (this.draggingGate.type === 'FULL_ADDER') {
                     // Full adder has two outputs at different heights
                     node.x = this.draggingGate.x + 25; // Match the input offset
                     // Keep the outputs at fixed heights relative to the gate center

@@ -1,8 +1,8 @@
 class Gate {
     constructor(type, x, y, editor) {
         this.type = type;
-        this.x = x;
-        this.y = y;
+        this._x = x;  // Use private variable
+        this._y = y;  // Use private variable
         this.editor = editor;
         this.inputs = [];
         this.outputs = [];
@@ -13,9 +13,7 @@ class Gate {
         this.isUnstable = false; // Add flag for unstable state
         
         // Add state for INPUT and OUTPUT types
-        if (type === 'INPUT') {
-            this.state = false;
-        } else if (type === 'OUTPUT') {
+        if (type === 'INPUT' || type === 'OUTPUT') {
             this.state = false;
         }
         
@@ -27,49 +25,49 @@ class Gate {
         switch(this.type) {
             case 'AND':
                 this.inputNodes = [
-                    { x: this.x - 25, y: this.y - 10, value: false, connected: false },
-                    { x: this.x - 25, y: this.y + 10, value: false, connected: false }
+                    { x: this._x - 25, y: this._y - 10, value: false, connected: false },
+                    { x: this._x - 25, y: this._y + 10, value: false, connected: false }
                 ];
                 this.outputNodes = [
-                    { x: this.x + 20, y: this.y, value: false, hasOutput: false }
+                    { x: this._x + 20, y: this._y, value: false, hasOutput: false }
                 ];
                 break;
             case 'NAND':
                 this.inputNodes = [
-                    { x: this.x - 25, y: this.y - 10, value: false, connected: false },
-                    { x: this.x - 25, y: this.y + 10, value: false, connected: false }
+                    { x: this._x - 25, y: this._y - 10, value: false, connected: false },
+                    { x: this._x - 25, y: this._y + 10, value: false, connected: false }
                 ];
                 this.outputNodes = [
-                    { x: this.x + 20, y: this.y, value: false, hasOutput: false }
+                    { x: this._x + 20, y: this._y, value: false, hasOutput: false }
                 ];
                 break;
             case 'OR':
             case 'NOR':
             case 'XOR':
                 this.inputNodes = [
-                    { x: this.x - 20, y: this.y - 10, value: false, connected: false },
-                    { x: this.x - 20, y: this.y + 10, value: false, connected: false }
+                    { x: this._x - 20, y: this._y - 10, value: false, connected: false },
+                    { x: this._x - 20, y: this._y + 10, value: false, connected: false }
                 ];
                 this.outputNodes = [
-                    { x: this.x + 20, y: this.y, value: false, hasOutput: false }
+                    { x: this._x + 20, y: this._y, value: false, hasOutput: false }
                 ];
                 break;
             case 'NOT':
                 this.inputNodes = [
-                    { x: this.x - 27, y: this.y, value: false, connected: false }
+                    { x: this._x - 27, y: this._y, value: false, connected: false }
                 ];
                 this.outputNodes = [
-                    { x: this.x + 27, y: this.y, value: false, hasOutput: false }
+                    { x: this._x + 27, y: this._y, value: false, hasOutput: false }
                 ];
                 break;
             case 'INPUT':
                 this.outputNodes = [
-                    { x: this.x + 20, y: this.y, value: false, hasOutput: false }
+                    { x: this._x + 20, y: this._y, value: false, hasOutput: false }
                 ];
                 break;
             case 'OUTPUT':
                 this.inputNodes = [
-                    { x: this.x - 20, y: this.y, value: false, connected: false }
+                    { x: this._x - 20, y: this._y, value: false, connected: false }
                 ];
                 break;
         }
@@ -183,10 +181,10 @@ class Gate {
         const outputValue = this.evaluate();
 
         this.drawGate(ctx, (ctx) => {
-            ctx.moveTo(this.x - 20, this.y - 20);
-            ctx.lineTo(this.x, this.y - 20);
-            ctx.arc(this.x, this.y, 20, -Math.PI/2, Math.PI/2);
-            ctx.lineTo(this.x - 20, this.y + 20);
+            ctx.moveTo(this._x - 20, this._y - 20);
+            ctx.lineTo(this._x, this._y - 20);
+            ctx.arc(this._x, this._y, 20, -Math.PI/2, Math.PI/2);
+            ctx.lineTo(this._x - 20, this._y + 20);
             ctx.closePath();
         }, outputValue, hasAllInputs);
     }
@@ -197,10 +195,10 @@ class Gate {
         const outputValue = this.evaluate();
 
         this.drawGate(ctx, (ctx) => {
-            ctx.moveTo(this.x - 20, this.y - 20);
-            ctx.quadraticCurveTo(this.x, this.y - 20, this.x + 20, this.y);
-            ctx.quadraticCurveTo(this.x, this.y + 20, this.x - 20, this.y + 20);
-            ctx.quadraticCurveTo(this.x - 10, this.y, this.x - 20, this.y - 20);
+            ctx.moveTo(this._x - 20, this._y - 20);
+            ctx.quadraticCurveTo(this._x, this._y - 20, this._x + 20, this._y);
+            ctx.quadraticCurveTo(this._x, this._y + 20, this._x - 20, this._y + 20);
+            ctx.quadraticCurveTo(this._x - 10, this._y, this._x - 20, this._y - 20);
         }, outputValue, hasAllInputs);
     }
 
@@ -212,9 +210,9 @@ class Gate {
 
         // Draw NOT triangle
         ctx.beginPath();
-        ctx.moveTo(this.x - 20, this.y - 20);
-        ctx.lineTo(this.x + 20, this.y);
-        ctx.lineTo(this.x - 20, this.y + 20);
+        ctx.moveTo(this._x - 20, this._y - 20);
+        ctx.lineTo(this._x + 20, this._y);
+        ctx.lineTo(this._x - 20, this._y + 20);
         ctx.closePath();
         
         // Color based on output state
@@ -229,7 +227,7 @@ class Gate {
         
         // Draw the NOT circle
         ctx.beginPath();
-        ctx.arc(this.x + 25, this.y, 3, 0, Math.PI * 2);
+        ctx.arc(this._x + 25, this._y, 3, 0, Math.PI * 2);
         ctx.stroke();
         
         // Draw value in center of triangle
@@ -238,15 +236,15 @@ class Gate {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         if (hasInput) {
-            ctx.fillText(outputValue ? '1' : '0', this.x - 5, this.y);
+            ctx.fillText(outputValue ? '1' : '0', this._x - 5, this._y);
         } else {
-            ctx.fillText('?', this.x - 5, this.y);
+            ctx.fillText('?', this._x - 5, this._y);
         }
         
         // Draw gate label
         ctx.fillStyle = '#000';
         ctx.font = '12px Arial';
-        ctx.fillText('NOT', this.x, this.y - 25);
+        ctx.fillText('NOT', this._x, this._y - 25);
     }
 
     drawNAND(ctx) {
@@ -255,16 +253,16 @@ class Gate {
         const outputValue = this.evaluate();
 
         this.drawGate(ctx, (ctx) => {
-            ctx.moveTo(this.x - 20, this.y - 20);
-            ctx.lineTo(this.x, this.y - 20);
-            ctx.arc(this.x, this.y, 20, -Math.PI/2, Math.PI/2);
-            ctx.lineTo(this.x - 20, this.y + 20);
+            ctx.moveTo(this._x - 20, this._y - 20);
+            ctx.lineTo(this._x, this._y - 20);
+            ctx.arc(this._x, this._y, 20, -Math.PI/2, Math.PI/2);
+            ctx.lineTo(this._x - 20, this._y + 20);
             ctx.closePath();
         }, outputValue, hasAllInputs);
 
         // Add NOT circle - adjusted position
         ctx.beginPath();
-        ctx.arc(this.x + 20, this.y, 5, 0, Math.PI * 2);
+        ctx.arc(this._x + 20, this._y, 5, 0, Math.PI * 2);
         ctx.stroke();
     }
 
@@ -274,15 +272,15 @@ class Gate {
         const outputValue = this.evaluate();
 
         this.drawGate(ctx, (ctx) => {
-            ctx.moveTo(this.x - 20, this.y - 20);
-            ctx.quadraticCurveTo(this.x, this.y - 20, this.x + 20, this.y);
-            ctx.quadraticCurveTo(this.x, this.y + 20, this.x - 20, this.y + 20);
-            ctx.quadraticCurveTo(this.x - 10, this.y, this.x - 20, this.y - 20);
+            ctx.moveTo(this._x - 20, this._y - 20);
+            ctx.quadraticCurveTo(this._x, this._y - 20, this._x + 20, this._y);
+            ctx.quadraticCurveTo(this._x, this._y + 20, this._x - 20, this._y + 20);
+            ctx.quadraticCurveTo(this._x - 10, this._y, this._x - 20, this._y - 20);
         }, outputValue, hasAllInputs);
 
         // Add NOT circle - adjusted position
         ctx.beginPath();
-        ctx.arc(this.x + 20, this.y, 5, 0, Math.PI * 2);
+        ctx.arc(this._x + 20, this._y, 5, 0, Math.PI * 2);
         ctx.stroke();
     }
 
@@ -292,16 +290,16 @@ class Gate {
         const outputValue = this.evaluate();
 
         this.drawGate(ctx, (ctx) => {
-            ctx.moveTo(this.x - 20, this.y - 20);
-            ctx.quadraticCurveTo(this.x, this.y - 20, this.x + 20, this.y);
-            ctx.quadraticCurveTo(this.x, this.y + 20, this.x - 20, this.y + 20);
-            ctx.quadraticCurveTo(this.x - 10, this.y, this.x - 20, this.y - 20);
+            ctx.moveTo(this._x - 20, this._y - 20);
+            ctx.quadraticCurveTo(this._x, this._y - 20, this._x + 20, this._y);
+            ctx.quadraticCurveTo(this._x, this._y + 20, this._x - 20, this._y + 20);
+            ctx.quadraticCurveTo(this._x - 10, this._y, this._x - 20, this._y - 20);
         }, outputValue, hasAllInputs);
 
         // Add extra curve for XOR
         ctx.beginPath();
-        ctx.moveTo(this.x - 25, this.y - 20);
-        ctx.quadraticCurveTo(this.x - 15, this.y, this.x - 25, this.y + 20);
+        ctx.moveTo(this._x - 25, this._y - 20);
+        ctx.quadraticCurveTo(this._x - 15, this._y, this._x - 25, this._y + 20);
         ctx.stroke();
     }
 
@@ -309,7 +307,7 @@ class Gate {
         if (this.type === 'INPUT') {
             // Draw main circle
             ctx.beginPath();
-            ctx.arc(this.x, this.y, 15, 0, Math.PI * 2);
+            ctx.arc(this._x, this._y, 15, 0, Math.PI * 2);
             ctx.fillStyle = this.state ? '#4CAF50' : '#f44336';
             ctx.fill();
             ctx.strokeStyle = '#000';
@@ -320,12 +318,12 @@ class Gate {
             ctx.font = 'bold 14px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(this.state ? '1' : '0', this.x, this.y);
+            ctx.fillText(this.state ? '1' : '0', this._x, this._y);
 
             // Draw label above (changed from "INPUT")
             ctx.fillStyle = '#000';
             ctx.font = '12px Arial';
-            ctx.fillText(this.label, this.x, this.y - 25);
+            ctx.fillText(this.label, this._x, this._y - 25);
         } else if (this.type === 'OUTPUT') {
             // Get input value from connected wire
             const inputNode = this.inputNodes[0];
@@ -334,7 +332,7 @@ class Gate {
 
             // Draw main circle
             ctx.beginPath();
-            ctx.arc(this.x, this.y, 15, 0, Math.PI * 2);
+            ctx.arc(this._x, this._y, 15, 0, Math.PI * 2);
             
             if (hasValue) {
                 ctx.fillStyle = value ? '#4CAF50' : '#f44336';
@@ -351,15 +349,15 @@ class Gate {
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             if (hasValue) {
-                ctx.fillText(value ? '1' : '0', this.x, this.y);
+                ctx.fillText(value ? '1' : '0', this._x, this._y);
             } else {
-                ctx.fillText('?', this.x, this.y);
+                ctx.fillText('?', this._x, this._y);
             }
 
             // Draw label above (changed from "OUTPUT")
             ctx.fillStyle = '#000';
             ctx.font = '12px Arial';
-            ctx.fillText(this.label, this.x, this.y - 25);
+            ctx.fillText(this.label, this._x, this._y - 25);
         }
     }
 
@@ -471,15 +469,15 @@ class Gate {
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         if (this.isUnstable) {
-            ctx.fillText('?', this.x, this.y);
+            ctx.fillText('?', this._x, this._y);
         } else {
-            ctx.fillText(hasAllInputs ? (outputValue ? '1' : '0') : '?', this.x, this.y);
+            ctx.fillText(hasAllInputs ? (outputValue ? '1' : '0') : '?', this._x, this._y);
         }
 
         // Draw gate label
         ctx.fillStyle = '#000';
         ctx.font = '12px Arial';
-        ctx.fillText(this.label, this.x, this.y - 25);
+        ctx.fillText(this.label, this._x, this._y - 25);
     }
 
     // Add method to set label
@@ -490,6 +488,48 @@ class Gate {
     // Add method to set unstable state
     setUnstable(unstable) {
         this.isUnstable = unstable;
+    }
+
+    // Add getter/setter for x
+    get x() {
+        return this._x;
+    }
+
+    set x(value) {
+        const dx = value - this._x;
+        this._x = value;
+        
+        // Update all node positions
+        this.inputNodes.forEach(node => {
+            node.x += dx;
+        });
+        this.outputNodes.forEach(node => {
+            node.x += dx;
+        });
+    }
+
+    // Add getter/setter for y
+    get y() {
+        return this._y;
+    }
+
+    set y(value) {
+        const dy = value - this._y;
+        this._y = value;
+        
+        // Update all node positions
+        this.inputNodes.forEach(node => {
+            node.y += dy;
+        });
+        this.outputNodes.forEach(node => {
+            node.y += dy;
+        });
+    }
+
+    // Add default updateConnectionPoints method
+    updateConnectionPoints() {
+        // Default implementation for basic gates
+        this.initializeNodes();
     }
 }
 
@@ -758,5 +798,359 @@ class NixieDisplay extends Gate {
         
         // Display components don't need to return a value
         return undefined;
+    }
+}
+
+class ThreeBitLatch extends Gate {
+    constructor(x, y, editor) {
+        super('THREE_BIT_LATCH', x, y, editor);
+        this.label = 'Latch';
+        this.width = 60;  
+        this.height = 80; 
+        this.storedValue = 0;
+        
+        // Define inputs and outputs with matching y-coordinates
+        this.inputNodes = [
+            // Clock at top center
+            { x: x, y: y - this.height/2, name: 'clock', value: false, connected: false },
+            // Data inputs on left side
+            { x: x - this.width/2, y: y - 15, name: 'bit1', value: false, connected: false },
+            { x: x - this.width/2, y: y, name: 'bit2', value: false, connected: false },
+            { x: x - this.width/2, y: y + 15, name: 'bit4', value: false, connected: false }
+        ];
+        
+        // Outputs aligned with corresponding inputs
+        this.outputNodes = [
+            { x: x + this.width/2, y: y - 15, name: 'out1', value: false, hasOutput: false },
+            { x: x + this.width/2, y: y, name: 'out2', value: false, hasOutput: false },
+            { x: x + this.width/2, y: y + 15, name: 'out4', value: false, hasOutput: false }
+        ];
+
+        this.sevenSegmentPatterns = [
+            [1,1,1,1,1,1,0], // 0
+            [0,1,1,0,0,0,0], // 1
+            [1,1,0,1,1,0,1], // 2
+            [1,1,1,1,0,0,1], // 3
+            [0,1,1,0,0,1,1], // 4
+            [1,0,1,1,0,1,1], // 5
+            [1,0,1,1,1,1,1], // 6
+            [1,1,1,0,0,0,0]  // 7
+        ];
+
+        this.lastClockState = false;
+    }
+
+    draw(ctx) {
+        // Draw main rectangle
+        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000';
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.rect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+        ctx.fill();
+        ctx.stroke();
+
+        // Draw component label above the seven segment display
+        ctx.fillStyle = '#000000';
+        ctx.font = '10px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(this.label, this.x, this.y - this.height/2 + 12);
+
+        // Draw seven segment display centered vertically
+        this.drawSevenSegment(ctx, this.x, this.y, 38);
+
+        // Draw input labels
+        ctx.fillStyle = '#000000';
+        ctx.font = '10px Arial';
+        ctx.textAlign = 'right';
+        ctx.fillText('1', this.x - this.width/2 - 5, this.y - 15);
+        ctx.fillText('2', this.x - this.width/2 - 5, this.y);
+        ctx.fillText('4', this.x - this.width/2 - 5, this.y + 15);
+
+        // Draw output labels
+        ctx.textAlign = 'left';
+        ctx.fillText('1', this.x + this.width/2 + 5, this.y - 15);
+        ctx.fillText('2', this.x + this.width/2 + 5, this.y);
+        ctx.fillText('4', this.x + this.width/2 + 5, this.y + 15);
+
+        // Draw clock label at top
+        ctx.textAlign = 'center';
+        ctx.fillText('CLK', this.x, this.y - this.height/2 - 10);
+
+        // Draw nodes
+        this.drawNodes(ctx);
+    }
+
+    drawSevenSegment(ctx, x, y, size) {
+        const pattern = this.sevenSegmentPatterns[this.storedValue];
+        const segmentWidth = size * 0.1;
+        const segmentLength = size * 0.4;
+        
+        ctx.lineWidth = segmentWidth;
+        ctx.lineCap = 'round';
+
+        // Define segment positions
+        const segments = [
+            // A: top
+            [x - segmentLength/2, y - segmentLength, x + segmentLength/2, y - segmentLength],
+            // B: top right
+            [x + segmentLength/2, y - segmentLength, x + segmentLength/2, y],
+            // C: bottom right
+            [x + segmentLength/2, y, x + segmentLength/2, y + segmentLength],
+            // D: bottom
+            [x - segmentLength/2, y + segmentLength, x + segmentLength/2, y + segmentLength],
+            // E: bottom left
+            [x - segmentLength/2, y, x - segmentLength/2, y + segmentLength],
+            // F: top left
+            [x - segmentLength/2, y - segmentLength, x - segmentLength/2, y],
+            // G: middle
+            [x - segmentLength/2, y, x + segmentLength/2, y]
+        ];
+
+        // Draw segments
+        segments.forEach((segment, i) => {
+            ctx.strokeStyle = pattern[i] ? '#ff0000' : '#dddddd';
+            ctx.beginPath();
+            ctx.moveTo(segment[0], segment[1]);
+            ctx.lineTo(segment[2], segment[3]);
+            ctx.stroke();
+        });
+        
+        ctx.lineWidth = 1;
+    }
+
+    evaluate() {
+        // Get clock state (now first input)
+        const clockState = this.inputNodes[0].sourceValue;
+        
+        // On rising edge of clock
+        if (clockState && !this.lastClockState) {
+            // Read input values (adjusted indices for data inputs)
+            const bit1 = this.inputNodes[1].sourceValue ? 1 : 0;
+            const bit2 = this.inputNodes[2].sourceValue ? 2 : 0;
+            const bit4 = this.inputNodes[3].sourceValue ? 4 : 0;
+            
+            // Update stored value
+            this.storedValue = bit1 + bit2 + bit4;
+        }
+        this.lastClockState = clockState;
+
+        // Update outputs to match stored value
+        this.outputNodes[0].sourceValue = (this.storedValue & 1) !== 0;
+        this.outputNodes[1].sourceValue = (this.storedValue & 2) !== 0;
+        this.outputNodes[2].sourceValue = (this.storedValue & 4) !== 0;
+
+        return this.storedValue;
+    }
+
+    updateConnectionPoints() {
+        // Update input positions
+        this.inputNodes[0].x = this.x;                    // Clock input
+        this.inputNodes[0].y = this.y - this.height/2;
+        
+        this.inputNodes[1].x = this.x - this.width/2;    // Data inputs
+        this.inputNodes[1].y = this.y - 15;              // -spacing
+        
+        this.inputNodes[2].x = this.x - this.width/2;
+        this.inputNodes[2].y = this.y;                   // center
+        
+        this.inputNodes[3].x = this.x - this.width/2;
+        this.inputNodes[3].y = this.y + 15;              // +spacing
+
+        // Update output positions to match input heights exactly
+        this.outputNodes[0].x = this.x + this.width/2;
+        this.outputNodes[0].y = this.y - 15;             // -spacing
+        
+        this.outputNodes[1].x = this.x + this.width/2;
+        this.outputNodes[1].y = this.y;                  // center
+        
+        this.outputNodes[2].x = this.x + this.width/2;
+        this.outputNodes[2].y = this.y + 15;             // +spacing
+    }
+}
+
+class ThreeBitAdder extends Gate {
+    constructor(x, y, editor) {
+        super('THREE_BIT_ADDER', x, y, editor);
+        this.label = 'Adder';
+        this.width = 60;
+        this.height = 120;  // Increased height
+        this.sum = 0;
+        this.overflow = false;
+        
+        const spacing = 15;
+        this.inputNodes = [
+            // A inputs (upper left side)
+            { x: this.x - this.width/2, y: this.y - 45, name: 'A1', value: false, connected: false },
+            { x: this.x - this.width/2, y: this.y - 30, name: 'A2', value: false, connected: false },
+            { x: this.x - this.width/2, y: this.y - 15, name: 'A4', value: false, connected: false },
+            // B inputs (lower left side)
+            { x: this.x - this.width/2, y: this.y + 15, name: 'B1', value: false, connected: false },
+            { x: this.x - this.width/2, y: this.y + 30, name: 'B2', value: false, connected: false },
+            { x: this.x - this.width/2, y: this.y + 45, name: 'B4', value: false, connected: false }
+        ];
+        
+        // Outputs remain the same
+        this.outputNodes = [
+            { x: this.x - spacing, y: this.y + this.height/2, name: 'S1', value: false, hasOutput: false },
+            { x: this.x, y: this.y + this.height/2, name: 'S2', value: false, hasOutput: false },
+            { x: this.x + spacing, y: this.y + this.height/2, name: 'S4', value: false, hasOutput: false },
+            { x: this.x, y: this.y - this.height/2, name: 'OVF', value: false, hasOutput: false }
+        ];
+
+        this.sevenSegmentPatterns = [
+            [1,1,1,1,1,1,0], // 0
+            [0,1,1,0,0,0,0], // 1
+            [1,1,0,1,1,0,1], // 2
+            [1,1,1,1,0,0,1], // 3
+            [0,1,1,0,0,1,1], // 4
+            [1,0,1,1,0,1,1], // 5
+            [1,0,1,1,1,1,1], // 6
+            [1,1,1,0,0,0,0]  // 7
+        ];
+    }
+
+    draw(ctx) {
+        // Draw main rectangle
+        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000';
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.rect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+        ctx.fill();
+        ctx.stroke();
+
+        // Draw component label
+        ctx.fillStyle = '#000000';
+        ctx.font = '10px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(this.label, this.x, this.y - this.height/2 + 12);
+
+        // Draw seven segment display
+        this.drawSevenSegment(ctx, this.x, this.y, 38);
+
+        // Draw input labels
+        ctx.font = '10px Arial';
+        ctx.textAlign = 'right';
+        
+        // A inputs (upper left)
+        ctx.fillText('A1', this.x - this.width/2 - 5, this.y - 45);
+        ctx.fillText('A2', this.x - this.width/2 - 5, this.y - 30);
+        ctx.fillText('A4', this.x - this.width/2 - 5, this.y - 15);
+        
+        // B inputs (lower left)
+        ctx.fillText('B1', this.x - this.width/2 - 5, this.y + 15);
+        ctx.fillText('B2', this.x - this.width/2 - 5, this.y + 30);
+        ctx.fillText('B4', this.x - this.width/2 - 5, this.y + 45);
+
+        // Draw output labels
+        ctx.textAlign = 'center';
+        ctx.fillText('S1', this.x - 15, this.y + this.height/2 + 15);
+        ctx.fillText('S2', this.x, this.y + this.height/2 + 15);
+        ctx.fillText('S4', this.x + 15, this.y + this.height/2 + 15);
+        ctx.fillText('OVF', this.x, this.y - this.height/2 - 5);
+
+        // Draw nodes
+        this.drawNodes(ctx);
+
+        // Draw overflow indicator if active
+        if (this.overflow) {
+            ctx.fillStyle = '#ff0000';
+            ctx.font = 'bold 10px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('OVF', this.x, this.y - this.height/2 + 25);
+        }
+    }
+
+    drawSevenSegment(ctx, x, y, size) {
+        const pattern = this.sevenSegmentPatterns[this.sum > 7 ? 7 : this.sum];
+        const segmentWidth = size * 0.1;
+        const segmentLength = size * 0.4;
+        
+        ctx.lineWidth = segmentWidth;
+        ctx.lineCap = 'round';
+
+        // Define segment positions
+        const segments = [
+            // A: top
+            [x - segmentLength/2, y - segmentLength, x + segmentLength/2, y - segmentLength],
+            // B: top right
+            [x + segmentLength/2, y - segmentLength, x + segmentLength/2, y],
+            // C: bottom right
+            [x + segmentLength/2, y, x + segmentLength/2, y + segmentLength],
+            // D: bottom
+            [x - segmentLength/2, y + segmentLength, x + segmentLength/2, y + segmentLength],
+            // E: bottom left
+            [x - segmentLength/2, y, x - segmentLength/2, y + segmentLength],
+            // F: top left
+            [x - segmentLength/2, y - segmentLength, x - segmentLength/2, y],
+            // G: middle
+            [x - segmentLength/2, y, x + segmentLength/2, y]
+        ];
+
+        // Draw segments
+        segments.forEach((segment, i) => {
+            ctx.strokeStyle = pattern[i] ? '#ff0000' : '#dddddd';
+            ctx.beginPath();
+            ctx.moveTo(segment[0], segment[1]);
+            ctx.lineTo(segment[2], segment[3]);
+            ctx.stroke();
+        });
+        
+        ctx.lineWidth = 1;
+    }
+
+    evaluate() {
+        // Calculate value for first number (A)
+        const a1 = this.inputNodes[0].sourceValue ? 1 : 0;
+        const a2 = this.inputNodes[1].sourceValue ? 2 : 0;
+        const a4 = this.inputNodes[2].sourceValue ? 4 : 0;
+        const valueA = a1 + a2 + a4;
+
+        // Calculate value for second number (B)
+        const b1 = this.inputNodes[3].sourceValue ? 1 : 0;
+        const b2 = this.inputNodes[4].sourceValue ? 2 : 0;
+        const b4 = this.inputNodes[5].sourceValue ? 4 : 0;
+        const valueB = b1 + b2 + b4;
+
+        // Calculate sum and check for overflow
+        this.sum = valueA + valueB;
+        this.overflow = this.sum > 7;
+
+        // Set output values
+        this.outputNodes[0].sourceValue = (this.sum & 1) !== 0;  // S1
+        this.outputNodes[1].sourceValue = (this.sum & 2) !== 0;  // S2
+        this.outputNodes[2].sourceValue = (this.sum & 4) !== 0;  // S4
+        this.outputNodes[3].sourceValue = this.overflow;         // OVF - now properly set to true/false
+
+        return this.sum;
+    }
+
+    updateConnectionPoints() {
+        const spacing = 15;
+        
+        // Update A input positions (upper left)
+        this.inputNodes[0].x = this.x - this.width/2;
+        this.inputNodes[0].y = this.y - 45;
+        this.inputNodes[1].x = this.x - this.width/2;
+        this.inputNodes[1].y = this.y - 30;
+        this.inputNodes[2].x = this.x - this.width/2;
+        this.inputNodes[2].y = this.y - 15;
+        
+        // Update B input positions (lower left)
+        this.inputNodes[3].x = this.x - this.width/2;
+        this.inputNodes[3].y = this.y + 15;
+        this.inputNodes[4].x = this.x - this.width/2;
+        this.inputNodes[4].y = this.y + 30;
+        this.inputNodes[5].x = this.x - this.width/2;
+        this.inputNodes[5].y = this.y + 45;
+
+        // Update sum output positions (bottom)
+        for (let i = 0; i < 3; i++) {
+            this.outputNodes[i].x = this.x + (i - 1) * spacing;
+            this.outputNodes[i].y = this.y + this.height/2;
+        }
+
+        // Update overflow output position (top)
+        this.outputNodes[3].x = this.x;
+        this.outputNodes[3].y = this.y - this.height/2;
     }
 } 
