@@ -1170,6 +1170,7 @@ class ClockPulse extends Gate {
         this.width = 60;
         this.height = 60;
         this.state = false;
+        this.isRunning = false;  // Add running state flag
         
         this.outputNodes = [
             { x: x + this.width/2, y: y - 15, name: 'high', value: false, hasOutput: false },
@@ -1198,17 +1199,36 @@ class ClockPulse extends Gate {
         ctx.lineTo(this.x + 15, this.y);
         ctx.stroke();
 
-        // Draw "CLK" (moved down from -25 to -20)
+        // Draw "CLK"
         ctx.fillStyle = 'black';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText("CLK", this.x, this.y - 20);
 
-        // Draw state text
-        ctx.fillText(this.state ? "HIGH" : "LOW", this.x, this.y + 20);
+        // Draw state text - show "Off" when not running
+        ctx.fillText(this.isRunning ? (this.state ? "HIGH" : "LOW") : "OFF", this.x, this.y + 20);
 
         // Draw nodes with their colored circles
         this.drawNodes(ctx);
+    }
+
+    drawNodes(ctx) {
+        // Draw output nodes with their colors based on values
+        this.outputNodes.forEach((node, i) => {
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = node.sourceValue ? 'green' : 'red';
+            if (node.isHovered) {
+                ctx.fillStyle = 'blue';
+            }
+            ctx.fill();
+            ctx.stroke();
+
+            // Draw H/L labels next to the nodes
+            ctx.fillStyle = 'black';
+            ctx.textAlign = 'right';
+            ctx.fillText(i === 0 ? "H" : "L", node.x - 8, node.y);
+        });
     }
 
     toggleState() {
@@ -1231,24 +1251,5 @@ class ClockPulse extends Gate {
         
         this.outputNodes[1].x = this.x + this.width/2;  // Low output
         this.outputNodes[1].y = this.y + 15;
-    }
-
-    drawNodes(ctx) {
-        // Draw output nodes with their colors based on values
-        this.outputNodes.forEach((node, i) => {
-            ctx.beginPath();
-            ctx.arc(node.x, node.y, 5, 0, 2 * Math.PI);
-            ctx.fillStyle = node.sourceValue ? 'green' : 'red';
-            if (node.isHovered) {
-                ctx.fillStyle = 'blue';
-            }
-            ctx.fill();
-            ctx.stroke();
-
-            // Draw H/L labels next to the nodes
-            ctx.fillStyle = 'black';
-            ctx.textAlign = 'right';
-            ctx.fillText(i === 0 ? "H" : "L", node.x - 8, node.y);
-        });
     }
 } 

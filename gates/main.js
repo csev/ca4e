@@ -350,7 +350,7 @@ class CircuitEditor {
             this.draggingGate.outputNodes.forEach((node, index) => {
                 if (this.draggingGate.type === 'CLOCK_PULSE') {
                     node.x = this.draggingGate.x + this.draggingGate.width/2;
-                    node.y = this.draggingGate.y;  // Single centered output
+                    node.y = this.draggingGate.y + (index === 0 ? -15 : 15);  // High at -15, Low at +15
                 } else if (this.draggingGate.type === 'THREE_BIT_ADDER') {
                     if (index === 3) {  // Overflow output at top
                         node.x = this.draggingGate.x;
@@ -477,17 +477,23 @@ class CircuitEditor {
                 if ((gate.type === 'INPUT' || gate.type === 'CLOCK_PULSE') && 
                     this.isPointInGate(x, y, gate)) {
                     if (gate.type === 'CLOCK_PULSE') {
-                        // Start the clock pulse timer if it's not already running
+                        // Start/stop the clock pulse timer
                         if (!gate.timer) {
+                            // Start the timer
                             gate.timer = setInterval(() => {
-                                gate.state = !gate.state;
+                                gate.toggleState();
                                 this.updateWireValues();
                             }, 2000); // Toggle every 2 seconds
+                            gate.isRunning = true;  // Set running state to true
+                            this.showMessage('Clock started');
                         } else {
-                            // Stop the clock if it's running
+                            // Stop the timer
                             clearInterval(gate.timer);
                             gate.timer = null;
+                            gate.isRunning = false;  // Set running state to false
+                            this.showMessage('Clock stopped');
                         }
+                        this.render();  // Force render to update the display
                     } else if (gate.toggleInput?.() || gate.toggleState?.()) {
                         this.updateWireValues();
                     }
@@ -798,6 +804,15 @@ class CircuitEditor {
     }
 
     deleteGate(gate) {
+        // Clear any existing timer if it's a clock pulse
+        if (gate.type === 'CLOCK_PULSE') {
+            if (gate.timer) {
+                clearInterval(gate.timer);
+                gate.timer = null;
+            }
+            gate.isRunning = false;  // Reset running state
+        }
+        
         // Remove all wires connected to this gate
         this.wires = this.wires.filter(wire => {
             if (wire.startGate === gate || wire.endGate === gate) {
