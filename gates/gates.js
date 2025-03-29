@@ -1040,21 +1040,21 @@ class ThreeBitAdder extends Gate {
         ctx.textAlign = 'right';
         
         // A inputs (left)
-        ctx.fillText('A1', this.x - this.width/2 - 5, this.y - 25);
-        ctx.fillText('A2', this.x - this.width/2 - 5, this.y);
-        ctx.fillText('A3', this.x - this.width/2 - 5, this.y + 25);
+        ctx.fillText('A1', this.x - this.width/2 - 7, this.y - 25);
+        ctx.fillText('A2', this.x - this.width/2 - 7, this.y);
+        ctx.fillText('A3', this.x - this.width/2 - 7, this.y + 25);
         
         // B inputs (right)
-        ctx.fillText('B1', this.x + this.width/2 + 5, this.y - 25);
-        ctx.fillText('B2', this.x + this.width/2 + 5, this.y);
-        ctx.fillText('B3', this.x + this.width/2 + 5, this.y + 25);
+        ctx.fillText('B1', this.x + this.width/2 + 20, this.y - 25);
+        ctx.fillText('B2', this.x + this.width/2 + 20, this.y);
+        ctx.fillText('B3', this.x + this.width/2 + 20, this.y + 25);
 
         // Draw output labels
         ctx.textAlign = 'center';
         ctx.fillText('S1', this.x - 15, this.y + this.height/2 + 15);
         ctx.fillText('S2', this.x, this.y + this.height/2 + 15);
         ctx.fillText('S4', this.x + 15, this.y + this.height/2 + 15);
-        ctx.fillText('OVF', this.x, this.y - this.height/2 - 5);
+        ctx.fillText('OVF', this.x, this.y - this.height/2 - 10);
 
         // Draw nodes
         this.drawNodes(ctx);
