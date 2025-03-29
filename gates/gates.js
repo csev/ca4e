@@ -981,23 +981,23 @@ class ThreeBitAdder extends Gate {
         super('THREE_BIT_ADDER', x, y, editor);
         this.label = 'Adder';
         this.width = 60;
-        this.height = 120;  // Increased height
+        this.height = 80;  // Reduced from 120 to 80
         this.sum = 0;
         this.overflow = false;
         
         const spacing = 15;
         this.inputNodes = [
-            // A inputs (upper left side)
-            { x: this.x - this.width/2, y: this.y - 45, name: 'A1', value: false, connected: false },
-            { x: this.x - this.width/2, y: this.y - 30, name: 'A2', value: false, connected: false },
-            { x: this.x - this.width/2, y: this.y - 15, name: 'A4', value: false, connected: false },
-            // B inputs (lower left side)
-            { x: this.x - this.width/2, y: this.y + 15, name: 'B1', value: false, connected: false },
-            { x: this.x - this.width/2, y: this.y + 30, name: 'B2', value: false, connected: false },
-            { x: this.x - this.width/2, y: this.y + 45, name: 'B4', value: false, connected: false }
+            // A inputs (left side)
+            { x: this.x - this.width/2, y: this.y - 25, name: 'A1', value: false, connected: false },
+            { x: this.x - this.width/2, y: this.y, name: 'A2', value: false, connected: false },
+            { x: this.x - this.width/2, y: this.y + 25, name: 'A3', value: false, connected: false },
+            // B inputs (right side)
+            { x: this.x + this.width/2, y: this.y - 25, name: 'B1', value: false, connected: false },
+            { x: this.x + this.width/2, y: this.y, name: 'B2', value: false, connected: false },
+            { x: this.x + this.width/2, y: this.y + 25, name: 'B3', value: false, connected: false }
         ];
         
-        // Outputs remain the same
+        // Outputs at bottom and top
         this.outputNodes = [
             { x: this.x - spacing, y: this.y + this.height/2, name: 'S1', value: false, hasOutput: false },
             { x: this.x, y: this.y + this.height/2, name: 'S2', value: false, hasOutput: false },
@@ -1039,15 +1039,15 @@ class ThreeBitAdder extends Gate {
         ctx.font = '10px Arial';
         ctx.textAlign = 'right';
         
-        // A inputs (upper left)
-        ctx.fillText('A1', this.x - this.width/2 - 5, this.y - 45);
-        ctx.fillText('A2', this.x - this.width/2 - 5, this.y - 30);
-        ctx.fillText('A4', this.x - this.width/2 - 5, this.y - 15);
+        // A inputs (left)
+        ctx.fillText('A1', this.x - this.width/2 - 5, this.y - 25);
+        ctx.fillText('A2', this.x - this.width/2 - 5, this.y);
+        ctx.fillText('A3', this.x - this.width/2 - 5, this.y + 25);
         
-        // B inputs (lower left)
-        ctx.fillText('B1', this.x - this.width/2 - 5, this.y + 15);
-        ctx.fillText('B2', this.x - this.width/2 - 5, this.y + 30);
-        ctx.fillText('B4', this.x - this.width/2 - 5, this.y + 45);
+        // B inputs (right)
+        ctx.fillText('B1', this.x + this.width/2 + 5, this.y - 25);
+        ctx.fillText('B2', this.x + this.width/2 + 5, this.y);
+        ctx.fillText('B3', this.x + this.width/2 + 5, this.y + 25);
 
         // Draw output labels
         ctx.textAlign = 'center';
@@ -1110,14 +1110,14 @@ class ThreeBitAdder extends Gate {
         // Calculate value for first number (A)
         const a1 = this.inputNodes[0].sourceValue ? 1 : 0;
         const a2 = this.inputNodes[1].sourceValue ? 2 : 0;
-        const a4 = this.inputNodes[2].sourceValue ? 4 : 0;
-        const valueA = a1 + a2 + a4;
+        const a3 = this.inputNodes[2].sourceValue ? 4 : 0;
+        const valueA = a1 + a2 + a3;
 
         // Calculate value for second number (B)
         const b1 = this.inputNodes[3].sourceValue ? 1 : 0;
         const b2 = this.inputNodes[4].sourceValue ? 2 : 0;
-        const b4 = this.inputNodes[5].sourceValue ? 4 : 0;
-        const valueB = b1 + b2 + b4;
+        const b3 = this.inputNodes[5].sourceValue ? 4 : 0;
+        const valueB = b1 + b2 + b3;
 
         // Calculate sum and check for overflow
         this.sum = valueA + valueB;
@@ -1135,21 +1135,21 @@ class ThreeBitAdder extends Gate {
     updateConnectionPoints() {
         const spacing = 15;
         
-        // Update A input positions (upper left)
+        // Update A input positions (left side)
         this.inputNodes[0].x = this.x - this.width/2;
-        this.inputNodes[0].y = this.y - 45;
+        this.inputNodes[0].y = this.y - 25;
         this.inputNodes[1].x = this.x - this.width/2;
-        this.inputNodes[1].y = this.y - 30;
+        this.inputNodes[1].y = this.y;
         this.inputNodes[2].x = this.x - this.width/2;
-        this.inputNodes[2].y = this.y - 15;
+        this.inputNodes[2].y = this.y + 25;
         
-        // Update B input positions (lower left)
-        this.inputNodes[3].x = this.x - this.width/2;
-        this.inputNodes[3].y = this.y + 15;
-        this.inputNodes[4].x = this.x - this.width/2;
-        this.inputNodes[4].y = this.y + 30;
-        this.inputNodes[5].x = this.x - this.width/2;
-        this.inputNodes[5].y = this.y + 45;
+        // Update B input positions (right side)
+        this.inputNodes[3].x = this.x + this.width/2;
+        this.inputNodes[3].y = this.y - 25;
+        this.inputNodes[4].x = this.x + this.width/2;
+        this.inputNodes[4].y = this.y;
+        this.inputNodes[5].x = this.x + this.width/2;
+        this.inputNodes[5].y = this.y + 25;
 
         // Update sum output positions (bottom)
         for (let i = 0; i < 3; i++) {

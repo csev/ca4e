@@ -311,11 +311,12 @@ class CircuitEditor {
                 if (this.draggingGate.type === 'CLOCK_PULSE') {
                     // Clock pulse has no input nodes, but include for completeness
                 } else if (this.draggingGate.type === 'THREE_BIT_ADDER') {
-                    node.x = this.draggingGate.x - this.draggingGate.width/2;
-                    if (index < 3) {  // A inputs (0-2)
-                        node.y = this.draggingGate.y - 45 + (index * 15);  // -45, -30, -15
-                    } else {          // B inputs (3-5)
-                        node.y = this.draggingGate.y + 15 + ((index-3) * 15);  // +15, +30, +45
+                    if (index < 3) {  // A inputs (left side)
+                        node.x = this.draggingGate.x - this.draggingGate.width/2;
+                        node.y = this.draggingGate.y + (index - 1) * 25;  // -25, 0, +25
+                    } else {          // B inputs (right side)
+                        node.x = this.draggingGate.x + this.draggingGate.width/2;
+                        node.y = this.draggingGate.y + ((index - 4) * 25);  // -25, 0, +25
                     }
                 } else if (this.draggingGate.type === 'THREE_BIT_LATCH') {
                     if (index === 0) {  // Clock input
