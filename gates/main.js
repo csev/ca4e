@@ -471,6 +471,11 @@ class CircuitEditor {
                     const newLabel = prompt('Enter label for the ' + gate.type.toLowerCase() + ':', gate.label);
                     if (newLabel !== null) {
                         gate.setLabel(newLabel);
+                        // Exit tag mode after setting label
+                        this.isTagMode = false;
+                        document.getElementById('tagMode').classList.remove('active');
+                        this.canvas.style.cursor = 'default';
+                        document.getElementById('selectedTool').textContent = 'Selected: None';
                         this.render();
                     }
                     return;
