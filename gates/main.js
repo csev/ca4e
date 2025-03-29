@@ -1206,6 +1206,24 @@ style.textContent = `
             font-size: 12px;
         }
     }
+
+    #tagMode {
+        background-color: #2196F3;
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+    #tagMode:hover {
+        background-color: #1976D2;
+    }
+
+    #tagMode.active {
+        background-color: #1565C0;
+    }
+
+    #tagMode.active:hover {
+        background-color: #0D47A1;
+    }
 `;
 document.head.appendChild(style);
 
