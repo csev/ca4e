@@ -9,7 +9,7 @@ class Gate {
         this.inputNodes = [];
         this.outputNodes = [];
         this.selected = false;
-        this.label = type; // Initialize with default label
+        this.label = type; // We'll update this when the ordinal is set
         this.isUnstable = false; // Add flag for unstable state
         
         // Add state for INPUT and OUTPUT types
@@ -530,6 +530,26 @@ class Gate {
     updateConnectionPoints() {
         // Default implementation for basic gates
         this.initializeNodes();
+    }
+
+    // Add method to update label with ordinal
+    updateLabelWithOrdinal() {
+        if (!this.ordinal) return;
+        
+        let ordinalDisplay = '';
+        if (this.ordinal <= 9) {
+            ordinalDisplay = this.ordinal.toString();
+        } else if (this.ordinal <= 35) {
+            // Convert 10-35 to A-Z
+            ordinalDisplay = String.fromCharCode(65 + (this.ordinal - 10));
+        }
+        
+        // Only append ordinal if it's 35 or less
+        if (this.ordinal <= 35) {
+            this.label = `${this.type}${ordinalDisplay}`;
+        } else {
+            this.label = this.type;
+        }
     }
 }
 
