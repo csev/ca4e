@@ -241,14 +241,12 @@ class CircuitEditor {
                 } else {
                     newGate = new Gate(this.selectedTool, x, y, this);
                 }
-
-                // Assign ordinal and update label
+                // Assign ordinal to the new gate
                 newGate.ordinal = this.getGateOrdinal(newGate);
-                newGate.updateLabelWithOrdinal();
-
                 this.gates.push(newGate);
                 this.selectedTool = null;
                 this.canvas.style.cursor = 'default';
+                // Clear the selected tool status
                 document.getElementById('selectedTool').textContent = 'Selected: None';
             } else {
                 // Check if clicked on a gate for dragging
