@@ -1369,3 +1369,87 @@ class JKFlipFlop extends Gate {
         this.outputNodes[1].y = this.y + 20;
     }
 } 
+
+class OneBitLatch extends Gate {
+    constructor(x, y, editor) {
+        super('ONE_BIT_LATCH', x, y, editor);
+        this.width = 60;
+        this.height = 60;
+        this.internalState = false;
+        this.lastClockState = false;
+        
+        // Initialize with 2 input nodes (data and clock) and 1 output node
+        this.inputNodes = [
+            { x: 0, y: 0, sourceValue: undefined, connected: false }, // Data input
+            { x: 0, y: 0, sourceValue: undefined, connected: false }  // Clock input
+        ];
+        this.outputNodes = [
+            { x: 0, y: 0, sourceValue: false, connected: false }      // Output
+        ];
+        
+        this.updateConnectionPoints();
+    }
+
+    draw(ctx) {
+        // Draw the latch body
+        ctx.beginPath();
+        ctx.rect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        
+        // Draw label
+        ctx.fillStyle = '#000';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('1-BIT', this.x, this.y - 8);
+        ctx.fillText('LATCH', this.x, this.y + 8);
+        
+        // Draw input labels
+        ctx.font = '10px Arial';
+        ctx.textAlign = 'right';
+        ctx.fillText('D', this.x - this.width/2 - 5, this.y - 10);  // Data input
+        ctx.fillText('CLK', this.x - this.width/2 - 5, this.y + 10); // Clock input
+        
+        // Draw nodes
+        this.drawNodes(ctx);
+        
+        // Draw state indicator
+        ctx.fillStyle = this.internalState ? '#4CAF50' : '#f44336';
+        ctx.beginPath();
+        ctx.arc(this.x + 15, this.y, 5, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    evaluate() {
+        const dataInput = this.inputNodes[0].sourceValue;
+        const clockInput = this.inputNodes[1].sourceValue;
+        
+        // On rising edge of clock (clock transitions from low to high)
+        if (clockInput && !this.lastClockState) {
+            this.internalState = dataInput;
+        }
+        
+        // Update output based on internal state
+        this.outputNodes[0].sourceValue = this.internalState;
+        
+        // Store current clock state for edge detection
+        this.lastClockState = clockInput;
+        
+        return this.outputNodes[0].sourceValue;
+    }
+
+    updateConnectionPoints() {
+        // Data input on left side, upper position
+        this.inputNodes[0].x = this.x - this.width/2;
+        this.inputNodes[0].y = this.y - 10;
+        
+        // Clock input on left side, lower position
+        this.inputNodes[1].x = this.x - this.width/2;
+        this.inputNodes[1].y = this.y + 10;
+        
+        // Output on right side, center
+        this.outputNodes[0].x = this.x + this.width/2;
+        this.outputNodes[0].y = this.y;
+    }
+} 
