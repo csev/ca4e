@@ -1193,20 +1193,20 @@ class ClockPulse extends Gate {
         ctx.beginPath();
         if (this.state) {
             // HIGH state - pulse goes up higher
-            ctx.moveTo(this.x - 15, this.y);
-            ctx.lineTo(this.x - 5, this.y);
-            ctx.lineTo(this.x - 5, this.y - this.height/4);  // Move up 25% of height
-            ctx.lineTo(this.x + 5, this.y - this.height/4);
-            ctx.lineTo(this.x + 5, this.y);
-            ctx.lineTo(this.x + 15, this.y);
+            ctx.moveTo(this.x - 15, this.y-this.height/8);
+            ctx.lineTo(this.x - 5, this.y-this.height/8);
+            ctx.lineTo(this.x - 5, this.y + this.height/8);  // Move down 25% of height
+            ctx.lineTo(this.x + 5, this.y + this.height/8);
+            ctx.lineTo(this.x + 5, this.y-this.height/8);
+            ctx.lineTo(this.x + 15, this.y-this.height/8);
         } else {
             // LOW state - pulse goes down lower
-            ctx.moveTo(this.x - 15, this.y);
-            ctx.lineTo(this.x - 5, this.y);
-            ctx.lineTo(this.x - 5, this.y + this.height/4);  // Move down 25% of height
-            ctx.lineTo(this.x + 5, this.y + this.height/4);
-            ctx.lineTo(this.x + 5, this.y);
-            ctx.lineTo(this.x + 15, this.y);
+            ctx.moveTo(this.x - 15, this.y+this.height/8);
+            ctx.lineTo(this.x - 5, this.y+this.height/8);
+            ctx.lineTo(this.x - 5, this.y - this.height/8);  // Move up 25% of height
+            ctx.lineTo(this.x + 5, this.y - this.height/8);
+            ctx.lineTo(this.x + 5, this.y+this.height/8);
+            ctx.lineTo(this.x + 15, this.y+this.height/8);
         }
         ctx.stroke();
 
