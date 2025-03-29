@@ -838,6 +838,10 @@ class ThreeBitLatch extends Gate {
         ];
 
         this.lastClockState = false;
+
+        // Add internal latch value storage separate from output value
+        this.latchValue = 0;     // Internal stored value
+        this.outputValue = 0;    // Current output value
     }
 
     draw(ctx) {
@@ -919,27 +923,31 @@ class ThreeBitLatch extends Gate {
     }
 
     evaluate() {
-        // Get clock state (now first input)
+        // Get clock state
         const clockState = this.inputNodes[0].sourceValue;
         
-        // On rising edge of clock
-        if (clockState && !this.lastClockState) {
-            // Read input values (adjusted indices for data inputs)
+        if (clockState) {
+            // When clock is HIGH, only update internal latch value
             const bit1 = this.inputNodes[1].sourceValue ? 1 : 0;
             const bit2 = this.inputNodes[2].sourceValue ? 2 : 0;
             const bit4 = this.inputNodes[3].sourceValue ? 4 : 0;
             
-            // Update stored value
-            this.storedValue = bit1 + bit2 + bit4;
+            // Store input values internally
+            this.latchValue = bit1 + bit2 + bit4;
+            
+            // Update display to show stored value
+            this.storedValue = this.latchValue;
+        } else {
+            // When clock is LOW, copy internal latch value to outputs
+            this.outputValue = this.latchValue;
         }
-        this.lastClockState = clockState;
 
-        // Update outputs to match stored value
-        this.outputNodes[0].sourceValue = (this.storedValue & 1) !== 0;
-        this.outputNodes[1].sourceValue = (this.storedValue & 2) !== 0;
-        this.outputNodes[2].sourceValue = (this.storedValue & 4) !== 0;
+        // Always output the current output value
+        this.outputNodes[0].sourceValue = (this.outputValue & 1) !== 0;
+        this.outputNodes[1].sourceValue = (this.outputValue & 2) !== 0;
+        this.outputNodes[2].sourceValue = (this.outputValue & 4) !== 0;
 
-        return this.storedValue;
+        return this.outputValue;
     }
 
     updateConnectionPoints() {
