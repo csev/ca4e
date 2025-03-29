@@ -672,50 +672,41 @@ class CircuitEditor {
             this.ctx.beginPath();
             this.ctx.moveTo(wire.start.x, wire.start.y);
             
-            // Calculate wire path using Bezier curves for all connections
-            const dx = wire.end.x - wire.start.x;
-            const dy = wire.end.y - wire.start.y;
-            const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-            
-            // Calculate control points to ensure proper angles
-            let cp1x, cp1y, cp2x, cp2y;
-            
-            if (Math.abs(angle) <= 20) {
-                // If angle is within limits, use direct curve
-                const midX = (wire.start.x + wire.end.x) / 2;
-                cp1x = midX;
-                cp1y = wire.start.y;
-                cp2x = midX;
-                cp2y = wire.end.y;
-            } else {
-                // If angle is outside limits, create intermediate points
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                const maxAngle = 20 * Math.PI / 180;
+            // Special handling for THREE_BIT_ADDER sum outputs (S1, S2, S4)
+            if (wire.startGate.type === 'THREE_BIT_ADDER' && 
+                wire.start.y === wire.startGate.y + wire.startGate.height/2) {
                 
-                // Calculate intermediate points to maintain angle limits
-                if (angle > 20) {
-                    // Angle is too steep upward
-                    const yOffset = distance * Math.sin(maxAngle);
-                    cp1x = wire.start.x + distance * 0.3;
-                    cp1y = wire.start.y + yOffset;
-                    cp2x = wire.end.x - distance * 0.3;
-                    cp2y = wire.end.y - yOffset;
-                } else {
-                    // Angle is too steep downward
-                    const yOffset = distance * Math.sin(maxAngle);
-                    cp1x = wire.start.x + distance * 0.3;
-                    cp1y = wire.start.y - yOffset;
-                    cp2x = wire.end.x - distance * 0.3;
-                    cp2y = wire.end.y + yOffset;
-                }
+                // First control point - straight down from start
+                const cp1x = wire.start.x;
+                const cp1y = wire.start.y + 40; // Move down by 40 pixels
+                
+                // Second control point - near the destination
+                const cp2x = wire.end.x;
+                const cp2y = wire.end.y - Math.abs(wire.end.x - wire.start.x) * 0.3; // Adjust curve based on horizontal distance
+                
+                this.ctx.bezierCurveTo(
+                    cp1x, cp1y,
+                    cp2x, cp2y,
+                    wire.end.x, wire.end.y
+                );
+            } else {
+                // Regular wire drawing logic for all other cases
+                const dx = wire.end.x - wire.start.x;
+                const dy = wire.end.y - wire.start.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                // Calculate control points for smooth curve
+                const cp1x = wire.start.x + dx * 0.5;
+                const cp1y = wire.start.y;
+                const cp2x = wire.end.x - dx * 0.5;
+                const cp2y = wire.end.y;
+                
+                this.ctx.bezierCurveTo(
+                    cp1x, cp1y,
+                    cp2x, cp2y,
+                    wire.end.x, wire.end.y
+                );
             }
-            
-            // Draw the curve with calculated control points
-            this.ctx.bezierCurveTo(
-                cp1x, cp1y,
-                cp2x, cp2y,
-                wire.end.x, wire.end.y
-            );
             
             // Set wire style based on hover/selected state
             if (wire === this.hoveredWire) {
@@ -729,7 +720,6 @@ class CircuitEditor {
                 this.ctx.lineWidth = 2;
             }
             
-            // Draw wire
             this.ctx.stroke();
 
             // Draw connection points
