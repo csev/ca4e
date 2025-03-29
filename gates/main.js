@@ -71,6 +71,9 @@ class CircuitEditor {
         // Add gate ordinal tracking
         this.gateOrdinals = new Map();
         
+        // Add tag mode flag
+        this.isTagMode = false;
+        
         // Start render loop
         this.render();
     }
@@ -171,27 +174,28 @@ class CircuitEditor {
             }
         });
 
-        // Modify the click handler to include delete functionality
-        this.canvas.addEventListener('click', this.handleClick.bind(this));
-
-        // Add double-click handler for editing labels
-        this.canvas.addEventListener('dblclick', (e) => {
-            const rect = this.canvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            // Check if clicked on an INPUT or OUTPUT gate
-            for (const gate of this.gates) {
-                if ((gate.type === 'INPUT' || gate.type === 'OUTPUT') && this.isPointInGate(x, y, gate)) {
-                    const newLabel = prompt('Enter new label:', gate.label);
-                    if (newLabel !== null) { // Check if user clicked Cancel
-                        gate.setLabel(newLabel);
-                        this.render();
-                    }
-                    break;
+        // Add tag mode button listener
+        const tagButton = document.getElementById('tagMode');
+        tagButton.addEventListener('click', () => {
+            this.isTagMode = !this.isTagMode;
+            tagButton.classList.toggle('active', this.isTagMode);
+            
+            // Update cursor and selected tool text
+            if (this.isTagMode) {
+                this.canvas.style.cursor = 'text';
+                document.getElementById('selectedTool').textContent = 'Selected: Tag Mode';
+                // Disable delete mode if it was active
+                if (this.deleteMode) {
+                    this.setDeleteMode(false);
                 }
+            } else {
+                this.canvas.style.cursor = 'default';
+                document.getElementById('selectedTool').textContent = 'Selected: None';
             }
         });
+
+        // Modify the handleClick method to include tag mode
+        this.canvas.addEventListener('click', this.handleClick.bind(this));
     }
 
     handleMouseDown(e) {
@@ -459,6 +463,23 @@ class CircuitEditor {
         const rect = this.canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
+
+        // Handle tag mode first
+        if (this.isTagMode) {
+            for (const gate of this.gates) {
+                if ((gate.type === 'INPUT' || gate.type === 'OUTPUT') && this.isPointInGate(x, y, gate)) {
+                    const newLabel = prompt('Enter label for the ' + gate.type.toLowerCase() + ':', gate.label);
+                    if (newLabel !== null) {
+                        gate.setLabel(newLabel);
+                        this.render();
+                    }
+                    return;
+                }
+            }
+            // If clicked on non-INPUT/OUTPUT gate while in tag mode
+            this.showMessage('Only inputs and outputs can be tagged', 'error');
+            return;
+        }
 
         if (this.deleteMode) {
             // Check if clicked on a gate
@@ -1045,6 +1066,19 @@ class CircuitEditor {
         const currentOrdinal = this.gateOrdinals.get(gate.type);
         this.gateOrdinals.set(gate.type, currentOrdinal + 1);
         return currentOrdinal + 1;
+    }
+
+    // Add method to handle ESC key to exit tag mode
+    handleKeyDown(e) {
+        if (e.key === 'Escape') {
+            if (this.isTagMode) {
+                this.isTagMode = false;
+                document.getElementById('tagMode').classList.remove('active');
+                this.canvas.style.cursor = 'default';
+                document.getElementById('selectedTool').textContent = 'Selected: None';
+            }
+            // ... rest of existing ESC key handling ...
+        }
     }
 }
 

@@ -222,6 +222,34 @@
         #cancelDeleteAll:hover {
             background-color: #757575;
         }
+
+        .mode-button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            background-color: #2196F3;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            height: 40px;
+        }
+
+        .mode-button.active {
+            background-color: #1976D2;
+        }
+
+        .mode-button:hover {
+            background-color: #1976D2;
+        }
+
+        /* Ensure consistent button heights */
+        .right-section button {
+            height: 40px;
+        }
     </style>
 </head>
 <body>
@@ -243,6 +271,7 @@
         </div>
         <div class="right-section">
             <span id="selectedTool">Selected: None</span>
+            <button id="tagMode" class="mode-button">🏷️ Tag</button>
             <button id="delete" class="icon-button">🗑️</button>
             <button id="clear">Delete All</button>
         </div>
