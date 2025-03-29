@@ -234,6 +234,8 @@ class CircuitEditor {
                     newGate = new ThreeBitAdder(x, y, this);
                 } else if (this.selectedTool === 'THREE_BIT_LATCH') {
                     newGate = new ThreeBitLatch(x, y, this);
+                } else if (this.selectedTool === 'JK_FLIP_FLOP') {
+                    newGate = new JKFlipFlop(x, y, this);
                 } else {
                     newGate = new Gate(this.selectedTool, x, y, this);
                 }

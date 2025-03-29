@@ -1263,4 +1263,109 @@ class ClockPulse extends Gate {
         this.outputNodes[1].x = this.x + this.width/2;  // Low output
         this.outputNodes[1].y = this.y + 15;
     }
+}
+
+class JKFlipFlop extends Gate {
+    constructor(x, y, editor) {
+        super('JK_FLIP_FLOP', x, y, editor);
+        this.label = 'JK';
+        this.width = 60;
+        this.height = 80;
+        this.state = false; // Internal state storage
+        
+        // Define inputs and outputs
+        this.inputNodes = [
+            { x: x - this.width/2, y: y - 20, name: 'J', value: false, connected: false },    // J input
+            { x: x - this.width/2, y: y + 20, name: 'K', value: false, connected: false },    // K input
+            { x: x, y: y - this.height/2, name: 'CLK', value: false, connected: false }       // Clock input
+        ];
+        
+        this.outputNodes = [
+            { x: x + this.width/2, y: y - 20, name: 'Q', value: false, hasOutput: false },    // Q output
+            { x: x + this.width/2, y: y + 20, name: 'Q_BAR', value: true, hasOutput: false }  // Q̄ output
+        ];
+
+        this.lastClockState = false; // Track clock transitions
+    }
+
+    draw(ctx) {
+        // Draw main body
+        ctx.beginPath();
+        ctx.strokeStyle = this.selected ? '#ff0000' : '#000000';
+        ctx.fillStyle = '#ffffff';
+        ctx.rect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+        ctx.fill();
+        ctx.stroke();
+
+        // Draw component label
+        ctx.fillStyle = '#000000';
+        ctx.font = '14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText(this.label, this.x, this.y);
+
+        // Draw input labels
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'right';
+        ctx.fillText('J', this.x - this.width/2 - 5, this.y - 20);
+        ctx.fillText('K', this.x - this.width/2 - 5, this.y + 20);
+        ctx.textAlign = 'center';
+        ctx.fillText('CLK', this.x, this.y - this.height/2 - 5);
+
+        // Draw output labels
+        ctx.textAlign = 'left';
+        ctx.fillText('Q', this.x + this.width/2 + 5, this.y - 20);
+        ctx.fillText('Q̄', this.x + this.width/2 + 5, this.y + 20);
+
+        // Draw state indicator
+        ctx.fillStyle = this.state ? '#4CAF50' : '#f44336';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y + 5, 5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Draw nodes
+        this.drawNodes(ctx);
+    }
+
+    evaluate() {
+        const J = this.inputNodes[0].sourceValue;
+        const K = this.inputNodes[1].sourceValue;
+        const clockState = this.inputNodes[2].sourceValue;
+
+        // Handle clock edge
+        if (clockState && !this.lastClockState) { // Rising edge
+            if (J && !K) {
+                this.state = true;      // Set
+            } else if (!J && K) {
+                this.state = false;     // Reset
+            } else if (J && K) {
+                this.state = !this.state; // Toggle
+            }
+            // If both J and K are low, maintain current state
+        }
+
+        // Update last clock state
+        this.lastClockState = clockState;
+
+        // Update outputs
+        this.outputNodes[0].sourceValue = this.state;      // Q
+        this.outputNodes[1].sourceValue = !this.state;     // Q̄
+
+        return this.state;
+    }
+
+    updateConnectionPoints() {
+        // Update input positions
+        this.inputNodes[0].x = this.x - this.width/2;    // J
+        this.inputNodes[0].y = this.y - 20;
+        this.inputNodes[1].x = this.x - this.width/2;    // K
+        this.inputNodes[1].y = this.y + 20;
+        this.inputNodes[2].x = this.x;                   // Clock
+        this.inputNodes[2].y = this.y - this.height/2;
+
+        // Update output positions
+        this.outputNodes[0].x = this.x + this.width/2;   // Q
+        this.outputNodes[0].y = this.y - 20;
+        this.outputNodes[1].x = this.x + this.width/2;   // Q̄
+        this.outputNodes[1].y = this.y + 20;
+    }
 } 
