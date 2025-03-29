@@ -58,8 +58,19 @@
             color: #333;
         }
 
+        .icon-button {
+            font-size: 20px;
+            padding: 8px 12px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
         #delete {
             background-color: #FF9800;
+            min-width: 40px;
+            min-height: 40px;
         }
 
         #delete:hover {
@@ -232,7 +243,7 @@
         </div>
         <div class="right-section">
             <span id="selectedTool">Selected: None</span>
-            <button id="delete">Delete Gate</button>
+            <button id="delete" class="icon-button">🗑️</button>
             <button id="clear">Delete All</button>
         </div>
     </div>
