@@ -1188,15 +1188,26 @@ class ClockPulse extends Gate {
         ctx.fill();
         ctx.stroke();
 
-        // Draw the clock icon in center
+        // Draw the clock icon in center - flipped based on state
         ctx.strokeStyle = 'black';
         ctx.beginPath();
-        ctx.moveTo(this.x - 15, this.y);
-        ctx.lineTo(this.x - 5, this.y);
-        ctx.lineTo(this.x - 5, this.y - 10);
-        ctx.lineTo(this.x + 5, this.y - 10);
-        ctx.lineTo(this.x + 5, this.y);
-        ctx.lineTo(this.x + 15, this.y);
+        if (this.state) {
+            // HIGH state - pulse goes up higher
+            ctx.moveTo(this.x - 15, this.y);
+            ctx.lineTo(this.x - 5, this.y);
+            ctx.lineTo(this.x - 5, this.y - this.height/4);  // Move up 25% of height
+            ctx.lineTo(this.x + 5, this.y - this.height/4);
+            ctx.lineTo(this.x + 5, this.y);
+            ctx.lineTo(this.x + 15, this.y);
+        } else {
+            // LOW state - pulse goes down lower
+            ctx.moveTo(this.x - 15, this.y);
+            ctx.lineTo(this.x - 5, this.y);
+            ctx.lineTo(this.x - 5, this.y + this.height/4);  // Move down 25% of height
+            ctx.lineTo(this.x + 5, this.y + this.height/4);
+            ctx.lineTo(this.x + 5, this.y);
+            ctx.lineTo(this.x + 15, this.y);
+        }
         ctx.stroke();
 
         // Draw "CLK"
