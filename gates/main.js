@@ -309,7 +309,7 @@ class CircuitEditor {
             // Update all node positions using stored relative positions
             this.draggingGate.inputNodes.forEach((node, index) => {
                 if (this.draggingGate.type === 'CLOCK_PULSE') {
-                    // Clock pulse has no input nodes, but include for completeness
+                    // Clock pulse has no input nodes
                 } else if (this.draggingGate.type === 'THREE_BIT_ADDER') {
                     if (index < 3) {  // A inputs (left side)
                         node.x = this.draggingGate.x - this.draggingGate.width/2;
@@ -350,7 +350,7 @@ class CircuitEditor {
             this.draggingGate.outputNodes.forEach((node, index) => {
                 if (this.draggingGate.type === 'CLOCK_PULSE') {
                     node.x = this.draggingGate.x + this.draggingGate.width/2;
-                    node.y = this.draggingGate.y + (index === 0 ? -15 : 15);  // High at -15, Low at +15
+                    node.y = this.draggingGate.y;  // Single centered output
                 } else if (this.draggingGate.type === 'THREE_BIT_ADDER') {
                     if (index === 3) {  // Overflow output at top
                         node.x = this.draggingGate.x;
@@ -476,7 +476,19 @@ class CircuitEditor {
             for (const gate of this.gates) {
                 if ((gate.type === 'INPUT' || gate.type === 'CLOCK_PULSE') && 
                     this.isPointInGate(x, y, gate)) {
-                    if (gate.toggleInput?.() || gate.toggleState?.()) {
+                    if (gate.type === 'CLOCK_PULSE') {
+                        // Start the clock pulse timer if it's not already running
+                        if (!gate.timer) {
+                            gate.timer = setInterval(() => {
+                                gate.state = !gate.state;
+                                this.updateWireValues();
+                            }, 2000); // Toggle every 2 seconds
+                        } else {
+                            // Stop the clock if it's running
+                            clearInterval(gate.timer);
+                            gate.timer = null;
+                        }
+                    } else if (gate.toggleInput?.() || gate.toggleState?.()) {
                         this.updateWireValues();
                     }
                     break;
