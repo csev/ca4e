@@ -596,9 +596,9 @@ class FullAdder extends Gate {
 
     evaluate() {
         // Get input values
-        const carryIn = this.inputNodes[0].connected ? this.inputNodes[0].sourceValue : false; // Default to false if not connected
-        const inputA = this.inputNodes[1].sourceValue;  // A is second input
-        const inputB = this.inputNodes[2].sourceValue;  // B is third input
+        const carryIn = this.inputNodes[0].sourceValue;
+        const inputA = this.inputNodes[1].sourceValue;
+        const inputB = this.inputNodes[2].sourceValue;
 
         // Calculate outputs
         // Sum is XOR of all three inputs
@@ -1368,7 +1368,7 @@ class JKFlipFlop extends Gate {
         this.outputNodes[1].x = this.x + this.width/2;   // Q̄
         this.outputNodes[1].y = this.y + 20;
     }
-} 
+}
 
 class OneBitLatch extends Gate {
     constructor(x, y, editor) {
@@ -1451,5 +1451,101 @@ class OneBitLatch extends Gate {
         // Output on right side, center
         this.outputNodes[0].x = this.x + this.width/2;
         this.outputNodes[0].y = this.y;
+    }
+}
+
+class SRFlipFlop extends Gate {
+    constructor(x, y, editor) {
+        super('SR_FLIP_FLOP', x, y, editor);
+        this.width = 60;
+        this.height = 60;
+        this.state = false; // Q output state
+        
+        // Initialize with 2 inputs (S and R) and 2 outputs (Q and Q̄)
+        this.inputNodes = [
+            { x: 0, y: 0, sourceValue: undefined, connected: false }, // S input
+            { x: 0, y: 0, sourceValue: undefined, connected: false }  // R input
+        ];
+        
+        this.outputNodes = [
+            { x: 0, y: 0, sourceValue: undefined, connected: false }, // Q output
+            { x: 0, y: 0, sourceValue: undefined, connected: false }  // Q̄ output
+        ];
+        
+        this.updateConnectionPoints();
+    }
+
+    draw(ctx) {
+        // Draw the main rectangle
+        ctx.beginPath();
+        ctx.rect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
+        ctx.strokeStyle = '#000';
+        ctx.stroke();
+        
+        // Draw labels
+        ctx.font = '12px Arial';
+        ctx.fillStyle = '#000';
+        ctx.textAlign = 'left';
+        ctx.fillText('S', this.x - this.width/2 + 5, this.y - 10);
+        ctx.fillText('R', this.x - this.width/2 + 5, this.y + 20);
+        
+        ctx.textAlign = 'right';
+        ctx.fillText('Q', this.x + this.width/2 - 5, this.y - 10);
+        ctx.fillText('Q̄', this.x + this.width/2 - 5, this.y + 20);
+        
+        // Draw label in center
+        ctx.textAlign = 'center';
+        ctx.fillText('SR', this.x, this.y);
+        
+        // Draw nodes
+        this.drawNodes(ctx);
+    }
+
+    evaluate() {
+        const S = this.inputNodes[0].sourceValue;
+        const R = this.inputNodes[1].sourceValue;
+        
+        // SR Flip-flop logic
+        if (S === undefined || R === undefined) {
+            // If inputs are not connected, maintain current state
+            this.outputNodes[0].sourceValue = this.state;
+            this.outputNodes[1].sourceValue = !this.state;
+            return;
+        }
+        
+        if (S && R) {
+            // Invalid state (both S and R high)
+            this.outputNodes[0].sourceValue = undefined;
+            this.outputNodes[1].sourceValue = undefined;
+            return;
+        }
+        
+        if (S) {
+            // Set state
+            this.state = true;
+        } else if (R) {
+            // Reset state
+            this.state = false;
+        }
+        // else: maintain current state (when both S and R are low)
+        
+        this.outputNodes[0].sourceValue = this.state;
+        this.outputNodes[1].sourceValue = !this.state;
+        
+        return this.state;
+    }
+
+    updateConnectionPoints() {
+        // Set input positions (left side)
+        this.inputNodes[0].x = this.x - this.width/2; // S input
+        this.inputNodes[0].y = this.y - 15;
+        this.inputNodes[1].x = this.x - this.width/2; // R input
+        this.inputNodes[1].y = this.y + 15;
+        
+        // Set output positions (right side)
+        this.outputNodes[0].x = this.x + this.width/2; // Q output
+        this.outputNodes[0].y = this.y - 15;
+        this.outputNodes[1].x = this.x + this.width/2; // Q̄ output
+        this.outputNodes[1].y = this.y + 15;
     }
 } 

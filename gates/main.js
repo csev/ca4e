@@ -238,6 +238,8 @@ class CircuitEditor {
                     newGate = new JKFlipFlop(x, y, this);
                 } else if (this.selectedTool === 'ONE_BIT_LATCH') {
                     newGate = new OneBitLatch(x, y, this);
+                } else if (this.selectedTool === 'SR_FLIP_FLOP') {
+                    newGate = new SRFlipFlop(x, y, this);
                 } else {
                     newGate = new Gate(this.selectedTool, x, y, this);
                 }
