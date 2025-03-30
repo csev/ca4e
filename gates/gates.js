@@ -244,7 +244,7 @@ class Gate {
         // Draw gate label
         ctx.fillStyle = '#000';
         ctx.font = '12px Arial';
-        ctx.fillText('NOT', this._x, this._y - 25);
+        ctx.fillText(this.label, this._x, this._y - 25);
     }
 
     drawNAND(ctx) {
@@ -546,9 +546,9 @@ class Gate {
         
         // Only append ordinal if it's 35 or less
         if (this.ordinal <= 35) {
-            this.label = `${this.type}${ordinalDisplay}`;
+            this.label = `${this.label}${ordinalDisplay}`;
         } else {
-            this.label = this.type;
+            this.label = this.label;
         }
     }
 }
@@ -1234,7 +1234,7 @@ class ClockPulse extends Gate {
         ctx.fillStyle = 'black';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText("CLK", this.x, this.y - 20);
+        ctx.fillText(this.label, this.x, this.y - 20);
 
         // Draw state text - show "Off" when not running
         ctx.fillText(this.isRunning ? (this.state ? "HIGH" : "LOW") : "OFF", this.x, this.y + 20);
@@ -1397,6 +1397,7 @@ class OneBitLatch extends Gate {
         this.height = 60;
         this.internalState = false;
         this.lastClockState = false;
+        this.label = 'Bit';
         
         // Initialize with 2 input nodes (data and clock) and 1 output node
         this.inputNodes = [
@@ -1422,8 +1423,7 @@ class OneBitLatch extends Gate {
         ctx.fillStyle = '#000';
         ctx.font = '12px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('1-BIT', this.x, this.y - 8);
-        ctx.fillText('LATCH', this.x, this.y + 8);
+        ctx.fillText(this.label, this.x, this.y - 8);
         
         // Draw input labels
         ctx.font = '10px Arial';
@@ -1480,6 +1480,7 @@ class SRFlipFlop extends Gate {
         this.width = 60;
         this.height = 60;
         this.state = false; // Q output state
+        this.label = 'SR';
         
         // Initialize with 2 inputs (S and R) and 2 outputs (Q and Q̄)
         this.inputNodes = [
@@ -1515,7 +1516,7 @@ class SRFlipFlop extends Gate {
         
         // Draw label in center
         ctx.textAlign = 'center';
-        ctx.fillText('SR', this.x, this.y);
+        ctx.fillText(this.label, this.x, this.y);
         
         // Draw nodes
         this.drawNodes(ctx);
