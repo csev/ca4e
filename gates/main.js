@@ -246,7 +246,6 @@ class CircuitEditor {
 
                 // Assign ordinal and update label
                 newGate.ordinal = this.getGateOrdinal(newGate);
-                console.log(this.selectedTool, newGate.orginal);
                 newGate.updateLabelWithOrdinal();
 
                 this.gates.push(newGate);
