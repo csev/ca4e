@@ -1282,19 +1282,19 @@ class JKFlipFlop extends Gate {
         super('JK_FLIP_FLOP', x, y, editor);
         this.label = 'JK';
         this.width = 60;
-        this.height = 80;
+        this.height = 60;
         this.state = false; // Internal state storage
         
         // Define inputs and outputs
         this.inputNodes = [
-            { x: x - this.width/2, y: y - 20, name: 'J', value: false, connected: false },    // J input
-            { x: x - this.width/2, y: y + 20, name: 'K', value: false, connected: false },    // K input
+            { x: x - this.width/2, y: y - 15, name: 'J', value: false, connected: false },    // J input
+            { x: x - this.width/2, y: y + 15, name: 'K', value: false, connected: false },    // K input
             { x: x, y: y - this.height/2, name: 'CLK', value: false, connected: false }       // Clock input
         ];
         
         this.outputNodes = [
-            { x: x + this.width/2, y: y - 20, name: 'Q', value: false, hasOutput: false },    // Q output
-            { x: x + this.width/2, y: y + 20, name: 'Q_BAR', value: true, hasOutput: false }  // Q̄ output
+            { x: x + this.width/2, y: y - 15, name: 'Q', value: false, hasOutput: false },    // Q output
+            { x: x + this.width/2, y: y + 15, name: 'Q_BAR', value: true, hasOutput: false }  // Q̄ output
         ];
 
         this.lastClockState = false; // Track clock transitions
