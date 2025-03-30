@@ -323,11 +323,12 @@ class CircuitEditor {
                 if (this.draggingGate.type === 'ONE_BIT_LATCH') {
                     if (index === 0) {  // Data input
                         node.x = this.draggingGate.x - this.draggingGate.width/2;
-                        node.y = this.draggingGate.y + 15; // Offset D input down
+                        node.y = this.draggingGate.y + 10; // Offset D input down
                     } else if (index === 1) {  // Clock input
-                        node.x = this.draggingGate.x;
-                        node.y = this.draggingGate.y - this.draggingGate.height/2;
-                    }
+                        node.x = this.draggingGate.x - this.draggingGate.width/2;
+                        node.y = this.draggingGate.y - 10;
+
+                    } 
                     return;
                 } else if (this.draggingGate.type === 'JK_FLIP_FLOP') {
                     if (index === 0) {      // J input
@@ -395,7 +396,7 @@ class CircuitEditor {
             this.draggingGate.outputNodes.forEach((node, index) => {
                 if (this.draggingGate.type === 'ONE_BIT_LATCH') {
                     node.x = this.draggingGate.x + this.draggingGate.width/2;
-                    node.y = this.draggingGate.y + 15; // Match D input height
+                    node.y = this.draggingGate.y; //
                 } else if (this.draggingGate.type === 'JK_FLIP_FLOP') {
                     node.x = this.draggingGate.x + this.draggingGate.width/2;
                     if (index === 0) {      // Q output
