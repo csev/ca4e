@@ -1430,14 +1430,13 @@ class OneBitLatch extends Gate {
         ctx.fillStyle = '#000';
         ctx.font = '12px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText('1-BIT', this.x, this.y - 8);
-        ctx.fillText('LATCH', this.x, this.y + 8);
+        ctx.fillText(this.label, this.x, this.y - 8);
         
         // Draw input labels
         ctx.font = '10px Arial';
         ctx.textAlign = 'right';
-        ctx.fillText('D', this.x - this.width/2 - 5, this.y - 10);  // Data input
-        ctx.fillText('CLK', this.x - this.width/2 - 5, this.y + 10); // Clock input
+        ctx.fillText('D', this.x - this.width/2 - 5, this.y - 15);  // Data input
+        ctx.fillText('CLK', this.x - this.width/2 - 5, this.y + 15); // Clock input
         
         // Draw nodes with colored output
         this.drawNodes(ctx);
@@ -1484,11 +1483,11 @@ class OneBitLatch extends Gate {
     updateConnectionPoints() {
         // Data input on left side, upper position
         this.inputNodes[0].x = this.x - this.width/2;
-        this.inputNodes[0].y = this.y - 10;
+        this.inputNodes[0].y = this.y - 15;
         
         // Clock input on left side, lower position
         this.inputNodes[1].x = this.x - this.width/2;
-        this.inputNodes[1].y = this.y + 10;
+        this.inputNodes[1].y = this.y + 15;
         
         // Output on right side, center
         this.outputNodes[0].x = this.x + this.width/2;

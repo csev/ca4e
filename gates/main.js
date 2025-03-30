@@ -323,10 +323,10 @@ class CircuitEditor {
                 if (this.draggingGate.type === 'ONE_BIT_LATCH') {
                     if (index === 0) {  // Data input
                         node.x = this.draggingGate.x - this.draggingGate.width/2;
-                        node.y = this.draggingGate.y + 10; // Offset D input down
+                        node.y = this.draggingGate.y + 15; // Offset D input down
                     } else if (index === 1) {  // Clock input
                         node.x = this.draggingGate.x - this.draggingGate.width/2;
-                        node.y = this.draggingGate.y - 10;
+                        node.y = this.draggingGate.y - 15;
 
                     } 
                     return;
