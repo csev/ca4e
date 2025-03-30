@@ -1245,20 +1245,12 @@ class ClockPulse extends Gate {
 
     drawNodes(ctx) {
         // Draw output nodes with their colors based on values
-        this.outputNodes.forEach((node, i) => {
+        this.outputNodes.forEach((node, index) => {
             ctx.beginPath();
             ctx.arc(node.x, node.y, 5, 0, 2 * Math.PI);
-            ctx.fillStyle = node.sourceValue ? 'green' : 'red';
-            if (node.isHovered) {
-                ctx.fillStyle = 'blue';
-            }
+            ctx.fillStyle = (index === 0 ? this.state : !this.state) ? '#4CAF50' : '#f44336';
             ctx.fill();
             ctx.stroke();
-
-            // Draw H/L labels next to the nodes
-            ctx.fillStyle = 'black';
-            ctx.textAlign = 'right';
-            ctx.fillText(i === 0 ? "H" : "L", node.x - 8, node.y);
         });
     }
 
@@ -1336,14 +1328,29 @@ class JKFlipFlop extends Gate {
         ctx.fillText('Q', this.x + this.width/2 + 5, this.y - 20);
         ctx.fillText('Q̄', this.x + this.width/2 + 5, this.y + 20);
 
-        // Draw state indicator
-        ctx.fillStyle = this.state ? '#4CAF50' : '#f44336';
-        ctx.beginPath();
-        ctx.arc(this.x, this.y + 5, 5, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Draw nodes
+        // Draw nodes with colored outputs
         this.drawNodes(ctx);
+    }
+
+    drawNodes(ctx) {
+        // Draw input nodes normally
+        this.inputNodes.forEach(node => {
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#000000';
+            ctx.fill();
+            ctx.stroke();
+        });
+
+        // Draw output nodes with state colors
+        this.outputNodes.forEach((node, index) => {
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, 5, 0, Math.PI * 2);
+            // Q output is colored based on state, Q̄ is opposite
+            ctx.fillStyle = (index === 0 ? this.state : !this.state) ? '#4CAF50' : '#f44336';
+            ctx.fill();
+            ctx.stroke();
+        });
     }
 
     evaluate() {
@@ -1423,7 +1430,8 @@ class OneBitLatch extends Gate {
         ctx.fillStyle = '#000';
         ctx.font = '12px Arial';
         ctx.textAlign = 'center';
-        ctx.fillText(this.label, this.x, this.y - 8);
+        ctx.fillText('1-BIT', this.x, this.y - 8);
+        ctx.fillText('LATCH', this.x, this.y + 8);
         
         // Draw input labels
         ctx.font = '10px Arial';
@@ -1431,14 +1439,28 @@ class OneBitLatch extends Gate {
         ctx.fillText('D', this.x - this.width/2 - 5, this.y - 10);  // Data input
         ctx.fillText('CLK', this.x - this.width/2 - 5, this.y + 10); // Clock input
         
-        // Draw nodes
+        // Draw nodes with colored output
         this.drawNodes(ctx);
-        
-        // Draw state indicator
-        ctx.fillStyle = this.internalState ? '#4CAF50' : '#f44336';
-        ctx.beginPath();
-        ctx.arc(this.x + 15, this.y, 5, 0, Math.PI * 2);
-        ctx.fill();
+    }
+
+    drawNodes(ctx) {
+        // Draw input nodes normally
+        this.inputNodes.forEach(node => {
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = '#000000';
+            ctx.fill();
+            ctx.stroke();
+        });
+
+        // Draw output node with state color
+        this.outputNodes.forEach(node => {
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, 5, 0, Math.PI * 2);
+            ctx.fillStyle = this.internalState ? '#4CAF50' : '#f44336';
+            ctx.fill();
+            ctx.stroke();
+        });
     }
 
     evaluate() {
