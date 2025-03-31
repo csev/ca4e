@@ -5,6 +5,8 @@
     <button onclick="setLayer('P+ diffusion')">P+ Diffusion</button>
     <button onclick="setLayer('contact')">Contact</button>
     <button onclick="setLayer('metal')">Metal</button>
+    <button onclick="setLayer('VCC')">VCC</button>
+    <button onclick="setLayer('GND')">GND</button>
     <button onclick="setLayer('erase')">Erase</button>
     <button onclick="clearCanvas()">Clear All</button>
 </div>
@@ -19,12 +21,14 @@
         'N+ diffusion': 'rgba(0, 255, 0, 0.3)', // Light Green
         'P+ diffusion': 'rgba(255, 165, 0, 0.3)', // Light Orange
         'contact': 'rgba(0, 0, 0, 0.3)', // Light Black (not used for filling)
-        'metal': 'rgba(0, 0, 255, 0.3)' // Light Blue
+        'metal': 'rgba(0, 0, 255, 0.3)', // Light Blue
+        'VCC': 'rgba(0, 0, 0, 0)', // Transparent for VCC
+        'GND': 'rgba(0, 0, 0, 0)' // Transparent for GND
     };
     let currentLayer = '';
     let isDrawing = false;
     let startX, startY; // Track starting position
-    const grid = Array(20).fill().map(() => Array(20).fill().map(() => Array(5).fill(false))); // 20x20x5 grid
+    const grid = Array(20).fill().map(() => Array(20).fill().map(() => Array(7).fill(false))); // 20x20x7 grid
 
     function setLayer(layer) {
         currentLayer = layer;
@@ -41,17 +45,17 @@
         startX = Math.floor((event.clientX - rect.left) / tileSize);
         startY = Math.floor((event.clientY - rect.top) / tileSize);
         
-        // Handle the contact layer separately
-        if (currentLayer === 'contact') {
-            grid[startY][startX][3] = true; // Mark the contact layer as drawn
+        // Handle the contact, VCC, and GND layers separately
+        if (['contact', 'VCC', 'GND'].includes(currentLayer)) {
+            grid[startY][startX][getLayerIndex(currentLayer)] = true; // Mark the layer as drawn
             redrawTile(startX, startY); // Redraw the tile immediately
-            isDrawing = false; // Stop drawing after setting the contact
-            return; // Exit early for contact
+            isDrawing = false; // Stop drawing after setting the layer
+            return; // Exit early for these layers
         }
     });
 
     canvas.addEventListener('mousemove', function(event) {
-        if (isDrawing && currentLayer !== 'contact') { // Only draw rubber band if not contact
+        if (isDrawing && currentLayer !== 'contact' && currentLayer !== 'VCC' && currentLayer !== 'GND') { // Only draw rubber band if not contact, VCC, or GND
             const rect = canvas.getBoundingClientRect();
             const x = Math.floor((event.clientX - rect.left) / tileSize);
             const y = Math.floor((event.clientY - rect.top) / tileSize);
@@ -60,7 +64,7 @@
     });
 
     canvas.addEventListener('mouseup', function(event) {
-        if (currentLayer !== 'contact') { // Only fill tiles if not contact
+        if (currentLayer !== 'contact' && currentLayer !== 'VCC' && currentLayer !== 'GND') { // Only fill tiles if not contact, VCC, or GND
             isDrawing = false;
             const rect = canvas.getBoundingClientRect();
             const x = Math.floor((event.clientX - rect.left) / tileSize);
@@ -95,7 +99,7 @@
                 const layerIndex = getLayerIndex(currentLayer);
                 if (currentLayer === 'erase') {
                     // Erase all layers at the current tile
-                    for (let k = 0; k < 5; k++) {
+                    for (let k = 0; k < 7; k++) {
                         grid[i][j][k] = false; // Mark all layers as not drawn
                     }
                 } else if (layerIndex !== -1) {
@@ -116,10 +120,16 @@
 
     function redrawTile(x, y) {
         ctx.clearRect(x * tileSize, y * tileSize, tileSize, tileSize); // Clear the tile
-        for (let i = 0; i < 5; i++) { // Loop through all layers
+        for (let i = 0; i < 7; i++) { // Loop through all layers
             if (grid[y][x][i]) {
                 if (i === 3) { // If the layer is 'contact'
                     drawContactLines(x, y); // Draw the contact lines instead of filling
+                } else if (i === 5) { // If the layer is 'VCC'
+                    drawRectangle(x, y, 0  )
+                    drawText(x, y, 'V'); // Draw VCC text
+                } else if (i === 6) { // If the layer is 'GND'
+                    drawRectangle(x, y, 0)
+                    drawText(x, y, 'G'); // Draw GND text
                 } else {
                     ctx.fillStyle = Object.values(layers)[i]; // Get the color for the layer
                     ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
@@ -128,18 +138,34 @@
         }
     }
 
-    function drawContactLines(x, y) {
+    function drawRectangle(x, y, inset) {
         ctx.strokeStyle = 'black'; // Color for the lines
         ctx.lineWidth = 2; // Line width
         ctx.beginPath();
-        const inset = tileSize / 4;
+        // Draw a black rectangle for the contact, inset by 2.5 pixels (1/8 of tile size)
         ctx.strokeRect(x * tileSize + inset, y * tileSize + inset, tileSize - inset * 2, tileSize - inset * 2);
-        // Draw diagonal lines
+        ctx.stroke();
+    }
+    
+    function drawContactLines(x, y) {
+        const inset = tileSize / 4; 
+        drawRectangle(x, y, inset);
+        ctx.strokeStyle = 'black'; // Color for the lines
+        ctx.lineWidth = 2; // Line width
+        ctx.beginPath();
         ctx.moveTo(x * tileSize + inset, y * tileSize + inset);
         ctx.lineTo((x + 1) * tileSize - inset, (y + 1) * tileSize - inset); // Top-left to bottom-right
         ctx.moveTo((x + 1) * tileSize - inset, y * tileSize + inset);
         ctx.lineTo(x * tileSize + inset, (y + 1) * tileSize - inset); // Top-right to bottom-left
         ctx.stroke();
+    }
+
+    function drawText(x, y, text) {
+        ctx.fillStyle = 'black'; // Color for the text
+        ctx.font = 'bold 12px Arial'; // Font style
+        ctx.textAlign = 'center'; // Center the text
+        ctx.textBaseline = 'middle'; // Middle alignment
+        ctx.fillText(text, x * tileSize + tileSize / 2, y * tileSize + tileSize / 2); // Draw the text in the center of the tile
     }
 
     function getLayerIndex(layer) {
@@ -149,6 +175,8 @@
             case 'P+ diffusion': return 2;
             case 'contact': return 3;
             case 'metal': return 4;
+            case 'VCC': return 5; // New layer index for VCC
+            case 'GND': return 6; // New layer index for GND
             case 'erase': return -1; // Invalid layer for index
             default: return -1; // Invalid layer
         }
