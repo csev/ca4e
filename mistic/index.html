@@ -18,7 +18,7 @@
         'polysilicon': 'rgba(255, 0, 0, 0.3)', // Light Red
         'N+ diffusion': 'rgba(0, 255, 0, 0.3)', // Light Green
         'P+ diffusion': 'rgba(255, 165, 0, 0.3)', // Light Orange
-        'contact': 'rgba(0, 0, 0, 0.3)', // Light Black
+        'contact': 'rgba(0, 0, 0, 0.3)', // Light Black (not used for filling)
         'metal': 'rgba(0, 0, 255, 0.3)' // Light Blue
     };
     let currentLayer = '';
@@ -108,10 +108,28 @@
         ctx.clearRect(x * tileSize, y * tileSize, tileSize, tileSize); // Clear the tile
         for (let i = 0; i < 5; i++) { // Loop through all layers
             if (grid[y][x][i]) {
-                ctx.fillStyle = Object.values(layers)[i]; // Get the color for the layer
-                ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+                if (i === 3) { // If the layer is 'contact'
+                    drawContactLines(x, y); // Draw the contact lines instead of filling
+                } else {
+                    ctx.fillStyle = Object.values(layers)[i]; // Get the color for the layer
+                    ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+                }
             }
         }
+    }
+
+    function drawContactLines(x, y) {
+        ctx.strokeStyle = 'black'; // Color for the lines
+        ctx.lineWidth = 2; // Line width
+        ctx.beginPath();
+        // Draw a black rectangle for the contact
+        ctx.strokeRect(x * tileSize, y * tileSize, tileSize, tileSize);
+        // Draw diagonal lines
+        ctx.moveTo(x * tileSize, y * tileSize);
+        ctx.lineTo((x + 1) * tileSize, (y + 1) * tileSize); // Top-left to bottom-right
+        ctx.moveTo((x + 1) * tileSize, y * tileSize);
+        ctx.lineTo(x * tileSize, (y + 1) * tileSize); // Top-right to bottom-left
+        ctx.stroke();
     }
 
     function getLayerIndex(layer) {
