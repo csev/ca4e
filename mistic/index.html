@@ -1,0 +1,85 @@
+<h1>VLSI LAYOUT like Magic</h1>
+<div id="toolbar">
+    <button onclick="setLayer('polysilicon')">Polysilicon</button>
+    <button onclick="setLayer('N+ diffusion')">N+ Diffusion</button>
+    <button onclick="setLayer('P+ diffusion')">P+ Diffusion</button>
+    <button onclick="setLayer('contact')">Contact</button>
+    <button onclick="setLayer('metal')">Metal</button>
+    <button onclick="clearCanvas()">Clear All</button>
+</div>
+<canvas id="vlsiCanvas" width="400" height="400" style="border:1px solid #000000;"></canvas>
+
+<script>
+    const canvas = document.getElementById('vlsiCanvas');
+    const ctx = canvas.getContext('2d');
+    const tileSize = 20;
+    const layers = {
+        'polysilicon': 'rgba(255, 0, 0, 0.3)', // Light Red
+        'N+ diffusion': 'rgba(0, 255, 0, 0.3)', // Light Green
+        'P+ diffusion': 'rgba(255, 165, 0, 0.3)', // Light Orange
+        'contact': 'rgba(0, 0, 0, 0.3)', // Light Black
+        'metal': 'rgba(0, 0, 255, 0.3)' // Light Blue
+    };
+    let currentLayer = '';
+    let isDrawing = false;
+    const grid = Array(20).fill().map(() => Array(20).fill().map(() => Array(5).fill(false))); // 20x20x5 grid
+
+    function setLayer(layer) {
+        currentLayer = layer;
+    }
+
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        grid.forEach(row => row.forEach(col => col.fill(false))); // Reset the grid
+    }
+
+    canvas.addEventListener('mousedown', function(event) {
+        isDrawing = true;
+        draw(event);
+    });
+
+    canvas.addEventListener('mousemove', function(event) {
+        if (isDrawing) {
+            draw(event);
+        }
+    });
+
+    canvas.addEventListener('mouseup', function() {
+        isDrawing = false;
+        ctx.beginPath();
+    });
+
+    function draw(event) {
+        const rect = canvas.getBoundingClientRect();
+        const x = Math.floor((event.clientX - rect.left) / tileSize);
+        const y = Math.floor((event.clientY - rect.top) / tileSize);
+
+        // Determine the layer index based on the current layer
+        const layerIndex = getLayerIndex(currentLayer);
+        if (layerIndex !== -1) {
+            grid[y][x][layerIndex] = true; // Mark the layer as drawn
+            redrawTile(x, y); // Redraw the tile
+        }
+    }
+
+    function redrawTile(x, y) {
+        ctx.clearRect(x * tileSize, y * tileSize, tileSize, tileSize); // Clear the tile
+        for (let i = 0; i < 5; i++) { // Loop through all layers
+            if (grid[y][x][i]) {
+                ctx.fillStyle = Object.values(layers)[i]; // Get the color for the layer
+                ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+            }
+        }
+    }
+
+    function getLayerIndex(layer) {
+        switch (layer) {
+            case 'polysilicon': return 0;
+            case 'N+ diffusion': return 1;
+            case 'P+ diffusion': return 2;
+            case 'contact': return 3;
+            case 'metal': return 4;
+            default: return -1; // Invalid layer
+        }
+    }
+</script>
