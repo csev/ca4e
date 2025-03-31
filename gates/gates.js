@@ -1206,6 +1206,7 @@ class ClockPulse extends Gate {
         // Draw the main rectangle
         ctx.fillStyle = 'white';
         ctx.strokeStyle = 'black';
+        ctx.font = Gate.squareFont;
         ctx.beginPath();
         ctx.rect(this.x - this.width/2, this.y - this.height/2, this.width, this.height);
         ctx.fill();
