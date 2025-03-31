@@ -323,31 +323,31 @@ class CircuitEditor {
                 if (this.draggingGate.type === 'ONE_BIT_LATCH') {
                     if (index === 0) {  // Data input
                         node.x = this.draggingGate.x - this.draggingGate.width/2;
-                        node.y = this.draggingGate.y + 15; // Offset D input down
+                        node.y = this.draggingGate.y + Gate.twoInputSquareVeritcalOffset; // Offset D input down
                     } else if (index === 1) {  // Clock input
                         node.x = this.draggingGate.x - this.draggingGate.width/2;
-                        node.y = this.draggingGate.y - 15;
+                        node.y = this.draggingGate.y - Gate.twoInputSquareVeritcalOffset;
 
                     } 
                     return;
                 } else if (this.draggingGate.type === 'JK_FLIP_FLOP') {
                     if (index === 0) {      // J input
                         node.x = this.draggingGate.x - this.draggingGate.width/2;
-                        node.y = this.draggingGate.y - 15;
+                        node.y = this.draggingGate.y - Gate.twoInputSquareVeritcalOffset;
                     } else if (index === 1) { // Clock input
                         node.x = this.draggingGate.x;
                         node.y = this.draggingGate.y - this.draggingGate.height/2;
                     } else if (index === 2) { // K input
                         node.x = this.draggingGate.x - this.draggingGate.width/2;
-                        node.y = this.draggingGate.y + 15;
+                        node.y = this.draggingGate.y + Gate.twoInputSquareVeritcalOffset;
                     }
                     return;
                 } else if (this.draggingGate.type === 'SR_FLIP_FLOP') {
                     node.x = this.draggingGate.x - this.draggingGate.width/2;
                     if (index === 0) {      // S input
-                        node.y = this.draggingGate.y - 15;
+                        node.y = this.draggingGate.y - Gate.twoInputSquareVeritcalOffset;
                     } else {                // R input
-                        node.y = this.draggingGate.y + 15;
+                        node.y = this.draggingGate.y + Gate.twoInputSquareVeritcalOffset;
                     }
                 } else if (this.draggingGate.type === 'CLOCK_PULSE') {
                     // Clock pulse has no input nodes
@@ -400,17 +400,17 @@ class CircuitEditor {
                 } else if (this.draggingGate.type === 'JK_FLIP_FLOP') {
                     node.x = this.draggingGate.x + this.draggingGate.width/2;
                     if (index === 0) {      // Q output
-                        node.y = this.draggingGate.y - 15; // Match J input height
+                        node.y = this.draggingGate.y - Gate.twoInputSquareVeritcalOffset; // Match J input height
                     } else {                // Q' output
-                        node.y = this.draggingGate.y + 15; // Match K input height
+                        node.y = this.draggingGate.y + Gate.twoInputSquareVeritcalOffset; // Match K input height
                     }
                     return;
                 } else if (this.draggingGate.type === 'SR_FLIP_FLOP') {
                     node.x = this.draggingGate.x + this.draggingGate.width/2;
                     if (index === 0) {      // Q output
-                        node.y = this.draggingGate.y - 15;
+                        node.y = this.draggingGate.y - Gate.twoInputSquareVeritcalOffset;
                     } else {                // Q' output
-                        node.y = this.draggingGate.y + 15;
+                        node.y = this.draggingGate.y + Gate.twoInputSquareVeritcalOffset;
                     }
                 } else if (this.draggingGate.type === 'CLOCK_PULSE') {
                     // ... existing CLOCK_PULSE code ...

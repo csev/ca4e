@@ -1,4 +1,7 @@
 class Gate {
+    static twoInputSquareVeritcalOffset = 15;
+    static squareFont = '12px Arial';
+    static squareLabelOffset = 7;
     constructor(type, x, y, editor) {
         this.type = type;
         this._x = x;  // Use private variable
@@ -137,7 +140,7 @@ class Gate {
                 
                 // Show connection type tooltip
                 ctx.fillStyle = '#000000';
-                ctx.font = '12px Arial';
+                ctx.font = Gate.squareFont;
                 ctx.fillText('Input', node.x, node.y - 15);
             }
         });
@@ -169,7 +172,7 @@ class Gate {
                 
                 // Show connection type tooltip
                 ctx.fillStyle = '#000000';
-                ctx.font = '12px Arial';
+                ctx.font = Gate.squareFont;
                 ctx.fillText('Output', node.x, node.y - 15);
             }
         });
@@ -243,7 +246,7 @@ class Gate {
         
         // Draw gate label
         ctx.fillStyle = '#000';
-        ctx.font = '12px Arial';
+        ctx.font = Gate.squareFont;
         ctx.fillText(this.label, this._x, this._y - 25);
     }
 
@@ -322,7 +325,7 @@ class Gate {
 
             // Draw label above (changed from "INPUT")
             ctx.fillStyle = '#000';
-            ctx.font = '12px Arial';
+            ctx.font = Gate.squareFont;
             ctx.fillText(this.label, this._x, this._y - 25);
         } else if (this.type === 'OUTPUT') {
             // Get input value from connected wire
@@ -356,7 +359,7 @@ class Gate {
 
             // Draw label above (changed from "OUTPUT")
             ctx.fillStyle = '#000';
-            ctx.font = '12px Arial';
+            ctx.font = Gate.squareFont;
             ctx.fillText(this.label, this._x, this._y - 25);
         }
     }
@@ -476,7 +479,7 @@ class Gate {
 
         // Draw gate label
         ctx.fillStyle = '#000';
-        ctx.font = '12px Arial';
+        ctx.font = Gate.squareFont;
         ctx.fillText(this.label, this._x, this._y - 25);
     }
 
@@ -595,7 +598,7 @@ class FullAdder extends Gate {
 
         // Draw input labels
         ctx.fillStyle = '#000';
-        ctx.font = '12px Arial';
+        ctx.font = Gate.squareFont;
         ctx.textAlign = 'right';
         ctx.fillText('Cin', this.x - 35, this.y - 17); // Aligned with S
         ctx.fillText('A', this.x - 35, this.y + 3);        // Aligned with Cout
@@ -701,7 +704,7 @@ class NixieDisplay extends Gate {
 
         // Draw input labels - moved outside the rectangle
         ctx.fillStyle = '#000';
-        ctx.font = '12px Arial';
+        ctx.font = Gate.squareFont;
         ctx.textAlign = 'right';
         ctx.fillText('1', this.inputNodes[0].x - 7, this.inputNodes[0].y + 2);
         ctx.fillText('2', this.inputNodes[1].x - 7, this.inputNodes[1].y + 2);
@@ -834,16 +837,16 @@ class ThreeBitLatch extends Gate {
             // Clock at top center
             { x: x, y: y - this.height/2, name: 'clock', value: false, connected: false },
             // Data inputs on left side
-            { x: x - this.width/2, y: y - 15, name: 'bit1', value: false, connected: false },
+            { x: x - this.width/2, y: y - Gate.twoInputSquareVeritcalOffset, name: 'bit1', value: false, connected: false },
             { x: x - this.width/2, y: y, name: 'bit2', value: false, connected: false },
-            { x: x - this.width/2, y: y + 15, name: 'bit4', value: false, connected: false }
+            { x: x - this.width/2, y: y + Gate.twoInputSquareVeritcalOffset, name: 'bit4', value: false, connected: false }
         ];
         
         // Outputs aligned with corresponding inputs
         this.outputNodes = [
-            { x: x + this.width/2, y: y - 15, name: 'out1', value: false, hasOutput: false },
+            { x: x + this.width/2, y: y - Gate.twoInputSquareVeritcalOffset, name: 'out1', value: false, hasOutput: false },
             { x: x + this.width/2, y: y, name: 'out2', value: false, hasOutput: false },
-            { x: x + this.width/2, y: y + 15, name: 'out4', value: false, hasOutput: false }
+            { x: x + this.width/2, y: y + Gate.twoInputSquareVeritcalOffset, name: 'out4', value: false, hasOutput: false }
         ];
 
         this.sevenSegmentPatterns = [
@@ -875,7 +878,7 @@ class ThreeBitLatch extends Gate {
 
         // Draw component label above the seven segment display
         ctx.fillStyle = '#000000';
-        ctx.font = '10px Arial';
+        ctx.font = Gate.squareFont;
         ctx.textAlign = 'center';
         ctx.fillText(this.label, this.x, this.y - this.height/2 + 12);
 
@@ -884,17 +887,17 @@ class ThreeBitLatch extends Gate {
 
         // Draw input labels
         ctx.fillStyle = '#000000';
-        ctx.font = '10px Arial';
+        ctx.font = Gate.squareFont;
         ctx.textAlign = 'right';
-        ctx.fillText('1', this.x - this.width/2 - 5, this.y - 15);
+        ctx.fillText('1', this.x - this.width/2 - 5, this.y - Gate.twoInputSquareVeritcalOffset);
         ctx.fillText('2', this.x - this.width/2 - 5, this.y);
-        ctx.fillText('4', this.x - this.width/2 - 5, this.y + 15);
+        ctx.fillText('4', this.x - this.width/2 - 5, this.y + Gate.twoInputSquareVeritcalOffset);
 
         // Draw output labels
         ctx.textAlign = 'left';
-        ctx.fillText('1', this.x + this.width/2 + 5, this.y - 15);
+        ctx.fillText('1', this.x + this.width/2 + 5, this.y - Gate.twoInputSquareVeritcalOffset);
         ctx.fillText('2', this.x + this.width/2 + 5, this.y);
-        ctx.fillText('4', this.x + this.width/2 + 5, this.y + 15);
+        ctx.fillText('4', this.x + this.width/2 + 5, this.y + Gate.twoInputSquareVeritcalOffset);
 
         // Draw clock label at top
         ctx.textAlign = 'center';
@@ -976,23 +979,23 @@ class ThreeBitLatch extends Gate {
         this.inputNodes[0].y = this.y - this.height/2;
         
         this.inputNodes[1].x = this.x - this.width/2;    // Data inputs
-        this.inputNodes[1].y = this.y - 15;              // -spacing
+        this.inputNodes[1].y = this.y - Gate.twoInputSquareVeritcalOffset;              // -spacing
         
         this.inputNodes[2].x = this.x - this.width/2;
         this.inputNodes[2].y = this.y;                   // center
         
         this.inputNodes[3].x = this.x - this.width/2;
-        this.inputNodes[3].y = this.y + 15;              // +spacing
+        this.inputNodes[3].y = this.y + Gate.twoInputSquareVeritcalOffset;              // +spacing
 
         // Update output positions to match input heights exactly
         this.outputNodes[0].x = this.x + this.width/2;
-        this.outputNodes[0].y = this.y - 15;             // -spacing
+        this.outputNodes[0].y = this.y - Gate.twoInputSquareVeritcalOffset;             // -spacing
         
         this.outputNodes[1].x = this.x + this.width/2;
         this.outputNodes[1].y = this.y;                  // center
         
         this.outputNodes[2].x = this.x + this.width/2;
-        this.outputNodes[2].y = this.y + 15;             // +spacing
+        this.outputNodes[2].y = this.y + Gate.twoInputSquareVeritcalOffset;             // +spacing
     }
 }
 
@@ -1048,7 +1051,7 @@ class ThreeBitAdder extends Gate {
 
         // Draw component label
         ctx.fillStyle = '#000000';
-        ctx.font = '10px Arial';
+        ctx.font = Gate.squareFont;
         ctx.textAlign = 'center';
         ctx.fillText(this.label, this.x, this.y - this.height/2 + 12);
 
@@ -1056,7 +1059,7 @@ class ThreeBitAdder extends Gate {
         this.drawSevenSegment(ctx, this.x, this.y, 38);
 
         // Draw input labels
-        ctx.font = '10px Arial';
+        ctx.font = Gate.squareFont;
         ctx.textAlign = 'right';
         
         // A inputs (left)
@@ -1193,8 +1196,8 @@ class ClockPulse extends Gate {
         this.isRunning = false;  // Add running state flag
         
         this.outputNodes = [
-            { x: x + this.width/2, y: y - 15, name: 'high', value: false, hasOutput: false },
-            { x: x + this.width/2, y: y + 15, name: 'low', value: true, hasOutput: false }
+            { x: x + this.width/2, y: y - Gate.twoInputSquareVeritcalOffset, name: 'high', value: false, hasOutput: false },
+            { x: x + this.width/2, y: y + Gate.twoInputSquareVeritcalOffset, name: 'low', value: true, hasOutput: false }
         ];
         this.inputNodes = [];
     }
@@ -1270,10 +1273,10 @@ class ClockPulse extends Gate {
     updateConnectionPoints() {
         // Update output positions
         this.outputNodes[0].x = this.x + this.width/2;  // High output
-        this.outputNodes[0].y = this.y - 15;
+        this.outputNodes[0].y = this.y - Gate.twoInputSquareVeritcalOffset;
         
         this.outputNodes[1].x = this.x + this.width/2;  // Low output
-        this.outputNodes[1].y = this.y + 15;
+        this.outputNodes[1].y = this.y + Gate.twoInputSquareVeritcalOffset;
     }
 }
 
@@ -1287,14 +1290,14 @@ class JKFlipFlop extends Gate {
         
         // Define inputs and outputs
         this.inputNodes = [
-            { x: x - this.width/2, y: y - 15, name: 'J', value: false, connected: false },    // J input
-            { x: x - this.width/2, y: y + 15, name: 'K', value: false, connected: false },    // K input
+            { x: x - this.width/2 , y: y - Gate.twoInputSquareVeritcalOffset, name: 'J', value: false, connected: false },    // J input
+            { x: x - this.width/2, y: y + Gate.twoInputSquareVeritcalOffset, name: 'K', value: false, connected: false },    // K input
             { x: x, y: y - this.height/2, name: 'CLK', value: false, connected: false }       // Clock input
         ];
         
         this.outputNodes = [
-            { x: x + this.width/2, y: y - 15, name: 'Q', value: false, hasOutput: false },    // Q output
-            { x: x + this.width/2, y: y + 15, name: 'Q_BAR', value: true, hasOutput: false }  // Q̄ output
+            { x: x + this.width/2, y: y - Gate.twoInputSquareVeritcalOffset, name: 'Q', value: false, hasOutput: false },    // Q output
+            { x: x + this.width/2, y: y + Gate.twoInputSquareVeritcalOffset, name: 'Q_BAR', value: true, hasOutput: false }  // Q̄ output
         ];
 
         this.lastClockState = false; // Track clock transitions
@@ -1316,17 +1319,17 @@ class JKFlipFlop extends Gate {
         ctx.fillText(this.label, this.x, this.y);
 
         // Draw input labels
-        ctx.font = '12px Arial';
-        ctx.textAlign = 'right';
-        ctx.fillText('J', this.x - this.width/2 - 5, this.y - 20);
-        ctx.fillText('K', this.x - this.width/2 - 5, this.y + 20);
+        ctx.font = Gate.squareFont;
+        ctx.textAlign = 'left';
+        ctx.fillText('J', this.x - this.width/2 + Gate.squareLabelOffset, this.y - 10);
+        ctx.fillText('K', this.x - this.width/2 + Gate.squareLabelOffset, this.y + 20);
         ctx.textAlign = 'center';
-        ctx.fillText('CLK', this.x, this.y - this.height/2 - 5);
+        ctx.fillText('CLK', this.x, this.y - this.height/2 - 10);
 
         // Draw output labels
-        ctx.textAlign = 'left';
-        ctx.fillText('Q', this.x + this.width/2 + 5, this.y - 20);
-        ctx.fillText('Q̄', this.x + this.width/2 + 5, this.y + 20);
+        ctx.textAlign = 'right';
+        ctx.fillText('Q', this.x + this.width/2 - Gate.squareLabelOffset, this.y - 10);
+        ctx.fillText('Q̄', this.x + this.width/2 - Gate.squareLabelOffset, this.y + 20);
 
         // Draw nodes with colored outputs
         this.drawNodes(ctx);
@@ -1404,7 +1407,7 @@ class OneBitLatch extends Gate {
         this.height = 60;
         this.internalState = false;
         this.lastClockState = false;
-        this.label = 'Bit';
+        this.label = 'BIT';
         
         // Initialize with 2 input nodes (data and clock) and 1 output node
         this.inputNodes = [
@@ -1428,15 +1431,15 @@ class OneBitLatch extends Gate {
         
         // Draw label
         ctx.fillStyle = '#000';
-        ctx.font = '12px Arial';
+        ctx.font = Gate.squareFont;
         ctx.textAlign = 'center';
-        ctx.fillText(this.label, this.x, this.y - 8);
+        ctx.fillText(this.label, this.x, this.y);
         
         // Draw input labels
-        ctx.font = '10px Arial';
-        ctx.textAlign = 'right';
-        ctx.fillText('D', this.x - this.width/2 - 5, this.y - 15);  // Data input
-        ctx.fillText('CLK', this.x - this.width/2 - 5, this.y + 15); // Clock input
+        ctx.font = Gate.squareFont;
+        ctx.textAlign = 'left';
+        ctx.fillText('D', this.x - this.width/2 + 7, this.y - Gate.twoInputSquareVeritcalOffset);  // Data input
+        ctx.fillText('CLK', this.x - this.width/2 + 7, this.y + Gate.twoInputSquareVeritcalOffset); // Clock input
         
         // Draw nodes with colored output
         this.drawNodes(ctx);
@@ -1483,11 +1486,11 @@ class OneBitLatch extends Gate {
     updateConnectionPoints() {
         // Data input on left side, upper position
         this.inputNodes[0].x = this.x - this.width/2;
-        this.inputNodes[0].y = this.y - 15;
+        this.inputNodes[0].y = this.y - Gate.twoInputSquareVeritcalOffset;
         
         // Clock input on left side, lower position
         this.inputNodes[1].x = this.x - this.width/2;
-        this.inputNodes[1].y = this.y + 15;
+        this.inputNodes[1].y = this.y + Gate.twoInputSquareVeritcalOffset;
         
         // Output on right side, center
         this.outputNodes[0].x = this.x + this.width/2;
@@ -1525,15 +1528,15 @@ class SRFlipFlop extends Gate {
         ctx.stroke();
         
         // Draw labels
-        ctx.font = '12px Arial';
+        ctx.font = Gate.squareFont;
         ctx.fillStyle = '#000';
         ctx.textAlign = 'left';
-        ctx.fillText('S', this.x - this.width/2 + 5, this.y - 10);
-        ctx.fillText('R', this.x - this.width/2 + 5, this.y + 20);
+        ctx.fillText('S', this.x - this.width/2 + Gate.squareLabelOffset, this.y - 10);
+        ctx.fillText('R', this.x - this.width/2 + Gate.squareLabelOffset, this.y + 20);
         
         ctx.textAlign = 'right';
-        ctx.fillText('Q', this.x + this.width/2 - 5, this.y - 10);
-        ctx.fillText('Q̄', this.x + this.width/2 - 5, this.y + 20);
+        ctx.fillText('Q', this.x + this.width/2 - Gate.squareLabelOffset, this.y - 10);
+        ctx.fillText('Q̄', this.x + this.width/2 - Gate.squareLabelOffset, this.y + 20);
         
         // Draw label in center
         ctx.textAlign = 'center';
@@ -1580,14 +1583,14 @@ class SRFlipFlop extends Gate {
     updateConnectionPoints() {
         // Set input positions (left side)
         this.inputNodes[0].x = this.x - this.width/2; // S input
-        this.inputNodes[0].y = this.y - 15;
+        this.inputNodes[0].y = this.y - Gate.twoInputSquareVeritcalOffset;
         this.inputNodes[1].x = this.x - this.width/2; // R input
-        this.inputNodes[1].y = this.y + 15;
+        this.inputNodes[1].y = this.y + Gate.twoInputSquareVeritcalOffset;
         
         // Set output positions (right side)
         this.outputNodes[0].x = this.x + this.width/2; // Q output
-        this.outputNodes[0].y = this.y - 15;
+        this.outputNodes[0].y = this.y - Gate.twoInputSquareVeritcalOffset;
         this.outputNodes[1].x = this.x + this.width/2; // Q̄ output
-        this.outputNodes[1].y = this.y + 15;
+        this.outputNodes[1].y = this.y + Gate.twoInputSquareVeritcalOffset;
     }
 } 
