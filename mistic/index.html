@@ -5,6 +5,7 @@
     <button onclick="setLayer('P+ diffusion')">P+ Diffusion</button>
     <button onclick="setLayer('contact')">Contact</button>
     <button onclick="setLayer('metal')">Metal</button>
+    <button onclick="setLayer('erase')">Erase</button>
     <button onclick="clearCanvas()">Clear All</button>
 </div>
 <canvas id="vlsiCanvas" width="400" height="400" style="border:1px solid #000000;"></canvas>
@@ -22,6 +23,7 @@
     };
     let currentLayer = '';
     let isDrawing = false;
+    let startX, startY; // Track starting position
     const grid = Array(20).fill().map(() => Array(20).fill().map(() => Array(5).fill(false))); // 20x20x5 grid
 
     function setLayer(layer) {
@@ -35,30 +37,70 @@
 
     canvas.addEventListener('mousedown', function(event) {
         isDrawing = true;
-        draw(event);
+        const rect = canvas.getBoundingClientRect();
+        startX = Math.floor((event.clientX - rect.left) / tileSize);
+        startY = Math.floor((event.clientY - rect.top) / tileSize);
     });
 
     canvas.addEventListener('mousemove', function(event) {
         if (isDrawing) {
-            draw(event);
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.floor((event.clientX - rect.left) / tileSize);
+            const y = Math.floor((event.clientY - rect.top) / tileSize);
+            drawRubberBand(startX, startY, x, y); // Draw the rubber band effect
         }
     });
 
-    canvas.addEventListener('mouseup', function() {
+    canvas.addEventListener('mouseup', function(event) {
         isDrawing = false;
-        ctx.beginPath();
-    });
-
-    function draw(event) {
         const rect = canvas.getBoundingClientRect();
         const x = Math.floor((event.clientX - rect.left) / tileSize);
         const y = Math.floor((event.clientY - rect.top) / tileSize);
+        fillTiles(startX, startY, x, y); // Fill or erase tiles once the mouse is released
+        ctx.beginPath(); // Reset the path
+    });
 
-        // Determine the layer index based on the current layer
-        const layerIndex = getLayerIndex(currentLayer);
-        if (layerIndex !== -1) {
-            grid[y][x][layerIndex] = true; // Mark the layer as drawn
-            redrawTile(x, y); // Redraw the tile
+    function drawRubberBand(startX, startY, endX, endY) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+        redrawAllTiles(); // Redraw all tiles to maintain their state
+
+        // Draw the rubber band rectangle
+        const x1 = Math.min(startX, endX);
+        const y1 = Math.min(startY, endY);
+        const x2 = Math.max(startX, endX);
+        const y2 = Math.max(startY, endY);
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)'; // Rubber band color
+        ctx.lineWidth = 2;
+        ctx.strokeRect(x1 * tileSize, y1 * tileSize, (x2 - x1 + 1) * tileSize, (y2 - y1 + 1) * tileSize);
+    }
+
+    function fillTiles(startX, startY, endX, endY) {
+        const x1 = Math.min(startX, endX);
+        const y1 = Math.min(startY, endY);
+        const x2 = Math.max(startX, endX);
+        const y2 = Math.max(startY, endY);
+
+        for (let i = y1; i <= y2; i++) {
+            for (let j = x1; j <= x2; j++) {
+                const layerIndex = getLayerIndex(currentLayer);
+                if (currentLayer === 'erase') {
+                    // Erase all layers at the current tile
+                    for (let k = 0; k < 5; k++) {
+                        grid[i][j][k] = false; // Mark all layers as not drawn
+                    }
+                } else if (layerIndex !== -1) {
+                    grid[i][j][layerIndex] = true; // Mark the layer as drawn
+                }
+            }
+        }
+        redrawAllTiles(); // Redraw all tiles after filling or erasing
+    }
+
+    function redrawAllTiles() {
+        for (let i = 0; i < grid.length; i++) {
+            for (let j = 0; j < grid[i].length; j++) {
+                redrawTile(j, i); // Redraw each tile
+            }
         }
     }
 
@@ -79,6 +121,7 @@
             case 'P+ diffusion': return 2;
             case 'contact': return 3;
             case 'metal': return 4;
+            case 'erase': return -1; // Invalid layer for index
             default: return -1; // Invalid layer
         }
     }
