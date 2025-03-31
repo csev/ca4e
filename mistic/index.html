@@ -1,4 +1,4 @@
-<h1>VLSI LAYOUT like Magic</h1>
+<h1>Mistic VLSI Layout</h1>
 <div id="toolbar">
     <button onclick="setLayer('polysilicon')">Polysilicon</button>
     <button onclick="setLayer('N+ diffusion')">N+ Diffusion</button>
@@ -40,10 +40,18 @@
         const rect = canvas.getBoundingClientRect();
         startX = Math.floor((event.clientX - rect.left) / tileSize);
         startY = Math.floor((event.clientY - rect.top) / tileSize);
+        
+        // Handle the contact layer separately
+        if (currentLayer === 'contact') {
+            grid[startY][startX][3] = true; // Mark the contact layer as drawn
+            redrawTile(startX, startY); // Redraw the tile immediately
+            isDrawing = false; // Stop drawing after setting the contact
+            return; // Exit early for contact
+        }
     });
 
     canvas.addEventListener('mousemove', function(event) {
-        if (isDrawing) {
+        if (isDrawing && currentLayer !== 'contact') { // Only draw rubber band if not contact
             const rect = canvas.getBoundingClientRect();
             const x = Math.floor((event.clientX - rect.left) / tileSize);
             const y = Math.floor((event.clientY - rect.top) / tileSize);
@@ -52,11 +60,13 @@
     });
 
     canvas.addEventListener('mouseup', function(event) {
-        isDrawing = false;
-        const rect = canvas.getBoundingClientRect();
-        const x = Math.floor((event.clientX - rect.left) / tileSize);
-        const y = Math.floor((event.clientY - rect.top) / tileSize);
-        fillTiles(startX, startY, x, y); // Fill or erase tiles once the mouse is released
+        if (currentLayer !== 'contact') { // Only fill tiles if not contact
+            isDrawing = false;
+            const rect = canvas.getBoundingClientRect();
+            const x = Math.floor((event.clientX - rect.left) / tileSize);
+            const y = Math.floor((event.clientY - rect.top) / tileSize);
+            fillTiles(startX, startY, x, y); // Fill or erase tiles once the mouse is released
+        }
         ctx.beginPath(); // Reset the path
     });
 
@@ -122,8 +132,7 @@
         ctx.strokeStyle = 'black'; // Color for the lines
         ctx.lineWidth = 2; // Line width
         ctx.beginPath();
-        // Draw a black rectangle for the contact, inset by 2.5 pixels (1/8 of tile size)
-        const inset = tileSize / 4; // 1/4 of the tile size
+        const inset = tileSize / 4;
         ctx.strokeRect(x * tileSize + inset, y * tileSize + inset, tileSize - inset * 2, tileSize - inset * 2);
         // Draw diagonal lines
         ctx.moveTo(x * tileSize + inset, y * tileSize + inset);
