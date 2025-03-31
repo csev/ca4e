@@ -47,6 +47,10 @@
         
         // Handle the contact, VCC, and GND layers separately
         if (['contact', 'VCC', 'GND'].includes(currentLayer)) {
+            grid[startY][startX][getLayerIndex('contact')] = false; // Mark the layer as drawn
+            grid[startY][startX][getLayerIndex('VCC')] = false; // Mark the layer as drawn
+            grid[startY][startX][getLayerIndex('GND')] = false; // Mark the layer as drawn
+
             grid[startY][startX][getLayerIndex(currentLayer)] = true; // Mark the layer as drawn
             redrawTile(startX, startY); // Redraw the tile immediately
             isDrawing = false; // Stop drawing after setting the layer
