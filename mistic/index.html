@@ -122,13 +122,14 @@
         ctx.strokeStyle = 'black'; // Color for the lines
         ctx.lineWidth = 2; // Line width
         ctx.beginPath();
-        // Draw a black rectangle for the contact
-        ctx.strokeRect(x * tileSize, y * tileSize, tileSize, tileSize);
+        // Draw a black rectangle for the contact, inset by 2.5 pixels (1/8 of tile size)
+        const inset = tileSize / 4; // 1/4 of the tile size
+        ctx.strokeRect(x * tileSize + inset, y * tileSize + inset, tileSize - inset * 2, tileSize - inset * 2);
         // Draw diagonal lines
-        ctx.moveTo(x * tileSize, y * tileSize);
-        ctx.lineTo((x + 1) * tileSize, (y + 1) * tileSize); // Top-left to bottom-right
-        ctx.moveTo((x + 1) * tileSize, y * tileSize);
-        ctx.lineTo(x * tileSize, (y + 1) * tileSize); // Top-right to bottom-left
+        ctx.moveTo(x * tileSize + inset, y * tileSize + inset);
+        ctx.lineTo((x + 1) * tileSize - inset, (y + 1) * tileSize - inset); // Top-left to bottom-right
+        ctx.moveTo((x + 1) * tileSize - inset, y * tileSize + inset);
+        ctx.lineTo(x * tileSize + inset, (y + 1) * tileSize - inset); // Top-right to bottom-left
         ctx.stroke();
     }
 
