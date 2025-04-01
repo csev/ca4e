@@ -72,6 +72,14 @@
                     'GND': 'rgba(0, 0, 0, 0)'
                 };
 
+                const layerPolysilicon = 0;
+                const layerNPlus = 1;
+                const layerPPlus = 2;
+                const layerContact = 3;
+                const layerMetal = 4;
+                const layerVCC = 5;
+                const layerGND = 6;
+
                 let currentLayer = '';
                 let isDrawing = false;
                 let startX, startY;
@@ -223,10 +231,14 @@
                             } else {
                                 ctx.fillStyle = Object.values(layers)[i];
                                 ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
-                                if (grid[y][x][3] || grid[y][x][5] || grid[y][x][6]) {
+                                if (grid[y][x][layerContact] || grid[y][x][layerVCC] || grid[y][x][layerGND]) {
                                     // No voltage
                                 } else {
-                                    if (voltage == 1) {
+                                    if ( i == layerNPlus && grid[y][x][layerPolysilicon] && volts[y][x][layerPolysilicon] == -1) {
+                                        drawText(x, y, '🚫');
+                                    } else if (i == layerPPlus && grid[y][x][layerPolysilicon] && volts[y][x][layerPolysilicon] == 1) {
+                                        drawText(x, y, '🚫');
+                                    } else if (voltage == 1) {
                                         drawText(x, y, '+');
                                     } else if (voltage == -1) {
                                         drawText(x, y, '-');
@@ -268,20 +280,19 @@
 
                 function getLayerIndex(layer) {
                     switch (layer) {
-                        case 'polysilicon': return 0;
-                        case 'N+ diffusion': return 1;
-                        case 'P+ diffusion': return 2;
-                        case 'contact': return 3;
-                        case 'metal': return 4;
-                        case 'VCC': return 5;
-                        case 'GND': return 6;
+                        case 'polysilicon': return layerPolysilicon;
+                        case 'N+ diffusion': return layerNPlus;
+                        case 'P+ diffusion': return layerPPlus;
+                        case 'contact': return layerContact;
+                        case 'metal': return layerMetal;
+                        case 'VCC': return layerVCC;
+                        case 'GND': return layerGND;
                         case 'erase': return -1;
                         default: return -1;
                     }
                 }
 
                 function compute() {
-                    console.log("compute");
                     for (let i = 0; i < grid.length; i++) {
                         for (let j = 0; j < grid[i].length; j++) {
                             for (let l = 0; l < 7; l++) {
@@ -292,12 +303,12 @@
 
                     for (let i = 0; i < grid.length; i++) {
                         for (let j = 0; j < grid[i].length; j++) {
-                            if (grid[i][j][5]) {
+                            if (grid[i][j][layerVCC]) {
                                 for (let l = 0; l < 7; l++) {
                                     volts[i][j][l] = 1;
                                 }
                             }
-                            if (grid[i][j][6]) {
+                            if (grid[i][j][layerGND]) {
                                 for (let l = 0; l < 7; l++) {
                                     volts[i][j][l] = -1;
                                 }
@@ -322,7 +333,7 @@
 
                         for (let i = 0; i < grid.length; i++) {
                             for (let j = 0; j < grid[i].length; j++) {
-                                if (grid[i][j][3]) {
+                                if (grid[i][j][layerContact]) {
                                     voltage = 0;
                                     for (let l = 0; l < 7; l++) {
                                         if (volts[i][j][l] != 0) voltage = volts[i][j][l];
@@ -348,8 +359,8 @@
                     if (!grid[i][j][l]) return false;
                     if (volts[i][j][l] == voltage) return false;
 
-                    if (l == 1 && grid[i][j][0] && volts[i][j][0] != 1) return;
-                    if (l == 2 && grid[i][j][0] && volts[i][j][0] != -1) return;
+                    if (l == layerNPlus && grid[i][j][layerPolysilicon] && volts[i][j][layerPolysilicon] != 1) return;
+                    if (l == layerPPlus && grid[i][j][layerPolysilicon] && volts[i][j][layerPolysilicon] != -1) return;
 
                     volts[i][j][l] = voltage;
 
