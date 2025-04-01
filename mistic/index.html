@@ -145,10 +145,14 @@
                 } else {
                     ctx.fillStyle = Object.values(layers)[i]; // Get the color for the layer
                     ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
-                    if ( voltage == 1) {
-                        drawText(x, y, '+');
-                    } else if ( voltage == -1 ) {
-                        drawText(x, y, '-');
+                    if ( grid[y][x][3] || grid[y][x][5] || grid[y][x][6] ) {
+                        // No voltage
+                    } else {
+                        if ( voltage == 1) {
+                            drawText(x, y, '+');
+                        } else if ( voltage == -1 ) {
+                            drawText(x, y, '-');
+                        }
                     }
                 }
             }
