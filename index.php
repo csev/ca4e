@@ -76,10 +76,10 @@ the sample content in various stages of completion:
       <a href="cmos/index.html" target="_blank" class="text-primary">DC Logic Builder</a>
     </li>
     <li>
-      <a href="gates/index.html" target="_blank" class="text-primary">Digital Logic Builder</a>
+      <a href="mistic/index.html" target="_blank" class="text-primary">A Simple VLSI Layout Builder</a>
     </li>
     <li>
-      <a href="mistic/index.html" target="_blank" class="text-primary">A Simple VLSI Layout Builder</a>
+      <a href="gates/index.html" target="_blank" class="text-primary">Digital Logic Builder</a>
     </li>
 <li>
 <a href="cdc8512/index.html"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator Prototype</a> (A UI Mockup - not working)
