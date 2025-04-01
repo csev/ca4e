@@ -221,6 +221,11 @@
                         volts[i][j][l] = 1;
                     }
                 }
+                if (grid[i][j][6]) {
+                    for (let l = 0; l < 7; l++) {
+                        volts[i][j][l] = -1;
+                    }
+                }
             }
         }
 
@@ -283,6 +288,12 @@
         // Is the new tile conected to the current layer
         if ( ! grid[i][j][l] ) return false;
         if ( volts[i][j][l] == voltage ) return false;
+
+        // If this is p diffusion or n diffusion, it stops at a polysilicon intersection
+        // unless there is a GND/VDD in place
+        
+        if ( l == 1 && grid[i][j][0] && volts[i][j][0] != 1 ) return;
+        if ( l == 2 && grid[i][j][0] && volts[i][j][0] != -1 ) return;
 
         volts[i][j][l] = voltage;
 
