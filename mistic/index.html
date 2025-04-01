@@ -23,7 +23,7 @@
     <button onclick="setLayer('VCC')" style="background-color: rgba(0, 0, 0, 0);">VCC</button>
     <button onclick="setLayer('GND')" style="background-color: rgba(0, 0, 0, 0);">GND</button>
     <button onclick="setLayer('erase')" style="background-color: rgba(255, 255, 255, 1);">🧽</button>
-    <button onclick="clearCanvas()">🗑️</button>
+    <button onclick="confirmClear()">🗑️</button>
 </div>
 <canvas id="vlsiCanvas" width="600" height="600" style="border:1px solid #000000;"></canvas>
 
@@ -55,6 +55,12 @@
     function clearCanvas() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         grid.forEach(row => row.forEach(col => col.fill(false))); // Reset the grid
+    }
+
+    function confirmClear() {
+        if (confirm("Are you sure you want to clear the entire canvas? This action cannot be undone.")) {
+            clearCanvas();
+        }
     }
 
     function getEventCoordinates(event) {
