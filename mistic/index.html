@@ -1,385 +1,365 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mistic VLSI Layout</title>
-    <style>
-    h1 {
-        font-size: 1.5em; /* Adjust the font size as needed */
-        margin-bottom: 10px; /* Reduce the space below the h1 */
-    }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mistic VLSI Layout</title>
+        <style>
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 10px;
+            }
 
-    #toolbar {
-        margin-bottom: 10px;
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-        justify-content: center;
-        padding: 8px;
-    }
+            #toolbar {
+                margin-bottom: 10px;
+                display: flex;
+                gap: 6px;
+                flex-wrap: wrap;
+                justify-content: center;
+                padding: 8px;
+            }
 
-    #toolbar button {
-        font-size: 14px;
-        padding: 8px 15px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        cursor: pointer;
-        min-width: 60px;
-        transition: all 0.2s ease;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
+            #toolbar button {
+                font-size: 14px;
+                padding: 8px 15px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+                cursor: pointer;
+                min-width: 60px;
+                transition: all 0.2s ease;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
 
-    #toolbar button:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
+            #toolbar button:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            }
 
-    #toolbar button:active {
-        transform: translateY(1px);
-        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
-    }
-    </style>
-</head>
-<body>
-    <center>
-<h1>Mistic VLSI Layout</h1>
-<div id="toolbar">
-    <button onclick="setLayer('polysilicon')" style="background-color: rgba(255, 0, 0, 0.2);">Poly</button>
-    <button onclick="setLayer('N+ diffusion')" style="background-color: rgba(0, 255, 0, 0.3);">N+</button>
-    <button onclick="setLayer('P+ diffusion')" style="background-color: rgba(255, 165, 0, 0.5);">P+</button>
-    <button onclick="setLayer('contact')" style="background-color: rgba(0, 0, 0, 0.3); color: white;">Via</button>
-    <button onclick="setLayer('metal')" style="background-color: rgba(0, 0, 255, 0.3);">Metal</button>
-    <button onclick="setLayer('VCC')" style="background-color: #f0f0f0;">VCC</button>
-    <button onclick="setLayer('GND')" style="background-color: #f0f0f0;">GND</button>
-    <button onclick="setLayer('erase')" style="background-color: rgba(255, 255, 255, 1);">🧽</button>
-    <button onclick="confirmClear()" style="background-color: #ffe6e6;">🗑️</button>
-</div>
-<canvas id="vlsiCanvas" width="600" height="600" style="border:1px solid #000000;"></canvas>
+            #toolbar button:active {
+                transform: translateY(1px);
+                box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+            }
+        </style>
+    </head>
+    <body>
+        <center>
+            <h1>Mistic VLSI Layout</h1>
+            <div id="toolbar">
+                <button onclick="setLayer('polysilicon')" style="background-color: rgba(255, 0, 0, 0.2);">Poly</button>
+                <button onclick="setLayer('N+ diffusion')" style="background-color: rgba(0, 255, 0, 0.3);">N+</button>
+                <button onclick="setLayer('P+ diffusion')" style="background-color: rgba(255, 165, 0, 0.5);">P+</button>
+                <button onclick="setLayer('contact')" style="background-color: rgba(0, 0, 0, 0.3); color: white;">Via</button>
+                <button onclick="setLayer('metal')" style="background-color: rgba(0, 0, 255, 0.3);">Metal</button>
+                <button onclick="setLayer('VCC')" style="background-color: #f0f0f0;">VCC</button>
+                <button onclick="setLayer('GND')" style="background-color: #f0f0f0;">GND</button>
+                <button onclick="setLayer('erase')" style="background-color: rgba(255, 255, 255, 1);">🧽</button>
+                <button onclick="confirmClear()" style="background-color: #ffe6e6;">🗑️</button>
+            </div>
+            <canvas id="vlsiCanvas" width="600" height="600" style="border:1px solid #000000;"></canvas>
 
-<script>
-    const canvas = document.getElementById('vlsiCanvas');
-    const ctx = canvas.getContext('2d');
-    const tileSize = 20;
-    const gridSize = 30;
-    const layers = {
-        'polysilicon': 'rgba(255, 0, 0, 0.2)', // Light Red
-        'N+ diffusion': 'rgba(0, 255, 0, 0.3)', // Light Green
-        'P+ diffusion': 'rgba(255, 165, 0, 0.5)', // Light Orange
-        'contact': 'rgba(0, 0, 0, 0.3)', // Light Black (not used for filling)
-        'metal': 'rgba(0, 0, 255, 0.3)', // Light Blue
-        'VCC': 'rgba(0, 0, 0, 0)', // Transparent for VCC
-        'GND': 'rgba(0, 0, 0, 0)' // Transparent for GND
-    };
+            <script>
+                const canvas = document.getElementById('vlsiCanvas');
+                const ctx = canvas.getContext('2d');
+                const tileSize = 20;
+                const gridSize = 30;
+                const layers = {
+                    'polysilicon': 'rgba(255, 0, 0, 0.2)',
+                    'N+ diffusion': 'rgba(0, 255, 0, 0.3)',
+                    'P+ diffusion': 'rgba(255, 165, 0, 0.5)',
+                    'contact': 'rgba(0, 0, 0, 0.3)',
+                    'metal': 'rgba(0, 0, 255, 0.3)',
+                    'VCC': 'rgba(0, 0, 0, 0)',
+                    'GND': 'rgba(0, 0, 0, 0)'
+                };
 
-    let currentLayer = '';
-    let isDrawing = false;
-    let startX, startY; // Track starting position
-    const grid = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(7).fill(false))); // 20x20x7 grid
-    const volts = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(7).fill(false)));
+                let currentLayer = '';
+                let isDrawing = false;
+                let startX, startY;
+                const grid = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(7).fill(false)));
+                const volts = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(7).fill(false)));
 
-    function setLayer(layer) {
-        currentLayer = layer;
-    }
+                function setLayer(layer) {
+                    currentLayer = layer;
+                }
 
-    function clearCanvas() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        grid.forEach(row => row.forEach(col => col.fill(false))); // Reset the grid
-    }
+                function clearCanvas() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    grid.forEach(row => row.forEach(col => col.fill(false)));
+                }
 
-    function confirmClear() {
-        if (confirm("Are you sure you want to clear the entire canvas? This action cannot be undone.")) {
-            clearCanvas();
-        }
-    }
-
-    function getEventCoordinates(event) {
-        const rect = canvas.getBoundingClientRect();
-        let clientX, clientY;
-        
-        if (event.touches) { // Touch event
-            clientX = event.touches[0].clientX;
-            clientY = event.touches[0].clientY;
-        } else { // Mouse event
-            clientX = event.clientX;
-            clientY = event.clientY;
-        }
-        
-        return {
-            x: Math.floor((clientX - rect.left) / tileSize),
-            y: Math.floor((clientY - rect.top) / tileSize)
-        };
-    }
-
-    function handleStart(event) {
-        event.preventDefault(); // Prevent scrolling when touching the canvas
-        isDrawing = true;
-        const coords = getEventCoordinates(event);
-        startX = coords.x;
-        startY = coords.y;
-        
-        // Handle the contact, VCC, and GND layers separately
-        if (['contact', 'VCC', 'GND'].includes(currentLayer)) {
-            grid[startY][startX][getLayerIndex('contact')] = false;
-            grid[startY][startX][getLayerIndex('VCC')] = false;
-            grid[startY][startX][getLayerIndex('GND')] = false;
-
-            grid[startY][startX][getLayerIndex(currentLayer)] = true;
-            redrawTile(startX, startY);
-            isDrawing = false;
-            redrawAllTiles();
-            return;
-        }
-    }
-
-    function handleMove(event) {
-        if (!isDrawing || ['contact', 'VCC', 'GND'].includes(currentLayer)) return;
-        event.preventDefault();
-        const coords = getEventCoordinates(event);
-        drawRubberBand(startX, startY, coords.x, coords.y);
-    }
-
-    function handleEnd(event) {
-        if (!isDrawing) return;
-        event.preventDefault();
-        
-        if (currentLayer !== 'contact' && currentLayer !== 'VCC' && currentLayer !== 'GND') {
-            const coords = getEventCoordinates(event.changedTouches ? event.changedTouches[0] : event);
-            fillTiles(startX, startY, coords.x, coords.y);
-        }
-        isDrawing = false;
-        ctx.beginPath();
-    }
-
-    // Add touch event listeners
-    canvas.addEventListener('touchstart', handleStart, { passive: false });
-    canvas.addEventListener('touchmove', handleMove, { passive: false });
-    canvas.addEventListener('touchend', handleEnd, { passive: false });
-    canvas.addEventListener('touchcancel', handleEnd, { passive: false });
-
-    // Keep mouse event listeners but use the new handlers
-    canvas.addEventListener('mousedown', handleStart);
-    canvas.addEventListener('mousemove', handleMove);
-    canvas.addEventListener('mouseup', handleEnd);
-
-    function drawRubberBand(startX, startY, endX, endY) {
-        ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-        redrawAllTiles(); // Redraw all tiles to maintain their state
-
-        // Draw the rubber band rectangle
-        const x1 = Math.min(startX, endX);
-        const y1 = Math.min(startY, endY);
-        const x2 = Math.max(startX, endX);
-        const y2 = Math.max(startY, endY);
-        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)'; // Rubber band color
-        ctx.lineWidth = 2;
-        ctx.strokeRect(x1 * tileSize, y1 * tileSize, (x2 - x1 + 1) * tileSize, (y2 - y1 + 1) * tileSize);
-    }
-
-    function fillTiles(startX, startY, endX, endY) {
-        const x1 = Math.min(startX, endX);
-        const y1 = Math.min(startY, endY);
-        const x2 = Math.max(startX, endX);
-        const y2 = Math.max(startY, endY);
-
-        for (let i = y1; i <= y2; i++) {
-            for (let j = x1; j <= x2; j++) {
-                const layerIndex = getLayerIndex(currentLayer);
-                if (currentLayer === 'erase') {
-                    // Erase all layers at the current tile
-                    for (let k = 0; k < 7; k++) {
-                        grid[i][j][k] = false; // Mark all layers as not drawn
+                function confirmClear() {
+                    if (confirm("Are you sure you want to clear the entire canvas? This action cannot be undone.")) {
+                        clearCanvas();
                     }
-                } else if (layerIndex !== -1) {
-                    grid[i][j][layerIndex] = true; // Mark the layer as drawn
                 }
-            }
-        }
-        redrawAllTiles(); // Redraw all tiles after filling or erasing
-    }
 
-    function redrawAllTiles() {
-        compute();
-        for (let i = 0; i < grid.length; i++) {
-            for (let j = 0; j < grid[i].length; j++) {
-                redrawTile(j, i); // Redraw each tile
-            }
-        }
-    }
-
-    function redrawTile(x, y) {
-        ctx.clearRect(x * tileSize, y * tileSize, tileSize, tileSize); // Clear the tile
-        let voltage = 0;
-        for (let i = 0; i < 7; i++) { // Loop through all layers
-            if (grid[y][x][i]) {
-                if ( volts[y][x][i] == 1) {
-                    voltage = 1;
-                } else if ( volts[y][x][i] == -1) {
-                    voltage = -1;
-                }
-                if (i === 3) { // If the layer is 'contact'
-                    drawContactLines(x, y); // Draw the contact lines instead of filling
-                } else if (i === 5) { // If the layer is 'VCC'
-                    drawRectangle(x, y, 0);
-                    drawText(x, y, 'V'); // Draw VCC text
-                } else if (i === 6) { // If the layer is 'GND'
-                    drawRectangle(x, y, 0);
-                    drawText(x, y, 'G'); // Draw GND text
-                } else {
-                    ctx.fillStyle = Object.values(layers)[i]; // Get the color for the layer
-                    ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
-                    if ( grid[y][x][3] || grid[y][x][5] || grid[y][x][6] ) {
-                        // No voltage
+                function getEventCoordinates(event) {
+                    const rect = canvas.getBoundingClientRect();
+                    let clientX, clientY;
+                    
+                    if (event.touches) {
+                        clientX = event.touches[0].clientX;
+                        clientY = event.touches[0].clientY;
                     } else {
-                        if ( voltage == 1) {
-                            drawText(x, y, '+');
-                        } else if ( voltage == -1 ) {
-                            drawText(x, y, '-');
-                        }
+                        clientX = event.clientX;
+                        clientY = event.clientY;
+                    }
+                    
+                    return {
+                        x: Math.floor((clientX - rect.left) / tileSize),
+                        y: Math.floor((clientY - rect.top) / tileSize)
+                    };
+                }
+
+                function handleStart(event) {
+                    event.preventDefault();
+                    isDrawing = true;
+                    const coords = getEventCoordinates(event);
+                    startX = coords.x;
+                    startY = coords.y;
+                    
+                    if (['contact', 'VCC', 'GND'].includes(currentLayer)) {
+                        grid[startY][startX][getLayerIndex('contact')] = false;
+                        grid[startY][startX][getLayerIndex('VCC')] = false;
+                        grid[startY][startX][getLayerIndex('GND')] = false;
+
+                        grid[startY][startX][getLayerIndex(currentLayer)] = true;
+                        redrawTile(startX, startY);
+                        isDrawing = false;
+                        redrawAllTiles();
+                        return;
                     }
                 }
-            }
-        }
-    }
 
-    function drawRectangle(x, y, inset) {
-        ctx.strokeStyle = 'black'; // Color for the lines
-        ctx.lineWidth = 2; // Line width
-        ctx.beginPath();
-        // Draw a black rectangle for the contact, inset by 2.5 pixels (1/8 of tile size)
-        ctx.strokeRect(x * tileSize + inset, y * tileSize + inset, tileSize - inset * 2, tileSize - inset * 2);
-        ctx.stroke();
-    }
-    
-    function drawContactLines(x, y) {
-        const inset = tileSize / 4; 
-        drawRectangle(x, y, inset);
-        ctx.strokeStyle = 'black'; // Color for the lines
-        ctx.lineWidth = 2; // Line width
-        ctx.beginPath();
-        ctx.moveTo(x * tileSize + inset, y * tileSize + inset);
-        ctx.lineTo((x + 1) * tileSize - inset, (y + 1) * tileSize - inset); // Top-left to bottom-right
-        ctx.moveTo((x + 1) * tileSize - inset, y * tileSize + inset);
-        ctx.lineTo(x * tileSize + inset, (y + 1) * tileSize - inset); // Top-right to bottom-left
-        ctx.stroke();
-    }
-
-    function drawText(x, y, text) {
-        ctx.fillStyle = 'black'; // Color for the text
-        ctx.font = 'bold 12px Arial'; // Font style
-        ctx.textAlign = 'center'; // Center the text
-        ctx.textBaseline = 'middle'; // Middle alignment
-        ctx.fillText(text, x * tileSize + tileSize / 2, y * tileSize + tileSize / 2); // Draw the text in the center of the tile
-    }
-
-    function getLayerIndex(layer) {
-        switch (layer) {
-            case 'polysilicon': return 0;
-            case 'N+ diffusion': return 1;
-            case 'P+ diffusion': return 2;
-            case 'contact': return 3;
-            case 'metal': return 4;
-            case 'VCC': return 5; // New layer index for VCC
-            case 'GND': return 6; // New layer index for GND
-            case 'erase': return -1; // Invalid layer for index
-            default: return -1; // Invalid layer
-        }
-    }
-
-    function compute() {
-        console.log("compute");
-        // Reset the voltage of each tile
-        for (let i = 0; i < grid.length; i++) {
-            for (let j = 0; j < grid[i].length; j++) {
-                for (let l = 0; l < 7; l++) {
-                    volts[i][j][l] = 0;
+                function handleMove(event) {
+                    if (!isDrawing || ['contact', 'VCC', 'GND'].includes(currentLayer)) return;
+                    event.preventDefault();
+                    const coords = getEventCoordinates(event);
+                    drawRubberBand(startX, startY, coords.x, coords.y);
                 }
-            }
-        }
 
-        // Set all layers with VCC or GND to the correct voltage
-        for (let i = 0; i < grid.length; i++) {
-            for (let j = 0; j < grid[i].length; j++) {
-                if (grid[i][j][5]) {
-                    for (let l = 0; l < 7; l++) {
-                        volts[i][j][l] = 1;
+                function handleEnd(event) {
+                    if (!isDrawing) return;
+                    event.preventDefault();
+                    
+                    if (currentLayer !== 'contact' && currentLayer !== 'VCC' && currentLayer !== 'GND') {
+                        const coords = getEventCoordinates(event.changedTouches ? event.changedTouches[0] : event);
+                        fillTiles(startX, startY, coords.x, coords.y);
                     }
+                    isDrawing = false;
+                    ctx.beginPath();
                 }
-                if (grid[i][j][6]) {
-                    for (let l = 0; l < 7; l++) {
-                        volts[i][j][l] = -1;
-                    }
-                }
-            }
-        }
 
-        for ( let phase = 0 ; phase < 5; phase++ ) {
-            changed = false;
-            // Propogate voltages across layers
-            for (let i = 0; i < grid.length; i++) {
-                for (let j = 0; j < grid[i].length; j++) {
-                    for (let l = 0; l < 7; l++) {
-                        if (grid[i][j][l] && volts[i][j][l] != 0 ) {
-                            changed = changed | propogateVoltage(volts[i][j][l], i-1, j, l);
-                            changed = changed | propogateVoltage(volts[i][j][l], i, j-1, l);
-                            changed = changed | propogateVoltage(volts[i][j][l], i+1, j, l);
-                            changed = changed | propogateVoltage(volts[i][j][l], i, j+1, l);
-                        }
-                    }
-                }
-            }
+                canvas.addEventListener('touchstart', handleStart, { passive: false });
+                canvas.addEventListener('touchmove', handleMove, { passive: false });
+                canvas.addEventListener('touchend', handleEnd, { passive: false });
+                canvas.addEventListener('touchcancel', handleEnd, { passive: false });
 
-            for (let i = 0; i < grid.length; i++) {
-                for (let j = 0; j < grid[i].length; j++) {
-                    if (grid[i][j][3]) { // connection
-                        voltage = 0;
-                        for (let l = 0; l < 7; l++) {
-                            if ( volts[i][j][l] != 0 ) voltage = volts[i][j][l];
-                        }
-                        for (let l = 0; l < 7; l++) {
-                            if ( volts[i][j][l] != voltage ) {
-                                changed = true;
-                                volts[i][j][l] = voltage;
+                canvas.addEventListener('mousedown', handleStart);
+                canvas.addEventListener('mousemove', handleMove);
+                canvas.addEventListener('mouseup', handleEnd);
+
+                function drawRubberBand(startX, startY, endX, endY) {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    redrawAllTiles();
+
+                    const x1 = Math.min(startX, endX);
+                    const y1 = Math.min(startY, endY);
+                    const x2 = Math.max(startX, endX);
+                    const y2 = Math.max(startY, endY);
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(x1 * tileSize, y1 * tileSize, (x2 - x1 + 1) * tileSize, (y2 - y1 + 1) * tileSize);
+                }
+
+                function fillTiles(startX, startY, endX, endY) {
+                    const x1 = Math.min(startX, endX);
+                    const y1 = Math.min(startY, endY);
+                    const x2 = Math.max(startX, endX);
+                    const y2 = Math.max(startY, endY);
+
+                    for (let i = y1; i <= y2; i++) {
+                        for (let j = x1; j <= x2; j++) {
+                            const layerIndex = getLayerIndex(currentLayer);
+                            if (currentLayer === 'erase') {
+                                for (let k = 0; k < 7; k++) {
+                                    grid[i][j][k] = false;
+                                }
+                            } else if (layerIndex !== -1) {
+                                grid[i][j][layerIndex] = true;
                             }
                         }
-                    } 
+                    }
+                    redrawAllTiles();
                 }
-            }
 
-            if ( ! changed ) break;
-        }
+                function redrawAllTiles() {
+                    compute();
+                    for (let i = 0; i < grid.length; i++) {
+                        for (let j = 0; j < grid[i].length; j++) {
+                            redrawTile(j, i);
+                        }
+                    }
+                }
 
-    }
+                function redrawTile(x, y) {
+                    ctx.clearRect(x * tileSize, y * tileSize, tileSize, tileSize);
+                    let voltage = 0;
+                    for (let i = 0; i < 7; i++) {
+                        if (grid[y][x][i]) {
+                            if (volts[y][x][i] == 1) {
+                                voltage = 1;
+                            } else if (volts[y][x][i] == -1) {
+                                voltage = -1;
+                            }
+                            if (i === 3) {
+                                drawContactLines(x, y);
+                            } else if (i === 5) {
+                                drawRectangle(x, y, 0);
+                                drawText(x, y, 'V');
+                            } else if (i === 6) {
+                                drawRectangle(x, y, 0);
+                                drawText(x, y, 'G');
+                            } else {
+                                ctx.fillStyle = Object.values(layers)[i];
+                                ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+                                if (grid[y][x][3] || grid[y][x][5] || grid[y][x][6]) {
+                                    // No voltage
+                                } else {
+                                    if (voltage == 1) {
+                                        drawText(x, y, '+');
+                                    } else if (voltage == -1) {
+                                        drawText(x, y, '-');
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
 
-    function propogateVoltage(voltage, i, j, l) {
-        // Have we stepped outside the tiles
-        if ( i < 0 || i+1 > grid.length ) return false;
-        if ( j < 0 || j+1 > grid.length ) return false;
+                function drawRectangle(x, y, inset) {
+                    ctx.strokeStyle = 'black';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.strokeRect(x * tileSize + inset, y * tileSize + inset, tileSize - inset * 2, tileSize - inset * 2);
+                    ctx.stroke();
+                }
 
-        // Is the new tile conected to the current layer
-        if ( ! grid[i][j][l] ) return false;
-        if ( volts[i][j][l] == voltage ) return false;
+                function drawContactLines(x, y) {
+                    const inset = tileSize / 4;
+                    drawRectangle(x, y, inset);
+                    ctx.strokeStyle = 'black';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(x * tileSize + inset, y * tileSize + inset);
+                    ctx.lineTo((x + 1) * tileSize - inset, (y + 1) * tileSize - inset);
+                    ctx.moveTo((x + 1) * tileSize - inset, y * tileSize + inset);
+                    ctx.lineTo(x * tileSize + inset, (y + 1) * tileSize - inset);
+                    ctx.stroke();
+                }
 
-        // If we are propogateing P diffusion or N diffusion, voltage stops at a polysilicon intersection
-        // unless there is an appropriate GND/VDD in the polysilicon
-        
-        /*  case 'polysilicon': return 0;
-            case 'N+ diffusion': return 1;
-            case 'P+ diffusion': return 2; */
+                function drawText(x, y, text) {
+                    ctx.fillStyle = 'black';
+                    ctx.font = 'bold 12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(text, x * tileSize + tileSize / 2, y * tileSize + tileSize / 2);
+                }
 
-        if ( l == 1 && grid[i][j][0] && volts[i][j][0] != 1 ) return;
-        if ( l == 2 && grid[i][j][0] && volts[i][j][0] != -1 ) return;
+                function getLayerIndex(layer) {
+                    switch (layer) {
+                        case 'polysilicon': return 0;
+                        case 'N+ diffusion': return 1;
+                        case 'P+ diffusion': return 2;
+                        case 'contact': return 3;
+                        case 'metal': return 4;
+                        case 'VCC': return 5;
+                        case 'GND': return 6;
+                        case 'erase': return -1;
+                        default: return -1;
+                    }
+                }
 
-        volts[i][j][l] = voltage;
+                function compute() {
+                    console.log("compute");
+                    for (let i = 0; i < grid.length; i++) {
+                        for (let j = 0; j < grid[i].length; j++) {
+                            for (let l = 0; l < 7; l++) {
+                                volts[i][j][l] = 0;
+                            }
+                        }
+                    }
 
-        if ( i > 0 ) propogateVoltage(voltage, i-1, j, l);
-        if ( j > 0 ) propogateVoltage(voltage, i, j-1, l);
-        if ( i < grid.length-1 ) propogateVoltage(voltage, i+1, j, l);
-        if ( j < grid.length-1 ) propogateVoltage(voltage, i, j+1, l);
-        return true;
-    }
+                    for (let i = 0; i < grid.length; i++) {
+                        for (let j = 0; j < grid[i].length; j++) {
+                            if (grid[i][j][5]) {
+                                for (let l = 0; l < 7; l++) {
+                                    volts[i][j][l] = 1;
+                                }
+                            }
+                            if (grid[i][j][6]) {
+                                for (let l = 0; l < 7; l++) {
+                                    volts[i][j][l] = -1;
+                                }
+                            }
+                        }
+                    }
 
-</script>
-</center>
-</body>
+                    for (let phase = 0; phase < 5; phase++) {
+                        changed = false;
+                        for (let i = 0; i < grid.length; i++) {
+                            for (let j = 0; j < grid[i].length; j++) {
+                                for (let l = 0; l < 7; l++) {
+                                    if (grid[i][j][l] && volts[i][j][l] != 0) {
+                                        changed = changed | propogateVoltage(volts[i][j][l], i-1, j, l);
+                                        changed = changed | propogateVoltage(volts[i][j][l], i, j-1, l);
+                                        changed = changed | propogateVoltage(volts[i][j][l], i+1, j, l);
+                                        changed = changed | propogateVoltage(volts[i][j][l], i, j+1, l);
+                                    }
+                                }
+                            }
+                        }
+
+                        for (let i = 0; i < grid.length; i++) {
+                            for (let j = 0; j < grid[i].length; j++) {
+                                if (grid[i][j][3]) {
+                                    voltage = 0;
+                                    for (let l = 0; l < 7; l++) {
+                                        if (volts[i][j][l] != 0) voltage = volts[i][j][l];
+                                    }
+                                    for (let l = 0; l < 7; l++) {
+                                        if (volts[i][j][l] != voltage) {
+                                            changed = true;
+                                            volts[i][j][l] = voltage;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        if (!changed) break;
+                    }
+                }
+
+                function propogateVoltage(voltage, i, j, l) {
+                    if (i < 0 || i+1 > grid.length) return false;
+                    if (j < 0 || j+1 > grid.length) return false;
+
+                    if (!grid[i][j][l]) return false;
+                    if (volts[i][j][l] == voltage) return false;
+
+                    if (l == 1 && grid[i][j][0] && volts[i][j][0] != 1) return;
+                    if (l == 2 && grid[i][j][0] && volts[i][j][0] != -1) return;
+
+                    volts[i][j][l] = voltage;
+
+                    if (i > 0) propogateVoltage(voltage, i-1, j, l);
+                    if (j > 0) propogateVoltage(voltage, i, j-1, l);
+                    if (i < grid.length-1) propogateVoltage(voltage, i+1, j, l);
+                    if (j < grid.length-1) propogateVoltage(voltage, i, j+1, l);
+                    return true;
+                }
+            </script>
+        </center>
+    </body>
 </html>
