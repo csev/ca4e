@@ -1,16 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mistic VLSI Layout</title>
+</head>
+<body>
 <h1>Mistic VLSI Layout</h1>
 <div id="toolbar">
-    <button onclick="setLayer('polysilicon')">Polysilicon</button>
-    <button onclick="setLayer('N+ diffusion')">N+ Diffusion</button>
-    <button onclick="setLayer('P+ diffusion')">P+ Diffusion</button>
-    <button onclick="setLayer('contact')">Contact</button>
-    <button onclick="setLayer('metal')">Metal</button>
-    <button onclick="setLayer('VCC')">VCC</button>
-    <button onclick="setLayer('GND')">GND</button>
-    <button onclick="setLayer('erase')">Erase</button>
-    <!--
-    <button onclick="compute()">Compute</button> -->
-    <button onclick="clearCanvas()">Clear All</button>
+    <button onclick="setLayer('polysilicon')" style="background-color: rgba(255, 0, 0, 0.2);">Poly</button>
+    <button onclick="setLayer('N+ diffusion')" style="background-color: rgba(0, 255, 0, 0.3);">N+</button>
+    <button onclick="setLayer('P+ diffusion')" style="background-color: rgba(255, 165, 0, 0.5);">P+</button>
+    <button onclick="setLayer('contact')" style="background-color: rgba(0, 0, 0, 0.3);">Via</button>
+    <button onclick="setLayer('metal')" style="background-color: rgba(0, 0, 255, 0.3);">Metal</button>
+    <button onclick="setLayer('VCC')" style="background-color: rgba(0, 0, 0, 0);">VCC</button>
+    <button onclick="setLayer('GND')" style="background-color: rgba(0, 0, 0, 0);">GND</button>
+    <button onclick="setLayer('erase')" style="background-color: rgba(255, 255, 255, 1);">🧽</button>
+    <button onclick="clearCanvas()">🗑️</button>
 </div>
 <canvas id="vlsiCanvas" width="400" height="400" style="border:1px solid #000000;"></canvas>
 
@@ -301,3 +307,5 @@
     }
 
 </script>
+</body>
+</html>
