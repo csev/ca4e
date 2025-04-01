@@ -6,6 +6,7 @@
     <title>Mistic VLSI Layout</title>
 </head>
 <body>
+    <center>
 <h1>Mistic VLSI Layout</h1>
 <div id="toolbar">
     <button onclick="setLayer('polysilicon')" style="background-color: rgba(255, 0, 0, 0.2);">Poly</button>
@@ -18,12 +19,13 @@
     <button onclick="setLayer('erase')" style="background-color: rgba(255, 255, 255, 1);">🧽</button>
     <button onclick="clearCanvas()">🗑️</button>
 </div>
-<canvas id="vlsiCanvas" width="400" height="400" style="border:1px solid #000000;"></canvas>
+<canvas id="vlsiCanvas" width="600" height="600" style="border:1px solid #000000;"></canvas>
 
 <script>
     const canvas = document.getElementById('vlsiCanvas');
     const ctx = canvas.getContext('2d');
     const tileSize = 20;
+    const gridSize = 30;
     const layers = {
         'polysilicon': 'rgba(255, 0, 0, 0.2)', // Light Red
         'N+ diffusion': 'rgba(0, 255, 0, 0.3)', // Light Green
@@ -37,8 +39,8 @@
     let currentLayer = '';
     let isDrawing = false;
     let startX, startY; // Track starting position
-    const grid = Array(20).fill().map(() => Array(20).fill().map(() => Array(7).fill(false))); // 20x20x7 grid
-    const volts = Array(20).fill().map(() => Array(20).fill().map(() => Array(7).fill(false)));
+    const grid = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(7).fill(false))); // 20x20x7 grid
+    const volts = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(7).fill(false)));
 
     function setLayer(layer) {
         currentLayer = layer;
@@ -307,5 +309,6 @@
     }
 
 </script>
+</center>
 </body>
 </html>
