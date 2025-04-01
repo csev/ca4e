@@ -9,6 +9,36 @@
         font-size: 1.5em; /* Adjust the font size as needed */
         margin-bottom: 10px; /* Reduce the space below the h1 */
     }
+
+    #toolbar {
+        margin-bottom: 10px;
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        justify-content: center;
+        padding: 8px;
+    }
+
+    #toolbar button {
+        font-size: 14px;
+        padding: 8px 15px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        min-width: 60px;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    #toolbar button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    #toolbar button:active {
+        transform: translateY(1px);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
     </style>
 </head>
 <body>
@@ -18,12 +48,12 @@
     <button onclick="setLayer('polysilicon')" style="background-color: rgba(255, 0, 0, 0.2);">Poly</button>
     <button onclick="setLayer('N+ diffusion')" style="background-color: rgba(0, 255, 0, 0.3);">N+</button>
     <button onclick="setLayer('P+ diffusion')" style="background-color: rgba(255, 165, 0, 0.5);">P+</button>
-    <button onclick="setLayer('contact')" style="background-color: rgba(0, 0, 0, 0.3);">Via</button>
+    <button onclick="setLayer('contact')" style="background-color: rgba(0, 0, 0, 0.3); color: white;">Via</button>
     <button onclick="setLayer('metal')" style="background-color: rgba(0, 0, 255, 0.3);">Metal</button>
-    <button onclick="setLayer('VCC')" style="background-color: rgba(0, 0, 0, 0);">VCC</button>
-    <button onclick="setLayer('GND')" style="background-color: rgba(0, 0, 0, 0);">GND</button>
+    <button onclick="setLayer('VCC')" style="background-color: #f0f0f0;">VCC</button>
+    <button onclick="setLayer('GND')" style="background-color: #f0f0f0;">GND</button>
     <button onclick="setLayer('erase')" style="background-color: rgba(255, 255, 255, 1);">🧽</button>
-    <button onclick="confirmClear()">🗑️</button>
+    <button onclick="confirmClear()" style="background-color: #ffe6e6;">🗑️</button>
 </div>
 <canvas id="vlsiCanvas" width="600" height="600" style="border:1px solid #000000;"></canvas>
 
