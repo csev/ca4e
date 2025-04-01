@@ -7,7 +7,7 @@
     <button onclick="setLayer('metal')">Metal</button>
     <button onclick="setLayer('VCC')">VCC</button>
     <button onclick="setLayer('GND')">GND</button>
-    <button onclick="setLayer('erase')">Erase</button>
+    <button onclick="compute()">Compute</button>
     <button onclick="clearCanvas()">Clear All</button>
 </div>
 <canvas id="vlsiCanvas" width="400" height="400" style="border:1px solid #000000;"></canvas>
@@ -25,10 +25,12 @@
         'VCC': 'rgba(0, 0, 0, 0)', // Transparent for VCC
         'GND': 'rgba(0, 0, 0, 0)' // Transparent for GND
     };
+
     let currentLayer = '';
     let isDrawing = false;
     let startX, startY; // Track starting position
     const grid = Array(20).fill().map(() => Array(20).fill().map(() => Array(7).fill(false))); // 20x20x7 grid
+    const volts = Array(20).fill().map(() => Array(20).fill().map(() => Array(7).fill(false)));
 
     function setLayer(layer) {
         currentLayer = layer;
@@ -124,19 +126,30 @@
 
     function redrawTile(x, y) {
         ctx.clearRect(x * tileSize, y * tileSize, tileSize, tileSize); // Clear the tile
+        let voltage = 0;
         for (let i = 0; i < 7; i++) { // Loop through all layers
             if (grid[y][x][i]) {
+                if ( volts[y][x][i] == 1) {
+                    voltage = 1;
+                } else if ( volts[y][x][i] == -1) {
+                    voltage = -1;
+                }
                 if (i === 3) { // If the layer is 'contact'
                     drawContactLines(x, y); // Draw the contact lines instead of filling
                 } else if (i === 5) { // If the layer is 'VCC'
-                    drawRectangle(x, y, 0  )
+                    drawRectangle(x, y, 0);
                     drawText(x, y, 'V'); // Draw VCC text
                 } else if (i === 6) { // If the layer is 'GND'
-                    drawRectangle(x, y, 0)
+                    drawRectangle(x, y, 0);
                     drawText(x, y, 'G'); // Draw GND text
                 } else {
                     ctx.fillStyle = Object.values(layers)[i]; // Get the color for the layer
                     ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+                    if ( voltage == 1) {
+                        drawText(x, y, '+');
+                    } else if ( voltage == -1 ) {
+                        drawText(x, y, '-');
+                    }
                 }
             }
         }
@@ -185,4 +198,65 @@
             default: return -1; // Invalid layer
         }
     }
+
+    function compute() {
+        // Reset the voltage of each tile
+        for (let i = 0; i < grid.length; i++) {
+            for (let j = 0; j < grid[i].length; j++) {
+                for (let l = 0; l < 7; l++) {
+                    volts[i][j][l] = 0;
+                }
+            }
+        }
+
+        // Set all layers with VCC or GND to the correct voltage
+        for (let i = 0; i < grid.length; i++) {
+            for (let j = 0; j < grid[i].length; j++) {
+                if (grid[i][j][5]) {
+                    for (let l = 0; l < 7; l++) {
+                        volts[i][j][l] = 1;
+                    }
+                } else if (grid[i][j][6]) {
+                    for (let l = 0; l < 7; l++) {
+                        volts[i][j][l] = -1;
+                    }
+                }
+            }
+        }
+
+        // Propogate metal down metal paths
+        for (let i = 1; i < grid.length-1; i++) {
+            for (let j = 1; j < grid[i].length-1; j++) {
+                for (let l = 0; l < 7; l++) {
+                    if (grid[i][j][l] && volts[i][j][l] != 0 ) {
+                        propogateVoltage(volts[i][j][l], i-1, j, l);
+                        propogateVoltage(volts[i][j][l], i, j-1, l);
+                        propogateVoltage(volts[i][j][l], i+1, j, l);
+                        propogateVoltage(volts[i][j][l], i, j+1, l);
+                    }
+                }
+            }
+        }
+
+        // Set the voltage of the VCC and GND tiles
+        redrawAllTiles();
+    }
+
+    function propogateVoltage(voltage, i, j, l) {
+        // Have we stepped outside the tiles
+        if ( i < 0 || i+1 > grid.length ) return;
+        if ( j < 0 || j+1 > grid.length ) return;
+
+        // Is the new tile conected to the current layer
+        if ( ! grid[i][j][l] ) return;
+        if ( volts[i][j][l] == voltage ) return;
+
+        volts[i][j][l] = voltage;
+
+        if ( i > 0 ) propogateVoltage(voltage, i-1, j, l);
+        if ( j > 0 ) propogateVoltage(voltage, i, j-1, l);
+        if ( i < grid.length-1 ) propogateVoltage(voltage, i+1, j, l);
+        if ( j < grid.length-1 ) propogateVoltage(voltage, i, j+1, l);
+    }
+
 </script>
