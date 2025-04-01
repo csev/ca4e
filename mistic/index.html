@@ -223,11 +223,19 @@
                             if (i === 3) {
                                 drawContactLines(x, y);
                             } else if (i === 5) {
-                                drawRectangle(x, y, 0);
-                                drawText(x, y, 'V');
+                                if ( volts[y][x][i] == 100 ) {
+                                    drawText(x, y, '🔥');
+                                } else {
+                                    drawRectangle(x, y, 0);
+                                    drawText(x, y, 'V');
+                                }
                             } else if (i === 6) {
-                                drawRectangle(x, y, 0);
-                                drawText(x, y, 'G');
+                                if ( volts[y][x][i] == 100 ) {
+                                    drawText(x, y, '🔥');
+                                } else {
+                                    drawRectangle(x, y, 0);
+                                    drawText(x, y, 'G');
+                                }
                             } else {
                                 ctx.fillStyle = Object.values(layers)[i];
                                 ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
@@ -316,39 +324,43 @@
                         }
                     }
 
+                    let changed = true;
                     for (let phase = 0; phase < 5; phase++) {
-                        changed = false;
-                        for (let i = 0; i < grid.length; i++) {
-                            for (let j = 0; j < grid[i].length; j++) {
-                                for (let l = 0; l < 7; l++) {
-                                    if (grid[i][j][l] && volts[i][j][l] != 0) {
-                                        changed = changed | propogateVoltage(volts[i][j][l], i-1, j, l);
-                                        changed = changed | propogateVoltage(volts[i][j][l], i, j-1, l);
-                                        changed = changed | propogateVoltage(volts[i][j][l], i+1, j, l);
-                                        changed = changed | propogateVoltage(volts[i][j][l], i, j+1, l);
-                                    }
-                                }
-                            }
-                        }
-
-                        for (let i = 0; i < grid.length; i++) {
-                            for (let j = 0; j < grid[i].length; j++) {
-                                if (grid[i][j][layerContact]) {
-                                    voltage = 0;
+                        try {
+                            changed = false;
+                            for (let i = 0; i < grid.length; i++) {
+                                for (let j = 0; j < grid[i].length; j++) {
                                     for (let l = 0; l < 7; l++) {
-                                        if (volts[i][j][l] != 0) voltage = volts[i][j][l];
-                                    }
-                                    for (let l = 0; l < 7; l++) {
-                                        if (volts[i][j][l] != voltage) {
-                                            changed = true;
-                                            volts[i][j][l] = voltage;
+                                        if (grid[i][j][l] && volts[i][j][l] != 0) {
+                                            changed = changed | propogateVoltage(volts[i][j][l], i-1, j, l);
+                                            changed = changed | propogateVoltage(volts[i][j][l], i, j-1, l);
+                                            changed = changed | propogateVoltage(volts[i][j][l], i+1, j, l);
+                                            changed = changed | propogateVoltage(volts[i][j][l], i, j+1, l);
                                         }
                                     }
                                 }
                             }
-                        }
 
-                        if (!changed) break;
+                            for (let i = 0; i < grid.length; i++) {
+                                for (let j = 0; j < grid[i].length; j++) {
+                                    if (grid[i][j][layerContact]) {
+                                        voltage = 0;
+                                        for (let l = 0; l < 7; l++) {
+                                            if (volts[i][j][l] != 0) voltage = volts[i][j][l];
+                                        }
+                                        for (let l = 0; l < 7; l++) {
+                                            if (volts[i][j][l] != voltage) {
+                                                changed = true;
+                                                volts[i][j][l] = voltage;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (!changed) break;
+                        } catch (e) {
+                            break;
+                        }
                     }
                 }
 
@@ -357,6 +369,11 @@
                     if (j < 0 || j+1 > grid.length) return false;
 
                     if (!grid[i][j][l]) return false;
+                    if (volts[i][j][l] == -1*voltage && voltage != 0) {
+                        console.log('short detected', i, j, l);
+                        for ( let ll = 0; ll < 7; ll++) volts[i][j][ll] = 100;
+                        throw new Error('short detected');
+                    }
                     if (volts[i][j][l] == voltage) return false;
 
                     if (l == layerNPlus && grid[i][j][layerPolysilicon] && volts[i][j][layerPolysilicon] != 1) return;
