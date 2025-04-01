@@ -7,7 +7,9 @@
     <button onclick="setLayer('metal')">Metal</button>
     <button onclick="setLayer('VCC')">VCC</button>
     <button onclick="setLayer('GND')">GND</button>
-    <button onclick="compute()">Compute</button>
+    <button onclick="setLayer('erase')">Erase</button>
+    <!--
+    <button onclick="compute()">Compute</button> -->
     <button onclick="clearCanvas()">Clear All</button>
 </div>
 <canvas id="vlsiCanvas" width="400" height="400" style="border:1px solid #000000;"></canvas>
@@ -56,6 +58,7 @@
             grid[startY][startX][getLayerIndex(currentLayer)] = true; // Mark the layer as drawn
             redrawTile(startX, startY); // Redraw the tile immediately
             isDrawing = false; // Stop drawing after setting the layer
+            redrawAllTiles();
             return; // Exit early for these layers
         }
     });
@@ -117,6 +120,7 @@
     }
 
     function redrawAllTiles() {
+        compute();
         for (let i = 0; i < grid.length; i++) {
             for (let j = 0; j < grid[i].length; j++) {
                 redrawTile(j, i); // Redraw each tile
@@ -204,6 +208,7 @@
     }
 
     function compute() {
+        console.log("compute");
         // Reset the voltage of each tile
         for (let i = 0; i < grid.length; i++) {
             for (let j = 0; j < grid[i].length; j++) {
@@ -258,26 +263,13 @@
                                 volts[i][j][l] = voltage;
                             }
                         }
-                        /*  case 'polysilicon': return 0;
-                            case 'N+ diffusion': return 1;
-                            case 'P+ diffusion': return 2; */
-                    } else if (grid[i][j][0] && grid[i][j][1]) { // N+ Connection
-                        if ( volts[i][j][0] == 1 ) {
-                            console.log("Active N+");
-                        }
-                    } else if (grid[i][j][0] && grid[i][j][2]) { // P+ Connection
-                        if ( volts[i][j][0] == -1 ) {
-                            console.log("Active P+");
-                        }
-                    }
+                    } 
                 }
             }
 
             if ( ! changed ) break;
         }
 
-        // Set the voltage of the VCC and GND tiles
-        redrawAllTiles();
     }
 
     function propogateVoltage(voltage, i, j, l) {
@@ -289,9 +281,13 @@
         if ( ! grid[i][j][l] ) return false;
         if ( volts[i][j][l] == voltage ) return false;
 
-        // If this is p diffusion or n diffusion, it stops at a polysilicon intersection
-        // unless there is a GND/VDD in place
+        // If we are propogateing P diffusion or N diffusion, voltage stops at a polysilicon intersection
+        // unless there is an appropriate GND/VDD in the polysilicon
         
+        /*  case 'polysilicon': return 0;
+            case 'N+ diffusion': return 1;
+            case 'P+ diffusion': return 2; */
+
         if ( l == 1 && grid[i][j][0] && volts[i][j][0] != 1 ) return;
         if ( l == 2 && grid[i][j][0] && volts[i][j][0] != -1 ) return;
 
