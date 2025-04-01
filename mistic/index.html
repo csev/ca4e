@@ -225,8 +225,8 @@
         }
 
         // Propogate metal down metal paths
-        for (let i = 1; i < grid.length-1; i++) {
-            for (let j = 1; j < grid[i].length-1; j++) {
+        for (let i = 0; i < grid.length; i++) {
+            for (let j = 0; j < grid[i].length; j++) {
                 for (let l = 0; l < 7; l++) {
                     if (grid[i][j][l] && volts[i][j][l] != 0 ) {
                         propogateVoltage(volts[i][j][l], i-1, j, l);
