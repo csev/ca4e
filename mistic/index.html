@@ -57,45 +57,74 @@
         grid.forEach(row => row.forEach(col => col.fill(false))); // Reset the grid
     }
 
-    canvas.addEventListener('mousedown', function(event) {
-        isDrawing = true;
+    function getEventCoordinates(event) {
         const rect = canvas.getBoundingClientRect();
-        startX = Math.floor((event.clientX - rect.left) / tileSize);
-        startY = Math.floor((event.clientY - rect.top) / tileSize);
+        let clientX, clientY;
+        
+        if (event.touches) { // Touch event
+            clientX = event.touches[0].clientX;
+            clientY = event.touches[0].clientY;
+        } else { // Mouse event
+            clientX = event.clientX;
+            clientY = event.clientY;
+        }
+        
+        return {
+            x: Math.floor((clientX - rect.left) / tileSize),
+            y: Math.floor((clientY - rect.top) / tileSize)
+        };
+    }
+
+    function handleStart(event) {
+        event.preventDefault(); // Prevent scrolling when touching the canvas
+        isDrawing = true;
+        const coords = getEventCoordinates(event);
+        startX = coords.x;
+        startY = coords.y;
         
         // Handle the contact, VCC, and GND layers separately
         if (['contact', 'VCC', 'GND'].includes(currentLayer)) {
-            grid[startY][startX][getLayerIndex('contact')] = false; // Mark the layer as drawn
-            grid[startY][startX][getLayerIndex('VCC')] = false; // Mark the layer as drawn
-            grid[startY][startX][getLayerIndex('GND')] = false; // Mark the layer as drawn
+            grid[startY][startX][getLayerIndex('contact')] = false;
+            grid[startY][startX][getLayerIndex('VCC')] = false;
+            grid[startY][startX][getLayerIndex('GND')] = false;
 
-            grid[startY][startX][getLayerIndex(currentLayer)] = true; // Mark the layer as drawn
-            redrawTile(startX, startY); // Redraw the tile immediately
-            isDrawing = false; // Stop drawing after setting the layer
-            redrawAllTiles();
-            return; // Exit early for these layers
-        }
-    });
-
-    canvas.addEventListener('mousemove', function(event) {
-        if (isDrawing && currentLayer !== 'contact' && currentLayer !== 'VCC' && currentLayer !== 'GND') { // Only draw rubber band if not contact, VCC, or GND
-            const rect = canvas.getBoundingClientRect();
-            const x = Math.floor((event.clientX - rect.left) / tileSize);
-            const y = Math.floor((event.clientY - rect.top) / tileSize);
-            drawRubberBand(startX, startY, x, y); // Draw the rubber band effect
-        }
-    });
-
-    canvas.addEventListener('mouseup', function(event) {
-        if (currentLayer !== 'contact' && currentLayer !== 'VCC' && currentLayer !== 'GND') { // Only fill tiles if not contact, VCC, or GND
+            grid[startY][startX][getLayerIndex(currentLayer)] = true;
+            redrawTile(startX, startY);
             isDrawing = false;
-            const rect = canvas.getBoundingClientRect();
-            const x = Math.floor((event.clientX - rect.left) / tileSize);
-            const y = Math.floor((event.clientY - rect.top) / tileSize);
-            fillTiles(startX, startY, x, y); // Fill or erase tiles once the mouse is released
+            redrawAllTiles();
+            return;
         }
-        ctx.beginPath(); // Reset the path
-    });
+    }
+
+    function handleMove(event) {
+        if (!isDrawing || ['contact', 'VCC', 'GND'].includes(currentLayer)) return;
+        event.preventDefault();
+        const coords = getEventCoordinates(event);
+        drawRubberBand(startX, startY, coords.x, coords.y);
+    }
+
+    function handleEnd(event) {
+        if (!isDrawing) return;
+        event.preventDefault();
+        
+        if (currentLayer !== 'contact' && currentLayer !== 'VCC' && currentLayer !== 'GND') {
+            const coords = getEventCoordinates(event.changedTouches ? event.changedTouches[0] : event);
+            fillTiles(startX, startY, coords.x, coords.y);
+        }
+        isDrawing = false;
+        ctx.beginPath();
+    }
+
+    // Add touch event listeners
+    canvas.addEventListener('touchstart', handleStart, { passive: false });
+    canvas.addEventListener('touchmove', handleMove, { passive: false });
+    canvas.addEventListener('touchend', handleEnd, { passive: false });
+    canvas.addEventListener('touchcancel', handleEnd, { passive: false });
+
+    // Keep mouse event listeners but use the new handlers
+    canvas.addEventListener('mousedown', handleStart);
+    canvas.addEventListener('mousemove', handleMove);
+    canvas.addEventListener('mouseup', handleEnd);
 
     function drawRubberBand(startX, startY, endX, endY) {
         ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
