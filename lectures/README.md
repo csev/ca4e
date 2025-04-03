@@ -4,6 +4,7 @@ Building Computing
 
 Physical computing
    Adding Machines
+   Slide Rules
 
 Physical + Electricity
    Pinball Machines
