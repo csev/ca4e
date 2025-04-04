@@ -17,6 +17,7 @@ Physical computing
 
 Physical + Electricity
    Pinball Machine - Video demo 15 minutes
+      https://www.youtube.com/watch?v=ue-1JoJQaEg
    Relay - Video demo 15 minutes
    Enigma / Bombe - BPark Video
 

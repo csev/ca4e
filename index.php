@@ -69,9 +69,11 @@ is, and how compiled languages like C work.
 As the course is developed, you can see some of
 the sample content in various stages of completion:
 <ul>
+<!--
     <li>
       <a href="gridboard/index.html" target="_blank" class="text-primary">Breadboard</a>
     </li>
+-->
     <li>
       <a href="cmos/index.html" target="_blank" class="text-primary">DC Logic Builder</a>
     </li>
