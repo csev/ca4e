@@ -1,7 +1,6 @@
 import {html, css, LitElement} from 'https://cdn.jsdelivr.net/gh/lit/dist@2.7.4/core/lit-core.min.js';
-// import {html, css, LitElement} from 'https://unpkg.com/lit-html@2.7.4/lit-core.js';
 import { msg } from 'https://cdn.jsdelivr.net/npm/@lit/localize@0.12.2/lit-localize.min.js';
-import { repeat } from 'https://unpkg.com/lit-html@2.7.4/directives/repeat.js';
+import { repeat } from 'https://cdn.jsdelivr.net/npm/lit-html@2.7.4/directives/repeat.js';
 
 // https://stackoverflow.com/questions/68614776/using-lit-with-javascript-and-no-build-tools
 
