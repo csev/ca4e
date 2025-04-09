@@ -24,8 +24,12 @@ The components will be:
 
 The connectors will be laid out on a square canvas that resizes in a responsive way.
 
-Components will all be squares and equal sized the label and orginal inside te square and 
-an indication of the state of the component, also inside the square.
+Components will all be squares and equal sized the label and orginal inside the square and
+an indication of the state of the component, also inside the square.  There will be "Move" button
+in the top tool bar which when selected allows the user to "grab" a component and move it around.
+
+As the component is moving the wires that are connected to the inputs and outputs will follow the
+component.
 
 Each of the components will have input connectors on the top and left and output
 connectors on the bottom and right except for the battery.  The battery will have a 6V output
@@ -33,11 +37,21 @@ connector on the top and ground (0V) input connectors on the bottom. Input connn
 like a filled equilateral triangle with the tip pointing inwards touching the edge of the component and output
 conectors will be a small equilateral triangle with the base touching the component.
 
-Wires can be drawn between any pair of input and output connectors. 
+Wires can be drawn between any pair of input and output connectors.
+Wires need to be routed around components when drawing a cricuit.
+Wires between components will be laid out using Manhattan wire routing where any wire can be
+vertical or horizontal.  Wires will be routed in a way that no wire
+are laid out on top of another wire until the wires get close to connectors.  Wires can cross one another
+a 90 degree angles.
+If two wires are near each other and going to the same connection they can be joined with a 45, 135, 225, or 315 degree
+angle on their way to the connectors.
+
 Any number of wires can be connected to an input or output connector.
-When connected,
-the connectors will be red if they are at 6V, blue if they are at 0V and black of they have no voltage.
-Wires will have a similar color code.
+When connected, the connectors will be red if they are at 6V, blue if they are
+at 0V and black of they have no voltage.
+Wires will have a similar red/blue/black color code.
+
+The layout of components can be adjusted to make the circuit easier to read.
 
 Each component will be numbered with an orginal like "Switch 1" or "Light 2".  Components
 will be placed using a set of buttons across the top of the UI.
