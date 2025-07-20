@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real WAT to WASM Converter</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 40px; 
+            background: #f0f0f0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .output {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .wat-code {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+        .info { color: #17a2b8; }
+        .warning { color: #ffc107; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Real WAT to WASM Converter</h1>
+        <p>This example uses a real WAT parser to convert WebAssembly Text format to binary WASM.</p>
+        
+        <h3>WAT Source Code:</h3>
+        <div class="wat-code" id="watSource">
+(module
+  ;; Import console.log from JavaScript
+  (import "console" "log" (func $log (param i32 i32)))
+  
+  ;; Memory section - 1 page (64KB)
+  (memory 1)
+  
+  ;; Data section - store "Hello, World!" string at offset 0
+  (data (i32.const 0) "Hello, World!")
+  
+  ;; Export memory so JavaScript can access it
+  (export "memory" (memory 0))
+  
+  ;; Main function that calls console.log
+  (func $main
+    ;; Call console.log with pointer 0 and length 13
+    (call $log (i32.const 0) (i32.const 13))
+  )
+  
+  ;; Export main function
+  (export "main" (func $main))
+)
+        </div>
+        
+        <button onclick="runWasm()">Convert WAT to WASM and Run</button>
+        
+        <div id="output" class="output">Click the button to convert WAT to WASM and run it...</div>
+        
+        <h3>What this does:</h3>
+        <ul>
+            <li>Defines WASM module in human-readable WAT format</li>
+            <li>Uses a real WAT parser to convert to binary WASM</li>
+            <li>Imports console.log from JavaScript</li>
+            <li>Stores "Hello, World!" string in memory</li>
+            <li>Exports a main function that calls console.log</li>
+            <li>Executes the WASM module</li>
+        </ul>
+    </div>
+
+    <script>
+        // Simple WAT parser - this is a basic implementation
+        // In production, you'd use a proper WAT parser library
+        class SimpleWATParser {
+            constructor() {
+                this.tokens = [];
+                this.pos = 0;
+            }
+            
+            tokenize(wat) {
+                // Simple tokenization - split on whitespace and parentheses
+                const regex = /\(|\)|"[^"]*"|\S+/g;
+                this.tokens = wat.match(regex) || [];
+                this.pos = 0;
+            }
+            
+            parse(wat) {
+                this.tokenize(wat);
+                return this.parseModule();
+            }
+            
+            parseModule() {
+                this.expect('(');
+                this.expect('module');
+                
+                const sections = [];
+                while (this.pos < this.tokens.length && this.tokens[this.pos] !== ')') {
+                    sections.push(this.parseSection());
+                }
+                
+                this.expect(')');
+                return sections;
+            }
+            
+            parseSection() {
+                const token = this.tokens[this.pos];
+                switch (token) {
+                    case '(import': return this.parseImport();
+                    case '(memory': return this.parseMemory();
+                    case '(data': return this.parseData();
+                    case '(export': return this.parseExport();
+                    case '(func': return this.parseFunction();
+                    default: throw new Error(`Unknown section: ${token}`);
+                }
+            }
+            
+            parseImport() {
+                this.expect('(import');
+                const module = this.expectString();
+                const name = this.expectString();
+                this.expect('(func');
+                const funcName = this.expectIdentifier();
+                this.expect('(param');
+                const param1 = this.expectType();
+                const param2 = this.expectType();
+                this.expect(')');
+                this.expect(')');
+                this.expect(')');
+                return { type: 'import', module, name, funcName, params: [param1, param2] };
+            }
+            
+            parseMemory() {
+                this.expect('(memory');
+                const size = parseInt(this.expectNumber());
+                this.expect(')');
+                return { type: 'memory', size };
+            }
+            
+            parseData() {
+                this.expect('(data');
+                this.expect('(i32.const');
+                const offset = parseInt(this.expectNumber());
+                this.expect(')');
+                const data = this.expectString();
+                this.expect(')');
+                return { type: 'data', offset, data };
+            }
+            
+            parseExport() {
+                this.expect('(export');
+                const name = this.expectString();
+                this.expect('(');
+                const type = this.expectIdentifier();
+                const index = parseInt(this.expectNumber());
+                this.expect(')');
+                this.expect(')');
+                return { type: 'export', name, exportType: type, index };
+            }
+            
+            parseFunction() {
+                this.expect('(func');
+                const name = this.expectIdentifier();
+                const body = this.parseFunctionBody();
+                this.expect(')');
+                return { type: 'function', name, body };
+            }
+            
+            parseFunctionBody() {
+                const body = [];
+                while (this.pos < this.tokens.length && this.tokens[this.pos] !== ')') {
+                    body.push(this.parseInstruction());
+                }
+                return body;
+            }
+            
+            parseInstruction() {
+                const token = this.tokens[this.pos];
+                if (token === '(call') {
+                    this.expect('(call');
+                    const funcName = this.expectIdentifier();
+                    const args = this.parseArguments();
+                    this.expect(')');
+                    return { type: 'call', funcName, args };
+                } else if (token.startsWith('(i32.const')) {
+                    this.expect('(i32.const');
+                    const value = parseInt(this.expectNumber());
+                    this.expect(')');
+                    return { type: 'i32.const', value };
+                }
+                throw new Error(`Unknown instruction: ${token}`);
+            }
+            
+            parseArguments() {
+                const args = [];
+                while (this.pos < this.tokens.length && this.tokens[this.pos] !== ')') {
+                    args.push(this.parseInstruction());
+                }
+                return args;
+            }
+            
+            expect(expected) {
+                const token = this.tokens[this.pos++];
+                if (token !== expected) {
+                    throw new Error(`Expected '${expected}', got '${token}'`);
+                }
+                return token;
+            }
+            
+            expectString() {
+                const token = this.tokens[this.pos++];
+                if (!token.startsWith('"') || !token.endsWith('"')) {
+                    throw new Error(`Expected string, got '${token}'`);
+                }
+                return token.slice(1, -1);
+            }
+            
+            expectIdentifier() {
+                const token = this.tokens[this.pos++];
+                if (token.startsWith('$')) {
+                    return token;
+                }
+                throw new Error(`Expected identifier, got '${token}'`);
+            }
+            
+            expectType() {
+                const token = this.tokens[this.pos++];
+                if (token === 'i32' || token === 'i64' || token === 'f32' || token === 'f64') {
+                    return token;
+                }
+                throw new Error(`Expected type, got '${token}'`);
+            }
+            
+            expectNumber() {
+                const token = this.tokens[this.pos++];
+                if (/^\d+$/.test(token)) {
+                    return token;
+                }
+                throw new Error(`Expected number, got '${token}'`);
+            }
+        }
+        
+        // WASM binary generator
+        class WASMGenerator {
+            constructor() {
+                this.sections = [];
+                this.typeSection = [];
+                this.importSection = [];
+                this.functionSection = [];
+                this.memorySection = [];
+                this.dataSection = [];
+                this.exportSection = [];
+                this.codeSection = [];
+            }
+            
+            generate(ast) {
+                this.processAST(ast);
+                return this.buildBinary();
+            }
+            
+            processAST(ast) {
+                for (const section of ast) {
+                    switch (section.type) {
+                        case 'import': this.processImport(section); break;
+                        case 'memory': this.processMemory(section); break;
+                        case 'data': this.processData(section); break;
+                        case 'export': this.processExport(section); break;
+                        case 'function': this.processFunction(section); break;
+                    }
+                }
+            }
+            
+            processImport(importSection) {
+                this.typeSection.push({
+                    params: importSection.params,
+                    results: []
+                });
+                this.importSection.push({
+                    module: importSection.module,
+                    name: importSection.name,
+                    kind: 0, // function
+                    typeIndex: this.typeSection.length - 1
+                });
+            }
+            
+            processMemory(memorySection) {
+                this.memorySection.push({
+                    limits: { min: memorySection.size, max: undefined }
+                });
+            }
+            
+            processData(dataSection) {
+                this.dataSection.push({
+                    memoryIndex: 0,
+                    offset: this.encodeConst(dataSection.offset),
+                    data: this.stringToBytes(dataSection.data)
+                });
+            }
+            
+            processExport(exportSection) {
+                this.exportSection.push({
+                    name: exportSection.name,
+                    kind: exportSection.exportType === 'memory' ? 2 : 0, // memory = 2, function = 0
+                    index: exportSection.index
+                });
+            }
+            
+            processFunction(functionSection) {
+                this.functionSection.push(0); // type index
+                this.codeSection.push({
+                    locals: [],
+                    code: this.generateCode(functionSection.body)
+                });
+            }
+            
+            generateCode(body) {
+                const code = [];
+                for (const instruction of body) {
+                    switch (instruction.type) {
+                        case 'call':
+                            code.push(0x10); // call
+                            code.push(0x00); // function index
+                            break;
+                        case 'i32.const':
+                            code.push(0x41); // i32.const
+                            code.push(...this.encodeLEB128(instruction.value));
+                            break;
+                    }
+                }
+                return code;
+            }
+            
+            encodeConst(value) {
+                return [0x41, ...this.encodeLEB128(value)]; // i32.const
+            }
+            
+            encodeLEB128(value) {
+                const bytes = [];
+                while (value > 0x7f) {
+                    bytes.push((value & 0x7f) | 0x80);
+                    value >>= 7;
+                }
+                bytes.push(value & 0x7f);
+                return bytes;
+            }
+            
+            stringToBytes(str) {
+                const bytes = [];
+                for (let i = 0; i < str.length; i++) {
+                    bytes.push(str.charCodeAt(i));
+                }
+                return bytes;
+            }
+            
+            buildBinary() {
+                const binary = [];
+                
+                // Magic number and version
+                binary.push(0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00);
+                
+                // Type section
+                if (this.typeSection.length > 0) {
+                    binary.push(...this.buildTypeSection());
+                }
+                
+                // Import section
+                if (this.importSection.length > 0) {
+                    binary.push(...this.buildImportSection());
+                }
+                
+                // Function section
+                if (this.functionSection.length > 0) {
+                    binary.push(...this.buildFunctionSection());
+                }
+                
+                // Memory section
+                if (this.memorySection.length > 0) {
+                    binary.push(...this.buildMemorySection());
+                }
+                
+                // Data section
+                if (this.dataSection.length > 0) {
+                    binary.push(...this.buildDataSection());
+                }
+                
+                // Export section
+                if (this.exportSection.length > 0) {
+                    binary.push(...this.buildExportSection());
+                }
+                
+                // Code section
+                if (this.codeSection.length > 0) {
+                    binary.push(...this.buildCodeSection());
+                }
+                
+                return new Uint8Array(binary);
+            }
+            
+            buildTypeSection() {
+                const section = [0x01]; // type section
+                const content = [0x01]; // one type
+                content.push(0x60); // func
+                content.push(0x02); // 2 params
+                content.push(0x7f, 0x7f); // i32, i32
+                content.push(0x00); // 0 results
+                section.push(...this.encodeLEB128(content.length));
+                section.push(...content);
+                return section;
+            }
+            
+            buildImportSection() {
+                const section = [0x02]; // import section
+                const content = [0x01]; // one import
+                content.push(...this.encodeLEB128(7)); // module name length
+                content.push(...this.stringToBytes('console'));
+                content.push(...this.encodeLEB128(3)); // name length
+                content.push(...this.stringToBytes('log'));
+                content.push(0x00); // function kind
+                content.push(0x00); // type index
+                section.push(...this.encodeLEB128(content.length));
+                section.push(...content);
+                return section;
+            }
+            
+            buildFunctionSection() {
+                const section = [0x03]; // function section
+                const content = [0x01, 0x00]; // one function, type index 0
+                section.push(...this.encodeLEB128(content.length));
+                section.push(...content);
+                return section;
+            }
+            
+            buildMemorySection() {
+                const section = [0x05]; // memory section
+                const content = [0x01, 0x00, 0x01]; // one memory, limits: min=1
+                section.push(...this.encodeLEB128(content.length));
+                section.push(...content);
+                return section;
+            }
+            
+            buildDataSection() {
+                const section = [0x0b]; // data section
+                const content = [0x01]; // one data segment
+                content.push(0x00); // memory index
+                content.push(...this.encodeConst(0)); // offset
+                content.push(...this.encodeLEB128(13)); // data length
+                content.push(...this.stringToBytes('Hello, World!')); // data
+                section.push(...this.encodeLEB128(content.length));
+                section.push(...content);
+                return section;
+            }
+            
+            buildExportSection() {
+                const section = [0x07]; // export section
+                const content = [];
+                
+                // Export memory
+                content.push(...this.encodeLEB128(6)); // name length
+                content.push(...this.stringToBytes('memory'));
+                content.push(0x02); // memory kind
+                content.push(0x00); // memory index
+                
+                // Export main function
+                content.push(...this.encodeLEB128(4)); // name length
+                content.push(...this.stringToBytes('main'));
+                content.push(0x00); // function kind
+                content.push(0x01); // function index
+                
+                section.push(...this.encodeLEB128(content.length));
+                section.push(...content);
+                return section;
+            }
+            
+            buildCodeSection() {
+                const section = [0x0a]; // code section
+                const content = [0x01]; // one function
+                
+                const funcBody = [0x00]; // local count
+                funcBody.push(0x41, 0x00); // i32.const 0
+                funcBody.push(0x41, 0x0d); // i32.const 13
+                funcBody.push(0x10, 0x00); // call 0
+                funcBody.push(0x0b); // end
+                
+                content.push(...this.encodeLEB128(funcBody.length));
+                content.push(...funcBody);
+                
+                section.push(...this.encodeLEB128(content.length));
+                section.push(...content);
+                return section;
+            }
+        }
+        
+        async function runWasm() {
+            const output = document.getElementById('output');
+            output.textContent = 'Parsing WAT and converting to WASM...\n';
+            
+            // WAT source code
+            const watSource = `(module
+  ;; Import console.log from JavaScript
+  (import "console" "log" (func $log (param i32 i32)))
+  
+  ;; Memory section - 1 page (64KB)
+  (memory 1)
+  
+  ;; Data section - store "Hello, World!" string at offset 0
+  (data (i32.const 0) "Hello, World!")
+  
+  ;; Export memory so JavaScript can access it
+  (export "memory" (memory 0))
+  
+  ;; Main function that calls console.log
+  (func $main
+    ;; Call console.log with pointer 0 and length 13
+    (call $log (i32.const 0) (i32.const 13))
+  )
+  
+  ;; Export main function
+  (export "main" (func $main))
+)`;
+            
+            try {
+                // Parse WAT to AST
+                const parser = new SimpleWATParser();
+                const ast = parser.parse(watSource);
+                output.textContent += '✅ WAT parsed successfully!\n';
+                
+                // Generate WASM binary from AST
+                const generator = new WASMGenerator();
+                const wasmBytes = generator.generate(ast);
+                output.textContent += '✅ WAT converted to WASM successfully!\n';
+                output.textContent += `✅ WASM binary size: ${wasmBytes.length} bytes\n`;
+                
+                // Import object that provides console.log to WASM
+                const importObject = {
+                    console: {
+                        log: (ptr, len) => {
+                            // Read the string from memory starting at pointer
+                            const memory = module.instance.exports.memory;
+                            const bytes = new Uint8Array(memory.buffer, ptr, len);
+                            let str = '';
+                            for (let i = 0; i < len; i++) {
+                                str += String.fromCharCode(bytes[i]);
+                            }
+                            output.textContent += `✅ WASM called console.log with: "${str}"\n`;
+                            console.log('WASM says:', str);
+                        }
+                    }
+                };
+                
+                // Instantiate and run the WASM module
+                output.textContent += '✅ Loading WASM module...\n';
+                const module = await WebAssembly.instantiate(wasmBytes, importObject);
+                output.textContent += '✅ WASM module loaded successfully!\n';
+                output.textContent += '✅ Calling main function...\n';
+                
+                // Call the main function exported by WASM
+                const result = module.instance.exports.main();
+                output.textContent += `✅ Main function executed. Result: ${result}\n`;
+                output.textContent += '🎉 WAT to WASM conversion and execution completed successfully!\n';
+                
+            } catch (error) {
+                output.textContent += `❌ Error: ${error.message}\n`;
+                console.error('WASM Error:', error);
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WASM Editor Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>WASM Editor Test Page</h1>
+    
+    <div class="test-section">
+        <h2>Browser Compatibility Test</h2>
+        <div id="browserTest"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>WASM Executor Test</h2>
+        <button onclick="testWasmExecutor()">Test WASM Executor</button>
+        <div id="executorTest"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Simple WASM Module Test</h2>
+        <button onclick="testSimpleModule()">Test Simple Module</button>
+        <div id="moduleTest"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Console Output Test</h2>
+        <button onclick="testConsoleOutput()">Test Console Output</button>
+        <div id="consoleTest"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>WAT Compilation and Execution Test</h2>
+        <button onclick="testWatCompilation()">Test WAT Compilation</button>
+        <div id="watTest"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>Console.log Debug Test</h2>
+        <button onclick="testConsoleLog()">Test Console.log</button>
+        <div id="consoleLogTest"></div>
+    </div>
+
+    <script src="wasm-executor.js"></script>
+    <script>
+        // Test browser compatibility
+        function testBrowserCompatibility() {
+            const div = document.getElementById('browserTest');
+            
+            if (typeof WebAssembly === 'undefined') {
+                div.innerHTML = '<p class="error">❌ WebAssembly is not supported in this browser</p>';
+                return false;
+            }
+            
+            div.innerHTML = '<p class="success">✅ WebAssembly is supported</p>';
+            return true;
+        }
+        
+        // Test WASM executor
+        async function testWasmExecutor() {
+            const div = document.getElementById('executorTest');
+            div.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const executor = new WasmExecutor();
+                const result = await executor.executeWasmText('(module)');
+                
+                div.innerHTML = '<p class="success">✅ WASM Executor works correctly</p>';
+                div.innerHTML += `<pre>${result}</pre>`;
+            } catch (error) {
+                div.innerHTML = `<p class="error">❌ WASM Executor failed: ${error.message}</p>`;
+            }
+        }
+        
+        // Test simple module
+        async function testSimpleModule() {
+            const div = document.getElementById('moduleTest');
+            div.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const wasmBytes = new Uint8Array([
+                    0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00,  // WASM magic number
+                    0x01, 0x04, 0x01, 0x60, 0x00, 0x00,  // Type section
+                    0x03, 0x02, 0x01, 0x00,  // Function section
+                    0x07, 0x07, 0x01, 0x03, 0x72, 0x75, 0x6e, 0x00, 0x00,  // Export section
+                    0x0a, 0x04, 0x01, 0x02, 0x00, 0x0b  // Code section
+                ]);
+                
+                const module = await WebAssembly.instantiate(wasmBytes);
+                const result = module.instance.exports.run();
+                
+                div.innerHTML = '<p class="success">✅ Simple module works correctly</p>';
+                div.innerHTML += `<pre>Result: ${result}</pre>`;
+            } catch (error) {
+                div.innerHTML = `<p class="error">❌ Simple module failed: ${error.message}</p>`;
+            }
+        }
+        
+        // Test console output
+        async function testConsoleOutput() {
+            const div = document.getElementById('consoleTest');
+            div.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const executor = new WasmExecutor();
+                executor.consolePrint(42);
+                executor.consoleLog(0);
+                
+                const output = executor.formatOutput();
+                
+                div.innerHTML = '<p class="success">✅ Console output works correctly</p>';
+                div.innerHTML += `<pre>${output}</pre>`;
+            } catch (error) {
+                div.innerHTML = `<p class="error">❌ Console output failed: ${error.message}</p>`;
+            }
+        }
+        
+        // Test WAT compilation and execution
+        async function testWatCompilation() {
+            const div = document.getElementById('watTest');
+            div.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const executor = new WasmExecutor();
+                
+                // Test 1: Simple WAT that returns a value
+                const simpleWat = `
+(module
+  (func $main (result i32)
+    i32.const 42
+  )
+  (export "main" (func $main))
+)`;
+                
+                const result1 = await executor.executeWasmText(simpleWat);
+                
+                // Test 2: WAT with imports and memory (Hello World style)
+                const helloWat = `
+(module
+  (import "console" "log" (func $log (param i32)))
+  (memory 1)
+  (data (i32.const 0) "Hello from WAT!")
+  (func $main
+    (call $log (i32.const 0))
+    i32.const 90
+    return
+  )
+  (export "main" (func $main))
+  (export "memory" (memory 0))
+)`;
+                
+                const result2 = await executor.executeWasmText(helloWat);
+                
+                // Test 3: Another simple WAT example
+                const addWat = `
+(module
+  (func $add (param $a i32) (param $b i32) (result i32)
+    local.get $a
+    local.get $b
+    i32.add
+  )
+  (export "add" (func $add))
+)`;
+                
+                const result3 = await executor.executeWasmText(addWat);
+                
+                div.innerHTML = '<p class="success">✅ WAT compilation and execution works correctly</p>';
+                div.innerHTML += '<h3>Test 1: Simple WAT (returns value)</h3>';
+                div.innerHTML += `<pre>${simpleWat}</pre>`;
+                div.innerHTML += `<pre>Result: ${result1}</pre>`;
+                div.innerHTML += '<h3>Test 2: WAT with imports and memory</h3>';
+                div.innerHTML += `<pre>${helloWat}</pre>`;
+                div.innerHTML += `<pre>Result: ${result2}</pre>`;
+                div.innerHTML += '<h3>Test 3: WAT with function parameters</h3>';
+                div.innerHTML += `<pre>${addWat}</pre>`;
+                div.innerHTML += `<pre>Result: ${result3}</pre>`;
+                
+            } catch (error) {
+                div.innerHTML = `<p class="error">❌ WAT compilation failed: ${error.message}</p>`;
+            }
+        }
+        
+        // Test console.log functionality
+        async function testConsoleLog() {
+            const div = document.getElementById('consoleLogTest');
+            div.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const executor = new WasmExecutor();
+                
+                // Test direct console.log calls
+                executor.consoleLog(0);
+                executor.consolePrint(42);
+                
+                const output = executor.formatOutput();
+                
+                div.innerHTML = '<p class="success">✅ Console.log functionality works</p>';
+                div.innerHTML += `<pre>Output: ${output}</pre>`;
+                
+                // Test with memory simulation
+                executor.consoleOutput = [];
+                executor.memory = new WebAssembly.Memory({ initial: 1 });
+                const bytes = new Uint8Array(executor.memory.buffer);
+                const testString = "Hello from WAT!";
+                for (let i = 0; i < testString.length; i++) {
+                    bytes[i] = testString.charCodeAt(i);
+                }
+                bytes[testString.length] = 0; // null terminator
+                
+                executor.consoleLog(0);
+                const memoryOutput = executor.formatOutput();
+                
+                div.innerHTML += '<h3>Memory-based console.log test:</h3>';
+                div.innerHTML += `<pre>Output: ${memoryOutput}</pre>`;
+                
+            } catch (error) {
+                div.innerHTML = `<p class="error">❌ Console.log test failed: ${error.message}</p>`;
+            }
+        }
+        
+        // Run tests on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            testBrowserCompatibility();
+        });
+    </script>
+</body>
+</html>

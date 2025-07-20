@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple WASM Hello World</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 40px; 
+            background: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .output {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { color: #28a745; }
+        .error { color: #dc3545; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Simple WebAssembly Hello World</h1>
+        <p>This example creates a WebAssembly module using hex constants and executes it to print "Hello, World!"</p>
+        
+        <button onclick="runWasm()">Run WASM Hello World</button>
+        
+        <div id="output" class="output">Click the button to run the WASM module...</div>
+        
+        <h3>What this does:</h3>
+        <ul>
+            <li>Creates a WASM module using raw hex bytes</li>
+            <li>Imports console.log from JavaScript</li>
+            <li>Stores "Hello, World!" string in memory</li>
+            <li>Exports a main function that calls console.log</li>
+            <li>Executes the WASM module</li>
+        </ul>
+    </div>
+
+    <script>
+        function runWasm() {
+            const output = document.getElementById('output');
+            output.textContent = 'Running WASM module...\n';
+            
+            // WASM module hex bytes that create a simple "Hello, World!" program
+            const wasmBytes = new Uint8Array([
+                0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00,  // WASM magic number and version
+                0x01, 0x07, 0x01, 0x60, 0x02, 0x7f, 0x7f, 0x00,  // Type section: function type (2 params, no result)
+                0x02, 0x0d, 0x01, 0x07, 0x63, 0x6f, 0x6e, 0x73, 0x6f, 0x6c, 0x65, 0x03, 0x6c, 0x6f, 0x67, 0x00, 0x00,  // Import section
+                0x03, 0x02, 0x01, 0x00,  // Function section
+                0x05, 0x03, 0x01, 0x00, 0x01,  // Memory section
+                0x0b, 0x0d, 0x01, 0x00, 0x41, 0x00, 0x0b, 0x0d, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x2c, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x21, 0x00,  // Data section: "Hello, World!" string
+                0x07, 0x0a, 0x01, 0x06, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x02, 0x00,  // Export section: memory
+                0x07, 0x07, 0x01, 0x04, 0x6d, 0x61, 0x69, 0x6e, 0x00, 0x01,  // Export section: main function
+                0x0a, 0x06, 0x01, 0x04, 0x00, 0x41, 0x00, 0x10, 0x00, 0x0b  // Code section: main function calls console.log(0)
+            ]);
+            
+            // Import object that provides console.log to WASM
+            const importObject = {
+                console: {
+                    log: (ptr) => {
+                        // Read the string from memory starting at pointer
+                        const memory = module.instance.exports.memory;
+                        const bytes = new Uint8Array(memory.buffer, ptr);
+                        let str = '';
+                        let i = 0;
+                        while (bytes[i] !== 0) {  // Read until null terminator
+                            str += String.fromCharCode(bytes[i]);
+                            i++;
+                        }
+                        output.textContent += `✅ WASM called console.log with: "${str}"\n`;
+                        console.log('WASM says:', str);
+                    }
+                }
+            };
+            
+            // Instantiate and run the WASM module
+            WebAssembly.instantiate(wasmBytes, importObject)
+                .then(module => {
+                    output.textContent += '✅ WASM module loaded successfully!\n';
+                    output.textContent += '✅ Calling main function...\n';
+                    
+                    // Call the main function exported by WASM
+                    const result = module.instance.exports.main();
+                    output.textContent += `✅ Main function executed. Result: ${result}\n`;
+                    output.textContent += '🎉 WASM Hello World completed successfully!\n';
+                })
+                .catch(error => {
+                    output.textContent += `❌ Error: ${error.message}\n`;
+                    console.error('WASM Error:', error);
+                });
+        }
+    </script>
+</body>
+</html> 

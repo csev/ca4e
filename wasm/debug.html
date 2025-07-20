@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WASM Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .debug-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        pre { background: #f5f5f5; padding: 10px; overflow-x: auto; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>WASM Debug Page</h1>
+    
+    <div class="debug-section">
+        <h2>Hello World Module Test</h2>
+        <button onclick="testHelloWorld()">Test Hello World</button>
+        <div id="helloWorldResult"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>Add Module Test</h2>
+        <button onclick="testAdd()">Test Add</button>
+        <div id="addResult"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>Fibonacci Module Test</h2>
+        <button onclick="testFibonacci()">Test Fibonacci</button>
+        <div id="fibonacciResult"></div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>Factorial Module Test</h2>
+        <button onclick="testFactorial()">Test Factorial</button>
+        <div id="factorialResult"></div>
+    </div>
+
+    <script>
+        // Create a simple Hello World WASM module
+        function createHelloWorldModule() {
+            return new Uint8Array([
+                0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00,  // WASM magic number and version
+                0x01, 0x07, 0x01, 0x60, 0x02, 0x7f, 0x7f, 0x00,  // Type section: function type (2 params, no result)
+                0x02, 0x0d, 0x01, 0x07, 0x63, 0x6f, 0x6e, 0x73, 0x6f, 0x6c, 0x65, 0x03, 0x6c, 0x6f, 0x67, 0x00, 0x00,  // Import section
+                0x03, 0x02, 0x01, 0x00,  // Function section
+                0x05, 0x03, 0x01, 0x00, 0x01,  // Memory section
+                0x0b, 0x0d, 0x01, 0x00, 0x41, 0x00, 0x0b, 0x0d, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x2c, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64, 0x21, 0x00,  // Data section: "Hello, World!" string
+                0x07, 0x0a, 0x01, 0x06, 0x6d, 0x65, 0x6d, 0x6f, 0x72, 0x79, 0x02, 0x00,  // Export section: memory
+                0x07, 0x07, 0x01, 0x04, 0x6d, 0x61, 0x69, 0x6e, 0x00, 0x01,  // Export section: main function
+                0x0a, 0x06, 0x01, 0x04, 0x00, 0x41, 0x00, 0x10, 0x00, 0x0b  // Code section: main function calls console.log(0)
+            ]);
+        }
+        
+        async function testHelloWorld() {
+            const div = document.getElementById('helloWorldResult');
+            div.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const wasmBytes = createHelloWorldModule();
+                console.log('WASM bytes:', wasmBytes);
+                
+                const importObject = {
+                    console: {
+                        log: (ptr) => {
+                            console.log('console.log called with ptr:', ptr);
+                            div.innerHTML += `<p class="success">console.log called with pointer: ${ptr}</p>`;
+                        }
+                    }
+                };
+                
+                const module = await WebAssembly.instantiate(wasmBytes, importObject);
+                console.log('Module exports:', module.instance.exports);
+                
+                if (module.instance.exports.main) {
+                    const result = module.instance.exports.main();
+                    div.innerHTML += `<p class="success">Main function executed. Result: ${result}</p>`;
+                } else {
+                    div.innerHTML += `<p class="error">No main function found in exports</p>`;
+                }
+                
+            } catch (error) {
+                div.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+                console.error('Error:', error);
+            }
+        }
+        
+        async function testAdd() {
+            const div = document.getElementById('addResult');
+            div.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const wasmBytes = new Uint8Array([
+                    0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00,  // WASM magic number and version
+                    0x01, 0x07, 0x01, 0x60, 0x02, 0x7f, 0x7f, 0x7f,  // Type section: function type (2 params, 1 result)
+                    0x03, 0x02, 0x01, 0x00,  // Function section
+                    0x07, 0x07, 0x01, 0x03, 0x61, 0x64, 0x64, 0x00, 0x00,  // Export section: add function
+                    0x0a, 0x09, 0x01, 0x07, 0x00, 0x20, 0x00, 0x20, 0x01, 0x6a, 0x0b  // Code section: add function
+                ]);
+                
+                const module = await WebAssembly.instantiate(wasmBytes);
+                console.log('Add module exports:', module.instance.exports);
+                
+                if (module.instance.exports.add) {
+                    const result = module.instance.exports.add(5, 3);
+                    div.innerHTML = `<p class="success">add(5, 3) = ${result}</p>`;
+                } else {
+                    div.innerHTML = `<p class="error">No add function found</p>`;
+                }
+                
+            } catch (error) {
+                div.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
+        }
+        
+        async function testFibonacci() {
+            const div = document.getElementById('fibonacciResult');
+            div.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const wasmBytes = new Uint8Array([
+                    0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00,  // WASM magic number and version
+                    0x01, 0x07, 0x01, 0x60, 0x01, 0x7f, 0x7f,  // Type section: function type (1 param, 1 result)
+                    0x03, 0x02, 0x01, 0x00,  // Function section
+                    0x07, 0x0b, 0x01, 0x09, 0x66, 0x69, 0x62, 0x6f, 0x6e, 0x61, 0x63, 0x63, 0x69, 0x00, 0x00,  // Export section
+                    0x0a, 0x15, 0x01, 0x13, 0x00, 0x20, 0x00, 0x41, 0x02, 0x4e, 0x04, 0x7e, 0x20, 0x00, 0x05, 0x20, 0x00, 0x41, 0x01, 0x6b, 0x10, 0x00, 0x20, 0x00, 0x41, 0x02, 0x6b, 0x10, 0x00, 0x6a, 0x0b, 0x0b  // Code section: fibonacci function
+                ]);
+                
+                const module = await WebAssembly.instantiate(wasmBytes);
+                console.log('Fibonacci module exports:', module.instance.exports);
+                
+                if (module.instance.exports.fibonacci) {
+                    const result = module.instance.exports.fibonacci(7);
+                    div.innerHTML = `<p class="success">fibonacci(7) = ${result}</p>`;
+                } else {
+                    div.innerHTML = `<p class="error">No fibonacci function found</p>`;
+                }
+                
+            } catch (error) {
+                div.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
+        }
+        
+        async function testFactorial() {
+            const div = document.getElementById('factorialResult');
+            div.innerHTML = '<p>Testing...</p>';
+            
+            try {
+                const wasmBytes = new Uint8Array([
+                    0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00,  // WASM magic number and version
+                    0x01, 0x07, 0x01, 0x60, 0x01, 0x7f, 0x7f,  // Type section: function type (1 param, 1 result)
+                    0x03, 0x02, 0x01, 0x00,  // Function section
+                    0x07, 0x0a, 0x01, 0x08, 0x66, 0x61, 0x63, 0x74, 0x6f, 0x72, 0x69, 0x61, 0x6c, 0x00, 0x00,  // Export section
+                    0x0a, 0x0f, 0x01, 0x0d, 0x00, 0x20, 0x00, 0x41, 0x01, 0x4e, 0x04, 0x7e, 0x41, 0x01, 0x05, 0x20, 0x00, 0x20, 0x00, 0x41, 0x01, 0x6b, 0x10, 0x00, 0x6c, 0x0b, 0x0b  // Code section: factorial function
+                ]);
+                
+                const module = await WebAssembly.instantiate(wasmBytes);
+                console.log('Factorial module exports:', module.instance.exports);
+                
+                if (module.instance.exports.factorial) {
+                    const result = module.instance.exports.factorial(5);
+                    div.innerHTML = `<p class="success">factorial(5) = ${result}</p>`;
+                } else {
+                    div.innerHTML = `<p class="error">No factorial function found</p>`;
+                }
+                
+            } catch (error) {
+                div.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html> 
