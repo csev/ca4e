@@ -171,11 +171,12 @@ class WasmEditor {
   ;; Export memory so JavaScript can access it
   (export "memory" (memory 0))
   
-  ;; Function to copy string from input to output
-  (func $copyString
+  ;; Function to copy string from input to output, returns length
+  (func $copyString (result i32)
     (local $i i32)
     (local $inputPtr i32)
     (local $outputPtr i32)
+    (local $char i32)
     
     ;; Set pointers: input at 0, output at 100
     (local.set $inputPtr (i32.const 0))
@@ -183,33 +184,37 @@ class WasmEditor {
     (local.set $i (i32.const 0))
     
     ;; Copy loop
-    (loop $copy_loop
-      ;; Load character from input
-      (local.get $inputPtr)
-      (local.get $i)
-      (i32.add)
-      (i32.load8_u)
-      
-      ;; Store character to output
-      (local.get $outputPtr)
-      (local.get $i)
-      (i32.add)
-      (i32.store8)
-      
-      ;; Increment counter
-      (local.get $i)
-      (i32.const 1)
-      (i32.add)
-      (local.set $i)
-      
-      ;; Check if we've reached the end of input string (null terminator)
-      (local.get $inputPtr)
-      (local.get $i)
-      (i32.add)
-      (i32.load8_u)
-      (i32.const 0)
-      (i32.ne)
-      (br_if $copy_loop)
+    (block $copy_loop_end
+      (loop $copy_loop
+        ;; Load character from input
+        (local.get $inputPtr)
+        (local.get $i)
+        (i32.add)
+        (i32.load8_u)
+        (local.tee $char)
+        
+        ;; Check if we've reached the end of input string (null terminator)
+        (local.get $char)
+        (i32.const 0)
+        (i32.eq)
+        (br_if $copy_loop_end)
+        
+        ;; Store character to output
+        (local.get $outputPtr)
+        (local.get $i)
+        (i32.add)
+        (local.get $char)
+        (i32.store8)
+        
+        ;; Increment counter
+        (local.get $i)
+        (i32.const 1)
+        (i32.add)
+        (local.set $i)
+        
+        ;; Continue loop
+        (br $copy_loop)
+      )
     )
     
     ;; Add null terminator to output
@@ -218,14 +223,18 @@ class WasmEditor {
     (i32.add)
     (i32.const 0)
     (i32.store8)
+    
+    ;; Return the length of copied string
+    (local.get $i)
   )
   
   ;; Main function
   (func $main (result i32)
-    ;; Copy the string
-    (call $copyString)
-    ;; Print the copied string with length
-    (call $log (i32.const 100) (i32.const 16))
+    ;; Copy the string and get its length
+    (local $length i32)
+    (local.set $length (call $copyString))
+    ;; Print the copied string with calculated length
+    (call $log (i32.const 100) (local.get $length))
     ;; Return 42
     (i32.const 42)
   )
