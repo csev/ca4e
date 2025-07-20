@@ -4,7 +4,11 @@ class WasmEditor {
         this.output = document.getElementById('output');
         this.errorOutput = document.getElementById('errorOutput');
         this.runButton = document.getElementById('runWasm');
+        this.showWasmButton = document.getElementById('showWasm');
         this.executor = new WasmExecutor();
+        
+        // Store the last compiled WASM binary
+        this.lastCompiledWasm = null;
         
         this.examples = {
             'hello-world': this.getHelloWorldExample(),
@@ -23,6 +27,19 @@ class WasmEditor {
         // Clear editor button
         document.getElementById('clearEditor').addEventListener('click', () => this.clearEditor());
         
+        // Show WASM button
+        this.showWasmButton.addEventListener('click', () => this.showWasmHex());
+        
+        // Modal close button
+        document.querySelector('.close').addEventListener('click', () => this.closeModal());
+        
+        // Close modal when clicking outside
+        document.getElementById('wasmModal').addEventListener('click', (e) => {
+            if (e.target.id === 'wasmModal') {
+                this.closeModal();
+            }
+        });
+        
         // Show example selector immediately
         this.showExampleSelector();
         
@@ -36,7 +53,8 @@ class WasmEditor {
     }
     
     loadDefaultExample() {
-        this.loadExample('hello-world');
+        // Don't load any example by default - let user choose
+        this.clearEditor();
     }
     
     loadExample(exampleName) {
@@ -51,25 +69,29 @@ class WasmEditor {
         // Create example selector dropdown
         const selector = document.createElement('select');
         selector.innerHTML = `
+            <option value="">Load sample code</option>
             <option value="hello-world">Hello World</option>
             <option value="string-copy">String Copy</option>
             <option value="uppercase">Uppercase Converter</option>
         `;
         
         selector.addEventListener('change', (e) => {
-            this.loadExample(e.target.value);
+            if (e.target.value) {
+                this.loadExample(e.target.value);
+                // Reset to default option after loading
+                e.target.value = '';
+            }
         });
         
         // Insert selector before the run button
         this.runButton.parentNode.insertBefore(selector, this.runButton);
-        
-        // Load default example
-        this.loadExample('hello-world');
     }
     
     clearEditor() {
         this.editor.value = '';
         this.clearOutput();
+        this.lastCompiledWasm = null;
+        this.showWasmButton.classList.add('hidden');
         this.showMessage('Editor cleared', 'success');
     }
     
@@ -77,6 +99,7 @@ class WasmEditor {
         this.output.innerHTML = '<p class="placeholder">Output will appear here when you compile and run your WAT code...</p>';
         this.errorOutput.classList.add('hidden');
         this.errorOutput.textContent = '';
+        this.showWasmButton.classList.add('hidden');
     }
     
     async runWasm() {
@@ -93,12 +116,21 @@ class WasmEditor {
             // Use the WASM executor to run the code
             const result = await this.executor.executeWasmText(wasmCode);
             
+            // Store the compiled WASM binary for hex display
+            this.lastCompiledWasm = this.executor.lastCompiledWasm;
+            
             this.hideLoading();
             this.showOutput(result);
+            
+            // Show the Show WASM button if compilation was successful
+            if (this.lastCompiledWasm) {
+                this.showWasmButton.classList.remove('hidden');
+            }
             
         } catch (error) {
             this.hideLoading();
             this.showError(error.message);
+            this.showWasmButton.classList.add('hidden');
         }
     }
     
@@ -133,6 +165,50 @@ class WasmEditor {
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+    
+    showWasmHex() {
+        if (!this.lastCompiledWasm) {
+            this.showError('No compiled WASM available. Please compile and run your WAT code first.');
+            return;
+        }
+        
+        const modal = document.getElementById('wasmModal');
+        const wasmSize = document.getElementById('wasmSize');
+        const wasmMagic = document.getElementById('wasmMagic');
+        const wasmHex = document.getElementById('wasmHex');
+        
+        // Update size
+        wasmSize.textContent = this.lastCompiledWasm.length;
+        
+        // Update magic number (first 4 bytes)
+        const magicBytes = Array.from(this.lastCompiledWasm.slice(0, 4))
+            .map(b => b.toString(16).padStart(2, '0'))
+            .join(' ');
+        wasmMagic.textContent = magicBytes;
+        
+        // Format hex dump
+        const hexLines = [];
+        for (let i = 0; i < this.lastCompiledWasm.length; i += 16) {
+            const offset = i.toString(16).padStart(8, '0');
+            const bytes = Array.from(this.lastCompiledWasm.slice(i, i + 16))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join(' ');
+            const ascii = Array.from(this.lastCompiledWasm.slice(i, i + 16))
+                .map(b => (b >= 32 && b <= 126) ? String.fromCharCode(b) : '.')
+                .join('');
+            
+            hexLines.push(`${offset}: ${bytes.padEnd(47)} |${ascii}|`);
+        }
+        
+        wasmHex.textContent = hexLines.join('\n');
+        
+        // Show modal
+        modal.classList.remove('hidden');
+    }
+    
+    closeModal() {
+        document.getElementById('wasmModal').classList.add('hidden');
     }
     
     // Example WASM code templates

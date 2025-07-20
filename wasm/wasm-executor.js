@@ -3,6 +3,7 @@ class WasmExecutor {
         this.consoleOutput = [];
         this.memory = null;
         this.instance = null;
+        this.lastCompiledWasm = null;
     }
     
     async executeWasmText(wasmText) {
@@ -108,7 +109,12 @@ class WasmExecutor {
             
             const wasmBinary = await response.arrayBuffer();
             console.log('Received WASM binary, size:', wasmBinary.byteLength, 'bytes');
-            return new Uint8Array(wasmBinary);
+            const wasmArray = new Uint8Array(wasmBinary);
+            
+            // Store the compiled WASM for hex display
+            this.lastCompiledWasm = wasmArray;
+            
+            return wasmArray;
             
         } catch (error) {
             console.error('WAT compilation error:', error);
