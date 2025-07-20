@@ -1,3 +1,7 @@
+
+;; wat2wasm simple.wat
+;; hexdump -C test.wasm
+
 (module
   ;; Import console.log from JavaScript
   (import "console" "log" (func $log (param i32 i32)))
