@@ -1,16 +1,35 @@
+<?php
+// Future LTI/Tsugi integration point
+// $CFG = new stdClass();
+// $CFG->wwwroot = 'http://localhost/tsugi';
+// require_once "tsugi/lib/lms_lib.php";
+// require_once "tsugi/lib/lti_util.php";
+
+// For now, just basic PHP setup
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WASM Editor - ES Module Example</title>
+    <title>WASM Editor & Execution Environment</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
+        <?php
+        // Future LTI/Tsugi integration - user info, course context, etc.
+        // if (isset($USER)) {
+        //     echo '<div class="lti-info">';
+        //     echo '<p>Welcome, ' . htmlspecialchars($USER->displayname) . '</p>';
+        //     echo '<p>Course: ' . htmlspecialchars($CONTEXT->title) . '</p>';
+        //     echo '</div>';
+        // }
+        ?>
         <header>
             <h1>WAT Editor & WASM Execution Environment</h1>
-            <p>A teaching tool for learning WebAssembly Text (WAT) format - ES Module Version</p>
+            <p>A teaching tool for learning WebAssembly Text (WAT) format</p>
         </header>
         
         <main>
@@ -53,13 +72,10 @@
                 </div>
             </div>
         </div>
+
     </div>
     
-    <script type="module">
-        import { WasmEditor } from './script-esm.js';
-        document.addEventListener('DOMContentLoaded', () => {
-            new WasmEditor();
-        });
-    </script>
+    <script src="wasm-executor.js"></script>
+    <script src="script.js"></script>
 </body>
 </html> 
