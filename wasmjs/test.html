@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test WASM Execution</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Test WASM Execution</h1>
+        <p>This page loads and executes the <code>test.wasm</code> file that was generated from <code>test.wat</code>.</p>
+        
+        <button onclick="runWasm()" class="btn btn-primary">Load and Run test.wasm</button>
+        
+        <div id="output" class="output-area">Click the button to load and run the WASM module...</div>
+        
+        <h3>What this does:</h3>
+        <ul>
+            <li>Loads the <code>test.wasm</code> file from disk</li>
+            <li>Provides console.log import to WASM</li>
+            <li>Executes the main function</li>
+            <li>Displays "Hello, World!" from WASM memory</li>
+        </ul>
+        
+        <h3>WAT Source (for reference):</h3>
+        <pre style="background: #f8f9fa; padding: 10px; border-radius: 5px; font-size: 12px;">
+(module
+  ;; Import console.log from JavaScript
+  (import "console" "log" (func $log (param i32 i32)))
+  
+  ;; Memory section - 1 page (64KB)
+  (memory 1)
+  
+  ;; Data section - store "Hello, World!" string at offset 0
+  (data (i32.const 0) "Hello, World!")
+  
+  ;; Export memory so JavaScript can access it
+  (export "memory" (memory 0))
+  
+  ;; Main function that calls console.log
+  (func $main
+    ;; Call console.log with pointer 0 and length 13
+    (call $log (i32.const 0) (i32.const 13))
+  )
+  
+  ;; Export main function
+  (export "main" (func $main))
+)</pre>
+    </div>
+
+    <script>
+        async function runWasm() {
+            const output = document.getElementById('output');
+            output.textContent = 'Loading test.wasm...\n';
+            
+            try {
+                // Load the WASM file
+                const response = await fetch('test.wasm');
+                if (!response.ok) {
+                    throw new Error(`Failed to load test.wasm: ${response.status} ${response.statusText}`);
+                }
+                
+                const wasmBytes = await response.arrayBuffer();
+                output.textContent += `✅ WASM file loaded successfully! Size: ${wasmBytes.byteLength} bytes\n`;
+                
+                // Import object that provides console.log to WASM
+                const importObject = {
+                    console: {
+                        log: (ptr, len) => {
+                            // Read the string from memory starting at pointer
+                            const memory = module.instance.exports.memory;
+                            const bytes = new Uint8Array(memory.buffer, ptr, len);
+                            let str = '';
+                            for (let i = 0; i < len; i++) {
+                                str += String.fromCharCode(bytes[i]);
+                            }
+                            output.textContent += `✅ WASM called console.log with: "${str}"\n`;
+                            console.log('WASM says:', str);
+                        }
+                    }
+                };
+                
+                // Instantiate the WASM module
+                output.textContent += '✅ Instantiating WASM module...\n';
+                const module = await WebAssembly.instantiate(wasmBytes, importObject);
+                output.textContent += '✅ WASM module instantiated successfully!\n';
+                
+                // Check what exports are available
+                const exports = module.instance.exports;
+                output.textContent += `✅ Available exports: ${Object.keys(exports).join(', ')}\n`;
+                
+                // Call the main function
+                output.textContent += '✅ Calling main function...\n';
+                if (exports.main) {
+                    const result = exports.main();
+                    output.textContent += `✅ Main function executed. Result: ${result}\n`;
+                } else {
+                    output.textContent += '❌ No main function found in exports\n';
+                }
+                
+                output.textContent += '🎉 WASM execution completed successfully!\n';
+                
+            } catch (error) {
+                output.textContent += `❌ Error: ${error.message}\n`;
+                console.error('WASM Error:', error);
+            }
+        }
+    </script>
+</body>
+</html> 
