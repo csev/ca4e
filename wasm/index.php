@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>WAT Editor & WASM Execution Environment</h1>
+            <h1>WASM Playground</h1>
             <p>A teaching tool for learning WebAssembly Text (WAT) format - ES Module Version</p>
         </header>
         

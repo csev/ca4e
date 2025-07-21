@@ -91,6 +91,9 @@ the sample content in various stages of completion:
 <a href="cdc8512/instructions.txt"  target="_blank" class="text-primary">CDC8512 Instruction Set Documentation</a>
 </li>
 <li>
+<a href="wasm"  target="_blank" class="text-primary">WASM Playground</a>
+</li>
+<li>
 <a href="https://www.youtube.com/playlist?list=PLa58EAvBOOSJDJoRNd8q8t3U0dgRAgZ1e" target="_blank" class="text-primary">A YouTube Playlist of the Development of the Course Content</a> (Please like and subscribe)
 </li>
 <li>Draft lecture on the CDC8512 microprocessor
