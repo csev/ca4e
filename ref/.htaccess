@@ -1,0 +1,8 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+    RewriteRule ^(.*)$ index.php [L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    FallbackResource index.php
+</IfModule>
