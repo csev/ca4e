@@ -35,18 +35,20 @@ header p {
     opacity: 0.9;
 }
 
-.calculator-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+.main-flex-container {
+    display: flex;
     gap: 30px;
     margin-bottom: 40px;
+    flex-wrap: wrap;
 }
 
-.input-section, .results-section {
+.input-section, .results-section, .wind-triangle-section {
     background: white;
     padding: 25px;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    flex: 1;
+    min-width: 300px;
 }
 
 .input-section h2, .results-section h2 {
@@ -59,17 +61,20 @@ header p {
 
 .input-group {
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .input-group label {
-    display: block;
-    margin-bottom: 8px;
     font-weight: 600;
     color: #34495e;
+    min-width: 140px;
+    flex-shrink: 0;
 }
 
 .input-group input {
-    width: 100%;
+    flex: 1;
     padding: 12px;
     border: 2px solid #bdc3c7;
     border-radius: 8px;
@@ -230,9 +235,23 @@ header p {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .calculator-grid {
-        grid-template-columns: 1fr;
+    .main-flex-container {
+        flex-direction: column;
         gap: 20px;
+    }
+    
+    .input-section, .results-section, .wind-triangle-section {
+        min-width: auto;
+    }
+    
+    .input-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .input-group label {
+        min-width: auto;
     }
     
     .container {

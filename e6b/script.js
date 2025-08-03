@@ -146,9 +146,9 @@ class E6BWindCalculator {
         const groundTrackY = centerY - Math.sin(trueCourseRad) * groundSpeed * scale;
         
         // Draw vectors
-        this.drawVector(centerX, centerY, headingX, headingY, '#3498db', 'Computed Heading');
+        this.drawVector(centerX, centerY, headingX, headingY, '#3498db', 'Heading');
         this.drawVector(centerX, centerY, windX, windY, '#e74c3c', 'Wind');
-        this.drawVector(centerX, centerY, groundTrackX, groundTrackY, '#2ecc71', 'Ground Track');
+        this.drawVector(centerX, centerY, groundTrackX, groundTrackY, '#2ecc71', 'Track');
         
         // Draw wind triangle
         this.ctx.strokeStyle = '#95a5a6';
@@ -193,15 +193,6 @@ class E6BWindCalculator {
             endY - arrowLength * Math.sin(angle + arrowAngle)
         );
         this.ctx.stroke();
-        
-        // Draw label
-        const midX = (startX + endX) / 2;
-        const midY = (startY + endY) / 2;
-        
-        this.ctx.fillStyle = color;
-        this.ctx.font = '12px Arial';
-        this.ctx.textAlign = 'center';
-        this.ctx.fillText(label, midX, midY - 10);
     }
 
     degreesToRadians(degrees) {

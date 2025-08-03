@@ -14,13 +14,14 @@
         </header>
         
         <main>
-            <div class="calculator-grid">
+            <!-- Three Column Layout: Input, Visualization, Results -->
+            <div class="main-flex-container">
                 <!-- Input Section -->
                 <div class="input-section">
                     <h2>Flight Data</h2>
                     
                     <div class="input-group">
-                        <label for="trueCourse">True Course (°)</label>
+                        <label for="trueCourse">Desired Course (°)</label>
                         <input type="number" id="trueCourse" min="0" max="359" value="360" step="1">
                     </div>
                     
@@ -42,6 +43,26 @@
                     <button id="calculateBtn" class="calculate-btn">Calculate</button>
                 </div>
                 
+                <!-- Visual Wind Triangle -->
+                <div class="wind-triangle-section">
+                    <h2>Wind Triangle Visualization</h2>
+                    <canvas id="windTriangle" width="300" height="300"></canvas>
+                    <div class="triangle-legend">
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #e74c3c;"></span>
+                            <span>Wind Vector</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #3498db;"></span>
+                            <span>Heading to Fly and True Air Speed</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-color" style="background: #2ecc71;"></span>
+                            <span>Desired Course and Ground Speed</span>
+                        </div>
+                    </div>
+                </div>
+                
                 <!-- Results Section -->
                 <div class="results-section">
                     <h2>Results</h2>
@@ -59,7 +80,7 @@
                     </div>
                     
                     <div class="result-item">
-                        <label>Heading:</label>
+                        <label>Heading to Fly:</label>
                         <span id="heading" class="result-value">--</span>
                         <span class="unit">°</span>
                     </div>
@@ -72,31 +93,11 @@
                 </div>
             </div>
             
-            <!-- Visual Wind Triangle -->
-            <div class="wind-triangle-section">
-                <h2>Wind Triangle Visualization</h2>
-                <canvas id="windTriangle" width="400" height="400"></canvas>
-                <div class="triangle-legend">
-                    <div class="legend-item">
-                        <span class="legend-color" style="background: #e74c3c;"></span>
-                        <span>Wind Vector</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color" style="background: #3498db;"></span>
-                        <span>Computed Heading</span>
-                    </div>
-                    <div class="legend-item">
-                        <span class="legend-color" style="background: #2ecc71;"></span>
-                        <span>Ground Track</span>
-                    </div>
-                </div>
-            </div>
-            
             <!-- Instructions -->
             <div class="instructions">
                 <h2>How to Use</h2>
                 <ol>
-                    <li>Enter your <strong>True Course</strong> (the direction you want to fly)</li>
+                    <li>Enter your <strong>Desired Course</strong> (the direction you want to fly)</li>
                     <li>Enter your <strong>True Airspeed</strong> (your aircraft's speed through the air)</li>
                     <li>Enter the <strong>Wind Direction</strong> (where the wind is coming from)</li>
                     <li>Enter the <strong>Wind Speed</strong> (how fast the wind is blowing)</li>
