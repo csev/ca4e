@@ -43,26 +43,34 @@ class E6BWindCalculator {
         }
 
         // Calculate wind angle (angle between true course and wind direction)
+        // Wind angle is the angle from true course to wind direction
         let windAngle = (windDirection - trueCourse) % 360;
+        if (windAngle < 0) windAngle += 360;
 
         // Convert to radians for calculations
         const windAngleRad = this.degreesToRadians(windAngle);
-        const trueCourseRad = this.degreesToRadians(trueCourse);
+        
+        // For ground speed calculation, we need the angle between TAS and wind vectors
+        // This is the supplement of the wind angle (180° - windAngle)
+        const groundSpeedAngleRad = Math.PI - windAngleRad;
 
-        // Calculate Wind Correction Angle (WCA)
+        // Calculate Wind Correction Angle (WCA) using sine law
+        // WCA = arcsin((windSpeed * sin(windAngle)) / trueAirspeed)
         const wcaRad = Math.asin((windSpeed * Math.sin(windAngleRad)) / trueAirspeed);
         const wca = this.radiansToDegrees(wcaRad);
 
         // Calculate Ground Speed using cosine law
+        // Ground Speed = sqrt(TAS² + WS² - 2*TAS*WS*cos(angle between TAS and wind))
         const groundSpeed = Math.sqrt(
-            Math.pow(trueAirspeed, 2) - 
-            // Math.pow(windSpeed, 2) - 
-            2 * trueAirspeed * windSpeed * Math.cos(windAngleRad)
+            Math.pow(trueAirspeed, 2) + 
+            Math.pow(windSpeed, 2) - 
+            2 * trueAirspeed * windSpeed * Math.cos(groundSpeedAngleRad)
         );
 
         // Calculate heading (true course + wind correction angle)
         let heading = (trueCourse + wca) % 360;
-
+        if (heading < 0) heading += 360;
+        
         // Calculate drift angle with proper sign
         // Positive drift angle means aircraft is drifting right (wind from left)
         // Negative drift angle means aircraft is drifting left (wind from right)
@@ -121,44 +129,29 @@ class E6BWindCalculator {
         const availableRadius = Math.min(this.canvas.width, this.canvas.height) * 0.45; // 90% of half canvas size
         const scale = availableRadius / maxVectorLength;
         
-        // Calculate vectors - Convert aviation coordinates (0° = North) to canvas coordinates (0° = East)
-        const trueCourseRad = this.degreesToRadians(90 - trueCourse); // Convert aviation to math coordinates
-        console.log('true course', trueCourse, trueCourseRad);
-        const windDirectionRad = this.degreesToRadians(90 - windDirection); // Convert aviation to math coordinates
-        const headingRad = this.degreesToRadians(90 - (trueCourse + wca)); // Convert aviation to math coordinates
-        console.log('heading', (trueCourse+wca), headingRad);
-        // Computed heading vector (blue) - what you actually fly
+        // Calculate heading (what you actually fly)
+        const heading = (trueCourse + wca) % 360;
+        
+        // Convert aviation coordinates (0° = North) to canvas coordinates (0° = East)
+        const headingRad = this.degreesToRadians(90 - heading);
+        const trueCourseRad = this.degreesToRadians(90 - trueCourse);
+        
+        // Heading vector (blue) - what you actually fly
         const headingX = centerX + Math.cos(headingRad) * trueAirspeed * scale;
         const headingY = centerY - Math.sin(headingRad) * trueAirspeed * scale;
         
-        // Wind vector (red) - Wind direction is FROM, convert to direction wind is blowing
-        const windToDirection = (windDirection + 180) % 360; // Convert FROM to TO direction
-        const windToRad = this.degreesToRadians(90 - windToDirection); // Convert to canvas coordinates
-        console.log('wind direction', windDirection, windToDirection, windToRad);
-        const windX = centerX + Math.cos(windToRad) * windSpeed * scale;
-        const windY = centerY - Math.sin(windToRad) * windSpeed * scale;
-        console.log('wind', windX, windY, windToRad, windSpeed);
-        console.log('zap', Math.sin(windToRad) * windSpeed * scale);
-        console.log('center', centerX, centerY);
-        
-        // Ground track vector (green) - same direction as true course but with wind-adjusted speed
+        // Ground track vector (green) - resultant direction (true course direction)
         const groundTrackX = centerX + Math.cos(trueCourseRad) * groundSpeed * scale;
         const groundTrackY = centerY - Math.sin(trueCourseRad) * groundSpeed * scale;
         
+        // Wind vector (red) - from heading end to ground track end
+        const windX = groundTrackX - headingX;
+        const windY = groundTrackY - headingY;
+        
         // Draw vectors
         this.drawVector(centerX, centerY, headingX, headingY, '#3498db', 'Heading');
-        this.drawVector(centerX, centerY, windX, windY, '#e74c3c', 'Wind');
+        this.drawVector(headingX, headingY, groundTrackX, groundTrackY, '#e74c3c', 'Wind');
         this.drawVector(centerX, centerY, groundTrackX, groundTrackY, '#2ecc71', 'Track');
-        
-        // Draw wind triangle
-        this.ctx.strokeStyle = '#95a5a6';
-        this.ctx.setLineDash([5, 5]);
-        this.ctx.lineWidth = 1;
-        this.ctx.beginPath();
-        this.ctx.moveTo(headingX, headingY);
-        this.ctx.lineTo(groundTrackX, groundTrackY);
-        this.ctx.stroke();
-        this.ctx.setLineDash([]);
         
         // Draw center point
         this.ctx.fillStyle = '#2c3e50';
