@@ -44,8 +44,6 @@ class E6BWindCalculator {
 
         // Calculate wind angle (angle between true course and wind direction)
         let windAngle = (windDirection - trueCourse) % 360;
-        // if (windAngle < 0) windAngle += 360;
-        // if (windAngle > 180) windAngle = 360 - windAngle;
 
         // Convert to radians for calculations
         const windAngleRad = this.degreesToRadians(windAngle);
@@ -57,15 +55,13 @@ class E6BWindCalculator {
 
         // Calculate Ground Speed using cosine law
         const groundSpeed = Math.sqrt(
-            Math.pow(trueAirspeed, 2) + 
-            Math.pow(windSpeed, 2) - 
+            Math.pow(trueAirspeed, 2) - 
+            // Math.pow(windSpeed, 2) - 
             2 * trueAirspeed * windSpeed * Math.cos(windAngleRad)
         );
 
         // Calculate heading (true course + wind correction angle)
-        let heading = trueCourse + wca;
-        if (heading > 360) heading -= 360;
-        if (heading < 0) heading += 360;
+        let heading = (trueCourse + wca) % 360;
 
         // Calculate drift angle with proper sign
         // Positive drift angle means aircraft is drifting right (wind from left)
@@ -119,7 +115,11 @@ class E6BWindCalculator {
         
         const centerX = this.canvas.width / 2;
         const centerY = this.canvas.height / 2;
-        const scale = 2; // Scale factor for visualization
+        
+        // Calculate dynamic scale to ensure largest vector stays within 10% of edge
+        const maxVectorLength = Math.max(trueAirspeed, windSpeed, groundSpeed);
+        const availableRadius = Math.min(this.canvas.width, this.canvas.height) * 0.45; // 90% of half canvas size
+        const scale = availableRadius / maxVectorLength;
         
         // Calculate vectors - Convert aviation coordinates (0° = North) to canvas coordinates (0° = East)
         const trueCourseRad = this.degreesToRadians(90 - trueCourse); // Convert aviation to math coordinates
