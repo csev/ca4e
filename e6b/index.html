@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E6B Wind Calculator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>E6B Wind Calculator</h1>
+            <p>Calculate wind correction angle and ground speed</p>
+        </header>
+        
+        <main>
+            <div class="calculator-grid">
+                <!-- Input Section -->
+                <div class="input-section">
+                    <h2>Flight Data</h2>
+                    
+                    <div class="input-group">
+                        <label for="trueCourse">True Course (°)</label>
+                        <input type="number" id="trueCourse" min="0" max="359" value="360" step="1">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="trueAirspeed">True Airspeed (kts)</label>
+                        <input type="number" id="trueAirspeed" min="50" max="500" value="120" step="5">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="windDirection">Wind Direction (°)</label>
+                        <input type="number" id="windDirection" min="0" max="359" value="270" step="1">
+                    </div>
+                    
+                    <div class="input-group">
+                        <label for="windSpeed">Wind Speed (kts)</label>
+                        <input type="number" id="windSpeed" min="0" max="100" value="20" step="5">
+                    </div>
+                    
+                    <button id="calculateBtn" class="calculate-btn">Calculate</button>
+                </div>
+                
+                <!-- Results Section -->
+                <div class="results-section">
+                    <h2>Results</h2>
+                    
+                    <div class="result-item">
+                        <label>Wind Correction Angle:</label>
+                        <span id="wca" class="result-value">--</span>
+                        <span class="unit">°</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <label>Ground Speed:</label>
+                        <span id="groundSpeed" class="result-value">--</span>
+                        <span class="unit">kts</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <label>Heading:</label>
+                        <span id="heading" class="result-value">--</span>
+                        <span class="unit">°</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <label>Drift Angle:</label>
+                        <span id="driftAngle" class="result-value">--</span>
+                        <span class="unit">°</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Visual Wind Triangle -->
+            <div class="wind-triangle-section">
+                <h2>Wind Triangle Visualization</h2>
+                <canvas id="windTriangle" width="400" height="400"></canvas>
+                <div class="triangle-legend">
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #e74c3c;"></span>
+                        <span>Wind Vector</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #3498db;"></span>
+                        <span>Computed Heading</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-color" style="background: #2ecc71;"></span>
+                        <span>Ground Track</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Instructions -->
+            <div class="instructions">
+                <h2>How to Use</h2>
+                <ol>
+                    <li>Enter your <strong>True Course</strong> (the direction you want to fly)</li>
+                    <li>Enter your <strong>True Airspeed</strong> (your aircraft's speed through the air)</li>
+                    <li>Enter the <strong>Wind Direction</strong> (where the wind is coming from)</li>
+                    <li>Enter the <strong>Wind Speed</strong> (how fast the wind is blowing)</li>
+                    <li>Click <strong>Calculate</strong> to see your results</li>
+                </ol>
+                
+                <div class="formula">
+                    <h3>Formula Used</h3>
+                    <p><strong>Wind Correction Angle (WCA):</strong></p>
+                    <p>WCA = arcsin(wind speed × sin(wind angle) ÷ true airspeed)</p>
+                    <p><strong>Ground Speed:</strong></p>
+                    <p>GS = √(TAS² + WS² - 2×TAS×WS×cos(wind angle))</p>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script type="module" src="script.js"></script>
+</body>
+</html> 
