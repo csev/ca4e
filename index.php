@@ -94,6 +94,9 @@ the sample content in various stages of completion:
 <a href="wasm"  target="_blank" class="text-primary">WASM Playground</a>
 </li>
 <li>
+<a href="e6b"  target="_blank" class="text-primary">Online Pilot Wind Correction Calculator (E6B)</a>
+</li>
+<li>
 <a href="https://www.youtube.com/playlist?list=PLa58EAvBOOSJDJoRNd8q8t3U0dgRAgZ1e" target="_blank" class="text-primary">A YouTube Playlist of the Development of the Course Content</a> (Please like and subscribe)
 </li>
 <li>Draft lecture on the CDC8512 microprocessor
