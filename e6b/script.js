@@ -16,7 +16,6 @@ class E6BWindCalculator {
         this.wcaResult = document.getElementById('wca');
         this.groundSpeedResult = document.getElementById('groundSpeed');
         this.headingResult = document.getElementById('heading');
-        this.driftAngleResult = document.getElementById('driftAngle');
         
         this.canvas = document.getElementById('windTriangle');
         this.ctx = this.canvas.getContext('2d');
@@ -33,9 +32,9 @@ class E6BWindCalculator {
     }
 
     calculate() {
-        const trueCourse = parseFloat(this.trueCourseInput.value);
+        const trueCourse = parseFloat(this.trueCourseInput.value) % 360;
         const trueAirspeed = parseFloat(this.trueAirspeedInput.value);
-        const windDirection = parseFloat(this.windDirectionInput.value);
+        const windDirection = parseFloat(this.windDirectionInput.value) % 360;
         const windSpeed = parseFloat(this.windSpeedInput.value);
 
         if (isNaN(trueCourse) || isNaN(trueAirspeed) || isNaN(windDirection) || isNaN(windSpeed)) {
@@ -44,60 +43,50 @@ class E6BWindCalculator {
 
         // Calculate wind angle (angle between true course and wind direction)
         // Wind angle is the angle from true course to wind direction
-        let windAngle = (windDirection - trueCourse) % 360;
-        if (windAngle < 0) windAngle += 360;
+        const windFrom = (180 - windDirection) % 360
+        let windAngle = (windFrom - trueCourse) % 360;
 
-        // Convert to radians for calculations
-        const windAngleRad = this.degreesToRadians(windAngle);
+        // Calculate Wind Correction Angle (WCA) and Ground Speed using law of sines
+        let wca, groundSpeed;
         
-        // For ground speed calculation, we need the angle between TAS and wind vectors
-        // This is the supplement of the wind angle (180° - windAngle)
-        const groundSpeedAngleRad = Math.PI - windAngleRad;
-
-        // Calculate Wind Correction Angle (WCA) using sine law
-        // WCA = arcsin((windSpeed * sin(windAngle)) / trueAirspeed)
-        const wcaRad = Math.asin((windSpeed * Math.sin(windAngleRad)) / trueAirspeed);
-        const wca = this.radiansToDegrees(wcaRad);
-
-        // Calculate Ground Speed using cosine law
-        // Ground Speed = sqrt(TAS² + WS² - 2*TAS*WS*cos(angle between TAS and wind))
-        const groundSpeed = Math.sqrt(
-            Math.pow(trueAirspeed, 2) + 
-            Math.pow(windSpeed, 2) - 
-            2 * trueAirspeed * windSpeed * Math.cos(groundSpeedAngleRad)
-        );
+        if (windAngle === 0 ) {
+            // Wind is directly behind (tailwind)
+            wca = 0;
+            groundSpeed = trueAirspeed + windSpeed;
+        } else if (windAngle === 180) {
+            // Wind is directly ahead (headwind)
+            wca = 0;
+            groundSpeed = trueAirspeed - windSpeed;
+        } else {
+            // Use law of sines for AAS triangle
+            const windAngleRad = this.degreesToRadians(windAngle);
+            wca = this.radiansToDegrees(Math.asin((windSpeed * Math.sin(windAngleRad)) / trueAirspeed));
+            
+            // Calculate ground speed angle (GSA)
+            const gsa = 180 - ((windAngle % 180) + wca);
+            const gsaRad = this.degreesToRadians(gsa);
+            const wcaRad = this.degreesToRadians(wca);
+            
+            // Calculate ground speed using law of sines
+            groundSpeed = Math.abs((windSpeed * Math.sin(gsaRad)) / Math.sin(wcaRad));
+        }
 
         // Calculate heading (true course + wind correction angle)
         let heading = (trueCourse + wca) % 360;
         if (heading < 0) heading += 360;
         
-        // Calculate drift angle with proper sign
-        // Positive drift angle means aircraft is drifting right (wind from left)
-        // Negative drift angle means aircraft is drifting left (wind from right)
-        let driftAngle = wca;
-        
-        // Determine sign based on wind angle
-        // If wind angle is between 0° and 180°, wind is from the right, so drift is negative
-        // If wind angle is between 180° and 360°, wind is from the left, so drift is positive
-        if (windAngle > 180) {
-            driftAngle = -Math.abs(wca);
-        } else {
-            driftAngle = Math.abs(wca);
-        }
-
         // Update results
-        this.updateResults(wca, groundSpeed, heading, driftAngle);
+        this.updateResults(wca, groundSpeed, heading);
         
         // Update visualization
         this.drawWindTriangle(trueCourse, trueAirspeed, windDirection, windSpeed, wca, groundSpeed);
     }
 
-    updateResults(wca, groundSpeed, heading, driftAngle) {
+    updateResults(wca, groundSpeed, heading) {
         const results = [
-            { element: this.wcaResult, value: wca.toFixed(1) },
-            { element: this.groundSpeedResult, value: groundSpeed.toFixed(1) },
-            { element: this.headingResult, value: heading.toFixed(1) },
-            { element: this.driftAngleResult, value: driftAngle.toFixed(1) + '°' }
+            { element: this.wcaResult, value: Math.round(wca) },
+            { element: this.groundSpeedResult, value: Math.round(groundSpeed) },
+            { element: this.headingResult, value: Math.round(heading) }
         ];
 
         results.forEach(({ element, value }) => {

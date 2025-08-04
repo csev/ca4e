@@ -85,11 +85,7 @@
                         <span class="unit">°</span>
                     </div>
                     
-                    <div class="result-item">
-                        <label>Drift Angle:</label>
-                        <span id="driftAngle" class="result-value">--</span>
-                        <span class="unit">°</span>
-                    </div>
+
                 </div>
             </div>
             
@@ -106,10 +102,14 @@
                 
                 <div class="formula">
                     <h3>Formula Used</h3>
-                    <p><strong>Wind Correction Angle (WCA):</strong></p>
+                    <p><strong>Wind Triangle Solution using Law of Sines:</strong></p>
+                    <p>1. <strong>Wind Correction Angle (WCA):</strong></p>
                     <p>WCA = arcsin(wind speed × sin(wind angle) ÷ true airspeed)</p>
-                    <p><strong>Ground Speed:</strong></p>
-                    <p>GS = √(TAS² + WS² - 2×TAS×WS×cos(wind angle))</p>
+                    <p>2. <strong>Ground Speed Angle (GSA):</strong></p>
+                    <p>GSA = 180° - (wind angle % 180° + WCA)</p>
+                    <p>3. <strong>Ground Speed:</strong></p>
+                    <p>GS = |(wind speed × sin(GSA)) ÷ sin(WCA)|</p>
+                    <p><em>Note: For headwind (180°) and tailwind (0°) cases, simple addition/subtraction is used.</em></p>
                 </div>
             </div>
         </main>
