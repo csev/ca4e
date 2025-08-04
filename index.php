@@ -96,9 +96,6 @@ the sample content in various stages of completion:
 <li>
 <a href="e6b"  target="_blank" class="text-primary">Online Pilot Wind Correction Calculator (E6B)</a>
 </li>
-<li>
-<a href="https://www.youtube.com/playlist?list=PLa58EAvBOOSJDJoRNd8q8t3U0dgRAgZ1e" target="_blank" class="text-primary">A YouTube Playlist of the Development of the Course Content</a> (Please like and subscribe)
-</li>
 <li>Draft lecture on the CDC8512 microprocessor
 <a href="lectures/CDC8512.pptx" target="_blank" class="text-primary">CDC8512 Microprocessor</a>.
 </li>
