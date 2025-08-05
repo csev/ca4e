@@ -90,6 +90,7 @@ class E6BWindTriangleTests {
     runProvidedTestCases() {
         console.log('📋 Provided Test Cases:');
         
+        // Note windAngle is the "to" direction, not the "from" direction
         const testCases = [
             { windAngle: 0, expectedWca: 0, expectedGs: 85 },
             { windAngle: 30, expectedWca: 4, expectedGs: 87 },
@@ -163,6 +164,8 @@ class E6BWindTriangleTests {
     // Special cases
     runSpecialCases() {
         console.log('⭐ Special Cases:');
+
+        // Note windDirection is the "from" direction, not the "to" direction
         
         // Crosswind from right
         this.runTest('Crosswind Right', 
@@ -176,9 +179,9 @@ class E6BWindTriangleTests {
             { wca: -9, groundSpeed: 99, heading: 351 }
         );
         
-        // 45-degree wind from right
+        // 45-degree wind from right (matching provided test case)
         this.runTest('45° Wind Right', 
-            { trueCourse: 0, trueAirspeed: 100, windDirection: 45, windSpeed: 15 },
+            { trueCourse: 0, trueAirspeed: 100, windDirection: 135, windSpeed: 15 },
             { wca: 6, groundSpeed: 89, heading: 6 }
         );
         
