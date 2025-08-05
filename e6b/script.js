@@ -53,7 +53,7 @@ class E6BWindCalculator {
         const results = this.performCalculation(inputs);
         
         // Update UI with results
-        this.updateResults(results.wca, results.groundSpeed, results.heading);
+        this.updateResults(results.wca, results.groundSpeed, results.heading, results.windAngle);
         this.drawWindTriangle(inputs.trueCourse, inputs.trueAirspeed, inputs.windFromDirection, inputs.windSpeed, results.wca, results.groundSpeed);
     }
 
@@ -118,10 +118,10 @@ class E6BWindCalculator {
         // Calculate heading (true course + wind correction angle)
         let heading = (inputs.trueCourse + wca + 360) % 360;
         
-        return { wca, groundSpeed, heading };
+        return { wca, groundSpeed, heading, windAngle };
     }
 
-    updateResults(wca, groundSpeed, heading) {
+    updateResults(wca, groundSpeed, heading, windAngle) {
         const results = [
             { element: this.wcaResult, value: Math.round(wca) },
             { element: this.groundSpeedResult, value: Math.round(groundSpeed) },
@@ -135,6 +135,9 @@ class E6BWindCalculator {
                 setTimeout(() => element.classList.remove('updated'), 500);
             }
         });
+        
+        // Log wind angle for debugging
+        console.log('Wind Angle:', Math.round(windAngle));
     }
 
     drawInitialTriangle() {

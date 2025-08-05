@@ -16,6 +16,7 @@ class E6BWindTriangleTests {
             const actualWca = Math.round(results.wca);
             const actualGroundSpeed = Math.round(results.groundSpeed);
             const actualHeading = Math.round(results.heading);
+            const actualWindAngle = Math.round(results.windAngle);
             
             // Check if results match expected values
             const wcaMatch = actualWca === expectedResults.wca;
@@ -32,7 +33,8 @@ class E6BWindTriangleTests {
                 actual: {
                     wca: actualWca,
                     groundSpeed: actualGroundSpeed,
-                    heading: actualHeading
+                    heading: actualHeading,
+                    windAngle: actualWindAngle
                 },
                 details: {
                     wcaMatch: wcaMatch,
@@ -70,7 +72,7 @@ class E6BWindTriangleTests {
                 console.log(`  Error: ${testResult.error}`);
             } else {
                 console.log(`  Expected: WCA=${testResult.expected.wca}, GS=${testResult.expected.groundSpeed}, HDG=${testResult.expected.heading}`);
-                console.log(`  Actual:   WCA=${testResult.actual.wca}, GS=${testResult.actual.groundSpeed}, HDG=${testResult.actual.heading}`);
+                console.log(`  Actual:   WCA=${testResult.actual.wca}, GS=${testResult.actual.groundSpeed}, HDG=${testResult.actual.heading}, WA=${testResult.actual.windAngle}°`);
             }
         }
     }

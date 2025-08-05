@@ -327,7 +327,7 @@
                                         <div class="test-name">${test.name}</div>
                                         <div class="test-details">
                                             Expected: WCA=${test.expected.wca}, GS=${test.expected.groundSpeed}, HDG=${test.expected.heading}<br>
-                                            Actual: WCA=${test.actual?.wca ?? 'N/A'}, GS=${test.actual?.groundSpeed ?? 'N/A'}, HDG=${test.actual?.heading ?? 'N/A'}
+                                            Actual: WCA=${test.actual?.wca ?? 'N/A'}, GS=${test.actual?.groundSpeed ?? 'N/A'}, HDG=${test.actual?.heading ?? 'N/A'}, WA=${test.actual?.windAngle ?? 'N/A'}°
                                         </div>
                                     </div>
                                     <div class="test-status ${test.passed ? 'pass' : 'fail'}">

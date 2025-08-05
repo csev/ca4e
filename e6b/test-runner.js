@@ -33,6 +33,9 @@ Deno.test("E6B Wind Triangle Calculator Tests", async (t) => {
       const actualWca = Math.round(results.wca);
       const actualGroundSpeed = Math.round(results.groundSpeed);
       const actualHeading = Math.round(results.heading);
+      const actualWindAngle = Math.round(results.windAngle);
+      
+      console.log(`${testName}: Wind Angle = ${actualWindAngle}°`);
       
       assertEquals(actualWca, expectedResults.wca, `WCA mismatch: expected ${expectedResults.wca}, got ${actualWca}`);
       assertEquals(actualGroundSpeed, expectedResults.groundSpeed, `Ground Speed mismatch: expected ${expectedResults.groundSpeed}, got ${actualGroundSpeed}`);
