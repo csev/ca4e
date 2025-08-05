@@ -54,14 +54,14 @@ class E6BWindCalculator {
         
         // Update UI with results
         this.updateResults(results.wca, results.groundSpeed, results.heading);
-        this.drawWindTriangle(inputs.trueCourse, inputs.trueAirspeed, inputs.windDirection, inputs.windSpeed, results.wca, results.groundSpeed);
+        this.drawWindTriangle(inputs.trueCourse, inputs.trueAirspeed, inputs.windFromDirection, inputs.windSpeed, results.wca, results.groundSpeed);
     }
 
     getInputs() {
         return {
             trueCourse: parseFloat(this.trueCourseInput.value) % 360,
             trueAirspeed: parseFloat(this.trueAirspeedInput.value),
-            windDirection: parseFloat(this.windDirectionInput.value) % 360,
+            windFromDirection: parseFloat(this.windDirectionInput.value) % 360,
             windSpeed: parseFloat(this.windSpeedInput.value)
         };
     }
@@ -69,14 +69,14 @@ class E6BWindCalculator {
     validateInputs(inputs) {
         return !isNaN(inputs.trueCourse) && 
                !isNaN(inputs.trueAirspeed) && 
-               !isNaN(inputs.windDirection) && 
+               !isNaN(inputs.windFromDirection) && 
                !isNaN(inputs.windSpeed);
     }
 
     performCalculation(inputs) {
-        // Calculate wind angle (angle between true course and wind direction)
-        // Wind direction is FROM direction, we need the angle to the wind
-        let windAngle = (inputs.windDirection - inputs.trueCourse) % 360;
+        // Calculate wind angle (angle between true course and wind from direction)
+        // For wind from direction, we need the angle from true course to wind from direction
+        let windAngle = (inputs.windFromDirection - inputs.trueCourse) % 360;
         if (windAngle < 0) windAngle += 360;
 
         // Calculate Wind Correction Angle (WCA) and Ground Speed using law of sines
@@ -86,6 +86,7 @@ class E6BWindCalculator {
             // No wind
             wca = 0;
             groundSpeed = inputs.trueAirspeed;
+            windAngle = 0;
         } else if (windAngle === 0) {
             // Wind is directly behind (tailwind)
             wca = 0;
@@ -94,7 +95,6 @@ class E6BWindCalculator {
             // Wind is directly ahead (headwind)
             wca = 0;
             groundSpeed = inputs.trueAirspeed - inputs.windSpeed;
-
         } else {
             // Use law of sines for AAS triangle
             const windAngleRad = this.degreesToRadians(windAngle);
@@ -150,7 +150,7 @@ class E6BWindCalculator {
         this.ctx.fillText('Enter flight data and click Calculate', this.canvas.width / 2, this.canvas.height / 2);
     }
 
-    drawWindTriangle(trueCourse, trueAirspeed, windDirection, windSpeed, wca, groundSpeed) {
+    drawWindTriangle(trueCourse, trueAirspeed, windFromDirection, windSpeed, wca, groundSpeed) {
         if (!this.canvas || !this.ctx) return;
         
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -166,9 +166,13 @@ class E6BWindCalculator {
         // Calculate heading (what you actually fly)
         const heading = (trueCourse + wca) % 360;
         
+        // Convert wind from direction to wind to direction for visualization
+        const windToDirection = (windFromDirection + 180) % 360;
+        
         // Convert aviation coordinates (0° = North) to canvas coordinates (0° = East)
         const headingRad = this.degreesToRadians(90 - heading);
         const trueCourseRad = this.degreesToRadians(90 - trueCourse);
+        const windRad = this.degreesToRadians(90 - windToDirection);
         
         // Heading vector (blue) - what you actually fly
         const headingX = centerX + Math.cos(headingRad) * trueAirspeed * scale;

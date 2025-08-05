@@ -56,11 +56,11 @@ Deno.test("E6B Wind Triangle Calculator Tests", async (t) => {
 
   // Run provided test cases
   for (const testCase of providedTestCases) {
-    const windDirection = (180 - testCase.windAngle) % 360;
+    const windFromDirection = (180 - testCase.windAngle) % 360;
     const inputs = {
       trueCourse: testCase.trueCourse,
       trueAirspeed: testCase.trueAirspeed,
-      windDirection: windDirection,
+      windFromDirection: windFromDirection,
       windSpeed: testCase.windSpeed
     };
     const expectedResults = {
@@ -74,27 +74,27 @@ Deno.test("E6B Wind Triangle Calculator Tests", async (t) => {
 
   // Edge cases
   await runTestCase("Zero Wind Speed", 
-    { trueCourse: 90, trueAirspeed: 100, windDirection: 180, windSpeed: 0 },
+    { trueCourse: 90, trueAirspeed: 100, windFromDirection: 180, windSpeed: 0 },
     { wca: 0, groundSpeed: 100, heading: 90 }
   );
 
   await runTestCase("Headwind", 
-    { trueCourse: 0, trueAirspeed: 100, windDirection: 180, windSpeed: 20 },
+    { trueCourse: 0, trueAirspeed: 100, windFromDirection: 180, windSpeed: 20 },
     { wca: 0, groundSpeed: 80, heading: 0 }
   );
 
   await runTestCase("Tailwind", 
-    { trueCourse: 0, trueAirspeed: 100, windDirection: 0, windSpeed: 20 },
+    { trueCourse: 0, trueAirspeed: 100, windFromDirection: 0, windSpeed: 20 },
     { wca: 0, groundSpeed: 120, heading: 0 }
   );
 
   await runTestCase("Crosswind Right", 
-    { trueCourse: 0, trueAirspeed: 100, windDirection: 90, windSpeed: 20 },
+    { trueCourse: 0, trueAirspeed: 100, windFromDirection: 90, windSpeed: 20 },
     { wca: 12, groundSpeed: 98, heading: 12 }
   );
 
   await runTestCase("Crosswind Left", 
-    { trueCourse: 0, trueAirspeed: 100, windDirection: 270, windSpeed: 20 },
+    { trueCourse: 0, trueAirspeed: 100, windFromDirection: 270, windSpeed: 20 },
     { wca: -12, groundSpeed: 98, heading: 348 }
   );
 }); 
