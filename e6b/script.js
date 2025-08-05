@@ -19,6 +19,7 @@ class E6BWindCalculator {
         this.wcaResult = document.getElementById('wca');
         this.groundSpeedResult = document.getElementById('groundSpeed');
         this.headingResult = document.getElementById('heading');
+        this.windAngleResult = document.getElementById('windAngle');
         
         this.canvas = document.getElementById('windTriangle');
         if (this.canvas) {
@@ -125,7 +126,8 @@ class E6BWindCalculator {
         const results = [
             { element: this.wcaResult, value: Math.round(wca) },
             { element: this.groundSpeedResult, value: Math.round(groundSpeed) },
-            { element: this.headingResult, value: Math.round(heading) }
+            { element: this.headingResult, value: Math.round(heading) },
+            { element: this.windAngleResult, value: Math.round(windAngle) }
         ];
 
         results.forEach(({ element, value }) => {
