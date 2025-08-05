@@ -10,6 +10,14 @@ class E6BWindTriangleTests {
     // Helper method to run a single test case
     runTest(testName, inputs, expectedResults) {
         try {
+            // Log inputs for debugging
+            console.log(`🔍 Inputs for ${testName}:`, {
+                trueCourse: inputs.trueCourse + '°',
+                trueAirspeed: inputs.trueAirspeed + ' kts',
+                windFromDirection: inputs.windFromDirection + '°',
+                windSpeed: inputs.windSpeed + ' kts'
+            });
+            
             const results = this.calculator.performCalculation(inputs);
             
             // Round results to match expected format
@@ -67,6 +75,9 @@ class E6BWindTriangleTests {
         const status = testResult.passed ? '✅ PASS' : '❌ FAIL';
         console.log(`${status}: ${testResult.name}`);
         
+        // Always show inputs for debugging
+        console.log(`  Inputs:   TC=${testResult.inputs.trueCourse}°, TAS=${testResult.inputs.trueAirspeed} kts, WFD=${testResult.inputs.windFromDirection}°, WS=${testResult.inputs.windSpeed} kts`);
+        
         if (!testResult.passed) {
             if (testResult.error) {
                 console.log(`  Error: ${testResult.error}`);
@@ -74,6 +85,9 @@ class E6BWindTriangleTests {
                 console.log(`  Expected: WCA=${testResult.expected.wca}, GS=${testResult.expected.groundSpeed}, HDG=${testResult.expected.heading}`);
                 console.log(`  Actual:   WCA=${testResult.actual.wca}, GS=${testResult.actual.groundSpeed}, HDG=${testResult.actual.heading}, WA=${testResult.actual.windAngle}°`);
             }
+        } else {
+            // Show actual results even for passed tests
+            console.log(`  Results:  WCA=${testResult.actual.wca}, GS=${testResult.actual.groundSpeed}, HDG=${testResult.actual.heading}, WA=${testResult.actual.windAngle}°`);
         }
     }
 
@@ -94,29 +108,28 @@ class E6BWindTriangleTests {
         
         // Note windAngle is the "to" direction, not the "from" direction
         const testCases = [
-            { windAngle: 0, expectedWca: 0, expectedGs: 85 },
-            { windAngle: 30, expectedWca: 4, expectedGs: 87 },
-            { windAngle: 40, expectedWca: 6, expectedGs: 88 },
-            { windAngle: 45, expectedWca: 6, expectedGs: 89 },
-            { windAngle: 60, expectedWca: 7, expectedGs: 92 },
-            { windAngle: 90, expectedWca: 9, expectedGs: 99 },
-            { windAngle: 120, expectedWca: 7, expectedGs: 107 },
-            { windAngle: 135, expectedWca: 6, expectedGs: 110 },
-            { windAngle: 180, expectedWca: 0, expectedGs: 115 },
-            { windAngle: 220, expectedWca: -6, expectedGs: 111 },
-            { windAngle: 225, expectedWca: -6, expectedGs: 110 },
-            { windAngle: 270, expectedWca: -9, expectedGs: 99 },
-            { windAngle: 360, expectedWca: 0, expectedGs: 85 }
+            { windFromDirection: 0, expectedWca: 0, expectedGs: 85 },
+            { windFromDirection: 30, expectedWca: 4, expectedGs: 87 },
+            { windFromDirection: 40, expectedWca: 6, expectedGs: 88 },
+            { windFromDirection: 45, expectedWca: 6, expectedGs: 89 },
+            { windFromDirection: 60, expectedWca: 7, expectedGs: 92 },
+            { windFromDirection: 90, expectedWca: 9, expectedGs: 99 },
+            { windFromDirection: 120, expectedWca: 7, expectedGs: 107 },
+            { windFromDirection: 135, expectedWca: 6, expectedGs: 110 },
+            { windFromDirection: 180, expectedWca: 0, expectedGs: 115 },
+            { windFromDirection: 220, expectedWca: -6, expectedGs: 111 },
+            { windFromDirection: 225, expectedWca: -6, expectedGs: 110 },
+            { windFromDirection: 270, expectedWca: -9, expectedGs: 99 },
+            { windFromDirection: 360, expectedWca: 0, expectedGs: 85 }
         ];
 
         testCases.forEach((testCase, index) => {
             // Convert wind angle to wind from direction
-            const windFromDirection = (180 - testCase.windAngle) % 360;
             
             const inputs = {
                 trueCourse: 0,
                 trueAirspeed: 100,
-                windFromDirection: windFromDirection,
+                windFromDirection: testCase.windFromDirection,
                 windSpeed: 15
             };
             
@@ -126,7 +139,7 @@ class E6BWindTriangleTests {
                 heading: (0 + testCase.expectedWca + 360) % 360
             };
             
-            this.runTest(`Wind Angle ${testCase.windAngle}°`, inputs, expectedResults);
+            this.runTest(`Wind Direction ${testCase.windFromDirection}°`, inputs, expectedResults);
         });
         
         console.log('');
@@ -150,14 +163,14 @@ class E6BWindTriangleTests {
         
         // Headwind case
         this.runTest('Headwind', 
-            { trueCourse: 0, trueAirspeed: 100, windFromDirection: 180, windSpeed: 20 },
-            { wca: 0, groundSpeed: 80, heading: 0 }
+            { trueCourse: 0, trueAirspeed: 100, windFromDirection: 0, windSpeed:15 },
+            { wca: 0, groundSpeed: 85, heading: 0 }
         );
         
         // Tailwind case
         this.runTest('Tailwind', 
-            { trueCourse: 0, trueAirspeed: 100, windFromDirection: 0, windSpeed: 20 },
-            { wca: 0, groundSpeed: 120, heading: 0 }
+            { trueCourse: 0, trueAirspeed: 100, windFromDirection: 180, windSpeed: 15 },
+            { wca: 0, groundSpeed: 115, heading: 0 }
         );
         
         console.log('');
@@ -182,27 +195,27 @@ class E6BWindTriangleTests {
         );
         
         // 45-degree wind from right (matching provided test case)
-        this.runTest('45° Wind Right', 
+        this.runTest('45° Headwind Right', 
             { trueCourse: 0, trueAirspeed: 100, windFromDirection: 135, windSpeed: 15 },
             { wca: 6, groundSpeed: 89, heading: 6 }
         );
         
         // 45-degree wind from left
-        this.runTest('45° Wind Left', 
+        this.runTest('315° Headwind Left', 
             { trueCourse: 0, trueAirspeed: 100, windFromDirection: 315, windSpeed: 15 },
             { wca: -6, groundSpeed: 89, heading: 354 }
         );
 
         // 135-degree wind from right (matching provided test case)
-        this.runTest('135° Wind Right', 
-            { trueCourse: 0, trueAirspeed: 100, windFromDirection: 325, windSpeed: 15 },
-            { wca: 6, groundSpeed: 89, heading: 226 }
+        this.runTest('135° Tailwind Right', 
+            { trueCourse: 0, trueAirspeed: 100, windFromDirection: 135, windSpeed: 15 },
+            { wca: 6, groundSpeed: 110, heading: 6 }
         );
         
         // 225-degree wind from left
-        this.runTest('225° Wind Left', 
-            { trueCourse: 0, trueAirspeed: 100, windFromDirection: 45, windSpeed: 15 },
-            { wca: -6, groundSpeed: 89, heading: 226 }
+        this.runTest('225° Tailwind Left', 
+            { trueCourse: 0, trueAirspeed: 100, windFromDirection: 225, windSpeed: 15 },
+            { wca: -6, groundSpeed: 110, heading: 354 }
         );
         
         console.log('');

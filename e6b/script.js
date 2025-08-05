@@ -77,7 +77,8 @@ class E6BWindCalculator {
     performCalculation(inputs) {
         // Calculate wind angle (angle between true course and wind from direction)
         // For wind from direction, we need the angle from true course to wind from direction
-        let windAngle = (inputs.windFromDirection - inputs.trueCourse) % 360;
+        let windToDirection = (inputs.windFromDirection + 180) % 360;
+        let windAngle = (windToDirection - inputs.trueCourse) % 360;
         if (windAngle < 0) windAngle += 360;
 
         // Calculate Wind Correction Angle (WCA) and Ground Speed using law of sines
