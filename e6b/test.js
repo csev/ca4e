@@ -193,13 +193,13 @@ class E6BWindTriangleTests {
 
         // 135-degree wind from right (matching provided test case)
         this.runTest('135° Wind Right', 
-            { trueCourse: 0, trueAirspeed: 100, windDirection: 225, windSpeed: 15 },
+            { trueCourse: 0, trueAirspeed: 100, windDirection: 325, windSpeed: 15 },
             { wca: 6, groundSpeed: 89, heading: 226 }
         );
         
         // 225-degree wind from left
         this.runTest('225° Wind Left', 
-            { trueCourse: 0, trueAirspeed: 100, windDirection: 225, windSpeed: 15 },
+            { trueCourse: 0, trueAirspeed: 100, windDirection: 45, windSpeed: 15 },
             { wca: -6, groundSpeed: 89, heading: 226 }
         );
         
