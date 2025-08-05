@@ -82,7 +82,11 @@ class E6BWindCalculator {
         // Calculate Wind Correction Angle (WCA) and Ground Speed using law of sines
         let wca, groundSpeed;
         
-        if (windAngle === 0) {
+        if (inputs.windSpeed === 0) {
+            // No wind
+            wca = 0;
+            groundSpeed = inputs.trueAirspeed;
+        } else if (windAngle === 0) {
             // Wind is directly behind (tailwind)
             wca = 0;
             groundSpeed = inputs.trueAirspeed + inputs.windSpeed;
@@ -90,10 +94,7 @@ class E6BWindCalculator {
             // Wind is directly ahead (headwind)
             wca = 0;
             groundSpeed = inputs.trueAirspeed - inputs.windSpeed;
-        } else if (inputs.windSpeed === 0) {
-            // No wind
-            wca = 0;
-            groundSpeed = inputs.trueAirspeed;
+
         } else {
             // Use law of sines for AAS triangle
             const windAngleRad = this.degreesToRadians(windAngle);
