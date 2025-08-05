@@ -1,0 +1,14 @@
+{
+  "name": "e6b-wind-calculator",
+  "version": "1.0.0",
+  "description": "E6B Wind Triangle Calculator with unit tests",
+  "main": "script.js",
+  "scripts": {
+    "test": "node test-runner.js",
+    "test:watch": "node test-runner.js --watch"
+  },
+  "devDependencies": {
+    "jsdom": "^22.1.0"
+  },
+  "type": "module"
+} 
