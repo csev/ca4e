@@ -70,7 +70,7 @@ As the course is developed, you can see some of
 the sample content in various stages of completion:
 <ul>
 <li>
-<a href="sliderule"  target="_blank" class="text-primary">Online Slide Rule</a>
+<a href="sliderule"  target="_blank" class="text-primary">Interactive Slide Rule</a>
 </li>
 <!--
     <li>

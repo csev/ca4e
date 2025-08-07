@@ -20,8 +20,8 @@ class TraditionalSlideRule {
     }
 
     createScales() {
-        this.createDScaleMarkings(this.fixedMarkings);
-        this.createCScaleMarkings(this.slidingMarkings);
+        this.createAScaleMarkings(this.fixedMarkings);
+        this.createBScaleMarkings(this.slidingMarkings);
         this.createLScaleMarkings(this.lMarkings);
     }
 
@@ -88,7 +88,7 @@ class TraditionalSlideRule {
         return markings;
     }
 
-    generateLogarithmicMarkingsForC() {
+    generateLogarithmicMarkingsForB() {
         const markings = [];
         const majorValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         
@@ -120,7 +120,7 @@ class TraditionalSlideRule {
         return markings;
     }
 
-    generateLogarithmicMarkingsForD() {
+    generateLogarithmicMarkingsForA() {
         const markings = [];
         const majorValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         
@@ -152,18 +152,18 @@ class TraditionalSlideRule {
         return markings;
     }
 
-    createDScaleMarkings(container) {
-        const markings = this.generateLogarithmicMarkingsForD();
+    createAScaleMarkings(container) {
+        const markings = this.generateLogarithmicMarkingsForA();
         
         markings.forEach(marking => {
             const markingElement = document.createElement('div');
             markingElement.className = `marking ${marking.isMajor ? 'major' : ''}`;
             markingElement.style.left = `${marking.position}%`;
             markingElement.setAttribute('data-value', marking.value);
-            markingElement.setAttribute('data-scale', 'D');
+            markingElement.setAttribute('data-scale', 'A');
             markingElement.setAttribute('tabindex', '0');
             markingElement.setAttribute('role', 'button');
-            markingElement.setAttribute('aria-label', `D scale, value ${marking.value}`);
+            markingElement.setAttribute('aria-label', `A scale, value ${marking.value}`);
             
             // Add label for major markings
             if (marking.isMajor) {
@@ -183,18 +183,18 @@ class TraditionalSlideRule {
         });
     }
 
-    createCScaleMarkings(container) {
-        const markings = this.generateLogarithmicMarkingsForC();
+    createBScaleMarkings(container) {
+        const markings = this.generateLogarithmicMarkingsForB();
         
         markings.forEach(marking => {
             const markingElement = document.createElement('div');
             markingElement.className = `marking ${marking.isMajor ? 'major' : ''}`;
             markingElement.style.left = `${marking.position}%`;
             markingElement.setAttribute('data-value', marking.value);
-            markingElement.setAttribute('data-scale', 'C');
+            markingElement.setAttribute('data-scale', 'B');
             markingElement.setAttribute('tabindex', '0');
             markingElement.setAttribute('role', 'button');
-            markingElement.setAttribute('aria-label', `C scale, value ${marking.value}`);
+            markingElement.setAttribute('aria-label', `B scale, value ${marking.value}`);
             
             // Add label for major markings
             if (marking.isMajor) {
@@ -410,24 +410,24 @@ class TraditionalSlideRule {
         
         console.log(`Demonstrating: ${a} × ${b} = ${product}`);
         
-        // Step 1: Move hairline to first number (2.5) on D scale
-        console.log(`Step 1: Moving hairline to ${a} on D scale...`);
+        // Step 1: Move hairline to first number (2.5) on A scale
+        console.log(`Step 1: Moving hairline to ${a} on A scale...`);
         const positionA = this.logToPosition(a);
         await this.animateHairline(positionA, 3000);
         
-        // Step 2: Slide C scale to align 1 with hairline
-        console.log(`Step 2: Sliding C scale to align 1 with hairline...`);
+        // Step 2: Slide B scale to align 1 with hairline
+        console.log(`Step 2: Sliding B scale to align 1 with hairline...`);
         const offsetNeeded = this.calculateOffsetForAlignment(a);
         await this.animateSlidingScale(offsetNeeded, 3000);
         
-        // Step 3: Move hairline to second number (3.2) on C scale
-        console.log(`Step 3: Moving hairline to ${b} on C scale...`);
+        // Step 3: Move hairline to second number (3.2) on B scale
+        console.log(`Step 3: Moving hairline to ${b} on B scale...`);
         const positionB = this.logToPosition(b);
-        const finalPosition = positionB + (offsetNeeded / 10); // Adjust for C scale offset
+        const finalPosition = positionB + (offsetNeeded / 10); // Adjust for B scale offset
         await this.animateHairline(finalPosition, 3000);
         
         // Step 4: Show result
-        console.log(`Step 4: Reading result ${product.toFixed(2)} on D scale`);
+        console.log(`Step 4: Reading result ${product.toFixed(2)} on A scale`);
         this.showResult(product);
     }
     
@@ -482,7 +482,7 @@ class TraditionalSlideRule {
     }
     
     calculateOffsetForAlignment(value) {
-        // Calculate the offset needed to align the C scale's "1" with the given value on D scale
+        // Calculate the offset needed to align the B scale's "1" with the given value on A scale
         const valuePosition = this.logToPosition(value);
         const onePosition = this.logToPosition(1);
         const offset = (valuePosition - onePosition) * 10; // Convert percentage to pixels
@@ -506,7 +506,7 @@ class TraditionalSlideRule {
             z-index: 1000;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
         `;
-        resultElement.textContent = `Result: ${result.toFixed(2)}`;
+        resultElement.textContent = `2.5 × 3.2 = ${result.toFixed(2)}`;
         
         document.body.appendChild(resultElement);
         
@@ -555,5 +555,40 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    document.querySelector('.controls').appendChild(demoButton);
+    // Add reset button
+    const resetButton = document.createElement('button');
+    resetButton.textContent = 'Reset';
+    resetButton.style.cssText = `
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        margin: 10px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+    `;
+    resetButton.addEventListener('mouseenter', () => {
+        resetButton.style.background = '#c0392b';
+    });
+    resetButton.addEventListener('mouseleave', () => {
+        resetButton.style.background = '#e74c3c';
+    });
+    resetButton.addEventListener('click', () => {
+        slideRule.resetSlideRule();
+    });
+    
+    // Create a button container
+    const buttonContainer = document.createElement('div');
+    buttonContainer.style.cssText = `
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-top: 10px;
+    `;
+    buttonContainer.appendChild(demoButton);
+    buttonContainer.appendChild(resetButton);
+    
+    document.querySelector('.controls').appendChild(buttonContainer);
 }); 
