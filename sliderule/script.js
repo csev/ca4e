@@ -17,8 +17,6 @@ class TraditionalSlideRule {
         this.lValue = document.getElementById('lValue');
         this.hairlinePosition = document.getElementById('hairlinePosition');
         this.slidingOffset = document.getElementById('slidingOffset');
-        this.hairlineValue = document.getElementById('hairlineValue');
-        this.offsetValue = document.getElementById('offsetValue');
     }
 
     createScales() {
@@ -250,21 +248,21 @@ class TraditionalSlideRule {
     generateLinearMarkings() {
         const markings = [];
         
-        // Generate major markings (0, 1, 2, ..., 10)
+        // Generate major markings (0.0, 0.1, 0.2, ..., 1.0)
         for (let i = 0; i <= 10; i++) {
-            const value = i;
-            const position = (value / 10) * 100; // Linear scale from 0 to 100%
+            const value = i * 0.1;
+            const position = (value / 1) * 100; // Linear scale from 0 to 100%
             markings.push({
-                value: value,
+                value: Math.round(value * 10) / 10,
                 position: position,
                 isMajor: true
             });
         }
         
-        // Generate minor markings (0.1, 0.2, ..., 9.9)
+        // Generate minor markings (0.01, 0.02, ..., 0.99)
         for (let i = 1; i <= 99; i++) {
-            const value = i * 0.1;
-            const position = (value / 10) * 100;
+            const value = i * 0.01;
+            const position = (value / 1) * 100;
             if (i % 10 !== 0) { // Skip major markings
                 markings.push({
                     value: Math.round(value * 10) / 10,
@@ -340,6 +338,7 @@ class TraditionalSlideRule {
     updateHairline() {
         const position = parseFloat(this.hairlinePosition.value);
         const value = this.positionToLog(position);
+        const cOffset = parseFloat(this.slidingOffset.value);
         
         // Update hairline position smoothly
         this.hairline.style.left = `${position}%`;
@@ -347,25 +346,26 @@ class TraditionalSlideRule {
         // Update D scale value (same as hairline value)
         this.dValue.textContent = value.toFixed(3);
         
-        // Update C scale value (same as hairline value, but considering slide offset)
-        this.cValue.textContent = value.toFixed(3);
+        // Update C scale value (considering both hairline position and C scale offset)
+        const cPosition = position - (cOffset / 10); // Convert pixel offset to percentage, subtract for correct direction
+        const cValue = this.positionToLog(cPosition);
+        this.cValue.textContent = cValue.toFixed(3);
         
         // Update L scale value (logarithm of the value)
         const logValue = Math.log10(value);
         this.lValue.textContent = logValue.toFixed(3);
         
-        // Update displayed value with more precision
-        this.hairlineValue.textContent = value.toFixed(3);
-        
-        console.log(`Hairline at ${value.toFixed(3)}`);
+        console.log(`Hairline at ${value.toFixed(3)}, C scale at ${cValue.toFixed(3)}`);
     }
 
     updateSlidingScale() {
         const offset = this.slidingOffset.value;
-        this.offsetValue.textContent = offset;
         
         // Apply offset to sliding scale
         this.slidingMarkings.style.transform = `translateX(${offset}px)`;
+        
+        // Update hairline to recalculate C scale value
+        this.updateHairline();
     }
 
     // Calculate multiplication: a × b
