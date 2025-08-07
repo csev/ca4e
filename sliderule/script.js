@@ -384,22 +384,136 @@ class TraditionalSlideRule {
         return result;
     }
 
+    // Reset slide rule to original position
+    resetSlideRule() {
+        // Reset hairline to center (50%)
+        this.hairlinePosition.value = 50;
+        this.updateHairline();
+        
+        // Reset C scale to original position (0 offset)
+        this.slidingOffset.value = 0;
+        this.slidingMarkings.style.transform = 'translateX(0px)';
+    }
+    
     // Demonstrate slide rule calculation
-    demonstrateCalculation() {
+    async demonstrateCalculation() {
+        // Reset to original position first
+        console.log('Resetting slide rule to original position...');
+        this.resetSlideRule();
+        
+        // Wait a moment for reset to be visible
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
         const a = 2.5;
         const b = 3.2;
         const product = this.multiply(a, b);
-        const quotient = this.divide(a, b);
         
-        console.log(`${a} × ${b} = ${product}`);
-        console.log(`${a} ÷ ${b} = ${quotient}`);
+        console.log(`Demonstrating: ${a} × ${b} = ${product}`);
         
-        // Show how to use the slide rule
-        console.log(`To multiply ${a} × ${b}:`);
-        console.log(`1. Move hairline to ${a} on D scale`);
-        console.log(`2. Slide C scale to align 1 with hairline`);
-        console.log(`3. Move hairline to ${b} on C scale`);
-        console.log(`4. Read result ${product.toFixed(2)} on D scale`);
+        // Step 1: Move hairline to first number (2.5) on D scale
+        console.log(`Step 1: Moving hairline to ${a} on D scale...`);
+        const positionA = this.logToPosition(a);
+        await this.animateHairline(positionA, 3000);
+        
+        // Step 2: Slide C scale to align 1 with hairline
+        console.log(`Step 2: Sliding C scale to align 1 with hairline...`);
+        const offsetNeeded = this.calculateOffsetForAlignment(a);
+        await this.animateSlidingScale(offsetNeeded, 3000);
+        
+        // Step 3: Move hairline to second number (3.2) on C scale
+        console.log(`Step 3: Moving hairline to ${b} on C scale...`);
+        const positionB = this.logToPosition(b);
+        const finalPosition = positionB + (offsetNeeded / 10); // Adjust for C scale offset
+        await this.animateHairline(finalPosition, 3000);
+        
+        // Step 4: Show result
+        console.log(`Step 4: Reading result ${product.toFixed(2)} on D scale`);
+        this.showResult(product);
+    }
+    
+    animateHairline(targetPosition, duration) {
+        return new Promise((resolve) => {
+            const startPosition = parseFloat(this.hairlinePosition.value);
+            const startTime = Date.now();
+            
+            const animate = () => {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const currentPosition = startPosition + (targetPosition - startPosition) * progress;
+                
+                this.hairlinePosition.value = currentPosition;
+                this.updateHairline();
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    resolve();
+                }
+            };
+            
+            animate();
+        });
+    }
+    
+    animateSlidingScale(targetOffset, duration) {
+        return new Promise((resolve) => {
+            const startOffset = parseFloat(this.slidingOffset.value);
+            const startTime = Date.now();
+            
+            const animate = () => {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const currentOffset = startOffset + (targetOffset - startOffset) * progress;
+                
+                // Apply the transform directly to the sliding markings
+                this.slidingMarkings.style.transform = `translateX(${currentOffset}px)`;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    // Update the slider value at the end
+                    this.slidingOffset.value = targetOffset;
+                    resolve();
+                }
+            };
+            
+            animate();
+        });
+    }
+    
+    calculateOffsetForAlignment(value) {
+        // Calculate the offset needed to align the C scale's "1" with the given value on D scale
+        const valuePosition = this.logToPosition(value);
+        const onePosition = this.logToPosition(1);
+        const offset = (valuePosition - onePosition) * 10; // Convert percentage to pixels
+        return offset;
+    }
+    
+    showResult(result) {
+        // Create a temporary highlight effect
+        const resultElement = document.createElement('div');
+        resultElement.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #27ae60;
+            color: white;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        `;
+        resultElement.textContent = `Result: ${result.toFixed(2)}`;
+        
+        document.body.appendChild(resultElement);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            document.body.removeChild(resultElement);
+        }, 3000);
     }
 }
 
@@ -409,7 +523,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Add demonstration button
     const demoButton = document.createElement('button');
-    demoButton.textContent = 'Demonstrate 2.5 × 3.2';
+    demoButton.textContent = 'Demonstrate: 2.5 × 3.2 = 8.0';
     demoButton.style.cssText = `
         background: #27ae60;
         color: white;
@@ -419,9 +533,26 @@ document.addEventListener('DOMContentLoaded', () => {
         margin: 10px;
         cursor: pointer;
         font-size: 16px;
+        transition: background-color 0.3s ease;
     `;
-    demoButton.addEventListener('click', () => {
-        slideRule.demonstrateCalculation();
+    demoButton.addEventListener('mouseenter', () => {
+        demoButton.style.background = '#219a52';
+    });
+    demoButton.addEventListener('mouseleave', () => {
+        demoButton.style.background = '#27ae60';
+    });
+    demoButton.addEventListener('click', async () => {
+        demoButton.disabled = true;
+        demoButton.textContent = 'Demonstrating...';
+        demoButton.style.background = '#95a5a6';
+        
+        try {
+            await slideRule.demonstrateCalculation();
+        } finally {
+            demoButton.disabled = false;
+            demoButton.textContent = 'Demonstrate: 2.5 × 3.2 = 8.0';
+            demoButton.style.background = '#27ae60';
+        }
     });
     
     document.querySelector('.controls').appendChild(demoButton);
