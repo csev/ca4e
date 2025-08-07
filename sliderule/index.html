@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Traditional Slide Rule</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Traditional Slide Rule</h1>
+            <p>For multiplication and division</p>
+        </header>
+        
+        <div class="slide-rule-container">
+            <div class="slide-rule" id="slideRule">
+                <!-- Fixed scale (D scale) -->
+                <div class="scale fixed-scale" id="fixedScale">
+                    <div class="scale-label">D</div>
+                    <div class="scale-value" id="dValue">1.0</div>
+                    <div class="scale-markings" id="fixedMarkings"></div>
+                </div>
+                
+                <!-- Sliding scale (C scale) -->
+                <div class="scale sliding-scale" id="slidingScale">
+                    <div class="scale-label">C</div>
+                    <div class="scale-value" id="cValue">1.0</div>
+                    <div class="scale-markings" id="slidingMarkings"></div>
+                </div>
+                
+                <!-- L scale (logarithmic scale) -->
+                <div class="scale l-scale" id="lScale">
+                    <div class="scale-label">L</div>
+                    <div class="scale-value" id="lValue">0.0</div>
+                    <div class="scale-markings" id="lMarkings"></div>
+                </div>
+                
+                <!-- Hairline cursor -->
+                <div class="hairline" id="hairline"></div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="control-group">
+                <label for="hairlinePosition">Hairline Position:</label>
+                <input type="range" id="hairlinePosition" min="0" max="100" value="50" step="0.1">
+                <span id="hairlineValue">1.0</span>
+            </div>
+            
+            <div class="control-group">
+                <label for="slidingOffset">Move C:</label>
+                <input type="range" id="slidingOffset" min="-1000" max="1000" value="0">
+                <span id="offsetValue">0</span>
+            </div>
+        </div>
+        
+        <div class="info-panel">
+            <h2>How to Use</h2>
+            <ul>
+                <li>Move the hairline to the first number on the D scale</li>
+                <li>Slide the C scale to align 1 with the hairline</li>
+                <li>Move the hairline to the second number on the C scale</li>
+                <li>Read the result on the D scale</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html> 
