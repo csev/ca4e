@@ -92,6 +92,11 @@ header p {
     font-size: 0.9rem;
 }
 
+.sliding-scale .scale-label {
+    background: #000;
+    color: white;
+}
+
 .scale-value {
     position: absolute;
     top: 20%;
