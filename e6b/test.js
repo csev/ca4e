@@ -194,9 +194,9 @@ class E6BWindTriangleTests {
             { wca: -9, groundSpeed: 99, heading: 351 }
         );
         
-        // 45-degree wind from right (matching provided test case)
+        // 45-degree wind from right (headwind component)
         this.runTest('45° Headwind Right', 
-            { trueCourse: 0, trueAirspeed: 100, windFromDirection: 135, windSpeed: 15 },
+            { trueCourse: 0, trueAirspeed: 100, windFromDirection: 45, windSpeed: 15 },
             { wca: 6, groundSpeed: 89, heading: 6 }
         );
         
