@@ -76,9 +76,9 @@ class E6BWindCalculator {
 
     performCalculation(inputs) {
         // Calculate wind angle (angle between true course and wind from direction)
-        // For wind from direction, we need the angle from true course to wind from direction
-        let windToDirection = (inputs.windFromDirection + 180) % 360;
-        let windAngle = (windToDirection - inputs.trueCourse) % 360;
+        // Wind angle is the angle from true course to wind from direction
+        // For aviation: wind angle = wind from direction - true course
+        let windAngle = (inputs.windFromDirection - inputs.trueCourse) % 360;
         if (windAngle < 0) windAngle += 360;
 
         // Calculate Wind Correction Angle (WCA) and Ground Speed using law of sines
@@ -90,31 +90,49 @@ class E6BWindCalculator {
             groundSpeed = inputs.trueAirspeed;
             windAngle = 0;
         } else if (windAngle === 0) {
-            // Wind is directly behind (tailwind)
-            wca = 0;
-            groundSpeed = inputs.trueAirspeed + inputs.windSpeed;
-        } else if (windAngle === 180) {
-            // Wind is directly ahead (headwind)
+            // Wind is directly ahead (headwind) - wind from same direction as true course
             wca = 0;
             groundSpeed = inputs.trueAirspeed - inputs.windSpeed;
+        } else if (windAngle === 180) {
+            // Wind is directly behind (tailwind) - wind from opposite direction as true course
+            wca = 0;
+            groundSpeed = inputs.trueAirspeed + inputs.windSpeed;
         } else {
             // Use law of sines for AAS triangle
             const windAngleRad = this.degreesToRadians(windAngle);
             wca = this.radiansToDegrees(Math.asin((inputs.windSpeed * Math.sin(windAngleRad)) / inputs.trueAirspeed));
             
             // Determine sign of WCA based on wind angle
-            // If wind angle > 180, wind is from the left, so WCA should be negative
+            // If wind angle is between 0° and 180°, wind is from the right, so WCA should be positive
+            // If wind angle is between 180° and 360°, wind is from the left, so WCA should be negative
             if (windAngle > 180) {
                 wca = -Math.abs(wca);
+            } else {
+                wca = Math.abs(wca);
             }
             
-            // Calculate ground speed angle (GSA) - the angle between wind and ground track
-            const gsa = 180 - (windAngle + Math.abs(wca));
-            const gsaRad = this.degreesToRadians(gsa);
-            const wcaRad = this.degreesToRadians(Math.abs(wca));
+            // Calculate ground speed using vector addition
+            // Ground track = Heading + Wind
+            // We know the heading (true course + WCA) and wind
+            // We need to find the ground track magnitude
             
-            // Calculate ground speed using law of sines
-            groundSpeed = Math.abs((inputs.windSpeed * Math.sin(gsaRad)) / Math.sin(wcaRad));
+            // Convert to radians
+            const headingRad = this.degreesToRadians(inputs.trueCourse + wca);
+            const windToDirection = (inputs.windFromDirection + 180) % 360;
+            const windRad = this.degreesToRadians(windToDirection);
+            
+            // Vector components
+            const headingX = inputs.trueAirspeed * Math.cos(headingRad);
+            const headingY = inputs.trueAirspeed * Math.sin(headingRad);
+            const windX = inputs.windSpeed * Math.cos(windRad);
+            const windY = inputs.windSpeed * Math.sin(windRad);
+            
+            // Ground track vector (resultant)
+            const groundX = headingX + windX;
+            const groundY = headingY + windY;
+            
+            // Ground speed magnitude
+            groundSpeed = Math.sqrt(groundX * groundX + groundY * groundY);
         }
 
         // Calculate heading (true course + wind correction angle)
