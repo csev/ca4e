@@ -25,7 +25,36 @@ header {
     background: linear-gradient(45deg, #3498db, #2980b9);
     color: white;
     padding: 30px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
     text-align: center;
+}
+
+.title-section {
+    flex: 1;
+}
+
+.home-link {
+    display: inline-block;
+    font-size: 2rem;
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.home-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
 header h1 {

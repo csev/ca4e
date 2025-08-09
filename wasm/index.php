@@ -9,8 +9,13 @@
 <body>
     <div class="container">
         <header>
-            <h1>WASM Playground</h1>
-            <p>A teaching tool for learning WebAssembly Text (WAT) format - ES Module Version</p>
+            <div class="header-content">
+                <div class="title-section">
+                    <h1>WASM Playground</h1>
+                    <p>A teaching tool for learning WebAssembly Text (WAT) format - ES Module Version</p>
+                </div>
+                <a href="../index.php" class="home-link" title="Go to Home">🏠</a>
+            </div>
         </header>
         
         <main>
