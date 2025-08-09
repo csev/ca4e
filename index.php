@@ -96,11 +96,9 @@ the sample content in various stages of completion:
 <li>
 <a href="wasm"  target="_blank" class="text-primary">WASM Playground</a>
 </li>
-<!--
 <li>
 <a href="e6b"  target="_blank" class="text-primary">Online Pilot Wind Correction Calculator (E6B)</a>
 </li>
--->
 <li>Draft lecture on the CDC8512 microprocessor
 <a href="lectures/CDC8512.pptx" target="_blank" class="text-primary">CDC8512 Microprocessor</a>.
 </li>
