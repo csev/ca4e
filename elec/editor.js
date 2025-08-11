@@ -4,7 +4,7 @@ class CircuitEditor {
         this.ctx = null;
         this.components = [];
         this.connections = [];
-        this.mode = 'move'; // 'move' or 'connect'
+        this.mode = 'move'; // 'move', 'connect', or 'delete'
         this.selectedComponent = null;
         this.dragging = false;
         this.dragOffset = { x: 0, y: 0 };
@@ -338,6 +338,12 @@ class CircuitEditor {
                     this.createConnection(this.connectingFrom, connectorInfo);
                     this.connectingFrom = null;
                 }
+            }
+        } else if (this.mode === 'delete') {
+            const component = this.findComponentAt(x, y);
+            if (component) {
+                this.deleteComponent(component);
+                this.setMode('move'); // Switch back to move mode after deletion
             }
         }
     }
@@ -912,6 +918,26 @@ class CircuitEditor {
                 component.y = position.y;
             }
         }
+    }
+
+    deleteComponent(component) {
+        // Remove all connections involving this component
+        this.connections = this.connections.filter(conn => 
+            conn.from.componentId !== component.id && conn.to.componentId !== component.id
+        );
+        
+        // Remove the component
+        this.components = this.components.filter(comp => comp.id !== component.id);
+        
+        // Update component counts
+        const type = component.type;
+        if (this.componentCounts[type] > 0) {
+            this.componentCounts[type]--;
+        }
+        
+        // Run simulation to update voltages
+        this.runSimulation();
+        this.draw();
     }
 
     toggleComponentState(component) {

@@ -119,6 +119,7 @@
         <div class="toolbar">
             <button id="moveBtn" class="active">Move</button>
             <button id="connectBtn">Connect</button>
+            <button id="deleteBtn">Delete</button>
             <button id="readBtn">Read Circuit</button>
             <button id="layoutBtn">Re-do Layout</button>
             <button id="clearBtn">Clear All</button>
@@ -169,6 +170,11 @@
             
             document.getElementById('connectBtn').addEventListener('click', () => {
                 editor.setMode('connect');
+                updateToolbarButtons();
+            });
+            
+            document.getElementById('deleteBtn').addEventListener('click', () => {
+                editor.setMode('delete');
                 updateToolbarButtons();
             });
             
@@ -230,6 +236,7 @@
             function updateToolbarButtons() {
                 document.getElementById('moveBtn').classList.toggle('active', editor.mode === 'move');
                 document.getElementById('connectBtn').classList.toggle('active', editor.mode === 'connect');
+                document.getElementById('deleteBtn').classList.toggle('active', editor.mode === 'delete');
             }
         }
     </script>
