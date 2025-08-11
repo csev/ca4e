@@ -19,10 +19,9 @@ The components will be:
 * Battery 6 volts
 * Switches that toggle open / closed
 * Lights
-* Single pole double throw relays
-* Connector with a mere input and output that simply passes voltage and current through
+* Single pole double throw relays - one that is open until activated and another that is closed until activated
 
-The connectors will be laid out on a square canvas that resizes in a responsive way.
+The components will be laid out on a square canvas that resizes in a responsive way.
 
 Components will all be squares and equal sized the label and orginal inside the square and
 an indication of the state of the component, also inside the square.  There will be "Move" button
@@ -31,25 +30,24 @@ in the top tool bar which when selected allows the user to "grab" a component an
 As the component is moving the wires that are connected to the inputs and outputs will follow the
 component.
 
-Each of the components will have input connectors on the top and left and output
-connectors on the bottom and right except for the battery.  The battery will have a 6V output
-connector on the top and ground (0V) input connectors on the bottom. Input connnectors will look
-like a filled equilateral triangle with the tip pointing inwards touching the edge of the component and output
-conectors will be a small equilateral triangle with the base touching the component.
+Each of the components will have input connectors on the top and output
+connectors on the bottom.  The battery will have a 6V output
+connector on the top and ground (0V) input connector on the bottom. Input connnectors will look
+like a filled equilateral triangle with the tip pointing inwards touching the edge of the component and output conectors will be a small equilateral triangle with the base touching the component.
 
 Wires can be drawn between any pair of input and output connectors.
 Wires need to be routed around components when drawing a cricuit.
 Wires between components will be laid out using Manhattan wire routing where any wire can be
 vertical or horizontal.  Wires will be routed in a way that no wire
-are laid out on top of another wire until the wires get close to connectors.  Wires can cross one another
-a 90 degree angles.
-If two wires are near each other and going to the same connection they can be joined with a 45, 135, 225, or 315 degree
-angle on their way to the connectors.
+are laid out on top of another wire until the wires get close to connectors.  Wires can cross one another a 90 degree angles.
+If two wires are near each other and going to the same connection they can be joined with a 45, 135, 225, or 315 degree angle on their way to the connectors.
 
 Any number of wires can be connected to an input or output connector.
 When connected, the connectors will be red if they are at 6V, blue if they are
-at 0V and black of they have no voltage.
-Wires will have a similar red/blue/black color code.
+at 0V and black of they have unknown voltage.
+
+Wires will have a similar red/blue/black color code depending on the voltages they
+are carrying.
 
 The layout of components can be adjusted to make the circuit easier to read.
 
