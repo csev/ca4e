@@ -88,7 +88,7 @@ class CircuitSimulator {
             connectors.push({
                 type: 'output',
                 x: x + w/2,
-                y: y + h,
+                y: y + h + 8, // Move outside the component boundary
                 voltage: null
             });
         }

@@ -120,6 +120,7 @@
             <button id="moveBtn" class="active">Move</button>
             <button id="connectBtn">Connect</button>
             <button id="readBtn">Read Circuit</button>
+            <button id="layoutBtn">Re-do Layout</button>
             <button id="clearBtn">Clear All</button>
             
             <div class="component-buttons">
@@ -174,6 +175,11 @@
             document.getElementById('readBtn').addEventListener('click', () => {
                 const result = editor.readCircuit();
                 status.textContent = result;
+            });
+            
+            document.getElementById('layoutBtn').addEventListener('click', () => {
+                editor.redoLayout();
+                status.textContent = "Layout optimized";
             });
             
             document.getElementById('clearBtn').addEventListener('click', () => {

@@ -279,7 +279,7 @@ class CircuitEditor {
             connectors.push({
                 type: 'output',
                 x: x + w/2,
-                y: y + h,
+                y: y + h + 8, // Move outside the component boundary
                 voltage: this.simulator ? this.simulator.getNodeVoltage(outputNodeId) : null
             });
         }
@@ -580,13 +580,26 @@ class CircuitEditor {
                 this.ctx.fill();
             } else {
                 // Filled triangle pointing outward (away from component)
-                this.ctx.fillStyle = this.getConnectorColor(connector.voltage);
-                this.ctx.beginPath();
-                this.ctx.moveTo(connector.x, connector.y);
-                this.ctx.lineTo(connector.x - 5, connector.y + 8);
-                this.ctx.lineTo(connector.x + 5, connector.y + 8);
-                this.ctx.closePath();
-                this.ctx.fill();
+                // For non-battery components, flip the triangle to point outward
+                if (component.type === 'battery') {
+                    // Battery output points down (away from component)
+                    this.ctx.fillStyle = this.getConnectorColor(connector.voltage);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(connector.x, connector.y);
+                    this.ctx.lineTo(connector.x - 5, connector.y + 8);
+                    this.ctx.lineTo(connector.x + 5, connector.y + 8);
+                    this.ctx.closePath();
+                    this.ctx.fill();
+                } else {
+                    // Other components output points up (away from component)
+                    this.ctx.fillStyle = this.getConnectorColor(connector.voltage);
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(connector.x, connector.y);
+                    this.ctx.lineTo(connector.x - 5, connector.y - 8);
+                    this.ctx.lineTo(connector.x + 5, connector.y - 8);
+                    this.ctx.closePath();
+                    this.ctx.fill();
+                }
             }
         }
     }
@@ -718,6 +731,187 @@ class CircuitEditor {
             components: this.components,
             connections: this.connections
         };
+    }
+
+    redoLayout() {
+        if (this.components.length === 0) return;
+        
+        // Create a graph representation of the circuit
+        const graph = this.buildCircuitGraph();
+        
+        // Use a layered layout algorithm
+        const positions = this.calculateOptimalPositions(graph);
+        
+        // Apply the new positions
+        this.applyLayoutPositions(positions);
+        
+        // Redraw the circuit
+        this.runSimulation();
+        this.draw();
+    }
+
+    buildCircuitGraph() {
+        const graph = {
+            nodes: [],
+            edges: []
+        };
+        
+        // Add all components as nodes
+        for (const component of this.components) {
+            graph.nodes.push({
+                id: component.id,
+                type: component.type,
+                component: component
+            });
+        }
+        
+        // Add connections as edges
+        for (const connection of this.connections) {
+            graph.edges.push({
+                from: connection.from.componentId,
+                to: connection.to.componentId,
+                connection: connection
+            });
+        }
+        
+        return graph;
+    }
+
+    calculateOptimalPositions(graph) {
+        const positions = new Map();
+        
+        // Use a force-directed layout algorithm to minimize wire crossings
+        const nodes = graph.nodes.map(node => ({
+            ...node,
+            x: Math.random() * (this.canvas.width - 200) + 100,
+            y: Math.random() * (this.canvas.height - 200) + 100,
+            vx: 0,
+            vy: 0
+        }));
+        
+        const edges = graph.edges;
+        
+        // Force-directed layout parameters
+        const repulsionForce = 1000; // Repulsion between nodes
+        const attractionForce = 0.1; // Attraction along edges
+        const iterations = 100;
+        const damping = 0.9;
+        
+        // Run force-directed layout
+        for (let iteration = 0; iteration < iterations; iteration++) {
+            // Reset forces
+            for (const node of nodes) {
+                node.fx = 0;
+                node.fy = 0;
+            }
+            
+            // Calculate repulsion forces between all nodes
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const nodeA = nodes[i];
+                    const nodeB = nodes[j];
+                    
+                    const dx = nodeB.x - nodeA.x;
+                    const dy = nodeB.y - nodeA.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance > 0) {
+                        const force = repulsionForce / (distance * distance);
+                        const fx = (dx / distance) * force;
+                        const fy = (dy / distance) * force;
+                        
+                        nodeA.fx -= fx;
+                        nodeA.fy -= fy;
+                        nodeB.fx += fx;
+                        nodeB.fy += fy;
+                    }
+                }
+            }
+            
+            // Calculate attraction forces along edges
+            for (const edge of edges) {
+                const nodeA = nodes.find(n => n.id === edge.from);
+                const nodeB = nodes.find(n => n.id === edge.to);
+                
+                if (nodeA && nodeB) {
+                    const dx = nodeB.x - nodeA.x;
+                    const dy = nodeB.y - nodeA.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    
+                    if (distance > 0) {
+                        const force = attractionForce * distance;
+                        const fx = (dx / distance) * force;
+                        const fy = (dy / distance) * force;
+                        
+                        nodeA.fx += fx;
+                        nodeA.fy += fy;
+                        nodeB.fx -= fx;
+                        nodeB.fy -= fy;
+                    }
+                }
+            }
+            
+            // Apply forces and update positions
+            for (const node of nodes) {
+                node.vx = (node.vx + node.fx) * damping;
+                node.vy = (node.vy + node.fy) * damping;
+                
+                node.x += node.vx;
+                node.y += node.vy;
+                
+                // Keep nodes within canvas bounds
+                node.x = Math.max(50, Math.min(this.canvas.width - this.componentSize - 50, node.x));
+                node.y = Math.max(50, Math.min(this.canvas.height - this.componentSize - 50, node.y));
+            }
+            
+            // Prevent overlaps by applying additional repulsion
+            for (let i = 0; i < nodes.length; i++) {
+                for (let j = i + 1; j < nodes.length; j++) {
+                    const nodeA = nodes[i];
+                    const nodeB = nodes[j];
+                    
+                    const dx = nodeB.x - nodeA.x;
+                    const dy = nodeB.y - nodeA.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const minDistance = 120; // 120px minimum spacing between component centers
+                    
+                    if (distance < minDistance && distance > 0) {
+                        // Push components apart to prevent overlap
+                        const pushForce = (minDistance - distance) / distance;
+                        const pushX = (dx / distance) * pushForce * 10;
+                        const pushY = (dy / distance) * pushForce * 10;
+                        
+                        nodeA.x -= pushX;
+                        nodeA.y -= pushY;
+                        nodeB.x += pushX;
+                        nodeB.y += pushY;
+                        
+                        // Keep within bounds after push
+                        nodeA.x = Math.max(50, Math.min(this.canvas.width - this.componentSize - 50, nodeA.x));
+                        nodeA.y = Math.max(50, Math.min(this.canvas.height - this.componentSize - 50, nodeA.y));
+                        nodeB.x = Math.max(50, Math.min(this.canvas.width - this.componentSize - 50, nodeB.x));
+                        nodeB.y = Math.max(50, Math.min(this.canvas.height - this.componentSize - 50, nodeB.y));
+                    }
+                }
+            }
+        }
+        
+        // Convert to positions map
+        for (const node of nodes) {
+            positions.set(node.id, { x: node.x, y: node.y });
+        }
+        
+        return positions;
+    }
+
+    applyLayoutPositions(positions) {
+        for (const component of this.components) {
+            const position = positions.get(component.id);
+            if (position) {
+                component.x = position.x;
+                component.y = position.y;
+            }
+        }
     }
 
     toggleComponentState(component) {
