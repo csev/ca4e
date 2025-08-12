@@ -55,6 +55,15 @@
                  "href" : "https://www.youtube.com/watch?v=l-VE_-Cuwos"
             }
         ]
+    },
+    "Solid State": {
+        "title": "Solid State",
+        "links" : [
+            {
+                 "title" : "Video:  How the first transistor worked - Engineer Guy",
+                 "href" : "https://www.youtube.com/watch?v=RdYHljZi7ys"
+            }
+        ]
     }
 }
 
