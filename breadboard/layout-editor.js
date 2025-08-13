@@ -8,14 +8,14 @@ class BreadboardEditor {
         this.simulator = circuitSimulator;
         
         // Grid configuration
-        this.GRID_COLS = 30;
+        this.GRID_COLS = 15;
         this.GRID_ROWS = 14;
         this.DOT_RADIUS = 4;
         this.PADDING = 40;
         this.CENTER_GAP = 30;
         
         // Calculate canvas size and grid spacing
-        this.CANVAS_WIDTH = 900;
+        this.CANVAS_WIDTH = 450; // Reduced from 900 to 450 (half the width)
         this.CANVAS_HEIGHT = 504 + this.CENTER_GAP;
         this.canvas.width = this.CANVAS_WIDTH;
         this.canvas.height = this.CANVAS_HEIGHT;
@@ -48,6 +48,10 @@ class BreadboardEditor {
         
         // Add transistor terminals tracking
         this.transistorTerminals = new Map();
+        
+        // Add oscilloscope probe tracking
+        this.probeMode = false;
+        this.probeDot = null;
         
         // Initialize dots
         this.initializeDots();
@@ -151,6 +155,48 @@ class BreadboardEditor {
             }
         });
         
+        // Add probe mode button
+        this.probeModeButton = document.createElement('button');
+        this.probeModeButton.innerHTML = '🔍 Probe';
+        this.probeModeButton.style.marginLeft = '20px';
+        this.probeModeButton.style.padding = '5px 10px';
+        this.probeModeButton.style.backgroundColor = '#4CAF50';
+        this.probeModeButton.style.color = 'white';
+        this.probeModeButton.style.border = 'none';
+        this.probeModeButton.style.borderRadius = '3px';
+        this.probeModeButton.style.cursor = 'pointer';
+        this.probeModeButton.style.display = 'inline-flex';
+        this.probeModeButton.style.alignItems = 'center';
+        this.probeModeButton.style.justifyContent = 'center';
+        this.probeModeButton.style.width = 'auto';
+        this.probeModeButton.style.height = 'auto';
+        this.probeModeButton.title = 'Probe Mode (Off)';
+        
+        // Add hover effects for probe button
+        this.probeModeButton.addEventListener('mouseover', () => {
+            this.probeModeButton.style.backgroundColor = this.probeMode ? '#d32f2f' : '#45a049';
+        });
+        
+        this.probeModeButton.addEventListener('mouseout', () => {
+            this.probeModeButton.style.backgroundColor = this.probeMode ? '#f44336' : '#4CAF50';
+        });
+        
+        // Add toggle handler for probe button
+        this.probeModeButton.addEventListener('click', () => {
+            this.probeMode = !this.probeMode;
+            console.log('Probe mode toggled:', this.probeMode);
+            this.probeModeButton.style.backgroundColor = this.probeMode ? '#f44336' : '#4CAF50';
+            this.probeModeButton.innerHTML = this.probeMode ? '🔍 PROBE ON' : '🔍 Probe';
+            this.probeModeButton.title = `Probe Mode (${this.probeMode ? 'On' : 'Off'})`;
+            this.canvas.style.cursor = this.probeMode ? 'crosshair' : 'default';
+            
+            // Clear probe when turning off
+            if (!this.probeMode) {
+                this.probeDot = null;
+                this.simulator.setOscilloscopeProbe(null);
+            }
+        });
+        
         // Add computation feedback element
         this.computationFeedback = document.createElement('div');
         this.computationFeedback.style.position = 'fixed';
@@ -207,6 +253,7 @@ class BreadboardEditor {
             if (controls) {
                 controls.appendChild(this.autoComputeToggle);
                 controls.appendChild(this.deleteModeButton);
+                controls.appendChild(this.probeModeButton);
             }
         });
     }
@@ -243,6 +290,21 @@ class BreadboardEditor {
         const rect = this.canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
+
+        // Handle probe mode
+        if (this.probeMode) {
+            console.log('Probe mode active, clicking at:', x, y);
+            const dot = this.findClosestDot(x, y);
+            if (dot) {
+                console.log('Probe placed at dot:', dot);
+                this.probeDot = dot;
+                this.simulator.setOscilloscopeProbe(dot);
+                this.drawGrid();
+            } else {
+                console.log('No dot found at position');
+            }
+            return;
+        }
 
         // Handle delete mode
         if (this.deleteMode) {
@@ -573,6 +635,20 @@ class BreadboardEditor {
         this.drawGrid();
     }
     
+    // Start AC simulation animation
+    startACSimulation() {
+        if (this.simulator.powerSupplyMode === 'AC') {
+            this.simulator.updateSimulationTime();
+            this.rebuildCircuit();
+            requestAnimationFrame(() => this.startACSimulation());
+        }
+    }
+    
+    // Stop AC simulation animation
+    stopACSimulation() {
+        // Animation will stop when powerSupplyMode is not 'AC'
+    }
+    
     // Turn off delete mode
     turnOffDeleteMode() {
         if (this.deleteMode) {
@@ -719,6 +795,15 @@ class BreadboardEditor {
         this.simulator.getAllTransistors().forEach((transistor, id) => {
             this.drawTransistor(transistor.x, transistor.y, id);
         });
+        
+        // Draw probe indicator
+        if (this.probeDot) {
+            console.log('Drawing probe indicator at:', this.probeDot.x, this.probeDot.y);
+            this.drawProbeIndicator(this.probeDot.x, this.probeDot.y);
+        }
+        
+        // Update oscilloscope data
+        this.simulator.updateOscilloscopeData(this.dots);
     }
     
     drawPowerRails() {
@@ -1434,6 +1519,44 @@ class BreadboardEditor {
         }
         this.ctx.fillStyle = '#000';
         this.ctx.fillText(isPMOS ? 'P' : 'N', -3, 3.5);
+        
+        // Restore context
+        this.ctx.restore();
+    }
+    
+    drawProbeIndicator(x, y) {
+        // Save context
+        this.ctx.save();
+        
+        // Draw probe indicator (red circle with crosshair)
+        this.ctx.beginPath();
+        this.ctx.arc(x, y, 15, 0, Math.PI * 2);
+        this.ctx.strokeStyle = '#ff0000';
+        this.ctx.lineWidth = 4;
+        this.ctx.stroke();
+        
+        // Fill the circle with semi-transparent red
+        this.ctx.fillStyle = 'rgba(255, 0, 0, 0.3)';
+        this.ctx.fill();
+        
+        // Draw crosshair
+        this.ctx.beginPath();
+        this.ctx.moveTo(x - 12, y);
+        this.ctx.lineTo(x + 12, y);
+        this.ctx.moveTo(x, y - 12);
+        this.ctx.lineTo(x, y + 12);
+        this.ctx.strokeStyle = '#ffffff';
+        this.ctx.lineWidth = 3;
+        this.ctx.stroke();
+        
+        // Add "PROBE" label with background
+        this.ctx.font = 'bold 14px Arial';
+        this.ctx.fillStyle = '#ffffff';
+        this.ctx.strokeStyle = '#ff0000';
+        this.ctx.lineWidth = 3;
+        this.ctx.textAlign = 'center';
+        this.ctx.strokeText('PROBE', x, y - 25);
+        this.ctx.fillText('PROBE', x, y - 25);
         
         // Restore context
         this.ctx.restore();

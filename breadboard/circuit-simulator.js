@@ -11,12 +11,12 @@ const LED_CHARACTERISTICS = {
 
 const TRANSISTOR_CHARACTERISTICS = {
     nmos: {
-        threshold: 4.5,        // Simple threshold - if gate > 4.5V, conducts
+        thresholdRatio: 0.5,  // Threshold as ratio of supply voltage
         onResistance: 1,      // Very low resistance when ON (ohms)
         offResistance: 1e6    // Very high resistance when OFF (mega ohm)
     },
     pmos: {
-        threshold: 4.5,        // Simple threshold - if gate < 4.5V, conducts
+        thresholdRatio: 0.5,  // Threshold as ratio of supply voltage
         onResistance: 1,
         offResistance: 1e6
     },
@@ -34,6 +34,18 @@ class CircuitSimulator {
         this.voltageSources = new Map(); // Map to track voltage source states (VCC or GND)
         this.nextSwitchId = 0;
         this.nextTransistorId = 0;
+        
+        // Power supply settings
+        this.powerSupplyVoltage = 9; // Default voltage
+        this.powerSupplyMode = 'DC'; // 'DC' or 'AC'
+        this.powerSupplyFrequency = 1; // Frequency in Hz for AC mode
+        this.simulationTime = 0; // Time for AC simulation
+        this.lastUpdateTime = Date.now();
+        
+        // Oscilloscope settings
+        this.oscilloscopeProbe = null; // Current probe position
+        this.oscilloscopeData = []; // Array to store voltage history
+        this.maxDataPoints = 200; // Maximum number of data points to store
     }
 
     // Initialize electrical connections for the breadboard
@@ -216,7 +228,7 @@ class CircuitSimulator {
         dots.forEach((dot, index) => {
             const row = Math.floor(index / this.gridCols);
             if (row === 0 || row === this.gridRows - 1) {
-                voltageMap.set(index, 9);  // VCC rails
+                voltageMap.set(index, this.getPowerSupplyVoltage());  // VCC rails
             } else if (row === 1 || row === this.gridRows - 2) {
                 voltageMap.set(index, 0);  // GND rails
             }
@@ -224,7 +236,8 @@ class CircuitSimulator {
             // Check for voltage source
             const sourceId = `voltage_source_${index}`;
             if (this.voltageSources.has(sourceId)) {
-                voltageMap.set(index, this.voltageSources.get(sourceId).isVcc ? 9 : 0);
+                const source = this.voltageSources.get(sourceId);
+                voltageMap.set(index, source.isVcc ? this.getPowerSupplyVoltage() : 0);
             }
         });
         
@@ -283,14 +296,21 @@ class CircuitSimulator {
         // Check if there's a voltage source at this dot
         const sourceId = `voltage_source_${dotIndex}`;
         if (this.voltageSources.has(sourceId)) {
-            return this.voltageSources.get(sourceId).isVcc ? 9 : 0;
+            const source = this.voltageSources.get(sourceId);
+            if (source.isVcc) {
+                return this.getPowerSupplyVoltage();
+            } else {
+                return 0; // GND is always 0V
+            }
         }
         
         // Get row and column of the dot
         const { row } = this.getRowCol(dotIndex);
         
         // Check power rails first
-        if (row === 0 || row === this.gridRows - 1) return 9;  // VCC rails
+        if (row === 0 || row === this.gridRows - 1) {
+            return this.getPowerSupplyVoltage();  // VCC rails
+        }
         if (row === 1 || row === this.gridRows - 2) return 0;  // GND rails
         
         // If a voltage map is provided, use it
@@ -303,7 +323,9 @@ class CircuitSimulator {
         if (connectedDots) {
             for (const connectedIndex of connectedDots) {
                 const connectedRow = Math.floor(connectedIndex / this.gridCols);
-                if (connectedRow === 0 || connectedRow === this.gridRows - 1) return 9;  // VCC
+                if (connectedRow === 0 || connectedRow === this.gridRows - 1) {
+                    return this.getPowerSupplyVoltage();  // VCC
+                }
                 if (connectedRow === 1 || connectedRow === this.gridRows - 2) return 0;  // GND
                 
                 // If voltage map exists, check voltages of connected dots
@@ -337,12 +359,14 @@ class CircuitSimulator {
             
             // Simple relay-like behavior
             if (gateVoltage !== null) {
+                const threshold = this.powerSupplyVoltage * TRANSISTOR_CHARACTERISTICS[transistor.type].thresholdRatio;
+                
                 if (transistor.type === 'nmos') {
                     // NMOS conducts when gate voltage is HIGH
-                    transistor.conducting = gateVoltage >= TRANSISTOR_CHARACTERISTICS.nmos.threshold;
+                    transistor.conducting = gateVoltage >= threshold;
                 } else if (transistor.type === 'pmos') {
                     // PMOS conducts when gate voltage is LOW
-                    transistor.conducting = gateVoltage <= TRANSISTOR_CHARACTERISTICS.pmos.threshold;
+                    transistor.conducting = gateVoltage <= threshold;
                 }
             } else {
                 transistor.conducting = false;
@@ -453,14 +477,135 @@ class CircuitSimulator {
         return TRANSISTOR_CHARACTERISTICS;
     }
 
+    // Power supply control methods
+    setPowerSupplyVoltage(voltage) {
+        this.powerSupplyVoltage = voltage;
+    }
+    
+    setPowerSupplyMode(mode) {
+        this.powerSupplyMode = mode;
+        if (mode === 'AC') {
+            this.simulationTime = 0;
+            this.lastUpdateTime = Date.now();
+        }
+    }
+    
+    setPowerSupplyFrequency(frequency) {
+        this.powerSupplyFrequency = frequency;
+    }
+    
+    getPowerSupplyVoltage() {
+        if (this.powerSupplyMode === 'DC') {
+            return this.powerSupplyVoltage;
+        } else {
+            // AC mode - calculate current voltage based on time
+            const currentTime = Date.now();
+            const deltaTime = (currentTime - this.lastUpdateTime) / 1000; // Convert to seconds
+            this.simulationTime += deltaTime;
+            this.lastUpdateTime = currentTime;
+            
+            // Calculate AC voltage using sine wave
+            const angularFrequency = 2 * Math.PI * this.powerSupplyFrequency;
+            const acVoltage = this.powerSupplyVoltage * Math.sin(angularFrequency * this.simulationTime);
+            
+            // Ensure voltage doesn't go below 0 for visualization purposes
+            return Math.max(0, acVoltage);
+        }
+    }
+    
+    // Get the peak voltage for display purposes
+    getPeakVoltage() {
+        return this.powerSupplyVoltage;
+    }
+    
+    // Get current AC voltage for display (without clamping to 0)
+    getCurrentACVoltage() {
+        if (this.powerSupplyMode === 'DC') {
+            return this.powerSupplyVoltage;
+        } else {
+            const currentTime = Date.now();
+            const deltaTime = (currentTime - this.lastUpdateTime) / 1000;
+            this.simulationTime += deltaTime;
+            this.lastUpdateTime = currentTime;
+            
+            const angularFrequency = 2 * Math.PI * this.powerSupplyFrequency;
+            return this.powerSupplyVoltage * Math.sin(angularFrequency * this.simulationTime);
+        }
+    }
+    
+    // Update simulation time for AC mode
+    updateSimulationTime() {
+        if (this.powerSupplyMode === 'AC') {
+            const currentTime = Date.now();
+            const deltaTime = (currentTime - this.lastUpdateTime) / 1000;
+            this.simulationTime += deltaTime;
+            this.lastUpdateTime = currentTime;
+        }
+    }
+    
+    // Oscilloscope methods
+    setOscilloscopeProbe(dot) {
+        this.oscilloscopeProbe = dot;
+        this.oscilloscopeData = []; // Clear data when probe moves
+    }
+    
+    getOscilloscopeProbe() {
+        return this.oscilloscopeProbe;
+    }
+    
+    updateOscilloscopeData(dots) {
+        if (!this.oscilloscopeProbe) return;
+        
+        const voltage = this.getDotVoltage(this.oscilloscopeProbe, dots);
+        const timestamp = Date.now();
+        
+        // Add new data point
+        this.oscilloscopeData.push({
+            voltage: voltage,
+            timestamp: timestamp
+        });
+        
+        // Keep only the last maxDataPoints
+        if (this.oscilloscopeData.length > this.maxDataPoints) {
+            this.oscilloscopeData.shift();
+        }
+    }
+    
+    getOscilloscopeData() {
+        return this.oscilloscopeData;
+    }
+    
+    getProbeVoltage(dots) {
+        if (!this.oscilloscopeProbe) return null;
+        return this.getDotVoltage(this.oscilloscopeProbe, dots);
+    }
+    
+    getProbePosition(dots) {
+        if (!this.oscilloscopeProbe) return "Not connected";
+        
+        // Find the dot index and convert to breadboard coordinates
+        const dotIndex = dots ? dots.indexOf(this.oscilloscopeProbe) : -1;
+        if (dotIndex === -1) return "Unknown";
+        
+        const { row, col } = this.getRowCol(dotIndex);
+        
+        // Convert to breadboard notation
+        const rowLabels = ['VCC', 'GND', 'a', 'b', 'c', 'd', 'e', 'gap', 'f', 'g', 'h', 'i', 'j', 'GND', 'VCC'];
+        const rowLabel = rowLabels[row];
+        
+        return `${rowLabel}${col + 1}`;
+    }
+    
     // Color interpolation for voltage visualization
     interpolateColor(voltage) {
         if (voltage === null) return '#333333';  // Default gray for no voltage
-        if (voltage === 9) return '#ff4444';     // VCC - red
+        
+        const maxVoltage = this.powerSupplyVoltage;
+        if (voltage === maxVoltage) return '#ff4444';     // VCC - red
         if (voltage === 0) return '#4444ff';     // GND - blue
         
         // Normalize voltage to 0-1 range
-        const t = voltage / 9;
+        const t = voltage / maxVoltage;
         
         // RGB components for interpolation
         const r = Math.round(68 + (255 - 68) * t);    // 68 to 255  (from blue to red)
