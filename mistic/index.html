@@ -39,6 +39,26 @@
                 transform: translateY(1px);
                 box-shadow: 0 1px 2px rgba(0,0,0,0.1);
             }
+            
+            .layer-modal {
+                position: absolute;
+                background: #fff;
+                border: 1px solid #000;
+                box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+                z-index: 1000;
+                user-select: none;
+            }
+            .layer-modal.hidden { display: none; }
+            .layer-modal .modal-header {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                padding: 6px 10px;
+                background: #f7f7f7;
+                border-bottom: 1px solid #ddd;
+                cursor: grab;
+                font-weight: bold;
+            }
         </style>
     </head>
     <body>
@@ -54,14 +74,34 @@
                 <button onclick="setLayer('GND')" style="background-color: #f0f0f0;">GND</button>
                 <button onclick="setLayer('erase')" style="background-color: rgba(255, 255, 255, 1);">🧽</button>
                 <button onclick="confirmClear()" style="background-color: #ffe6e6;">🗑️</button>
+                <button id="toggleLayersBtn" style="background-color:#eef7ff;">Layers</button>
             </div>
-            <canvas id="vlsiCanvas" width="600" height="600" style="border:1px solid #000000;"></canvas>
+            <div id="canvasContainer" style="position:relative; display:inline-block;">
+                <canvas id="vlsiCanvas" width="600" height="600" style="border:1px solid #000000; display:block;"></canvas>
+                <div id="layerModal" class="layer-modal hidden">
+                    <div id="layerModalHeader" class="modal-header" title="Drag to move">
+                        <span>✋</span>
+                        <span>Layers</span>
+                    </div>
+                    <div style="padding:8px;">
+                        <canvas id="layerCanvas" width="220" height="240" style="border:1px solid #000000;"></canvas>
+                    </div>
+                </div>
+            </div>
 
             <script>
                 const canvas = document.getElementById('vlsiCanvas');
                 const ctx = canvas.getContext('2d');
-                const tileSize = 20;
-                const gridSize = 30;
+                const layerCanvas = document.getElementById('layerCanvas');
+                const lctx = layerCanvas ? layerCanvas.getContext('2d') : null;
+                const layerModal = document.getElementById('layerModal');
+                const layerModalHeader = document.getElementById('layerModalHeader');
+                const toggleLayersBtn = document.getElementById('toggleLayersBtn');
+                const canvasContainer = document.getElementById('canvasContainer');
+                let modalUserMoved = false; // if user drags, we keep their position
+                let tileSize = 30; // fixed pixel size per grid tile (finger-friendly)
+                let gridSize = 30;
+                const MAX_GRID_SIZE = 60;
                 const layers = {
                     'polysilicon': 'rgba(255, 0, 0, 0.2)',
                     'N+ diffusion': 'rgba(0, 255, 0, 0.3)',
@@ -83,8 +123,34 @@
                 let currentLayer = '';
                 let isDrawing = false;
                 let startX, startY;
-                const grid = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(7).fill(false)));
-                const volts = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(7).fill(false)));
+                let grid = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(7).fill(false)));
+                let volts = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(7).fill(0)));
+
+                function createGrid(size) {
+                    return Array(size).fill().map(() => Array(size).fill().map(() => Array(7).fill(false)));
+                }
+
+                function createVolts(size) {
+                    return Array(size).fill().map(() => Array(size).fill().map(() => Array(7).fill(0)));
+                }
+
+                function resizeGrid(newSize) {
+                    const oldGrid = grid;
+                    const oldSize = gridSize;
+                    const newGrid = createGrid(newSize);
+                    const newVolts = createVolts(newSize);
+                    const copy = Math.min(oldSize, newSize);
+                    for (let i = 0; i < copy; i++) {
+                        for (let j = 0; j < copy; j++) {
+                            for (let l = 0; l < 7; l++) {
+                                newGrid[i][j][l] = oldGrid[i][j][l];
+                            }
+                        }
+                    }
+                    grid = newGrid;
+                    volts = newVolts; // will be recomputed
+                    gridSize = newSize;
+                }
 
                 function setLayer(layer) {
                     currentLayer = layer;
@@ -135,6 +201,7 @@
                         redrawTile(startX, startY);
                         isDrawing = false;
                         redrawAllTiles();
+                        drawLayerView(startX, startY);
                         return;
                     }
                 }
@@ -166,6 +233,146 @@
                 canvas.addEventListener('mousedown', handleStart);
                 canvas.addEventListener('mousemove', handleMove);
                 canvas.addEventListener('mouseup', handleEnd);
+
+                // Hover preview for mouse
+                canvas.addEventListener('mousemove', function(evt) {
+                    const coords = getEventCoordinates(evt);
+                    drawLayerView(coords.x, coords.y);
+                });
+                canvas.addEventListener('mouseleave', function() {
+                    clearLayerView();
+                });
+
+                // Hover preview for touch
+                canvas.addEventListener('touchstart', function(evt) {
+                    const coords = getEventCoordinates(evt);
+                    drawLayerView(coords.x, coords.y);
+                }, { passive: false });
+                canvas.addEventListener('touchmove', function(evt) {
+                    const coords = getEventCoordinates(evt);
+                    drawLayerView(coords.x, coords.y);
+                }, { passive: false });
+
+                // Toggle modal visibility
+                toggleLayersBtn.addEventListener('click', function() {
+                    if (layerModal.classList.contains('hidden')) {
+                        layerModal.classList.remove('hidden');
+                        modalUserMoved = false;
+                        centerModalTopCentered();
+                    } else {
+                        layerModal.classList.add('hidden');
+                    }
+                });
+
+                // Drag handling for the modal (mouse + touch)
+                (function enableDrag() {
+                    if (!layerModal || !layerModalHeader) return;
+                    let dragging = false;
+                    let startClientX = 0, startClientY = 0;
+                    let startLeft = 0, startTop = 0;
+
+                    function onPointerDown(e) {
+                        e.preventDefault();
+                        dragging = true;
+                        const rect = layerModal.getBoundingClientRect();
+                        const containerRect = canvasContainer.getBoundingClientRect();
+                        startLeft = rect.left - containerRect.left;
+                        startTop = rect.top - containerRect.top;
+                        if (e.touches) {
+                            startClientX = e.touches[0].clientX;
+                            startClientY = e.touches[0].clientY;
+                        } else {
+                            startClientX = e.clientX;
+                            startClientY = e.clientY;
+                        }
+                        layerModalHeader.style.cursor = 'grabbing';
+                        window.addEventListener('mousemove', onPointerMove, { passive: false });
+                        window.addEventListener('mouseup', onPointerUp, { passive: false });
+                        window.addEventListener('touchmove', onPointerMove, { passive: false });
+                        window.addEventListener('touchend', onPointerUp, { passive: false });
+                    }
+
+                    function onPointerMove(e) {
+                        if (!dragging) return;
+                        e.preventDefault();
+                        let clientX, clientY;
+                        if (e.touches) {
+                            clientX = e.touches[0].clientX;
+                            clientY = e.touches[0].clientY;
+                        } else {
+                            clientX = e.clientX;
+                            clientY = e.clientY;
+                        }
+                        const dx = clientX - startClientX;
+                        const dy = clientY - startClientY;
+                        const containerRect = canvasContainer.getBoundingClientRect();
+                        const maxLeft = containerRect.width - layerModal.offsetWidth;
+                        const maxTop = containerRect.height - layerModal.offsetHeight;
+                        const newLeft = Math.max(0, Math.min(maxLeft, startLeft + dx));
+                        const newTop = Math.max(0, Math.min(maxTop, startTop + dy));
+                        layerModal.style.left = newLeft + 'px';
+                        layerModal.style.top = newTop + 'px';
+                        modalUserMoved = true;
+                    }
+
+                    function onPointerUp(e) {
+                        dragging = false;
+                        layerModalHeader.style.cursor = 'grab';
+                        window.removeEventListener('mousemove', onPointerMove);
+                        window.removeEventListener('mouseup', onPointerUp);
+                        window.removeEventListener('touchmove', onPointerMove);
+                        window.removeEventListener('touchend', onPointerUp);
+                    }
+
+                    layerModalHeader.addEventListener('mousedown', onPointerDown);
+                    layerModalHeader.addEventListener('touchstart', onPointerDown, { passive: false });
+                })();
+
+                // Responsive canvas sizing: scale with window, keep square
+                function resizeCanvasToContainer() {
+                    const horizontalPadding = 40; // breathing room around canvas in layout
+                    // Use 80% of viewport width on large screens (width-driven sizing)
+                    const targetWidth = Math.floor(window.innerWidth * 0.8);
+                    const maxWidth = Math.max(320, Math.min(targetWidth, window.innerWidth - horizontalPadding));
+                    // Fixed tile size; compute how many tiles fit horizontally only
+                    const fitCols = Math.floor(maxWidth / tileSize);
+                    const newGridSize = Math.min(MAX_GRID_SIZE, Math.max(5, fitCols));
+                    const pixelSize = newGridSize * tileSize;
+                    if (newGridSize !== gridSize) {
+                        resizeGrid(newGridSize);
+                    }
+                    canvas.width = pixelSize;
+                    canvas.height = pixelSize;
+                    // Redraw grid according to new canvas size
+                    redrawAllTiles();
+                    // Keep modal near the top and horizontally centered while resizing if visible
+                    if (!layerModal.classList.contains('hidden')) {
+                        centerModalTopCentered();
+                    }
+                }
+
+                function centerModalOverCanvas() {
+                    const containerRect = canvasContainer.getBoundingClientRect();
+                    const modalW = layerModal.offsetWidth;
+                    const modalH = layerModal.offsetHeight;
+                    const left = Math.max(0, Math.floor((containerRect.width - modalW) / 2));
+                    const top = Math.max(0, Math.floor((containerRect.height - modalH) / 2));
+                    layerModal.style.left = left + 'px';
+                    layerModal.style.top = top + 'px';
+                }
+
+                function centerModalTopCentered() {
+                    const containerRect = canvasContainer.getBoundingClientRect();
+                    const modalW = layerModal.offsetWidth;
+                    const left = Math.max(0, Math.floor((containerRect.width - modalW) / 2));
+                    const top = 8; // keep near top during resizing
+                    layerModal.style.left = left + 'px';
+                    layerModal.style.top = top + 'px';
+                }
+
+                window.addEventListener('resize', resizeCanvasToContainer);
+                // Initial sizing
+                resizeCanvasToContainer();
 
                 function drawRubberBand(startX, startY, endX, endY) {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -284,6 +491,90 @@
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
                     ctx.fillText(text, x * tileSize + tileSize / 2, y * tileSize + tileSize / 2);
+                }
+
+                // Draws the vertical layer stack preview for a given grid cell
+                function drawLayerView(gridX, gridY) {
+                    if (!lctx || !layerCanvas) return;
+                    lctx.clearRect(0, 0, layerCanvas.width, layerCanvas.height);
+
+                    if (gridX < 0 || gridX >= gridSize || gridY < 0 || gridY >= gridSize) return;
+
+                    // Header
+                    lctx.fillStyle = 'black';
+                    lctx.font = '12px Arial';
+                    lctx.textAlign = 'left';
+                    lctx.textBaseline = 'alphabetic';
+                    lctx.fillText('(' + gridX + ', ' + gridY + ')', 8, 16);
+
+                    const padding = 12;
+                    const labelGutter = 70; // reserved space on the left for text labels
+                    const left = padding + labelGutter;
+                    const top = 28;
+                    const width = layerCanvas.width - padding * 2 - labelGutter;
+                    const layerHeight = 30;
+                    const gapHeight = 12; // gap between metal and P+
+
+                    // Top to bottom visual order: N+, Poly, P+, gap, Metal (metal is bottom)
+                    const presentN = grid[gridY][gridX][layerNPlus];
+                    const presentP = grid[gridY][gridX][layerPPlus];
+                    const presentPoly = grid[gridY][gridX][layerPolysilicon];
+                    const presentMetal = grid[gridY][gridX][layerMetal];
+                    const viaPresent = grid[gridY][gridX][layerContact] || grid[gridY][gridX][layerVCC] || grid[gridY][gridX][layerGND];
+
+                    const slots = [
+                        { name: 'N+ diffusion', color: layers['N+ diffusion'], present: presentN, height: layerHeight },
+                        { name: 'polysilicon', color: layers['polysilicon'], present: presentPoly, height: layerHeight },
+                        { name: 'P+ diffusion', color: layers['P+ diffusion'], present: presentP, height: layerHeight },
+                        { name: 'gap', color: 'rgba(0,0,0,0)', present: true, height: gapHeight },
+                        { name: 'metal', color: layers['metal'], present: presentMetal, height: layerHeight }
+                    ];
+
+                    const viaWidth = Math.max(12, Math.floor(width * 0.4));
+                    const viaX = left + Math.floor((width - viaWidth) / 2);
+
+                    let yPos = top;
+                    for (let s of slots) {
+                        // outline
+                        lctx.strokeStyle = '#333';
+                        lctx.lineWidth = 1;
+                        lctx.strokeRect(left, yPos, width, s.height);
+
+                        if (s.name !== 'gap' && s.present) {
+                            lctx.fillStyle = s.color;
+                            lctx.fillRect(left, yPos, width, s.height);
+                        }
+
+                        if (viaPresent) {
+                            // drill a hole through every layer slot
+                            lctx.clearRect(viaX, yPos, viaWidth, s.height);
+                        }
+
+                        // Label (accessibility): draw to the left of the bar, vertically centered
+                        lctx.fillStyle = '#000';
+                        lctx.font = '12px Arial';
+                        lctx.textAlign = 'right';
+                        lctx.textBaseline = 'middle';
+                        const labelX = left - 6; // small gap from bar
+                        const labelY = yPos + s.height / 2;
+                        const labelText = s.name === 'gap' ? 'gap' : s.name;
+                        lctx.fillText(labelText, labelX, labelY);
+
+                        yPos += s.height;
+                    }
+
+                    if (viaPresent) {
+                        // Fill the drilled center with metal (same as layer metal color)
+                        lctx.fillStyle = layers['metal'];
+                        lctx.fillRect(viaX, top, viaWidth, yPos - top);
+                        lctx.strokeStyle = '#000';
+                        lctx.strokeRect(viaX, top, viaWidth, yPos - top);
+                    }
+                }
+
+                function clearLayerView() {
+                    if (!lctx || !layerCanvas) return;
+                    lctx.clearRect(0, 0, layerCanvas.width, layerCanvas.height);
                 }
 
                 function getLayerIndex(layer) {
