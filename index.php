@@ -84,11 +84,11 @@ the sample content in various stages of completion:
       <a href="cmos/index.html" target="_blank" class="text-primary">CMOS Gate Builder</a>
     </li>
     <li>
-      <a href="gates/index.html" target="_blank" class="text-primary">Digital Logic Builder</a>
-    </li>
-    <li>
       <a href="mistic/index.html" target="_blank" class="text-primary">Mistic VLSI Layout Tool</a> (inspried by the
      <a href="http://opencircuitdesign.com/magic/" class="text-primary" target="_blank">Magic VLSI Layout Tool</a>)
+    </li>
+    <li>
+      <a href="gates/index.html" target="_blank" class="text-primary">Digital Logic Builder</a>
     </li>
 <li>
 <a href="cdc8512/index.html"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator Prototype</a> (A UI Mockup - not working)
