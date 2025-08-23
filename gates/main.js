@@ -8,6 +8,8 @@ class CircuitEditor {
         this.draggingGate = null;
         this.selectedTool = null;
         this.wireStartNode = null;
+        this.draggingWaypoint = null;
+        this.selectedWaypoint = null;
         this.dragStartX = 0;
         this.dragStartY = 0;
         this.dragStartGateX = 0;
@@ -196,6 +198,7 @@ class CircuitEditor {
 
         // Modify the handleClick method to include tag mode
         this.canvas.addEventListener('click', this.handleClick.bind(this));
+        this.canvas.addEventListener('dblclick', this.handleDoubleClick.bind(this));
     }
 
     handleMouseDown(e) {
@@ -205,6 +208,14 @@ class CircuitEditor {
             const rect = this.canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
+
+            // Check for waypoint deletion first
+            const waypointInfo = this.findWaypointAt(x, y);
+            if (waypointInfo) {
+                this.removeWaypoint(waypointInfo.wire, waypointInfo.index);
+                this.showMessage('Waypoint removed');
+                return;
+            }
 
             // Check for wire deletion
             for (let i = this.wires.length - 1; i >= 0; i--) {
@@ -275,6 +286,16 @@ class CircuitEditor {
                     }
                 }
 
+                // Check if clicked on waypoint for dragging
+                const waypointInfo = this.findWaypointAt(x, y);
+                if (waypointInfo) {
+                    this.draggingWaypoint = waypointInfo;
+                    this.dragStartX = x;
+                    this.dragStartY = y;
+                    this.canvas.style.cursor = 'grabbing';
+                    return;
+                }
+
                 // Check if clicked on node (for wire creation)
                 const clickedNode = this.findClickedNode(x, y);
                 if (clickedNode) {
@@ -308,6 +329,24 @@ class CircuitEditor {
                 this.updateWireValues();
             }
         }, this.updateDebounceTime);
+
+        // Handle waypoint dragging
+        if (this.draggingWaypoint) {
+            const dx = x - this.dragStartX;
+            const dy = y - this.dragStartY;
+            
+            // Update waypoint position
+            this.draggingWaypoint.waypoint.x = this.draggingWaypoint.waypoint.x + dx;
+            this.draggingWaypoint.waypoint.y = this.draggingWaypoint.waypoint.y + dy;
+            
+            // Update drag start position for next move
+            this.dragStartX = x;
+            this.dragStartY = y;
+            
+            // Force a render
+            this.render();
+            return;
+        }
 
         // Handle gate dragging
         if (this.draggingGate) {
@@ -415,7 +454,14 @@ class CircuitEditor {
                 } else if (this.draggingGate.type === 'CLOCK_PULSE') {
                     // ... existing CLOCK_PULSE code ...
                 } else if (this.draggingGate.type === 'THREE_BIT_ADDER') {
-                    // ... existing THREE_BIT_ADDER code ...
+                    const spacing = 15;
+                    if (index < 3) {  // Sum outputs (S1, S2, S4) - bottom
+                        node.x = this.draggingGate.x + (index - 1) * spacing;
+                        node.y = this.draggingGate.y + this.draggingGate.height/2 + 20; // 20 pixels below component
+                    } else {          // Overflow output (OVF) - top
+                        node.x = this.draggingGate.x;
+                        node.y = this.draggingGate.y - this.draggingGate.height/2;
+                    }
                 } else if (this.draggingGate.type === 'THREE_BIT_LATCH') {
                     // ... existing THREE_BIT_LATCH code ...
                 } else if (this.draggingGate.type === 'NIXIE_DISPLAY') {
@@ -431,6 +477,8 @@ class CircuitEditor {
                     node.y = this.draggingGate.y + this.dragStartNodePositions.outputs[index].relativeY;
                 }
             });
+            
+
             
             // Force a render
             this.render();
@@ -481,7 +529,7 @@ class CircuitEditor {
             }
         }
 
-        // Update cursor for input gates
+        // Update cursor for input gates and waypoints
         let overInput = false;
         for (const gate of this.gates) {
             if (gate.type === 'INPUT' && this.isPointInGate(x, y, gate)) {
@@ -491,13 +539,21 @@ class CircuitEditor {
             }
         }
 
-        if (!overInput && !this.wireStartNode) {
+        // Check for waypoint hover
+        const waypointInfo = this.findWaypointAt(x, y);
+        if (waypointInfo) {
+            this.canvas.style.cursor = 'grab';
+        } else if (!overInput && !this.wireStartNode) {
             this.canvas.style.cursor = 'default';
         }
     }
 
     handleMouseUp() {
         this.isMouseDown = false;
+        if (this.draggingWaypoint) {
+            this.draggingWaypoint = null;
+            this.canvas.style.cursor = 'default';
+        }
         if (this.draggingGate) {
             // Check if gate position actually changed
             const dx = this.dragStartX - this.draggingGate.x;
@@ -507,6 +563,20 @@ class CircuitEditor {
             }
             this.draggingGate = null;
             this.canvas.style.cursor = 'default';
+        }
+    }
+
+    handleDoubleClick(e) {
+        const rect = this.canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        // Check if double-clicked on a wire to add a waypoint
+        const wire = this.findHoveredWire(x, y);
+        if (wire) {
+            this.addWaypointToWire(wire, x, y);
+            this.showMessage('Waypoint added to wire');
+            return;
         }
     }
 
@@ -631,6 +701,8 @@ class CircuitEditor {
 
     findClickedNode(x, y, radius = 5) {
         for (const gate of this.gates) {
+
+            
             // Check input nodes
             for (const node of gate.inputNodes) {
                 if (Math.hypot(x - node.x, y - node.y) < radius) {
@@ -649,6 +721,30 @@ class CircuitEditor {
 
     findHoveredWire(x, y) {
         return this.wires.find(wire => this.isPointNearWire(x, y, wire));
+    }
+
+    findWaypointAt(x, y, radius = 6) {
+        for (const wire of this.wires) {
+            for (let i = 0; i < wire.waypoints.length; i++) {
+                const waypoint = wire.waypoints[i];
+                if (Math.hypot(x - waypoint.x, y - waypoint.y) < radius) {
+                    return { wire, waypoint, index: i };
+                }
+            }
+        }
+        return null;
+    }
+
+    addWaypointToWire(wire, x, y) {
+        // Add a waypoint at the specified position
+        wire.waypoints.push({ x, y });
+    }
+
+    removeWaypoint(wire, index) {
+        // Remove a waypoint at the specified index
+        if (index >= 0 && index < wire.waypoints.length) {
+            wire.waypoints.splice(index, 1);
+        }
     }
 
     showMessage(message, isError = false) {
@@ -689,7 +785,8 @@ class CircuitEditor {
             start: startNode.node,
             end: endNode.node,
             startGate: startNode.gate,
-            endGate: endNode.gate
+            endGate: endNode.gate,
+            waypoints: [] // Array of waypoint positions for wire routing
         };
 
         // Update connection states
@@ -765,44 +862,72 @@ class CircuitEditor {
         this.ctx.lineWidth = 2;
 
         this.wires.forEach(wire => {
+            // Get entry/exit points outside the components
+            const startEntry = this.getEntryPoint(wire.start, wire.startGate);
+            const endEntry = this.getEntryPoint(wire.end, wire.endGate);
+            
             this.ctx.beginPath();
             this.ctx.moveTo(wire.start.x, wire.start.y);
             
-            // Special handling for THREE_BIT_ADDER sum outputs (S1, S2, S4)
-            if (wire.startGate.type === 'THREE_BIT_ADDER' && 
-                wire.start.y === wire.startGate.y + wire.startGate.height/2) {
-                
-                // First control point - straight down from start
-                const cp1x = wire.start.x;
-                const cp1y = wire.start.y + 40; // Move down by 40 pixels
-                
-                // Second control point - near the destination
-                const cp2x = wire.end.x;
-                const cp2y = wire.end.y - Math.abs(wire.end.x - wire.start.x) * 0.3; // Adjust curve based on horizontal distance
-                
-                this.ctx.bezierCurveTo(
-                    cp1x, cp1y,
-                    cp2x, cp2y,
-                    wire.end.x, wire.end.y
-                );
+            // Special handling for THREE_BIT_ADDER sum outputs - straight line down first
+            if (wire.startGate.type === 'THREE_BIT_ADDER' && wire.start.y > wire.startGate.y + wire.startGate.height/2) {
+                // This is a sum output, draw straight line down to entry point
+                this.ctx.lineTo(startEntry.x, startEntry.y);
             } else {
-                // Regular wire drawing logic for all other cases
-                const dx = wire.end.x - wire.start.x;
-                const dy = wire.end.y - wire.start.y;
-                const distance = Math.sqrt(dx * dx + dy * dy);
-                
-                // Calculate control points for smooth curve
-                const cp1x = wire.start.x + dx * 0.5;
-                const cp1y = wire.start.y;
-                const cp2x = wire.end.x - dx * 0.5;
-                const cp2y = wire.end.y;
+                // Normal bezier curve for other components
+                const startDx = startEntry.x - wire.start.x;
+                const startDy = startEntry.y - wire.start.y;
+                const startCp1x = wire.start.x + startDx * 0.5;
+                const startCp1y = wire.start.y;
+                const startCp2x = startEntry.x - startDx * 0.5;
+                const startCp2y = startEntry.y;
                 
                 this.ctx.bezierCurveTo(
-                    cp1x, cp1y,
-                    cp2x, cp2y,
-                    wire.end.x, wire.end.y
+                    startCp1x, startCp1y,
+                    startCp2x, startCp2y,
+                    startEntry.x, startEntry.y
                 );
             }
+            
+            // Draw through waypoints using bezier curves
+            let currentPoint = startEntry;
+            
+            wire.waypoints.forEach(waypoint => {
+                const dx = waypoint.x - currentPoint.x;
+                const dy = waypoint.y - currentPoint.y;
+                
+                // Calculate control points for smooth curve
+                const cp1x = currentPoint.x + dx * 0.5;
+                const cp1y = currentPoint.y;
+                const cp2x = waypoint.x - dx * 0.5;
+                const cp2y = waypoint.y;
+                
+                this.ctx.bezierCurveTo(
+                    cp1x, cp1y,
+                    cp2x, cp2y,
+                    waypoint.x, waypoint.y
+                );
+                
+                currentPoint = waypoint;
+            });
+            
+            // Draw to end point using curved path
+            const dx = endEntry.x - currentPoint.x;
+            const dy = endEntry.y - currentPoint.y;
+            
+            // Calculate control points for smooth curve
+            const cp1x = currentPoint.x + dx * 0.5;
+            const cp1y = currentPoint.y;
+            const cp2x = endEntry.x - dx * 0.5;
+            const cp2y = endEntry.y;
+            
+            this.ctx.bezierCurveTo(
+                cp1x, cp1y,
+                cp2x, cp2y,
+                endEntry.x, endEntry.y
+            );
+            
+            this.ctx.lineTo(wire.end.x, wire.end.y);
             
             // Set wire style based on hover/selected state
             if (wire === this.hoveredWire) {
@@ -824,26 +949,96 @@ class CircuitEditor {
             this.ctx.arc(wire.end.x, wire.end.y, 3, 0, Math.PI * 2);
             this.ctx.fillStyle = wire === this.hoveredWire ? '#2196F3' : '#4CAF50';
             this.ctx.fill();
+            
+            // Draw waypoints
+            wire.waypoints.forEach((waypoint, index) => {
+                this.ctx.beginPath();
+                this.ctx.arc(waypoint.x, waypoint.y, 4, 0, Math.PI * 2);
+                this.ctx.fillStyle = '#FF9800'; // Orange for waypoints
+                this.ctx.fill();
+                this.ctx.strokeStyle = '#000';
+                this.ctx.lineWidth = 1;
+                this.ctx.stroke();
+            });
         });
+    }
+
+    getEntryPoint(node, gate) {
+        // Calculate entry point just outside the component
+        const margin = 20; // Distance outside the component
+        
+        // Special handling for THREE_BIT_ADDER sum outputs
+        if (gate.type === 'THREE_BIT_ADDER') {
+            // Check if this is a sum output (S1, S2, S4) - they should exit downward
+            const isSumOutput = node.y > gate.y + gate.height/2;
+            if (isSumOutput) {
+                return { x: node.x, y: node.y + 10 }; // Exit 10 pixels down from the node
+            }
+        }
+        
+        // Get component bounds
+        let bounds;
+        if (gate.type === 'INPUT' || gate.type === 'OUTPUT') {
+            // Circular gates
+            bounds = {
+                left: gate.x - 15,
+                right: gate.x + 15,
+                top: gate.y - 15,
+                bottom: gate.y + 15
+            };
+        } else {
+            // Rectangular gates
+            bounds = {
+                left: gate.x - 20,
+                right: gate.x + 20,
+                top: gate.y - 20,
+                bottom: gate.y + 20
+            };
+        }
+        
+        // Determine which side of the component the node is on
+        const nodeX = node.x;
+        const nodeY = node.y;
+        
+        // Find the closest edge and place entry point just outside
+        if (nodeX <= bounds.left) {
+            // Node is on the left side
+            return { x: bounds.left - margin, y: nodeY };
+        } else if (nodeX >= bounds.right) {
+            // Node is on the right side
+            return { x: bounds.right + margin, y: nodeY };
+        } else if (nodeY <= bounds.top) {
+            // Node is on the top side
+            return { x: nodeX, y: bounds.top - margin };
+        } else if (nodeY >= bounds.bottom) {
+            // Node is on the bottom side
+            return { x: nodeX, y: bounds.bottom + margin };
+        } else {
+            // Node is inside the component (shouldn't happen, but fallback)
+            return { x: bounds.right + margin, y: nodeY };
+        }
     }
 
     isPointNearWire(x, y, wire) {
         const threshold = 5;
         
-        // Check if point is near wire curve
-        const midX = (wire.start.x + wire.end.x) / 2;
-        const points = [
-            { x: wire.start.x, y: wire.start.y },
-            { x: midX, y: wire.start.y },
-            { x: midX, y: wire.end.y },
-            { x: wire.end.x, y: wire.end.y }
-        ];
-
-        for (let i = 0; i < points.length - 1; i++) {
+                    // Get entry points for the wire
+            const startEntry = this.getEntryPoint(wire.start, wire.startGate);
+            const endEntry = this.getEntryPoint(wire.end, wire.endGate);
+        
+        // Check if point is near any part of the wire path
+        const segments = [];
+        
+        // Add segments for wire path
+        segments.push({ start: wire.start, end: startEntry });
+        segments.push({ start: startEntry, end: endEntry });
+        segments.push({ start: endEntry, end: wire.end });
+        
+        for (const segment of segments) {
             const dist = this.pointToLineDistance(
                 x, y,
-                points[i].x, points[i].y,
-                points[i + 1].x, points[i + 1].y
+                segment.start.x, segment.start.y,
+                segment.end.x, segment.end.y
             );
             if (dist < threshold) return true;
         }

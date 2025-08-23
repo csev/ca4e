@@ -106,6 +106,7 @@ class Gate {
             case 'OUTPUT':
                 this.drawIO(ctx);
                 break;
+
         }
 
         // Draw input/output nodes
@@ -1174,10 +1175,10 @@ class ThreeBitAdder extends Gate {
         this.inputNodes[5].x = this.x + this.width/2;
         this.inputNodes[5].y = this.y + 25;
 
-        // Update sum output positions (bottom)
+        // Update sum output positions (bottom - exit downward)
         for (let i = 0; i < 3; i++) {
             this.outputNodes[i].x = this.x + (i - 1) * spacing;
-            this.outputNodes[i].y = this.y + this.height/2;
+            this.outputNodes[i].y = this.y + this.height/2 + 20; // Position below the component
         }
 
         // Update overflow output position (top)
@@ -1594,4 +1595,6 @@ class SRFlipFlop extends Gate {
         this.outputNodes[1].x = this.x + this.width/2; // Q̄ output
         this.outputNodes[1].y = this.y + Gate.twoInputSquareVeritcalOffset;
     }
-} 
+}
+
+ 
