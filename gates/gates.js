@@ -532,8 +532,20 @@ class Gate {
 
     // Add default updateConnectionPoints method
     updateConnectionPoints() {
-        // Default implementation for basic gates
-        this.initializeNodes();
+        if (this.type === 'OR' || this.type === 'NOR' || this.type === 'XOR') {
+            // Update input nodes for curved gates
+            this.inputNodes[0].x = this.x - 20;
+            this.inputNodes[0].y = this.y - 10;
+            this.inputNodes[1].x = this.x - 20;
+            this.inputNodes[1].y = this.y + 10;
+            
+            // Update output nodes
+            this.outputNodes[0].x = this.x + 20;
+            this.outputNodes[0].y = this.y;
+        } else {
+            // Default implementation for other gates
+            this.initializeNodes();
+        }
     }
 
     // Add method to update label with ordinal

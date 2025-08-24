@@ -375,7 +375,10 @@ class CircuitEditor {
                 this.draggingGate.type === 'CLOCK_PULSE' ||
                 this.draggingGate.type === 'JK_FLIP_FLOP' ||
                 this.draggingGate.type === 'ONE_BIT_LATCH' ||
-                this.draggingGate.type === 'SR_FLIP_FLOP') {
+                this.draggingGate.type === 'SR_FLIP_FLOP' ||
+                this.draggingGate.type === 'OR' ||
+                this.draggingGate.type === 'NOR' ||
+                this.draggingGate.type === 'XOR') {
                 this.draggingGate.updateConnectionPoints();
                 // Force a render
                 this.render();
@@ -415,13 +418,20 @@ class CircuitEditor {
                     // AND and NAND gates have two inputs at specific positions
                     node.x = this.draggingGate.x - 25;
                     node.y = this.draggingGate.y + (index === 0 ? -10 : 10); // First input at -10, second at +10
+                } else if (this.draggingGate.type === 'OR' || this.draggingGate.type === 'NOR' || this.draggingGate.type === 'XOR') {
+                    // OR, NOR, and XOR gates have two inputs at specific positions
+                    node.x = this.draggingGate.x - 20;
+                    node.y = this.draggingGate.y + (index === 0 ? -10 : 10); // First input at -10, second at +10
                 } else {
                     node.x = this.draggingGate.x - 20;
                 }
                 if (this.draggingGate.type !== 'FULL_ADDER' && 
                     this.draggingGate.type !== 'NOT' && 
                     this.draggingGate.type !== 'AND' && 
-                    this.draggingGate.type !== 'NAND') {
+                    this.draggingGate.type !== 'NAND' &&
+                    this.draggingGate.type !== 'OR' && 
+                    this.draggingGate.type !== 'NOR' && 
+                    this.draggingGate.type !== 'XOR') {
                     node.y = this.draggingGate.y + this.dragStartNodePositions.inputs[index].relativeY;
                 }
             });
@@ -1043,6 +1053,13 @@ class CircuitEditor {
             if (isSumOutput) {
                 return { x: node.x, y: node.y }; // Use the node position directly, no extra offset
             }
+        }
+        
+        // Special handling for OR, NOR, and XOR input nodes - they are on curved edges
+        if ((gate.type === 'OR' || gate.type === 'NOR' || gate.type === 'XOR') && 
+            gate.inputNodes.includes(node)) {
+            // For curved gates, place entry point just outside the node position
+            return { x: node.x - margin, y: node.y };
         }
         
         // Get component bounds
