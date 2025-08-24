@@ -76,6 +76,9 @@ class CircuitEditor {
         // Add tag mode flag
         this.isTagMode = false;
         
+        // Add waypoints visibility flag
+        this.showWaypoints = true;
+        
         // Start render loop
         this.render();
     }
@@ -194,6 +197,15 @@ class CircuitEditor {
                 this.canvas.style.cursor = 'default';
                 document.getElementById('selectedTool').textContent = 'Selected: None';
             }
+        });
+
+        // Add waypoints toggle button listener
+        const waypointsButton = document.getElementById('waypointsToggle');
+        waypointsButton.addEventListener('click', () => {
+            this.showWaypoints = !this.showWaypoints;
+            waypointsButton.classList.toggle('active', !this.showWaypoints);
+            waypointsButton.textContent = this.showWaypoints ? '👁️ Waypoints' : '🙈 Waypoints';
+            this.showMessage(this.showWaypoints ? 'Waypoints shown' : 'Waypoints hidden');
         });
 
         // Modify the handleClick method to include tag mode
@@ -1035,16 +1047,18 @@ class CircuitEditor {
             this.ctx.fillStyle = wire === this.hoveredWire ? '#2196F3' : '#4CAF50';
             this.ctx.fill();
             
-            // Draw waypoints
-            wire.waypoints.forEach((waypoint, index) => {
-                this.ctx.beginPath();
-                this.ctx.arc(waypoint.x, waypoint.y, 4, 0, Math.PI * 2);
-                this.ctx.fillStyle = '#FF9800'; // Orange for waypoints
-                this.ctx.fill();
-                this.ctx.strokeStyle = '#000';
-                this.ctx.lineWidth = 1;
-                this.ctx.stroke();
-            });
+            // Draw waypoints (if enabled)
+            if (this.showWaypoints) {
+                wire.waypoints.forEach((waypoint, index) => {
+                    this.ctx.beginPath();
+                    this.ctx.arc(waypoint.x, waypoint.y, 4, 0, Math.PI * 2);
+                    this.ctx.fillStyle = '#FF9800'; // Orange for waypoints
+                    this.ctx.fill();
+                    this.ctx.strokeStyle = '#000';
+                    this.ctx.lineWidth = 1;
+                    this.ctx.stroke();
+                });
+            }
         });
     }
 
@@ -1584,6 +1598,24 @@ style.textContent = `
 
     #tagMode.active:hover {
         background-color: #0D47A1;
+    }
+
+    #waypointsToggle {
+        background-color: #9C27B0;
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+    #waypointsToggle:hover {
+        background-color: #7B1FA2;
+    }
+
+    #waypointsToggle.active {
+        background-color: #6A1B9A;
+    }
+
+    #waypointsToggle.active:hover {
+        background-color: #4A148C;
     }
 `;
 document.head.appendChild(style);
