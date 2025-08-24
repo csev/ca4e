@@ -26,6 +26,12 @@ class CircuitEditor {
         this.circuitHash = '';
         this.lastCircuitState = null;
         
+        // Add debounced circuit update system
+        this.circuitUpdateTimeout = null;
+        this.circuitUpdateDebounceTime = 500; // 500ms debounce for circuit updates
+        this.circuitNeedsUpdate = false;
+        this.lastCircuitHash = '';
+        
         // Create circuit instance for computations with message display function
         this.circuit = new Circuit(this.showMessage.bind(this));
         
@@ -78,6 +84,9 @@ class CircuitEditor {
         
         // Add waypoints visibility flag
         this.showWaypoints = true;
+        
+        // Initialize the circuit hash after all setup is complete
+        this.lastCircuitHash = this.computeCircuitHash();
         
         // Start render loop
         this.render();
@@ -236,7 +245,7 @@ class CircuitEditor {
                     wire.startGate.disconnectNode(wire.start, false);
                     wire.endGate.disconnectNode(wire.end, true);
                     this.wires.splice(i, 1);
-                    this.updateWireValues();
+                    this.scheduleCircuitUpdate();
                     return;
                 }
             }
@@ -338,12 +347,18 @@ class CircuitEditor {
         this.mouseMoveTimeout = setTimeout(() => {
             this.isMouseMoving = false;
             if (!this.isMouseDown) {
-                this.updateWireValues();
+                this.scheduleCircuitUpdate();
             }
         }, this.updateDebounceTime);
 
         // Handle waypoint dragging
         if (this.draggingWaypoint) {
+            // Clear circuit update timeout during dragging
+            if (this.circuitUpdateTimeout) {
+                clearTimeout(this.circuitUpdateTimeout);
+                this.circuitNeedsUpdate = true;
+            }
+            
             const dx = x - this.dragStartX;
             const dy = y - this.dragStartY;
             
@@ -362,6 +377,12 @@ class CircuitEditor {
 
         // Handle gate dragging
         if (this.draggingGate) {
+            // Clear circuit update timeout during dragging
+            if (this.circuitUpdateTimeout) {
+                clearTimeout(this.circuitUpdateTimeout);
+                this.circuitNeedsUpdate = true;
+            }
+            
             const dx = x - this.dragStartX;
             const dy = y - this.dragStartY;
             
@@ -545,16 +566,22 @@ class CircuitEditor {
         if (this.draggingWaypoint) {
             this.draggingWaypoint = null;
             this.canvas.style.cursor = 'default';
+            // Trigger circuit update after waypoint dragging ends
+            this.scheduleCircuitUpdate();
         }
         if (this.draggingGate) {
             // Check if gate position actually changed
             const dx = this.dragStartX - this.draggingGate.x;
             const dy = this.dragStartY - this.draggingGate.y;
-            if (Math.abs(dx) > 0.1 || Math.abs(dy) > 0.1) {
-                this.updateWireValues();
-            }
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
             this.draggingGate = null;
             this.canvas.style.cursor = 'default';
+            
+            // Only trigger circuit update if gate was actually moved
+            if (distance > 1) {
+                this.scheduleCircuitUpdate();
+            }
         }
     }
 
@@ -621,7 +648,7 @@ class CircuitEditor {
                             // Start the timer
                             gate.timer = setInterval(() => {
                                 gate.toggleState();
-                                this.updateWireValues();
+                                this.performImmediateCircuitUpdate(); // Use immediate update for clock
                             }, 2000); // Toggle every 2 seconds
                             gate.isRunning = true;  // Set running state to true
                             this.showMessage('Clock started');
@@ -634,7 +661,7 @@ class CircuitEditor {
                         }
                         this.render();  // Force render to update the display
                     } else if (gate.toggleInput?.() || gate.toggleState?.()) {
-                        this.updateWireValues();
+                        this.scheduleCircuitUpdate();
                     }
                     break;
                 }
@@ -642,16 +669,21 @@ class CircuitEditor {
         }
     }
 
-    updateWireValues() {
-        // Skip update if mouse is moving or down
-        if (this.isMouseMoving || this.isMouseDown) {
-            return;
-        }
-
+    // Add immediate circuit update method (bypasses debouncing)
+    performImmediateCircuitUpdate() {
         // Check if circuit has actually changed
         if (!this.hasCircuitChanged()) {
             return;
         }
+
+        // Show updating indicator
+        const statusBar = document.querySelector('.status-bar');
+        const updatingIndicator = document.createElement('span');
+        updatingIndicator.id = 'updating-indicator';
+        updatingIndicator.style.color = '#ff9800';
+        updatingIndicator.style.marginLeft = '10px';
+        updatingIndicator.textContent = '🔄 Computing...';
+        statusBar.appendChild(updatingIndicator);
 
         const startTime = performance.now();
         
@@ -664,12 +696,57 @@ class CircuitEditor {
         // Log the state if needed
         this.circuit.logState();
         
-        // Update display
-        this.render();
+        // Update the circuit hash
+        this.lastCircuitHash = this.computeCircuitHash();
 
         const endTime = performance.now();
         const elapsedTime = endTime - startTime;
         console.log(`Circuit recomputation completed in ${elapsedTime.toFixed(2)}ms`);
+        
+        // Remove updating indicator
+        const indicator = document.getElementById('updating-indicator');
+        if (indicator) {
+            indicator.remove();
+        }
+    }
+
+    // Add debounced circuit update method
+    scheduleCircuitUpdate() {
+        // Clear any existing timeout
+        if (this.circuitUpdateTimeout) {
+            clearTimeout(this.circuitUpdateTimeout);
+        }
+        
+        // Mark that circuit needs update
+        this.circuitNeedsUpdate = true;
+        
+        // Schedule the update after debounce period
+        this.circuitUpdateTimeout = setTimeout(() => {
+            this.performCircuitUpdate();
+        }, this.circuitUpdateDebounceTime);
+    }
+    
+    // Perform the actual circuit update
+    performCircuitUpdate() {
+        // Skip update if mouse is moving or down
+        if (this.isMouseMoving || this.isMouseDown) {
+            return;
+        }
+
+        // Check if circuit has actually changed
+        if (!this.hasCircuitChanged()) {
+            this.circuitNeedsUpdate = false;
+            return;
+        }
+
+        // Use the immediate update method
+        this.performImmediateCircuitUpdate();
+        this.circuitNeedsUpdate = false;
+    }
+
+    updateWireValues() {
+        // Instead of immediately updating, schedule a debounced update
+        this.scheduleCircuitUpdate();
     }
 
     isPointInGate(x, y, gate) {
@@ -899,7 +976,7 @@ class CircuitEditor {
         }
         
         // Force circuit update since we added a wire
-        this.updateWireValues();
+        this.scheduleCircuitUpdate();
     }
 
     render() {
@@ -1222,7 +1299,7 @@ class CircuitEditor {
         }
 
         // Force circuit update since we deleted a gate
-        this.updateWireValues();
+        this.scheduleCircuitUpdate();
         this.render();
     }
 
@@ -1273,8 +1350,7 @@ class CircuitEditor {
     // Add method to check if circuit has changed
     hasCircuitChanged() {
         const newHash = this.computeCircuitHash();
-        const changed = newHash !== this.circuitHash;
-        this.circuitHash = newHash;
+        const changed = newHash !== this.lastCircuitHash;
         return changed;
     }
 
@@ -1307,7 +1383,7 @@ class CircuitEditor {
         inputGate.state = value;
         
         // Update the circuit
-        this.updateWireValues();
+        this.scheduleCircuitUpdate();
         
         this.showMessage(`Set input "${label}" to ${value ? '1' : '0'}`);
         return true;
