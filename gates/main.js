@@ -369,55 +369,38 @@ class CircuitEditor {
             this.draggingGate.x = this.dragStartGateX + dx;
             this.draggingGate.y = this.dragStartGateY + dy;
             
+            // Special handling for components with updateConnectionPoints methods
+            if (this.draggingGate.type === 'THREE_BIT_ADDER' || 
+                this.draggingGate.type === 'THREE_BIT_LATCH' ||
+                this.draggingGate.type === 'CLOCK_PULSE' ||
+                this.draggingGate.type === 'JK_FLIP_FLOP' ||
+                this.draggingGate.type === 'ONE_BIT_LATCH' ||
+                this.draggingGate.type === 'SR_FLIP_FLOP') {
+                this.draggingGate.updateConnectionPoints();
+                // Force a render
+                this.render();
+                return;
+            }
+            
             // Update all node positions using stored relative positions
             this.draggingGate.inputNodes.forEach((node, index) => {
                 if (this.draggingGate.type === 'ONE_BIT_LATCH') {
-                    if (index === 0) {  // Data input
-                        node.x = this.draggingGate.x - this.draggingGate.width/2;
-                        node.y = this.draggingGate.y + Gate.twoInputSquareVeritcalOffset; // Offset D input down
-                    } else if (index === 1) {  // Clock input
-                        node.x = this.draggingGate.x - this.draggingGate.width/2;
-                        node.y = this.draggingGate.y - Gate.twoInputSquareVeritcalOffset;
-
-                    } 
+                    // Handled by updateConnectionPoints() above
                     return;
                 } else if (this.draggingGate.type === 'JK_FLIP_FLOP') {
-                    if (index === 0) {      // J input
-                        node.x = this.draggingGate.x - this.draggingGate.width/2;
-                        node.y = this.draggingGate.y - Gate.twoInputSquareVeritcalOffset;
-                    } else if (index === 1) { // Clock input
-                        node.x = this.draggingGate.x;
-                        node.y = this.draggingGate.y - this.draggingGate.height/2;
-                    } else if (index === 2) { // K input
-                        node.x = this.draggingGate.x - this.draggingGate.width/2;
-                        node.y = this.draggingGate.y + Gate.twoInputSquareVeritcalOffset;
-                    }
+                    // Handled by updateConnectionPoints() above
                     return;
                 } else if (this.draggingGate.type === 'SR_FLIP_FLOP') {
-                    node.x = this.draggingGate.x - this.draggingGate.width/2;
-                    if (index === 0) {      // S input
-                        node.y = this.draggingGate.y - Gate.twoInputSquareVeritcalOffset;
-                    } else {                // R input
-                        node.y = this.draggingGate.y + Gate.twoInputSquareVeritcalOffset;
-                    }
+                    // Handled by updateConnectionPoints() above
+                    return;
                 } else if (this.draggingGate.type === 'CLOCK_PULSE') {
                     // Clock pulse has no input nodes
                 } else if (this.draggingGate.type === 'THREE_BIT_ADDER') {
-                    if (index < 3) {  // A inputs (left side)
-                        node.x = this.draggingGate.x - this.draggingGate.width/2;
-                        node.y = this.draggingGate.y + (index - 1) * 25;  // -25, 0, +25
-                    } else {          // B inputs (right side)
-                        node.x = this.draggingGate.x + this.draggingGate.width/2;
-                        node.y = this.draggingGate.y + ((index - 4) * 25);  // -25, 0, +25
-                    }
+                    // Handled by updateConnectionPoints() above
+                    return;
                 } else if (this.draggingGate.type === 'THREE_BIT_LATCH') {
-                    if (index === 0) {  // Clock input
-                        node.x = this.draggingGate.x;
-                        node.y = this.draggingGate.y - this.draggingGate.height/2;
-                    } else {  // Data inputs
-                        node.x = this.draggingGate.x - this.draggingGate.width/2;
-                        node.y = this.draggingGate.y + ((index - 2) * 15);  // -15, 0, +15
-                    }
+                    // Handled by updateConnectionPoints() above
+                    return;
                 } else if (this.draggingGate.type === 'NIXIE_DISPLAY') {
                     node.x = this.draggingGate.x - 40;
                 } else if (this.draggingGate.type === 'FULL_ADDER') {
@@ -446,36 +429,23 @@ class CircuitEditor {
             // Update output node positions
             this.draggingGate.outputNodes.forEach((node, index) => {
                 if (this.draggingGate.type === 'ONE_BIT_LATCH') {
-                    node.x = this.draggingGate.x + this.draggingGate.width/2;
-                    node.y = this.draggingGate.y; //
+                    // Handled by updateConnectionPoints() above
+                    return;
                 } else if (this.draggingGate.type === 'JK_FLIP_FLOP') {
-                    node.x = this.draggingGate.x + this.draggingGate.width/2;
-                    if (index === 0) {      // Q output
-                        node.y = this.draggingGate.y - Gate.twoInputSquareVeritcalOffset; // Match J input height
-                    } else {                // Q' output
-                        node.y = this.draggingGate.y + Gate.twoInputSquareVeritcalOffset; // Match K input height
-                    }
+                    // Handled by updateConnectionPoints() above
                     return;
                 } else if (this.draggingGate.type === 'SR_FLIP_FLOP') {
-                    node.x = this.draggingGate.x + this.draggingGate.width/2;
-                    if (index === 0) {      // Q output
-                        node.y = this.draggingGate.y - Gate.twoInputSquareVeritcalOffset;
-                    } else {                // Q' output
-                        node.y = this.draggingGate.y + Gate.twoInputSquareVeritcalOffset;
-                    }
+                    // Handled by updateConnectionPoints() above
+                    return;
                 } else if (this.draggingGate.type === 'CLOCK_PULSE') {
-                    // ... existing CLOCK_PULSE code ...
+                    // Handled by updateConnectionPoints() above
+                    return;
                 } else if (this.draggingGate.type === 'THREE_BIT_ADDER') {
-                    const spacing = 15;
-                    if (index < 3) {  // Sum outputs (S1, S2, S4) - bottom
-                        node.x = this.draggingGate.x + (index - 1) * spacing;
-                        node.y = this.draggingGate.y + this.draggingGate.height/2 + 20; // 20 pixels below component
-                    } else {          // Overflow output (OVF) - top
-                        node.x = this.draggingGate.x;
-                        node.y = this.draggingGate.y - this.draggingGate.height/2;
-                    }
+                    // Handled by updateConnectionPoints() above
+                    return;
                 } else if (this.draggingGate.type === 'THREE_BIT_LATCH') {
-                    // ... existing THREE_BIT_LATCH code ...
+                    // Handled by updateConnectionPoints() above
+                    return;
                 } else if (this.draggingGate.type === 'NIXIE_DISPLAY') {
                     // ... existing NIXIE_DISPLAY code ...
                 } else if (this.draggingGate.type === 'FULL_ADDER') {
@@ -1071,7 +1041,7 @@ class CircuitEditor {
             // Check if this is a sum output (S1, S2, S4) - they should exit downward
             const isSumOutput = node.y > gate.y + gate.height/2;
             if (isSumOutput) {
-                return { x: node.x, y: node.y + 10 }; // Exit 10 pixels down from the node
+                return { x: node.x, y: node.y }; // Use the node position directly, no extra offset
             }
         }
         

@@ -1178,7 +1178,7 @@ class ThreeBitAdder extends Gate {
         // Update sum output positions (bottom - exit downward)
         for (let i = 0; i < 3; i++) {
             this.outputNodes[i].x = this.x + (i - 1) * spacing;
-            this.outputNodes[i].y = this.y + this.height/2 + 20; // Position below the component
+            this.outputNodes[i].y = this.y + this.height/2; // Position at bottom edge of component
         }
 
         // Update overflow output position (top)
