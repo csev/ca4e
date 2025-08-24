@@ -735,6 +735,49 @@ class CircuitEditor {
         return null;
     }
 
+    drawSmoothCurve(points) {
+        if (points.length < 2) return;
+        
+        // Use Catmull-Rom spline for smooth interpolation through all points
+        const tension = 0.5; // Controls curve tightness (0-1)
+        const segments = 10; // Number of segments between each point
+        
+        for (let i = 0; i < points.length - 1; i++) {
+            const p0 = i > 0 ? points[i - 1] : points[i];
+            const p1 = points[i];
+            const p2 = points[i + 1];
+            const p3 = i < points.length - 2 ? points[i + 2] : p2;
+            
+            // Draw smooth curve between p1 and p2
+            for (let j = 0; j <= segments; j++) {
+                const t = j / segments;
+                const point = this.catmullRomInterpolate(p0, p1, p2, p3, t, tension);
+                
+                if (j === 0) {
+                    this.ctx.lineTo(point.x, point.y);
+                } else {
+                    this.ctx.lineTo(point.x, point.y);
+                }
+            }
+        }
+    }
+    
+    catmullRomInterpolate(p0, p1, p2, p3, t, tension) {
+        const t2 = t * t;
+        const t3 = t2 * t;
+        
+        // Catmull-Rom matrix coefficients
+        const c0 = -tension * t3 + 2 * tension * t2 - tension * t;
+        const c1 = (2 - tension) * t3 + (tension - 3) * t2 + 1;
+        const c2 = (tension - 2) * t3 + (3 - 2 * tension) * t2 + tension * t;
+        const c3 = tension * t3 - tension * t2;
+        
+        return {
+            x: c0 * p0.x + c1 * p1.x + c2 * p2.x + c3 * p3.x,
+            y: c0 * p0.y + c1 * p1.y + c2 * p2.y + c3 * p3.y
+        };
+    }
+
     addWaypointToWire(wire, x, y) {
         // Add a waypoint at the specified position
         wire.waypoints.push({ x, y });
@@ -889,43 +932,27 @@ class CircuitEditor {
                 );
             }
             
-            // Draw through waypoints using bezier curves
-            let currentPoint = startEntry;
-            
-            wire.waypoints.forEach(waypoint => {
-                const dx = waypoint.x - currentPoint.x;
-                const dy = waypoint.y - currentPoint.y;
+            // Draw smooth curve through all waypoints
+            if (wire.waypoints.length > 0) {
+                // Create a smooth curve through all waypoints
+                const allPoints = [startEntry, ...wire.waypoints, endEntry];
+                this.drawSmoothCurve(allPoints);
+            } else {
+                // No waypoints - draw simple curve from start to end
+                const dx = endEntry.x - startEntry.x;
+                const dy = endEntry.y - startEntry.y;
                 
-                // Calculate control points for smooth curve
-                const cp1x = currentPoint.x + dx * 0.5;
-                const cp1y = currentPoint.y;
-                const cp2x = waypoint.x - dx * 0.5;
-                const cp2y = waypoint.y;
+                const cp1x = startEntry.x + dx * 0.5;
+                const cp1y = startEntry.y;
+                const cp2x = endEntry.x - dx * 0.5;
+                const cp2y = endEntry.y;
                 
                 this.ctx.bezierCurveTo(
                     cp1x, cp1y,
                     cp2x, cp2y,
-                    waypoint.x, waypoint.y
+                    endEntry.x, endEntry.y
                 );
-                
-                currentPoint = waypoint;
-            });
-            
-            // Draw to end point using curved path
-            const dx = endEntry.x - currentPoint.x;
-            const dy = endEntry.y - currentPoint.y;
-            
-            // Calculate control points for smooth curve
-            const cp1x = currentPoint.x + dx * 0.5;
-            const cp1y = currentPoint.y;
-            const cp2x = endEntry.x - dx * 0.5;
-            const cp2y = endEntry.y;
-            
-            this.ctx.bezierCurveTo(
-                cp1x, cp1y,
-                cp2x, cp2y,
-                endEntry.x, endEntry.y
-            );
+            }
             
             this.ctx.lineTo(wire.end.x, wire.end.y);
             
