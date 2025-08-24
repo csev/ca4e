@@ -778,6 +778,8 @@ class CircuitEditor {
         };
     }
 
+
+
     addWaypointToWire(wire, x, y) {
         // Add a waypoint at the specified position
         wire.waypoints.push({ x, y });
@@ -1049,26 +1051,56 @@ class CircuitEditor {
     isPointNearWire(x, y, wire) {
         const threshold = 5;
         
-                    // Get entry points for the wire
-            const startEntry = this.getEntryPoint(wire.start, wire.startGate);
-            const endEntry = this.getEntryPoint(wire.end, wire.endGate);
+        // Get entry points for the wire
+        const startEntry = this.getEntryPoint(wire.start, wire.startGate);
+        const endEntry = this.getEntryPoint(wire.end, wire.endGate);
         
-        // Check if point is near any part of the wire path
-        const segments = [];
+        // Create all points for the curve
+        const allPoints = [startEntry, ...wire.waypoints, endEntry];
         
-        // Add segments for wire path
-        segments.push({ start: wire.start, end: startEntry });
-        segments.push({ start: startEntry, end: endEntry });
-        segments.push({ start: endEntry, end: wire.end });
-        
-        for (const segment of segments) {
-            const dist = this.pointToLineDistance(
-                x, y,
-                segment.start.x, segment.start.y,
-                segment.end.x, segment.end.y
-            );
-            if (dist < threshold) return true;
+        if (allPoints.length < 2) {
+            // Simple line case - check straight line segments
+            const segments = [];
+            segments.push({ start: wire.start, end: startEntry });
+            segments.push({ start: startEntry, end: endEntry });
+            segments.push({ start: endEntry, end: wire.end });
+            
+            for (const segment of segments) {
+                const dist = this.pointToLineDistance(
+                    x, y,
+                    segment.start.x, segment.start.y,
+                    segment.end.x, segment.end.y
+                );
+                if (dist < threshold) return true;
+            }
+            return false;
         }
+        
+        // Check if point is near the curved spline path
+        const segments = 20; // Sample the curve at 20 points per segment
+        
+        for (let i = 0; i < allPoints.length - 1; i++) {
+            const p0 = i > 0 ? allPoints[i - 1] : allPoints[i];
+            const p1 = allPoints[i];
+            const p2 = allPoints[i + 1];
+            const p3 = i < allPoints.length - 2 ? allPoints[i + 2] : p2;
+            
+            for (let j = 0; j < segments; j++) {
+                const t1 = j / segments;
+                const t2 = (j + 1) / segments;
+                
+                const point1 = this.catmullRomInterpolate(p0, p1, p2, p3, t1, 0.5);
+                const point2 = this.catmullRomInterpolate(p0, p1, p2, p3, t2, 0.5);
+                
+                const dist = this.pointToLineDistance(
+                    x, y,
+                    point1.x, point1.y,
+                    point2.x, point2.y
+                );
+                if (dist < threshold) return true;
+            }
+        }
+        
         return false;
     }
 
