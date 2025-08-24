@@ -781,8 +781,64 @@ class CircuitEditor {
 
 
     addWaypointToWire(wire, x, y) {
-        // Add a waypoint at the specified position
-        wire.waypoints.push({ x, y });
+        // Get entry points
+        const startEntry = this.getEntryPoint(wire.start, wire.startGate);
+        const endEntry = this.getEntryPoint(wire.end, wire.endGate);
+        
+        // Create all points for the curve
+        const allPoints = [startEntry, ...wire.waypoints, endEntry];
+        
+        if (allPoints.length < 2) {
+            // Simple line case - add at the end
+            wire.waypoints.push({ x, y });
+            return;
+        }
+        
+        // Find the closest point on the curve and determine insertion position
+        let closestSegment = 0;
+        let minDistance = Infinity;
+        let closestT = 0;
+        
+        // Sample the curve to find where to insert the waypoint
+        const segments = 50; // High resolution sampling
+        
+        for (let i = 0; i < allPoints.length - 1; i++) {
+            const p0 = i > 0 ? allPoints[i - 1] : allPoints[i];
+            const p1 = allPoints[i];
+            const p2 = allPoints[i + 1];
+            const p3 = i < allPoints.length - 2 ? allPoints[i + 2] : p2;
+            
+            for (let j = 0; j <= segments; j++) {
+                const t = j / segments;
+                const point = this.catmullRomInterpolate(p0, p1, p2, p3, t, 0.5);
+                
+                const distance = Math.hypot(x - point.x, y - point.y);
+                if (distance < minDistance) {
+                    minDistance = distance;
+                    closestSegment = i;
+                    closestT = t;
+                }
+            }
+        }
+        
+        // Map the segment index to the correct waypoint insertion position
+        // allPoints = [startEntry, waypoint0, waypoint1, ..., endEntry]
+        // wire.waypoints = [waypoint0, waypoint1, ...]
+        
+        let insertIndex;
+        if (closestSegment === 0) {
+            // Between start entry and first waypoint (or end entry if no waypoints)
+            insertIndex = 0;
+        } else if (closestSegment === allPoints.length - 2) {
+            // Between last waypoint and end entry
+            insertIndex = wire.waypoints.length;
+        } else {
+            // Between waypoints
+            insertIndex = closestSegment;
+        }
+        
+        // Insert the waypoint at the correct position
+        wire.waypoints.splice(insertIndex, 0, { x, y });
     }
 
     removeWaypoint(wire, index) {
