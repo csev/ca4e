@@ -1,4 +1,4 @@
-Instruction set foe the CDC8512
+Instruction set for the CDC8512
 
 SX3 A3      # Copy a register to another
 SX3 42      # Set a register to an 8-bit constant (Base-10, single character or 0x hex)
