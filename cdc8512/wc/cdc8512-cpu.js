@@ -303,6 +303,8 @@ export class CDC8512CPU extends LitElement {
         display: flex;
         flex-direction: row;
         gap: 1rem;
+        border: 2px solid orange;
+        padding: 10px;
       }
       
       .instructions-memory-container {
@@ -363,11 +365,9 @@ export class CDC8512CPU extends LitElement {
               
               <!-- Register Section -->
               <div class="mb-3">
-                <h5>Registers</h5>
-                <div class="registers-container">
-                  <div class="card">
-                    <div class="card-body">
-                      <h6 class="card-title">Control Registers</h6>
+                <div style="display: flex; flex-direction: ${this.isMobile ? 'column' : 'row'}; gap: ${this.isMobile ? '0.25rem' : '1rem'}; ${this.isMobile ? 'border: 1px solid #dee2e6; border-radius: 0.375rem; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);' : ''} padding: ${this.isMobile ? '0.75rem' : '10px'};">
+                  <div style="${this.isMobile ? 'border: none; box-shadow: none; margin-bottom: 0.25rem;' : 'border: 1px solid #dee2e6; border-radius: 0.375rem; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);'}">
+                    <div style="padding: ${this.isMobile ? '0.25rem' : '1rem'};">
                       <div style="display: flex; gap: 1rem;">
                         <div>
                           <small class="text-muted">PC:</small><br>
@@ -384,9 +384,8 @@ export class CDC8512CPU extends LitElement {
                       </div>
                     </div>
                   </div>
-                  <div class="card">
-                    <div class="card-body">
-                      <h6 class="card-title">A Registers</h6>
+                  <div style="${this.isMobile ? 'border: none; box-shadow: none; margin-bottom: 0.25rem;' : 'border: 1px solid #dee2e6; border-radius: 0.375rem; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);'}">
+                    <div style="padding: ${this.isMobile ? '0.25rem' : '1rem'};">
                       <div style="display: flex; gap: 0.5rem;">
                         <div>
                           <small class="text-muted">A0:</small><br>
@@ -407,9 +406,8 @@ export class CDC8512CPU extends LitElement {
                       </div>
                     </div>
                   </div>
-                  <div class="card">
-                    <div class="card-body">
-                      <h6 class="card-title">X Registers</h6>
+                  <div style="${this.isMobile ? 'border: none; box-shadow: none; margin-bottom: 0.25rem;' : 'border: 1px solid #dee2e6; border-radius: 0.375rem; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);'}">
+                    <div style="padding: ${this.isMobile ? '0.25rem' : '1rem'};">
                       <div style="display: flex; gap: 0.5rem;">
                         <div>
                           <small class="text-muted">X0:</small><br>
@@ -433,8 +431,8 @@ export class CDC8512CPU extends LitElement {
                 </div>
               </div>
 
-              <div style="display: flex; flex-direction: row; gap: 1rem; border: 3px solid red; padding: 10px; background-color: yellow;">
-                <div style="flex: 1; border: 2px solid blue; padding: 5px; background-color: lightblue;">
+              <div style="display: flex; flex-direction: row; gap: 1rem;">
+                <div style="flex: 1;">
                   <p><strong>Instructions</strong></p>
                   <ul style="list-style-type: none; font-family: monospace;">
                     ${repeat(
@@ -451,8 +449,8 @@ export class CDC8512CPU extends LitElement {
                   </ul>
                 </div>
                 ${!this.isMobile ? html`
-                <div style="flex: 1; border: 2px solid blue; padding: 5px; background-color: lightblue;">
-                  <p><strong>Instructions 2</strong></p>
+                <div style="flex: 1;">
+                  <p><strong>Instructions</strong></p>
                   <ul style="list-style-type: none; font-family: monospace;">
                     ${repeat(
                       this.instructions,
@@ -463,7 +461,7 @@ export class CDC8512CPU extends LitElement {
                   </ul>
                 </div>
                 ` : html``}
-                <div style="flex: 1; border: 2px solid green; padding: 5px; background-color: lightgreen;">
+                <div style="flex: 1;">
                   <p><strong>Memory</strong></p>
                   <ul style="list-style-type: none; font-family: monospace;">
                     ${repeat(
@@ -480,8 +478,8 @@ export class CDC8512CPU extends LitElement {
                   </ul>
                 </div>
                 ${!this.isMobile ? html`
-                <div style="flex: 1; border: 2px solid green; padding: 5px; background-color: lightgreen;">
-                  <p><strong>Memory 2</strong></p>
+                <div style="flex: 1;">
+                  <p><strong>Memory</strong></p>
                   <ul style="list-style-type: none; font-family: monospace;">
                     ${repeat(
                       this.memory,
