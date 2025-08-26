@@ -2027,7 +2027,7 @@ Examples:
         } else if (component.type === 'ONE_BIT_LATCH') {
             if (type === 'input') {
                 if (index === 0) return 'D';
-                if (index === 1) return 'EN';
+                if (index === 1) return 'CLK';
             } else {
                 if (index === 0) return 'Q';
             }
@@ -2202,9 +2202,9 @@ Examples:
             if (connector === 'q') return gate.outputNodes[0];
             if (connector === 'q\'') return gate.outputNodes[1];
         } else if (gate.type === 'ONE_BIT_LATCH') {
-            // 1-bit Latch: D, EN inputs; Q output
+            // 1-bit Latch: D, CLK inputs; Q output
             if (connector === 'd') return gate.inputNodes[0];
-            if (connector === 'en') return gate.inputNodes[1];
+            if (connector === 'clk') return gate.inputNodes[1];
             if (connector === 'q') return gate.outputNodes[0];
         } else if (gate.type === 'CLOCK_PULSE') {
             // Clock Pulse: Hi, Lo outputs
@@ -2239,7 +2239,7 @@ Examples:
         } else if (gate.type === 'JK_FLIP_FLOP') {
             connectors.push('J', 'K', 'CLK', 'Q', 'Q\'');
         } else if (gate.type === 'ONE_BIT_LATCH') {
-            connectors.push('D', 'EN', 'Q');
+            connectors.push('D', 'CLK', 'Q');
         } else if (gate.type === 'CLOCK_PULSE') {
             connectors.push('Hi', 'Lo');
         } else if (gate.type === 'THREE_BIT_LATCH') {
@@ -2278,6 +2278,8 @@ Examples:
             return 'No components to layout';
         }
         
+        console.log(`Starting layout with ${this.gates.length} gates and ${this.wires.length} wires`);
+        
         // Check if there are any existing waypoints
         const hasWaypoints = this.wires.some(wire => wire.waypoints && wire.waypoints.length > 0);
         
@@ -2295,20 +2297,25 @@ Examples:
         }
         
         const result = this.optimizeLayout();
-        this.scheduleCircuitUpdate();
+        console.log(`Layout completed. Gates: ${this.gates.length}, Wires: ${this.wires.length}`);
+        // Don't call circuit update for layout - just reposition components
         return result;
     }
     
     optimizeLayout() {
+        console.log('Step 1: Analyzing circuit structure...');
         // Step 1: Analyze circuit structure
         const analysis = this.analyzeCircuit();
         
+        console.log('Step 2: Applying force-directed layout...');
         // Step 2: Apply force-directed layout
         this.applyForceDirectedLayout(analysis);
         
+        console.log('Step 3: Optimizing wire routing...');
         // Step 3: Optimize wire routing
         this.optimizeWireRouting();
         
+        console.log('Step 4: Final positioning adjustments...');
         // Step 4: Final positioning adjustments
         this.finalizeLayout();
         
@@ -2325,6 +2332,8 @@ Examples:
             wireCrossings: 0
         };
         
+        console.log(`Analyzing ${this.gates.length} gates...`);
+        
         // Categorize components
         this.gates.forEach(gate => {
             if (gate.type === 'INPUT') {
@@ -2335,6 +2344,8 @@ Examples:
                 analysis.gates.push(gate);
             }
         });
+        
+        console.log(`Categorized: ${analysis.inputs.length} inputs, ${analysis.outputs.length} outputs, ${analysis.gates.length} gates`);
         
         // Build connection graph and calculate levels
         this.calculateComponentLevels(analysis);
@@ -2436,10 +2447,10 @@ Examples:
     }
     
     applyForceDirectedLayout(analysis) {
-        const iterations = 50;
-        const repulsionForce = 100;
-        const attractionForce = 0.1;
-        const damping = 0.8;
+        const iterations = 20; // Reduced iterations
+        const repulsionForce = 50; // Reduced force
+        const attractionForce = 0.05; // Reduced force
+        const damping = 0.9; // Increased damping
         
         // Initialize velocities
         const velocities = new Map();
@@ -2454,15 +2465,15 @@ Examples:
             // Apply attraction forces between connected components
             this.applyAttractionForces(velocities, attractionForce, analysis);
             
-            // Apply level-based positioning
-            this.applyLevelPositioning(analysis);
-            
             // Update positions
             this.updatePositions(velocities, damping);
             
             // Keep components within canvas bounds
             this.constrainToCanvas();
         }
+        
+        // Apply level-based positioning after force-directed layout
+        this.applyLevelPositioning(analysis);
     }
     
     applyRepulsionForces(velocities, force) {
@@ -2523,7 +2534,7 @@ Examples:
             levelGroups.get(level).push(gate);
         });
         
-        // Position components by level
+        // Position components by level - use direct positioning instead of smooth transition
         const levelWidth = this.canvas.width / (levelGroups.size + 1);
         levelGroups.forEach((gates, level) => {
             const x = levelWidth * (level + 1);
@@ -2532,9 +2543,9 @@ Examples:
             gates.forEach((gate, index) => {
                 const y = gateSpacing * (index + 1);
                 
-                // Smooth transition to new position
-                gate.x += (x - gate.x) * 0.1;
-                gate.y += (y - gate.y) * 0.1;
+                // Direct positioning - no smooth transition in the force loop
+                gate.x = x;
+                gate.y = y;
             });
         });
     }
