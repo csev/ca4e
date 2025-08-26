@@ -1616,11 +1616,25 @@ class CircuitEditor {
         
         if (parts[0] === 'place') {
             if (parts.length < 2) {
-                return "Usage: place [component-type] [optional-label]";
+                return 'Error: Please specify a component type. Example: place input a';
             }
             
-            const componentType = parts[1];
-            const label = parts.length >= 3 ? parts[2] : null;
+            const componentType = parts[1].toLowerCase();
+            const label = parts[2] || null;
+            
+            // Validate component type
+            const validTypes = ['input', 'output', 'and', 'or', 'not', 'nand', 'nor', 'xor', 'full-adder', 'nixie', 'clock', 'sr-flip-flop', 'jk-flip-flop', '1-bit-latch', '3-bit-latch', '3-bit-adder'];
+            if (!validTypes.includes(componentType)) {
+                return `Error: Invalid component type "${componentType}". Valid types: ${validTypes.join(', ')}`;
+            }
+            
+            // Check if label already exists
+            if (label) {
+                const existingGate = this.gates.find(gate => gate.label === label);
+                if (existingGate) {
+                    return `Error: Component with label "${label}" already exists (${existingGate.type})`;
+                }
+            }
             
             // Map component types to our gate types
             const componentMap = {
@@ -1643,9 +1657,6 @@ class CircuitEditor {
             };
             
             const gateType = componentMap[componentType];
-            if (!gateType) {
-                return `Unknown component type: ${componentType}. Available: ${Object.keys(componentMap).join(', ')}`;
-            }
             
             // Find a good placement position
             const position = this.findPlacementPosition();
@@ -1685,20 +1696,25 @@ class CircuitEditor {
             
             const finalLabel = label || newGate.label;
             return `Placed ${componentType} with label "${finalLabel}" at (${Math.round(position.x)}, ${Math.round(position.y)})`;
-            
         } else if (parts[0] === 'delete') {
             if (parts.length < 2) {
-                return "Usage: delete [component-type] [label]";
+                return 'Error: Please specify a component type. Example: delete input a';
             }
             
-            const componentType = parts[1];
+            const componentType = parts[1].toLowerCase();
             const label = parts[2];
             
             if (!label) {
-                return "Usage: delete [component-type] [label]";
+                return 'Error: Please specify a component label. Example: delete input a';
             }
             
-            // Map component types to our gate types
+            // Validate component type
+            const validTypes = ['input', 'output', 'and', 'or', 'not', 'nand', 'nor', 'xor', 'full-adder', 'nixie', 'clock', 'sr-flip-flop', 'jk-flip-flop', '1-bit-latch', '3-bit-latch', '3-bit-adder'];
+            if (!validTypes.includes(componentType)) {
+                return `Error: Invalid component type "${componentType}". Valid types: ${validTypes.join(', ')}`;
+            }
+            
+            // Map component type to gate type
             const componentMap = {
                 'input': 'INPUT',
                 'output': 'OUTPUT',
@@ -1719,36 +1735,34 @@ class CircuitEditor {
             };
             
             const gateType = componentMap[componentType];
-            if (!gateType) {
-                return `Unknown component type: ${componentType}. Available: ${Object.keys(componentMap).join(', ')}`;
-            }
             
             // Find the component to delete
-            const componentIndex = this.gates.findIndex(gate => 
-                gate.type === gateType && gate.label.toLowerCase() === label.toLowerCase()
+            const gateToDelete = this.gates.find(gate => 
+                gate.type === gateType && gate.label === label
             );
             
-            if (componentIndex === -1) {
-                return `Component not found: ${componentType} "${label}"`;
+            if (!gateToDelete) {
+                return `Error: ${componentType} "${label}" not found. Use 'read' to see available components.`;
             }
             
-            const component = this.gates[componentIndex];
-            
-            // Remove all wires connected to this component
+            // Remove wires connected to this gate
             this.wires = this.wires.filter(wire => 
-                wire.startGate !== component && wire.endGate !== component
+                wire.startGate !== gateToDelete && wire.endGate !== gateToDelete
             );
             
-            // Remove the component
-            this.gates.splice(componentIndex, 1);
-            
+            // Remove the gate
+            this.gates = this.gates.filter(gate => gate !== gateToDelete);
             this.scheduleCircuitUpdate();
-            return `Deleted ${componentType} "${label}"`;
             
+            return `Deleted ${componentType} "${label}"`;
         } else if (parts[0] === 'connect') {
             // Parse: connect [from-component] [from-connector] to [to-component] [to-connector]
-            if (parts.length < 6 || parts[3] !== 'to') {
-                return "Usage: connect [from-component] [from-connector] to [to-component] [to-connector]";
+            if (parts.length < 5) {
+                return 'Error: Invalid connect syntax. Use: connect [from] [from-connector] to [to] [to-connector]';
+            }
+            
+            if (parts[2] !== 'to') {
+                return 'Error: Invalid syntax. Use: connect [from] [from-connector] to [to] [to-connector]';
             }
             
             const fromComponent = parts[1];
@@ -1756,58 +1770,69 @@ class CircuitEditor {
             const toComponent = parts[4];
             const toConnector = parts[5];
             
-            // Find components by label
-            const fromGate = this.gates.find(gate => gate.label.toLowerCase() === fromComponent);
-            const toGate = this.gates.find(gate => gate.label.toLowerCase() === toComponent);
-            
-            if (!fromGate) return `Component not found: ${fromComponent}`;
-            if (!toGate) return `Component not found: ${toComponent}`;
-            
-            // Find the appropriate nodes
-            let fromNode, toNode;
-            
-            // Handle output connections
-            if (fromConnector === 'output') {
-                fromNode = fromGate.outputNodes[0];
-            } else if (fromConnector.startsWith('output-')) {
-                const outputIndex = parseInt(fromConnector.split('-')[1]) - 1;
-                fromNode = fromGate.outputNodes[outputIndex];
+            if (!fromConnector || !toConnector) {
+                return 'Error: Please specify both connectors. Use: connect [from] [from-connector] to [to] [to-connector]';
             }
             
-            // Handle input connections
-            if (toConnector === 'input') {
-                toNode = toGate.inputNodes[0];
-            } else if (toConnector.startsWith('input-')) {
-                const inputIndex = parseInt(toConnector.split('-')[1]) - 1;
-                toNode = toGate.inputNodes[inputIndex];
+            // Find the source component
+            const fromGate = this.gates.find(gate => gate.label === fromComponent);
+            if (!fromGate) {
+                return `Error: Source component "${fromComponent}" not found. Use 'read' to see available components.`;
             }
             
-            if (!fromNode) return `Output connector not found: ${fromConnector}`;
-            if (!toNode) return `Input connector not found: ${toConnector}`;
+            // Find the target component
+            const toGate = this.gates.find(gate => gate.label === toComponent);
+            if (!toGate) {
+                return `Error: Target component "${toComponent}" not found. Use 'read' to see available components.`;
+            }
             
-            // Create wire
+            // Validate connectors
+            const fromNode = this.findNode(fromGate, fromConnector);
+            if (!fromNode) {
+                const validConnectors = this.getValidConnectors(fromGate);
+                return `Error: Invalid source connector "${fromConnector}". Valid connectors for ${fromComponent}: ${validConnectors.join(', ')}`;
+            }
+            
+            const toNode = this.findNode(toGate, toConnector);
+            if (!toNode) {
+                const validConnectors = this.getValidConnectors(toGate);
+                return `Error: Invalid target connector "${toConnector}". Valid connectors for ${toComponent}: ${validConnectors.join(', ')}`;
+            }
+            
+            // Check if connection already exists
+            const existingConnection = this.wires.find(wire => 
+                wire.startGate === fromGate && wire.start === fromNode &&
+                wire.endGate === toGate && wire.end === toNode
+            );
+            
+            if (existingConnection) {
+                return `Error: Connection from ${fromComponent} ${fromConnector} to ${toComponent} ${toConnector} already exists.`;
+            }
+            
+            // Create the wire
             const wire = {
-                start: fromNode,
-                end: toNode,
                 startGate: fromGate,
+                start: fromNode,
                 endGate: toGate,
+                end: toNode,
                 waypoints: []
             };
-            
-            // Update connection states
-            fromGate.connectNode(fromNode, false);
-            toGate.connectNode(toNode, true);
             
             this.wires.push(wire);
             this.scheduleCircuitUpdate();
             
             return `Connected ${fromComponent} ${fromConnector} to ${toComponent} ${toConnector}`;
-            
         } else if (parts[0] === 'read') {
+            if (this.gates.length === 0) {
+                return 'Circuit is empty. Use "place" to add components.';
+            }
             return this.readCircuit();
         } else if (parts[0] === 'clear') {
+            if (this.gates.length === 0) {
+                return 'Circuit is already empty.';
+            }
             this.clear();
-            return "Circuit cleared";
+            return 'Circuit cleared';
         } else if (parts[0] === 'help') {
             return `Available commands:
 - place [component-type] [optional-label] - Place a component
@@ -1830,9 +1855,9 @@ Examples:
 - connect a output to gate1 input-1`;
         } else if (parts[0] === 'layout') {
             return this.performLayout();
+        } else {
+            return `Error: Unknown command "${parts[0]}". Type "help" for available commands.`;
         }
-        
-        return `Unknown command: ${command}. Type 'help' for available commands.`;
     }
 
     readCircuit() {
@@ -1931,6 +1956,51 @@ Examples:
             }
             // ... rest of existing ESC key handling ...
         }
+    }
+
+    // Helper methods for command validation
+    findNode(gate, connectorName) {
+        // Handle output connections
+        if (connectorName === 'output') {
+            return gate.outputNodes[0];
+        } else if (connectorName.startsWith('output-')) {
+            const outputIndex = parseInt(connectorName.split('-')[1]) - 1;
+            return gate.outputNodes[outputIndex];
+        }
+        
+        // Handle input connections
+        if (connectorName === 'input') {
+            return gate.inputNodes[0];
+        } else if (connectorName.startsWith('input-')) {
+            const inputIndex = parseInt(connectorName.split('-')[1]) - 1;
+            return gate.inputNodes[inputIndex];
+        }
+        
+        return null;
+    }
+    
+    getValidConnectors(gate) {
+        const connectors = [];
+        
+        // Add input connectors
+        if (gate.inputNodes.length === 1) {
+            connectors.push('input');
+        } else {
+            gate.inputNodes.forEach((_, index) => {
+                connectors.push(`input-${index + 1}`);
+            });
+        }
+        
+        // Add output connectors
+        if (gate.outputNodes.length === 1) {
+            connectors.push('output');
+        } else {
+            gate.outputNodes.forEach((_, index) => {
+                connectors.push(`output-${index + 1}`);
+            });
+        }
+        
+        return connectors;
     }
 
     // Layout optimization system
