@@ -139,6 +139,8 @@ export class CDC8512CPU extends LitElement {
     const numValue = parseInt(value, 16);
     if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
       this.a2 = numValue;
+      // Hardware emulation: Store X2 value to memory address A2 when value changes
+      this.memory[this.a2] = this.x2;
     }
   }
 
@@ -150,6 +152,8 @@ export class CDC8512CPU extends LitElement {
     const numValue = parseInt(value, 16);
     if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
       this.a3 = numValue;
+      // Hardware emulation: Store X3 value to memory address A3 when value changes
+      this.memory[this.a3] = this.x3;
     }
   }
 
@@ -397,11 +401,11 @@ export class CDC8512CPU extends LitElement {
                         </div>
                         <div>
                           <small class="text-muted">A2:</small><br>
-                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.a2)}" @input=${this.changeA2}>
+                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.a2)}" @change=${this.changeA2}>
                         </div>
                         <div>
                           <small class="text-muted">A3:</small><br>
-                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.a3)}" @input=${this.changeA3}>
+                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.a3)}" @change=${this.changeA3}>
                         </div>
                       </div>
                     </div>
