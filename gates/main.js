@@ -1828,6 +1828,8 @@ Examples:
 - place and
 - delete input a
 - connect a output to gate1 input-1`;
+        } else if (parts[0] === 'layout') {
+            return this.performLayout();
         }
         
         return `Unknown command: ${command}. Type 'help' for available commands.`;
@@ -1928,6 +1930,375 @@ Examples:
                 this.canvas.style.cursor = 'default';
             }
             // ... rest of existing ESC key handling ...
+        }
+    }
+
+    // Layout optimization system
+    performLayout() {
+        if (this.gates.length === 0) {
+            return 'No components to layout';
+        }
+        
+        // Check if there are any existing waypoints
+        const hasWaypoints = this.wires.some(wire => wire.waypoints && wire.waypoints.length > 0);
+        
+        if (hasWaypoints) {
+            // Show confirmation dialog
+            const confirmed = confirm('Layout will delete existing waypoints. Continue?');
+            if (!confirmed) {
+                return 'Layout cancelled';
+            }
+            
+            // Remove all waypoints
+            this.wires.forEach(wire => {
+                wire.waypoints = [];
+            });
+        }
+        
+        const result = this.optimizeLayout();
+        this.scheduleCircuitUpdate();
+        return result;
+    }
+    
+    optimizeLayout() {
+        // Step 1: Analyze circuit structure
+        const analysis = this.analyzeCircuit();
+        
+        // Step 2: Apply force-directed layout
+        this.applyForceDirectedLayout(analysis);
+        
+        // Step 3: Optimize wire routing
+        this.optimizeWireRouting();
+        
+        // Step 4: Final positioning adjustments
+        this.finalizeLayout();
+        
+        return `Layout optimized: ${this.gates.length} components repositioned`;
+    }
+    
+    analyzeCircuit() {
+        const analysis = {
+            inputs: [],
+            outputs: [],
+            gates: [],
+            connections: [],
+            levels: new Map(), // Component levels (depth from inputs)
+            wireCrossings: 0
+        };
+        
+        // Categorize components
+        this.gates.forEach(gate => {
+            if (gate.type === 'INPUT') {
+                analysis.inputs.push(gate);
+            } else if (gate.type === 'OUTPUT') {
+                analysis.outputs.push(gate);
+            } else {
+                analysis.gates.push(gate);
+            }
+        });
+        
+        // Build connection graph and calculate levels
+        this.calculateComponentLevels(analysis);
+        
+        // Count wire crossings
+        analysis.wireCrossings = this.countWireCrossings();
+        
+        return analysis;
+    }
+    
+    calculateComponentLevels(analysis) {
+        const visited = new Set();
+        const levels = new Map();
+        
+        // Start with inputs at level 0
+        analysis.inputs.forEach(input => {
+            levels.set(input, 0);
+            visited.add(input);
+        });
+        
+        // BFS to calculate levels
+        const queue = [...analysis.inputs];
+        while (queue.length > 0) {
+            const current = queue.shift();
+            const currentLevel = levels.get(current);
+            
+            // Find all components connected to current
+            this.wires.forEach(wire => {
+                let target = null;
+                if (wire.startGate === current) {
+                    target = wire.endGate;
+                } else if (wire.endGate === current) {
+                    target = wire.startGate;
+                }
+                
+                if (target && !visited.has(target)) {
+                    visited.add(target);
+                    levels.set(target, currentLevel + 1);
+                    queue.push(target);
+                }
+            });
+        }
+        
+        analysis.levels = levels;
+    }
+    
+    countWireCrossings() {
+        let crossings = 0;
+        
+        for (let i = 0; i < this.wires.length; i++) {
+            for (let j = i + 1; j < this.wires.length; j++) {
+                if (this.wiresIntersect(this.wires[i], this.wires[j])) {
+                    crossings++;
+                }
+            }
+        }
+        
+        return crossings;
+    }
+    
+    wiresIntersect(wire1, wire2) {
+        // Simplified intersection detection using bounding boxes
+        const box1 = this.getWireBoundingBox(wire1);
+        const box2 = this.getWireBoundingBox(wire2);
+        
+        return !(box1.right < box2.left || 
+                box1.left > box2.right || 
+                box1.bottom < box2.top || 
+                box1.top > box2.bottom);
+    }
+    
+    getWireBoundingBox(wire) {
+        const points = this.getWirePoints(wire);
+        let minX = Math.min(...points.map(p => p.x));
+        let maxX = Math.max(...points.map(p => p.x));
+        let minY = Math.min(...points.map(p => p.y));
+        let maxY = Math.max(...points.map(p => p.y));
+        
+        return { left: minX, right: maxX, top: minY, bottom: maxY };
+    }
+    
+    getWirePoints(wire) {
+        const points = [];
+        
+        // Add start point
+        const startEntry = this.getEntryPoint(wire.start, wire.startGate);
+        points.push(startEntry);
+        
+        // Add waypoints
+        if (wire.waypoints) {
+            points.push(...wire.waypoints);
+        }
+        
+        // Add end point
+        const endEntry = this.getEntryPoint(wire.end, wire.endGate);
+        points.push(endEntry);
+        
+        return points;
+    }
+    
+    applyForceDirectedLayout(analysis) {
+        const iterations = 50;
+        const repulsionForce = 100;
+        const attractionForce = 0.1;
+        const damping = 0.8;
+        
+        // Initialize velocities
+        const velocities = new Map();
+        this.gates.forEach(gate => {
+            velocities.set(gate, { x: 0, y: 0 });
+        });
+        
+        for (let iter = 0; iter < iterations; iter++) {
+            // Apply repulsion forces between all components
+            this.applyRepulsionForces(velocities, repulsionForce);
+            
+            // Apply attraction forces between connected components
+            this.applyAttractionForces(velocities, attractionForce, analysis);
+            
+            // Apply level-based positioning
+            this.applyLevelPositioning(analysis);
+            
+            // Update positions
+            this.updatePositions(velocities, damping);
+            
+            // Keep components within canvas bounds
+            this.constrainToCanvas();
+        }
+    }
+    
+    applyRepulsionForces(velocities, force) {
+        for (let i = 0; i < this.gates.length; i++) {
+            for (let j = i + 1; j < this.gates.length; j++) {
+                const gate1 = this.gates[i];
+                const gate2 = this.gates[j];
+                
+                const dx = gate2.x - gate1.x;
+                const dy = gate2.y - gate1.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance > 0 && distance < 150) {
+                    const repulsion = force / (distance * distance);
+                    const fx = (dx / distance) * repulsion;
+                    const fy = (dy / distance) * repulsion;
+                    
+                    velocities.get(gate1).x -= fx;
+                    velocities.get(gate1).y -= fy;
+                    velocities.get(gate2).x += fx;
+                    velocities.get(gate2).y += fy;
+                }
+            }
+        }
+    }
+    
+    applyAttractionForces(velocities, force, analysis) {
+        this.wires.forEach(wire => {
+            const gate1 = wire.startGate;
+            const gate2 = wire.endGate;
+            
+            const dx = gate2.x - gate1.x;
+            const dy = gate2.y - gate1.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance > 0) {
+                const attraction = force * distance;
+                const fx = (dx / distance) * attraction;
+                const fy = (dy / distance) * attraction;
+                
+                velocities.get(gate1).x += fx;
+                velocities.get(gate1).y += fy;
+                velocities.get(gate2).x -= fx;
+                velocities.get(gate2).y -= fy;
+            }
+        });
+    }
+    
+    applyLevelPositioning(analysis) {
+        const levelGroups = new Map();
+        
+        // Group components by level
+        this.gates.forEach(gate => {
+            const level = analysis.levels.get(gate) || 0;
+            if (!levelGroups.has(level)) {
+                levelGroups.set(level, []);
+            }
+            levelGroups.get(level).push(gate);
+        });
+        
+        // Position components by level
+        const levelWidth = this.canvas.width / (levelGroups.size + 1);
+        levelGroups.forEach((gates, level) => {
+            const x = levelWidth * (level + 1);
+            const gateSpacing = Math.min(120, this.canvas.height / (gates.length + 1));
+            
+            gates.forEach((gate, index) => {
+                const y = gateSpacing * (index + 1);
+                
+                // Smooth transition to new position
+                gate.x += (x - gate.x) * 0.1;
+                gate.y += (y - gate.y) * 0.1;
+            });
+        });
+    }
+    
+    updatePositions(velocities, damping) {
+        this.gates.forEach(gate => {
+            const vel = velocities.get(gate);
+            gate.x += vel.x;
+            gate.y += vel.y;
+            
+            // Apply damping
+            vel.x *= damping;
+            vel.y *= damping;
+        });
+    }
+    
+    constrainToCanvas() {
+        const margin = 50;
+        this.gates.forEach(gate => {
+            gate.x = Math.max(margin, Math.min(this.canvas.width - margin, gate.x));
+            gate.y = Math.max(margin, Math.min(this.canvas.height - margin, gate.y));
+        });
+    }
+    
+    optimizeWireRouting() {
+        this.wires.forEach(wire => {
+            this.optimizeWirePath(wire);
+        });
+    }
+    
+    optimizeWirePath(wire) {
+        // Layout optimization removes waypoints for cleaner appearance
+        // Direct connections are preferred after layout optimization
+        wire.waypoints = [];
+    }
+    
+    isPathBlocked(from, to) {
+        // Check if any component blocks the direct path
+        const midX = (from.x + to.x) / 2;
+        const midY = (from.y + to.y) / 2;
+        
+        return this.gates.some(gate => {
+            const distance = Math.sqrt(
+                Math.pow(gate.x - midX, 2) + Math.pow(gate.y - midY, 2)
+            );
+            return distance < 60; // Component radius
+        });
+    }
+    
+    createWaypoints(from, to) {
+        const waypoints = [];
+        const dx = to.x - from.x;
+        const dy = to.y - from.y;
+        
+        // Create a simple detour
+        if (Math.abs(dx) > Math.abs(dy)) {
+            // Horizontal detour
+            const midY = from.y + (dy / 2);
+            waypoints.push({ x: from.x + (dx / 2), y: midY });
+        } else {
+            // Vertical detour
+            const midX = from.x + (dx / 2);
+            waypoints.push({ x: midX, y: from.y + (dy / 2) });
+        }
+        
+        return waypoints;
+    }
+    
+    finalizeLayout() {
+        // Snap components to grid for cleaner appearance
+        const gridSize = 20;
+        this.gates.forEach(gate => {
+            gate.x = Math.round(gate.x / gridSize) * gridSize;
+            gate.y = Math.round(gate.y / gridSize) * gridSize;
+        });
+        
+        // Ensure minimum spacing
+        this.ensureMinimumSpacing();
+    }
+    
+    ensureMinimumSpacing() {
+        const minDistance = 80;
+        
+        for (let i = 0; i < this.gates.length; i++) {
+            for (let j = i + 1; j < this.gates.length; j++) {
+                const gate1 = this.gates[i];
+                const gate2 = this.gates[j];
+                
+                const dx = gate2.x - gate1.x;
+                const dy = gate2.y - gate1.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                
+                if (distance < minDistance) {
+                    const pushDistance = minDistance - distance;
+                    const pushX = (dx / distance) * pushDistance * 0.5;
+                    const pushY = (dy / distance) * pushDistance * 0.5;
+                    
+                    gate1.x -= pushX;
+                    gate1.y -= pushY;
+                    gate2.x += pushX;
+                    gate2.y += pushY;
+                }
+            }
         }
     }
 }

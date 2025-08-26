@@ -8,94 +8,99 @@ This digital circuit editor allows users to create, simulate, and test digital l
 
 ## 🖥️ Command Line Interface
 
-The command line interface is located at the bottom of the screen and provides text-based control over all circuit operations.
+The application includes a powerful command-line interface at the bottom of the screen, especially useful for accessibility and power users.
 
-### Basic Commands
+### Available Commands
 
 #### `place [component-type] [optional-label]`
-Places a component on the canvas with smart positioning to avoid overlapping.
+Places a component on the canvas. If a label is provided, it uses the literal label; otherwise, it uses automatic numbering.
 
-**Examples:**
-```bash
-place input a          # Places input with label "a"
-place and gate1        # Places AND gate with label "gate1"
-place or              # Places OR gate with automatic numbering (OR1)
-place not inverter    # Places NOT gate with label "inverter"
-```
-
-**Available Component Types:**
-- `input` - Input signal source
-- `output` - Output signal destination
+**Component Types:**
+- `input` - Input gate
+- `output` - Output gate  
 - `and` - AND gate
 - `or` - OR gate
-- `not` - NOT gate (inverter)
+- `not` - NOT gate
 - `nand` - NAND gate
 - `nor` - NOR gate
 - `xor` - XOR gate
-- `full-adder` - 1-bit full adder
-- `nixie` - Nixie display
-- `clock` - Clock pulse generator
+- `full-adder` - Full adder
+- `nixie` - Nixie tube display
+- `clock` - Clock generator
 - `sr-flip-flop` - SR flip-flop
 - `jk-flip-flop` - JK flip-flop
 - `1-bit-latch` - 1-bit latch
 - `3-bit-latch` - 3-bit latch
 - `3-bit-adder` - 3-bit adder
 
+**Examples:**
+- `place input a` - Places an input labeled "a"
+- `place and` - Places an AND gate with automatic numbering
+- `place or gate1` - Places an OR gate labeled "gate1"
+
 #### `delete [component-type] [label]`
-Deletes a specific component and all its connections.
+Deletes a specific component by type and label.
 
 **Examples:**
-```bash
-delete input a         # Deletes input with label "a"
-delete and gate1       # Deletes AND gate with label "gate1"
-delete or OR1          # Deletes OR gate with label "OR1"
-```
+- `delete input a` - Deletes input labeled "a"
+- `delete and gate1` - Deletes AND gate labeled "gate1"
 
 #### `connect [from] [from-connector] to [to] [to-connector]`
-Connects components using their input and output connectors.
+Connects two components using their input/output nodes.
 
 **Examples:**
-```bash
-connect a output to gate1 input-1      # Connects input "a" to first input of "gate1"
-connect gate1 output to gate2 input-1  # Connects "gate1" output to "gate2" first input
-connect clock output-1 to latch input-1 # Connects first output of clock to first input of latch
-```
-
-**Connector Types:**
-- `output` - First output (for single-output components)
-- `output-1`, `output-2`, etc. - Specific outputs (for multi-output components)
-- `input` - First input (for single-input components)
-- `input-1`, `input-2`, etc. - Specific inputs (for multi-input components)
+- `connect a output to gate1 input-1` - Connects output of "a" to input-1 of "gate1"
+- `connect gate1 output to result input-1` - Connects output of "gate1" to input-1 of "result"
 
 #### `read`
-Displays the current circuit status including:
-- All components and their positions
-- All connections between components
-- Current state of inputs and outputs
-
-**Example Output:**
-```
-Circuit Status:
-
-Components:
-- a (INPUT) at (400, 300)
-- gate1 (AND) at (500, 300)
-- result (OUTPUT) at (600, 300)
-
-Connections:
-- a output to gate1 input-1
-- gate1 output to result input-1
-
-Circuit State:
-- a: 0
-- result: 0
-```
+Displays the current state of all components and their connections.
 
 #### `clear`
-Removes all components and connections from the circuit.
+Removes all components and wires from the canvas.
+
+#### `layout`
+**NEW!** Automatically optimizes component layout to minimize wire crossings and improve readability. This command uses advanced algorithms including:
+
+- **Force-directed layout** - Components repel each other while connected components attract
+- **Level-based positioning** - Components are arranged by their logical depth from inputs
+- **Wire crossing minimization** - Detects and reduces wire intersections
+- **Clean wire routing** - Removes existing waypoints for direct, clean connections
+- **Grid snapping** - Aligns components to a grid for cleaner appearance
+
+**Note:** If existing waypoints are detected, a confirmation dialog will appear asking permission to remove them before layout optimization.
+
+**Examples:**
+- `layout` - Optimizes the current circuit layout
 
 #### `help`
-Displays available commands and usage examples.
+Displays detailed help information for all available commands.
+
+### Navigation
+
+- **↑ (Up Arrow)** - Browse command history (previous commands)
+- **↓ (Down Arrow)** - Browse command history (next commands)
+
+### Examples
+
+```bash
+# Build a simple AND circuit
+place input a
+place input b
+place and gate1
+place output result
+connect a output to gate1 input-1
+connect b output to gate1 input-2
+connect gate1 output to result input-1
+
+# Optimize the layout
+layout
+
+# Read the circuit status
+read
+
+# Clear and start over
+clear
+```
 
 ## 🎨 Visual Interface Features
 
