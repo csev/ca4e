@@ -615,7 +615,7 @@ class CircuitEditor {
         // Handle tag mode first
         if (this.isTagMode) {
             for (const gate of this.gates) {
-                if ((gate.type === 'INPUT' || gate.type === 'OUTPUT') && this.isPointInGate(x, y, gate)) {
+                if (this.isPointInGate(x, y, gate)) {
                     const newLabel = prompt('Enter label for the ' + gate.type.toLowerCase() + ':', gate.label);
                     if (newLabel !== null) {
                         gate.setLabel(newLabel);
@@ -628,8 +628,8 @@ class CircuitEditor {
                     return;
                 }
             }
-            // If clicked on non-INPUT/OUTPUT gate while in tag mode
-            this.showMessage('Only inputs and outputs can be tagged', 'error');
+            // If clicked on empty space while in tag mode
+            this.showMessage('Click on a component to tag it', 'error');
             return;
         }
 
