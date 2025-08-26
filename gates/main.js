@@ -552,6 +552,15 @@ class CircuitEditor {
             }
         }
 
+        // Check for wire hover in delete mode
+        if (this.deleteMode) {
+            const hoveredWire = this.findHoveredWire(x, y);
+            if (hoveredWire) {
+                this.canvas.style.cursor = 'not-allowed';
+                return;
+            }
+        }
+
         // Check for waypoint hover
         const waypointInfo = this.findWaypointAt(x, y);
         if (waypointInfo) {
@@ -627,6 +636,20 @@ class CircuitEditor {
         }
 
         if (this.deleteMode) {
+            // Check if clicked on a wire first
+            for (let i = this.wires.length - 1; i >= 0; i--) {
+                const wire = this.wires[i];
+                if (this.isPointNearWire(x, y, wire)) {
+                    wire.startGate.disconnectNode(wire.start, false);
+                    wire.endGate.disconnectNode(wire.end, true);
+                    this.wires.splice(i, 1);
+                    this.scheduleCircuitUpdate();
+                    this.showMessage('Wire deleted');
+                    this.setDeleteMode(false);
+                    return;
+                }
+            }
+            
             // Check if clicked on a gate
             for (let i = this.gates.length - 1; i >= 0; i--) {
                 const gate = this.gates[i];
@@ -1028,8 +1051,9 @@ class CircuitEditor {
     }
 
     drawWires() {
-        this.ctx.strokeStyle = '#000';
-        this.ctx.lineWidth = 2;
+        // Use different color for wires in delete mode
+        this.ctx.strokeStyle = this.deleteMode ? '#ff4444' : '#000';
+        this.ctx.lineWidth = this.deleteMode ? 3 : 2; // Make wires thicker in delete mode
 
         this.wires.forEach(wire => {
             // Get entry/exit points outside the components
