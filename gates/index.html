@@ -32,19 +32,64 @@
             gap: 10px;
         }
 
-        .gate-selector button {
+        .gate-selector select {
             padding: 8px 15px;
-            border: none;
+            border: 2px solid #4CAF50;
             border-radius: 4px;
-            background-color: #4CAF50;
-            color: white;
+            background-color: white;
+            color: #333;
             cursor: pointer;
-            transition: background-color 0.2s;
+            transition: border-color 0.2s;
             font-weight: bold;
+            font-size: 14px;
+            min-width: 150px;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .gate-selector button:hover {
-            background-color: #45a049;
+        .gate-selector select:hover {
+            border-color: #45a049;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .gate-selector select:focus {
+            outline: none;
+            border-color: #45a049;
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        .center-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .commands-selector {
+            display: flex;
+            gap: 10px;
+        }
+
+        .commands-selector select {
+            padding: 8px 15px;
+            border: 2px solid #2196F3;
+            border-radius: 4px;
+            background-color: white;
+            color: #333;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+            min-width: 120px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .commands-selector select:hover {
+            border-color: #1976D2;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .commands-selector select:focus {
+            outline: none;
+            border-color: #1976D2;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
         }
 
         .right-section {
@@ -255,29 +300,37 @@
 <body>
     <div class="toolbar">
         <div class="gate-selector">
-            <button data-gate="INPUT">Input</button>
-            <button data-gate="OUTPUT">Output</button>
-            <button data-gate="AND">AND</button>
-            <button data-gate="OR">OR</button>
-            <button data-gate="NOT">NOT</button>
-            <button data-gate="NAND">NAND</button>
-            <button data-gate="NOR">NOR</button>
-            <button data-gate="XOR">XOR</button>
-            <button data-gate="FULL_ADDER">Full Adder</button>
-            <button data-gate="NIXIE_DISPLAY">Nixie Display</button>
-            <button data-gate="CLOCK_PULSE">Clock</button>
-            <button data-gate="SR_FLIP_FLOP">SR Flip-Flop</button>
-            <button data-gate="JK_FLIP_FLOP">JK Flip-Flop</button>
-            <button data-gate="ONE_BIT_LATCH">1-Bit Latch</button>
-            <button data-gate="THREE_BIT_LATCH">3-Bit Latch</button>
-            <button data-gate="THREE_BIT_ADDER">3-Bit Adder</button>
+            <select id="gateSelector">
+                <option value="">Select Component</option>
+                <option value="INPUT">Input</option>
+                <option value="OUTPUT">Output</option>
+                <option value="AND">AND</option>
+                <option value="OR">OR</option>
+                <option value="NOT">NOT</option>
+                <option value="NAND">NAND</option>
+                <option value="NOR">NOR</option>
+                <option value="XOR">XOR</option>
+                <option value="FULL_ADDER">Full Adder</option>
+                <option value="NIXIE_DISPLAY">Nixie Display</option>
+                <option value="CLOCK_PULSE">Clock</option>
+                <option value="SR_FLIP_FLOP">SR Flip-Flop</option>
+                <option value="JK_FLIP_FLOP">JK Flip-Flop</option>
+                <option value="ONE_BIT_LATCH">1-Bit Latch</option>
+                <option value="THREE_BIT_LATCH">3-Bit Latch</option>
+                <option value="THREE_BIT_ADDER">3-Bit Adder</option>
+            </select>
         </div>
-        <div class="right-section">
-            <span id="selectedTool">Selected: None</span>
+        <div class="center-section">
             <button id="tagMode" class="mode-button">🏷️ Tag</button>
-            <button id="waypointsToggle" class="mode-button">👁️ Waypoints</button>
             <button id="delete" class="icon-button">🗑️</button>
-            <button id="clear">Delete All</button>
+        </div>
+        <div class="commands-selector">
+            <select id="commandsSelector">
+                <option value="">Select Command</option>
+                <option value="waypointsToggle">👁️ Toggle Waypoints</option>
+                <option value="clear">🧹 Clear All</option>
+                <option value="screenReaderToggle">🔊 Toggle Screen Reader</option>
+            </select>
         </div>
     </div>
 
@@ -285,7 +338,6 @@
 
     <div class="status-bar">
         <span id="coordinates">Position: 0, 0</span>
-        <span id="selectedTool">Selected: None</span>
     </div>
 
     <div class="tooltip" id="tooltip"></div>
@@ -312,19 +364,11 @@
     <script>
         // Add mouse coordinate tracking
         const coordinates = document.getElementById('coordinates');
-        const selectedTool = document.getElementById('selectedTool');
         const canvas = document.getElementById('circuitCanvas');
         const confirmModal = document.getElementById('confirmModal');
         const confirmDeleteAll = document.getElementById('confirmDeleteAll');
         const cancelDeleteAll = document.getElementById('cancelDeleteAll');
-        const clearButton = document.getElementById('clear');
-
-        // Handle Delete All button click
-        clearButton.addEventListener('click', (e) => {
-            e.preventDefault(); // Prevent default clear behavior
-            e.stopPropagation(); // Stop event from bubbling up
-            confirmModal.style.display = 'block';
-        });
+        const gateSelector = document.getElementById('gateSelector');
 
         // Handle confirmation
         confirmDeleteAll.addEventListener('click', () => {
@@ -356,10 +400,8 @@
         });
 
         // Update selected tool display
-        document.querySelectorAll('.gate-selector button').forEach(button => {
-            button.addEventListener('click', () => {
-                selectedTool.textContent = `Selected: ${button.dataset.gate}`;
-            });
+        gateSelector.addEventListener('change', (e) => {
+            // selectedTool.textContent = `Selected: ${e.target.value}`; // This line is removed
         });
 
         // Add tooltips for buttons

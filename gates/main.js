@@ -63,9 +63,6 @@ class CircuitEditor {
         this.announcementEl.setAttribute('aria-live', 'polite');
         document.body.appendChild(this.announcementEl);
         
-        // Add screen reader toggle button
-        this.addScreenReaderToggle();
-        
         // Add speech synthesis
         this.speechSynthesis = window.speechSynthesis;
         this.speechUtterance = null;
@@ -93,25 +90,45 @@ class CircuitEditor {
     }
 
     initializeEventListeners() {
-        // Gate selection buttons
-        document.querySelectorAll('.gate-selector button').forEach(button => {
-            // Add hover announcement
-            button.addEventListener('mouseenter', () => {
-                if (this.screenReaderMode) {
-                    this.announce(`Toolbar button: ${button.dataset.gate} gate`);
-                }
-            });
+        // Gate selection dropdown
+        const gateSelector = document.getElementById('gateSelector');
+        gateSelector.addEventListener('change', (e) => {
+            this.selectedTool = e.target.value;
+            this.canvas.style.cursor = 'crosshair';
+            
+            // Announce tool selection
+            if (this.screenReaderMode) {
+                this.announce(`Selected ${e.target.value} gate tool`);
+            }
+        });
 
-            button.addEventListener('click', () => {
-                this.selectedTool = button.dataset.gate;
-                this.canvas.style.cursor = 'crosshair';
-                document.getElementById('selectedTool').textContent = `Selected: ${button.dataset.gate}`;
-                
-                // Announce tool selection
-                if (this.screenReaderMode) {
-                    this.announce(`Selected ${button.dataset.gate} gate tool`);
-                }
-            });
+        // Commands dropdown
+        const commandsSelector = document.getElementById('commandsSelector');
+        commandsSelector.addEventListener('change', (e) => {
+            const command = e.target.value;
+            
+            switch(command) {
+                case 'waypointsToggle':
+                    this.showWaypoints = !this.showWaypoints;
+                    this.showMessage(this.showWaypoints ? 'Waypoints shown' : 'Waypoints hidden');
+                    if (this.screenReaderMode) {
+                        this.announce(this.showWaypoints ? 'Waypoints shown' : 'Waypoints hidden');
+                    }
+                    break;
+                    
+                case 'clear':
+                    // Show confirmation modal for clear
+                    const confirmModal = document.getElementById('confirmModal');
+                    confirmModal.style.display = 'block';
+                    break;
+                    
+                case 'screenReaderToggle':
+                    this.toggleScreenReader();
+                    break;
+            }
+            
+            // Reset dropdown to default
+            commandsSelector.value = '';
         });
 
         // Add hover announcement for delete button
@@ -119,14 +136,6 @@ class CircuitEditor {
         deleteButton.addEventListener('mouseenter', () => {
             if (this.screenReaderMode) {
                 this.announce('Delete mode button');
-            }
-        });
-
-        // Add hover announcement for screen reader toggle
-        const screenReaderButton = document.getElementById('screenReaderToggle');
-        screenReaderButton.addEventListener('mouseenter', () => {
-            if (this.screenReaderMode) {
-                this.announce('Screen reader toggle button');
             }
         });
 
@@ -179,8 +188,6 @@ class CircuitEditor {
                 }
                 // Reset cursor
                 this.canvas.style.cursor = 'default';
-                // Reset selected tool display
-                document.getElementById('selectedTool').textContent = 'Selected: None';
                 // Clear any wire drawing in progress
                 this.wireStartNode = null;
                 // Force a render to clear any temporary visual states
@@ -197,24 +204,13 @@ class CircuitEditor {
             // Update cursor and selected tool text
             if (this.isTagMode) {
                 this.canvas.style.cursor = 'text';
-                document.getElementById('selectedTool').textContent = 'Selected: Tag Mode';
                 // Disable delete mode if it was active
                 if (this.deleteMode) {
                     this.setDeleteMode(false);
                 }
             } else {
                 this.canvas.style.cursor = 'default';
-                document.getElementById('selectedTool').textContent = 'Selected: None';
             }
-        });
-
-        // Add waypoints toggle button listener
-        const waypointsButton = document.getElementById('waypointsToggle');
-        waypointsButton.addEventListener('click', () => {
-            this.showWaypoints = !this.showWaypoints;
-            waypointsButton.classList.toggle('active', !this.showWaypoints);
-            waypointsButton.textContent = this.showWaypoints ? '👁️ Waypoints' : '🙈 Waypoints';
-            this.showMessage(this.showWaypoints ? 'Waypoints shown' : 'Waypoints hidden');
         });
 
         // Modify the handleClick method to include tag mode
@@ -283,7 +279,10 @@ class CircuitEditor {
                 this.gates.push(newGate);
                 this.selectedTool = null;
                 this.canvas.style.cursor = 'default';
-                document.getElementById('selectedTool').textContent = 'Selected: None';
+                
+                // Reset dropdown to default option
+                const gateSelector = document.getElementById('gateSelector');
+                gateSelector.value = '';
             } else {
                 // Check if clicked on a gate for dragging
                 for (const gate of this.gates) {
@@ -624,7 +623,6 @@ class CircuitEditor {
                         this.isTagMode = false;
                         document.getElementById('tagMode').classList.remove('active');
                         this.canvas.style.cursor = 'default';
-                        document.getElementById('selectedTool').textContent = 'Selected: None';
                         this.render();
                     }
                     return;
@@ -1332,12 +1330,10 @@ class CircuitEditor {
         this.canvas.style.cursor = enabled ? 'not-allowed' : 'default';
         document.getElementById('delete').classList.toggle('active', enabled);
         if (!enabled) {
-            document.getElementById('selectedTool').textContent = 'Selected: None';
             if (this.screenReaderMode) {
                 this.announce('Delete mode cancelled');
             }
         } else {
-            document.getElementById('selectedTool').textContent = 'Selected: Delete Mode';
             if (this.screenReaderMode) {
                 this.announce('Delete mode activated');
             }
@@ -1446,22 +1442,8 @@ class CircuitEditor {
         return inputNode.sourceValue;
     }
 
-    addScreenReaderToggle() {
-        const button = document.createElement('button');
-        button.id = 'screenReaderToggle';
-        button.className = 'screen-reader-toggle';
-        button.innerHTML = '🔊 Screen Reader';
-        button.onclick = () => this.toggleScreenReader();
-        
-        // Add to toolbar
-        document.querySelector('.right-section').appendChild(button);
-    }
-
     toggleScreenReader() {
         this.screenReaderMode = !this.screenReaderMode;
-        const button = document.getElementById('screenReaderToggle');
-        button.classList.toggle('active', this.screenReaderMode);
-        button.innerHTML = this.screenReaderMode ? '🔊 Screen Reader On' : '🔊 Screen Reader Off';
         
         // Cancel any ongoing speech when toggling off
         if (!this.screenReaderMode) {
@@ -1542,7 +1524,6 @@ class CircuitEditor {
                 this.isTagMode = false;
                 document.getElementById('tagMode').classList.remove('active');
                 this.canvas.style.cursor = 'default';
-                document.getElementById('selectedTool').textContent = 'Selected: None';
             }
             // ... rest of existing ESC key handling ...
         }
