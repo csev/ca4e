@@ -1429,7 +1429,7 @@ class CircuitEditor {
     setInputByLabel(label, value) {
         // Find the input gate with matching label
         const inputGate = this.gates.find(gate => 
-            gate.type === 'INPUT' && gate.label === label
+            gate.type === 'INPUT' && gate.label.toLowerCase() === label.toLowerCase()
         );
 
         if (!inputGate) {
@@ -1463,7 +1463,7 @@ class CircuitEditor {
     getOutputByLabel(label) {
         // Find the output gate with matching label
         const outputGate = this.gates.find(gate => 
-            gate.type === 'OUTPUT' && gate.label === label
+            gate.type === 'OUTPUT' && gate.label.toLowerCase() === label.toLowerCase()
         );
 
         if (!outputGate) {
@@ -1630,7 +1630,7 @@ class CircuitEditor {
             
             // Check if label already exists
             if (label) {
-                const existingGate = this.gates.find(gate => gate.label === label);
+                const existingGate = this.gates.find(gate => gate.label.toLowerCase() === label.toLowerCase());
                 if (existingGate) {
                     return `Error: Component with label "${label}" already exists (${existingGate.type})`;
                 }
@@ -1738,7 +1738,7 @@ class CircuitEditor {
             
             // Find the component to delete
             const gateToDelete = this.gates.find(gate => 
-                gate.type === gateType && gate.label === label
+                gate.type === gateType && gate.label.toLowerCase() === label.toLowerCase()
             );
             
             if (!gateToDelete) {
@@ -1761,7 +1761,7 @@ class CircuitEditor {
                 return 'Error: Invalid connect syntax. Use: connect [from] [from-connector] to [to] [to-connector]';
             }
             
-            if (parts[2] !== 'to') {
+            if (parts[3] !== 'to') {
                 return 'Error: Invalid syntax. Use: connect [from] [from-connector] to [to] [to-connector]';
             }
             
@@ -1775,13 +1775,13 @@ class CircuitEditor {
             }
             
             // Find the source component
-            const fromGate = this.gates.find(gate => gate.label === fromComponent);
+            const fromGate = this.gates.find(gate => gate.label.toLowerCase() === fromComponent.toLowerCase());
             if (!fromGate) {
                 return `Error: Source component "${fromComponent}" not found. Use 'read' to see available components.`;
             }
             
             // Find the target component
-            const toGate = this.gates.find(gate => gate.label === toComponent);
+            const toGate = this.gates.find(gate => gate.label.toLowerCase() === toComponent.toLowerCase());
             if (!toGate) {
                 return `Error: Target component "${toComponent}" not found. Use 'read' to see available components.`;
             }
@@ -1826,6 +1826,13 @@ class CircuitEditor {
             if (this.gates.length === 0) {
                 return 'Circuit is empty. Use "place" to add components.';
             }
+            
+            // Check if a specific component label was provided
+            if (parts.length > 1) {
+                const componentLabel = parts[1];
+                return this.readComponent(componentLabel);
+            }
+            
             return this.readCircuit();
         } else if (parts[0] === 'clear') {
             if (this.gates.length === 0) {
@@ -1839,7 +1846,9 @@ class CircuitEditor {
 - delete [component-type] [label] - Delete a component
 - connect [from] [from-connector] to [to] [to-connector] - Connect components
 - read - Read circuit status
+- read [component-label] - Read detailed information about a specific component
 - clear - Clear all components
+- layout - Optimize component layout to minimize wire crossings
 - help - Show this help
 
 Component types: input, output, and, or, not, nand, nor, xor, full-adder, nixie, clock, sr-flip-flop, jk-flip-flop, 1-bit-latch, 3-bit-latch, 3-bit-adder
@@ -1852,7 +1861,10 @@ Examples:
 - place input a
 - place and
 - delete input a
-- connect a output to gate1 input-1`;
+- connect a output to gate1 input-1
+- connect sam output to full1 Cin
+- connect full1 S to result input-1
+- read full1`;
         } else if (parts[0] === 'layout') {
             return this.performLayout();
         } else {
@@ -1889,6 +1901,161 @@ Examples:
         }
         
         return result;
+    }
+
+    readComponent(componentLabel) {
+        // Find the component by label (case insensitive)
+        const component = this.gates.find(gate => 
+            gate.label.toLowerCase() === componentLabel.toLowerCase()
+        );
+        
+        if (!component) {
+            return `Error: Component "${componentLabel}" not found. Use 'read' to see all components.`;
+        }
+        
+        let result = `Component: ${component.label} (${component.type})\n`;
+        result += `Position: (${Math.round(component.x)}, ${Math.round(component.y)})\n`;
+        
+        // Show inputs
+        if (component.inputNodes && component.inputNodes.length > 0) {
+            result += `\nInputs:\n`;
+            component.inputNodes.forEach((node, index) => {
+                const connectorName = this.getConnectorName(component, node, 'input', index);
+                const value = node.connected ? (node.sourceValue ? '1' : '0') : '?';
+                result += `  ${connectorName}: ${value}${node.connected ? '' : ' (not connected)'}\n`;
+            });
+        }
+        
+        // Show outputs
+        if (component.outputNodes && component.outputNodes.length > 0) {
+            result += `\nOutputs:\n`;
+            component.outputNodes.forEach((node, index) => {
+                const connectorName = this.getConnectorName(component, node, 'output', index);
+                const value = node.hasOutput ? (node.sourceValue ? '1' : '0') : '?';
+                result += `  ${connectorName}: ${value}${node.hasOutput ? '' : ' (not connected)'}\n`;
+            });
+        }
+        
+        // Show special state for certain components
+        if (component.type === 'INPUT') {
+            result += `\nState: ${component.state ? '1' : '0'}\n`;
+        } else if (component.type === 'CLOCK_PULSE') {
+            result += `\nClock State: ${component.isRunning ? (component.state ? 'HIGH' : 'LOW') : 'OFF'}\n`;
+        } else if (component.type === 'THREE_BIT_LATCH') {
+            result += `\nStored Value: ${component.storedValue}\n`;
+        }
+        
+        // Show connections
+        const incomingWires = this.wires.filter(wire => wire.endGate === component);
+        const outgoingWires = this.wires.filter(wire => wire.startGate === component);
+        
+        if (incomingWires.length > 0) {
+            result += `\nIncoming Connections:\n`;
+            incomingWires.forEach(wire => {
+                const fromConnector = this.getConnectorName(wire.startGate, wire.start, 'output', 
+                    wire.startGate.outputNodes.indexOf(wire.start));
+                result += `  ${wire.startGate.label} ${fromConnector} → ${component.label}\n`;
+            });
+        }
+        
+        if (outgoingWires.length > 0) {
+            result += `\nOutgoing Connections:\n`;
+            outgoingWires.forEach(wire => {
+                const toConnector = this.getConnectorName(wire.endGate, wire.end, 'input', 
+                    wire.endGate.inputNodes.indexOf(wire.end));
+                result += `  ${component.label} → ${wire.endGate.label} ${toConnector}\n`;
+            });
+        }
+        
+        return result;
+    }
+    
+    getConnectorName(component, node, type, index) {
+        // For complex components, return the labeled connector name
+        if (component.type === 'FULL_ADDER') {
+            if (type === 'input') {
+                if (index === 0) return 'Cin';
+                if (index === 1) return 'A';
+                if (index === 2) return 'B';
+            } else {
+                if (index === 0) return 'S';
+                if (index === 1) return 'Cout';
+            }
+        } else if (component.type === 'NIXIE_DISPLAY') {
+            if (type === 'input') {
+                if (index === 0) return 'I1';
+                if (index === 1) return 'I2';
+                if (index === 2) return 'I4';
+            }
+        } else if (component.type === 'THREE_BIT_ADDER') {
+            if (type === 'input') {
+                if (index === 0) return 'A0';
+                if (index === 1) return 'A1';
+                if (index === 2) return 'A2';
+                if (index === 3) return 'B0';
+                if (index === 4) return 'B1';
+                if (index === 5) return 'B2';
+            } else {
+                if (index === 0) return 'S0';
+                if (index === 1) return 'S1';
+                if (index === 2) return 'S2';
+                if (index === 3) return 'Cout';
+            }
+        } else if (component.type === 'CLOCK_PULSE') {
+            if (type === 'output') {
+                if (index === 0) return 'Hi';
+                if (index === 1) return 'Lo';
+            }
+        } else if (component.type === 'SR_FLIP_FLOP') {
+            if (type === 'input') {
+                if (index === 0) return 'S';
+                if (index === 1) return 'R';
+                if (index === 2) return 'CLK';
+            } else {
+                if (index === 0) return 'Q';
+                if (index === 1) return 'Q\'';
+            }
+        } else if (component.type === 'JK_FLIP_FLOP') {
+            if (type === 'input') {
+                if (index === 0) return 'J';
+                if (index === 1) return 'K';
+                if (index === 2) return 'CLK';
+            } else {
+                if (index === 0) return 'Q';
+                if (index === 1) return 'Q\'';
+            }
+        } else if (component.type === 'ONE_BIT_LATCH') {
+            if (type === 'input') {
+                if (index === 0) return 'D';
+                if (index === 1) return 'EN';
+            } else {
+                if (index === 0) return 'Q';
+            }
+        } else if (component.type === 'THREE_BIT_LATCH') {
+            if (type === 'input') {
+                if (index === 0) return 'CLK';
+                if (index === 1) return 'I1';
+                if (index === 2) return 'I2';
+                if (index === 3) return 'I3';
+            } else {
+                if (index === 0) return 'O1';
+                if (index === 1) return 'O2';
+                if (index === 2) return 'O3';
+            }
+        }
+        
+        // For simple gates, return numbered connectors
+        if (type === 'input') {
+            if (component.type === 'OUTPUT') {
+                return 'input'; // OUTPUT components only have one input
+            }
+            return component.inputNodes.length === 1 ? 'input' : `input-${index + 1}`;
+        } else {
+            if (component.type === 'INPUT') {
+                return 'output'; // INPUT components only have one output
+            }
+            return component.outputNodes.length === 1 ? 'output' : `output-${index + 1}`;
+        }
     }
 
     // Command history system
@@ -1960,20 +2127,98 @@ Examples:
 
     // Helper methods for command validation
     findNode(gate, connectorName) {
+        const connector = connectorName.toLowerCase();
+        
         // Handle output connections
-        if (connectorName === 'output') {
+        if (connector === 'output') {
             return gate.outputNodes[0];
-        } else if (connectorName.startsWith('output-')) {
-            const outputIndex = parseInt(connectorName.split('-')[1]) - 1;
+        } else if (connector.startsWith('output-')) {
+            const outputIndex = parseInt(connector.split('-')[1]) - 1;
             return gate.outputNodes[outputIndex];
         }
         
         // Handle input connections
-        if (connectorName === 'input') {
+        if (connector === 'input') {
             return gate.inputNodes[0];
-        } else if (connectorName.startsWith('input-')) {
-            const inputIndex = parseInt(connectorName.split('-')[1]) - 1;
+        } else if (connector.startsWith('input-')) {
+            const inputIndex = parseInt(connector.split('-')[1]) - 1;
             return gate.inputNodes[inputIndex];
+        }
+        
+        // Handle labeled connectors for complex components
+        // Check input nodes for labels
+        for (let i = 0; i < gate.inputNodes.length; i++) {
+            const node = gate.inputNodes[i];
+            if (node.label && node.label.toLowerCase() === connector) {
+                return node;
+            }
+        }
+        
+        // Check output nodes for labels
+        for (let i = 0; i < gate.outputNodes.length; i++) {
+            const node = gate.outputNodes[i];
+            if (node.label && node.label.toLowerCase() === connector) {
+                return node;
+            }
+        }
+        
+        // For components with known labeled connectors, check by position/index
+        if (gate.type === 'FULL_ADDER') {
+            // Full Adder: Cin, A, B inputs; S, Cout outputs
+            if (connector === 'cin') return gate.inputNodes[0];
+            if (connector === 'a') return gate.inputNodes[1];
+            if (connector === 'b') return gate.inputNodes[2];
+            if (connector === 's') return gate.outputNodes[0];
+            if (connector === 'cout') return gate.outputNodes[1];
+        } else if (gate.type === 'NIXIE_DISPLAY') {
+            // Nixie Display: I1, I2, I4 inputs
+            if (connector === 'i1') return gate.inputNodes[0];
+            if (connector === 'i2') return gate.inputNodes[1];
+            if (connector === 'i4') return gate.inputNodes[2];
+        } else if (gate.type === 'THREE_BIT_ADDER') {
+            // 3-bit Adder: A0, A1, A2, B0, B1, B2 inputs; S0, S1, S2, Cout outputs
+            if (connector === 'a0') return gate.inputNodes[0];
+            if (connector === 'a1') return gate.inputNodes[1];
+            if (connector === 'a2') return gate.inputNodes[2];
+            if (connector === 'b0') return gate.inputNodes[3];
+            if (connector === 'b1') return gate.inputNodes[4];
+            if (connector === 'b2') return gate.inputNodes[5];
+            if (connector === 's0') return gate.outputNodes[0];
+            if (connector === 's1') return gate.outputNodes[1];
+            if (connector === 's2') return gate.outputNodes[2];
+            if (connector === 'cout') return gate.outputNodes[3];
+        } else if (gate.type === 'SR_FLIP_FLOP') {
+            // SR Flip-Flop: S, R, CLK inputs; Q, Q' outputs
+            if (connector === 's') return gate.inputNodes[0];
+            if (connector === 'r') return gate.inputNodes[1];
+            if (connector === 'clk') return gate.inputNodes[2];
+            if (connector === 'q') return gate.outputNodes[0];
+            if (connector === 'q\'') return gate.outputNodes[1];
+        } else if (gate.type === 'JK_FLIP_FLOP') {
+            // JK Flip-Flop: J, K, CLK inputs; Q, Q' outputs
+            if (connector === 'j') return gate.inputNodes[0];
+            if (connector === 'k') return gate.inputNodes[1];
+            if (connector === 'clk') return gate.inputNodes[2];
+            if (connector === 'q') return gate.outputNodes[0];
+            if (connector === 'q\'') return gate.outputNodes[1];
+        } else if (gate.type === 'ONE_BIT_LATCH') {
+            // 1-bit Latch: D, EN inputs; Q output
+            if (connector === 'd') return gate.inputNodes[0];
+            if (connector === 'en') return gate.inputNodes[1];
+            if (connector === 'q') return gate.outputNodes[0];
+        } else if (gate.type === 'CLOCK_PULSE') {
+            // Clock Pulse: Hi, Lo outputs
+            if (connector === 'hi') return gate.outputNodes[0];
+            if (connector === 'lo') return gate.outputNodes[1];
+        } else if (gate.type === 'THREE_BIT_LATCH') {
+            // 3-bit Latch: CLK, I1, I2, I3 inputs; O1, O2, O3 outputs
+            if (connector === 'clk') return gate.inputNodes[0];
+            if (connector === 'i1') return gate.inputNodes[1];
+            if (connector === 'i2') return gate.inputNodes[2];
+            if (connector === 'i3') return gate.inputNodes[3];
+            if (connector === 'o1') return gate.outputNodes[0];
+            if (connector === 'o2') return gate.outputNodes[1];
+            if (connector === 'o3') return gate.outputNodes[2];
         }
         
         return null;
@@ -1982,22 +2227,46 @@ Examples:
     getValidConnectors(gate) {
         const connectors = [];
         
-        // Add input connectors
-        if (gate.inputNodes.length === 1) {
-            connectors.push('input');
+        // For complex components, show labeled connectors
+        if (gate.type === 'FULL_ADDER') {
+            connectors.push('Cin', 'A', 'B', 'S', 'Cout');
+        } else if (gate.type === 'NIXIE_DISPLAY') {
+            connectors.push('I1', 'I2', 'I4');
+        } else if (gate.type === 'THREE_BIT_ADDER') {
+            connectors.push('A0', 'A1', 'A2', 'B0', 'B1', 'B2', 'S0', 'S1', 'S2', 'Cout');
+        } else if (gate.type === 'SR_FLIP_FLOP') {
+            connectors.push('S', 'R', 'CLK', 'Q', 'Q\'');
+        } else if (gate.type === 'JK_FLIP_FLOP') {
+            connectors.push('J', 'K', 'CLK', 'Q', 'Q\'');
+        } else if (gate.type === 'ONE_BIT_LATCH') {
+            connectors.push('D', 'EN', 'Q');
+        } else if (gate.type === 'CLOCK_PULSE') {
+            connectors.push('Hi', 'Lo');
+        } else if (gate.type === 'THREE_BIT_LATCH') {
+            connectors.push('CLK', 'I1', 'I2', 'I3', 'O1', 'O2', 'O3');
         } else {
-            gate.inputNodes.forEach((_, index) => {
-                connectors.push(`input-${index + 1}`);
-            });
-        }
-        
-        // Add output connectors
-        if (gate.outputNodes.length === 1) {
-            connectors.push('output');
-        } else {
-            gate.outputNodes.forEach((_, index) => {
-                connectors.push(`output-${index + 1}`);
-            });
+            // For simple gates, use numbered connectors
+            // Add input connectors
+            if (gate.type === 'OUTPUT') {
+                connectors.push('input'); // OUTPUT components only have one input
+            } else if (gate.inputNodes.length === 1) {
+                connectors.push('input');
+            } else {
+                gate.inputNodes.forEach((_, index) => {
+                    connectors.push(`input-${index + 1}`);
+                });
+            }
+            
+            // Add output connectors
+            if (gate.type === 'INPUT') {
+                connectors.push('output'); // INPUT components only have one output
+            } else if (gate.outputNodes.length === 1) {
+                connectors.push('output');
+            } else {
+                gate.outputNodes.forEach((_, index) => {
+                    connectors.push(`output-${index + 1}`);
+                });
+            }
         }
         
         return connectors;

@@ -719,15 +719,15 @@ class NixieDisplay extends Gate {
         ctx.fillStyle = '#000';
         ctx.font = Gate.squareFont;
         ctx.textAlign = 'right';
-        ctx.fillText('1', this.inputNodes[0].x - 7, this.inputNodes[0].y + 2);
-        ctx.fillText('2', this.inputNodes[1].x - 7, this.inputNodes[1].y + 2);
-        ctx.fillText('4', this.inputNodes[2].x - 7, this.inputNodes[2].y + 2);
+        ctx.fillText('I1', this.inputNodes[0].x - 7, this.inputNodes[0].y + 2);
+        ctx.fillText('I2', this.inputNodes[1].x - 7, this.inputNodes[1].y + 2);
+        ctx.fillText('I4', this.inputNodes[2].x - 7, this.inputNodes[2].y + 2);
 
         // Draw output labels
         ctx.textAlign = 'left';
-        ctx.fillText('1', this.outputNodes[0].x + 7, this.outputNodes[0].y + 2);
-        ctx.fillText('2', this.outputNodes[1].x + 7, this.outputNodes[1].y + 2);
-        ctx.fillText('4', this.outputNodes[2].x + 7, this.outputNodes[2].y + 2);
+        ctx.fillText('O1', this.outputNodes[0].x + 7, this.outputNodes[0].y + 2);
+        ctx.fillText('O2', this.outputNodes[1].x + 7, this.outputNodes[1].y + 2);
+        ctx.fillText('O4', this.outputNodes[2].x + 7, this.outputNodes[2].y + 2);
 
         // Draw component label inside the rectangle at the bottom
         ctx.textAlign = 'center';
@@ -902,15 +902,15 @@ class ThreeBitLatch extends Gate {
         ctx.fillStyle = '#000000';
         ctx.font = Gate.squareFont;
         ctx.textAlign = 'right';
-        ctx.fillText('1', this.x - this.width/2 - 5, this.y - Gate.twoInputSquareVeritcalOffset);
-        ctx.fillText('2', this.x - this.width/2 - 5, this.y);
-        ctx.fillText('4', this.x - this.width/2 - 5, this.y + Gate.twoInputSquareVeritcalOffset);
+        ctx.fillText('I1', this.x - this.width/2 - 5, this.y - Gate.twoInputSquareVeritcalOffset);
+        ctx.fillText('I2', this.x - this.width/2 - 5, this.y);
+        ctx.fillText('I3', this.x - this.width/2 - 5, this.y + Gate.twoInputSquareVeritcalOffset);
 
         // Draw output labels
         ctx.textAlign = 'left';
-        ctx.fillText('1', this.x + this.width/2 + 5, this.y - Gate.twoInputSquareVeritcalOffset);
-        ctx.fillText('2', this.x + this.width/2 + 5, this.y);
-        ctx.fillText('4', this.x + this.width/2 + 5, this.y + Gate.twoInputSquareVeritcalOffset);
+        ctx.fillText('O1', this.x + this.width/2 + 5, this.y - Gate.twoInputSquareVeritcalOffset);
+        ctx.fillText('O2', this.x + this.width/2 + 5, this.y);
+        ctx.fillText('O3', this.x + this.width/2 + 5, this.y + Gate.twoInputSquareVeritcalOffset);
 
         // Draw clock label at top
         ctx.textAlign = 'center';
@@ -1255,6 +1255,13 @@ class ClockPulse extends Gate {
 
         // Draw state text - show "Off" when not running
         ctx.fillText(this.isRunning ? (this.state ? "HIGH" : "LOW") : "OFF", this.x, this.y + 20);
+
+        // Draw output labels
+        ctx.fillStyle = '#000000';
+        ctx.font = Gate.squareFont;
+        ctx.textAlign = 'left';
+        ctx.fillText('Hi', this.x + this.width/2 + 8, this.y - Gate.twoInputSquareVeritcalOffset + 2);
+        ctx.fillText('Lo', this.x + this.width/2 + 8, this.y + Gate.twoInputSquareVeritcalOffset + 2);
 
         // Draw nodes with their colored circles
         this.drawNodes(ctx);

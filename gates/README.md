@@ -48,12 +48,43 @@ Deletes a specific component by type and label.
 #### `connect [from] [from-connector] to [to] [to-connector]`
 Connects two components using their input/output nodes.
 
+**Connector Types:**
+- **Simple Gates**: `input`, `input-1`, `input-2`, `output`, `output-1`, `output-2`
+- **Complex Components**: Use labeled connectors (case-insensitive)
+
+**Labeled Connectors by Component:**
+- **Full Adder**: `Cin`, `A`, `B` (inputs); `S`, `Cout` (outputs)
+- **Nixie Display**: `I1`, `I2`, `I4` (inputs); `O1`, `O2`, `O4` (outptuts)
+- **3-bit Adder**: `A0`, `A1`, `A2`, `B0`, `B1`, `B2` (inputs); `S0`, `S1`, `S2`, `Cout` (outputs)
+- **Clock Pulse**: `Hi`, `Lo` (outputs)
+- **SR Flip-Flop**: `S`, `R`, `CLK` (inputs); `Q`, `Q'` (outputs)
+- **JK Flip-Flop**: `J`, `K`, `CLK` (inputs); `Q`, `Q'` (outputs)
+- **1-bit Latch**: `D`, `EN` (inputs); `Q` (output)
+- **3-bit Latch**: `CLK`, `I1`, `I2`, `I3` (inputs); `O1`, `O2`, `O3` (outputs)
+
 **Examples:**
 - `connect a output to gate1 input-1` - Connects output of "a" to input-1 of "gate1"
-- `connect gate1 output to result input-1` - Connects output of "gate1" to input-1 of "result"
+- `connect sam output to full1 Cin` - Connects output of "sam" to Cin input of "full1"
+- `connect full1 S to result input-1` - Connects S output of "full1" to input-1 of "result"
+- `connect adder1 A0 to latch1 I1` - Connects A0 input of "adder1" to I1 input of "latch1"
+- `connect counter1 output to nixie1 I1` - Connects output of "counter1" to I1 input of "nixie1"
+- `connect clock1 Hi to flipflop1 CLK` - Connects Hi output of "clock1" to CLK input of "flipflop1"
 
 #### `read`
 Displays the current state of all components and their connections.
+
+#### `read [component-label]`
+Displays detailed information about a specific component, including:
+- Component type and position
+- Input and output connectors with their current values
+- Connection status (connected/not connected)
+- Special state information (for inputs, clocks, latches)
+- Incoming and outgoing wire connections
+
+**Examples:**
+- `read` - Shows all components and connections
+- `read full1` - Shows detailed info about component "full1"
+- `read clock1` - Shows detailed info about component "clock1"
 
 #### `clear`
 Removes all components and wires from the canvas.
@@ -192,50 +223,3 @@ connect adder1 output-1 to sum input
 connect adder1 output-2 to cout input
 read
 ```
-
-### Working with Sequential Logic
-```bash
-place clock clk
-place sr-flip-flop ff1
-place output q
-connect clk output-1 to ff1 input-3
-connect ff1 output-1 to q input
-read
-```
-
-## 🔧 Technical Details
-
-### Circuit Simulation
-- **Real-time Evaluation**: Logic states are computed in real-time
-- **Signal Propagation**: Values propagate through wires automatically
-- **Stability Detection**: Prevents infinite loops in feedback circuits
-
-### Component System
-- **Modular Design**: Each component type is implemented as a separate class
-- **Extensible**: Easy to add new component types
-- **State Management**: Components maintain their own state and logic
-
-### Wire System
-- **Automatic Routing**: Wires are automatically routed between components
-- **Waypoint Support**: Custom routing through waypoints
-- **Connection Validation**: Ensures valid connections between components
-
-## 🎓 Educational Value
-
-This tool is excellent for:
-- Teaching digital logic fundamentals
-- Demonstrating gate behavior and truth tables
-- Building and testing combinational circuits
-- Exploring sequential logic with flip-flops
-- Understanding circuit simulation concepts
-- Learning command line interfaces for accessibility
-
-## 🚀 Getting Started
-
-1. **Open the Application**: Load the HTML file in a web browser
-2. **Choose Your Interface**: Use either the visual interface or command line
-3. **Start Building**: Begin with simple components and gradually build complexity
-4. **Test Your Circuit**: Use the `read` command to check circuit status
-5. **Experiment**: Try different component combinations and connections
-
-The command line interface provides a powerful, accessible way to build and test digital circuits, making this tool valuable for both educational and practical applications.
