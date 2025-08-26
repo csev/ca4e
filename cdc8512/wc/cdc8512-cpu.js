@@ -117,6 +117,8 @@ export class CDC8512CPU extends LitElement {
     const numValue = parseInt(value, 16);
     if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
       this.a0 = numValue;
+      // Hardware emulation: Load value from memory address A0 into X0 when A0 changes
+      this.x0 = this.memory[this.a0];
     }
   }
 
@@ -128,6 +130,8 @@ export class CDC8512CPU extends LitElement {
     const numValue = parseInt(value, 16);
     if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
       this.a1 = numValue;
+      // Hardware emulation: Load value from memory address A1 into X1 when A1 changes
+      this.x1 = this.memory[this.a1];
     }
   }
 
@@ -415,19 +419,19 @@ export class CDC8512CPU extends LitElement {
                       <div style="display: flex; gap: 0.5rem;">
                         <div>
                           <small class="text-muted">X0:</small><br>
-                          <input type="text" size="4" class="font-monospace register-input" value="${this.toChar(this.x0)}" @input=${this.changeX0} @blur=${this.blurX0}>
+                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.x0)}" @input=${this.changeX0} @blur=${this.blurX0}>
                         </div>
                         <div>
                           <small class="text-muted">X1:</small><br>
-                          <input type="text" size="4" class="font-monospace register-input" value="${this.toChar(this.x1)}" @input=${this.changeX1} @blur=${this.blurX1}>
+                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.x1)}" @input=${this.changeX1} @blur=${this.blurX1}>
                         </div>
                         <div>
                           <small class="text-muted">X2:</small><br>
-                          <input type="text" size="4" class="font-monospace register-input" value="${this.toChar(this.x2)}" @input=${this.changeX2} @blur=${this.blurX2}>
+                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.x2)}" @input=${this.changeX2} @blur=${this.blurX2}>
                         </div>
                         <div>
                           <small class="text-muted">X3:</small><br>
-                          <input type="text" size="4" class="font-monospace register-input" value="${this.toChar(this.x3)}" @input=${this.changeX3} @blur=${this.blurX3}>
+                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.x3)}" @input=${this.changeX3} @blur=${this.blurX3}>
                         </div>
                       </div>
                     </div>
