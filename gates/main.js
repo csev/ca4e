@@ -82,6 +82,11 @@ class CircuitEditor {
         // Add waypoints visibility flag
         this.showWaypoints = true;
         
+        // Command history system
+        this.commandHistory = [];
+        this.historyIndex = -1;
+        this.currentCommand = '';
+        
         // Initialize the circuit hash after all setup is complete
         this.lastCircuitHash = this.computeCircuitHash();
         
@@ -216,6 +221,39 @@ class CircuitEditor {
         // Modify the handleClick method to include tag mode
         this.canvas.addEventListener('click', this.handleClick.bind(this));
         this.canvas.addEventListener('dblclick', this.handleDoubleClick.bind(this));
+
+        // Command line interface
+        const commandInput = document.getElementById('commandInput');
+        const status = document.getElementById('status');
+        
+        commandInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const command = commandInput.value.trim();
+                if (command) {
+                    // Add command to history
+                    this.addToHistory(command);
+                    
+                    const result = this.executeCommand(command);
+                    status.textContent = result;
+                    commandInput.value = '';
+                }
+            }
+        });
+        
+        // Add arrow key navigation for command history
+        commandInput.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                const previousCommand = this.getPreviousCommand();
+                if (previousCommand !== null) {
+                    this.updateCommandInput(previousCommand);
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                const nextCommand = this.getNextCommand();
+                this.updateCommandInput(nextCommand);
+            }
+        });
     }
 
     handleMouseDown(e) {
@@ -1515,6 +1553,370 @@ class CircuitEditor {
         const currentOrdinal = this.gateOrdinals.get(gate.type);
         this.gateOrdinals.set(gate.type, currentOrdinal + 1);
         return currentOrdinal + 1;
+    }
+
+    // Find a good placement position that doesn't overlap with existing components
+    findPlacementPosition() {
+        const spacing = 80; // Minimum distance between components
+        const margin = 50; // Margin from canvas edges
+        
+        // Start from center
+        let x = this.canvas.width / 2;
+        let y = this.canvas.height / 2;
+        
+        // If no components exist, use center
+        if (this.gates.length === 0) {
+            return { x, y };
+        }
+        
+        // Try to find a position near existing components but not overlapping
+        let attempts = 0;
+        const maxAttempts = 50;
+        
+        while (attempts < maxAttempts) {
+            // Check if this position is too close to any existing component
+            let tooClose = false;
+            for (const gate of this.gates) {
+                const distance = Math.sqrt(
+                    Math.pow(x - gate.x, 2) + Math.pow(y - gate.y, 2)
+                );
+                if (distance < spacing) {
+                    tooClose = true;
+                    break;
+                }
+            }
+            
+            if (!tooClose) {
+                return { x, y };
+            }
+            
+            // Try a new position
+            const angle = (attempts * 137.5) * (Math.PI / 180); // Golden angle for good distribution
+            const radius = spacing + (attempts * 10);
+            x = this.canvas.width / 2 + Math.cos(angle) * radius;
+            y = this.canvas.height / 2 + Math.sin(angle) * radius;
+            
+            // Keep within canvas bounds
+            x = Math.max(margin, Math.min(this.canvas.width - margin, x));
+            y = Math.max(margin, Math.min(this.canvas.height - margin, y));
+            
+            attempts++;
+        }
+        
+        // If we can't find a good position, use a random position
+        x = margin + Math.random() * (this.canvas.width - 2 * margin);
+        y = margin + Math.random() * (this.canvas.height - 2 * margin);
+        
+        return { x, y };
+    }
+
+    // Command line interface
+    executeCommand(command) {
+        const parts = command.toLowerCase().split(' ');
+        
+        if (parts[0] === 'place') {
+            if (parts.length < 2) {
+                return "Usage: place [component-type] [optional-label]";
+            }
+            
+            const componentType = parts[1];
+            const label = parts.length >= 3 ? parts[2] : null;
+            
+            // Map component types to our gate types
+            const componentMap = {
+                'input': 'INPUT',
+                'output': 'OUTPUT',
+                'and': 'AND',
+                'or': 'OR',
+                'not': 'NOT',
+                'nand': 'NAND',
+                'nor': 'NOR',
+                'xor': 'XOR',
+                'full-adder': 'FULL_ADDER',
+                'nixie': 'NIXIE_DISPLAY',
+                'clock': 'CLOCK_PULSE',
+                'sr-flip-flop': 'SR_FLIP_FLOP',
+                'jk-flip-flop': 'JK_FLIP_FLOP',
+                '1-bit-latch': 'ONE_BIT_LATCH',
+                '3-bit-latch': 'THREE_BIT_LATCH',
+                '3-bit-adder': 'THREE_BIT_ADDER'
+            };
+            
+            const gateType = componentMap[componentType];
+            if (!gateType) {
+                return `Unknown component type: ${componentType}. Available: ${Object.keys(componentMap).join(', ')}`;
+            }
+            
+            // Find a good placement position
+            const position = this.findPlacementPosition();
+            
+            let newGate;
+            if (gateType === 'CLOCK_PULSE') {
+                newGate = new ClockPulse(position.x, position.y, this);
+            } else if (gateType === 'FULL_ADDER') {
+                newGate = new FullAdder(position.x, position.y, this);
+            } else if (gateType === 'NIXIE_DISPLAY') {
+                newGate = new NixieDisplay(position.x, position.y, this);
+            } else if (gateType === 'THREE_BIT_ADDER') {
+                newGate = new ThreeBitAdder(position.x, position.y, this);
+            } else if (gateType === 'THREE_BIT_LATCH') {
+                newGate = new ThreeBitLatch(position.x, position.y, this);
+            } else if (gateType === 'JK_FLIP_FLOP') {
+                newGate = new JKFlipFlop(position.x, position.y, this);
+            } else if (gateType === 'ONE_BIT_LATCH') {
+                newGate = new OneBitLatch(position.x, position.y, this);
+            } else if (gateType === 'SR_FLIP_FLOP') {
+                newGate = new SRFlipFlop(position.x, position.y, this);
+            } else {
+                newGate = new Gate(gateType, position.x, position.y, this);
+            }
+            
+            // Set the label - use provided label or fall back to numbering scheme
+            if (label) {
+                newGate.setLabel(label);
+            } else {
+                // Use the old numbering scheme
+                newGate.ordinal = this.getGateOrdinal(newGate);
+                newGate.updateLabelWithOrdinal();
+            }
+            
+            this.gates.push(newGate);
+            this.scheduleCircuitUpdate();
+            
+            const finalLabel = label || newGate.label;
+            return `Placed ${componentType} with label "${finalLabel}" at (${Math.round(position.x)}, ${Math.round(position.y)})`;
+            
+        } else if (parts[0] === 'delete') {
+            if (parts.length < 2) {
+                return "Usage: delete [component-type] [label]";
+            }
+            
+            const componentType = parts[1];
+            const label = parts[2];
+            
+            if (!label) {
+                return "Usage: delete [component-type] [label]";
+            }
+            
+            // Map component types to our gate types
+            const componentMap = {
+                'input': 'INPUT',
+                'output': 'OUTPUT',
+                'and': 'AND',
+                'or': 'OR',
+                'not': 'NOT',
+                'nand': 'NAND',
+                'nor': 'NOR',
+                'xor': 'XOR',
+                'full-adder': 'FULL_ADDER',
+                'nixie': 'NIXIE_DISPLAY',
+                'clock': 'CLOCK_PULSE',
+                'sr-flip-flop': 'SR_FLIP_FLOP',
+                'jk-flip-flop': 'JK_FLIP_FLOP',
+                '1-bit-latch': 'ONE_BIT_LATCH',
+                '3-bit-latch': 'THREE_BIT_LATCH',
+                '3-bit-adder': 'THREE_BIT_ADDER'
+            };
+            
+            const gateType = componentMap[componentType];
+            if (!gateType) {
+                return `Unknown component type: ${componentType}. Available: ${Object.keys(componentMap).join(', ')}`;
+            }
+            
+            // Find the component to delete
+            const componentIndex = this.gates.findIndex(gate => 
+                gate.type === gateType && gate.label.toLowerCase() === label.toLowerCase()
+            );
+            
+            if (componentIndex === -1) {
+                return `Component not found: ${componentType} "${label}"`;
+            }
+            
+            const component = this.gates[componentIndex];
+            
+            // Remove all wires connected to this component
+            this.wires = this.wires.filter(wire => 
+                wire.startGate !== component && wire.endGate !== component
+            );
+            
+            // Remove the component
+            this.gates.splice(componentIndex, 1);
+            
+            this.scheduleCircuitUpdate();
+            return `Deleted ${componentType} "${label}"`;
+            
+        } else if (parts[0] === 'connect') {
+            // Parse: connect [from-component] [from-connector] to [to-component] [to-connector]
+            if (parts.length < 6 || parts[3] !== 'to') {
+                return "Usage: connect [from-component] [from-connector] to [to-component] [to-connector]";
+            }
+            
+            const fromComponent = parts[1];
+            const fromConnector = parts[2];
+            const toComponent = parts[4];
+            const toConnector = parts[5];
+            
+            // Find components by label
+            const fromGate = this.gates.find(gate => gate.label.toLowerCase() === fromComponent);
+            const toGate = this.gates.find(gate => gate.label.toLowerCase() === toComponent);
+            
+            if (!fromGate) return `Component not found: ${fromComponent}`;
+            if (!toGate) return `Component not found: ${toComponent}`;
+            
+            // Find the appropriate nodes
+            let fromNode, toNode;
+            
+            // Handle output connections
+            if (fromConnector === 'output') {
+                fromNode = fromGate.outputNodes[0];
+            } else if (fromConnector.startsWith('output-')) {
+                const outputIndex = parseInt(fromConnector.split('-')[1]) - 1;
+                fromNode = fromGate.outputNodes[outputIndex];
+            }
+            
+            // Handle input connections
+            if (toConnector === 'input') {
+                toNode = toGate.inputNodes[0];
+            } else if (toConnector.startsWith('input-')) {
+                const inputIndex = parseInt(toConnector.split('-')[1]) - 1;
+                toNode = toGate.inputNodes[inputIndex];
+            }
+            
+            if (!fromNode) return `Output connector not found: ${fromConnector}`;
+            if (!toNode) return `Input connector not found: ${toConnector}`;
+            
+            // Create wire
+            const wire = {
+                start: fromNode,
+                end: toNode,
+                startGate: fromGate,
+                endGate: toGate,
+                waypoints: []
+            };
+            
+            // Update connection states
+            fromGate.connectNode(fromNode, false);
+            toGate.connectNode(toNode, true);
+            
+            this.wires.push(wire);
+            this.scheduleCircuitUpdate();
+            
+            return `Connected ${fromComponent} ${fromConnector} to ${toComponent} ${toConnector}`;
+            
+        } else if (parts[0] === 'read') {
+            return this.readCircuit();
+        } else if (parts[0] === 'clear') {
+            this.clear();
+            return "Circuit cleared";
+        } else if (parts[0] === 'help') {
+            return `Available commands:
+- place [component-type] [optional-label] - Place a component
+- delete [component-type] [label] - Delete a component
+- connect [from] [from-connector] to [to] [to-connector] - Connect components
+- read - Read circuit status
+- clear - Clear all components
+- help - Show this help
+
+Component types: input, output, and, or, not, nand, nor, xor, full-adder, nixie, clock, sr-flip-flop, jk-flip-flop, 1-bit-latch, 3-bit-latch, 3-bit-adder
+
+Navigation:
+- ↑ (Up Arrow) - Browse command history (previous commands)
+- ↓ (Down Arrow) - Browse command history (next commands)
+
+Examples:
+- place input a
+- place and
+- delete input a
+- connect a output to gate1 input-1`;
+        }
+        
+        return `Unknown command: ${command}. Type 'help' for available commands.`;
+    }
+
+    readCircuit() {
+        let result = "Circuit Status:\n";
+        
+        // Components
+        result += "\nComponents:\n";
+        for (const gate of this.gates) {
+            result += `- ${gate.label} (${gate.type}) at (${Math.round(gate.x)}, ${Math.round(gate.y)})\n`;
+        }
+        
+        // Connections
+        result += "\nConnections:\n";
+        for (const wire of this.wires) {
+            result += `- ${wire.startGate.label} output to ${wire.endGate.label} input\n`;
+        }
+        
+        // Circuit state
+        if (this.gates.length > 0) {
+            result += "\nCircuit State:\n";
+            for (const gate of this.gates) {
+                if (gate.type === 'INPUT') {
+                    result += `- ${gate.label}: ${gate.state ? '1' : '0'}\n`;
+                } else if (gate.type === 'OUTPUT') {
+                    const value = gate.inputNodes[0]?.sourceValue;
+                    result += `- ${gate.label}: ${value === undefined ? '?' : value ? '1' : '0'}\n`;
+                }
+            }
+        }
+        
+        return result;
+    }
+
+    // Command history system
+    addToHistory(command) {
+        // Don't add empty commands or duplicate consecutive commands
+        if (command.trim() === '' || 
+            (this.commandHistory.length > 0 && this.commandHistory[this.commandHistory.length - 1] === command)) {
+            return;
+        }
+        
+        this.commandHistory.push(command);
+        
+        // Keep only the last 50 commands
+        if (this.commandHistory.length > 50) {
+            this.commandHistory.shift();
+        }
+        
+        // Reset history index
+        this.historyIndex = -1;
+    }
+    
+    getPreviousCommand() {
+        if (this.commandHistory.length === 0) {
+            return null;
+        }
+        
+        if (this.historyIndex === -1) {
+            // First time going up, save current command
+            this.currentCommand = document.getElementById('commandInput').value;
+        }
+        
+        if (this.historyIndex < this.commandHistory.length - 1) {
+            this.historyIndex++;
+            return this.commandHistory[this.commandHistory.length - 1 - this.historyIndex];
+        }
+        
+        return this.commandHistory[0]; // Return oldest command
+    }
+    
+    getNextCommand() {
+        if (this.historyIndex <= 0) {
+            // Going back to current command or beyond
+            this.historyIndex = -1;
+            return this.currentCommand;
+        }
+        
+        this.historyIndex--;
+        return this.commandHistory[this.commandHistory.length - 1 - this.historyIndex];
+    }
+    
+    updateCommandInput(command) {
+        const commandInput = document.getElementById('commandInput');
+        commandInput.value = command || '';
+        // Move cursor to end
+        commandInput.setSelectionRange(commandInput.value.length, commandInput.value.length);
     }
 
     // Add method to handle ESC key to exit tag mode

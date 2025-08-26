@@ -98,6 +98,57 @@
             gap: 20px;
         }
 
+        /* Command line interface styles */
+        .command-line {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 20px;
+            border-top: 2px solid #3498db;
+            z-index: 1000;
+        }
+
+        .command-line input {
+            width: 100%;
+            background-color: #34495e;
+            color: #ecf0f1;
+            border: 1px solid #7f8c8d;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .command-line input:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+
+        .command-line input::placeholder {
+            color: #95a5a6;
+        }
+
+        .status {
+            font-size: 12px;
+            color: #bdc3c7;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Adjust canvas height to make room for command line */
+        #circuitCanvas {
+            margin-top: 60px;
+            margin-bottom: 100px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
         #selectedTool {
             font-weight: bold;
             color: #333;
@@ -146,14 +197,6 @@
 
         #clear:hover {
             background-color: #D32F2F;
-        }
-
-        #circuitCanvas {
-            margin-top: 60px;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .status-bar {
@@ -341,6 +384,12 @@
     </div>
 
     <div class="tooltip" id="tooltip"></div>
+
+    <!-- Command line interface -->
+    <div class="command-line">
+        <input type="text" id="commandInput" placeholder="Type commands here... (e.g., 'place input a', 'place and', 'delete input a', 'connect a output to gate1 input-1')">
+        <div class="status" id="status">Ready. Type 'help' for available commands.</div>
+    </div>
 
     <!-- Add confirmation modal -->
     <div id="confirmModal" class="modal" style="display: none;">
