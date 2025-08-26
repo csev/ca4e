@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Circuit Editor - Help</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #34495e;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+
+        .command-example {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            border-left: 4px solid #e74c3c;
+        }
+
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .component-card {
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #bdc3c7;
+        }
+
+        .component-card h4 {
+            color: #2c3e50;
+            margin-top: 0;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+        }
+
+        .connector-list {
+            background-color: #34495e;
+            color: #ecf0f1;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+
+        .tip {
+            background-color: #e8f5e8;
+            border: 1px solid #27ae60;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .tip::before {
+            content: "💡 ";
+            font-weight: bold;
+        }
+
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .warning::before {
+            content: "⚠️ ";
+            font-weight: bold;
+        }
+
+        .keyboard-shortcut {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 3px;
+            padding: 2px 6px;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+
+        .navigation {
+            position: sticky;
+            top: 0;
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            border-radius: 8px;
+        }
+
+        .navigation ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .navigation a {
+            color: #ecf0f1;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .navigation a:hover {
+            background-color: #34495e;
+        }
+
+        .back-button {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-button">← Back to Circuit Editor</a>
+        
+        <h1>Digital Circuit Editor - Help Guide</h1>
+        
+        <div class="navigation">
+            <ul>
+                <li><a href="#getting-started">Getting Started</a></li>
+                <li><a href="#components">Components</a></li>
+                <li><a href="#command-line">Command Line</a></li>
+                <li><a href="#mouse-controls">Mouse Controls</a></li>
+                <li><a href="#keyboard-shortcuts">Keyboard Shortcuts</a></li>
+                <li><a href="#layout">Layout & Organization</a></li>
+                <li><a href="#accessibility">Accessibility</a></li>
+            </ul>
+        </div>
+
+        <div id="getting-started" class="section">
+            <h2>Getting Started</h2>
+            <p>Welcome to the Digital Circuit Editor! This tool allows you to create and simulate digital logic circuits using a visual interface and command-line controls.</p>
+            
+            <h3>Quick Start</h3>
+            <ol>
+                <li><strong>Select a Component</strong>: Use the dropdown menu at the top to choose a component type</li>
+                <li><strong>Place Components</strong>: Click on the canvas to place components, or use the command line</li>
+                <li><strong>Connect Components</strong>: Click on output nodes and drag to input nodes, or use the command line</li>
+                <li><strong>Test Your Circuit</strong>: Change input values and watch the circuit simulate in real-time</li>
+            </ol>
+        </div>
+
+        <div id="components" class="section">
+            <h2>Available Components</h2>
+            
+            <div class="component-grid">
+                <div class="component-card">
+                    <h4>Basic Gates</h4>
+                    <ul>
+                        <li><strong>AND</strong>: Output is 1 only if all inputs are 1</li>
+                        <li><strong>OR</strong>: Output is 1 if any input is 1</li>
+                        <li><strong>NOT</strong>: Inverts the input (0→1, 1→0)</li>
+                        <li><strong>NAND</strong>: AND followed by NOT</li>
+                        <li><strong>NOR</strong>: OR followed by NOT</li>
+                        <li><strong>XOR</strong>: Output is 1 if exactly one input is 1</li>
+                    </ul>
+                </div>
+
+                <div class="component-card">
+                    <h4>Input/Output</h4>
+                    <ul>
+                        <li><strong>Input</strong>: User-controlled input signal (0 or 1)</li>
+                        <li><strong>Output</strong>: Displays the value of connected signal</li>
+                        <li><strong>Clock</strong>: Automatically oscillates between 0 and 1</li>
+                    </ul>
+                </div>
+
+                <div class="component-card">
+                    <h4>Complex Components</h4>
+                    <ul>
+                        <li><strong>Full Adder</strong>: Adds three binary digits with carry</li>
+                        <li><strong>3-Bit Adder</strong>: Adds two 3-bit numbers</li>
+                        <li><strong>SR Flip-Flop</strong>: Basic memory element</li>
+                        <li><strong>JK Flip-Flop</strong>: Universal flip-flop</li>
+                        <li><strong>1-Bit Latch</strong>: Simple memory with clock</li>
+                        <li><strong>3-Bit Latch</strong>: Stores three bits</li>
+                        <li><strong>Nixie Display</strong>: Shows decimal output</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h3>Component Connectors</h3>
+            <p>Complex components have specific input and output connectors:</p>
+            
+            <div class="connector-list">
+                <strong>Full Adder:</strong> Cin, A, B (inputs); S, Cout (outputs)<br>
+                <strong>3-Bit Adder:</strong> A0, A1, A2, B0, B1, B2 (inputs); S0, S1, S2, Cout (outputs)<br>
+                <strong>SR Flip-Flop:</strong> S, R, CLK (inputs); Q, Q' (outputs)<br>
+                <strong>JK Flip-Flop:</strong> J, K, CLK (inputs); Q, Q' (outputs)<br>
+                <strong>1-Bit Latch:</strong> D, CLK (inputs); Q (output)<br>
+                <strong>3-Bit Latch:</strong> CLK, I1, I2, I3 (inputs); O1, O2, O3 (outputs)<br>
+                <strong>Nixie Display:</strong> I1, I2, I4 (inputs); O1, O2, O4 (outputs)<br>
+                <strong>Clock:</strong> Hi, Lo (outputs)
+            </div>
+        </div>
+
+        <div id="command-line" class="section">
+            <h2>Command Line Interface</h2>
+            <p>The command line at the bottom of the screen provides powerful text-based control over your circuit. All commands are case-insensitive.</p>
+
+            <h3>Basic Commands</h3>
+            
+            <h4>Placing Components</h4>
+            <div class="command-example">place [component-type] [label]</div>
+            <p><strong>Examples:</strong></p>
+            <ul>
+                <li><code>place input a</code> - Places an input labeled "a"</li>
+                <li><code>place and gate1</code> - Places an AND gate labeled "gate1"</li>
+                <li><code>place full-adder fa1</code> - Places a full adder labeled "fa1"</li>
+                <li><code>place not</code> - Places a NOT gate with auto-numbering (NOT1, NOT2, etc.)</li>
+            </ul>
+
+            <h4>Deleting Components</h4>
+            <div class="command-example">delete [component-type] [label]</div>
+            <p><strong>Examples:</strong></p>
+            <ul>
+                <li><code>delete input a</code> - Deletes input labeled "a"</li>
+                <li><code>delete and gate1</code> - Deletes AND gate labeled "gate1"</li>
+            </ul>
+
+            <h4>Connecting Components</h4>
+            <div class="command-example">connect [from] [from-connector] to [to] [to-connector]</div>
+            <p><strong>Examples:</strong></p>
+            <ul>
+                <li><code>connect a output to gate1 input</code> - Connects input "a" to gate "gate1"</li>
+                <li><code>connect fa1 S to output1 input</code> - Connects full adder sum to output</li>
+                <li><code>connect clock1 Hi to latch1 CLK</code> - Connects clock to latch</li>
+            </ul>
+
+            <h4>Reading Circuit State</h4>
+            <div class="command-example">read [component-label]</div>
+            <p><strong>Examples:</strong></p>
+            <ul>
+                <li><code>read</code> - Shows all components and their values</li>
+                <li><code>read a</code> - Shows detailed info about component "a"</li>
+            </ul>
+
+            <h4>Layout and Organization</h4>
+            <div class="command-example">layout</div>
+            <p>Automatically arranges components to minimize wire crossings and improve readability.</p>
+
+            <h4>Other Commands</h4>
+            <ul>
+                <li><code>clear</code> - Removes all components and wires</li>
+                <li><code>help</code> - Shows available commands</li>
+            </ul>
+
+            <div class="tip">
+                <strong>Pro Tip:</strong> Use the up/down arrow keys to navigate through your command history, just like in a terminal!
+            </div>
+        </div>
+
+        <div id="mouse-controls" class="section">
+            <h2>Mouse Controls</h2>
+            
+            <h3>Placing Components</h3>
+            <ol>
+                <li>Select a component type from the dropdown</li>
+                <li>Click anywhere on the canvas to place it</li>
+                <li>Components are automatically placed near existing ones to avoid overlap</li>
+            </ol>
+
+            <h3>Connecting Components</h3>
+            <ol>
+                <li>Click on an output node (red circle)</li>
+                <li>Drag to an input node (blue circle)</li>
+                <li>Release to create the connection</li>
+            </ol>
+
+            <h3>Moving Components</h3>
+            <ul>
+                <li><strong>Drag and Drop:</strong> Click and drag any component to move it</li>
+                <li><strong>Wire Following:</strong> Connected wires automatically follow component movement</li>
+            </ul>
+
+            <h3>Deleting Components and Wires</h3>
+            <ol>
+                <li>Click the <span class="keyboard-shortcut">🗑️</span> button to enter delete mode</li>
+                <li>Click on any component or wire to delete it</li>
+                <li>Click the delete button again or press <span class="keyboard-shortcut">Esc</span> to exit delete mode</li>
+            </ol>
+
+            <h3>Tagging Components</h3>
+            <ol>
+                <li>Click the <span class="keyboard-shortcut">🏷️ Tag</span> button</li>
+                <li>Click on any component to change its label</li>
+                <li>Type the new label and press Enter</li>
+            </ol>
+        </div>
+
+        <div id="keyboard-shortcuts" class="section">
+            <h2>Keyboard Shortcuts</h2>
+            
+            <ul>
+                <li><span class="keyboard-shortcut">Esc</span> - Cancel current operation, exit delete mode, clear selection</li>
+                <li><span class="keyboard-shortcut">Enter</span> - Execute command in command line</li>
+                <li><span class="keyboard-shortcut">↑</span> - Navigate up in command history</li>
+                <li><span class="keyboard-shortcut">↓</span> - Navigate down in command history</li>
+            </ul>
+        </div>
+
+        <div id="layout" class="section">
+            <h2>Layout & Organization</h2>
+            
+            <h3>Automatic Layout</h3>
+            <p>The <code>layout</code> command uses a force-directed algorithm to automatically arrange your components:</p>
+            <ul>
+                <li><strong>Repulsion:</strong> Components push each other apart to prevent overlap</li>
+                <li><strong>Attraction:</strong> Connected components are pulled closer together</li>
+                <li><strong>Level Positioning:</strong> Components are arranged by their logical depth in the circuit</li>
+            </ul>
+
+            <h3>Manual Organization</h3>
+            <ul>
+                <li><strong>Drag to Move:</strong> Click and drag any component to reposition it</li>
+                <li><strong>Wire Management:</strong> Use waypoints to create cleaner wire paths</li>
+                <li><strong>Grid Snapping:</strong> Components automatically snap to a grid for alignment</li>
+            </ul>
+
+            <div class="tip">
+                <strong>Layout Tip:</strong> The layout algorithm works best when components are connected. For unconnected components, try placing them manually or use the layout command multiple times.
+            </div>
+        </div>
+
+        <div id="accessibility" class="section">
+            <h2>Accessibility Features</h2>
+            
+            <h3>Screen Reader Support</h3>
+            <ul>
+                <li><strong>Toggle Screen Reader:</strong> Use the "🔊 Toggle Screen Reader" command to enable voice announcements</li>
+                <li><strong>Component Announcements:</strong> Screen reader announces component selection and placement</li>
+                <li><strong>Status Updates:</strong> Circuit changes and errors are announced</li>
+            </ul>
+
+            <h3>Command Line Interface</h3>
+            <p>The command line interface provides full keyboard control for users who prefer text-based interaction:</p>
+            <ul>
+                <li>All circuit operations can be performed via commands</li>
+                <li>Command history navigation with arrow keys</li>
+                <li>Comprehensive error messages and feedback</li>
+            </ul>
+
+            <h3>Visual Accessibility</h3>
+            <ul>
+                <li><strong>High Contrast:</strong> Clear visual distinction between components and connections</li>
+                <li><strong>Color Coding:</strong> Input nodes (blue), output nodes (red), wires (black)</li>
+                <li><strong>Hover Effects:</strong> Visual feedback when hovering over interactive elements</li>
+            </ul>
+
+            <div class="warning">
+                <strong>Note:</strong> For the best accessibility experience, use the command line interface and enable screen reader mode if you use assistive technology.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Tips & Best Practices</h2>
+            
+            <div class="tip">
+                <strong>Start Simple:</strong> Begin with basic gates and simple connections before building complex circuits.
+            </div>
+
+            <div class="tip">
+                <strong>Use Labels:</strong> Always label your inputs, outputs, and important components for easier debugging.
+            </div>
+
+            <div class="tip">
+                <strong>Test Incrementally:</strong> Test your circuit as you build it, not just at the end.
+            </div>
+
+            <div class="tip">
+                <strong>Command Line Efficiency:</strong> Use the command line for repetitive tasks like placing multiple similar components.
+            </div>
+
+            <div class="tip">
+                <strong>Layout Regularly:</strong> Use the layout command periodically to keep your circuit organized and readable.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Need More Help?</h2>
+            <p>If you need additional assistance or have questions about specific features:</p>
+            <ul>
+                <li>Check the command line help by typing <code>help</code></li>
+                <li>Experiment with different component combinations</li>
+                <li>Use the layout command to organize complex circuits</li>
+                <li>Start with simple examples and gradually increase complexity</li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

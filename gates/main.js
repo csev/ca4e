@@ -136,6 +136,12 @@ class CircuitEditor {
             commandsSelector.value = '';
         });
 
+        // Add event listener for help button
+        const helpButton = document.getElementById('helpButton');
+        helpButton.addEventListener('click', () => {
+            window.open('help.html', '_blank');
+        });
+
         // Add hover announcement for delete button
         const deleteButton = document.getElementById('delete');
         deleteButton.addEventListener('mouseenter', () => {
