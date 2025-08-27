@@ -53,11 +53,18 @@ class CDC8512Emulator {
             const parts = line.split(';')[0].trim().split(/\s+/);
             const instruction = parts[0].toUpperCase();
             
+            // Clean up register names by removing commas
+            if (parts.length > 1) {
+                parts[1] = parts[1].replace(',', '');
+            }
+            
             if (instruction === 'SET') {
                 const reg = parts[1];
                 const value = parseInt(parts[2]);
                 const regNum = this.parseRegister(reg);
-                this.cpu.instructions[address] = 0x80 | regNum; // SET opcode (10000rrr)
+                const opcode = 0x80 | regNum;
+                console.log(`Assembling SET ${reg}: regNum=${regNum}, opcode=0x${opcode.toString(16).padStart(2, '0')} (${opcode.toString(2).padStart(8, '0')})`);
+                this.cpu.instructions[address] = opcode; // SET opcode (10000rrr) - 10000 = 0x10, but we need it in bits 7-3, so 0x80
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
             } else if (instruction === 'INC') {
@@ -88,10 +95,12 @@ class CDC8512Emulator {
             'A0': 0, 'A1': 1, 'A2': 2, 'A3': 3,
             'X0': 4, 'X1': 5, 'X2': 6, 'X3': 7
         };
-        return regMap[reg.toUpperCase()] || 0;
+        const result = regMap[reg.toUpperCase()] || 0;
+        console.log(`parseRegister('${reg}') = ${result}`);
+        return result;
     }
 
-    // Get register name from number
+    // Get register name from number (matches specification: 000=A0, 001=A1, 010=A2, 011=A3, 100=X0, 101=X1, 110=X2, 111=X3)
     getRegisterName(reg) {
         const names = ['a0', 'a1', 'a2', 'a3', 'x0', 'x1', 'x2', 'x3'];
         return names[reg];
@@ -127,6 +136,24 @@ class CDC8512Emulator {
             
             if (opcode === 0x01) { // INC (01001rrr) - opcode 001 in bits 5-3
                 this.cpu[regName] = (this.cpu[regName] + 1) & 0xFF;
+                
+                // CDC 6500 load/store architecture: 
+                // A0/A1: Implicit LOAD from memory into X0/X1
+                // A2/A3: Implicit STORE from X2/X3 to memory
+                if (regName === 'a0') {
+                    this.cpu.x0 = this.cpu.memory[this.cpu.a0];
+                    console.log(`Implicit load: memory[${this.cpu.a0}] (${this.cpu.x0}) -> X0`);
+                } else if (regName === 'a1') {
+                    this.cpu.x1 = this.cpu.memory[this.cpu.a1];
+                    console.log(`Implicit load: memory[${this.cpu.a1}] (${this.cpu.x1}) -> X1`);
+                } else if (regName === 'a2') {
+                    this.cpu.memory[this.cpu.a2] = this.cpu.x2;
+                    console.log(`Implicit store: X2 (${this.cpu.x2}) -> memory[${this.cpu.a2}]`);
+                } else if (regName === 'a3') {
+                    this.cpu.memory[this.cpu.a3] = this.cpu.x3;
+                    console.log(`Implicit store: X3 (${this.cpu.x3}) -> memory[${this.cpu.a3}]`);
+                }
+                
                 result = `INC ${regName}`;
             } else if (opcode === 0x02) { // DEC (01010rrr) - opcode 010 in bits 5-3
                 this.cpu[regName] = (this.cpu[regName] - 1) & 0xFF;
@@ -149,10 +176,24 @@ class CDC8512Emulator {
             
             if (opcode === 0x00) { // SET (10000rrr)
                 this.cpu[regName] = immediate;
-                // If setting X2, store the character in data memory at A2's address
-                if (regName === 'x2') {
-                    this.storeChar(this.cpu.a2, immediate);
+                
+                // CDC 6500 load/store architecture: 
+                // A0/A1: Implicit LOAD from memory into X0/X1
+                // A2/A3: Implicit STORE from X2/X3 to memory
+                if (regName === 'a0') {
+                    this.cpu.x0 = this.cpu.memory[immediate];
+                    console.log(`Implicit load: memory[${immediate}] (${this.cpu.x0}) -> X0`);
+                } else if (regName === 'a1') {
+                    this.cpu.x1 = this.cpu.memory[immediate];
+                    console.log(`Implicit load: memory[${immediate}] (${this.cpu.x1}) -> X1`);
+                } else if (regName === 'a2') {
+                    this.cpu.memory[immediate] = this.cpu.x2;
+                    console.log(`Implicit store: X2 (${this.cpu.x2}) -> memory[${immediate}]`);
+                } else if (regName === 'a3') {
+                    this.cpu.memory[immediate] = this.cpu.x3;
+                    console.log(`Implicit store: X3 (${this.cpu.x3}) -> memory[${immediate}]`);
                 }
+                
                 result = `SET ${regName}, ${immediate}`;
             } else if (opcode === 0x01) { // CMP
                 const value = this.cpu[regName];
@@ -222,11 +263,7 @@ class CDC8512Emulator {
         console.log('PS Output:', output);
     }
 
-    // Store character in data memory (called by SET instructions)
-    storeChar(address, charCode) {
-        this.cpu.memory[address] = charCode;
-        console.log(`Stored char ${charCode} ('${String.fromCharCode(charCode)}') at address ${address}`);
-    }
+
 
     // Start continuous execution
     start() {
