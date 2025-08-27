@@ -344,6 +344,12 @@ export class CDC8512CPU extends LitElement {
         font-family: 'Courier New', Courier, monospace;
       }
       
+      .error-mode {
+        background-color: #f8d7da !important;
+        border-color: #dc3545 !important;
+        color: #721c24 !important;
+      }
+      
       .form-control {
         display: block;
         width: 100%;
@@ -438,7 +444,7 @@ export class CDC8512CPU extends LitElement {
                         </div>
                         <div>
                           <small class="text-muted">MODE:</small><br>
-                          <input type="text" size="2" class="font-monospace register-input" value="0x${this.toHex(this.mode)}" @input=${this.changeMode}>
+                          <input type="text" size="2" class="font-monospace register-input ${this.mode >= 1 ? 'error-mode' : ''}" value="0x${this.toHex(this.mode)}" @input=${this.changeMode}>
                         </div>
                       </div>
                     </div>

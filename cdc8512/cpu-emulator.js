@@ -135,6 +135,17 @@ class CDC8512Emulator {
         return names[reg];
     }
 
+    // Check A register addresses for out of range errors
+    checkAAddresses() {
+        if (this.cpu.a0 >= 32 || this.cpu.a1 >= 32 || this.cpu.a2 >= 32 || this.cpu.a3 >= 32) {
+            this.running = false;
+            this.cpu.mode = 3;
+            this.cpu.requestUpdate();
+            return true; // Error detected
+        }
+        return false; // No error
+    }
+
     // Execute a single instruction
     executeStep() {
         if (this.running === false) return null;
@@ -165,6 +176,11 @@ class CDC8512Emulator {
             
             if (opcode === 0x01) { // INC (01001rrr) - opcode 001 in bits 5-3
                 this.cpu[regName] = (this.cpu[regName] + 1) & 0xFF;
+                
+                // Check A register addresses for out of range errors
+                if (this.checkAAddresses()) {
+                    return 'ERROR: A register address out of range';
+                }
                 
                 // CDC 6500 load/store architecture: 
                 // A0/A1: Implicit LOAD from memory into X0/X1
@@ -206,6 +222,11 @@ class CDC8512Emulator {
             if (opcode === 0x00) { // SET (10000rrr)
                 this.cpu[regName] = immediate;
                 
+                // Check A register addresses for out of range errors
+                if (this.checkAAddresses()) {
+                    return 'ERROR: A register address out of range';
+                }
+                
                 // CDC 6500 load/store architecture: 
                 // A0/A1: Implicit LOAD from memory into X0/X1
                 // A2/A3: Implicit STORE from X2/X3 to memory
@@ -237,6 +258,39 @@ class CDC8512Emulator {
             }
             pcIncrement = 2; // 16-bit instruction
         }
+        // Jump instructions (101000xx) - 16-bit
+        else if ((instruction >> 6) === 2 && (instruction & 0x38) === 0x28) {
+            const jumpType = instruction & 0x03;
+            const jumpAddress = this.cpu.instructions[this.cpu.pc + 1];
+            
+            // Check if jump address is out of range
+            if (jumpAddress >= 32) {
+                console.log(`Jump address out of range: 0x${jumpAddress.toString(16).padStart(2, '0')}`);
+                this.running = false;
+                this.cpu.mode = 2;
+                this.cpu.requestUpdate();
+                return 'ERROR: Jump address out of range';
+            }
+            
+            let shouldJump = false;
+            if (jumpType === 0x00) { // JE
+                shouldJump = this.cpu.comparison === '=';
+                result = `JE ${jumpAddress}`;
+            } else if (jumpType === 0x01) { // JL
+                shouldJump = this.cpu.comparison === '<';
+                result = `JL ${jumpAddress}`;
+            } else if (jumpType === 0x02) { // JG
+                shouldJump = this.cpu.comparison === '>';
+                result = `JG ${jumpAddress}`;
+            }
+            
+            if (shouldJump) {
+                this.cpu.pc = jumpAddress;
+                pcIncrement = 0; // PC already set
+            } else {
+                pcIncrement = 2; // Skip the immediate byte
+            }
+        }
         // Register copy instructions (11xxxxxx)
         else if ((instruction >> 6) === 3) {
             const destReg = (instruction >> 3) & 0x07;
@@ -249,7 +303,11 @@ class CDC8512Emulator {
         }
         // Unknown instruction
         else {
-            result = 'NOP';
+            console.log(`Unknown instruction: 0x${instruction.toString(16).padStart(2, '0')}`);
+            // Invalid instruction - halt CPU and set error mode
+            this.running = false;
+            this.cpu.mode = 1;
+            result = 'ERROR: Invalid instruction';
             pcIncrement = 1;
         }
         

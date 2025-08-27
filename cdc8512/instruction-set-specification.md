@@ -272,11 +272,107 @@ Address | Binary          | Assembly              | Description
 6. **I/O Operations**: Print operations output to console/display
 7. **Reset Behavior**: Clears all memory to 0, sets all registers to 0, PC = 0
 
-## Error Handling
+## Error Handling and Mode Register
 
-- **Invalid Opcodes**: Unused opcode combinations should be treated as NOP
-- **Memory Bounds**: Memory access beyond 0xFF should wrap around
-- **Register Overflow**: 8-bit arithmetic operations wrap around (no overflow flag)
-- **Invalid Jumps**: Jump addresses beyond instruction memory should wrap around
+The CDC8512 CPU includes a 4-bit mode register (0x0-0xF) for error indication and future expansion. The mode register is displayed in the register area and provides visual feedback through color coding.
 
-This specification provides a complete foundation for implementing the CDC8512 8-bit machine language emulator with clear bit patterns and semantic definitions for each instruction.
+### Mode Register Values
+
+- **0x0**: Normal operation (no errors)
+- **0x1**: Invalid instruction encountered
+- **0x2**: Jump address out of range (>= 32)
+- **0x3**: A register address out of range (>= 32)
+- **0x4-0xF**: Reserved for future use
+
+### Error Conditions
+
+#### Mode 0x1: Invalid Instruction
+**Trigger**: Any instruction that doesn't match the defined instruction patterns
+**Behavior**: CPU halts, mode register set to 1, status shows "Error: Invalid instruction"
+**Example**:
+```
+Assembly: (invalid instruction)
+Binary: 0x00 0xFF (HALT followed by invalid byte)
+Result: Mode = 1, CPU halted
+```
+
+#### Mode 0x2: Jump Address Out of Range
+**Trigger**: Jump instruction (JE, JL, JG) with destination address >= 32
+**Behavior**: CPU halts, mode register set to 2, status shows "Error: Jump address out of range"
+**Example**:
+```
+Assembly: JE 0x20
+Binary: 0xA0 0x20 (JE instruction + address 32)
+Result: Mode = 2, CPU halted
+```
+
+#### Mode 0x3: A Register Address Out of Range
+**Trigger**: Any A register (A0, A1, A2, A3) contains value >= 32
+**Behavior**: CPU halts, mode register set to 3, status shows "Error: A register address out of range"
+**Example**:
+```
+Assembly: SET A0, 32
+Binary: 0x80 0x20 (SET A0 + immediate 32)
+Result: Mode = 3, CPU halted
+```
+
+### Sample Error Test Programs
+
+#### Test Invalid Instruction (Mode 1)
+```
+Assembly:
+SET X0, 0x00    ; Valid instruction
+0xFF            ; Invalid instruction (triggers error)
+HALT
+
+Binary:
+0x80 0x00       ; SET X0, 0
+0xFF            ; Invalid instruction
+0x00            ; HALT (never reached)
+```
+
+#### Test Jump Address Out of Range (Mode 2)
+```
+Assembly:
+SET X0, 0       ; Set X0 to 0
+CMP X0, 0       ; Compare X0 to 0 (sets CMP to "=")
+JE 0x20         ; Jump to address 32 (out of range)
+
+Binary:
+0x80 0x00       ; SET X0, 0
+0x81 0x00       ; CMP X0, 0
+0xA0 0x20       ; JE 32 (triggers error)
+```
+
+#### Test A Register Address Out of Range (Mode 3)
+```
+Assembly:
+SET A0, 32      ; Set A0 to 32 (out of range)
+
+Binary:
+0x80 0x20       ; SET A0, 32 (triggers error)
+```
+
+### Visual Error Indication
+
+- **Mode Register Display**: Shows current mode value in hex (0x0-0xF)
+- **Error Color Coding**: Mode register turns red when mode >= 1
+- **Status Messages**: Detailed error descriptions in status area
+- **Console Logging**: Error details logged to browser console
+
+### Error Recovery
+
+- **Reset**: Use the "Reset CPU" button to clear all errors and return to mode 0
+- **Manual Mode Change**: Users can manually set mode register to 0 to clear error state
+- **Program Reload**: Loading a new program automatically resets the CPU
+
+### Future Error Modes
+
+The mode register provides 12 additional values (0x4-0xF) for future error conditions such as:
+- Stack overflow/underflow
+- Division by zero
+- Interrupt handling
+- Debug mode indicators
+- Performance monitoring
+
+This error handling system provides clear feedback for debugging and development while maintaining the simplicity of the 8-bit architecture.
