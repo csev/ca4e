@@ -17,6 +17,7 @@ class CDC8512Emulator {
     reset() {
         this.cpu.pc = 0;
         this.cpu.comparison = '=';
+        this.cpu.mode = 0;
         this.cpu.a0 = 0;
         this.cpu.a1 = 0;
         this.cpu.a2 = 0;

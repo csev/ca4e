@@ -14,6 +14,7 @@ export class CDC8512CPU extends LitElement {
       // Register properties
       pc: { type: Number },
       comparison: { type: String },
+      mode: { type: Number },
       a0: { type: Number },
       a1: { type: Number },
       a2: { type: Number },
@@ -36,6 +37,7 @@ export class CDC8512CPU extends LitElement {
     // Initialize registers
     this.pc = 0;
     this.comparison = "=";
+    this.mode = 0;
     this.a0 = 0;
     this.a1 = 0;
     this.a2 = 0;
@@ -100,6 +102,17 @@ export class CDC8512CPU extends LitElement {
     const numValue = parseInt(value, 16);
     if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
       this.pc = numValue;
+    }
+  }
+
+  changeMode(e) {
+    let value = e.target.value;
+    if (value.startsWith('0x')) {
+      value = value.substring(2);
+    }
+    const numValue = parseInt(value, 16);
+    if (!isNaN(numValue) && numValue >= 0 && numValue <= 15) {
+      this.mode = numValue;
     }
   }
 
@@ -422,6 +435,10 @@ export class CDC8512CPU extends LitElement {
                             <option value="<" ${this.comparison === "<" ? "selected" : ""}><</option>
                             <option value=">" ${this.comparison === ">" ? "selected" : ""}>></option>
                           </select>
+                        </div>
+                        <div>
+                          <small class="text-muted">MODE:</small><br>
+                          <input type="text" size="2" class="font-monospace register-input" value="0x${this.toHex(this.mode)}" @input=${this.changeMode}>
                         </div>
                       </div>
                     </div>
