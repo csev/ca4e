@@ -476,11 +476,11 @@ export class CDC8512CPU extends LitElement {
                       this.memory,
                       (word, index) => this.isMobile ? 
                         (index>=0 && index<=31) ? html`
-                        <li>0x${this.toHex(index)}: <input type="text" size="4" value="${this.toChar(word)}" @input=${this.changeMemory(index)} @blur=${this.blurMemory(index)}></li>
+                        <li>0x${this.toHex(index)}: <input type="text" size="4" value="0x${this.toHex(word)}" @input=${this.changeMemory(index)} @blur=${this.blurMemory(index)}></li>
                         ` : html``
                         :
                         (index>=0 && index<=15) ? html`
-                        <li>0x${this.toHex(index)}: <input type="text" size="4" value="${this.toChar(word)}" @input=${this.changeMemory(index)} @blur=${this.blurMemory(index)}></li>
+                        <li>0x${this.toHex(index)}: <input type="text" size="4" value="0x${this.toHex(word)}" @input=${this.changeMemory(index)} @blur=${this.blurMemory(index)}></li>
                         ` : html``
                     )}
                   </ul>
@@ -491,9 +491,9 @@ export class CDC8512CPU extends LitElement {
                   <ul style="list-style-type: none; font-family: monospace;">
                     ${repeat(
                       this.memory,
-                      (word, index) => (index>=16 && index<=31) ? html`
-                      <li>0x${this.toHex(index)}: <input type="text" size="4" value="${this.toChar(word)}" @input=${this.changeMemory(index)} @blur=${this.blurMemory(index)}></li>
-                      ` : html``
+                      (word, index) =>                         (index>=16 && index<=31) ? html`
+                        <li>0x${this.toHex(index)}: <input type="text" size="4" value="0x${this.toHex(word)}" @input=${this.changeMemory(index)} @blur=${this.blurMemory(index)}></li>
+                        ` : html``
                     )}
                   </ul>
                 </div>
