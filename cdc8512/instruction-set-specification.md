@@ -312,7 +312,7 @@ Result: Mode = 2, CPU halted
 **Example**:
 ```
 Assembly: SET A0, 32
-Binary: 0x80 0x20 (SET A0 + immediate 32)
+Binary: 10000000 00100000 (SET A0 + immediate 32)
 Result: Mode = 3, CPU halted
 ```
 
@@ -321,14 +321,14 @@ Result: Mode = 3, CPU halted
 #### Test Invalid Instruction (Mode 1)
 ```
 Assembly:
-SET X0, 0x00    ; Valid instruction
-0xFF            ; Invalid instruction (triggers error)
+SET X0, 00000000    ; Valid instruction
+11111111            ; Invalid instruction (triggers error)
 HALT
 
 Binary:
-0x80 0x00       ; SET X0, 0
-0xFF            ; Invalid instruction
-0x00            ; HALT (never reached)
+10000000 00000000       ; SET X0, 0
+11111111            ; Invalid instruction
+00000000            ; HALT (never reached)
 ```
 
 #### Test Jump Address Out of Range (Mode 2)
@@ -336,12 +336,12 @@ Binary:
 Assembly:
 SET X0, 0       ; Set X0 to 0
 CMP X0, 0       ; Compare X0 to 0 (sets CMP to "=")
-JE 0x20         ; Jump to address 32 (out of range)
+JE 00100000         ; Jump to address 32 (out of range)
 
 Binary:
-0x80 0x00       ; SET X0, 0
-0x81 0x00       ; CMP X0, 0
-0xA0 0x20       ; JE 32 (triggers error)
+10000000 00000000       ; SET X0, 0
+10000001 00000000       ; CMP X0, 0
+10100000 00100000       ; JE 32 (triggers error)
 ```
 
 #### Test A Register Address Out of Range (Mode 3)
@@ -350,7 +350,7 @@ Assembly:
 SET A0, 32      ; Set A0 to 32 (out of range)
 
 Binary:
-0x80 0x20       ; SET A0, 32 (triggers error)
+10000000 00100000       ; SET A0, 32 (triggers error)
 ```
 
 ### Visual Error Indication

@@ -101,7 +101,7 @@ cpu.a2 = 0x0D;  // Store 0x55 to memory[0x0D]
 - **A2/A3 Changes**: Should immediately store values from X2/X3 into memory
 - **Register Updates**: Should immediately reflect in the UI
 - **Memory Updates**: Should immediately reflect in the memory display
-- **Hex Display**: All values should display in hex format (0x00 to 0xFF)
+- **Binary Display**: All values should display in binary format (00000000 to 11111111)
 - **Hardware Emulation**: Load/store operations work exactly like CDC 6500 addressing
 
 ## Important Notes
