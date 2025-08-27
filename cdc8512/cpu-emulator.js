@@ -84,7 +84,7 @@ class CDC8512Emulator {
             
                     // Calculate instruction size
         if (instruction === 'SET' || instruction === 'CMP' || instruction === 'ADD' || instruction === 'SUB' ||
-            instruction === 'JE' || instruction === 'JL' || instruction === 'JG') {
+            instruction === 'JE' || instruction === 'JL' || instruction === 'JG' || instruction === 'JP') {
             address += 2; // 16-bit instructions
         } else if (instruction === 'INC' || instruction === 'ZERO' || instruction === 'PS' || instruction === 'HALT' ||
                    instruction === 'MOV' || instruction === 'CMPZ') {
@@ -203,6 +203,12 @@ class CDC8512Emulator {
                 const labelOrValue = parts[1];
                 const value = this.resolveLabelOrValue(labelOrValue, labels);
                 this.cpu.instructions[address] = 0xA2; // JG opcode (10100010)
+                this.cpu.instructions[address + 1] = value;
+                address += 2;
+            } else if (instruction === 'JP') {
+                const labelOrValue = parts[1];
+                const value = this.resolveLabelOrValue(labelOrValue, labels);
+                this.cpu.instructions[address] = 0xA3; // JP opcode (10100011)
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
             } else if (instruction === 'MOV') {
@@ -356,9 +362,16 @@ class CDC8512Emulator {
             } else if (opcode === 0x01) { // CMPZ (01001rrr) - opcode 001 in bits 5-3
                 console.log(`  Executing: CMPZ ${regName}`);
                 const value = this.cpu[regName];
-                this.cpu.comparison = value === 0 ? '=' : value < 0 ? '<' : '>';
+                const newComparison = value === 0 ? '=' : value < 0 ? '<' : '>';
+                this.cpu.comparison = newComparison;
                 console.log(`CMPZ ${regName}: ${value} vs 0 = ${this.cpu.comparison}`);
-                this.cpu.requestUpdate(); // Force UI update for comparison register
+                // Force a complete re-render to ensure comparison register updates
+                this.cpu.requestUpdate();
+                // Also try to directly update the dropdown element
+                const cmpSelect = this.cpu.shadowRoot?.querySelector('select[class*="form-control"]');
+                if (cmpSelect) {
+                    cmpSelect.value = newComparison;
+                }
                 result = `CMPZ ${regName}`;
             } else if (opcode === 0x02) { // INC (01010rrr) - opcode 010 in bits 5-3
                 console.log(`  Executing: INC ${regName}`);
@@ -398,10 +411,10 @@ class CDC8512Emulator {
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
             const regName = this.getRegisterName(register);
             
-            console.log(`DEBUG DECODE: instruction=0x${instruction.toString(16).padStart(2, '0')} (${instruction.toString(2).padStart(8, '0')})`);
-            console.log(`DEBUG DECODE: (instruction >> 3) = ${(instruction >> 3)} (${(instruction >> 3).toString(2).padStart(8, '0')})`);
-            console.log(`DEBUG DECODE: opcode = ${opcode} (${opcode.toString(2).padStart(8, '0')})`);
-            console.log(`DEBUG DECODE: register = ${register} (${register.toString(2).padStart(8, '0')})`);
+            // console.log(`DEBUG DECODE: instruction=0x${instruction.toString(16).padStart(2, '0')} (${instruction.toString(2).padStart(8, '0')})`);
+            // console.log(`DEBUG DECODE: (instruction >> 3) = ${(instruction >> 3)} (${(instruction >> 3).toString(2).padStart(8, '0')})`);
+            // console.log(`DEBUG DECODE: opcode = ${opcode} (${opcode.toString(2).padStart(8, '0')})`);
+            // console.log(`DEBUG DECODE: register = ${register} (${register.toString(2).padStart(8, '0')})`);
             
             console.log(`  Decoded: opcode=${opcode}, register=${register}(${regName}), immediate=${immediate}`);
             
@@ -437,9 +450,16 @@ class CDC8512Emulator {
             } else if (opcode === 0x01) { // CMP
                 console.log(`  Executing: CMP ${regName}, ${immediate}`);
                 const value = this.cpu[regName];
-                this.cpu.comparison = value === immediate ? '=' : value < immediate ? '<' : '>';
+                const newComparison = value === immediate ? '=' : value < immediate ? '<' : '>';
+                this.cpu.comparison = newComparison;
                 console.log(`CMP ${regName}: ${value} vs ${immediate} = ${this.cpu.comparison}`);
-                this.cpu.requestUpdate(); // Force UI update for comparison register
+                // Force a complete re-render to ensure comparison register updates
+                this.cpu.requestUpdate();
+                // Also try to directly update the dropdown element
+                const cmpSelect = this.cpu.shadowRoot?.querySelector('select[class*="form-control"]');
+                if (cmpSelect) {
+                    cmpSelect.value = newComparison;
+                }
                 result = `CMP ${regName}, ${immediate}`;
             } else if (opcode === 0x02) { // ADD
                 console.log(`  Executing: ADD ${regName}, ${immediate}`);
@@ -466,6 +486,10 @@ class CDC8512Emulator {
                     shouldJump = this.cpu.comparison === '>';
                     console.log(`JG ${immediate}: comparison=${this.cpu.comparison}, shouldJump=${shouldJump}`);
                     result = `JG ${immediate}`;
+                } else if (jumpType === 0x03) { // JP (10100011) - Unconditional jump
+                    shouldJump = true; // Always jump
+                    console.log(`JP ${immediate}: unconditional jump`);
+                    result = `JP ${immediate}`;
                 }
                 
                 if (shouldJump) {

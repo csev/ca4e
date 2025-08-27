@@ -214,6 +214,7 @@
                     
                     if (value === 'hello') {
                         emulator.loadHelloProgram();
+                        enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
                         document.getElementById('assembly-input').value = `SET X2, 72
 SET A2, 0
@@ -230,6 +231,7 @@ HALT`;
                         updateTrace();
                     } else if (value === 'hello-world') {
                         emulator.loadHelloWorldProgram();
+                        enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
                         document.getElementById('assembly-input').value = `PS
 HALT
@@ -244,11 +246,12 @@ loop:
 CMP X0, 5
 JE end
 INC X0
-JL loop
+JP loop
 end:
 HALT`;
                         emulator.reset();
                         emulator.loadProgram(labelsDemo);
+                        enableStepButton(); // Re-enable step button after loading program
                         document.getElementById('assembly-input').value = labelsDemo;
                         updateStatus();
                         updateTrace();
@@ -272,6 +275,7 @@ HALT`;
                         try {
                             emulator.reset();
                             emulator.loadProgram(assemblyCode);
+                            enableStepButton(); // Re-enable step button after assembly
                             updateStatus();
                             updateTrace();
                             updateOutput();
@@ -354,6 +358,7 @@ HALT`;
                 
                 document.getElementById('reset').addEventListener('click', () => {
                     emulator.reset();
+                    enableStepButton(); // Re-enable step button after reset
                     updateStatus();
                     updateTrace();
                     updateOutput();
@@ -363,6 +368,9 @@ HALT`;
                     const result = emulator.step();
                     if (result) {
                         console.log('Step result:', result);
+                    } else {
+                        // CPU halted, disable step button
+                        document.getElementById('step').disabled = true;
                     }
                     updateStatus();
                     updateTrace();
@@ -388,13 +396,17 @@ HALT`;
                         
                         // Set up a timer to update the UI during continuous execution
                         const updateInterval = setInterval(() => {
-                                                    if (!emulator.getStatus().running) {
-                            clearInterval(updateInterval);
-                            startButton.textContent = 'Start';
-                            startButton.classList.remove('running');
-                            updateStatus();
-                            updateTrace();
-                            updateOutput();
+                            if (!emulator.getStatus().running) {
+                                clearInterval(updateInterval);
+                                startButton.textContent = 'Start';
+                                startButton.classList.remove('running');
+                                // Check if CPU halted and disable step button if so
+                                if (emulator.getStatus().halted) {
+                                    document.getElementById('step').disabled = true;
+                                }
+                                updateStatus();
+                                updateTrace();
+                                updateOutput();
                             } else {
                                 updateStatus();
                                 updateTrace();
@@ -403,6 +415,11 @@ HALT`;
                         }, 100); // Update UI every 100ms during execution
                     }
                 });
+                
+                // Enable step button
+                function enableStepButton() {
+                    document.getElementById('step').disabled = false;
+                }
                 
                 // Update functions
                 function updateStatus() {
