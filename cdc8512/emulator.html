@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDC8512 CPU Emulator</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #1e1e1e;
+            color: #ffffff;
+            margin: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #444;
+            padding-bottom: 10px;
+        }
+        
+        .cpu-display {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .registers, .memory, .controls, .output {
+            background-color: #2d2d2d;
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        
+        .section-title {
+            font-weight: bold;
+            color: #00ff00;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #555;
+            padding-bottom: 5px;
+        }
+        
+        .register-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        
+        .register {
+            background-color: #3d3d3d;
+            padding: 8px;
+            border-radius: 3px;
+            text-align: center;
+        }
+        
+        .register-label {
+            font-size: 12px;
+            color: #aaa;
+            margin-bottom: 5px;
+        }
+        
+        .register-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #00ff00;
+        }
+        
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(16, 1fr);
+            gap: 2px;
+            font-size: 10px;
+        }
+        
+        .memory-cell {
+            background-color: #3d3d3d;
+            padding: 4px;
+            text-align: center;
+            border-radius: 2px;
+        }
+        
+        .memory-cell.highlighted {
+            background-color: #006600;
+        }
+        
+        .memory-cell.instruction {
+            background-color: #660066;
+        }
+        
+        .memory-cell.data {
+            background-color: #666600;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            background-color: #0066cc;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        
+        button:hover {
+            background-color: #0088ff;
+        }
+        
+        button:disabled {
+            background-color: #444;
+            cursor: not-allowed;
+        }
+        
+        .clock-display {
+            font-size: 18px;
+            font-weight: bold;
+            color: #00ff00;
+            margin: 0 20px;
+        }
+        
+        .output-area {
+            background-color: #000;
+            border: 1px solid #555;
+            padding: 10px;
+            min-height: 100px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+        }
+        
+        .status {
+            color: #ffff00;
+            font-weight: bold;
+        }
+        
+        .instruction-display {
+            background-color: #3d3d3d;
+            padding: 10px;
+            border-radius: 3px;
+            margin-top: 10px;
+        }
+        
+        .program-input {
+            width: 100%;
+            height: 100px;
+            background-color: #2d2d2d;
+            color: #fff;
+            border: 1px solid #555;
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CDC8512 CPU Emulator</h1>
+            <p>8-bit Machine Language Emulator with Visual Debugging</p>
+        </div>
+        
+        <div class="cpu-display">
+            <div class="registers">
+                <div class="section-title">CPU Registers</div>
+                <div class="register-grid">
+                    <div class="register">
+                        <div class="register-label">PC</div>
+                        <div class="register-value" id="pc">0x00</div>
+                    </div>
+                    <div class="register">
+                        <div class="register-label">CMP</div>
+                        <div class="register-value" id="cmp">=</div>
+                    </div>
+                    <div class="register">
+                        <div class="register-label">A0</div>
+                        <div class="register-value" id="a0">0x00</div>
+                    </div>
+                    <div class="register">
+                        <div class="register-label">A1</div>
+                        <div class="register-value" id="a1">0x00</div>
+                    </div>
+                    <div class="register">
+                        <div class="register-label">A2</div>
+                        <div class="register-value" id="a2">0x00</div>
+                    </div>
+                    <div class="register">
+                        <div class="register-label">A3</div>
+                        <div class="register-value" id="a3">0x00</div>
+                    </div>
+                    <div class="register">
+                        <div class="register-label">X0</div>
+                        <div class="register-value" id="x0">0x00</div>
+                    </div>
+                    <div class="register">
+                        <div class="register-label">X1</div>
+                        <div class="register-value" id="x1">0x00</div>
+                    </div>
+                    <div class="register">
+                        <div class="register-label">X2</div>
+                        <div class="register-value" id="x2">0x00</div>
+                    </div>
+                    <div class="register">
+                        <div class="register-label">X3</div>
+                        <div class="register-value" id="x3">0x00</div>
+                    </div>
+                </div>
+                <div class="instruction-display">
+                    <div class="section-title">Current Instruction</div>
+                    <div id="current-instruction">HALT</div>
+                </div>
+            </div>
+            
+            <div class="memory">
+                <div class="section-title">Memory (Instruction + Data)</div>
+                <div class="memory-grid" id="memory-grid"></div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="start-btn">Start</button>
+            <button id="stop-btn" disabled>Stop</button>
+            <button id="step-btn">Step</button>
+            <button id="reset-btn">Reset</button>
+            <button id="load-hello-btn">Load Hello Program</button>
+            <div class="clock-display" id="clock-display">0.5 Hz</div>
+            <div class="status" id="status">Ready</div>
+        </div>
+        
+        <div class="output">
+            <div class="section-title">Output</div>
+            <div class="output-area" id="output-area"></div>
+        </div>
+        
+        <div class="program-input">
+            <div class="section-title">Program Input (Assembly)</div>
+            <textarea id="program-input" placeholder="Enter assembly code here...">SET X2, 72
+SET A2, 0
+SET X2, 101
+INC A2
+SET X2, 108
+INC A2
+INC A2
+SET X2, 111
+INC A2
+PS
+HALT</textarea>
+            <button id="assemble-btn">Assemble & Load</button>
+        </div>
+    </div>
+
+    <script>
+        class CDC8512CPU {
+            constructor() {
+                this.reset();
+                this.clockInterval = null;
+                this.clockSpeed = 500; // 0.5 Hz = 500ms
+            }
+            
+            reset() {
+                this.pc = 0;
+                this.cmp = '=';
+                this.a0 = 0;
+                this.a1 = 0;
+                this.a2 = 0;
+                this.a3 = 0;
+                this.x0 = 0;
+                this.x1 = 0;
+                this.x2 = 0;
+                this.x3 = 0;
+                this.memory = new Array(256).fill(0);
+                this.running = false;
+                this.halted = false;
+            }
+            
+            // Register access methods
+            getRegister(name) {
+                return this[name];
+            }
+            
+            setRegister(name, value) {
+                this[name] = value & 0xFF; // 8-bit wrap
+            }
+            
+            // Memory access
+            readMemory(address) {
+                return this.memory[address & 0xFF];
+            }
+            
+            writeMemory(address, value) {
+                this.memory[address & 0xFF] = value & 0xFF;
+            }
+            
+            // Instruction decoding
+            decodeInstruction() {
+                const instruction = this.readMemory(this.pc);
+                const opcode = (instruction >> 6) & 0x03;
+                const register = instruction & 0x07;
+                
+                return { instruction, opcode, register };
+            }
+            
+            // Execute single instruction
+            execute() {
+                if (this.halted) return;
+                
+                const instruction = this.readMemory(this.pc);
+                
+                // Special instructions (00xxxxxx)
+                if ((instruction >> 6) === 0) {
+                    if (instruction === 0x00) {
+                        this.halted = true;
+                        this.pc++;
+                        return 'HALT';
+                    } else if (instruction === 0x01) {
+                        this.printString();
+                        this.pc++;
+                        return 'PS';
+                    }
+                }
+                
+                // Single register instructions (01xxxxxx)
+                if ((instruction >> 6) === 1) {
+                    const opcode = (instruction >> 3) & 0x07;
+                    const register = instruction & 0x07;
+                    const regName = this.getRegisterName(register);
+                    
+                    if (opcode === 0x00) { // INC
+                        this.setRegister(regName, this.getRegister(regName) + 1);
+                        this.pc++;
+                        return `INC ${regName}`;
+                    } else if (opcode === 0x01) { // DEC
+                        this.setRegister(regName, this.getRegister(regName) - 1);
+                        this.pc++;
+                        return `DEC ${regName}`;
+                    } else if (opcode === 0x02) { // CMPZ
+                        const value = this.getRegister(regName);
+                        this.cmp = value === 0 ? '=' : value < 0 ? '<' : '>';
+                        this.pc++;
+                        return `CMPZ ${regName}`;
+                    }
+                }
+                
+                // Immediate instructions (10xxxxxx) - 16-bit
+                if ((instruction >> 6) === 2) {
+                    const opcode = (instruction >> 3) & 0x07;
+                    const register = instruction & 0x07;
+                    const immediate = this.readMemory(this.pc + 1);
+                    const regName = this.getRegisterName(register);
+                    
+                    if (opcode === 0x00) { // SET
+                        this.setRegister(regName, immediate);
+                        this.pc += 2;
+                        return `SET ${regName}, ${immediate}`;
+                    } else if (opcode === 0x01) { // CMP
+                        const value = this.getRegister(regName);
+                        this.cmp = value === immediate ? '=' : value < immediate ? '<' : '>';
+                        this.pc += 2;
+                        return `CMP ${regName}, ${immediate}`;
+                    } else if (opcode === 0x02) { // ADD
+                        this.setRegister(regName, this.getRegister(regName) + immediate);
+                        this.pc += 2;
+                        return `ADD ${regName}, ${immediate}`;
+                    } else if (opcode === 0x03) { // SUB
+                        this.setRegister(regName, this.getRegister(regName) - immediate);
+                        this.pc += 2;
+                        return `SUB ${regName}, ${immediate}`;
+                    }
+                }
+                
+                // Register copy instructions (11xxxxxx)
+                if ((instruction >> 6) === 3) {
+                    const destReg = (instruction >> 3) & 0x07;
+                    const srcReg = instruction & 0x07;
+                    const destName = this.getRegisterName(destReg);
+                    const srcName = this.getRegisterName(srcReg);
+                    this.setRegister(destName, this.getRegister(srcName));
+                    this.pc++;
+                    return `MOV ${destName}, ${srcName}`;
+                }
+                
+                // Unknown instruction
+                this.pc++;
+                return 'NOP';
+            }
+            
+            getRegisterName(reg) {
+                const names = ['a0', 'a1', 'a2', 'a3', 'x0', 'x1', 'x2', 'x3'];
+                return names[reg];
+            }
+            
+            printString() {
+                let output = '';
+                let addr = 0;
+                while (addr < 256) {
+                    const char = this.readMemory(addr);
+                    if (char === 0) break;
+                    output += String.fromCharCode(char);
+                    addr++;
+                }
+                this.output += output + '\n';
+            }
+            
+            // Assembly parser
+            assemble(assembly) {
+                const lines = assembly.split('\n').map(line => line.trim()).filter(line => line);
+                let address = 0;
+                
+                for (const line of lines) {
+                    const parts = line.split(';')[0].trim().split(/\s+/);
+                    const instruction = parts[0].toUpperCase();
+                    
+                    if (instruction === 'SET') {
+                        const reg = parts[1];
+                        const value = parseInt(parts[2]);
+                        const regNum = this.parseRegister(reg);
+                        this.memory[address] = 0x80 | regNum; // SET opcode (10xxxxxx)
+                        this.memory[address + 1] = value;
+                        address += 2;
+                    } else if (instruction === 'INC') {
+                        const reg = parts[1];
+                        const regNum = this.parseRegister(reg);
+                        this.memory[address] = 0x40 | regNum; // INC opcode (01xxxxxx)
+                        address += 1;
+                    } else if (instruction === 'DEC') {
+                        const reg = parts[1];
+                        const regNum = this.parseRegister(reg);
+                        this.memory[address] = 0x40 | (0x08 | regNum); // DEC opcode (01xxxxxx)
+                        address += 1;
+                    } else if (instruction === 'PS') {
+                        this.memory[address] = 0x01; // PS opcode (00xxxxxx)
+                        address += 1;
+                    } else if (instruction === 'HALT') {
+                        this.memory[address] = 0x00; // HALT opcode (00xxxxxx)
+                        address += 1;
+                    }
+                }
+            }
+            
+            parseRegister(reg) {
+                const regMap = {
+                    'A0': 0, 'A1': 1, 'A2': 2, 'A3': 3,
+                    'X0': 4, 'X1': 5, 'X2': 6, 'X3': 7
+                };
+                return regMap[reg.toUpperCase()] || 0;
+            }
+        }
+        
+        // UI Controller
+        class EmulatorUI {
+            constructor() {
+                this.cpu = new CDC8512CPU();
+                this.output = '';
+                this.setupEventListeners();
+                this.updateDisplay();
+            }
+            
+            setupEventListeners() {
+                document.getElementById('start-btn').addEventListener('click', () => this.start());
+                document.getElementById('stop-btn').addEventListener('click', () => this.stop());
+                document.getElementById('step-btn').addEventListener('click', () => this.step());
+                document.getElementById('reset-btn').addEventListener('click', () => this.reset());
+                document.getElementById('load-hello-btn').addEventListener('click', () => this.loadHelloProgram());
+                document.getElementById('assemble-btn').addEventListener('click', () => this.assembleAndLoad());
+            }
+            
+            start() {
+                if (this.cpu.halted) return;
+                
+                this.cpu.running = true;
+                document.getElementById('start-btn').disabled = true;
+                document.getElementById('stop-btn').disabled = false;
+                document.getElementById('step-btn').disabled = true;
+                document.getElementById('status').textContent = 'Running';
+                
+                this.cpu.clockInterval = setInterval(() => {
+                    if (this.cpu.halted) {
+                        this.stop();
+                        return;
+                    }
+                    this.step();
+                }, this.cpu.clockSpeed);
+            }
+            
+            stop() {
+                this.cpu.running = false;
+                if (this.cpu.clockInterval) {
+                    clearInterval(this.cpu.clockInterval);
+                    this.cpu.clockInterval = null;
+                }
+                document.getElementById('start-btn').disabled = false;
+                document.getElementById('stop-btn').disabled = true;
+                document.getElementById('step-btn').disabled = false;
+                document.getElementById('status').textContent = this.cpu.halted ? 'Halted' : 'Stopped';
+            }
+            
+            step() {
+                if (this.cpu.halted) return;
+                
+                const instruction = this.cpu.execute();
+                this.output += `PC=${this.cpu.pc.toString(16).padStart(2, '0')}: ${instruction}\n`;
+                this.updateDisplay();
+            }
+            
+            reset() {
+                this.stop();
+                this.cpu.reset();
+                this.output = '';
+                this.updateDisplay();
+                document.getElementById('status').textContent = 'Ready';
+            }
+            
+            loadHelloProgram() {
+                const helloProgram = `SET X2, 72
+SET A2, 0
+SET X2, 101
+INC A2
+SET X2, 108
+INC A2
+INC A2
+SET X2, 111
+INC A2
+PS
+HALT`;
+                document.getElementById('program-input').value = helloProgram;
+                this.assembleAndLoad();
+            }
+            
+            assembleAndLoad() {
+                this.reset();
+                const assembly = document.getElementById('program-input').value;
+                this.cpu.assemble(assembly);
+                this.updateDisplay();
+                document.getElementById('status').textContent = 'Program loaded';
+            }
+            
+            updateDisplay() {
+                // Update registers
+                document.getElementById('pc').textContent = `0x${this.cpu.pc.toString(16).padStart(2, '0')}`;
+                document.getElementById('cmp').textContent = this.cpu.cmp;
+                document.getElementById('a0').textContent = `0x${this.cpu.a0.toString(16).padStart(2, '0')}`;
+                document.getElementById('a1').textContent = `0x${this.cpu.a1.toString(16).padStart(2, '0')}`;
+                document.getElementById('a2').textContent = `0x${this.cpu.a2.toString(16).padStart(2, '0')}`;
+                document.getElementById('a3').textContent = `0x${this.cpu.a3.toString(16).padStart(2, '0')}`;
+                document.getElementById('x0').textContent = `0x${this.cpu.x0.toString(16).padStart(2, '0')}`;
+                document.getElementById('x1').textContent = `0x${this.cpu.x1.toString(16).padStart(2, '0')}`;
+                document.getElementById('x2').textContent = `0x${this.cpu.x2.toString(16).padStart(2, '0')}`;
+                document.getElementById('x3').textContent = `0x${this.cpu.x3.toString(16).padStart(2, '0')}`;
+                
+                // Update current instruction
+                if (!this.cpu.halted) {
+                    const instruction = this.cpu.readMemory(this.cpu.pc);
+                    document.getElementById('current-instruction').textContent = 
+                        `0x${instruction.toString(16).padStart(2, '0')}`;
+                } else {
+                    document.getElementById('current-instruction').textContent = 'HALTED';
+                }
+                
+                // Update memory display
+                this.updateMemoryDisplay();
+                
+                // Update output
+                document.getElementById('output-area').textContent = this.output;
+            }
+            
+            updateMemoryDisplay() {
+                const grid = document.getElementById('memory-grid');
+                grid.innerHTML = '';
+                
+                for (let i = 0; i < 256; i++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'memory-cell';
+                    cell.textContent = this.cpu.memory[i].toString(16).padStart(2, '0');
+                    
+                    if (i === this.cpu.pc) {
+                        cell.classList.add('highlighted');
+                    }
+                    
+                    if (i < 32) {
+                        cell.classList.add('instruction');
+                    } else {
+                        cell.classList.add('data');
+                    }
+                    
+                    grid.appendChild(cell);
+                }
+            }
+        }
+        
+        // Initialize the emulator
+        const emulator = new EmulatorUI();
+    </script>
+</body>
+</html>
