@@ -59,9 +59,7 @@ export class CDC8512CPU extends LitElement {
     window.addEventListener('resize', this.handleResize.bind(this));
   }
 
-  toggleRunning() {
-    this.running = !this.running; 
-  }
+
 
   changeInstruction(index) {
     return (e) => {
@@ -364,11 +362,6 @@ export class CDC8512CPU extends LitElement {
 
   render() {
     return html`
-        <i class="fas fa-cog ${this.running ? "fa-spin" : "" }"></i>
-        <button class="btn btn-primary"
-            @click=${this.toggleRunning}>
-          ${this.running ? msg("Stop") : msg("Start")}
-        </button>
           <div class="container">
               
               <!-- Register Section -->
