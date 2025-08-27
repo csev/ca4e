@@ -292,64 +292,105 @@ export class CDC8512CPU extends LitElement {
     return '?';
   }
 
-  createRenderRoot() { return this;}
+
 
   static get styles() {
     return css`
       :host {
         --breakpoint-width: 1000px;
+        display: block;
+        font-family: Arial, sans-serif;
+      }
+      
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      
+      .mb-3 {
+        margin-bottom: 1rem;
+      }
+      
+      .text-muted {
+        color: #6c757d;
+        font-size: 0.875rem;
+      }
+      
+      .font-monospace {
+        font-family: 'Courier New', Courier, monospace;
       }
       
       .register-input {
         min-width: 4ch !important;
         width: 4ch !important;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+        font-family: 'Courier New', Courier, monospace;
       }
       
-      .registers-container {
-        display: flex;
-        flex-direction: row;
-        gap: 1rem;
-        border: 2px solid orange;
-        padding: 10px;
-      }
-      
-      .instructions-memory-container {
-        display: flex;
-        flex-direction: row;
-        gap: 1rem;
-        border: 2px solid red;
-        min-height: 200px;
-      }
-      
-      .instructions-column {
-        flex: 1;
-        border: 1px solid blue;
-        background-color: #f0f0f0;
-      }
-      
-      .memory-column {
-        flex: 1;
-        border: 1px solid green;
-        background-color: #f0f0f0;
-      }
-      
-      .instructions-list, .memory-list {
-        max-height: none;
-        overflow: visible;
-      }
-      
-      .desktop-only {
+      .form-control {
         display: block;
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: 0.375rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+      }
+      
+      .form-control-sm {
+        min-height: calc(1.5em + 0.5rem + 2px);
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+        border-radius: 0.25rem;
+      }
+      
+      .bg-warning {
+        background-color: #ffc107 !important;
+        color: #000 !important;
+        font-weight: bold;
+      }
+      
+      ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      li {
+        margin-bottom: 2px;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.875rem;
+      }
+      
+      li input {
+        border: 1px solid #ced4da;
+        border-radius: 0.25rem;
+        padding: 2px 4px;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 0.875rem;
+      }
+      
+      p {
+        margin: 0 0 0.5rem 0;
+        font-weight: bold;
+      }
+      
+      strong {
+        font-weight: bold;
       }
       
       @media (max-width: 1000px) {
-        .registers-container {
-          flex-direction: column;
-          gap: 0.5rem;
-        }
-        
-        .desktop-only {
-          display: none;
+        .container {
+          padding: 10px;
         }
         
         .instructions-list, .memory-list {

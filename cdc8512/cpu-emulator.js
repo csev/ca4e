@@ -331,6 +331,7 @@ class CDC8512Emulator {
 
     // Load the Hello program
     loadHelloProgram() {
+        this.reset();
         const helloProgram = `SET X2, 72
 SET A2, 0
 SET X2, 101
@@ -347,6 +348,7 @@ HALT`;
 
     // Load the Hello World program using DATA instruction
     loadHelloWorldProgram() {
+        this.reset();
         const helloWorldProgram = `PS
 HALT
 DATA 'Hello World!'`;
