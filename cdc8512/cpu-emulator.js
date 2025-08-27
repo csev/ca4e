@@ -48,6 +48,7 @@ class CDC8512Emulator {
     loadProgram(assembly) {
         const lines = assembly.split('\n').map(line => line.trim()).filter(line => line);
         let address = 0;
+        let inDataSegment = false;
         
         for (const line of lines) {
             const parts = line.split(';')[0].trim().split(/\s+/);
@@ -56,6 +57,32 @@ class CDC8512Emulator {
             // Clean up register names by removing commas
             if (parts.length > 1) {
                 parts[1] = parts[1].replace(',', '');
+            }
+            
+            if (instruction === 'DATA') {
+                // Start data segment
+                inDataSegment = true;
+                this.cpu.instructions[address] = 0x0F; // 00001111 - DATA marker
+                address += 1;
+                
+                // Extract string from quotes
+                const match = line.match(/DATA\s+'([^']*)'/);
+                if (match) {
+                    const str = match[1];
+                    console.log(`Loading data string: "${str}"`);
+                    
+                    // Load string into data memory starting at address 0
+                    for (let i = 0; i < str.length; i++) {
+                        this.cpu.memory[i] = str.charCodeAt(i);
+                    }
+                    this.cpu.memory[str.length] = 0; // null terminator
+                }
+                continue;
+            }
+            
+            if (inDataSegment) {
+                // We're in data segment, skip this line
+                continue;
             }
             
             if (instruction === 'SET') {
@@ -87,6 +114,7 @@ class CDC8512Emulator {
         }
         
         this.cpu.requestUpdate();
+        console.log('Data memory:', this.cpu.memory.slice(0, 20));
     }
 
     // Parse register name to number
@@ -315,6 +343,14 @@ INC A2
 PS
 HALT`;
         this.loadProgram(helloProgram);
+    }
+
+    // Load the Hello World program using DATA instruction
+    loadHelloWorldProgram() {
+        const helloWorldProgram = `PS
+HALT
+DATA 'Hello World!'`;
+        this.loadProgram(helloWorldProgram);
     }
 
     // Get execution status

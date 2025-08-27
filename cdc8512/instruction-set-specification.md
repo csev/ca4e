@@ -31,6 +31,7 @@ The CDC8512 is an 8-bit machine language emulator with a Harvard architecture fe
 #### Special Instructions (00xxxxxx)
 - `00000000` - HALT - Stop execution
 - `00000001` - PS - Print data area as zero-terminated character string on a single line
+- `00001111` - DATA - When loading, the following bytes are to be copied into the data memory starting at the zero address - loading is terminated by a zero byte
 
 #### Single Register Instructions (01xxxxxx)
 - `01000rrr` - INC rrr - Increment A or X register
@@ -92,6 +93,12 @@ HALT        # Stop Execution
 - **Semantics**: Print data memory as null-terminated string
 - **Assembly**: `PS`
 - **Description**: Outputs characters from data memory starting at address 0 until a null terminator (0) is encountered
+
+#### DATA (00001111)
+- **Size**: Variable (8-bit opcode + string data + null terminator)
+- **Semantics**: Load string data into memory starting at address 0
+- **Assembly**: `DATA 'string'`
+- **Description**: During program loading, copies the specified string (including null terminator) into data memory starting at address 0. This instruction is processed during loading and does not execute during runtime.
 
 ### Single Register Instructions (01xxxxxx)
 
@@ -222,6 +229,37 @@ Address | Binary          | Assembly              | Description
 0x0D    | 01000010        | INC A2               | Increment A2 to 4
 0x0E    | 00000001        | PS                   | Print string
 0x0F    | 00000000        | HALT                 | Stop execution
+```
+
+## Program Example: "Hello World" Demonstating the data segment
+
+Assembly
+```
+PS            ; Print string from memory
+HALT          ; Stop execution
+DATA  'Hello World!'
+```
+
+Binary
+```
+Address | Binary          | Assembly              | Description
+--------|-----------------|----------------------|------------
+0x00    | 00000001        | PS                   | Print string from memory
+0x01    | 00000000        | HALT                 | Stop execution
+0x02    | 00001111        | DATA 'Hello World!'  | Data segment marker
+0x03    | 01001000        | 'H' (72)             | ASCII 'H'
+0x04    | 01100101        | 'e' (101)            | ASCII 'e'
+0x05    | 01101100        | 'l' (108)            | ASCII 'l'
+0x06    | 01101100        | 'l' (108)            | ASCII 'l'
+0x07    | 01101111        | 'o' (111)            | ASCII 'o'
+0x08    | 00100000        | ' ' (32)             | ASCII space
+0x09    | 01010111        | 'W' (87)             | ASCII 'W'
+0x0A    | 01101111        | 'o' (111)            | ASCII 'o'
+0x0B    | 01110010        | 'r' (114)            | ASCII 'r'
+0x0C    | 01101100        | 'l' (108)            | ASCII 'l'
+0x0D    | 01100100        | 'd' (100)            | ASCII 'd'
+0x0E    | 00100001        | '!' (33)             | ASCII '!'
+0x0F    | 00000000        | null terminator      | End of string
 ```
 
 ## Implementation Notes

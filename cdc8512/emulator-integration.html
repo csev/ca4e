@@ -109,6 +109,7 @@
             <div class="control-group">
                 <h3>Program Control</h3>
                 <button id="load-hello">Load Hello Program</button>
+                <button id="load-hello-world">Load Hello World Program</button>
                 <button id="reset">Reset CPU</button>
                 <button id="step">Step</button>
                 <button id="start">Start (0.5 Hz)</button>
@@ -153,6 +154,13 @@
                     emulator.loadHelloProgram();
                     updateStatus();
                     updateTrace();
+                });
+
+                document.getElementById('load-hello-world').addEventListener('click', () => {
+                    emulator.loadHelloWorldProgram();
+                    updateStatus();
+                    updateTrace();
+                    updateOutput();
                 });
                 
                 document.getElementById('reset').addEventListener('click', () => {
