@@ -182,7 +182,8 @@ class CDC8512Emulator {
                 const reg = parts[1];
                 const value = this.parseValue(parts[2]);
                 const regNum = this.parseRegister(reg);
-                const opcode = 0x81 | regNum; // CMP opcode (10001rrr)
+                const opcode = 0x88 | regNum; // CMP opcode (10001rrr)
+                console.log(`Assembling CMP ${reg}, ${value}: regNum=${regNum}, opcode=0x${opcode.toString(16).padStart(2, '0')} (${opcode.toString(2).padStart(8, '0')})`);
                 this.cpu.instructions[address] = opcode;
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
@@ -305,10 +306,13 @@ class CDC8512Emulator {
         
         // Special instructions (00xxxxxx)
         if ((instruction >> 6) === 0) {
+            console.log(`DECISION: Special instruction path - instruction=0x${instruction.toString(16).padStart(2, '0')}`);
             if (instruction === 0x00) {
+                console.log(`  Executing: HALT`);
                 this.running = false;
                 result = 'HALT';
             } else if (instruction === 0x01) {
+                console.log(`  Executing: PS`);
                 this.printString();
                 result = 'PS';
             }
@@ -316,11 +320,14 @@ class CDC8512Emulator {
         }
         // Single register instructions (01xxxxxx)
         else if ((instruction >> 6) === 1) {
+            console.log(`DECISION: Single register instruction path - instruction=0x${instruction.toString(16).padStart(2, '0')}`);
             const opcode = (instruction >> 3) & 0x07;
             const register = instruction & 0x07;
             const regName = this.getRegisterName(register);
+            console.log(`  Decoded: opcode=${opcode}, register=${register}(${regName})`);
             
             if (opcode === 0x00) { // ZERO (01000rrr) - opcode 000 in bits 5-3
+                console.log(`  Executing: ZERO ${regName}`);
                 this.cpu[regName] = 0;
                 
                 // Check A register addresses for out of range errors
@@ -347,10 +354,14 @@ class CDC8512Emulator {
                 
                 result = `ZERO ${regName}`;
             } else if (opcode === 0x01) { // CMPZ (01001rrr) - opcode 001 in bits 5-3
+                console.log(`  Executing: CMPZ ${regName}`);
                 const value = this.cpu[regName];
                 this.cpu.comparison = value === 0 ? '=' : value < 0 ? '<' : '>';
+                console.log(`CMPZ ${regName}: ${value} vs 0 = ${this.cpu.comparison}`);
+                this.cpu.requestUpdate(); // Force UI update for comparison register
                 result = `CMPZ ${regName}`;
             } else if (opcode === 0x02) { // INC (01010rrr) - opcode 010 in bits 5-3
+                console.log(`  Executing: INC ${regName}`);
                 this.cpu[regName] = (this.cpu[regName] + 1) & 0xFF;
                 
                 // Check A register addresses for out of range errors
@@ -381,14 +392,23 @@ class CDC8512Emulator {
         }
         // Immediate instructions (10xxxxxx) - 16-bit
         else if ((instruction >> 6) === 2) {
+            console.log(`DECISION: Immediate instruction path - instruction=0x${instruction.toString(16).padStart(2, '0')}`);
             const opcode = (instruction >> 3) & 0x07;
             const register = instruction & 0x07;
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
             const regName = this.getRegisterName(register);
             
-            console.log(`16-bit instruction: opcode=${opcode}, register=${register}(${regName}), immediate=${immediate}`);
+            console.log(`DEBUG DECODE: instruction=0x${instruction.toString(16).padStart(2, '0')} (${instruction.toString(2).padStart(8, '0')})`);
+            console.log(`DEBUG DECODE: (instruction >> 3) = ${(instruction >> 3)} (${(instruction >> 3).toString(2).padStart(8, '0')})`);
+            console.log(`DEBUG DECODE: opcode = ${opcode} (${opcode.toString(2).padStart(8, '0')})`);
+            console.log(`DEBUG DECODE: register = ${register} (${register.toString(2).padStart(8, '0')})`);
             
+            console.log(`  Decoded: opcode=${opcode}, register=${register}(${regName}), immediate=${immediate}`);
+            
+            pcIncrement = 2; // 16-bit instruction
+
             if (opcode === 0x00) { // SET (10000rrr)
+                console.log(`  Executing: SET ${regName}, ${immediate}`);
                 this.cpu[regName] = immediate;
                 
                 // Check A register addresses for out of range errors
@@ -415,64 +435,65 @@ class CDC8512Emulator {
                 
                 result = `SET ${regName}, ${immediate}`;
             } else if (opcode === 0x01) { // CMP
+                console.log(`  Executing: CMP ${regName}, ${immediate}`);
                 const value = this.cpu[regName];
                 this.cpu.comparison = value === immediate ? '=' : value < immediate ? '<' : '>';
+                console.log(`CMP ${regName}: ${value} vs ${immediate} = ${this.cpu.comparison}`);
+                this.cpu.requestUpdate(); // Force UI update for comparison register
                 result = `CMP ${regName}, ${immediate}`;
             } else if (opcode === 0x02) { // ADD
+                console.log(`  Executing: ADD ${regName}, ${immediate}`);
                 this.cpu[regName] = (this.cpu[regName] + immediate) & 0xFF;
                 result = `ADD ${regName}, ${immediate}`;
             } else if (opcode === 0x03) { // SUB
+                console.log(`  Executing: SUB ${regName}, ${immediate}`);
                 this.cpu[regName] = (this.cpu[regName] - immediate) & 0xFF;
                 result = `SUB ${regName}, ${immediate}`;
-            }
-            pcIncrement = 2; // 16-bit instruction
-        }
-        // Jump instructions (101000xx) - 16-bit
-        else if ((instruction >> 6) === 2 && (instruction & 0x38) === 0x28) {
-            const jumpType = instruction & 0x03;
-            const jumpAddress = this.cpu.instructions[this.cpu.pc + 1];
-            
-            // Check if jump address is out of range
-            if (jumpAddress >= 32) {
-                console.log(`Jump address out of range: 0x${jumpAddress.toString(16).padStart(2, '0')}`);
-                this.running = false;
-                this.cpu.mode = 2;
-                this.cpu.requestUpdate();
-                return 'ERROR: Jump address out of range';
-            }
-            
-            let shouldJump = false;
-            if (jumpType === 0x00) { // JE
-                shouldJump = this.cpu.comparison === '=';
-                result = `JE ${jumpAddress}`;
-            } else if (jumpType === 0x01) { // JL
-                shouldJump = this.cpu.comparison === '<';
-                result = `JL ${jumpAddress}`;
-            } else if (jumpType === 0x02) { // JG
-                shouldJump = this.cpu.comparison === '>';
-                result = `JG ${jumpAddress}`;
-            }
-            
-            if (shouldJump) {
-                this.cpu.pc = jumpAddress;
-                pcIncrement = 0; // PC already set
-            } else {
-                pcIncrement = 2; // Skip the immediate byte
+            } else if ((instruction >> 3) === 0x14) { // Jump instructions (101000xx) - opcode 10100 in bits 7-3
+                const jumpType = instruction & 0x03; // Get jump type from bits 1-0
+                console.log(`Jump instruction decode: instruction=0x${instruction.toString(16).padStart(2, '0')}, opcode=0x${opcode.toString(16).padStart(2, '0')}, jumpType=${jumpType}, immediate=${immediate}`);
+                
+                let shouldJump = false;
+                if (jumpType === 0x00) { // JE (10100000)
+                    shouldJump = this.cpu.comparison === '=';
+                    console.log(`JE ${immediate}: comparison=${this.cpu.comparison}, shouldJump=${shouldJump}`);
+                    result = `JE ${immediate}`;
+                } else if (jumpType === 0x01) { // JL (10100001)
+                    shouldJump = this.cpu.comparison === '<';
+                    console.log(`JL ${immediate}: comparison=${this.cpu.comparison}, shouldJump=${shouldJump}`);
+                    result = `JL ${immediate}`;
+                } else if (jumpType === 0x02) { // JG (10100010)
+                    shouldJump = this.cpu.comparison === '>';
+                    console.log(`JG ${immediate}: comparison=${this.cpu.comparison}, shouldJump=${shouldJump}`);
+                    result = `JG ${immediate}`;
+                }
+                
+                if (shouldJump) {
+                    console.log(`JUMP: JUMPING to address ${immediate} (PC was ${this.cpu.pc})`);
+                    this.cpu.pc = immediate;
+                    pcIncrement = 0; // PC already set
+                } else {
+                    console.log(`JUMP: NOT jumping, continuing to next instruction (PC += 2)`);
+                    pcIncrement = 2; // Skip the immediate byte
+                }
             }
         }
         // Register copy instructions (11xxxxxx)
         else if ((instruction >> 6) === 3) {
+            console.log(`DECISION: Register copy instruction path - instruction=0x${instruction.toString(16).padStart(2, '0')}`);
             const destReg = (instruction >> 3) & 0x07;
             const srcReg = instruction & 0x07;
             const destName = this.getRegisterName(destReg);
             const srcName = this.getRegisterName(srcReg);
+            console.log(`  Decoded: dest=${destReg}(${destName}), src=${srcReg}(${srcName})`);
             this.cpu[destName] = this.cpu[srcName];
             result = `MOV ${destName}, ${srcName}`;
             pcIncrement = 1;
         }
         // Unknown instruction
         else {
-            console.log(`Unknown instruction: 0x${instruction.toString(16).padStart(2, '0')}`);
+            console.log(`DECISION: Unknown instruction path - instruction=0x${instruction.toString(16).padStart(2, '0')}`);
+            console.log(`  ERROR: Invalid instruction - halting CPU`);
             // Invalid instruction - halt CPU and set error mode
             this.running = false;
             this.cpu.mode = 1;
