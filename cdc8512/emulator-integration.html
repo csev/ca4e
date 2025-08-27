@@ -48,6 +48,28 @@
             cursor: not-allowed;
         }
         
+        .running {
+            background-color: #dc3545 !important;
+        }
+        
+        .running::after {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin-left: 6px;
+            border: 1px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        
         .status {
             font-weight: bold;
             color: #28a745;
@@ -90,23 +112,18 @@
                 <button id="reset">Reset CPU</button>
                 <button id="step">Step</button>
                 <button id="start">Start (0.5 Hz)</button>
-                <button id="stop">Stop</button>
             </div>
             
             <div class="control-group">
                 <h3>Status</h3>
                 <div id="status" class="status">Ready</div>
                 <div id="current-instruction">No instruction loaded</div>
+                <div id="output">Printed: No output yet</div>
             </div>
         </div>
         
         <!-- Your existing CDC8512 web component -->
         <cdc8512-cpu name="CA4E.com"></cdc8512-cpu>
-        
-        <div class="output">
-            <h3>Program Output</h3>
-            <div id="output">No output yet</div>
-        </div>
         
         <div class="trace">
             <h3>Execution Trace</h3>
@@ -156,13 +173,38 @@
                 });
                 
                 document.getElementById('start').addEventListener('click', () => {
-                    emulator.start();
-                    updateStatus();
-                });
-                
-                document.getElementById('stop').addEventListener('click', () => {
-                    emulator.stop();
-                    updateStatus();
+                    const startButton = document.getElementById('start');
+                    const status = emulator.getStatus();
+                    
+                    if (status.running) {
+                        // Currently running, so stop
+                        emulator.stop();
+                        startButton.textContent = 'Start (0.5 Hz)';
+                        startButton.classList.remove('running');
+                        updateStatus();
+                    } else {
+                        // Currently stopped, so start
+                        emulator.start();
+                        startButton.textContent = 'Stop';
+                        startButton.classList.add('running');
+                        updateStatus();
+                        
+                        // Set up a timer to update the UI during continuous execution
+                        const updateInterval = setInterval(() => {
+                                                    if (!emulator.getStatus().running) {
+                            clearInterval(updateInterval);
+                            startButton.textContent = 'Start (0.5 Hz)';
+                            startButton.classList.remove('running');
+                            updateStatus();
+                            updateTrace();
+                            updateOutput();
+                            } else {
+                                updateStatus();
+                                updateTrace();
+                                updateOutput();
+                            }
+                        }, 100); // Update UI every 100ms during execution
+                    }
                 });
                 
                 // Update functions
@@ -195,8 +237,9 @@
                 
                 function updateOutput() {
                     const status = emulator.getStatus();
+                    const outputText = status.output ? status.output.trim() : '';
                     document.getElementById('output').textContent = 
-                        status.output || 'No output yet';
+                        outputText ? `Printed: ${outputText}` : 'Printed: No output yet';
                 }
                 
                 // Initial status update

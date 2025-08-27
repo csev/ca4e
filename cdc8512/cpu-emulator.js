@@ -275,7 +275,12 @@ class CDC8512Emulator {
                 this.stop();
                 return;
             }
-            this.executeStep();
+            const result = this.executeStep();
+            // If executeStep returns null (halted) or the program has halted, stop execution
+            if (result === null || !this.running) {
+                this.stop();
+                return;
+            }
         }, this.clockSpeed);
     }
 
