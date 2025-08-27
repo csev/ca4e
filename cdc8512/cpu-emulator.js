@@ -50,13 +50,69 @@ class CDC8512Emulator {
         console.log('Raw assembly input:', assembly);
         const lines = assembly.split('\n').map(line => line.trim()).filter(line => line);
         console.log('Parsed lines:', lines);
+        
+        // First pass: collect labels and calculate addresses
+        const labels = {};
         let address = 0;
         let inDataSegment = false;
+        
+        for (const line of lines) {
+            const parts = line.split(';')[0].trim().split(/\s+/);
+            if (parts.length === 0) continue;
+            
+            // Check if line starts with a label (ends with ':')
+            if (parts[0].endsWith(':')) {
+                const label = parts[0].slice(0, -1); // Remove the ':'
+                labels[label] = address;
+                console.log(`Label "${label}" at address 0x${address.toString(16).padStart(2, '0')}`);
+                // Remove label from parts and continue with instruction
+                parts.shift();
+                if (parts.length === 0) continue;
+            }
+            
+            const instruction = parts[0].toUpperCase();
+            
+            if (instruction === 'DATA') {
+                inDataSegment = true;
+                address += 1; // DATA marker
+                continue;
+            }
+            
+            if (inDataSegment) {
+                continue;
+            }
+            
+            // Calculate instruction size
+            if (instruction === 'SET' || instruction === 'CMP' || instruction === 'ADD' || instruction === 'SUB' || 
+                instruction === 'JE' || instruction === 'JL' || instruction === 'JG') {
+                address += 2; // 16-bit instructions
+            } else if (instruction === 'INC' || instruction === 'DEC' || instruction === 'PS' || instruction === 'HALT' || 
+                       instruction === 'MOV' || instruction === 'CMPZ') {
+                address += 1; // 8-bit instructions
+            }
+        }
+        
+        console.log('Labels collected:', labels);
+        
+        // Second pass: assemble with resolved labels
+        address = 0;
+        inDataSegment = false;
         
         for (const line of lines) {
             console.log('Processing line:', line);
             const parts = line.split(';')[0].trim().split(/\s+/);
             console.log('Line parts:', parts);
+            
+            if (parts.length === 0) continue;
+            
+            // Check if line starts with a label
+            if (parts[0].endsWith(':')) {
+                const label = parts[0].slice(0, -1);
+                console.log(`Skipping label: ${label}`);
+                parts.shift();
+                if (parts.length === 0) continue;
+            }
+            
             const instruction = parts[0].toUpperCase();
             console.log('Instruction:', instruction);
             
@@ -98,18 +154,18 @@ class CDC8512Emulator {
                 const regNum = this.parseRegister(reg);
                 const opcode = 0x80 | regNum;
                 console.log(`Assembling SET ${reg}: regNum=${regNum}, opcode=0x${opcode.toString(16).padStart(2, '0')} (${opcode.toString(2).padStart(8, '0')})`);
-                this.cpu.instructions[address] = opcode; // SET opcode (10000rrr) - 10000 = 0x10, but we need it in bits 7-3, so 0x80
+                this.cpu.instructions[address] = opcode;
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
             } else if (instruction === 'INC') {
                 const reg = parts[1];
                 const regNum = this.parseRegister(reg);
-                this.cpu.instructions[address] = 0x48 | regNum; // INC opcode (01001rrr) - 01001 = 0x48
+                this.cpu.instructions[address] = 0x48 | regNum; // INC opcode (01001rrr)
                 address += 1;
             } else if (instruction === 'DEC') {
                 const reg = parts[1];
                 const regNum = this.parseRegister(reg);
-                this.cpu.instructions[address] = 0x50 | regNum; // DEC opcode (01010rrr) - 01010 = 0x50
+                this.cpu.instructions[address] = 0x50 | regNum; // DEC opcode (01010rrr)
                 address += 1;
             } else if (instruction === 'PS') {
                 this.cpu.instructions[address] = 0x01; // PS opcode (00000001)
@@ -126,17 +182,20 @@ class CDC8512Emulator {
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
             } else if (instruction === 'JE') {
-                const value = this.parseValue(parts[1]);
+                const labelOrValue = parts[1];
+                const value = this.resolveLabelOrValue(labelOrValue, labels);
                 this.cpu.instructions[address] = 0xA0; // JE opcode (10100000)
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
             } else if (instruction === 'JL') {
-                const value = this.parseValue(parts[1]);
+                const labelOrValue = parts[1];
+                const value = this.resolveLabelOrValue(labelOrValue, labels);
                 this.cpu.instructions[address] = 0xA1; // JL opcode (10100001)
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
             } else if (instruction === 'JG') {
-                const value = this.parseValue(parts[1]);
+                const labelOrValue = parts[1];
+                const value = this.resolveLabelOrValue(labelOrValue, labels);
                 this.cpu.instructions[address] = 0xA2; // JG opcode (10100010)
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
@@ -198,6 +257,17 @@ class CDC8512Emulator {
             return parseInt(value, 16);
         }
         return parseInt(value, 10);
+    }
+
+    // Resolve label or value (for jump instructions)
+    resolveLabelOrValue(labelOrValue, labels) {
+        // Check if it's a label
+        if (labels.hasOwnProperty(labelOrValue)) {
+            console.log(`Resolved label "${labelOrValue}" to address 0x${labels[labelOrValue].toString(16).padStart(2, '0')}`);
+            return labels[labelOrValue];
+        }
+        // Otherwise parse as value
+        return this.parseValue(labelOrValue);
     }
 
     // Get register name from number (matches specification: 000=A0, 001=A1, 010=A2, 011=A3, 100=X0, 101=X1, 110=X2, 111=X3)

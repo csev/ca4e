@@ -128,11 +128,13 @@
                     <option value="">-- Load Program --</option>
                     <option value="hello">Load Hello</option>
                     <option value="hello-world">Load Hello World</option>
+                    <option value="labels-demo">Load Labels Demo</option>
                     <option value="toggle-assembler">Toggle Assembler</option>
                 </select>
                 <button id="reset">Reset</button>
                 <button id="step">Step</button>
                 <button id="start">Start</button>
+                <button id="help" style="background-color: #28a745; font-weight: bold;">?</button>
             </div>
             
             <div class="control-group" id="assembler-section" style="display: none;">
@@ -207,6 +209,22 @@ DATA 'Hello World!'`;
                         updateStatus();
                         updateTrace();
                         updateOutput();
+                    } else if (value === 'labels-demo') {
+                        // Load a demo program that uses labels
+                        const labelsDemo = `SET X0, 0
+loop:
+CMP X0, 5
+JE end
+INC X0
+JL loop
+end:
+HALT`;
+                        emulator.reset();
+                        emulator.loadProgram(labelsDemo);
+                        document.getElementById('assembly-input').value = labelsDemo;
+                        updateStatus();
+                        updateTrace();
+                        updateOutput();
                     } else if (value === 'toggle-assembler') {
                         const assemblerSection = document.getElementById('assembler-section');
                         if (assemblerSection.style.display === 'none') {
@@ -241,6 +259,10 @@ DATA 'Hello World!'`;
 
                 document.getElementById('clear-assembly').addEventListener('click', () => {
                     document.getElementById('assembly-input').value = '';
+                });
+
+                document.getElementById('help').addEventListener('click', () => {
+                    window.open('./documentation.html', '_blank');
                 });
 
 

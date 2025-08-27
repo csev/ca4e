@@ -231,7 +231,7 @@ Address | Binary          | Assembly              | Description
 0x0F    | 00000000        | HALT                 | Stop execution
 ```
 
-## Program Example: "Hello World" Demonstating the data segment
+## Program Example: "Hello World" Demonstrating the data segment
 
 Assembly
 ```

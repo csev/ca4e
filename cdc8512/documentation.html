@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CDC8512 CPU Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        
+        h2 {
+            color: #34495e;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+        }
+        
+        .instruction-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        
+        .instruction-table th {
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #2980b9;
+        }
+        
+        .instruction-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            vertical-align: top;
+        }
+        
+        .instruction-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+        
+        .register-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .register-card {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .register-card h4 {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+        
+        .error-table {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        
+        .error-table h3 {
+            color: #856404;
+            margin-top: 0;
+        }
+        
+        .tip {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .tip h4 {
+            color: #0c5460;
+            margin-top: 0;
+        }
+        
+        .example {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 4px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .example h4 {
+            color: #155724;
+            margin-top: 0;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            border-bottom: 2px solid #dee2e6;
+            margin-bottom: 20px;
+        }
+        
+        .nav-tab {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .nav-tab.active {
+            border-bottom-color: #3498db;
+            color: #3498db;
+            font-weight: bold;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>CDC8512 CPU Assembly Language Reference</h1>
+        
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showTab('instructions')">Instructions</button>
+            <button class="nav-tab" onclick="showTab('registers')">Registers</button>
+            <button class="nav-tab" onclick="showTab('examples')">Examples</button>
+            <button class="nav-tab" onclick="showTab('errors')">Error Handling</button>
+            <button class="nav-tab" onclick="showTab('labels')">Labels</button>
+        </div>
+        
+        <div id="instructions" class="tab-content active">
+            <h2>Instruction Set Reference</h2>
+            
+            <h3>Special Instructions (8-bit)</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Assembly</th>
+                    <th>Binary</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>HALT</td>
+                    <td>00000000</td>
+                    <td>Stop program execution</td>
+                </tr>
+                <tr>
+                    <td>PS</td>
+                    <td>00000001</td>
+                    <td>Print string from data memory (null-terminated)</td>
+                </tr>
+            </table>
+            
+            <h3>Single Register Instructions (8-bit)</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Assembly</th>
+                    <th>Binary</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>INC reg</td>
+                    <td>01001rrr</td>
+                    <td>Increment register by 1</td>
+                </tr>
+                <tr>
+                    <td>DEC reg</td>
+                    <td>01010rrr</td>
+                    <td>Decrement register by 1</td>
+                </tr>
+                <tr>
+                    <td>CMPZ reg</td>
+                    <td>01010rrr</td>
+                    <td>Compare register to zero, set CMP flag</td>
+                </tr>
+            </table>
+            
+            <h3>Immediate Instructions (16-bit)</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Assembly</th>
+                    <th>Binary</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>SET reg, value</td>
+                    <td>10000rrr + value</td>
+                    <td>Set register to immediate value (0-255)</td>
+                </tr>
+                <tr>
+                    <td>CMP reg, value</td>
+                    <td>10001rrr + value</td>
+                    <td>Compare register to immediate value</td>
+                </tr>
+                <tr>
+                    <td>ADD reg, value</td>
+                    <td>10010rrr + value</td>
+                    <td>Add immediate value to register</td>
+                </tr>
+                <tr>
+                    <td>SUB reg, value</td>
+                    <td>10011rrr + value</td>
+                    <td>Subtract immediate value from register</td>
+                </tr>
+                <tr>
+                    <td>JE label/value</td>
+                    <td>10100000 + address</td>
+                    <td>Jump if CMP == "="</td>
+                </tr>
+                <tr>
+                    <td>JL label/value</td>
+                    <td>10100001 + address</td>
+                    <td>Jump if CMP == "<"</td>
+                </tr>
+                <tr>
+                    <td>JG label/value</td>
+                    <td>10100010 + address</td>
+                    <td>Jump if CMP == ">"</td>
+                </tr>
+            </table>
+            
+            <h3>Register Copy Instructions (8-bit)</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Assembly</th>
+                    <th>Binary</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>MOV dest, src</td>
+                    <td>11dddsss</td>
+                    <td>Copy source register to destination register</td>
+                </tr>
+            </table>
+            
+            <h3>Data Segment</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Assembly</th>
+                    <th>Binary</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>DATA 'string'</td>
+                    <td>00001111 + string + null</td>
+                    <td>Load string into data memory (processed during assembly)</td>
+                </tr>
+            </table>
+        </div>
+        
+        <div id="registers" class="tab-content">
+            <h2>Register Reference</h2>
+            
+            <div class="register-grid">
+                <div class="register-card">
+                    <h4>Address Registers (A0-A3)</h4>
+                    <p>Used for memory addressing and implicit load/store operations</p>
+                    <ul>
+                        <li><strong>A0, A1</strong>: Implicit LOAD from memory into X0, X1</li>
+                        <li><strong>A2, A3</strong>: Implicit STORE from X2, X3 to memory</li>
+                    </ul>
+                </div>
+                
+                <div class="register-card">
+                    <h4>Data Registers (X0-X3)</h4>
+                    <p>Used for data manipulation and arithmetic operations</p>
+                    <ul>
+                        <li><strong>X0, X1</strong>: Loaded from memory when A0, A1 are set</li>
+                        <li><strong>X2, X3</strong>: Stored to memory when A2, A3 are set</li>
+                    </ul>
+                </div>
+                
+                <div class="register-card">
+                    <h4>Special Registers</h4>
+                    <ul>
+                        <li><strong>PC</strong>: Program Counter (current instruction address)</li>
+                        <li><strong>CMP</strong>: Comparison flag ("<", "=", ">")</li>
+                        <li><strong>MODE</strong>: Error mode register (0x0-0xF)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3>Register Encoding</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Register</th>
+                    <th>Binary</th>
+                    <th>Hex</th>
+                </tr>
+                <tr><td>A0</td><td>000</td><td>0</td></tr>
+                <tr><td>A1</td><td>001</td><td>1</td></tr>
+                <tr><td>A2</td><td>010</td><td>2</td></tr>
+                <tr><td>A3</td><td>011</td><td>3</td></tr>
+                <tr><td>X0</td><td>100</td><td>4</td></tr>
+                <tr><td>X1</td><td>101</td><td>5</td></tr>
+                <tr><td>X2</td><td>110</td><td>6</td></tr>
+                <tr><td>X3</td><td>111</td><td>7</td></tr>
+            </table>
+            
+            <div class="tip">
+                <h4>💡 CDC 6500 Load/Store Architecture</h4>
+                <p>When you set A0 or A1, the corresponding X register (X0 or X1) is automatically loaded from memory at that address. When you set A2 or A3, the corresponding X register (X2 or X3) is automatically stored to memory at that address.</p>
+            </div>
+        </div>
+        
+        <div id="examples" class="tab-content">
+            <h2>Example Programs</h2>
+            
+            <div class="example">
+                <h4>Hello World (Manual)</h4>
+                <div class="code-block">
+SET X2, 72    ; 'H'
+SET A2, 0     ; Address 0
+SET X2, 101   ; 'e'
+INC A2        ; Address 1
+SET X2, 108   ; 'l'
+INC A2        ; Address 2
+INC A2        ; Address 3 (second 'l')
+SET X2, 111   ; 'o'
+INC A2        ; Address 4
+PS            ; Print string
+HALT
+                </div>
+            </div>
+            
+            <div class="example">
+                <h4>Hello World (with DATA)</h4>
+                <div class="code-block">
+PS            ; Print string
+HALT          ; Stop
+DATA 'Hello World!'
+                </div>
+            </div>
+            
+            <div class="example">
+                <h4>Counter Loop (with Labels)</h4>
+                <div class="code-block">
+SET X0, 0     ; Initialize counter
+loop:
+CMP X0, 5     ; Compare counter to 5
+JE end        ; Jump to end if equal
+INC X0        ; Increment counter
+JL loop       ; Jump back to loop
+end:
+HALT          ; Stop
+                </div>
+            </div>
+            
+            <div class="example">
+                <h4>Memory Copy</h4>
+                <div class="code-block">
+SET A0, 10    ; Source address
+SET A2, 20    ; Destination address
+MOV X2, X0    ; Copy from X0 to X2
+HALT
+                </div>
+            </div>
+        </div>
+        
+        <div id="errors" class="tab-content">
+            <h2>Error Handling</h2>
+            
+            <div class="error-table">
+                <h3>Mode Register Error Codes</h3>
+                <table class="instruction-table">
+                    <tr>
+                        <th>Mode</th>
+                        <th>Error</th>
+                        <th>Trigger</th>
+                    </tr>
+                    <tr>
+                        <td>0x0</td>
+                        <td>Normal operation</td>
+                        <td>No error</td>
+                    </tr>
+                    <tr>
+                        <td>0x1</td>
+                        <td>Invalid instruction</td>
+                        <td>Unknown opcode</td>
+                    </tr>
+                    <tr>
+                        <td>0x2</td>
+                        <td>Jump address out of range</td>
+                        <td>Jump to address ≥ 32</td>
+                    </tr>
+                    <tr>
+                        <td>0x3</td>
+                        <td>A register address out of range</td>
+                        <td>Any A register ≥ 32</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <h3>Error Test Programs</h3>
+            
+            <div class="example">
+                <h4>Test Invalid Instruction (Mode 1)</h4>
+                <div class="code-block">
+SET X0, 0
+0xFF          ; Invalid instruction
+HALT
+                </div>
+            </div>
+            
+            <div class="example">
+                <h4>Test Jump Address Out of Range (Mode 2)</h4>
+                <div class="code-block">
+SET X0, 0
+CMP X0, 0
+JE 0x20       ; Jump to address 32 (out of range)
+                </div>
+            </div>
+            
+            <div class="example">
+                <h4>Test A Register Address Out of Range (Mode 3)</h4>
+                <div class="code-block">
+SET A0, 32    ; Set A0 to 32 (out of range)
+                </div>
+            </div>
+        </div>
+        
+        <div id="labels" class="tab-content">
+            <h2>Label System</h2>
+            
+            <p>The assembler supports a two-pass label system for easier programming.</p>
+            
+            <h3>Label Definition</h3>
+            <p>Labels are defined by ending a line with a colon (<code>:</code>):</p>
+            <div class="code-block">
+start:        ; This defines a label called "start"
+SET X0, 0
+loop:         ; This defines a label called "loop"
+INC X0
+            </div>
+            
+            <h3>Label Usage</h3>
+            <p>Labels can be used in jump instructions instead of hard-coded addresses:</p>
+            <div class="code-block">
+SET X0, 0
+loop:
+CMP X0, 5
+JE end        ; Jump to "end" label
+INC X0
+JL loop       ; Jump back to "loop" label
+end:
+HALT
+            </div>
+            
+            <h3>Two-Pass Assembly</h3>
+            <ol>
+                <li><strong>First Pass</strong>: Collects all labels and calculates their addresses</li>
+                <li><strong>Second Pass</strong>: Assembles the program with resolved label addresses</li>
+            </ol>
+            
+            <div class="tip">
+                <h4>💡 Benefits of Labels</h4>
+                <ul>
+                    <li>No need to calculate jump addresses manually</li>
+                    <li>Adding/removing instructions doesn't break jump addresses</li>
+                    <li>More readable and maintainable code</li>
+                    <li>Supports both labels and direct addresses</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => content.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>
