@@ -34,9 +34,9 @@ The CDC8512 is an 8-bit machine language emulator with a Harvard architecture fe
 - `00001111` - DATA - When loading, the following bytes are to be copied into the data memory starting at the zero address - loading is terminated by a zero byte
 
 #### Single Register Instructions (01xxxxxx)
-- `01000rrr` - INC rrr - Increment A or X register
-- `01001rrr` - DEC rrr - Decrement A or X register
-- `01010rrr` - CMPZ rrr - Compare register to zero, set CMP to < = >
+- `01000rrr` - ZERO rrr - Set A or X register to zero
+- `01001rrr` - CMPZ rrr - Compare register to zero, set CMP to < = >
+- `01010rrr` - INC rrr - Increment A or X register
 - `0110ddss` - ADD X[dd], X[ss] - X[dd] = X[dd] + X[ss]
 - `0111ddss` - SUB X[dd], X[ss] - X[dd] = X[dd] - X[ss]
 
@@ -102,23 +102,23 @@ HALT        # Stop Execution
 
 ### Single Register Instructions (01xxxxxx)
 
-#### INC rrr (01000rrr)
+#### ZERO rrr (01000rrr)
 - **Size**: 8 bits
-- **Semantics**: reg = reg + 1
-- **Assembly**: `INC reg`
-- **Description**: Increments the specified register by 1. Works with both A and X registers.
+- **Semantics**: reg = 0
+- **Assembly**: `ZERO reg`
+- **Description**: Sets the specified register to zero. Works with both A and X registers.
 
-#### DEC rrr (01001rrr)
-- **Size**: 8 bits
-- **Semantics**: reg = reg - 1
-- **Assembly**: `DEC reg`
-- **Description**: Decrements the specified register by 1. Works with both A and X registers.
-
-#### CMPZ rrr (01010rrr)
+#### CMPZ rrr (01001rrr)
 - **Size**: 8 bits
 - **Semantics**: CMP = (reg == 0 ? "=" : reg < 0 ? "<" : ">")
 - **Assembly**: `CMPZ reg`
 - **Description**: Compares the specified register to zero and sets the comparison flag accordingly
+
+#### INC rrr (01010rrr)
+- **Size**: 8 bits
+- **Semantics**: reg = reg + 1
+- **Assembly**: `INC reg`
+- **Description**: Increments the specified register by 1. Works with both A and X registers.
 
 #### ADD X[dd], X[ss] (0110ddss)
 - **Size**: 8 bits

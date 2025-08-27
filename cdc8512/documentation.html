@@ -205,19 +205,19 @@
                     <th>Description</th>
                 </tr>
                 <tr>
-                    <td>INC reg</td>
-                    <td>01001rrr</td>
-                    <td>Increment register by 1</td>
-                </tr>
-                <tr>
-                    <td>DEC reg</td>
-                    <td>01010rrr</td>
-                    <td>Decrement register by 1</td>
+                    <td>ZERO reg</td>
+                    <td>01000rrr</td>
+                    <td>Set register to zero</td>
                 </tr>
                 <tr>
                     <td>CMPZ reg</td>
-                    <td>01010rrr</td>
+                    <td>01001rrr</td>
                     <td>Compare register to zero, set CMP flag</td>
+                </tr>
+                <tr>
+                    <td>INC reg</td>
+                    <td>01010rrr</td>
+                    <td>Increment register by 1</td>
                 </tr>
             </table>
             
@@ -381,7 +381,7 @@ DATA 'Hello World!'
             <div class="example">
                 <h4>Counter Loop (with Labels)</h4>
                 <div class="code-block">
-SET X0, 0     ; Initialize counter
+ZERO X0       ; Initialize counter to 0
 loop:
 CMP X0, 5     ; Compare counter to 5
 JE end        ; Jump to end if equal

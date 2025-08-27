@@ -339,15 +339,19 @@ HALT</textarea>
                         this.setRegister(regName, this.getRegister(regName) + 1);
                         this.pc++;
                         return `INC ${regName}`;
-                    } else if (opcode === 0x01) { // DEC
-                        this.setRegister(regName, this.getRegister(regName) - 1);
+                    } else if (opcode === 0x00) { // ZERO
+                        this.setRegister(regName, 0);
                         this.pc++;
-                        return `DEC ${regName}`;
-                    } else if (opcode === 0x02) { // CMPZ
+                        return `ZERO ${regName}`;
+                    } else if (opcode === 0x01) { // CMPZ
                         const value = this.getRegister(regName);
-                        this.cmp = value === 0 ? '=' : value < 0 ? '<' : '>';
+                        this.comparison = value === 0 ? '=' : value < 0 ? '<' : '>';
                         this.pc++;
                         return `CMPZ ${regName}`;
+                    } else if (opcode === 0x02) { // INC
+                        this.setRegister(regName, this.getRegister(regName) + 1);
+                        this.pc++;
+                        return `INC ${regName}`;
                     }
                 }
                 
@@ -427,15 +431,20 @@ HALT</textarea>
                         this.memory[address] = 0x80 | regNum; // SET opcode (10xxxxxx)
                         this.memory[address + 1] = value;
                         address += 2;
+                    } else if (instruction === 'ZERO') {
+                        const reg = parts[1];
+                        const regNum = this.parseRegister(reg);
+                        this.memory[address] = 0x40 | regNum; // ZERO opcode (01000rrr)
+                        address += 1;
+                    } else if (instruction === 'CMPZ') {
+                        const reg = parts[1];
+                        const regNum = this.parseRegister(reg);
+                        this.memory[address] = 0x48 | regNum; // CMPZ opcode (01001rrr)
+                        address += 1;
                     } else if (instruction === 'INC') {
                         const reg = parts[1];
                         const regNum = this.parseRegister(reg);
-                        this.memory[address] = 0x40 | regNum; // INC opcode (01xxxxxx)
-                        address += 1;
-                    } else if (instruction === 'DEC') {
-                        const reg = parts[1];
-                        const regNum = this.parseRegister(reg);
-                        this.memory[address] = 0x40 | (0x08 | regNum); // DEC opcode (01xxxxxx)
+                        this.memory[address] = 0x50 | regNum; // INC opcode (01010rrr)
                         address += 1;
                     } else if (instruction === 'PS') {
                         this.memory[address] = 0x01; // PS opcode (00xxxxxx)
