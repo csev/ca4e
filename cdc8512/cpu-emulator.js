@@ -47,13 +47,18 @@ class CDC8512Emulator {
 
     // Load assembly program into instruction memory
     loadProgram(assembly) {
+        console.log('Raw assembly input:', assembly);
         const lines = assembly.split('\n').map(line => line.trim()).filter(line => line);
+        console.log('Parsed lines:', lines);
         let address = 0;
         let inDataSegment = false;
         
         for (const line of lines) {
+            console.log('Processing line:', line);
             const parts = line.split(';')[0].trim().split(/\s+/);
+            console.log('Line parts:', parts);
             const instruction = parts[0].toUpperCase();
+            console.log('Instruction:', instruction);
             
             // Clean up register names by removing commas
             if (parts.length > 1) {
@@ -87,8 +92,9 @@ class CDC8512Emulator {
             }
             
             if (instruction === 'SET') {
+                console.log('Processing SET instruction');
                 const reg = parts[1];
-                const value = parseInt(parts[2]);
+                const value = this.parseValue(parts[2]);
                 const regNum = this.parseRegister(reg);
                 const opcode = 0x80 | regNum;
                 console.log(`Assembling SET ${reg}: regNum=${regNum}, opcode=0x${opcode.toString(16).padStart(2, '0')} (${opcode.toString(2).padStart(8, '0')})`);
@@ -111,11 +117,68 @@ class CDC8512Emulator {
             } else if (instruction === 'HALT') {
                 this.cpu.instructions[address] = 0x00; // HALT opcode (00000000)
                 address += 1;
+            } else if (instruction === 'CMP') {
+                const reg = parts[1];
+                const value = this.parseValue(parts[2]);
+                const regNum = this.parseRegister(reg);
+                const opcode = 0x81 | regNum; // CMP opcode (10001rrr)
+                this.cpu.instructions[address] = opcode;
+                this.cpu.instructions[address + 1] = value;
+                address += 2;
+            } else if (instruction === 'JE') {
+                const value = this.parseValue(parts[1]);
+                this.cpu.instructions[address] = 0xA0; // JE opcode (10100000)
+                this.cpu.instructions[address + 1] = value;
+                address += 2;
+            } else if (instruction === 'JL') {
+                const value = this.parseValue(parts[1]);
+                this.cpu.instructions[address] = 0xA1; // JL opcode (10100001)
+                this.cpu.instructions[address + 1] = value;
+                address += 2;
+            } else if (instruction === 'JG') {
+                const value = this.parseValue(parts[1]);
+                this.cpu.instructions[address] = 0xA2; // JG opcode (10100010)
+                this.cpu.instructions[address + 1] = value;
+                address += 2;
+            } else if (instruction === 'MOV') {
+                const destReg = parts[1];
+                const srcReg = parts[2];
+                const destNum = this.parseRegister(destReg);
+                const srcNum = this.parseRegister(srcReg);
+                const opcode = 0xC0 | (destNum << 3) | srcNum; // MOV opcode (11dddsss)
+                this.cpu.instructions[address] = opcode;
+                address += 1;
+            } else if (instruction === 'ADD') {
+                const reg = parts[1];
+                const value = this.parseValue(parts[2]);
+                const regNum = this.parseRegister(reg);
+                const opcode = 0x82 | regNum; // ADD opcode (10010rrr)
+                this.cpu.instructions[address] = opcode;
+                this.cpu.instructions[address + 1] = value;
+                address += 2;
+            } else if (instruction === 'SUB') {
+                const reg = parts[1];
+                const value = this.parseValue(parts[2]);
+                const regNum = this.parseRegister(reg);
+                const opcode = 0x83 | regNum; // SUB opcode (10011rrr)
+                this.cpu.instructions[address] = opcode;
+                this.cpu.instructions[address + 1] = value;
+                address += 2;
+            } else if (instruction === 'CMPZ') {
+                const reg = parts[1];
+                const regNum = this.parseRegister(reg);
+                const opcode = 0x50 | regNum; // CMPZ opcode (01010rrr)
+                this.cpu.instructions[address] = opcode;
+                address += 1;
+            } else {
+                console.log(`Unrecognized instruction: "${instruction}"`);
             }
         }
         
         this.cpu.requestUpdate();
+        console.log('Loaded program:', this.cpu.instructions.slice(0, address));
         console.log('Data memory:', this.cpu.memory.slice(0, 20));
+        console.log(`Program loaded: ${address} bytes`);
     }
 
     // Parse register name to number
@@ -127,6 +190,14 @@ class CDC8512Emulator {
         const result = regMap[reg.toUpperCase()] || 0;
         console.log(`parseRegister('${reg}') = ${result}`);
         return result;
+    }
+
+    // Parse value (supports decimal and hex)
+    parseValue(value) {
+        if (value.startsWith('0x')) {
+            return parseInt(value, 16);
+        }
+        return parseInt(value, 10);
     }
 
     // Get register name from number (matches specification: 000=A0, 001=A1, 010=A2, 011=A3, 100=X0, 101=X1, 110=X2, 111=X3)
