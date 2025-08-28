@@ -393,7 +393,7 @@ loop:
 CMP X0, 5     ; Compare counter to 5
 JE end        ; Jump to end if equal
 INC X0        ; Increment counter
-JL loop       ; Jump back to loop
+JP loop       ; Jump back to loop
 end:
 HALT          ; Stop
                 </div>
