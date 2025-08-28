@@ -169,6 +169,7 @@
                 <button id="assemble">Assemble & Load</button>
                 <button id="save-assembly">Save</button>
                 <button id="load-assembly">Load</button>
+                <button id="delete-assembly">Delete</button>
                 <button id="manage-saved">Manage</button>
                 <button id="clear-assembly">Clear</button>
             </div>
@@ -330,6 +331,27 @@ HALT`;
                     }
                 });
 
+                document.getElementById('delete-assembly').addEventListener('click', () => {
+                    const savedPrograms = JSON.parse(localStorage.getItem('cdc8512_programs') || '{}');
+                    const programNames = Object.keys(savedPrograms);
+                    
+                    if (programNames.length === 0) {
+                        alert('No saved programs found');
+                        return;
+                    }
+                    
+                    const programName = prompt('Enter the name of the program to delete:\n\nAvailable programs:\n' + programNames.join('\n'));
+                    if (programName && savedPrograms[programName]) {
+                        if (confirm(`Are you sure you want to delete "${programName}"?`)) {
+                            delete savedPrograms[programName];
+                            localStorage.setItem('cdc8512_programs', JSON.stringify(savedPrograms));
+                            alert(`Program "${programName}" deleted successfully!`);
+                        }
+                    } else if (programName) {
+                        alert(`Program "${programName}" not found`);
+                    }
+                });
+
                 document.getElementById('manage-saved').addEventListener('click', () => {
                     const savedPrograms = JSON.parse(localStorage.getItem('cdc8512_programs') || '{}');
                     const programNames = Object.keys(savedPrograms);
@@ -345,7 +367,7 @@ HALT`;
                         const date = new Date(program.timestamp).toLocaleString();
                         message += `${name} (saved: ${date})\n`;
                     });
-                    message += '\nTo load: Click "Load" and enter the program name\nTo delete: Use browser developer tools to clear localStorage';
+                    message += '\nTo load: Click "Load" and enter the program name\nTo delete: Click "Delete" and enter the program name';
                     
                     alert(message);
                 });
