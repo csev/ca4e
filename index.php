@@ -91,10 +91,7 @@ the sample content in various stages of completion:
       <a href="gates/index.html" target="_blank" class="text-primary">Digital Logic Builder</a>
     </li>
 <li>
-<a href="cdc8512/index.html"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator Prototype</a> (A UI Mockup - not working)
-</li>
-<li>
-<a href="cdc8512/instructions.txt"  target="_blank" class="text-primary">CDC8512 Instruction Set Documentation</a>
+<a href="cdc8512/index.html"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator</a> (<a href="cdc8512/documentation.html"  target="_blank" class="text-primary">Documentation</a>)
 </li>
 <li>
 <a href="wasm"  target="_blank" class="text-primary">WASM Playground</a>

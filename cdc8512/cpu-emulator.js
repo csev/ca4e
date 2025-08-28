@@ -51,21 +51,47 @@ class CDC8512Emulator {
     // Load assembly program into instruction memory
     loadProgram(assembly) {
         console.log('Raw assembly input:', assembly);
-        const lines = assembly.split('\n').map(line => line.trim()).filter(line => line);
+        // Split into lines, trim whitespace, and filter out empty lines and comment-only lines
+        const lines = assembly.split('\n')
+            .map(line => line.trim())
+            .filter(line => {
+                // Skip empty lines
+                if (line.length === 0) return false;
+                // Skip lines that start with semicolon (comment-only lines)
+                if (line.startsWith(';')) return false;
+                return true;
+            });
         console.log('Parsed lines:', lines);
+        
+        // Error tracking
+        const errors = [];
+        const maxInstructions = 256;
         
         // First pass: collect labels and calculate addresses
         const labels = {};
         let address = 0;
         let inDataSegment = false;
         
-        for (const line of lines) {
-            const parts = line.split(';')[0].trim().split(/\s+/);
+        for (let lineNum = 0; lineNum < lines.length; lineNum++) {
+            const line = lines[lineNum];
+            // Remove comments (everything after semicolon) and trim
+            const codeLine = line.split(';')[0].trim();
+            if (codeLine.length === 0) continue; // Skip lines that are only comments
+            
+            const parts = codeLine.split(/\s+/);
             if (parts.length === 0) continue;
             
             // Check if line starts with a label (ends with ':')
             if (parts[0].endsWith(':')) {
                 const label = parts[0].slice(0, -1); // Remove the ':'
+                if (label.length === 0) {
+                    errors.push(`Line ${lineNum + 1}: Empty label name`);
+                    continue;
+                }
+                if (labels.hasOwnProperty(label)) {
+                    errors.push(`Line ${lineNum + 1}: Duplicate label "${label}"`);
+                    continue;
+                }
                 labels[label] = address;
                 console.log(`Label "${label}" at address 0x${address.toString(16).padStart(2, '0')}`);
                 // Remove label from parts and continue with instruction
@@ -85,25 +111,51 @@ class CDC8512Emulator {
                 continue;
             }
             
-                    // Calculate instruction size
-        if (instruction === 'SET' || instruction === 'CMP' || instruction === 'ADD' || instruction === 'SUB' ||
-            instruction === 'JE' || instruction === 'JL' || instruction === 'JG' || instruction === 'JP') {
-            address += 2; // 16-bit instructions
-        } else if (instruction === 'INC' || instruction === 'ZERO' || instruction === 'PS' || instruction === 'HALT' ||
-                   instruction === 'MOV' || instruction === 'CMPZ') {
-            address += 1; // 8-bit instructions
-        }
+            // Validate instruction
+            const validInstructions = ['SET', 'CMP', 'ADD', 'SUB', 'JE', 'JL', 'JG', 'JP', 'INC', 'ZERO', 'PS', 'HALT', 'MOV', 'CMPZ'];
+            if (!validInstructions.includes(instruction)) {
+                errors.push(`Line ${lineNum + 1}: Unknown instruction "${instruction}"`);
+                continue;
+            }
+            
+            // Calculate instruction size and check for overflow
+            let instructionSize = 0;
+            if (instruction === 'SET' || instruction === 'CMP' || instruction === 'ADD' || instruction === 'SUB' ||
+                instruction === 'JE' || instruction === 'JL' || instruction === 'JG' || instruction === 'JP') {
+                instructionSize = 2; // 16-bit instructions
+            } else if (instruction === 'INC' || instruction === 'ZERO' || instruction === 'PS' || instruction === 'HALT' ||
+                       instruction === 'MOV' || instruction === 'CMPZ') {
+                instructionSize = 1; // 8-bit instructions
+            }
+            
+            if (address + instructionSize > maxInstructions) {
+                errors.push(`Line ${lineNum + 1}: Program too large - exceeds ${maxInstructions} bytes`);
+                break;
+            }
+            
+            address += instructionSize;
         }
         
         console.log('Labels collected:', labels);
+        
+        // Check for errors in first pass
+        if (errors.length > 0) {
+            throw new Error('Assembly errors:\n' + errors.join('\n'));
+        }
         
         // Second pass: assemble with resolved labels
         address = 0;
         inDataSegment = false;
         
-        for (const line of lines) {
+        for (let lineNum = 0; lineNum < lines.length; lineNum++) {
+            const line = lines[lineNum];
             console.log('Processing line:', line);
-            const parts = line.split(';')[0].trim().split(/\s+/);
+            
+            // Remove comments (everything after semicolon) and trim
+            const codeLine = line.split(';')[0].trim();
+            if (codeLine.length === 0) continue; // Skip lines that are only comments
+            
+            const parts = codeLine.split(/\s+/);
             console.log('Line parts:', parts);
             
             if (parts.length === 0) continue;
@@ -152,6 +204,9 @@ class CDC8512Emulator {
             
             if (instruction === 'SET') {
                 console.log('Processing SET instruction');
+                if (parts.length < 3) {
+                    throw new Error(`Line ${lineNum + 1}: SET instruction requires register and value (e.g., SET X0, 42)`);
+                }
                 const reg = parts[1];
                 const value = this.parseValue(parts[2]);
                 const regNum = this.parseRegister(reg);
@@ -161,16 +216,25 @@ class CDC8512Emulator {
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
             } else if (instruction === 'ZERO') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: ZERO instruction requires register (e.g., ZERO X0)`);
+                }
                 const reg = parts[1];
                 const regNum = this.parseRegister(reg);
                 this.cpu.instructions[address] = 0x40 | regNum; // ZERO opcode (01000rrr)
                 address += 1;
             } else if (instruction === 'CMPZ') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: CMPZ instruction requires register (e.g., CMPZ X0)`);
+                }
                 const reg = parts[1];
                 const regNum = this.parseRegister(reg);
                 this.cpu.instructions[address] = 0x48 | regNum; // CMPZ opcode (01001rrr)
                 address += 1;
             } else if (instruction === 'INC') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: INC instruction requires register (e.g., INC X0)`);
+                }
                 const reg = parts[1];
                 const regNum = this.parseRegister(reg);
                 this.cpu.instructions[address] = 0x50 | regNum; // INC opcode (01010rrr)
@@ -182,6 +246,9 @@ class CDC8512Emulator {
                 this.cpu.instructions[address] = 0x00; // HALT opcode (00000000)
                 address += 1;
             } else if (instruction === 'CMP') {
+                if (parts.length < 3) {
+                    throw new Error(`Line ${lineNum + 1}: CMP instruction requires register and value (e.g., CMP X0, 42)`);
+                }
                 const reg = parts[1];
                 const value = this.parseValue(parts[2]);
                 const regNum = this.parseRegister(reg);
@@ -191,30 +258,45 @@ class CDC8512Emulator {
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
             } else if (instruction === 'JE') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: JE instruction requires label or address (e.g., JE loop)`);
+                }
                 const labelOrValue = parts[1];
                 const value = this.resolveLabelOrValue(labelOrValue, labels);
                 this.cpu.instructions[address] = 0xA0; // JE opcode (10100000)
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
             } else if (instruction === 'JL') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: JL instruction requires label or address (e.g., JL loop)`);
+                }
                 const labelOrValue = parts[1];
                 const value = this.resolveLabelOrValue(labelOrValue, labels);
                 this.cpu.instructions[address] = 0xA1; // JL opcode (10100001)
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
             } else if (instruction === 'JG') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: JG instruction requires label or address (e.g., JG loop)`);
+                }
                 const labelOrValue = parts[1];
                 const value = this.resolveLabelOrValue(labelOrValue, labels);
                 this.cpu.instructions[address] = 0xA2; // JG opcode (10100010)
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
             } else if (instruction === 'JP') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: JP instruction requires label or address (e.g., JP loop)`);
+                }
                 const labelOrValue = parts[1];
                 const value = this.resolveLabelOrValue(labelOrValue, labels);
                 this.cpu.instructions[address] = 0xA3; // JP opcode (10100011)
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
             } else if (instruction === 'MOV') {
+                if (parts.length < 3) {
+                    throw new Error(`Line ${lineNum + 1}: MOV instruction requires destination and source registers (e.g., MOV X0, X1)`);
+                }
                 const destReg = parts[1];
                 const srcReg = parts[2];
                 const destNum = this.parseRegister(destReg);
@@ -223,6 +305,9 @@ class CDC8512Emulator {
                 this.cpu.instructions[address] = opcode;
                 address += 1;
             } else if (instruction === 'ADD') {
+                if (parts.length < 3) {
+                    throw new Error(`Line ${lineNum + 1}: ADD instruction requires register and value (e.g., ADD X0, 42)`);
+                }
                 const reg = parts[1];
                 const value = this.parseValue(parts[2]);
                 const regNum = this.parseRegister(reg);
@@ -231,6 +316,9 @@ class CDC8512Emulator {
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
             } else if (instruction === 'SUB') {
+                if (parts.length < 3) {
+                    throw new Error(`Line ${lineNum + 1}: SUB instruction requires register and value (e.g., SUB X0, 42)`);
+                }
                 const reg = parts[1];
                 const value = this.parseValue(parts[2]);
                 const regNum = this.parseRegister(reg);
@@ -238,14 +326,9 @@ class CDC8512Emulator {
                 this.cpu.instructions[address] = opcode;
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
-            } else if (instruction === 'CMPZ') {
-                const reg = parts[1];
-                const regNum = this.parseRegister(reg);
-                const opcode = 0x50 | regNum; // CMPZ opcode (01010rrr)
-                this.cpu.instructions[address] = opcode;
-                address += 1;
             } else {
-                console.log(`Unrecognized instruction: "${instruction}"`);
+                // This should never happen since we validated instructions in the first pass
+                throw new Error(`Line ${lineNum + 1}: Unknown instruction "${instruction}"`);
             }
         }
         
@@ -261,17 +344,32 @@ class CDC8512Emulator {
             'A0': 0, 'A1': 1, 'A2': 2, 'A3': 3,
             'X0': 4, 'X1': 5, 'X2': 6, 'X3': 7
         };
-        const result = regMap[reg.toUpperCase()] || 0;
+        const result = regMap[reg.toUpperCase()];
+        if (result === undefined) {
+            throw new Error(`Invalid register name: "${reg}". Valid registers are: A0, A1, A2, A3, X0, X1, X2, X3`);
+        }
         console.log(`parseRegister('${reg}') = ${result}`);
         return result;
     }
 
     // Parse value (supports decimal and hex)
     parseValue(value) {
+        let result;
         if (value.startsWith('0x')) {
-            return parseInt(value, 16);
+            result = parseInt(value, 16);
+        } else {
+            result = parseInt(value, 10);
         }
-        return parseInt(value, 10);
+        
+        if (isNaN(result)) {
+            throw new Error(`Invalid value: "${value}". Must be a decimal number or hex value (0x...)`);
+        }
+        
+        if (result < 0 || result > 255) {
+            throw new Error(`Value out of range: "${value}". Must be between 0 and 255 (0x00 to 0xFF)`);
+        }
+        
+        return result;
     }
 
     // Resolve label or value (for jump instructions)
@@ -281,8 +379,18 @@ class CDC8512Emulator {
             console.log(`Resolved label "${labelOrValue}" to address 0x${labels[labelOrValue].toString(16).padStart(2, '0')}`);
             return labels[labelOrValue];
         }
+        
+        // Check if it looks like a label but isn't defined
+        if (isNaN(labelOrValue) && !labelOrValue.startsWith('0x')) {
+            throw new Error(`Undefined label: "${labelOrValue}". Available labels: ${Object.keys(labels).join(', ')}`);
+        }
+        
         // Otherwise parse as value
-        return this.parseValue(labelOrValue);
+        const value = this.parseValue(labelOrValue);
+        if (value >= 32) {
+            throw new Error(`Jump address out of range: ${labelOrValue}. Must be between 0 and 31 (0x00 to 0x1F)`);
+        }
+        return value;
     }
 
     // Get register name from number (matches specification: 000=A0, 001=A1, 010=A2, 011=A3, 100=X0, 101=X1, 110=X2, 111=X3)

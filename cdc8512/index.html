@@ -161,15 +161,14 @@
     <div class="container">
         <div class="control-group" id="assembler-section" style="display: none;">
             <h3>CDC6512 Assembly Editor</h3>
-            <div style="margin-bottom: 10px;">
-                <button id="assemble">Assemble</button>
-                <button id="save-assembly">Save</button>
-                <button id="load-assembly">Load</button>
-                <button id="delete-assembly">Delete</button>
-                <button id="manage-saved">Manage</button>
-                <button id="clear-assembly">Clear</button>
-            </div>
             <textarea id="assembly-input" rows="8" cols="50"></textarea>
+            <br><br>
+            <button id="assemble">Assemble</button>
+            <button id="save-assembly">Save</button>
+            <button id="load-assembly">Load</button>
+            <button id="delete-assembly">Delete</button>
+            <button id="manage-saved">Manage</button>
+            <button id="clear-assembly">Clear</button>
         </div>
         
         <div class="controls">
@@ -300,6 +299,7 @@ HALT`;
                             updateTrace();
                             updateOutput();
                             console.log('Assembly loaded successfully');
+                            alert('Assembly successful! Code has been loaded into instruction memory and the CPU has been reset and is ready to execute.');
                         } catch (error) {
                             console.error('Assembly error:', error);
                             alert('Assembly error: ' + error.message);
