@@ -23,6 +23,8 @@ export class CDC8512CPU extends LitElement {
       x1: { type: Number },
       x2: { type: Number },
       x3: { type: Number },
+      // Memory highlighting
+      highlightedMemory: { type: Array },
       // Responsive layout
       isMobile: { type: Boolean }
     }
@@ -46,6 +48,9 @@ export class CDC8512CPU extends LitElement {
     this.x1 = 0;
     this.x2 = 0;
     this.x3 = 0;
+    
+    // Initialize memory highlighting
+    this.highlightedMemory = [];
     
     // Initialize responsive layout
     this.isMobile = window.innerWidth <= 1000;
@@ -305,6 +310,19 @@ export class CDC8512CPU extends LitElement {
     return '?';
   }
 
+  // Method to highlight a memory address
+  highlightMemory(address) {
+    // Clear all previous highlights and highlight only the most recent address
+    this.highlightedMemory = [address];
+    this.requestUpdate();
+  }
+
+  // Method to clear memory highlighting
+  clearMemoryHighlighting() {
+    this.highlightedMemory = [];
+    this.requestUpdate();
+  }
+
 
 
   static get styles() {
@@ -375,6 +393,12 @@ export class CDC8512CPU extends LitElement {
       .bg-warning {
         background-color: #ffc107 !important;
         color: #000 !important;
+        font-weight: bold;
+      }
+      
+      .bg-memory-access {
+        background-color: #28a745 !important;
+        color: #fff !important;
         font-weight: bold;
       }
       
@@ -537,7 +561,7 @@ export class CDC8512CPU extends LitElement {
                         ` : html``
                         :
                         (index>=0 && index<=15) ? html`
-                        <li>0x${this.toHex(index)}: <input type="text" size="4" value="0x${this.toHex(word)}" @input=${this.changeMemory(index)} @blur=${this.blurMemory(index)}></li>
+                        <li><span class="${this.highlightedMemory.includes(index) ? 'bg-memory-access' : ''}">0x${this.toHex(index)}:</span> <input type="text" size="4" value="0x${this.toHex(word)}" @input=${this.changeMemory(index)} @blur=${this.blurMemory(index)}></li>
                         ` : html``
                     )}
                   </ul>
@@ -549,7 +573,7 @@ export class CDC8512CPU extends LitElement {
                     ${repeat(
                       this.memory,
                       (word, index) =>                         (index>=16 && index<=31) ? html`
-                        <li>0x${this.toHex(index)}: <input type="text" size="4" value="0x${this.toHex(word)}" @input=${this.changeMemory(index)} @blur=${this.blurMemory(index)}></li>
+                        <li><span class="${this.highlightedMemory.includes(index) ? 'bg-memory-access' : ''}">0x${this.toHex(index)}:</span> <input type="text" size="4" value="0x${this.toHex(word)}" @input=${this.changeMemory(index)} @blur=${this.blurMemory(index)}></li>
                         ` : html``
                     )}
                   </ul>

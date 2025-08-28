@@ -37,6 +37,9 @@ class CDC8512Emulator {
         this.output = '';
         this.executionTrace = [];
         
+        // Clear memory highlighting
+        this.cpu.clearMemoryHighlighting();
+        
         if (this.clockInterval) {
             clearInterval(this.clockInterval);
             this.clockInterval = null;
@@ -345,15 +348,19 @@ class CDC8512Emulator {
             // A2/A3: Implicit STORE from X2/X3 to memory
             if (regName === 'a0') {
                 this.cpu.x0 = this.cpu.memory[this.cpu.a0];
+                this.cpu.highlightMemory(this.cpu.a0);
                 console.log(`Implicit load: memory[${this.cpu.a0}] (${this.cpu.x0}) -> X0`);
             } else if (regName === 'a1') {
                 this.cpu.x1 = this.cpu.memory[this.cpu.a1];
+                this.cpu.highlightMemory(this.cpu.a1);
                 console.log(`Implicit load: memory[${this.cpu.a1}] (${this.cpu.x1}) -> X1`);
             } else if (regName === 'a2') {
                 this.cpu.memory[this.cpu.a2] = this.cpu.x2;
+                this.cpu.highlightMemory(this.cpu.a2);
                 console.log(`Implicit store: X2 (${this.cpu.x2}) -> memory[${this.cpu.a2}]`);
             } else if (regName === 'a3') {
                 this.cpu.memory[this.cpu.a3] = this.cpu.x3;
+                this.cpu.highlightMemory(this.cpu.a3);
                 console.log(`Implicit store: X3 (${this.cpu.x3}) -> memory[${this.cpu.a3}]`);
             }
             
@@ -394,15 +401,19 @@ class CDC8512Emulator {
             // A2/A3: Implicit STORE from X2/X3 to memory
             if (regName === 'a0') {
                 this.cpu.x0 = this.cpu.memory[this.cpu.a0];
+                this.cpu.highlightMemory(this.cpu.a0);
                 console.log(`Implicit load: memory[${this.cpu.a0}] (${this.cpu.x0}) -> X0`);
             } else if (regName === 'a1') {
                 this.cpu.x1 = this.cpu.memory[this.cpu.a1];
+                this.cpu.highlightMemory(this.cpu.a1);
                 console.log(`Implicit load: memory[${this.cpu.a1}] (${this.cpu.x1}) -> X1`);
             } else if (regName === 'a2') {
                 this.cpu.memory[this.cpu.a2] = this.cpu.x2;
+                this.cpu.highlightMemory(this.cpu.a2);
                 console.log(`Implicit store: X2 (${this.cpu.x2}) -> memory[${this.cpu.a2}]`);
             } else if (regName === 'a3') {
                 this.cpu.memory[this.cpu.a3] = this.cpu.x3;
+                this.cpu.highlightMemory(this.cpu.a3);
                 console.log(`Implicit store: X3 (${this.cpu.x3}) -> memory[${this.cpu.a3}]`);
             }
             
@@ -426,15 +437,19 @@ class CDC8512Emulator {
             // A2/A3: Implicit STORE from X2/X3 to memory
             if (regName === 'a0') {
                 this.cpu.x0 = this.cpu.memory[immediate];
+                this.cpu.highlightMemory(immediate);
                 console.log(`Implicit load: memory[${immediate}] (${this.cpu.x0}) -> X0`);
             } else if (regName === 'a1') {
                 this.cpu.x1 = this.cpu.memory[immediate];
+                this.cpu.highlightMemory(immediate);
                 console.log(`Implicit load: memory[${immediate}] (${this.cpu.x1}) -> X1`);
             } else if (regName === 'a2') {
                 this.cpu.memory[immediate] = this.cpu.x2;
+                this.cpu.highlightMemory(immediate);
                 console.log(`Implicit store: X2 (${this.cpu.x2}) -> memory[${immediate}]`);
             } else if (regName === 'a3') {
                 this.cpu.memory[immediate] = this.cpu.x3;
+                this.cpu.highlightMemory(immediate);
                 console.log(`Implicit store: X3 (${this.cpu.x3}) -> memory[${immediate}]`);
             }
             
