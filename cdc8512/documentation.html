@@ -221,6 +221,11 @@
                     <td>01010rrr</td>
                     <td>Increment register by 1</td>
                 </tr>
+                <tr>
+                    <td>DEC reg</td>
+                    <td>01011rrr</td>
+                    <td>Decrement register by 1</td>
+                </tr>
             </table>
             
             <h3>Immediate Instructions (16-bit)</h3>
@@ -233,22 +238,22 @@
                 <tr>
                     <td>SET reg, value</td>
                     <td>10000rrr + value</td>
-                    <td>Set register to immediate value (0-255)</td>
+                    <td>Set register to immediate value (0-255, 0x00-0xFF, or 'A')</td>
                 </tr>
                 <tr>
                     <td>CMP reg, value</td>
                     <td>10001rrr + value</td>
-                    <td>Compare register to immediate value</td>
+                    <td>Compare register to immediate value (0-255, 0x00-0xFF, or 'A')</td>
                 </tr>
                 <tr>
                     <td>ADD reg, value</td>
                     <td>10010rrr + value</td>
-                    <td>Add immediate value to register</td>
+                    <td>Add immediate value to register (0-255, 0x00-0xFF, or 'A')</td>
                 </tr>
                 <tr>
                     <td>SUB reg, value</td>
                     <td>10011rrr + value</td>
-                    <td>Subtract immediate value from register</td>
+                    <td>Subtract immediate value from register (0-255, 0x00-0xFF, or 'A')</td>
                 </tr>
                 <tr>
                     <td>JE label/value</td>
@@ -354,6 +359,11 @@
                 <h4>💡 CDC 6500 Load/Store Architecture</h4>
                 <p>When you set A0 or A1, the corresponding X register (X0 or X1) is automatically loaded from memory at that address. When you set A2 or A3, the corresponding X register (X2 or X3) is automatically stored to memory at that address.</p>
             </div>
+            
+            <div class="tip">
+                <h4>💡 ASCII Character Support</h4>
+                <p>Immediate values can be specified as single ASCII characters in quotes: <code>SET X0, 'A'</code> sets X0 to 65 (ASCII for 'A'). This works for all immediate instructions: SET, CMP, ADD, SUB.</p>
+            </div>
         </div>
         
         <div id="examples" class="tab-content">
@@ -362,14 +372,14 @@
             <div class="example">
                 <h4>Hello World (Manual)</h4>
                 <div class="code-block">
-SET X2, 72    ; 'H'
+SET X2, 'H'   ; Set X2 to ASCII 'H' (72)
 SET A2, 0     ; Address 0
-SET X2, 101   ; 'e'
+SET X2, 'e'   ; Set X2 to ASCII 'e' (101)
 INC A2        ; Address 1
-SET X2, 108   ; 'l'
+SET X2, 'l'   ; Set X2 to ASCII 'l' (108)
 INC A2        ; Address 2
 INC A2        ; Address 3 (second 'l')
-SET X2, 111   ; 'o'
+SET X2, 'o'   ; Set X2 to ASCII 'o' (111)
 INC A2        ; Address 4
 PS            ; Print string
 HALT
@@ -382,6 +392,29 @@ HALT
 PS            ; Print string
 HALT          ; Stop
 DATA 'Hello World!'
+                </div>
+            </div>
+            
+            <div class="example">
+                <h4>Hello (using ADD/DEC)</h4>
+                <div class="code-block">
+; This will print:  Hello
+
+SET X3, 'H'   ; Set X3 to the value for ASCII H
+SET A3, 0     ; Set A3 to zero and store 'H' in data memory location 0x00
+SET X3, 'e'   ; Set X3 to 'e'
+INC A3        ; Add 1 to A3 and store 'e' in location 0x01
+SET X3, 'l'   ; Set X3 to 'l'
+ADD A3, 1     ; Add 1 to A3 and store 'l' in location 0x02
+INC A3        ; Add 1 to A3 and store 'l' in location 0x03
+ADD X3, 4     ; Add 4 to X3 so that it is now 'p'
+DEC X3        ; Subtract 1 from X3 so that it is now 'o'
+INC A3        ; Add 1 to A3 and store 'o' in location 0x04
+SET X3, 0     ; Set X3 to integer zero
+INC A3        ; Add 1 to A3 and store integer 0 in location 0x05
+PS            ; Print memory starting at data address 0 as an
+              ; ASCII string, stopping when a zero is encountered
+HALT
                 </div>
             </div>
             

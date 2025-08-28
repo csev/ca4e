@@ -112,7 +112,7 @@ class CDC8512Emulator {
             }
             
             // Validate instruction
-            const validInstructions = ['SET', 'CMP', 'ADD', 'SUB', 'JE', 'JL', 'JG', 'JP', 'INC', 'ZERO', 'PS', 'HALT', 'MOV', 'CMPZ'];
+            const validInstructions = ['SET', 'CMP', 'ADD', 'SUB', 'JE', 'JL', 'JG', 'JP', 'INC', 'DEC', 'ZERO', 'PS', 'HALT', 'MOV', 'CMPZ'];
             if (!validInstructions.includes(instruction)) {
                 errors.push(`Line ${lineNum + 1}: Unknown instruction "${instruction}"`);
                 continue;
@@ -123,7 +123,7 @@ class CDC8512Emulator {
             if (instruction === 'SET' || instruction === 'CMP' || instruction === 'ADD' || instruction === 'SUB' ||
                 instruction === 'JE' || instruction === 'JL' || instruction === 'JG' || instruction === 'JP') {
                 instructionSize = 2; // 16-bit instructions
-            } else if (instruction === 'INC' || instruction === 'ZERO' || instruction === 'PS' || instruction === 'HALT' ||
+            } else if (instruction === 'INC' || instruction === 'DEC' || instruction === 'ZERO' || instruction === 'PS' || instruction === 'HALT' ||
                        instruction === 'MOV' || instruction === 'CMPZ') {
                 instructionSize = 1; // 8-bit instructions
             }
@@ -239,6 +239,14 @@ class CDC8512Emulator {
                 const regNum = this.parseRegister(reg);
                 this.cpu.instructions[address] = 0x50 | regNum; // INC opcode (01010rrr)
                 address += 1;
+            } else if (instruction === 'DEC') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: DEC instruction requires register (e.g., DEC X0)`);
+                }
+                const reg = parts[1];
+                const regNum = this.parseRegister(reg);
+                this.cpu.instructions[address] = 0x58 | regNum; // DEC opcode (01011rrr)
+                address += 1;
             } else if (instruction === 'PS') {
                 this.cpu.instructions[address] = 0x01; // PS opcode (00000001)
                 address += 1;
@@ -311,7 +319,7 @@ class CDC8512Emulator {
                 const reg = parts[1];
                 const value = this.parseValue(parts[2]);
                 const regNum = this.parseRegister(reg);
-                const opcode = 0x82 | regNum; // ADD opcode (10010rrr)
+                const opcode = 0x92 | regNum; // ADD opcode (10010rrr)
                 this.cpu.instructions[address] = opcode;
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
@@ -352,17 +360,30 @@ class CDC8512Emulator {
         return result;
     }
 
-    // Parse value (supports decimal and hex)
+    // Parse value (supports decimal, hex, and single ASCII characters)
     parseValue(value) {
         let result;
-        if (value.startsWith('0x')) {
+        
+        // Check for single quoted ASCII character
+        if (value.startsWith("'") && value.endsWith("'")) {
+            if (value.length !== 3) {
+                throw new Error(`Invalid character literal: "${value}". Must be a single character (e.g., 'A')`);
+            }
+            const char = value.charAt(1);
+            result = char.charCodeAt(0);
+            
+            // Validate that it's a standard ASCII character (0-127)
+            if (result < 0 || result > 127) {
+                throw new Error(`Invalid ASCII character: "${value}". Must be a standard ASCII character (0-127, e.g., 'A', '!', ' ')`);
+            }
+        } else if (value.startsWith('0x')) {
             result = parseInt(value, 16);
         } else {
             result = parseInt(value, 10);
         }
         
         if (isNaN(result)) {
-            throw new Error(`Invalid value: "${value}". Must be a decimal number or hex value (0x...)`);
+            throw new Error(`Invalid value: "${value}". Must be a decimal number, hex value (0x...), or single ASCII character ('A')`);
         }
         
         if (result < 0 || result > 255) {
@@ -528,6 +549,41 @@ class CDC8512Emulator {
             result = `INC ${regName}`;
             pcIncrement = 1;
         }
+        else if ((instruction >> 3) === 0x0B) { // 01011xxx - DEC
+            const register = instruction & 0x07;
+            const regName = this.getRegisterName(register);
+            console.log(`  Executing: DEC ${regName}`);
+            this.cpu[regName] = (this.cpu[regName] - 1) & 0xFF;
+            
+            // Check A register addresses for out of range errors
+            if (this.checkAAddresses()) {
+                return 'ERROR: A register address out of range';
+            }
+            
+            // CDC 6500 load/store architecture: 
+            // A0/A1: Implicit LOAD from memory into X0/X1
+            // A2/A3: Implicit STORE from X2/X3 to memory
+            if (regName === 'a0') {
+                this.cpu.x0 = this.cpu.memory[this.cpu.a0];
+                this.cpu.highlightMemory(this.cpu.a0);
+                console.log(`Implicit load: memory[${this.cpu.a0}] (${this.cpu.x0}) -> X0`);
+            } else if (regName === 'a1') {
+                this.cpu.x1 = this.cpu.memory[this.cpu.a1];
+                this.cpu.highlightMemory(this.cpu.a1);
+                console.log(`Implicit load: memory[${this.cpu.a1}] (${this.cpu.x1}) -> X1`);
+            } else if (regName === 'a2') {
+                this.cpu.memory[this.cpu.a2] = this.cpu.x2;
+                this.cpu.highlightMemory(this.cpu.a2);
+                console.log(`Implicit store: X2 (${this.cpu.x2}) -> memory[${this.cpu.a2}]`);
+            } else if (regName === 'a3') {
+                this.cpu.memory[this.cpu.a3] = this.cpu.x3;
+                this.cpu.highlightMemory(this.cpu.a3);
+                console.log(`Implicit store: X3 (${this.cpu.x3}) -> memory[${this.cpu.a3}]`);
+            }
+            
+            result = `DEC ${regName}`;
+            pcIncrement = 1;
+        }
         else if ((instruction >> 3) === 0x10) { // 10000xxx - SET (16-bit)
             const register = instruction & 0x07;
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
@@ -589,6 +645,33 @@ class CDC8512Emulator {
             const regName = this.getRegisterName(register);
             console.log(`  Executing: ADD ${regName}, ${immediate}`);
             this.cpu[regName] = (this.cpu[regName] + immediate) & 0xFF;
+            
+            // Check A register addresses for out of range errors
+            if (this.checkAAddresses()) {
+                return 'ERROR: A register address out of range';
+            }
+            
+            // CDC 6500 load/store architecture: 
+            // A0/A1: Implicit LOAD from memory into X0/X1
+            // A2/A3: Implicit STORE from X2/X3 to memory
+            if (regName === 'a0') {
+                this.cpu.x0 = this.cpu.memory[this.cpu.a0];
+                this.cpu.highlightMemory(this.cpu.a0);
+                console.log(`Implicit load: memory[${this.cpu.a0}] (${this.cpu.x0}) -> X0`);
+            } else if (regName === 'a1') {
+                this.cpu.x1 = this.cpu.memory[this.cpu.a1];
+                this.cpu.highlightMemory(this.cpu.a1);
+                console.log(`Implicit load: memory[${this.cpu.a1}] (${this.cpu.x1}) -> X1`);
+            } else if (regName === 'a2') {
+                this.cpu.memory[this.cpu.a2] = this.cpu.x2;
+                this.cpu.highlightMemory(this.cpu.a2);
+                console.log(`Implicit store: X2 (${this.cpu.x2}) -> memory[${this.cpu.a2}]`);
+            } else if (regName === 'a3') {
+                this.cpu.memory[this.cpu.a3] = this.cpu.x3;
+                this.cpu.highlightMemory(this.cpu.a3);
+                console.log(`Implicit store: X3 (${this.cpu.x3}) -> memory[${this.cpu.a3}]`);
+            }
+            
             result = `ADD ${regName}, ${immediate}`;
             pcIncrement = 2;
         }
@@ -598,6 +681,33 @@ class CDC8512Emulator {
             const regName = this.getRegisterName(register);
             console.log(`  Executing: SUB ${regName}, ${immediate}`);
             this.cpu[regName] = (this.cpu[regName] - immediate) & 0xFF;
+            
+            // Check A register addresses for out of range errors
+            if (this.checkAAddresses()) {
+                return 'ERROR: A register address out of range';
+            }
+            
+            // CDC 6500 load/store architecture: 
+            // A0/A1: Implicit LOAD from memory into X0/X1
+            // A2/A3: Implicit STORE from X2/X3 to memory
+            if (regName === 'a0') {
+                this.cpu.x0 = this.cpu.memory[this.cpu.a0];
+                this.cpu.highlightMemory(this.cpu.a0);
+                console.log(`Implicit load: memory[${this.cpu.a0}] (${this.cpu.x0}) -> X0`);
+            } else if (regName === 'a1') {
+                this.cpu.x1 = this.cpu.memory[this.cpu.a1];
+                this.cpu.highlightMemory(this.cpu.a1);
+                console.log(`Implicit load: memory[${this.cpu.a1}] (${this.cpu.x1}) -> X1`);
+            } else if (regName === 'a2') {
+                this.cpu.memory[this.cpu.a2] = this.cpu.x2;
+                this.cpu.highlightMemory(this.cpu.a2);
+                console.log(`Implicit store: X2 (${this.cpu.x2}) -> memory[${this.cpu.a2}]`);
+            } else if (regName === 'a3') {
+                this.cpu.memory[this.cpu.a3] = this.cpu.x3;
+                this.cpu.highlightMemory(this.cpu.a3);
+                console.log(`Implicit store: X3 (${this.cpu.x3}) -> memory[${this.cpu.a3}]`);
+            }
+            
             result = `SUB ${regName}, ${immediate}`;
             pcIncrement = 2;
         }
