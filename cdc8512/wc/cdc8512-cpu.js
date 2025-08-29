@@ -310,6 +310,83 @@ export class CDC8512CPU extends LitElement {
     return '?';
   }
 
+  disassembleInstruction(instruction) {
+    // Disassemble a single instruction byte
+    if (instruction === 0x00) return "HALT";
+    if (instruction === 0x01) return "PS";
+    
+    // 8-bit patterns
+    if ((instruction >> 3) === 0x08) { // 01000xxx - ZERO
+      const reg = instruction & 0x07;
+      return `ZERO ${this.getRegisterName(reg)}`;
+    }
+    if ((instruction >> 3) === 0x09) { // 01001xxx - CMPZ
+      const reg = instruction & 0x07;
+      return `CMPZ ${this.getRegisterName(reg)}`;
+    }
+    if ((instruction >> 3) === 0x0A) { // 01010xxx - INC
+      const reg = instruction & 0x07;
+      return `INC ${this.getRegisterName(reg)}`;
+    }
+    if ((instruction >> 3) === 0x0B) { // 01011xxx - DEC
+      const reg = instruction & 0x07;
+      return `DEC ${this.getRegisterName(reg)}`;
+    }
+    
+    // 5-bit patterns for immediate instructions
+    if ((instruction >> 5) === 0x04) { // 100xxxxx - Immediate instructions
+      const subOpcode = (instruction >> 3) & 0x03;
+      const reg = instruction & 0x07;
+      const instructions = ["SET", "CMP", "ADD", "SUB"];
+      return `${instructions[subOpcode]} ${this.getRegisterName(reg)}, [immediate]`;
+    }
+    
+    // Jump instructions
+    if ((instruction >> 5) === 0x05) { // 10100xxx - Jump instructions
+      const jumpType = instruction & 0x03;
+      const jumpTypes = ["JE", "JL", "JG", "JP"];
+      return `${jumpTypes[jumpType]}, [address]`;
+    }
+    
+    // Register copy instructions
+    if ((instruction >> 6) === 0x03) { // 11xxxxxx - MOV
+      const destReg = (instruction >> 3) & 0x07;
+      const srcReg = instruction & 0x07;
+      return `MOV ${this.getRegisterName(destReg)}, ${this.getRegisterName(srcReg)}`;
+    }
+    
+    return "Invalid instruction";
+  }
+
+  getRegisterName(regNum) {
+    const registers = ['A0', 'A1', 'A2', 'A3', 'X0', 'X1', 'X2', 'X3'];
+    return registers[regNum] || `R${regNum}`;
+  }
+
+  getTooltipText(value, address) {
+    let tooltip = `Address: 0x${this.toHex(address)}`;
+    tooltip += `\nValue: 0x${this.toHex(value)} (${value})`;
+    
+    // Add ASCII character info if it's a printable character
+    if (value >= 32 && value <= 126) {
+      tooltip += `\nASCII: '${String.fromCharCode(value)}'`;
+    } else if (value === 0) {
+      tooltip += `\nASCII: null terminator`;
+    } else if (value < 32) {
+      tooltip += `\nASCII: control character`;
+    } else {
+      tooltip += `\nASCII: non-printable`;
+    }
+    
+    // Add instruction disassembly if it's a valid instruction
+    const disassembly = this.disassembleInstruction(value);
+    if (disassembly !== "Invalid instruction") {
+      tooltip += `\nInstruction: ${disassembly}`;
+    }
+    
+    return tooltip;
+  }
+
   // Method to highlight a memory address
   highlightMemory(address) {
     // Clear all previous highlights and highlight only the most recent address
@@ -400,6 +477,48 @@ export class CDC8512CPU extends LitElement {
         background-color: #28a745 !important;
         color: #fff !important;
         font-weight: bold;
+      }
+      
+      .tooltip {
+        position: relative;
+        display: inline-block;
+      }
+      
+      .tooltip .tooltiptext {
+        visibility: hidden;
+        width: 200px;
+        background-color: #333;
+        color: #fff;
+        text-align: left;
+        border-radius: 6px;
+        padding: 8px;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        margin-left: -100px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 12px;
+        white-space: pre-line;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      }
+      
+      .tooltip .tooltiptext::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -5px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: #333 transparent transparent transparent;
+      }
+      
+      .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
       }
       
       ul {
@@ -528,11 +647,11 @@ export class CDC8512CPU extends LitElement {
                       this.instructions,
                       (word, index) => this.isMobile ? 
                         (index>=0 && index<=31) ? html`
-                        <li><span class="${index === this.pc ? 'bg-warning' : ''}">0x${this.toHex(index)}:</span> <input type="text" size="8" value="${this.toBinary(word)}" @input=${this.changeInstruction(index)}></li>
+                        <li><span class="${index === this.pc ? 'bg-warning' : ''}">0x${this.toHex(index)}:</span> <div class="tooltip"><input type="text" size="8" value="${this.toBinary(word)}" @input=${this.changeInstruction(index)}><span class="tooltiptext">${this.getTooltipText(word, index)}</span></div></li>
                         ` : html``
                         :
                         (index>=0 && index<=15) ? html`
-                        <li><span class="${index === this.pc ? 'bg-warning' : ''}">0x${this.toHex(index)}:</span> <input type="text" size="8" value="${this.toBinary(word)}" @input=${this.changeInstruction(index)}></li>
+                        <li><span class="${index === this.pc ? 'bg-warning' : ''}">0x${this.toHex(index)}:</span> <div class="tooltip"><input type="text" size="8" value="${this.toBinary(word)}" @input=${this.changeInstruction(index)}><span class="tooltiptext">${this.getTooltipText(word, index)}</span></div></li>
                         ` : html``
                     )}
                   </ul>
@@ -543,8 +662,8 @@ export class CDC8512CPU extends LitElement {
                   <ul style="list-style-type: none; font-family: monospace;">
                     ${repeat(
                       this.instructions,
-                      (word, index) => (index>=16 && index<=31) ? html`
-                      <li><span class="${index === this.pc ? 'bg-warning' : ''}">0x${this.toHex(index)}:</span> <input type="text" size="8" value="${this.toBinary(word)}" @input=${this.changeInstruction(index)}></li>
+                      (word, index) =>                       (index>=16 && index<=31) ? html`
+                      <li><span class="${index === this.pc ? 'bg-warning' : ''}">0x${this.toHex(index)}:</span> <div class="tooltip"><input type="text" size="8" value="${this.toBinary(word)}" @input=${this.changeInstruction(index)}><span class="tooltiptext">${this.getTooltipText(word, index)}</span></div></li>
                       ` : html``
                     )}
                   </ul>
