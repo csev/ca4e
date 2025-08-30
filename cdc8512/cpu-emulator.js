@@ -908,6 +908,18 @@ DATA 'Hello World!'`;
         this.loadProgram(helloWorldProgram);
     }
 
+    // Load the Hi program - simple program to print "Hi"
+    loadHiProgram() {
+        this.reset();
+        const hiProgram = `SET X2, 'H'
+ZERO A2
+SET X2, 'i'
+INC A2
+PS
+HALT`;
+        this.loadProgram(hiProgram);
+    }
+
     // Get execution status
     getStatus() {
         return {

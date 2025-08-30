@@ -387,6 +387,31 @@ export class CDC8512CPU extends LitElement {
     return tooltip;
   }
 
+  getAriaLabel(value, address) {
+    let ariaLabel = `Instruction memory address 0x${this.toHex(address)}, value 0x${this.toHex(value)} (${value})`;
+    
+    // Add ASCII character info if it's a printable character
+    if (value >= 32 && value <= 126) {
+      ariaLabel += `, ASCII character ${String.fromCharCode(value)}`;
+    } else if (value === 0) {
+      ariaLabel += `, null terminator`;
+    } else if (value < 32) {
+      ariaLabel += `, control character`;
+    } else {
+      ariaLabel += `, non-printable character`;
+    }
+    
+    // Add instruction disassembly if it's a valid instruction
+    const disassembly = this.disassembleInstruction(value);
+    if (disassembly !== "Invalid instruction") {
+      ariaLabel += `, disassembles to ${disassembly}`;
+    } else {
+      ariaLabel += `, invalid instruction`;
+    }
+    
+    return ariaLabel;
+  }
+
   // Method to highlight a memory address
   highlightMemory(address) {
     // Clear all previous highlights and highlight only the most recent address
@@ -647,11 +672,11 @@ export class CDC8512CPU extends LitElement {
                       this.instructions,
                       (word, index) => this.isMobile ? 
                         (index>=0 && index<=31) ? html`
-                        <li><span class="${index === this.pc ? 'bg-warning' : ''}">0x${this.toHex(index)}:</span> <div class="tooltip"><input type="text" size="8" value="${this.toBinary(word)}" @input=${this.changeInstruction(index)}><span class="tooltiptext">${this.getTooltipText(word, index)}</span></div></li>
+                        <li><span class="${index === this.pc ? 'bg-warning' : ''}">0x${this.toHex(index)}:</span> <div class="tooltip"><input type="text" size="8" value="${this.toBinary(word)}" @input=${this.changeInstruction(index)} aria-label="${this.getAriaLabel(word, index)}"><span class="tooltiptext">${this.getTooltipText(word, index)}</span></div></li>
                         ` : html``
                         :
                         (index>=0 && index<=15) ? html`
-                        <li><span class="${index === this.pc ? 'bg-warning' : ''}">0x${this.toHex(index)}:</span> <div class="tooltip"><input type="text" size="8" value="${this.toBinary(word)}" @input=${this.changeInstruction(index)}><span class="tooltiptext">${this.getTooltipText(word, index)}</span></div></li>
+                        <li><span class="${index === this.pc ? 'bg-warning' : ''}">0x${this.toHex(index)}:</span> <div class="tooltip"><input type="text" size="8" value="${this.toBinary(word)}" @input=${this.changeInstruction(index)} aria-label="${this.getAriaLabel(word, index)}"><span class="tooltiptext">${this.getTooltipText(word, index)}</span></div></li>
                         ` : html``
                     )}
                   </ul>
@@ -663,7 +688,7 @@ export class CDC8512CPU extends LitElement {
                     ${repeat(
                       this.instructions,
                       (word, index) =>                       (index>=16 && index<=31) ? html`
-                      <li><span class="${index === this.pc ? 'bg-warning' : ''}">0x${this.toHex(index)}:</span> <div class="tooltip"><input type="text" size="8" value="${this.toBinary(word)}" @input=${this.changeInstruction(index)}><span class="tooltiptext">${this.getTooltipText(word, index)}</span></div></li>
+                      <li><span class="${index === this.pc ? 'bg-warning' : ''}">0x${this.toHex(index)}:</span> <div class="tooltip"><input type="text" size="8" value="${this.toBinary(word)}" @input=${this.changeInstruction(index)} aria-label="${this.getAriaLabel(word, index)}"><span class="tooltiptext">${this.getTooltipText(word, index)}</span></div></li>
                       ` : html``
                     )}
                   </ul>

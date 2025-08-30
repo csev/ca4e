@@ -175,6 +175,7 @@
                 <div class="nav-left">
                     <select id="load-program">
                         <option value="">-- Load Program --</option>
+                        <option value="hi">Load Hi</option>
                         <option value="hello">Load Hello</option>
                         <option value="hello-world">Load Hello World</option>
                         <option value="labels-demo">Load Labels Demo</option>
@@ -271,6 +272,19 @@ HALT`;
                         emulator.loadProgram(labelsDemo);
                         enableStepButton(); // Re-enable step button after loading program
                         document.getElementById('assembly-input').value = labelsDemo;
+                        updateStatus();
+                        updateTrace();
+                        updateOutput();
+                    } else if (value === 'hi') {
+                        emulator.loadHiProgram();
+                        enableStepButton(); // Re-enable step button after loading program
+                        // Load assembly code into textarea
+                        document.getElementById('assembly-input').value = `SET X2, 'H'
+ZERO A2
+SET X2, 'i'
+INC A2
+PS
+HALT`;
                         updateStatus();
                         updateTrace();
                         updateOutput();
