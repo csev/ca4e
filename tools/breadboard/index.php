@@ -1,4 +1,13 @@
-<!DOCTYPE html>
+<?php
+
+require_once "../config.php";
+
+use \Tsugi\Core\LTIX;
+
+// Initialize LTI if we received a launch.  If this was a non-LTI GET,
+// then $USER will be null (i.e. anonymous)
+$LTI = LTIX::session_start();
+?><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
