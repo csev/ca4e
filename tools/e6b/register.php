@@ -5,6 +5,6 @@ $REGISTER_LTI2 = array(
 "FontAwesome" => "fa-plane",
 "short_name" => "E6B",
 "description" => "This is an emulator for the E6B analog trigonometry computer that pilots use to compute windo correction angle for a particular wind speed, airspeed, and desired ground track.  It was developed in the late 1930s and is still a big part of private pilot training when preparting for cross country flights.",
-"messages" => array("launch", "launch_grade")
+"messages" => array("anonymous", "launch", "launch_grade")
 );
 

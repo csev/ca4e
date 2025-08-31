@@ -5,6 +5,6 @@ $REGISTER_LTI2 = array(
 "FontAwesome" => "fa-plug fa-rotate-270",
 "short_name" => "CMOS Layout Tool",
 "description" => "This tools allows you to create logic gates by laying out PMOS and NMOS transistors in a breadboard-style user interface.",
-"messages" => array("launch", "launch_grade")
+"messages" => array("anonymous", "launch", "launch_grade")
 );
 
