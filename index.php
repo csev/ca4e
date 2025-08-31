@@ -70,34 +70,26 @@ As the course is developed, you can see some of
 the sample content in various stages of completion:
 <ul>
 <li>
-<a href="sliderule"  target="_blank" class="text-primary">Interactive Slide Rule</a>
+<a href="tools/sliderule"  target="_blank" class="text-primary">Interactive Slide Rule</a>
 </li>
 <li>
-<a href="e6b"  target="_blank" class="text-primary">Online Pilot Wind Correction Calculator (E6B)</a>
+<a href="tools/e6b"  target="_blank" class="text-primary">Online Pilot Wind Correction Calculator (E6B)</a>
 </li>
-<!--
     <li>
-      <a href="gridboard/index.html" target="_blank" class="text-primary">Breadboard</a>
-    </li>
--->
-    <li>
-      <a href="cmos/index.html" target="_blank" class="text-primary">CMOS Gate Builder</a>
+      <a href="tools/cmos/" target="_blank" class="text-primary">CMOS Gate Builder</a>
     </li>
     <li>
-      <a href="mistic/index.html" target="_blank" class="text-primary">Mistic VLSI Layout Tool</a> (inspried by the
+      <a href="tools/mistic/" target="_blank" class="text-primary">Mistic VLSI Layout Tool</a> (inspried by the
      <a href="http://opencircuitdesign.com/magic/" class="text-primary" target="_blank">Magic VLSI Layout Tool</a>)
     </li>
     <li>
-      <a href="gates/index.html" target="_blank" class="text-primary">Digital Logic Builder</a>
+      <a href="tools/gates/" target="_blank" class="text-primary">Digital Logic Builder</a>
     </li>
 <li>
-<a href="cdc8512/index.html"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator</a> (<a href="cdc8512/documentation.html"  target="_blank" class="text-primary">Documentation</a>)
+<a href="tools/cdc8512"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator</a> (<a href="cdc8512/documentation.html"  target="_blank" class="text-primary">Documentation</a>)
 </li>
 <li>
-<a href="wasm"  target="_blank" class="text-primary">WASM Playground</a>
-</li>
-<li>Draft lecture on the CDC8512 microprocessor
-<a href="lectures/CDC8512.pptx" target="_blank" class="text-primary">CDC8512 Microprocessor</a>.
+<a href="tools/wasm"  target="_blank" class="text-primary">WASM Playground</a>
 </li>
 <li>You also can view the course that is a pre-requisite for this course
 <a href="http://www.cc4e.com/" target="_blank" class="text-primary">C Programming Everybody</a>
@@ -105,7 +97,7 @@ the sample content in various stages of completion:
 </ul>
 <p>
 The course is not developed in a linear order.  These courses take a long time to develop.
-I tend to work on thigs that I think will be most difficult first.  Most of the early work is to build
+I tend to work on things that I think will be most difficult first.  Most of the early work is to build
 and test autograders.
 </p>
 <h3>Copyright</h3>
