@@ -3,8 +3,8 @@
 $REGISTER_LTI2 = array(
 "name" => "CDC8512",
 "FontAwesome" => "fa-calculator",
-"short_name" => "CDC8512 CPU EMulator",
-"description" => "This is an online tool for experimentation and supports auto graded for the assignments from www.ca4e.com (Computer Architecture for Everybody).",
+"short_name" => "CDC8512 CPU Emulator",
+"description" => "This tool emulates a fictitious CDC8612 CPU based loosely on the 1970's CDC-6500 supercomputer.",
 "messages" => array("launch", "launch_grade")
 );
 
