@@ -142,6 +142,9 @@ $LTI = LTIX::session_start();
 <?php if ($USER) : ?>
                 <button id="assignmentBtn" style="background-color:#fff0e6;">Assignment</button>
 <?php endif; ?>
+<?php if ($USER && $USER->instructor) : ?>
+                <button onclick="drawNotGate()" style="background-color: #9C27B0; color: white;">Not</button>
+<?php endif; ?>
             </div>
             <div id="canvasContainer" style="position:relative; display:inline-block;">
                 <canvas id="vlsiCanvas" width="600" height="600" style="border:1px solid #000000; display:block;"></canvas>
@@ -163,8 +166,21 @@ $LTI = LTIX::session_start();
                     <div class="modal-content">
                         <p>In this assignment you will lay out a Not gate. 
                             Place a probe with the label "A" on the input to your NOT gate. Place a probe with the label 
-                            "out" on the output of your NOT gate.  Then press "Grade" to check your circuit.</p>
-                            <button onclick="gradeAssignment()">Grade</button>
+                            "Q" on the output of your NOT gate. Do not place a VCC or GND on the trace that has the probe.
+                            If you place a VCC or GND for testing place the probes on the same 
+                            square as the test points so the test points are cleared.. Then press "Grade" to check your circuit.</p>
+                        <div id="gradingSection" style="margin-top: 20px; display: none;">
+                            <h3>Circuit Grading</h3>
+                            <div id="stepDisplay">
+                                <p id="stepText">Ready to grade your circuit!</p>
+                            </div>
+                            <div style="margin-top: 15px;">
+                                <button id="nextBtn" onclick="nextStep()" style="background-color: #2196F3; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; display: none;">Next</button>
+                            </div>
+                        </div>
+                        <div style="margin-top: 20px;">
+                            <button onclick="startGrading()" style="background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Grade</button>
+                        </div>
                     </div>
                 </div>
 <?php endif; ?>
@@ -213,6 +229,14 @@ $LTI = LTIX::session_start();
                 let grid = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(8).fill(false)));
                 let volts = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(8).fill(0)));
                 let probeLabels = {}; // Store probe labels: {x_y: 'label'}
+                
+                // Grading variables
+                let currentStep = 0;
+                let gradingSteps = [
+                    { name: "Check for A and Q probes", status: "pending" },
+                    { name: "Test A=0 → Q=1", status: "pending" },
+                    { name: "Test A=1 → Q=0", status: "pending" }
+                ];
 
                 function createGrid(size) {
                     return Array(size).fill().map(() => Array(size).fill().map(() => Array(8).fill(false)));
@@ -397,6 +421,160 @@ $LTI = LTIX::session_start();
 
                 // Assignment button click handler
                 assignmentBtn.addEventListener('click', showAssignmentModal);
+
+                // Grading functions
+                function startGrading() {
+                    currentStep = 0;
+                    document.getElementById('gradingSection').style.display = 'block';
+                    document.getElementById('nextBtn').style.display = 'none';
+                    nextStep();
+                }
+
+                function nextStep() {
+                    if (currentStep >= gradingSteps.length) {
+                        // All steps completed successfully
+                        alert("yay");
+                        return;
+                    }
+
+                    const step = gradingSteps[currentStep];
+                    const stepText = document.getElementById('stepText');
+                    
+                    switch (currentStep) {
+                        case 0:
+                            // Step 1: Check for A and out probes
+                            if (checkProbes()) {
+                                stepText.innerHTML = `<span style="color: green;">✓ ${step.name}</span>`;
+                                step.status = "passed";
+                                currentStep++;
+                                document.getElementById('nextBtn').style.display = 'inline-block';
+                            } else {
+                                stepText.innerHTML = `<span style="color: red;">✗ ${step.name}</span><br>
+                                    <small>Error: You need exactly one probe labeled "A" and one probe labeled "Q".</small>`;
+                                step.status = "failed";
+                            }
+                            break;
+                            
+                        case 1:
+                            // Step 2: Test A=0 → out=1
+                            if (testCircuit(0, 1)) {
+                                stepText.innerHTML = `<span style="color: green;">✓ ${step.name}</span>`;
+                                step.status = "passed";
+                                currentStep++;
+                                document.getElementById('nextBtn').style.display = 'inline-block';
+                            } else {
+                                stepText.innerHTML = `<span style="color: red;">✗ ${step.name}</span><br>
+                                    <small>Error: When A=0, the output should be 1. Check your NOT gate implementation.</small>`;
+                                step.status = "failed";
+                            }
+                            break;
+                            
+                        case 2:
+                            // Step 3: Test A=1 → out=0
+                            if (testCircuit(1, 0)) {
+                                stepText.innerHTML = `<span style="color: green;">✓ ${step.name}</span>`;
+                                step.status = "passed";
+                                currentStep++;
+                                document.getElementById('nextBtn').style.display = 'inline-block';
+                            } else {
+                                stepText.innerHTML = `<span style="color: red;">✗ ${step.name}</span><br>
+                                    <small>Error: When A=1, the output should be 0. Check your NOT gate implementation.</small>`;
+                                step.status = "failed";
+                            }
+                            break;
+                    }
+                }
+
+                function checkProbes() {
+                    const probeLabels = window.MisticProbes.getProbeLabels();
+                    const hasA = probeLabels.includes('A');
+                    const hasQ = probeLabels.includes('Q');
+                    return hasA && hasQ && probeLabels.length === 2;
+                }
+
+                function testCircuit(inputValue, expectedOutput) {
+                    // Set the A probe to the input value
+                    window.MisticProbes.setProbeValue('A', inputValue);
+                    
+                    // Recompute the circuit
+                    window.MisticProbes.recompute();
+                    
+                    // Get the output value
+                    const outputValue = window.MisticProbes.getProbeValue('Q');
+                    
+                    return outputValue === expectedOutput;
+                }
+
+                function drawNotGate() {
+                    // Clear the canvas first
+                    clearCanvas();
+                    
+                    // Draw a basic CMOS NOT gate
+                    // PMOS transistor (top)
+                    grid[5][8][layerPPlus] = true;  // P+ diffusion
+                    grid[5][9][layerPPlus] = true;
+                    grid[5][10][layerPPlus] = true;
+                    grid[5][11][layerPPlus] = true;
+                    grid[5][12][layerPPlus] = true;
+                    
+                    // NMOS transistor (bottom)
+                    grid[15][8][layerNPlus] = true;  // N+ diffusion
+                    grid[15][9][layerNPlus] = true;
+                    grid[15][10][layerNPlus] = true;
+                    grid[15][11][layerNPlus] = true;
+                    grid[15][12][layerNPlus] = true;
+                    
+                    // Polysilicon gate (shared between PMOS and NMOS)
+                    grid[5][10][layerPolysilicon] = true;
+                    grid[6][10][layerPolysilicon] = true;
+                    grid[7][10][layerPolysilicon] = true;
+                    grid[8][10][layerPolysilicon] = true;
+                    grid[9][10][layerPolysilicon] = true;
+                    grid[10][10][layerPolysilicon] = true;
+                    grid[11][10][layerPolysilicon] = true;
+                    grid[12][10][layerPolysilicon] = true;
+                    grid[13][10][layerPolysilicon] = true;
+                    grid[14][10][layerPolysilicon] = true;
+                    grid[15][10][layerPolysilicon] = true;
+                    
+                    // VCC connection (top)
+                    grid[3][10][layerVCC] = true;
+                    
+                    // GND connection (bottom)
+                    grid[17][10][layerGND] = true;
+                    
+                    // Metal connections
+                    // VCC to PMOS
+                    grid[4][10][layerMetal] = true;
+                    grid[5][10][layerMetal] = true;
+                    
+                    // GND to NMOS
+                    grid[16][10][layerMetal] = true;
+                    grid[15][10][layerMetal] = true;
+                    
+                    // Output connection (shared drain)
+                    grid[10][10][layerMetal] = true;
+                    grid[10][11][layerMetal] = true;
+                    grid[10][12][layerMetal] = true;
+                    grid[10][13][layerMetal] = true;
+                    
+                    // Input connection (gate)
+                    grid[10][8][layerMetal] = true;
+                    grid[10][9][layerMetal] = true;
+                    grid[10][10][layerMetal] = true;
+                    
+                    // Add probes
+                    // Input probe A
+                    grid[10][7][layerProbe] = true;
+                    probeLabels['7_10'] = 'A';
+                    
+                    // Output probe Q
+                    grid[10][14][layerProbe] = true;
+                    probeLabels['14_10'] = 'Q';
+                    
+                    // Redraw everything
+                    redrawAllTiles();
+                }
 <?php endif; ?>
 
                 // Drag handling for the modal (mouse + touch)
