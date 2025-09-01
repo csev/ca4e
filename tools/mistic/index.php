@@ -81,6 +81,7 @@ $LTI = LTIX::session_start();
                 <button onclick="setLayer('metal')" style="background-color: rgba(0, 0, 255, 0.3);">Metal</button>
                 <button onclick="setLayer('VCC')" style="background-color: #f0f0f0;">VCC</button>
                 <button onclick="setLayer('GND')" style="background-color: #f0f0f0;">GND</button>
+                <button onclick="setLayer('probe')" style="background-color: rgba(128, 0, 128, 0.3);">🔍</button>
                 <button onclick="setLayer('erase')" style="background-color: rgba(255, 255, 255, 1);">🧽</button>
                 <button onclick="confirmClear()" style="background-color: #ffe6e6;">🗑️</button>
                 <button id="toggleLayersBtn" style="background-color:#eef7ff;">Layers</button>
@@ -128,19 +129,21 @@ $LTI = LTIX::session_start();
                 const layerMetal = 4;
                 const layerVCC = 5;
                 const layerGND = 6;
+                const layerProbe = 7;
 
                 let currentLayer = '';
                 let isDrawing = false;
                 let startX, startY;
-                let grid = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(7).fill(false)));
-                let volts = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(7).fill(0)));
+                let grid = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(8).fill(false)));
+                let volts = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(8).fill(0)));
+                let probeLabels = {}; // Store probe labels: {x_y: 'label'}
 
                 function createGrid(size) {
-                    return Array(size).fill().map(() => Array(size).fill().map(() => Array(7).fill(false)));
+                    return Array(size).fill().map(() => Array(size).fill().map(() => Array(8).fill(false)));
                 }
 
                 function createVolts(size) {
-                    return Array(size).fill().map(() => Array(size).fill().map(() => Array(7).fill(0)));
+                    return Array(size).fill().map(() => Array(size).fill().map(() => Array(8).fill(0)));
                 }
 
                 function resizeGrid(newSize) {
@@ -156,6 +159,15 @@ $LTI = LTIX::session_start();
                             }
                         }
                     }
+                    // Preserve probe labels for copied area
+                    const newProbeLabels = {};
+                    for (let key in probeLabels) {
+                        const [x, y] = key.split('_').map(Number);
+                        if (x < copy && y < copy) {
+                            newProbeLabels[key] = probeLabels[key];
+                        }
+                    }
+                    probeLabels = newProbeLabels;
                     grid = newGrid;
                     volts = newVolts; // will be recomputed
                     gridSize = newSize;
@@ -168,6 +180,7 @@ $LTI = LTIX::session_start();
                 function clearCanvas() {
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     grid.forEach(row => row.forEach(col => col.fill(false)));
+                    probeLabels = {}; // Clear probe labels
                 }
 
                 function confirmClear() {
@@ -201,12 +214,25 @@ $LTI = LTIX::session_start();
                     startX = coords.x;
                     startY = coords.y;
                     
-                    if (['contact', 'VCC', 'GND'].includes(currentLayer)) {
+                    if (['contact', 'VCC', 'GND', 'probe'].includes(currentLayer)) {
                         grid[startY][startX][getLayerIndex('contact')] = false;
                         grid[startY][startX][getLayerIndex('VCC')] = false;
                         grid[startY][startX][getLayerIndex('GND')] = false;
+                        grid[startY][startX][getLayerIndex('probe')] = false;
 
                         grid[startY][startX][getLayerIndex(currentLayer)] = true;
+                        
+                        // Handle probe label input
+                        if (currentLayer === 'probe') {
+                            const label = prompt('Enter a single character label for this probe:');
+                            if (label && label.length > 0) {
+                                probeLabels[startX + '_' + startY] = label.charAt(0);
+                            } else {
+                                // If no label provided, remove the probe
+                                grid[startY][startX][getLayerIndex('probe')] = false;
+                            }
+                        }
+                        
                         redrawTile(startX, startY);
                         isDrawing = false;
                         redrawAllTiles();
@@ -226,7 +252,7 @@ $LTI = LTIX::session_start();
                     if (!isDrawing) return;
                     event.preventDefault();
                     
-                    if (currentLayer !== 'contact' && currentLayer !== 'VCC' && currentLayer !== 'GND') {
+                    if (currentLayer !== 'contact' && currentLayer !== 'VCC' && currentLayer !== 'GND' && currentLayer !== 'probe') {
                         const coords = getEventCoordinates(event.changedTouches ? event.changedTouches[0] : event);
                         fillTiles(startX, startY, coords.x, coords.y);
                     }
@@ -429,7 +455,7 @@ $LTI = LTIX::session_start();
                 function redrawTile(x, y) {
                     ctx.clearRect(x * tileSize, y * tileSize, tileSize, tileSize);
                     let voltage = 0;
-                    for (let i = 0; i < 7; i++) {
+                    for (let i = 0; i < 8; i++) {
                         if (grid[y][x][i]) {
                             if (volts[y][x][i] == 1) {
                                 voltage = 1;
@@ -452,10 +478,15 @@ $LTI = LTIX::session_start();
                                     drawRectangle(x, y, 0);
                                     drawText(x, y, 'G');
                                 }
+                            } else if (i === 7) {
+                                // Probe rendering
+                                drawRectangle(x, y, 0);
+                                const label = probeLabels[x + '_' + y] || '?';
+                                drawText(x, y, label);
                             } else {
                                 ctx.fillStyle = Object.values(layers)[i];
                                 ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
-                                if (grid[y][x][layerContact] || grid[y][x][layerVCC] || grid[y][x][layerGND]) {
+                                if (grid[y][x][layerContact] || grid[y][x][layerVCC] || grid[y][x][layerGND] || grid[y][x][layerProbe]) {
                                     // No voltage
                                 } else {
                                     if ( i == layerNPlus && grid[y][x][layerPolysilicon] && volts[y][x][layerPolysilicon] == -1) {
@@ -595,6 +626,7 @@ $LTI = LTIX::session_start();
                         case 'metal': return layerMetal;
                         case 'VCC': return layerVCC;
                         case 'GND': return layerGND;
+                        case 'probe': return layerProbe;
                         case 'erase': return -1;
                         default: return -1;
                     }
@@ -603,7 +635,7 @@ $LTI = LTIX::session_start();
                 function compute() {
                     for (let i = 0; i < grid.length; i++) {
                         for (let j = 0; j < grid[i].length; j++) {
-                            for (let l = 0; l < 7; l++) {
+                            for (let l = 0; l < 8; l++) {
                                 volts[i][j][l] = 0;
                             }
                         }
@@ -612,12 +644,12 @@ $LTI = LTIX::session_start();
                     for (let i = 0; i < grid.length; i++) {
                         for (let j = 0; j < grid[i].length; j++) {
                             if (grid[i][j][layerVCC]) {
-                                for (let l = 0; l < 7; l++) {
+                                for (let l = 0; l < 8; l++) {
                                     volts[i][j][l] = 1;
                                 }
                             }
                             if (grid[i][j][layerGND]) {
-                                for (let l = 0; l < 7; l++) {
+                                for (let l = 0; l < 8; l++) {
                                     volts[i][j][l] = -1;
                                 }
                             }
@@ -630,7 +662,7 @@ $LTI = LTIX::session_start();
                             changed = false;
                             for (let i = 0; i < grid.length; i++) {
                                 for (let j = 0; j < grid[i].length; j++) {
-                                    for (let l = 0; l < 7; l++) {
+                                    for (let l = 0; l < 8; l++) {
                                         if (grid[i][j][l] && volts[i][j][l] != 0) {
                                             changed = changed | propogateVoltage(volts[i][j][l], i-1, j, l);
                                             changed = changed | propogateVoltage(volts[i][j][l], i, j-1, l);
@@ -645,10 +677,10 @@ $LTI = LTIX::session_start();
                                 for (let j = 0; j < grid[i].length; j++) {
                                     if (grid[i][j][layerContact]) {
                                         voltage = 0;
-                                        for (let l = 0; l < 7; l++) {
+                                        for (let l = 0; l < 8; l++) {
                                             if (volts[i][j][l] != 0) voltage = volts[i][j][l];
                                         }
-                                        for (let l = 0; l < 7; l++) {
+                                        for (let l = 0; l < 8; l++) {
                                             if (volts[i][j][l] != voltage) {
                                                 changed = true;
                                                 volts[i][j][l] = voltage;
@@ -671,7 +703,7 @@ $LTI = LTIX::session_start();
                     if (!grid[i][j][l]) return false;
                     if (volts[i][j][l] == -1*voltage && voltage != 0) {
                         console.log('short detected', i, j, l);
-                        for ( let ll = 0; ll < 7; ll++) volts[i][j][ll] = 100;
+                        for ( let ll = 0; ll < 8; ll++) volts[i][j][ll] = 100;
                         throw new Error('short detected');
                     }
                     if (volts[i][j][l] == voltage) return false;
@@ -687,6 +719,67 @@ $LTI = LTIX::session_start();
                     if (j < grid.length-1) propogateVoltage(voltage, i, j+1, l);
                     return true;
                 }
+
+                // JavaScript API for probe access
+                window.MisticProbes = {
+                    // Get the voltage value at a probe with the given label
+                    getProbeValue: function(label) {
+                        for (let key in probeLabels) {
+                            if (probeLabels[key] === label) {
+                                const [x, y] = key.split('_').map(Number);
+                                if (grid[y] && grid[y][x] && grid[y][x][layerProbe]) {
+                                    // Return the voltage at this location
+                                    let voltage = 0;
+                                    for (let l = 0; l < 8; l++) {
+                                        if (volts[y][x][l] == 1) voltage = 1;
+                                        else if (volts[y][x][l] == -1) voltage = -1;
+                                    }
+                                    return voltage;
+                                }
+                            }
+                        }
+                        return null; // Probe not found
+                    },
+
+                    // Set the voltage value at a probe with the given label
+                    setProbeValue: function(label, voltage) {
+                        for (let key in probeLabels) {
+                            if (probeLabels[key] === label) {
+                                const [x, y] = key.split('_').map(Number);
+                                if (grid[y] && grid[y][x] && grid[y][x][layerProbe]) {
+                                    // Set voltage for all layers at this location
+                                    for (let l = 0; l < 8; l++) {
+                                        volts[y][x][l] = voltage;
+                                    }
+                                    redrawTile(x, y);
+                                    return true;
+                                }
+                            }
+                        }
+                        return false; // Probe not found
+                    },
+
+                    // Get all probe labels
+                    getProbeLabels: function() {
+                        return Object.values(probeLabels);
+                    },
+
+                    // Get probe locations (x, y coordinates)
+                    getProbeLocations: function() {
+                        const locations = {};
+                        for (let key in probeLabels) {
+                            const [x, y] = key.split('_').map(Number);
+                            locations[probeLabels[key]] = {x: x, y: y};
+                        }
+                        return locations;
+                    },
+
+                    // Force recomputation of the circuit
+                    recompute: function() {
+                        compute();
+                        redrawAllTiles();
+                    }
+                };
             </script>
         </center>
     </body>
