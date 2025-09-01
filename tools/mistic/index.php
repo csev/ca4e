@@ -145,6 +145,7 @@ $LTI = LTIX::session_start();
 <?php if ($USER && $USER->instructor) : ?>
                 <button onclick="drawNotGate()" style="background-color: #9C27B0; color: white;">Not</button>
 <?php endif; ?>
+                <button onclick="readCircuit()" style="background-color: #607D8B; color: white;">Read Circuit</button>
             </div>
             <div id="canvasContainer" style="position:relative; display:inline-block;">
                 <canvas id="vlsiCanvas" width="600" height="600" style="border:1px solid #000000; display:block;"></canvas>
@@ -574,6 +575,330 @@ $LTI = LTIX::session_start();
                     
                     // Redraw everything
                     redrawAllTiles();
+                }
+
+                function readCircuit() {
+                    console.log("=== CIRCUIT ANALYSIS ===");
+                    console.log("Reading current circuit layout...");
+                    
+                    // Check if speech synthesis is available
+                    if (!window.speechSynthesis) {
+                        alert("Speech synthesis not available in this browser");
+                        return;
+                    }
+                    
+                    // Stop any current speech
+                    window.speechSynthesis.cancel();
+                    
+                    // Analyze the circuit and generate commands
+                    const commands = [];
+                    
+                    // Helper function to find connected line segments
+                    function findConnectedLineSegments(startX, startY, layerIndex) {
+                        const visited = new Set();
+                        const segments = [];
+                        
+                        // First, collect all connected cells
+                        const allConnected = [];
+                        
+                        function collectConnected(x, y) {
+                            const key = `${x},${y}`;
+                            if (visited.has(key) || x < 0 || x >= gridSize || y < 0 || y >= gridSize || !grid[y][x][layerIndex]) {
+                                return;
+                            }
+                            visited.add(key);
+                            allConnected.push({x, y});
+                            
+                            // Check adjacent cells
+                            collectConnected(x+1, y);
+                            collectConnected(x-1, y);
+                            collectConnected(x, y+1);
+                            collectConnected(x, y-1);
+                        }
+                        
+                        collectConnected(startX, startY);
+                        
+                        if (allConnected.length === 0) return segments;
+                        
+                        // Now break the connected region into line segments
+                        const remaining = new Set(allConnected.map(p => `${p.x},${p.y}`));
+                        
+                        while (remaining.size > 0) {
+                            const start = remaining.values().next().value;
+                            const [startX, startY] = start.split(',').map(Number);
+                            
+                            // Try to find horizontal line
+                            let horizontalLine = [{x: startX, y: startY}];
+                            remaining.delete(start);
+                            
+                            // Extend horizontally
+                            let x = startX + 1;
+                            while (remaining.has(`${x},${startY}`)) {
+                                horizontalLine.push({x, y: startY});
+                                remaining.delete(`${x},${startY}`);
+                                x++;
+                            }
+                            
+                            x = startX - 1;
+                            while (remaining.has(`${x},${startY}`)) {
+                                horizontalLine.unshift({x, y: startY});
+                                remaining.delete(`${x},${startY}`);
+                                x--;
+                            }
+                            
+                            // If horizontal line is longer than 1, use it
+                            if (horizontalLine.length > 1) {
+                                segments.push(horizontalLine);
+                                continue;
+                            }
+                            
+                            // Try vertical line
+                            let verticalLine = [{x: startX, y: startY}];
+                            
+                            // Extend vertically
+                            let y = startY + 1;
+                            while (remaining.has(`${startX},${y}`)) {
+                                verticalLine.push({x: startX, y});
+                                remaining.delete(`${startX},${y}`);
+                                y++;
+                            }
+                            
+                            y = startY - 1;
+                            while (remaining.has(`${startX},${y}`)) {
+                                verticalLine.unshift({x: startX, y});
+                                remaining.delete(`${startX},${y}`);
+                                y--;
+                            }
+                            
+                            // If vertical line is longer than 1, use it
+                            if (verticalLine.length > 1) {
+                                segments.push(verticalLine);
+                            } else {
+                                // Single point
+                                segments.push([{x: startX, y: startY}]);
+                            }
+                        }
+                        
+                        // Now add overlapping points to show connections
+                        const finalSegments = [];
+                        for (let i = 0; i < segments.length; i++) {
+                            const segment = segments[i];
+                            finalSegments.push(segment);
+                            
+                            // Check if this segment connects to any other segments
+                            for (let j = i + 1; j < segments.length; j++) {
+                                const otherSegment = segments[j];
+                                
+                                // Find intersection points
+                                const intersection = segment.filter(point => 
+                                    otherSegment.some(otherPoint => 
+                                        point.x === otherPoint.x && point.y === otherPoint.y
+                                    )
+                                );
+                                
+                                // If there's an intersection, add the connecting point to both segments
+                                if (intersection.length > 0) {
+                                    intersection.forEach(point => {
+                                        // Add to current segment if not already present
+                                        if (!segment.some(p => p.x === point.x && p.y === point.y)) {
+                                            segment.push(point);
+                                        }
+                                        // Add to other segment if not already present
+                                        if (!otherSegment.some(p => p.x === point.x && p.y === point.y)) {
+                                            otherSegment.push(point);
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                        
+                        return finalSegments;
+                    }
+                    
+                    // Helper function to create draw command from segment
+                    function createDrawCommand(segment, layerName) {
+                        if (segment.length === 1) {
+                            const p = segment[0];
+                            return `draw ${layerName} at (${p.x}, ${p.y})`;
+                        } else {
+                            const first = segment[0];
+                            const last = segment[segment.length - 1];
+                            return `draw ${layerName} from (${first.x}, ${first.y}) to (${last.x}, ${last.y})`;
+                        }
+                    }
+                    
+                    // Track processed cells to avoid duplicates
+                    const processed = new Set();
+                    
+                    // Process each layer
+                    const layers = [
+                        { index: layerVCC, name: 'VCC' },
+                        { index: layerGND, name: 'GND' },
+                        { index: layerPPlus, name: 'P+ diffusion' },
+                        { index: layerNPlus, name: 'N+ diffusion' },
+                        { index: layerPolysilicon, name: 'polysilicon' },
+                        { index: layerMetal, name: 'metal' },
+                        { index: layerContact, name: 'via' }
+                    ];
+                    
+                    layers.forEach(layer => {
+                        for (let y = 0; y < gridSize; y++) {
+                            for (let x = 0; x < gridSize; x++) {
+                                const key = `${layer.index},${x},${y}`;
+                                if (!processed.has(key) && grid[y][x][layer.index]) {
+                                    const segments = findConnectedLineSegments(x, y, layer.index);
+                                    
+                                    segments.forEach(segment => {
+                                        const command = createDrawCommand(segment, layer.name);
+                                        commands.push(command);
+                                        
+                                        // Mark all cells in segment as processed
+                                        segment.forEach(p => {
+                                            processed.add(`${layer.index},${p.x},${p.y}`);
+                                        });
+                                    });
+                                }
+                            }
+                        }
+                    });
+                    
+                    // Handle probes separately
+                    Object.keys(probeLabels).forEach(key => {
+                        const [x, y] = key.split('_').map(Number);
+                        commands.push(`draw probe "${probeLabels[key]}" at (${x}, ${y})`);
+                    });
+                    
+                    // Output the commands in a clean format
+                    console.log("=== DRAWING COMMANDS FOR ACCESSIBILITY ===");
+                    console.log("Commands to recreate this circuit:");
+                    console.log("clear");
+                    
+                    // Output all commands in order
+                    commands.forEach(cmd => {
+                        console.log(`  ${cmd}`);
+                    });
+                    
+                    console.log("redraw");
+                    console.log("=== END COMMANDS ===");
+                    
+                    // Also show a summary
+                    console.log("=== CIRCUIT SUMMARY ===");
+                    console.log(`Grid size: ${gridSize}x${gridSize}`);
+                    console.log(`Total commands: ${commands.length}`);
+                    console.log(`Probes found: ${Object.keys(probeLabels).length}`);
+                    Object.keys(probeLabels).forEach(key => {
+                        const [x, y] = key.split('_');
+                        console.log(`  - Probe "${probeLabels[key]}" at (${x}, ${y})`);
+                    });
+                    
+                    // Speak the commands with pauses and proper ordering
+                    function speakCommands() {
+                        let allCommands = [];
+                        
+                        // Group commands by type for speech organization
+                        const groupedCommands = {
+                            'VCC': commands.filter(cmd => cmd.includes('VCC')),
+                            'GND': commands.filter(cmd => cmd.includes('GND')),
+                            'P+ diffusion': commands.filter(cmd => cmd.includes('P+ diffusion')),
+                            'N+ diffusion': commands.filter(cmd => cmd.includes('N+ diffusion')),
+                            'polysilicon': commands.filter(cmd => cmd.includes('polysilicon')),
+                            'metal': commands.filter(cmd => cmd.includes('metal')),
+                            'via': commands.filter(cmd => cmd.includes('via')),
+                            'probe': commands.filter(cmd => cmd.includes('probe'))
+                        };
+                        
+                        // Collect all commands and sort by position (upper-left to lower-right)
+                        Object.keys(groupedCommands).forEach(layer => {
+                            if (groupedCommands[layer].length > 0) {
+                                groupedCommands[layer].forEach(cmd => {
+                                    // Extract coordinates for sorting
+                                    const coords = cmd.match(/\((\d+),\s*(\d+)\)/);
+                                    if (coords) {
+                                        const x = parseInt(coords[1]);
+                                        const y = parseInt(coords[2]);
+                                        allCommands.push({
+                                            cmd: cmd,
+                                            x: x,
+                                            y: y,
+                                            layer: layer
+                                        });
+                                    } else {
+                                        allCommands.push({
+                                            cmd: cmd,
+                                            x: 0,
+                                            y: 0,
+                                            layer: layer
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                        
+                        // Sort by y first (top to bottom), then by x (left to right)
+                        allCommands.sort((a, b) => {
+                            if (a.y !== b.y) return a.y - b.y;
+                            return a.x - b.x;
+                        });
+                        
+                        // Group by layer for speech
+                        const layerGroups = {};
+                        allCommands.forEach(item => {
+                            if (!layerGroups[item.layer]) {
+                                layerGroups[item.layer] = [];
+                            }
+                            layerGroups[item.layer].push(item.cmd);
+                        });
+                        
+                        // Speak with pauses
+                        let speechQueue = [];
+                        speechQueue.push("Circuit drawing commands.");
+                        
+                        Object.keys(layerGroups).forEach(layer => {
+                            speechQueue.push(`${layer}:`);
+                            layerGroups[layer].forEach(cmd => {
+                                speechQueue.push(cmd);
+                                speechQueue.push("pause"); // 0.5 second pause
+                            });
+                        });
+                        
+                        // Speak the queue with pauses
+                        let index = 0;
+                        function speakNext() {
+                            if (index >= speechQueue.length) return;
+                            
+                            const text = speechQueue[index];
+                            if (text === "pause") {
+                                // Wait 500ms then continue
+                                setTimeout(speakNext, 500);
+                            } else {
+                                const utterance = new SpeechSynthesisUtterance(text);
+                                utterance.rate = 0.8;
+                                utterance.pitch = 1.0;
+                                utterance.volume = 1.0;
+                                
+                                // Try to use a good voice
+                                const voices = window.speechSynthesis.getVoices();
+                                const preferredVoice = voices.find(voice => 
+                                    voice.name.includes('Google') || 
+                                    voice.name.includes('Samantha') || 
+                                    voice.name.includes('Alex')
+                                );
+                                if (preferredVoice) {
+                                    utterance.voice = preferredVoice;
+                                }
+                                
+                                utterance.onend = speakNext;
+                                window.speechSynthesis.speak(utterance);
+                            }
+                            index++;
+                        }
+                        
+                        speakNext();
+                    }
+                    
+                    speakCommands();
+                    
+                    console.log("Speaking circuit commands with pauses...");
                 }
 <?php endif; ?>
 
