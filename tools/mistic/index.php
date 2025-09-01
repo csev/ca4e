@@ -68,6 +68,58 @@ $LTI = LTIX::session_start();
                 cursor: grab;
                 font-weight: bold;
             }
+            
+            .assignment-modal {
+                position: absolute;
+                background: #fff;
+                border: 2px solid #333;
+                border-radius: 8px;
+                box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+                z-index: 1001;
+                user-select: none;
+                min-width: 300px;
+                min-height: 200px;
+                max-width: 90vw;
+                max-height: 90vh;
+                resize: both;
+                overflow: auto;
+            }
+            .assignment-modal.hidden { display: none; }
+            .assignment-modal .modal-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 6px;
+                padding: 10px 15px;
+                background: #f0f8ff;
+                border-bottom: 1px solid #ddd;
+                cursor: grab;
+                font-weight: bold;
+                border-radius: 6px 6px 0 0;
+            }
+            .assignment-modal .modal-content {
+                padding: 20px;
+                overflow-y: auto;
+                height: calc(100% - 50px);
+            }
+            .assignment-modal .close-btn {
+                background: none;
+                border: none;
+                font-size: 18px;
+                cursor: pointer;
+                color: #666;
+                padding: 0;
+                width: 24px;
+                height: 24px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .assignment-modal .close-btn:hover {
+                color: #000;
+                background: #f0f0f0;
+                border-radius: 3px;
+            }
         </style>
     </head>
     <body>
@@ -81,10 +133,15 @@ $LTI = LTIX::session_start();
                 <button onclick="setLayer('metal')" style="background-color: rgba(0, 0, 255, 0.3);">Metal</button>
                 <button onclick="setLayer('VCC')" style="background-color: #f0f0f0;">VCC</button>
                 <button onclick="setLayer('GND')" style="background-color: #f0f0f0;">GND</button>
-                <button onclick="setLayer('probe')" style="background-color: rgba(128, 0, 128, 0.3);">🔍</button>
+<?php if ($USER) : ?>
+                <button onclick="setLayer('probe')" style="background-color: rgba(128, 0, 128, 0.3);">Probe</button>
+<?php endif; ?>
                 <button onclick="setLayer('erase')" style="background-color: rgba(255, 255, 255, 1);">🧽</button>
                 <button onclick="confirmClear()" style="background-color: #ffe6e6;">🗑️</button>
                 <button id="toggleLayersBtn" style="background-color:#eef7ff;">Layers</button>
+<?php if ($USER) : ?>
+                <button id="assignmentBtn" style="background-color:#fff0e6;">Assignment</button>
+<?php endif; ?>
             </div>
             <div id="canvasContainer" style="position:relative; display:inline-block;">
                 <canvas id="vlsiCanvas" width="600" height="600" style="border:1px solid #000000; display:block;"></canvas>
@@ -97,6 +154,20 @@ $LTI = LTIX::session_start();
                         <canvas id="layerCanvas" width="220" height="240" style="border:1px solid #000000;"></canvas>
                     </div>
                 </div>
+<?php if ($USER) : ?>
+                <div id="assignmentModal" class="assignment-modal hidden">
+                    <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
+                        <span>📋 Assignment</span>
+                        <button class="close-btn" onclick="closeAssignmentModal()" title="Close">×</button>
+                    </div>
+                    <div class="modal-content">
+                        <p>In this assignment you will lay out a Not gate. 
+                            Place a probe with the label "A" on the input to your NOT gate. Place a probe with the label 
+                            "out" on the output of your NOT gate.  Then press "Grade" to check your circuit.</p>
+                            <button onclick="gradeAssignment()">Grade</button>
+                    </div>
+                </div>
+<?php endif; ?>
             </div>
 
             <script>
@@ -108,6 +179,11 @@ $LTI = LTIX::session_start();
                 const layerModalHeader = document.getElementById('layerModalHeader');
                 const toggleLayersBtn = document.getElementById('toggleLayersBtn');
                 const canvasContainer = document.getElementById('canvasContainer');
+<?php if ($USER) : ?>
+                const assignmentModal = document.getElementById('assignmentModal');
+                const assignmentModalHeader = document.getElementById('assignmentModalHeader');
+                const assignmentBtn = document.getElementById('assignmentBtn');
+<?php endif; ?>
                 let modalUserMoved = false; // if user drags, we keep their position
                 let tileSize = 30; // fixed pixel size per grid tile (finger-friendly)
                 let gridSize = 30;
@@ -299,6 +375,30 @@ $LTI = LTIX::session_start();
                     }
                 });
 
+<?php if ($USER) : ?>
+                // Assignment modal functions
+                function showAssignmentModal() {
+                    assignmentModal.classList.remove('hidden');
+                    centerAssignmentModal();
+                }
+
+                function closeAssignmentModal() {
+                    assignmentModal.classList.add('hidden');
+                }
+
+                function centerAssignmentModal() {
+                    const containerRect = canvasContainer.getBoundingClientRect();
+                    const modalW = assignmentModal.offsetWidth;
+                    const left = Math.max(0, Math.floor((containerRect.width - modalW) / 2));
+                    const top = 20; // 20px from the top of canvas
+                    assignmentModal.style.left = left + 'px';
+                    assignmentModal.style.top = top + 'px';
+                }
+
+                // Assignment button click handler
+                assignmentBtn.addEventListener('click', showAssignmentModal);
+<?php endif; ?>
+
                 // Drag handling for the modal (mouse + touch)
                 (function enableDrag() {
                     if (!layerModal || !layerModalHeader) return;
@@ -362,6 +462,71 @@ $LTI = LTIX::session_start();
                     layerModalHeader.addEventListener('mousedown', onPointerDown);
                     layerModalHeader.addEventListener('touchstart', onPointerDown, { passive: false });
                 })();
+
+<?php if ($USER) : ?>
+                // Drag handling for the assignment modal (mouse + touch)
+                (function enableAssignmentDrag() {
+                    if (!assignmentModal || !assignmentModalHeader) return;
+                    let dragging = false;
+                    let startClientX = 0, startClientY = 0;
+                    let startLeft = 0, startTop = 0;
+
+                    function onPointerDown(e) {
+                        e.preventDefault();
+                        dragging = true;
+                        const rect = assignmentModal.getBoundingClientRect();
+                        const containerRect = canvasContainer.getBoundingClientRect();
+                        startLeft = rect.left - containerRect.left;
+                        startTop = rect.top - containerRect.top;
+                        if (e.touches) {
+                            startClientX = e.touches[0].clientX;
+                            startClientY = e.touches[0].clientY;
+                        } else {
+                            startClientX = e.clientX;
+                            startClientY = e.clientY;
+                        }
+                        assignmentModalHeader.style.cursor = 'grabbing';
+                        window.addEventListener('mousemove', onPointerMove, { passive: false });
+                        window.addEventListener('mouseup', onPointerUp, { passive: false });
+                        window.addEventListener('touchmove', onPointerMove, { passive: false });
+                        window.addEventListener('touchend', onPointerUp, { passive: false });
+                    }
+
+                    function onPointerMove(e) {
+                        if (!dragging) return;
+                        e.preventDefault();
+                        let clientX, clientY;
+                        if (e.touches) {
+                            clientX = e.touches[0].clientX;
+                            clientY = e.touches[0].clientY;
+                        } else {
+                            clientX = e.clientX;
+                            clientY = e.clientY;
+                        }
+                        const dx = clientX - startClientX;
+                        const dy = clientY - startClientY;
+                        const containerRect = canvasContainer.getBoundingClientRect();
+                        const maxLeft = containerRect.width - assignmentModal.offsetWidth;
+                        const maxTop = containerRect.height - assignmentModal.offsetHeight;
+                        const newLeft = Math.max(0, Math.min(maxLeft, startLeft + dx));
+                        const newTop = Math.max(0, Math.min(maxTop, startTop + dy));
+                        assignmentModal.style.left = newLeft + 'px';
+                        assignmentModal.style.top = newTop + 'px';
+                    }
+
+                    function onPointerUp(e) {
+                        dragging = false;
+                        assignmentModalHeader.style.cursor = 'grab';
+                        window.removeEventListener('mousemove', onPointerMove);
+                        window.removeEventListener('mouseup', onPointerUp);
+                        window.removeEventListener('touchmove', onPointerMove);
+                        window.removeEventListener('touchend', onPointerUp);
+                    }
+
+                    assignmentModalHeader.addEventListener('mousedown', onPointerDown);
+                    assignmentModalHeader.addEventListener('touchstart', onPointerDown, { passive: false });
+                })();
+<?php endif; ?>
 
                 // Responsive canvas sizing: scale with window, keep square
                 function resizeCanvasToContainer() {
