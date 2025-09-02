@@ -510,68 +510,31 @@ $LTI = LTIX::session_start();
                     // Clear the canvas first
                     clearCanvas();
                     
-                    // Draw a basic CMOS NOT gate
-                    // PMOS transistor (top)
-                    grid[5][8][layerPPlus] = true;  // P+ diffusion
-                    grid[5][9][layerPPlus] = true;
-                    grid[5][10][layerPPlus] = true;
-                    grid[5][11][layerPPlus] = true;
-                    grid[5][12][layerPPlus] = true;
+                    // Execute the exact draw commands for the NOT gate
+                    const commands = [
+                        'draw VCC at (1, 1)',
+                        'draw GND at (1, 11)',
+                        'draw P+ from (5, 1) to (5, 5)',
+                        'draw N+ from (5, 7) to (5, 11)',
+                        'draw polysilicon from (3, 3) to (6, 3)',
+                        'draw polysilicon from (3, 4) to (3, 9)',
+                        'draw polysilicon from (1, 6) to (2, 6)',
+                        'draw polysilicon from (4, 9) to (6, 9)',
+                        'draw metal from (1, 1) to (9, 1)',
+                        'draw metal from (5, 5) to (5, 7)',
+                        'draw metal from (6, 6) to (8, 6)',
+                        'draw metal from (1, 11) to (9, 11)',
+                        'draw via at (5, 1)',
+                        'draw via at (5, 5)',
+                        'draw via at (5, 7)',
+                        'draw via at (5, 11)'
+                    ];
                     
-                    // NMOS transistor (bottom)
-                    grid[15][8][layerNPlus] = true;  // N+ diffusion
-                    grid[15][9][layerNPlus] = true;
-                    grid[15][10][layerNPlus] = true;
-                    grid[15][11][layerNPlus] = true;
-                    grid[15][12][layerNPlus] = true;
-                    
-                    // Polysilicon gate (shared between PMOS and NMOS)
-                    grid[5][10][layerPolysilicon] = true;
-                    grid[6][10][layerPolysilicon] = true;
-                    grid[7][10][layerPolysilicon] = true;
-                    grid[8][10][layerPolysilicon] = true;
-                    grid[9][10][layerPolysilicon] = true;
-                    grid[10][10][layerPolysilicon] = true;
-                    grid[11][10][layerPolysilicon] = true;
-                    grid[12][10][layerPolysilicon] = true;
-                    grid[13][10][layerPolysilicon] = true;
-                    grid[14][10][layerPolysilicon] = true;
-                    grid[15][10][layerPolysilicon] = true;
-                    
-                    // VCC connection (top)
-                    grid[3][10][layerVCC] = true;
-                    
-                    // GND connection (bottom)
-                    grid[17][10][layerGND] = true;
-                    
-                    // Metal connections
-                    // VCC to PMOS
-                    grid[4][10][layerMetal] = true;
-                    grid[5][10][layerMetal] = true;
-                    
-                    // GND to NMOS
-                    grid[16][10][layerMetal] = true;
-                    grid[15][10][layerMetal] = true;
-                    
-                    // Output connection (shared drain)
-                    grid[10][10][layerMetal] = true;
-                    grid[10][11][layerMetal] = true;
-                    grid[10][12][layerMetal] = true;
-                    grid[10][13][layerMetal] = true;
-                    
-                    // Input connection (gate)
-                    grid[10][8][layerMetal] = true;
-                    grid[10][9][layerMetal] = true;
-                    grid[10][10][layerMetal] = true;
-                    
-                    // Add probes
-                    // Input probe A
-                    grid[10][7][layerProbe] = true;
-                    probeLabels['7_10'] = 'A';
-                    
-                    // Output probe Q
-                    grid[10][14][layerProbe] = true;
-                    probeLabels['14_10'] = 'Q';
+                    // Execute each command in order
+                    commands.forEach(command => {
+                        const result = executeCommand(command);
+                        console.log(`Executed: ${command} -> ${result}`);
+                    });
                     
                     // Redraw everything
                     redrawAllTiles();
@@ -1296,14 +1259,19 @@ $LTI = LTIX::session_start();
                 }
 
                 function getLayerIndex(layer) {
-                    switch (layer) {
+                    // Convert to lowercase for case-insensitive matching
+                    const layerLower = layer.toLowerCase();
+                    switch (layerLower) {
                         case 'polysilicon': return layerPolysilicon;
-                        case 'N+ diffusion': return layerNPlus;
-                        case 'P+ diffusion': return layerPPlus;
+                        case 'n+ diffusion': return layerNPlus;
+                        case 'n+': return layerNPlus;  // Shorter alias
+                        case 'p+ diffusion': return layerPPlus;
+                        case 'p+': return layerPPlus;  // Shorter alias
                         case 'contact': return layerContact;
+                        case 'via': return layerContact;  // Alias for contact
                         case 'metal': return layerMetal;
-                        case 'VCC': return layerVCC;
-                        case 'GND': return layerGND;
+                        case 'vcc': return layerVCC;
+                        case 'gnd': return layerGND;
                         case 'probe': return layerProbe;
                         case 'erase': return -1;
                         default: return -1;
@@ -1458,6 +1426,234 @@ $LTI = LTIX::session_start();
                         redrawAllTiles();
                     }
                 };
+            </script>
+
+            <!-- Command line interface -->
+            <div class="command-line">
+                <input type="text" id="commandInput" placeholder="Type commands here... (e.g., 'clear', 'draw metal at (5,5)', 'draw metal from (5,5) to (10,10)', 'redraw')">
+                <div class="status" id="status">Ready. Type 'help' for available commands.</div>
+            </div>
+
+            <style>
+                /* Command line interface styles */
+                .command-line {
+                    position: fixed;
+                    bottom: 0;
+                    left: 0;
+                    right: 0;
+                    background-color: #2c3e50;
+                    color: white;
+                    padding: 15px 20px;
+                    border-top: 2px solid #3498db;
+                    z-index: 1000;
+                }
+
+                .command-line input {
+                    width: 100%;
+                    background-color: #34495e;
+                    color: #ecf0f1;
+                    border: 1px solid #7f8c8d;
+                    padding: 10px 15px;
+                    border-radius: 4px;
+                    font-family: 'Courier New', monospace;
+                    font-size: 14px;
+                    margin-bottom: 8px;
+                }
+
+                .command-line input:focus {
+                    outline: none;
+                    border-color: #3498db;
+                    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+                }
+
+                .command-line input::placeholder {
+                    color: #95a5a6;
+                }
+
+                .status {
+                    font-size: 12px;
+                    color: #bdc3c7;
+                    font-family: 'Courier New', monospace;
+                }
+
+                /* Adjust canvas container to make room for command line */
+                #canvasContainer {
+                    margin-bottom: 100px;
+                }
+            </style>
+
+            <script>
+                // Command line interface functionality
+                const commandInput = document.getElementById('commandInput');
+                const status = document.getElementById('status');
+                let commandHistory = [];
+                let historyIndex = -1;
+
+                // Command history management
+                function addToHistory(command) {
+                    commandHistory.push(command);
+                    if (commandHistory.length > 50) commandHistory.shift(); // Keep last 50 commands
+                    historyIndex = commandHistory.length;
+                }
+
+                function getPreviousCommand() {
+                    if (historyIndex > 0) {
+                        historyIndex--;
+                        return commandHistory[historyIndex];
+                    }
+                    return null;
+                }
+
+                function getNextCommand() {
+                    if (historyIndex < commandHistory.length - 1) {
+                        historyIndex++;
+                        return commandHistory[historyIndex];
+                    } else if (historyIndex === commandHistory.length - 1) {
+                        historyIndex = commandHistory.length;
+                        return '';
+                    }
+                    return null;
+                }
+
+                function updateCommandInput(command) {
+                    commandInput.value = command || '';
+                    commandInput.setSelectionRange(commandInput.value.length, commandInput.value.length);
+                }
+
+                // Command execution
+                function executeCommand(command) {
+                    const parts = command.toLowerCase().split(' ');
+                    
+                    if (parts[0] === 'clear') {
+                        clearCanvas();
+                        return 'Canvas cleared.';
+                    } else if (parts[0] === 'redraw') {
+                        redrawAllTiles();
+                        return 'Canvas redrawn.';
+                    } else if (parts[0] === 'draw') {
+                        // Parse draw commands like: draw metal at (5,5) or draw metal rectangle from (5,5) to (10,10)
+                        if (parts.length < 4) {
+                            return 'Error: Invalid draw command. Use: draw <layer> at (x,y) or draw <layer> rectangle from (x,y) to (x,y)';
+                        }
+                        
+                        const layer = parts[1];
+                        const layerIndex = getLayerIndex(layer);
+                        
+                        if (layerIndex === -1) {
+                            return `Error: Invalid layer "${layer}". Valid layers: polysilicon, n+ diffusion, p+ diffusion, contact, metal, vcc, gnd, probe`;
+                        }
+                        
+                        if (parts[2] === 'at') {
+                            // Single point: draw metal at (5,5)
+                            // Handle spaces around coordinates by using a more flexible regex
+                            const commandStr = command.toLowerCase();
+                            const coords = commandStr.match(/at\s*\((\d+)\s*,\s*(\d+)\)/);
+                            if (!coords) {
+                                return 'Error: Invalid coordinates. Use format: (x,y)';
+                            }
+                            const x = parseInt(coords[1]);
+                            const y = parseInt(coords[2]);
+                            
+                            if (x < 0 || x >= gridSize || y < 0 || y >= gridSize) {
+                                return `Error: Coordinates (${x},${y}) out of bounds. Grid size is ${gridSize}x${gridSize}`;
+                            }
+                            
+                            grid[y][x][layerIndex] = true;
+                            redrawAllTiles();
+                            return `Drew ${layer} at (${x},${y})`;
+                            
+                        } else if (parts[2] === 'from') {
+                            // Rectangle: draw metal from (5,5) to (10,10)
+                            // Check if this layer supports rectangle drawing
+                            if (layerIndex === layerContact || layerIndex === layerProbe) {
+                                return `Error: ${layer} layers only support single-point placement. Use: draw ${layer} at (x,y)`;
+                            }
+                            
+                            // Handle spaces around coordinates by joining parts and using a more flexible regex
+                            const commandStr = command.toLowerCase();
+                            const fromMatch = commandStr.match(/from\s*\((\d+)\s*,\s*(\d+)\)/);
+                            const toMatch = commandStr.match(/to\s*\((\d+)\s*,\s*(\d+)\)/);
+                            
+                            if (!fromMatch || !toMatch) {
+                                return 'Error: Invalid coordinates. Use format: (x,y) to (x,y)';
+                            }
+                            
+                            const fromX = parseInt(fromMatch[1]);
+                            const fromY = parseInt(fromMatch[2]);
+                            const toX = parseInt(toMatch[1]);
+                            const toY = parseInt(toMatch[2]);
+                            
+                            if (fromX < 0 || fromX >= gridSize || fromY < 0 || fromY >= gridSize ||
+                                toX < 0 || toX >= gridSize || toY < 0 || toY >= gridSize) {
+                                return `Error: Coordinates out of bounds. Grid size is ${gridSize}x${gridSize}`;
+                            }
+                            
+                            const minX = Math.min(fromX, toX);
+                            const maxX = Math.max(fromX, toX);
+                            const minY = Math.min(fromY, toY);
+                            const maxY = Math.max(fromY, toY);
+                            
+                            for (let y = minY; y <= maxY; y++) {
+                                for (let x = minX; x <= maxX; x++) {
+                                    grid[y][x][layerIndex] = true;
+                                }
+                            }
+                            
+                            redrawAllTiles();
+                            return `Drew ${layer} from (${minX},${minY}) to (${maxX},${maxY})`;
+                        } else {
+                            return 'Error: Invalid draw command. Use: draw <layer> at (x,y) or draw <layer> from (x,y) to (x,y)';
+                        }
+                    } else if (parts[0] === 'help') {
+                        return `Available commands:
+- clear: Clear the entire canvas
+- redraw: Redraw all tiles
+- draw <layer> at (x,y): Draw a single point (all layers)
+- draw <layer> from (x,y) to (x,y): Draw a rectangle (polysilicon, n+ diffusion, p+ diffusion, metal, vcc, gnd)
+- help: Show this help message
+
+Valid layers: polysilicon, n+ diffusion/n+, p+ diffusion/p+, contact/via, metal, vcc, gnd, probe
+Note: contact/via and probe layers only support single-point placement with 'at'
+Grid size: ${gridSize}x${gridSize}`;
+                    } else {
+                        return `Unknown command: "${parts[0]}". Type 'help' for available commands.`;
+                    }
+                }
+
+                // Event listeners
+                commandInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        const command = commandInput.value.trim();
+                        if (command) {
+                            addToHistory(command);
+                            const result = executeCommand(command);
+                            status.textContent = result;
+                            commandInput.value = '';
+                        }
+                    }
+                });
+
+                // Arrow key navigation for command history
+                commandInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        const previousCommand = getPreviousCommand();
+                        if (previousCommand !== null) {
+                            updateCommandInput(previousCommand);
+                        }
+                    } else if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        const nextCommand = getNextCommand();
+                        if (nextCommand !== null) {
+                            updateCommandInput(nextCommand);
+                        }
+                    }
+                });
+
+                // Focus command input when page loads
+                window.addEventListener('load', () => {
+                    commandInput.focus();
+                });
             </script>
         </center>
     </body>
