@@ -345,8 +345,8 @@ $LTI = LTIX::session_start();
                 let currentStep = 0;
                 let gradingSteps = [
                     { name: "Check for A and Q probes", status: "pending" },
-                    { name: "Test A=0 → Q=1", status: "pending" },
-                    { name: "Test A=1 → Q=0", status: "pending" }
+                    { name: "Test A=GND → Q=VCC", status: "pending" },
+                    { name: "Test A=VCC → Q=GND", status: "pending" }
                 ];
 
                 function createGrid(size) {
@@ -588,7 +588,7 @@ $LTI = LTIX::session_start();
                 function centerAssignmentModal() {
                     const containerRect = canvasContainer.getBoundingClientRect();
                     const modalW = assignmentModal.offsetWidth;
-                    const left = Math.max(0, Math.floor((containerRect.width - modalW) / 2));
+                    const left = Math.max(0, Math.floor(containerRect.width * 0.8 - modalW / 2));
                     const top = 20; // 20px from the top of canvas
                     assignmentModal.style.left = left + 'px';
                     assignmentModal.style.top = top + 'px';
@@ -631,29 +631,29 @@ $LTI = LTIX::session_start();
                             break;
                             
                         case 1:
-                            // Step 2: Test A=0 → out=1
-                            if (testCircuit(0, 1)) {
+                            // Step 2: Test A=GND → Q=VCC
+                            if (testCircuit(-1, 1)) {
                                 stepText.innerHTML = `<span style="color: green;">✓ ${step.name}</span>`;
                                 step.status = "passed";
                                 currentStep++;
                                 document.getElementById('nextBtn').style.display = 'inline-block';
                             } else {
                                 stepText.innerHTML = `<span style="color: red;">✗ ${step.name}</span><br>
-                                    <small>Error: When A=0, the output should be 1. Check your NOT gate implementation.</small>`;
+                                    <small>Error: When A=GND, the output should be VCC. Check your NOT gate implementation.</small>`;
                                 step.status = "failed";
                             }
                             break;
                             
                         case 2:
-                            // Step 3: Test A=1 → out=0
-                            if (testCircuit(1, 0)) {
+                            // Step 3: Test A=VCC → Q=GND
+                            if (testCircuit(1, -1)) {
                                 stepText.innerHTML = `<span style="color: green;">✓ ${step.name}</span>`;
                                 step.status = "passed";
                                 currentStep++;
                                 document.getElementById('nextBtn').style.display = 'inline-block';
                             } else {
                                 stepText.innerHTML = `<span style="color: red;">✗ ${step.name}</span><br>
-                                    <small>Error: When A=1, the output should be 0. Check your NOT gate implementation.</small>`;
+                                    <small>Error: When A=VCC, the output should be GND. Check your NOT gate implementation.</small>`;
                                 step.status = "failed";
                             }
                             break;
@@ -668,14 +668,42 @@ $LTI = LTIX::session_start();
                 }
 
                 function testCircuit(inputValue, expectedOutput) {
+                    console.log(`Testing circuit with A=${inputValue === -1 ? 'GND' : 'VCC'}, expecting Q=${expectedOutput === -1 ? 'GND' : 'VCC'}`);
+                    
                     // Set the A probe to the input value
                     window.MisticProbes.setProbeValue('A', inputValue);
+                    console.log(`Set probe A to voltage ${inputValue} (treating as ${inputValue === -1 ? 'GND' : 'VCC'})`);
                     
                     // Recompute the circuit
                     window.MisticProbes.recompute();
+                    console.log('Circuit recomputed');
+                    
+                    // Force a complete redraw to show voltage propagation
+                    redrawAllTiles();
+                    console.log('Canvas redrawn to show voltages');
                     
                     // Get the output value
                     const outputValue = window.MisticProbes.getProbeValue('Q');
+                    console.log(`Probe Q voltage: ${outputValue} (should be ${expectedOutput === -1 ? 'GND' : 'VCC'})`);
+                    
+                    // Also check what voltages are at various points in the circuit
+                    console.log('Checking circuit voltages...');
+                    for (let y = 0; y < gridSize; y++) {
+                        for (let x = 0; x < gridSize; x++) {
+                            if (grid[y][x][layerMetal] || grid[y][x][layerPolysilicon]) {
+                                let voltage = 0;
+                                for (let l = 0; l < 8; l++) {
+                                    if (volts[y][x][l] != 0) {
+                                        voltage = volts[y][x][l];
+                                        break;
+                                    }
+                                }
+                                if (voltage !== 0) {
+                                    console.log(`Voltage at (${x},${y}): ${voltage}`);
+                                }
+                            }
+                        }
+                    }
                     
                     return outputValue === expectedOutput;
                 }
@@ -1473,6 +1501,24 @@ $LTI = LTIX::session_start();
                                     volts[i][j][l] = -1;
                                 }
                             }
+                            // Handle probe voltages - they should already be set by setProbeValue
+                            // but we need to ensure they're properly initialized for propagation
+                            if (grid[i][j][layerProbe]) {
+                                // Check if this probe has a voltage set
+                                let hasVoltage = false;
+                                for (let l = 0; l < 8; l++) {
+                                    if (volts[i][j][l] != 0) {
+                                        hasVoltage = true;
+                                        break;
+                                    }
+                                }
+                                // If no voltage is set, initialize to 0 (neutral)
+                                if (!hasVoltage) {
+                                    for (let l = 0; l < 8; l++) {
+                                        volts[i][j][l] = 0;
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -1532,6 +1578,16 @@ $LTI = LTIX::session_start();
                     if (l == layerPPlus && grid[i][j][layerPolysilicon] && volts[i][j][layerPolysilicon] != -1) return;
 
                     volts[i][j][l] = voltage;
+                    
+                    // Debug logging for probe voltage propagation
+                    if (grid[i][j][layerProbe]) {
+                        console.log(`Propagating voltage ${voltage} to probe at (${i},${j}) layer ${l}`);
+                    }
+                    
+                    // Debug logging for metal voltage propagation
+                    if (grid[i][j][layerMetal]) {
+                        console.log(`Propagating voltage ${voltage} to metal at (${i},${j}) layer ${l}`);
+                    }
 
                     if (i > 0) propogateVoltage(voltage, i-1, j, l);
                     if (j > 0) propogateVoltage(voltage, i, j-1, l);
