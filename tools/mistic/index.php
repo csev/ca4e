@@ -49,6 +49,71 @@ $LTI = LTIX::session_start();
                 box-shadow: 0 1px 2px rgba(0,0,0,0.1);
             }
             
+            /* Draw Dropdown Styles */
+            .draw-dropdown {
+                position: relative;
+                display: inline-block;
+            }
+            
+            .draw-dropdown-btn {
+                background-color: #4CAF50;
+                color: white;
+                padding: 8px 15px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+                cursor: pointer;
+                min-width: 80px;
+                font-size: 14px;
+                transition: all 0.2s ease;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            
+            .draw-dropdown-btn:hover {
+                background-color: #45a049;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            }
+            
+            .draw-dropdown-content {
+                display: none;
+                position: absolute;
+                background-color: #f9f9f9;
+                min-width: 160px;
+                box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+                z-index: 1000;
+                border-radius: 6px;
+                border: 1px solid #ddd;
+                top: 100%;
+                left: 0;
+                margin-top: 2px;
+            }
+            
+            .dropdown-item {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: flex;
+                align-items: center;
+                cursor: pointer;
+                transition: background-color 0.2s;
+                border-radius: 4px;
+                margin: 2px;
+            }
+            
+            .dropdown-item:hover {
+                background-color: #f1f1f1;
+            }
+            
+            .color-indicator {
+                width: 16px;
+                height: 16px;
+                border-radius: 3px;
+                margin-right: 10px;
+                border: 1px solid #ccc;
+                display: inline-block;
+                flex-shrink: 0;
+            }
+            
             .layer-modal {
                 position: absolute;
                 background: #fff;
@@ -126,17 +191,55 @@ $LTI = LTIX::session_start();
         <center>
             <h1>Mistic VLSI Layout</h1>
             <div id="toolbar">
-                <button onclick="setLayer('polysilicon')" style="background-color: rgba(255, 0, 0, 0.2);">Poly</button>
-                <button onclick="setLayer('N+ diffusion')" style="background-color: rgba(0, 255, 0, 0.3);">N+</button>
-                <button onclick="setLayer('P+ diffusion')" style="background-color: rgba(255, 165, 0, 0.5);">P+</button>
-                <button onclick="setLayer('contact')" style="background-color: rgba(0, 0, 0, 0.3); color: white;">Via</button>
-                <button onclick="setLayer('metal')" style="background-color: rgba(0, 0, 255, 0.3);">Metal</button>
-                <button onclick="setLayer('VCC')" style="background-color: #f0f0f0;">VCC</button>
-                <button onclick="setLayer('GND')" style="background-color: #f0f0f0;">GND</button>
+                <div class="draw-dropdown">
+                    <button class="draw-dropdown-btn" onclick="toggleDrawDropdown()">
+                        Draw ▼
+                    </button>
+                    <div class="draw-dropdown-content" id="drawDropdown">
+                        <div class="dropdown-item" onclick="setLayer('')">
+                            Drawing Menu
+                        </div>
+                        <div class="dropdown-item" onclick="setLayer('metal')">
+                            <span class="color-indicator" style="background-color: rgba(0, 0, 255, 0.3);"></span>
+                            Metal
+                        </div>
+                        <div class="dropdown-item" onclick="setLayer('polysilicon')">
+                            <span class="color-indicator" style="background-color: rgba(255, 0, 0, 0.2);"></span>
+                            Poly
+                        </div>
+                        <div class="dropdown-item" onclick="setLayer('N+ diffusion')">
+                            <span class="color-indicator" style="background-color: rgba(0, 255, 0, 0.3);"></span>
+                            N+
+                        </div>
+                        <div class="dropdown-item" onclick="setLayer('P+ diffusion')">
+                            <span class="color-indicator" style="background-color: rgba(255, 165, 0, 0.5);"></span>
+                            P+
+                        </div>
+                        <div class="dropdown-item" onclick="setLayer('contact')">
+                            <span class="color-indicator" style="background-color: rgba(0, 0, 0, 0.3); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px; border: 1px solid #333;">×</span>
+                            Via
+                        </div>
+                        <div class="dropdown-item" onclick="setLayer('VCC')">
+                            <span class="color-indicator" style="background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #333; font-weight: bold;">+</span>
+                            VCC
+                        </div>
+                        <div class="dropdown-item" onclick="setLayer('GND')">
+                            <span class="color-indicator" style="background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #333; font-weight: bold;">-</span>
+                            GND
+                        </div>
+                        <div class="dropdown-item" onclick="setLayer('erase')">
+                            <span class="color-indicator" style="background-color: rgba(255, 255, 255, 1); border: 1px solid #ccc;">🧽</span>
+                            Erase
+                        </div>
+                        <div class="dropdown-item" onclick="toggleCommandLine()">
+                            <span class="color-indicator" style="background-color: #6c757d; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">⌨️</span>
+                            Show Commands
+                        </div>
+                    </div>
+                </div>
 <?php if ($USER) : ?>
                 <button onclick="setLayer('probe')" style="background-color: rgba(128, 0, 128, 0.3);">Probe</button>
 <?php endif; ?>
-                <button onclick="setLayer('erase')" style="background-color: rgba(255, 255, 255, 1);">🧽</button>
                 <button onclick="confirmClear()" style="background-color: #ffe6e6;">🗑️</button>
                 <button id="toggleLayersBtn" style="background-color:#eef7ff;">Layers</button>
 <?php if ($USER) : ?>
@@ -277,6 +380,49 @@ $LTI = LTIX::session_start();
 
                 function setLayer(layer) {
                     currentLayer = layer;
+                    // Update dropdown button text to show selected layer
+                    const dropdownBtn = document.querySelector('.draw-dropdown-btn');
+                    const layerNames = {
+                        '': 'Draw',
+                        'metal': 'Metal',
+                        'polysilicon': 'Poly',
+                        'N+ diffusion': 'N+',
+                        'P+ diffusion': 'P+',
+                        'contact': 'Via',
+                        'VCC': 'VCC',
+                        'GND': 'GND',
+                        'erase': '🧽'
+                    };
+                    dropdownBtn.textContent = layerNames[layer] || 'Draw';
+                    // Close dropdown when a layer is selected
+                    closeDrawDropdown();
+                }
+                
+                function toggleDrawDropdown() {
+                    const dropdown = document.getElementById('drawDropdown');
+                    if (dropdown.style.display === 'block') {
+                        dropdown.style.display = 'none';
+                    } else {
+                        dropdown.style.display = 'block';
+                    }
+                }
+                
+                function closeDrawDropdown() {
+                    const dropdown = document.getElementById('drawDropdown');
+                    dropdown.style.display = 'none';
+                }
+                
+                function toggleCommandLine() {
+                    const commandLine = document.querySelector('.command-line');
+                    const toggleItem = document.querySelector('.dropdown-item[onclick="toggleCommandLine()"]');
+                    
+                    if (commandLine.style.display === 'none') {
+                        commandLine.style.display = 'block';
+                        toggleItem.innerHTML = '<span class="color-indicator" style="background-color: #6c757d; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">⌨️</span>Hide Commands';
+                    } else {
+                        commandLine.style.display = 'none';
+                        toggleItem.innerHTML = '<span class="color-indicator" style="background-color: #6c757d; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">⌨️</span>Show Commands';
+                    }
                 }
 
                 function clearCanvas() {
@@ -375,6 +521,14 @@ $LTI = LTIX::session_start();
                 canvas.addEventListener('mousedown', handleStart);
                 canvas.addEventListener('mousemove', handleMove);
                 canvas.addEventListener('mouseup', handleEnd);
+                
+                // Close dropdown when clicking outside
+                document.addEventListener('click', function(event) {
+                    const dropdown = document.querySelector('.draw-dropdown');
+                    if (!dropdown.contains(event.target)) {
+                        closeDrawDropdown();
+                    }
+                });
 
                 // Hover preview for mouse
                 canvas.addEventListener('mousemove', function(evt) {
@@ -1435,7 +1589,7 @@ $LTI = LTIX::session_start();
             </script>
 
             <!-- Command line interface -->
-            <div class="command-line">
+            <div class="command-line" style="display: none;">
                 <input type="text" id="commandInput" placeholder="Type commands here... (e.g., 'clear', 'draw metal at (5,5)', 'draw metal from (5,5) to (10,10)', 'redraw')">
                 <div class="status" id="status">Ready. Type 'help' for available commands.</div>
             </div>
