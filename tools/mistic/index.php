@@ -235,6 +235,12 @@ $LTI = LTIX::session_start();
                             <span class="color-indicator" style="background-color: #6c757d; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">⌨️</span>
                             Show Commands
                         </div>
+                        <?php if ($USER) : ?>
+                        <div class="dropdown-item" onclick="setLayer('probe')">
+                            <span class="color-indicator" style="background-color: rgba(128, 0, 128, 0.3);"></span>
+                            Probe
+                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 <?php if ($USER) : ?>
@@ -380,6 +386,8 @@ $LTI = LTIX::session_start();
 
                 function setLayer(layer) {
                     currentLayer = layer;
+                    console.log('setLayer called with:', layer); // Debug log
+                    
                     // Update dropdown button text to show selected layer
                     const dropdownBtn = document.querySelector('.draw-dropdown-btn');
                     const layerNames = {
@@ -391,7 +399,8 @@ $LTI = LTIX::session_start();
                         'contact': 'Via',
                         'VCC': 'VCC',
                         'GND': 'GND',
-                        'erase': '🧽'
+                        'erase': '🧽',
+                        'probe': 'Probe' // Add probe to the layer names
                     };
                     dropdownBtn.textContent = layerNames[layer] || 'Draw';
                     // Close dropdown when a layer is selected
@@ -468,21 +477,26 @@ $LTI = LTIX::session_start();
                     startY = coords.y;
                     
                     if (['contact', 'VCC', 'GND', 'probe'].includes(currentLayer)) {
+                        // Clear all special layers at this position
                         grid[startY][startX][getLayerIndex('contact')] = false;
                         grid[startY][startX][getLayerIndex('VCC')] = false;
                         grid[startY][startX][getLayerIndex('GND')] = false;
                         grid[startY][startX][getLayerIndex('probe')] = false;
 
+                        // Set the current layer
                         grid[startY][startX][getLayerIndex(currentLayer)] = true;
                         
                         // Handle probe label input
                         if (currentLayer === 'probe') {
+                            console.log('Placing probe at:', startX, startY); // Debug log
                             const label = prompt('Enter a single character label for this probe:');
                             if (label && label.length > 0) {
                                 probeLabels[startX + '_' + startY] = label.charAt(0);
+                                console.log('Probe placed with label:', label.charAt(0)); // Debug log
                             } else {
                                 // If no label provided, remove the probe
                                 grid[startY][startX][getLayerIndex('probe')] = false;
+                                console.log('Probe placement cancelled'); // Debug log
                             }
                         }
                         
