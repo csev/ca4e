@@ -146,6 +146,7 @@ $LTI = LTIX::session_start();
                 <button onclick="drawNotGate()" style="background-color: #9C27B0; color: white;">Not</button>
 <?php endif; ?>
                 <button onclick="readCircuit()" style="background-color: #607D8B; color: white;">Read Circuit</button>
+                <button onclick="openDocumentation()" style="background-color: #FF9800; color: white; font-weight: bold; font-size: 16px; width: 40px; height: 40px; border-radius: 50%;">?</button>
             </div>
             <div id="canvasContainer" style="position:relative; display:inline-block;">
                 <canvas id="vlsiCanvas" width="600" height="600" style="border:1px solid #000000; display:block;"></canvas>
@@ -288,6 +289,11 @@ $LTI = LTIX::session_start();
                     if (confirm("Are you sure you want to clear the entire canvas? This action cannot be undone.")) {
                         clearCanvas();
                     }
+                }
+
+                function openDocumentation() {
+                    // Open the documentation HTML file in a new tab
+                    window.open('documentation.html', '_blank');
                 }
 
                 function getEventCoordinates(event) {
