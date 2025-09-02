@@ -576,6 +576,7 @@ $LTI = LTIX::session_start();
                     // Redraw everything
                     redrawAllTiles();
                 }
+<?php endif; ?>
 
                 function readCircuit() {
                     console.log("=== CIRCUIT ANALYSIS ===");
@@ -749,6 +750,16 @@ $LTI = LTIX::session_start();
                                     const segments = findConnectedLineSegments(x, y, layer.index);
                                     
                                     segments.forEach(segment => {
+                                        // DEBUG: Log segment details for edge expansion experimentation
+                                        console.log(`=== SEGMENT DEBUG ===`);
+                                        console.log(`Layer: ${layer.name}`);
+                                        console.log(`Segment:`, segment);
+                                        console.log(`Bounds: (${Math.min(...segment.map(p => p.x))},${Math.min(...segment.map(p => p.y))}) to (${Math.max(...segment.map(p => p.x))},${Math.max(...segment.map(p => p.y))})`);
+                                        console.log(`Length: ${segment.length}`);
+                                        
+                                        // TODO: Add edge expansion logic here
+                                        // Check if we can expand edges without pulling in open grid points
+                                        
                                         const command = createDrawCommand(segment, layer.name);
                                         commands.push(command);
                                         
@@ -900,7 +911,6 @@ $LTI = LTIX::session_start();
                     
                     console.log("Speaking circuit commands with pauses...");
                 }
-<?php endif; ?>
 
                 // Drag handling for the modal (mouse + touch)
                 (function enableDrag() {
