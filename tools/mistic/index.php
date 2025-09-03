@@ -8,7 +8,7 @@ use \Tsugi\Core\LTIX;
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
 
-$_SESSION['GSRF'] = time();
+$_SESSION['GSRF'] = 0;
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -2179,9 +2179,9 @@ Grid size: ${gridSize}x${gridSize}`;
                     //     target: e.target.tagName
                     // });
                     
-                    // Test for Option + Shift + 8 (Hitchhiker's Guide reference - 42!)
-                    if (e.altKey && e.shiftKey && e.key === '8') {
-                        console.log('🎯 Easter egg triggered! Option + Shift + 8 detected! (Hitchhiker\'s Guide reference!)');
+                    // Test for Ctrl + * (Hitchhiker's Guide reference - 42!)
+                    if (e.ctrlKey && e.key === '*') {
+                        console.log('🎯 Easter egg triggered! Ctrl + * detected! (Hitchhiker\'s Guide reference!)');
                         unlockNotGate();
                     }
                 });
