@@ -58,6 +58,8 @@ $LTI = LTIX::session_start();
 - Global variable setup ($USER, $CONTEXT, $LINK, $RESULT, $KEY)
 - Anonymous access for non-LTI requests
 
+**Important**: LTI tools are cookieless - they don't use traditional PHP session cookies. Session state is maintained through LTI launch parameters and the Tsugi framework's internal session management.
+
 ## Global Variables After LTI Launch
 When an LTI launch occurs, these variables are available:
 - `$USER` - User object with displayname, email, etc. (or null if anonymous)
@@ -79,8 +81,64 @@ When an LTI launch occurs, these variables are available:
 ## Common Patterns
 1. **User Check**: `if ($USER && $USER->instructor)` for instructor-specific features
 2. **Context Display**: Show course information when available
-3. **Grade Passback**: Use `$RESULT` object for sending grades back to LMS
+3. **Grade Passback**: Use `LTIX::gradeSend()` for sending grades back to LMS
 4. **Session Persistence**: LTI sessions persist across page loads
+
+## Grade Submission
+For submitting grades to the LMS, use the simplified approach:
+
+### Grade Submission Endpoint
+```php
+<?php
+require_once "../config.php";
+use \Tsugi\Core\LTIX;
+
+// Sanity checks
+$LAUNCH = LTIX::requireData();
+$user_id = $USER->id;
+
+// Get and validate grade
+$grade = floatval($_POST['grade']);
+if ($grade < 0.0 || $grade > 1.0) {
+    echo json_encode(Array("status" => "failure", "detail" => "Grade must be between 0.0 and 1.0"));
+    return;
+}
+
+// Submit grade using Tsugi
+$debug_log = array();
+$retval = LTIX::gradeSend($grade, false, $debug_log);
+if (is_string($retval)) {
+    echo json_encode(Array("status" => "failure", "detail" => $retval, "debug_log" => $debug_log));
+    return;
+}
+
+echo json_encode(Array("status" => "success", "debug_log" => $debug_log));
+?>
+```
+
+### JavaScript Integration
+```javascript
+// Use addSession() helper for proper session handling
+fetch('<?php echo addSession('grade-submit.php'); ?>', {
+    method: 'POST',
+    body: formData
+})
+.then(response => response.json())
+.then(data => {
+    if (data.status === 'success') {
+        console.log('Grade submitted successfully');
+    } else {
+        console.error('Grade submission failed:', data.detail);
+    }
+});
+```
+
+### Key Points
+- Use `LTIX::requireData()` instead of manual session handling
+- Use `LTIX::gradeSend()` for proper grade submission
+- Use `addSession()` helper in JavaScript for proper URL generation
+- Return JSON with `status` and `debug_log` fields
+- Grades should be between 0.0 and 1.0
 
 ## Development Guidelines
 - Always check if LTI variables exist before using them

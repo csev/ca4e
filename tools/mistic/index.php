@@ -7,6 +7,19 @@ use \Tsugi\Core\LTIX;
 // Initialize LTI if we received a launch.  If this was a non-LTI GET,
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
+
+// Handle grade submission redirects
+$grade_message = '';
+$grade_message_type = '';
+if (isset($_GET['grade_success']) && $_GET['grade_success'] == '1') {
+    $grade = isset($_GET['grade']) ? $_GET['grade'] : '1.0';
+    $grade_message = "Assignment completed successfully! Grade of $grade submitted to LMS.";
+    $grade_message_type = 'success';
+} elseif (isset($_GET['grade_error'])) {
+    $error = isset($_GET['error']) ? $_GET['error'] : 'Unknown error';
+    $grade_message = "Assignment completed, but grade submission failed: $error";
+    $grade_message_type = 'error';
+}
 ?><!DOCTYPE html>
 <html lang="en">
     <head>
@@ -323,7 +336,11 @@ $LTI = LTIX::session_start();
                             "Q" on the output of your NOT gate.
                             Do not place a VCC or GND on the trace that has the probe.
                             If you place a VCC or GND for testing place the probes on the same 
-                            square as the test points so the test points are cleared. Then press "Grade" to check your circuit.</p>
+                            square as the test points so the test points are cleared. Then press "Grade" to check your circuit.
+                            <?php if ($USER) : ?>
+                            <br><br><strong>Note:</strong> When you successfully complete this assignment, your grade will be automatically submitted to your LMS.
+                            <?php endif; ?>
+                        </p>
                         <div id="gradingSection" style="margin-top: 20px; display: none;">
                             <h3>Circuit Grading</h3>
                             <div id="stepDisplay">
@@ -744,7 +761,14 @@ $LTI = LTIX::session_start();
                 function nextStep() {
                     if (currentStep >= gradingSteps.length) {
                         // All steps completed successfully
-                        alert("yay");
+                        const stepText = document.getElementById('stepText');
+                        stepText.innerHTML = '<span style="color: green;">✓ All tests passed! Submitting grade...</span>';
+                        
+                        // Submit grade to LMS if this is an LTI session
+                        if (typeof submitGradeToLMS === 'function') {
+                            submitGradeToLMS(1.0); // Perfect score for completing all steps
+                        }
+                        
                         // Reset all probes to zero voltage after successful grade
                         resetAllProbesToZero();
                         // Close the assignment dialog
@@ -838,9 +862,6 @@ $LTI = LTIX::session_start();
                                         break;
                                     }
                                 }
-                                if (voltage !== 0) {
-                                    console.log(`Voltage at (${x},${y}): ${voltage}`);
-                                }
                             }
                         }
                     }
@@ -886,6 +907,66 @@ $LTI = LTIX::session_start();
                 function resetGrading() {
                     console.log('Resetting grading process');
                     resetToBeginningScreen();
+                }
+
+                // LTI Grade Submission Function
+                function submitGradeToLMS(grade) {
+                    console.log('Submitting grade to LMS:', grade);
+                    
+                    // Check if we're in an LTI session (user is authenticated)
+                    <?php if ($USER) : ?>
+                    console.log('User is authenticated via LTI, proceeding with grade submission...');
+                    
+                    // Submit the grade via AJAX using form data (as expected by the endpoint)
+                    const formData = new FormData();
+                    formData.append('grade', grade);
+                    formData.append('code', 'VLSI_NOT_GATE_COMPLETED'); // Add a code identifier for the assignment
+                    
+                    console.log('Sending grade=' + grade);
+                    
+                    fetch('<?php echo addSession('grade-submit.php'); ?>', {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => {
+                        console.log('Response received:', response);
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Grade response received...');
+                        console.log(data);
+                        
+                        if (data.status === 'success') {
+                            console.log('Grade submitted successfully:', data);
+                            // Show success message to user
+                            const stepText = document.getElementById('stepText');
+                            if (stepText) {
+                                stepText.innerHTML = `<span style="color: green;">✓ Assignment completed! Grade ${grade} submitted to LMS.</span>`;
+                            }
+                        } else {
+                            console.error('Grade submission failed:', data);
+                            // Show error message to user
+                            const stepText = document.getElementById('stepText');
+                            if (stepText) {
+                                stepText.innerHTML = `<span style="color: orange;">⚠ Assignment completed, but grade submission failed: ${data.detail}</span>`;
+                            }
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error submitting grade:', error);
+                        // Show error message to user
+                        const stepText = document.getElementById('stepText');
+                        if (stepText) {
+                            stepText.innerHTML = `<span style="color: orange;">⚠ Assignment completed, but grade submission failed: ${error.message}</span>`;
+                        }
+                    });
+                    <?php else : ?>
+                    // User is not authenticated (anonymous access), just log it
+                    console.log('Anonymous user - grade not submitted to LMS:', grade);
+                    <?php endif; ?>
                 }
 
                 function drawNotGate() {
