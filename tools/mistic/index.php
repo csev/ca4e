@@ -272,7 +272,7 @@ $LTI = LTIX::session_start();
                         <button class="close-btn" onclick="closeAssignmentModal()" title="Close">×</button>
                     </div>
                     <div class="modal-content">
-                        <p>In this assignment you will lay out a Not gate. 
+                        <p id="assignmentInstructions">In this assignment you will lay out a Not gate. 
                             Place a probe with the label "A" on the input to your NOT gate. Place a probe with the label 
                             "Q" on the output of your NOT gate.
                             Do not place a VCC or GND on the trace that has the probe.
@@ -283,12 +283,10 @@ $LTI = LTIX::session_start();
                             <div id="stepDisplay">
                                 <p id="stepText">Ready to grade your circuit!</p>
                             </div>
-                            <div style="margin-top: 15px;">
-                                <button id="nextBtn" onclick="nextStep()" style="background-color: #2196F3; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; display: none;">Next</button>
-                            </div>
                         </div>
-                        <div style="margin-top: 20px;">
-                            <button onclick="startGrading()" style="background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Grade</button>
+                        <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: space-between;">
+                            <button id="nextBtn" onclick="nextStep()" style="background-color: #2196F3; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; display: none;">Next</button>
+                            <button id="gradeBtn" onclick="startGrading()" style="background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Grade</button>
                         </div>
                     </div>
                 </div>
@@ -588,13 +586,16 @@ $LTI = LTIX::session_start();
 
                 function closeAssignmentModal() {
                     assignmentModal.classList.add('hidden');
+                    // Reset to the beginning screen
+                    resetToBeginningScreen();
                 }
 
                 function centerAssignmentModal() {
-                    const containerRect = canvasContainer.getBoundingClientRect();
                     const modalW = assignmentModal.offsetWidth;
-                    const left = Math.max(0, Math.floor(containerRect.width * 0.8 - modalW / 2));
-                    const top = 20; // 20px from the top of canvas
+                    const modalH = assignmentModal.offsetHeight;
+                    // Center the modal in the viewport, not constrained to canvas
+                    const left = Math.max(0, Math.floor((window.innerWidth - modalW) / 2));
+                    const top = Math.max(0, Math.floor((window.innerHeight - modalH) / 2));
                     assignmentModal.style.left = left + 'px';
                     assignmentModal.style.top = top + 'px';
                 }
@@ -606,7 +607,13 @@ $LTI = LTIX::session_start();
                 function startGrading() {
                     currentStep = 0;
                     document.getElementById('gradingSection').style.display = 'block';
-                    document.getElementById('nextBtn').style.display = 'none';
+                    // Hide the instructions
+                    document.getElementById('assignmentInstructions').style.display = 'none';
+                    // Change Grade button to Reset
+                    const gradeBtn = document.getElementById('gradeBtn');
+                    gradeBtn.textContent = 'Reset';
+                    gradeBtn.onclick = resetGrading;
+                    gradeBtn.style.backgroundColor = '#FF9800';
                     nextStep();
                 }
 
@@ -616,6 +623,8 @@ $LTI = LTIX::session_start();
                         alert("yay");
                         // Reset all probes to zero voltage after successful grade
                         resetAllProbesToZero();
+                        // Close the assignment dialog
+                        closeAssignmentModal();
                         return;
                     }
 
@@ -726,6 +735,33 @@ $LTI = LTIX::session_start();
                     // Redraw to show the reset state
                     redrawAllTiles();
                     console.log('All probes reset to zero voltage');
+                }
+
+                function resetToBeginningScreen() {
+                    console.log('Resetting to beginning screen');
+                    // Reset grading state
+                    currentStep = 0;
+                    gradingSteps.forEach(step => {
+                        step.status = "pending";
+                    });
+                    // Hide grading section
+                    document.getElementById('gradingSection').style.display = 'none';
+                    document.getElementById('nextBtn').style.display = 'none';
+                    // Show the instructions again
+                    document.getElementById('assignmentInstructions').style.display = 'block';
+                    // Reset step text
+                    document.getElementById('stepText').innerHTML = 'Ready to grade your circuit!';
+                    // Reset Grade button back to original state
+                    const gradeBtn = document.getElementById('gradeBtn');
+                    gradeBtn.textContent = 'Grade';
+                    gradeBtn.onclick = startGrading;
+                    gradeBtn.style.backgroundColor = '#4CAF50';
+                    console.log('Reset to beginning screen completed');
+                }
+
+                function resetGrading() {
+                    console.log('Resetting grading process');
+                    resetToBeginningScreen();
                 }
 
                 function drawNotGate() {
@@ -1297,8 +1333,14 @@ $LTI = LTIX::session_start();
                         for (let j = x1; j <= x2; j++) {
                             const layerIndex = getLayerIndex(currentLayer);
                             if (currentLayer === 'erase') {
-                                for (let k = 0; k < 7; k++) {
+                                for (let k = 0; k < 8; k++) {
                                     grid[i][j][k] = false;
+                                }
+                                // Also remove probe data if this was a probe location
+                                const key = j + '_' + i;
+                                if (probeLabels[key]) {
+                                    delete probeLabels[key];
+                                    delete probeVoltages[key];
                                 }
                             } else if (layerIndex !== -1) {
                                 grid[i][j][layerIndex] = true;
