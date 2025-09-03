@@ -88,6 +88,14 @@
             margin: 15px 0;
             border-left: 4px solid #dc3545;
         }
+        .info {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 15px 0;
+            border-left: 4px solid #17a2b8;
+        }
         code {
             background: #f1f3f4;
             padding: 2px 6px;
@@ -157,6 +165,23 @@
             </div>
         </div>
 
+        <h2>🔌 Contact Placement Rules</h2>
+        <div class="info">
+            <strong>ℹ️ Important Rule:</strong> Only one contact type can exist in a grid cell at any time. When you place a new contact (Probe, VCC, GND, or Via), any existing contact in that cell will be automatically cleared.
+        </div>
+        
+        <p>The following contact types are mutually exclusive:</p>
+        <ul>
+            <li><strong>Probe</strong> - Test points with customizable labels (A, B, Q, etc.)</li>
+            <li><strong>VCC</strong> - Power supply connection (+)</li>
+            <li><strong>GND</strong> - Ground connection (-)</li>
+            <li><strong>Via/Contact</strong> - Metal connection between layers</li>
+        </ul>
+        
+        <div class="tip">
+            <strong>💡 Tip:</strong> This automatic clearing ensures clean circuit layouts and prevents conflicts between different contact types. You can always place a different contact type in the same location by simply clicking on it.
+        </div>
+
         <h2>⌨️ Command Line Interface</h2>
         <p>The tool features a powerful command-line interface at the bottom of the screen for precise control and automation.</p>
         
@@ -178,7 +203,9 @@
             <code>draw metal at (5,5)</code> - Place metal at coordinate (5,5)<br>
             <code>draw polysilicon from (3,3) to (6,3)</code> - Draw polysilicon line from (3,3) to (6,3)<br>
             <code>draw via at (5,1)</code> - Place a via at (5,1)<br>
-            <code>draw VCC at (1,1)</code> - Place VCC at (1,1)
+            <code>draw VCC at (1,1)</code> - Place VCC at (1,1)<br>
+            <code>draw probe at (10,10)</code> - Place a probe at (10,10) (will prompt for label)<br>
+            <code>draw GND at (15,15)</code> - Place ground at (15,15)
         </div>
 
         <h3>Layer Aliases</h3>
@@ -198,11 +225,14 @@
 
         <h2>🔧 Special Features</h2>
         
+        <h3>Assignment System</h3>
+        <p>For authenticated users, the tool includes an assignment system with automatic grading. Complete assignments to test your circuit designs and receive grades.</p>
+        
         <h3>NOT Gate Button</h3>
         <p>Click the <strong>Not</strong> button to automatically draw a complete NOT gate circuit with all necessary components.</p>
         
         <h3>Read Circuit</h3>
-        <p>Use the <strong>Read Circuit</strong> button to generate draw commands that can replicate your current circuit design.</p>
+        <p>Use the <strong>Read Circuit</strong> button to generate draw commands that can replicate your current circuit design. This feature also provides speech synthesis for accessibility.</p>
         
         <h3>Layer Visibility</h3>
         <p>Click the <strong>Layers</strong> button to toggle layer visibility and control which layers are displayed.</p>
@@ -219,6 +249,10 @@
         <div class="tip">
             <strong>💡 Tip:</strong> Use the "Read Circuit" feature to verify your design and get the exact commands needed to recreate it.
         </div>
+        
+        <div class="tip">
+            <strong>💡 Tip:</strong> When placing probes, use meaningful labels like "A" for input and "Q" for output to make circuit analysis easier.
+        </div>
 
         <h2>⚠️ Important Notes</h2>
         <div class="warning">
@@ -228,6 +262,10 @@
         <div class="warning">
             <strong>⚠️ Warning:</strong> The grid size is currently 30x30. Coordinates outside this range will generate an error.
         </div>
+        
+        <div class="warning">
+            <strong>⚠️ Warning:</strong> Placing a new contact will automatically remove any existing contact in the same grid cell. This is by design to maintain circuit integrity.
+        </div>
 
         <h2>🔍 Troubleshooting</h2>
         <ul>
@@ -235,6 +273,7 @@
             <li><strong>Invalid coordinates:</strong> Ensure coordinates are within the grid bounds (0 to 29)</li>
             <li><strong>Layer not found:</strong> Use the exact layer name or accepted alias</li>
             <li><strong>Drawing issues:</strong> Try using the <code>redraw</code> command to refresh the display</li>
+            <li><strong>Contact disappeared:</strong> Check if you placed another contact type in the same location</li>
         </ul>
 
         <h2>📚 Advanced Usage</h2>
@@ -242,8 +281,17 @@
         <ul>
             <li>Using the command line to create scripts of draw commands</li>
             <li>Breaking complex shapes into smaller, manageable rectangles</li>
-            <li>Using the layer visibility controls to focus on specific layers during design</li>
-            <li>Testing your circuit with the built-in grading system (if available)</li>
+            <li>Using the layer visibility controls to see how the layers are stacked and connected</li>
+            <li>Planning contact placement to avoid conflicts between different contact types</li>
+        </ul>
+
+        <h2>🎓 Assignment Features</h2>
+        <p>For authenticated users, the tool includes:</p>
+        <ul>
+            <li><strong>Automatic Grading:</strong> Test your circuits against predefined criteria</li>
+            <li><strong>LMS Integration:</strong> Grades are automatically submitted to your Learning Management System</li>
+            <li><strong>Step-by-Step Feedback:</strong> Receive detailed feedback on each part of your assignment</li>
+            <li><strong>Circuit Validation:</strong> Verify that your design meets the assignment requirements</li>
         </ul>
 
         <div style="text-align: center; margin-top: 40px; padding-top: 20px; border-top: 2px solid #667eea;">
