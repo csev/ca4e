@@ -836,7 +836,7 @@ if (isset($_GET['grade_success']) && $_GET['grade_success'] == '1') {
                     
                     // Set the A probe to the input value
                     window.MisticProbes.setProbeValue('A', inputValue);
-                    console.log(`Set probe A to voltage ${inputValue} (treating as ${inputValue === -1 ? 'GND' : 'VCC'})`);
+                    // console.log(`Set probe A to voltage ${inputValue} (treating as ${inputValue === -1 ? 'GND' : 'VCC'})`);
                     
                     // Recompute the circuit
                     window.MisticProbes.recompute();
@@ -870,7 +870,7 @@ if (isset($_GET['grade_success']) && $_GET['grade_success'] == '1') {
                 }
 
                 function resetAllProbesToZero() {
-                    console.log('Resetting all probes to zero voltage after successful grade');
+                    // console.log('Resetting all probes to zero voltage after successful grade');
                     // Reset all probe voltage types to '0' (neutral)
                     Object.keys(probeVoltages).forEach(key => {
                         probeVoltages[key] = '0';
@@ -1775,24 +1775,24 @@ if (isset($_GET['grade_success']) && $_GET['grade_success'] == '1') {
                             if (grid[i][j][layerProbe]) {
                                 const key = j + '_' + i; // Note: grid[i][j] but key is "x_y"
                                 const voltageType = probeVoltages[key];
-                                console.log('Found a probe at ', i, j, 'with voltage type:', voltageType);
+                                // console.log('Found a probe at ', i, j, 'with voltage type:', voltageType);
                                 
                                 if (voltageType === 'VCC') {
                                     for (let l = 0; l < 8; l++) {
                                         volts[i][j][l] = 1;
                                     }
-                                    console.log('Set probe at (', i, j, ') to VCC (1)');
+                                    // console.log('Set probe at (', i, j, ') to VCC (1)');
                                 } else if (voltageType === 'GND') {
                                     for (let l = 0; l < 8; l++) {
                                         volts[i][j][l] = -1;
                                     }
-                                    console.log('Set probe at (', i, j, ') to GND (-1)');
+                                    // console.log('Set probe at (', i, j, ') to GND (-1)');
                                 } else {
                                     // Default to 0 (neutral)
                                     for (let l = 0; l < 8; l++) {
                                         volts[i][j][l] = 0;
                                     }
-                                    console.log('Set probe at (', i, j, ') to neutral (0)');
+                                    // console.log('Set probe at (', i, j, ') to neutral (0)');
                                 }
                             }
                         }
@@ -1895,7 +1895,7 @@ if (isset($_GET['grade_success']) && $_GET['grade_success'] == '1') {
 
                     // Set the voltage value at a probe with the given label
                     setProbeValue: function(label, voltage) {
-                        console.log('Setting probe voltage type', label, voltage, probeLabels);
+                        // console.log('Setting probe voltage type', label, voltage, probeLabels);
                         for (let key in probeLabels) {
                             if (probeLabels[key] === label) {
                                 const [x, y] = key.split('_').map(Number);
@@ -1906,7 +1906,7 @@ if (isset($_GET['grade_success']) && $_GET['grade_success'] == '1') {
                                     else if (voltage === -1) voltageType = 'GND';
                                     
                                     probeVoltages[key] = voltageType;
-                                    console.log(`Updated probe ${label} voltage type to ${voltageType}`);
+                                    // console.log(`Updated probe ${label} voltage type to ${voltageType}`);
                                     
                                     // Recompute to apply the new voltage
                                     compute();
