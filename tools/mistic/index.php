@@ -946,6 +946,8 @@ if (isset($_GET['grade_success']) && $_GET['grade_success'] == '1') {
                             if (stepText) {
                                 stepText.innerHTML = `<span style="color: green;">✓ Assignment completed! Grade ${grade} submitted to LMS.</span>`;
                             }
+                            // Show alert to user
+                            alert(`🎉 Congratulations! Your grade of 1.0 has been successfully submitted to the LMS.`);
                         } else {
                             console.error('Grade submission failed:', data);
                             // Show error message to user
@@ -953,6 +955,8 @@ if (isset($_GET['grade_success']) && $_GET['grade_success'] == '1') {
                             if (stepText) {
                                 stepText.innerHTML = `<span style="color: orange;">⚠ Assignment completed, but grade submission failed: ${data.detail}</span>`;
                             }
+                            // Show error alert to user
+                            alert(`⚠️ Grade submission failed: ${data.detail}\n\nYour assignment was completed successfully, but the grade could not be sent to the LMS. Please contact your instructor.`);
                         }
                     })
                     .catch(error => {
@@ -962,6 +966,8 @@ if (isset($_GET['grade_success']) && $_GET['grade_success'] == '1') {
                         if (stepText) {
                             stepText.innerHTML = `<span style="color: orange;">⚠ Assignment completed, but grade submission failed: ${error.message}</span>`;
                         }
+                        // Show error alert to user
+                        alert(`⚠️ Grade submission error: ${error.message}\n\nYour assignment was completed successfully, but there was a technical error sending the grade to the LMS. Please contact your instructor.`);
                     });
                     <?php else : ?>
                     // User is not authenticated (anonymous access), just log it
