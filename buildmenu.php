@@ -23,7 +23,6 @@ function buildMenu() {
         $set->addLeft('Assignments', $R.'assn');
     }
 
-    /*
     if ( isset($_SESSION['id']) ) {
         $submenu = new \Tsugi\UI\Menu();
         if ( isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true" ) {
@@ -39,7 +38,7 @@ function buildMenu() {
     } else {
         $set->addRight('Login', $T.'login.php');
     }
-     */
+
     $set->addRight('Instructor', 'https://online.dr-chuck.com');
 
     return $set;

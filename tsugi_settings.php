@@ -23,7 +23,7 @@ $CFG->theme = array(
 
 $CFG->context_title = "Computer Architecture for Everybody";
 
-// $CFG->lessons = $CFG->dirroot.'/../lessons.json';
+$CFG->lessons = $CFG->dirroot.'/../lessons.json';
 
 // $CFG->giftquizzes = $CFG->dirroot.'/../dj4e-private/quiz';
 

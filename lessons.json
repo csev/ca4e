@@ -1,0 +1,97 @@
+{
+"title": "Computer Architecture for Everybody (CC4E)",
+"description" : "Hello and welcome to my site where you learn computer architecture chip design.",
+"count": true,
+"required_modules": [
+    "https://github.com/tsugitools/gift",
+    "https://github.com/tsugitools/youtube",
+    "https://github.com/tsugitools/peer-grade",
+    "https://github.com/tsugitools/tdiscus"
+],
+"discussions" : [
+    {
+    "title" : "Welcome to Computer Architecture Programming for Everybody",
+    "launch" : "mod/tdiscus/",
+    "resource_link_id": "discussion_welcome"
+    },
+    {
+    "title" : "Report Bugs in Course Material",
+    "launch" : "mod/tdiscus/",
+    "resource_link_id": "discussion_bugs"
+    }
+],
+"modules": [
+{
+    "title": "Origins of Computing",
+    "anchor": "origins",
+    "icon" : "fa-history",
+    "description": "We look at humans and their relationship with Technology since Stonehenge through the advent of early electronic and electromechanical computers.",
+    "slides": [
+        "{apphome}/lectures/01-Origins.pptx"
+    ],
+    "discussions" : [
+        {
+        "title" : "History / Introduction",
+        "launch" : "mod/tdiscus/",
+        "resource_link_id": "discuss_01_origins"
+        }
+    ]
+},
+{
+    "title": "Solid State Computing",
+    "anchor": "solid",
+    "icon" : "fa-plug fa-rotate-270",
+    "description": "We look how the invention of the transistor changed everything.",
+    "slides": [
+        "{apphome}/lectures/02-SolidState.pptx"
+    ],
+    "discussions" : [
+        {
+        "title" : "Transistors and Solid State Computing",
+        "launch" : "mod/tdiscus/",
+        "resource_link_id": "discuss_02_solid"
+        }
+    ]
+},
+{
+    "title": "Digital Logic",
+    "anchor": "digital",
+    "icon" : "fa-torii-gate",
+    "description": "We move from the electrical aspects of computing to the more abstract logical domain.",
+    "slides": [
+        "{apphome}/lectures/03-DigitalLogic.pptx"
+    ],
+     "lti" : [
+        {
+            "title" : "Mistic: Building VLSI Circuits",
+            "launch" : "mod/mistic/?assn=not",
+            "resource_link_id" : "ca4e_03_not"
+        }
+    ],
+    "discussions" : [
+        {
+        "title" : "Digital Logic",
+        "launch" : "mod/tdiscus/",
+        "resource_link_id": "discuss_03_logic"
+        }
+    ]
+},
+{
+    "title": "CPU Design and Machine Code",
+    "anchor": "cpu",
+    "icon" : "fa-calculator",
+    "description": "Machine code - CDC 8512.",
+    "slides": [
+        "{apphome}/lectures/04-CPU-Machine-Code.pptx"
+    ],
+
+    "discussions" : [
+        {
+        "title" : "CPU Design and Machine Code",
+        "launch" : "mod/tdiscus/",
+        "resource_link_id": "discuss_04_cpu"
+        }
+    ]
+}
+]
+}
