@@ -274,9 +274,10 @@ $LTI = LTIX::session_start();
                     <div class="modal-content">
                         <p>In this assignment you will lay out a Not gate. 
                             Place a probe with the label "A" on the input to your NOT gate. Place a probe with the label 
-                            "Q" on the output of your NOT gate. Do not place a VCC or GND on the trace that has the probe.
+                            "Q" on the output of your NOT gate.
+                            Do not place a VCC or GND on the trace that has the probe.
                             If you place a VCC or GND for testing place the probes on the same 
-                            square as the test points so the test points are cleared.. Then press "Grade" to check your circuit.</p>
+                            square as the test points so the test points are cleared. Then press "Grade" to check your circuit.</p>
                         <div id="gradingSection" style="margin-top: 20px; display: none;">
                             <h3>Circuit Grading</h3>
                             <div id="stepDisplay">
@@ -337,6 +338,7 @@ $LTI = LTIX::session_start();
                 let grid = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(8).fill(false)));
                 let volts = Array(gridSize).fill().map(() => Array(gridSize).fill().map(() => Array(8).fill(0)));
                 let probeLabels = {}; // Store probe labels: {x_y: 'label'}
+                let probeVoltages = {}; // Store probe voltage types: {x_y: 'VCC'|'GND'|'0'}
                 
                 // Grading variables
                 let currentStep = 0;
@@ -369,13 +371,16 @@ $LTI = LTIX::session_start();
                     }
                     // Preserve probe labels for copied area
                     const newProbeLabels = {};
+                    const newProbeVoltages = {};
                     for (let key in probeLabels) {
                         const [x, y] = key.split('_').map(Number);
                         if (x < copy && y < copy) {
                             newProbeLabels[key] = probeLabels[key];
+                            newProbeVoltages[key] = probeVoltages[key];
                         }
                     }
                     probeLabels = newProbeLabels;
+                    probeVoltages = newProbeVoltages;
                     grid = newGrid;
                     volts = newVolts; // will be recomputed
                     gridSize = newSize;
@@ -435,6 +440,7 @@ $LTI = LTIX::session_start();
                     ctx.clearRect(0, 0, canvas.width, canvas.height);
                     grid.forEach(row => row.forEach(col => col.fill(false)));
                     probeLabels = {}; // Clear probe labels
+                    probeVoltages = {}; // Clear probe voltages
                 }
 
                 function confirmClear() {
@@ -489,7 +495,9 @@ $LTI = LTIX::session_start();
                             const label = prompt('Enter a single character label for this probe:');
                             if (label && label.length > 0) {
                                 probeLabels[startX + '_' + startY] = label.charAt(0);
-                                console.log('Probe placed with label:', label.charAt(0)); // Debug log
+                                // Automatically set all probes to zero voltage
+                                probeVoltages[startX + '_' + startY] = '0';
+                                console.log('Probe placed with label:', label.charAt(0), 'and voltage type: 0');
                             } else {
                                 // If no label provided, remove the probe
                                 grid[startY][startX][getLayerIndex('probe')] = false;
@@ -606,6 +614,8 @@ $LTI = LTIX::session_start();
                     if (currentStep >= gradingSteps.length) {
                         // All steps completed successfully
                         alert("yay");
+                        // Reset all probes to zero voltage after successful grade
+                        resetAllProbesToZero();
                         return;
                     }
 
@@ -703,6 +713,19 @@ $LTI = LTIX::session_start();
                     }
                     
                     return outputValue === expectedOutput;
+                }
+
+                function resetAllProbesToZero() {
+                    console.log('Resetting all probes to zero voltage after successful grade');
+                    // Reset all probe voltage types to '0' (neutral)
+                    Object.keys(probeVoltages).forEach(key => {
+                        probeVoltages[key] = '0';
+                    });
+                    // Recompute the circuit with all probes at zero
+                    compute();
+                    // Redraw to show the reset state
+                    redrawAllTiles();
+                    console.log('All probes reset to zero voltage');
                 }
 
                 function drawNotGate() {
@@ -938,7 +961,8 @@ $LTI = LTIX::session_start();
                     // Handle probes separately
                     Object.keys(probeLabels).forEach(key => {
                         const [x, y] = key.split('_').map(Number);
-                        commands.push(`draw probe "${probeLabels[key]}" at (${x}, ${y})`);
+                        const voltageType = probeVoltages[key] || '0';
+                        commands.push(`draw probe "${probeLabels[key]}" at (${x}, ${y}) with voltage ${voltageType}`);
                     });
                     
                     // Output the commands in a clean format
@@ -961,7 +985,8 @@ $LTI = LTIX::session_start();
                     console.log(`Probes found: ${Object.keys(probeLabels).length}`);
                     Object.keys(probeLabels).forEach(key => {
                         const [x, y] = key.split('_');
-                        console.log(`  - Probe "${probeLabels[key]}" at (${x}, ${y})`);
+                        const voltageType = probeVoltages[key] || '0';
+                        console.log(`  - Probe "${probeLabels[key]}" at (${x}, ${y}) with voltage ${voltageType}`);
                     });
                     
                     // Speak the commands with pauses and proper ordering
@@ -1498,22 +1523,28 @@ $LTI = LTIX::session_start();
                                     volts[i][j][l] = -1;
                                 }
                             }
-                            // Handle probe voltages - they should already be set by setProbeValue
-                            // but we need to ensure they're properly initialized for propagation
+                            // Handle probe voltages based on stored voltage types
                             if (grid[i][j][layerProbe]) {
-                                // Check if this probe has a voltage set
-                                let hasVoltage = false;
-                                for (let l = 0; l < 8; l++) {
-                                    if (volts[i][j][l] != 0) {
-                                        hasVoltage = true;
-                                        break;
+                                const key = j + '_' + i; // Note: grid[i][j] but key is "x_y"
+                                const voltageType = probeVoltages[key];
+                                console.log('Found a probe at ', i, j, 'with voltage type:', voltageType);
+                                
+                                if (voltageType === 'VCC') {
+                                    for (let l = 0; l < 8; l++) {
+                                        volts[i][j][l] = 1;
                                     }
-                                }
-                                // If no voltage is set, initialize to 0 (neutral)
-                                if (!hasVoltage) {
+                                    console.log('Set probe at (', i, j, ') to VCC (1)');
+                                } else if (voltageType === 'GND') {
+                                    for (let l = 0; l < 8; l++) {
+                                        volts[i][j][l] = -1;
+                                    }
+                                    console.log('Set probe at (', i, j, ') to GND (-1)');
+                                } else {
+                                    // Default to 0 (neutral)
                                     for (let l = 0; l < 8; l++) {
                                         volts[i][j][l] = 0;
                                     }
+                                    console.log('Set probe at (', i, j, ') to neutral (0)');
                                 }
                             }
                         }
@@ -1614,16 +1645,33 @@ $LTI = LTIX::session_start();
                         return null; // Probe not found
                     },
 
+                    // Get the voltage type (VCC, GND, or 0) at a probe with the given label
+                    getProbeVoltageType: function(label) {
+                        for (let key in probeLabels) {
+                            if (probeLabels[key] === label) {
+                                return probeVoltages[key] || '0';
+                            }
+                        }
+                        return null; // Probe not found
+                    },
+
                     // Set the voltage value at a probe with the given label
                     setProbeValue: function(label, voltage) {
+                        console.log('Setting probe voltage type', label, voltage, probeLabels);
                         for (let key in probeLabels) {
                             if (probeLabels[key] === label) {
                                 const [x, y] = key.split('_').map(Number);
                                 if (grid[y] && grid[y][x] && grid[y][x][layerProbe]) {
-                                    // Set voltage for all layers at this location
-                                    for (let l = 0; l < 8; l++) {
-                                        volts[y][x][l] = voltage;
-                                    }
+                                    // Convert voltage value to voltage type and store it
+                                    let voltageType = '0';
+                                    if (voltage === 1) voltageType = 'VCC';
+                                    else if (voltage === -1) voltageType = 'GND';
+                                    
+                                    probeVoltages[key] = voltageType;
+                                    console.log(`Updated probe ${label} voltage type to ${voltageType}`);
+                                    
+                                    // Recompute to apply the new voltage
+                                    compute();
                                     redrawTile(x, y);
                                     return true;
                                 }
