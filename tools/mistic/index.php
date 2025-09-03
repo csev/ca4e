@@ -56,8 +56,8 @@ $LTI = LTIX::session_start();
             }
             
             .draw-dropdown-btn {
-                background-color: #4CAF50;
-                color: white;
+                background-color: white;
+                color: black;
                 padding: 8px 15px;
                 border-radius: 6px;
                 border: 1px solid #ccc;
@@ -69,7 +69,7 @@ $LTI = LTIX::session_start();
             }
             
             .draw-dropdown-btn:hover {
-                background-color: #45a049;
+                background-color: #f8f8f8;
                 transform: translateY(-1px);
                 box-shadow: 0 4px 8px rgba(0,0,0,0.15);
             }
@@ -112,6 +112,44 @@ $LTI = LTIX::session_start();
                 border: 1px solid #ccc;
                 display: inline-block;
                 flex-shrink: 0;
+            }
+            
+            /* Remove borders from specific icons */
+            .color-indicator[style*="background-color: rgba(255, 255, 255, 1)"] {
+                border: none !important;
+            }
+            
+            .color-indicator[style*="background-color: #eef7ff"] {
+                border: none !important;
+            }
+            
+            /* Custom Via icon styling */
+            .via-icon {
+                position: relative;
+                background-color: rgba(0, 0, 0, 0.3) !important;
+                border: 2px solid #000 !important;
+            }
+            
+            .via-icon::before {
+                content: '';
+                position: absolute;
+                width: 22px;
+                height: 2px;
+                background: #000;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(45deg);
+            }
+            
+            .via-icon::after {
+                content: '';
+                position: absolute;
+                width: 22px;
+                height: 2px;
+                background: #000;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%) rotate(-45deg);
             }
             
             .layer-modal {
@@ -193,12 +231,12 @@ $LTI = LTIX::session_start();
             <h1>Mistic VLSI Layout</h1>
             <div id="toolbar">
                 <div class="draw-dropdown">
-                    <button class="draw-dropdown-btn" onclick="toggleDrawDropdown()">
-                        Draw ▼
+                    <button class="draw-dropdown-btn" id="layersDropdownBtn" onclick="toggleLayersDropdown()">
+                        Layers ▼
                     </button>
-                    <div class="draw-dropdown-content" id="drawDropdown">
+                    <div class="draw-dropdown-content" id="layersDropdown">
                         <div class="dropdown-item" onclick="setLayer('')">
-                            Drawing Menu
+                            Layers
                         </div>
                         <div class="dropdown-item" onclick="setLayer('metal')">
                             <span class="color-indicator" style="background-color: rgba(0, 0, 255, 0.3);"></span>
@@ -216,8 +254,23 @@ $LTI = LTIX::session_start();
                             <span class="color-indicator" style="background-color: rgba(255, 165, 0, 0.5);"></span>
                             P+
                         </div>
+                        <div class="dropdown-item" onclick="setLayer('erase')">
+                            <span class="color-indicator" style="background-color: rgba(255, 255, 255, 1);">🧽</span>
+                            Erase
+                        </div>
+                        <div class="dropdown-item" onclick="setDetailMode()">
+                            <span class="color-indicator" style="background-color: #eef7ff; display: flex; align-items: center; justify-content: center; color: #333; font-weight: bold;">🔍</span>
+                            Detail
+                        </div>
+                    </div>
+                </div>
+                <div class="draw-dropdown">
+                    <button class="draw-dropdown-btn" id="contactsDropdownBtn" onclick="toggleContactsDropdown()">
+                        Contacts ▼
+                    </button>
+                    <div class="draw-dropdown-content" id="contactsDropdown">
                         <div class="dropdown-item" onclick="setLayer('contact')">
-                            <span class="color-indicator" style="background-color: rgba(0, 0, 0, 0.3); display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px; border: 1px solid #333;">×</span>
+                            <span class="color-indicator via-icon"></span>
                             Via
                         </div>
                         <div class="dropdown-item" onclick="setLayer('VCC')">
@@ -228,24 +281,16 @@ $LTI = LTIX::session_start();
                             <span class="color-indicator" style="background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #333; font-weight: bold;">-</span>
                             GND
                         </div>
-                        <div class="dropdown-item" onclick="setLayer('erase')">
-                            <span class="color-indicator" style="background-color: rgba(255, 255, 255, 1); border: 1px solid #ccc;">🧽</span>
-                            Erase
-                        </div>
                         <?php if ($USER) : ?>
                         <div class="dropdown-item" onclick="setLayer('probe')">
                             <span class="color-indicator" style="background-color: rgba(128, 0, 128, 0.3);"></span>
                             Probe
                         </div>
                         <?php endif; ?>
-                        <div class="dropdown-item" onclick="toggleCommandLine()">
-                            <span class="color-indicator" style="background-color: #6c757d; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">⌨️</span>
-                            Show Commands
-                        </div>
                     </div>
                 </div>
                 <button onclick="confirmClear()" style="background-color: #ffe6e6;">🗑️</button>
-                <button id="toggleLayersBtn" style="background-color:#eef7ff;">Layers</button>
+                <button onclick="toggleCommandLine()" style="background-color: #6c757d; color: white;">Commands</button>
 <?php if ($USER) : ?>
                 <button id="assignmentBtn" style="background-color:#fff0e6;">Assignment</button>
 <?php endif; ?>
@@ -301,7 +346,6 @@ $LTI = LTIX::session_start();
                 const lctx = layerCanvas ? layerCanvas.getContext('2d') : null;
                 const layerModal = document.getElementById('layerModal');
                 const layerModalHeader = document.getElementById('layerModalHeader');
-                const toggleLayersBtn = document.getElementById('toggleLayersBtn');
                 const canvasContainer = document.getElementById('canvasContainer');
 <?php if ($USER) : ?>
                 const assignmentModal = document.getElementById('assignmentModal');
@@ -389,27 +433,99 @@ $LTI = LTIX::session_start();
                     currentLayer = layer;
                     console.log('setLayer called with:', layer); // Debug log
                     
-                    // Update dropdown button text to show selected layer with icon
-                    const dropdownBtn = document.querySelector('.draw-dropdown-btn');
-                    const layerDisplay = {
-                        '': 'Draw',
-                        'metal': '🔵 Metal',
-                        'polysilicon': '🔴 Poly',
-                        'N+ diffusion': '🟢 N+',
-                        'P+ diffusion': '🟠 P+',
-                        'contact': '❌ Via',
-                        'VCC': '➕ VCC',
-                        'GND': '➖ GND',
-                        'erase': '🧽 Erase',
-                        'probe': '🟣 Probe'
-                    };
-                    dropdownBtn.textContent = layerDisplay[layer] || 'Draw';
-                    // Close dropdown when a layer is selected
-                    closeDrawDropdown();
+                    // Determine which dropdown this layer belongs to and update accordingly
+                    const contactLayers = ['contact', 'VCC', 'GND', 'probe'];
+                    const isContactLayer = contactLayers.includes(layer);
+                    
+                    if (isContactLayer) {
+                        // Update contacts dropdown button
+                        const contactsBtn = document.getElementById('contactsDropdownBtn');
+                        if (layer === 'contact') {
+                            // Create custom Via icon with thick diagonal black crosses
+                            contactsBtn.innerHTML = '<span style="display: inline-block; width: 16px; height: 16px; background: rgba(0,0,0,0.3); border: 2px solid #000; position: relative; margin-right: 8px; vertical-align: middle;"><span style="position: absolute; width: 22px; height: 2px; background: #000; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(45deg);"></span><span style="position: absolute; width: 22px; height: 2px; background: #000; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-45deg);"></span></span>Via';
+                        } else if (layer === 'VCC') {
+                            contactsBtn.innerHTML = '<span style="display: inline-flex; width: 16px; height: 16px; background: #f0f0f0; border: 1px solid rgba(0,0,0,0.2); border-radius: 3px; margin-right: 8px; vertical-align: middle; align-items: center; justify-content: center; color: #333; font-weight: bold;">+</span>VCC';
+                        } else if (layer === 'GND') {
+                            contactsBtn.innerHTML = '<span style="display: inline-flex; width: 16px; height: 16px; background: #f0f0f0; border: 1px solid rgba(0,0,0,0.2); border-radius: 3px; margin-right: 8px; vertical-align: middle; align-items: center; justify-content: center; color: #333; font-weight: bold;">-</span>GND';
+                        } else if (layer === 'probe') {
+                            contactsBtn.innerHTML = '<span style="display: inline-block; width: 16px; height: 16px; background: rgba(128, 0, 128, 0.3); border: 1px solid rgba(0,0,0,0.2); border-radius: 3px; margin-right: 8px; vertical-align: middle;"></span>Probe';
+                        } else {
+                            contactsBtn.textContent = 'Contacts';
+                        }
+                        // Reset layers dropdown button
+                        document.getElementById('layersDropdownBtn').textContent = 'Layers ▼';
+                    } else {
+                        // Update layers dropdown button
+                        const layersBtn = document.getElementById('layersDropdownBtn');
+                        if (layer === '') {
+                            layersBtn.textContent = 'Layers ▼';
+                        } else if (layer === 'erase') {
+                            layersBtn.innerHTML = '<span style="display: inline-block; width: 16px; height: 16px; background: rgba(255,255,255,1); border-radius: 3px; margin-right: 8px; vertical-align: middle;">🧽</span>Erase';
+                        } else {
+                            // Create rounded corner rectangles with faint outlines for material layers
+                            // Colors must match exactly with the dropdown color-indicator styles
+                            const layerColors = {
+                                'metal': 'rgba(0, 0, 255, 0.3)',
+                                'polysilicon': 'rgba(255, 0, 0, 0.2)',
+                                'N+ diffusion': 'rgba(0, 255, 0, 0.3)',
+                                'P+ diffusion': 'rgba(255, 165, 0, 0.5)'
+                            };
+                            const color = layerColors[layer];
+                            const names = {
+                                'metal': 'Metal',
+                                'polysilicon': 'Poly',
+                                'N+ diffusion': 'N+',
+                                'P+ diffusion': 'P+'
+                            };
+                            layersBtn.innerHTML = `<span style="display: inline-block; width: 16px; height: 16px; background: ${color}; border: 1px solid rgba(0,0,0,0.2); border-radius: 3px; margin-right: 8px; vertical-align: middle;"></span>${names[layer]}`;
+                        }
+                        // Reset contacts dropdown button
+                        document.getElementById('contactsDropdownBtn').textContent = 'Contacts ▼';
+                    }
+                    
+                    // Close both dropdowns when a selection is made
+                    document.getElementById('layersDropdown').style.display = 'none';
+                    document.getElementById('contactsDropdown').style.display = 'none';
+                    
+                    // Turn off detail hover mode when a real layer is selected
+                    if (layer !== '') {
+                        // Close the layers modal if it's open
+                        if (!layerModal.classList.contains('hidden')) {
+                            layerModal.classList.add('hidden');
+                        }
+                    }
+                }
+
+                function setDetailMode() {
+                    // Set the layers button to show Detail with magnifying glass
+                    const layersBtn = document.getElementById('layersDropdownBtn');
+                    layersBtn.textContent = '🔍 Detail';
+                    // Reset contacts dropdown button
+                    document.getElementById('contactsDropdownBtn').textContent = 'Contacts ▼';
+                    // Close both dropdowns
+                    document.getElementById('layersDropdown').style.display = 'none';
+                    document.getElementById('contactsDropdown').style.display = 'none';
+                    // Open the layers modal
+                    toggleLayersModal();
                 }
                 
-                function toggleDrawDropdown() {
-                    const dropdown = document.getElementById('drawDropdown');
+                function toggleLayersDropdown() {
+                    const dropdown = document.getElementById('layersDropdown');
+                    const contactsDropdown = document.getElementById('contactsDropdown');
+                    // Close contacts dropdown when opening layers
+                    contactsDropdown.style.display = 'none';
+                    if (dropdown.style.display === 'block') {
+                        dropdown.style.display = 'none';
+                    } else {
+                        dropdown.style.display = 'block';
+                    }
+                }
+
+                function toggleContactsDropdown() {
+                    const dropdown = document.getElementById('contactsDropdown');
+                    const layersDropdown = document.getElementById('layersDropdown');
+                    // Close layers dropdown when opening contacts
+                    layersDropdown.style.display = 'none';
                     if (dropdown.style.display === 'block') {
                         dropdown.style.display = 'none';
                     } else {
@@ -417,9 +533,9 @@ $LTI = LTIX::session_start();
                     }
                 }
                 
-                function closeDrawDropdown() {
-                    const dropdown = document.getElementById('drawDropdown');
-                    dropdown.style.display = 'none';
+                function closeAllDropdowns() {
+                    document.getElementById('layersDropdown').style.display = 'none';
+                    document.getElementById('contactsDropdown').style.display = 'none';
                 }
                 
                 function toggleCommandLine() {
@@ -540,11 +656,12 @@ $LTI = LTIX::session_start();
                 canvas.addEventListener('mousemove', handleMove);
                 canvas.addEventListener('mouseup', handleEnd);
                 
-                // Close dropdown when clicking outside
+                // Close dropdowns when clicking outside
                 document.addEventListener('click', function(event) {
-                    const dropdown = document.querySelector('.draw-dropdown');
-                    if (!dropdown.contains(event.target)) {
-                        closeDrawDropdown();
+                    const layersDropdown = document.querySelector('#layersDropdown').parentElement;
+                    const contactsDropdown = document.querySelector('#contactsDropdown').parentElement;
+                    if (!layersDropdown.contains(event.target) && !contactsDropdown.contains(event.target)) {
+                        closeAllDropdowns();
                     }
                 });
 
@@ -568,7 +685,7 @@ $LTI = LTIX::session_start();
                 }, { passive: false });
 
                 // Toggle modal visibility
-                toggleLayersBtn.addEventListener('click', function() {
+                function toggleLayersModal() {
                     if (layerModal.classList.contains('hidden')) {
                         layerModal.classList.remove('hidden');
                         modalUserMoved = false;
@@ -576,7 +693,7 @@ $LTI = LTIX::session_start();
                     } else {
                         layerModal.classList.add('hidden');
                     }
-                });
+                }
 
 <?php if ($USER) : ?>
                 // Assignment modal functions
