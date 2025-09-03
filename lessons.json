@@ -64,7 +64,7 @@
      "lti" : [
         {
             "title" : "Mistic: Building VLSI Circuits",
-            "launch" : "mod/mistic/?assn=not",
+            "launch" : "tools/mistic/?assn=not",
             "resource_link_id" : "ca4e_03_not"
         }
     ],
