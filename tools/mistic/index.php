@@ -8,18 +8,8 @@ use \Tsugi\Core\LTIX;
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
 
-// Handle grade submission redirects
-$grade_message = '';
-$grade_message_type = '';
-if (isset($_GET['grade_success']) && $_GET['grade_success'] == '1') {
-    $grade = isset($_GET['grade']) ? $_GET['grade'] : '1.0';
-    $grade_message = "Assignment completed successfully! Grade of $grade submitted to LMS.";
-    $grade_message_type = 'success';
-} elseif (isset($_GET['grade_error'])) {
-    $error = isset($_GET['error']) ? $_GET['error'] : 'Unknown error';
-    $grade_message = "Assignment completed, but grade submission failed: $error";
-    $grade_message_type = 'error';
-}
+$_SESSION['GSRF'] = time();
+
 ?><!DOCTYPE html>
 <html lang="en">
     <head>
@@ -924,7 +914,7 @@ if (isset($_GET['grade_success']) && $_GET['grade_success'] == '1') {
                     
                     console.log('Sending grade=' + grade);
                     
-                    fetch('<?php echo addSession('grade-submit.php'); ?>', {
+                    fetch('<?php echo addSession($CFG->wwwroot . '/api/grade-submit.php'); ?>', {
                         method: 'POST',
                         body: formData
                     })
@@ -2189,9 +2179,9 @@ Grid size: ${gridSize}x${gridSize}`;
                     //     target: e.target.tagName
                     // });
                     
-                    // Test for Ctrl + * (Hitchhiker's Guide reference - 42!)
-                    if (e.ctrlKey && e.key === '*') {
-                        console.log('🎯 Easter egg triggered! Ctrl + * detected! (Hitchhiker\'s Guide reference!)');
+                    // Test for Option + Shift + 8 (Hitchhiker's Guide reference - 42!)
+                    if (e.altKey && e.shiftKey && e.key === '8') {
+                        console.log('🎯 Easter egg triggered! Option + Shift + 8 detected! (Hitchhiker\'s Guide reference!)');
                         unlockNotGate();
                     }
                 });
