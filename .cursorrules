@@ -1,0 +1,126 @@
+# CA4E Project - LTI and Tsugi Framework Rules
+
+## Project Overview
+This is the Computer Architecture for Everybody (CA4E) project, which provides educational tools that integrate with Learning Management Systems (LMS) through LTI (Learning Tools Interoperability) and the Tsugi framework.
+
+## LTI (Learning Tools Interoperability) Basics
+LTI is a standard that allows educational tools to integrate seamlessly with LMS platforms like Canvas, Moodle, Blackboard, etc. It provides:
+- Single sign-on from the LMS
+- User context and course information
+- Grade passback capabilities
+- Secure communication between LMS and tools
+
+## Tsugi Framework Architecture
+Tsugi is a PHP framework that simplifies LTI integration. The project uses the modern Tsugi library located in `tsugi/vendor/tsugi/lib/src/`.
+
+### Core Components
+- **LTIX**: Main entry point for LTI sessions (`tsugi/vendor/tsugi/lib/src/Core/LTIX.php`)
+- **User**: Represents the authenticated user from the LMS
+- **Context**: Contains course/section information
+- **Link**: Represents the specific tool instance in the course
+- **Result**: Handles grade passback and student progress
+- **Key**: Manages LTI consumer keys and secrets
+
+### Key Classes Location
+All core classes are in `tsugi/vendor/tsugi/lib/src/Core/`:
+- `LTIX.php` - Main LTI session management
+- `User.php` - User information and authentication
+- `Context.php` - Course context and metadata
+- `Link.php` - Tool link configuration
+- `Result.php` - Grade passback and results
+- `Key.php` - LTI key management
+
+## Standard Tool Structure
+Every tool in the `tools/` directory follows this pattern:
+
+```php
+<?php
+require_once "../config.php";
+use \Tsugi\Core\LTIX;
+
+// Initialize LTI if we received a launch. If this was a non-LTI GET,
+// then $USER will be null (i.e. anonymous)
+$LTI = LTIX::session_start();
+?>
+<!DOCTYPE html>
+<!-- Tool HTML content -->
+```
+
+## Configuration
+- **Main config**: `tsugi/config.php` - Database, URLs, tool folders
+- **Tool config**: `tools/config.php` - Includes main config and sets up tool environment
+- **Tool folders**: Configured in main config as `$CFG->tool_folders = array("admin", "../tools", "../mod")`
+
+## Session Management
+`LTIX::session_start()` handles:
+- LTI launch validation
+- Session creation
+- Global variable setup ($USER, $CONTEXT, $LINK, $RESULT, $KEY)
+- Anonymous access for non-LTI requests
+
+## Global Variables After LTI Launch
+When an LTI launch occurs, these variables are available:
+- `$USER` - User object with displayname, email, etc. (or null if anonymous)
+- `$CONTEXT` - Course context object with title, id, etc.
+- `$LINK` - Tool link object with configuration
+- `$RESULT` - Result object for grade passback
+- `$KEY` - LTI key object for consumer management
+
+## Anonymous vs Authenticated Access
+- **LTI Launch**: User is authenticated, all variables are objects
+- **Direct Access**: User is anonymous, all variables are null
+- **Anonymous Limitations**: When `$USER` is null, there is no user context, so:
+  - No grade passback is possible (no `$RESULT` object)
+  - Many Tsugi API features are unavailable
+  - No course context or user preferences
+  - No progress tracking or persistence
+- Tools should handle both scenarios gracefully, but be aware of these limitations
+
+## Common Patterns
+1. **User Check**: `if ($USER && $USER->instructor)` for instructor-specific features
+2. **Context Display**: Show course information when available
+3. **Grade Passback**: Use `$RESULT` object for sending grades back to LMS
+4. **Session Persistence**: LTI sessions persist across page loads
+
+## Development Guidelines
+- Always check if LTI variables exist before using them
+- Provide fallback behavior for anonymous users
+- Use proper error handling for LTI operations
+- Follow the established tool structure pattern
+- Test both LTI and direct access scenarios
+
+## File Organization
+- `tools/` - Individual LTI tools (circuit simulators, calculators, etc.)
+- `tsugi/` - Tsugi framework and configuration
+- `mod/` - Additional modules and tools
+- `admin/` - Administrative tools and interfaces
+
+## Integration Points
+- **LMS Integration**: Through LTI launch URLs
+- **Grade Passback**: Via Result objects
+- **User Management**: Through User objects
+- **Course Context**: Via Context objects
+- **Tool Configuration**: Through Link objects
+
+## Security Considerations
+- LTI launches are cryptographically signed
+- User context comes from trusted LMS
+- Session management is handled by Tsugi
+- Direct access is limited to anonymous functionality
+
+## Testing
+- Test tools both as LTI launches and direct access
+- Verify user context and instructor privileges
+- Test grade passback functionality
+- Validate session persistence
+
+## Common Issues
+- Missing LTI variables when accessed directly
+- Session state not persisting
+- Grade passback failures
+- Configuration path issues
+
+## Resources
+- Tsugi Documentation: `tsugi/vendor/tsugi/lib/docs/`
+- LTI Specification: IMS Global Learning Consortium
+- CA4E Project: Computer Architecture for Everybody
