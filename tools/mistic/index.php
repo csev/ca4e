@@ -8,7 +8,7 @@ use \Tsugi\Core\LTIX;
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
 
-$_SESSION['GSRF'] = 0;
+$_SESSION['GSRF'] = 10;
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -607,6 +607,13 @@ $_SESSION['GSRF'] = 0;
                         grid[startY][startX][getLayerIndex('VCC')] = false;
                         grid[startY][startX][getLayerIndex('GND')] = false;
                         grid[startY][startX][getLayerIndex('probe')] = false;
+
+                        // Clean up probe data if this was a probe location
+                        const key = startX + '_' + startY;
+                        if (probeLabels[key]) {
+                            delete probeLabels[key];
+                            delete probeVoltages[key];
+                        }
 
                         // Set the current layer
                         grid[startY][startX][getLayerIndex(currentLayer)] = true;
@@ -2059,6 +2066,21 @@ $_SESSION['GSRF'] = 0;
                             
                             if (x < 0 || x >= gridSize || y < 0 || y >= gridSize) {
                                 return `Error: Coordinates (${x},${y}) out of bounds. Grid size is ${gridSize}x${gridSize}`;
+                            }
+                            
+                            // Clear all special layers at this position if placing a contact type
+                            if (['contact', 'vcc', 'gnd', 'probe'].includes(layer)) {
+                                grid[y][x][getLayerIndex('contact')] = false;
+                                grid[y][x][getLayerIndex('VCC')] = false;
+                                grid[y][x][getLayerIndex('GND')] = false;
+                                grid[y][x][getLayerIndex('probe')] = false;
+                                
+                                // Clean up probe data if this was a probe location
+                                const key = x + '_' + y;
+                                if (probeLabels[key]) {
+                                    delete probeLabels[key];
+                                    delete probeVoltages[key];
+                                }
                             }
                             
                             grid[y][x][layerIndex] = true;
