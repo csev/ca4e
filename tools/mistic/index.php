@@ -135,17 +135,18 @@ $LTI = LTIX::session_start();
             }
             
             .assignment-modal {
-                position: absolute;
+                position: fixed;
                 background: #fff;
                 border: 2px solid #333;
                 border-radius: 8px;
                 box-shadow: 0 8px 24px rgba(0,0,0,0.3);
                 z-index: 1001;
                 user-select: none;
-                min-width: 300px;
-                min-height: 200px;
-                max-width: 90vw;
-                max-height: 90vh;
+                width: 75vw;
+                min-width: 400px;
+                max-width: 800px;
+                min-height: 300px;
+                max-height: 80vh;
                 resize: both;
                 overflow: auto;
             }
@@ -580,24 +581,35 @@ $LTI = LTIX::session_start();
 <?php if ($USER) : ?>
                 // Assignment modal functions
                 function showAssignmentModal() {
+                    // Reset to beginning state when opening
+                    resetToBeginningScreen();
                     assignmentModal.classList.remove('hidden');
                     centerAssignmentModal();
                 }
 
                 function closeAssignmentModal() {
+                    // Prevent multiple close attempts
+                    if (assignmentModal.classList.contains('hidden')) {
+                        return;
+                    }
+                    // Clear any inline positioning to prevent conflicts
+                    assignmentModal.style.left = '';
+                    assignmentModal.style.top = '';
+                    // Simply hide the modal - don't reset immediately to avoid conflicts
                     assignmentModal.classList.add('hidden');
-                    // Reset to the beginning screen
-                    resetToBeginningScreen();
                 }
 
                 function centerAssignmentModal() {
-                    const modalW = assignmentModal.offsetWidth;
-                    const modalH = assignmentModal.offsetHeight;
-                    // Center the modal in the viewport, not constrained to canvas
-                    const left = Math.max(0, Math.floor((window.innerWidth - modalW) / 2));
-                    const top = Math.max(0, Math.floor((window.innerHeight - modalH) / 2));
-                    assignmentModal.style.left = left + 'px';
-                    assignmentModal.style.top = top + 'px';
+                    // Only set initial position if modal doesn't already have a position
+                    if (!assignmentModal.style.left || !assignmentModal.style.top) {
+                        const modalW = assignmentModal.offsetWidth;
+                        const modalH = assignmentModal.offsetHeight;
+                        // Position modal nudged to the right, near the top of viewport
+                        const left = Math.max(0, Math.floor((window.innerWidth - modalW) * 0.7)); // 70% from left edge
+                        const top = Math.max(20, Math.floor(window.innerHeight * 0.1)); // 10% from top, minimum 20px
+                        assignmentModal.style.left = left + 'px';
+                        assignmentModal.style.top = top + 'px';
+                    }
                 }
 
                 // Assignment button click handler
@@ -1241,9 +1253,9 @@ $LTI = LTIX::session_start();
                         }
                         const dx = clientX - startClientX;
                         const dy = clientY - startClientY;
-                        const containerRect = canvasContainer.getBoundingClientRect();
-                        const maxLeft = containerRect.width - assignmentModal.offsetWidth;
-                        const maxTop = containerRect.height - assignmentModal.offsetHeight;
+                        // Remove canvas container constraints - allow modal to move freely on screen
+                        const maxLeft = window.innerWidth - assignmentModal.offsetWidth;
+                        const maxTop = window.innerHeight - assignmentModal.offsetHeight;
                         const newLeft = Math.max(0, Math.min(maxLeft, startLeft + dx));
                         const newTop = Math.max(0, Math.min(maxTop, startTop + dy));
                         assignmentModal.style.left = newLeft + 'px';
