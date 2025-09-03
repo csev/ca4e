@@ -231,21 +231,18 @@ $LTI = LTIX::session_start();
                             <span class="color-indicator" style="background-color: rgba(255, 255, 255, 1); border: 1px solid #ccc;">🧽</span>
                             Erase
                         </div>
-                        <div class="dropdown-item" onclick="toggleCommandLine()">
-                            <span class="color-indicator" style="background-color: #6c757d; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">⌨️</span>
-                            Show Commands
-                        </div>
                         <?php if ($USER) : ?>
                         <div class="dropdown-item" onclick="setLayer('probe')">
                             <span class="color-indicator" style="background-color: rgba(128, 0, 128, 0.3);"></span>
                             Probe
                         </div>
                         <?php endif; ?>
+                        <div class="dropdown-item" onclick="toggleCommandLine()">
+                            <span class="color-indicator" style="background-color: #6c757d; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 10px;">⌨️</span>
+                            Show Commands
+                        </div>
                     </div>
                 </div>
-<?php if ($USER) : ?>
-                <button onclick="setLayer('probe')" style="background-color: rgba(128, 0, 128, 0.3);">Probe</button>
-<?php endif; ?>
                 <button onclick="confirmClear()" style="background-color: #ffe6e6;">🗑️</button>
                 <button id="toggleLayersBtn" style="background-color:#eef7ff;">Layers</button>
 <?php if ($USER) : ?>
@@ -388,21 +385,21 @@ $LTI = LTIX::session_start();
                     currentLayer = layer;
                     console.log('setLayer called with:', layer); // Debug log
                     
-                    // Update dropdown button text to show selected layer
+                    // Update dropdown button text to show selected layer with icon
                     const dropdownBtn = document.querySelector('.draw-dropdown-btn');
-                    const layerNames = {
+                    const layerDisplay = {
                         '': 'Draw',
-                        'metal': 'Metal',
-                        'polysilicon': 'Poly',
-                        'N+ diffusion': 'N+',
-                        'P+ diffusion': 'P+',
-                        'contact': 'Via',
-                        'VCC': 'VCC',
-                        'GND': 'GND',
-                        'erase': '🧽',
-                        'probe': 'Probe' // Add probe to the layer names
+                        'metal': '🔵 Metal',
+                        'polysilicon': '🔴 Poly',
+                        'N+ diffusion': '🟢 N+',
+                        'P+ diffusion': '🟠 P+',
+                        'contact': '❌ Via',
+                        'VCC': '➕ VCC',
+                        'GND': '➖ GND',
+                        'erase': '🧽 Erase',
+                        'probe': '🟣 Probe'
                     };
-                    dropdownBtn.textContent = layerNames[layer] || 'Draw';
+                    dropdownBtn.textContent = layerDisplay[layer] || 'Draw';
                     // Close dropdown when a layer is selected
                     closeDrawDropdown();
                 }
