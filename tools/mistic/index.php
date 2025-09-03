@@ -588,20 +588,15 @@ $LTI = LTIX::session_start();
                 }
 
                 function closeAssignmentModal() {
-                    // Prevent multiple close attempts
-                    if (assignmentModal.classList.contains('hidden')) {
-                        return;
-                    }
-                    // Clear any inline positioning to prevent conflicts
-                    assignmentModal.style.left = '';
-                    assignmentModal.style.top = '';
+                    console.log('closeAssignmentModal');
                     // Simply hide the modal - don't reset immediately to avoid conflicts
                     assignmentModal.classList.add('hidden');
                 }
 
                 function centerAssignmentModal() {
                     // Only set initial position if modal doesn't already have a position
-                    if (!assignmentModal.style.left || !assignmentModal.style.top) {
+                    if (!assignmentModal.style.left && !assignmentModal.style.top) {
+                        console.log('centerAssignmentModal');
                         const modalW = assignmentModal.offsetWidth;
                         const modalH = assignmentModal.offsetHeight;
                         // Position modal nudged to the right, near the top of viewport
@@ -1222,10 +1217,9 @@ $LTI = LTIX::session_start();
                     function onPointerDown(e) {
                         e.preventDefault();
                         dragging = true;
-                        const rect = assignmentModal.getBoundingClientRect();
-                        const containerRect = canvasContainer.getBoundingClientRect();
-                        startLeft = rect.left - containerRect.left;
-                        startTop = rect.top - containerRect.top;
+                        // For position: fixed, use viewport coordinates directly
+                        startLeft = parseInt(assignmentModal.style.left) || 0;
+                        startTop = parseInt(assignmentModal.style.top) || 0;
                         if (e.touches) {
                             startClientX = e.touches[0].clientX;
                             startClientY = e.touches[0].clientY;
@@ -1293,10 +1287,6 @@ $LTI = LTIX::session_start();
                     canvas.height = pixelSize;
                     // Redraw grid according to new canvas size
                     redrawAllTiles();
-                    // Keep modal near the top and horizontally centered while resizing if visible
-                    if (!layerModal.classList.contains('hidden')) {
-                        centerModalTopCentered();
-                    }
                 }
 
                 function centerModalOverCanvas() {
