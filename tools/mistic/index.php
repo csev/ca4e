@@ -295,7 +295,7 @@ $LTI = LTIX::session_start();
                 <button id="assignmentBtn" style="background-color:#fff0e6;">Assignment</button>
 <?php endif; ?>
 <?php if ($USER && $USER->instructor) : ?>
-                <button onclick="drawNotGate()" style="background-color: #9C27B0; color: white;">Not</button>
+
 <?php endif; ?>
                 <button onclick="readCircuit()" style="background-color: #607D8B; color: white;">Read Circuit</button>
                 <button onclick="openDocumentation()" style="background-color: #FF9800; color: white; font-weight: bold; font-size: 16px; width: 40px; height: 40px; border-radius: 50%;">?</button>
@@ -1767,16 +1767,6 @@ $LTI = LTIX::session_start();
                     if (l == layerPPlus && grid[i][j][layerPolysilicon] && volts[i][j][layerPolysilicon] != -1) return;
 
                     volts[i][j][l] = voltage;
-                    
-                    // Debug logging for probe voltage propagation
-                    if (grid[i][j][layerProbe]) {
-                        console.log(`Propagating voltage ${voltage} to probe at (${i},${j}) layer ${l}`);
-                    }
-                    
-                    // Debug logging for metal voltage propagation
-                    if (grid[i][j][layerMetal]) {
-                        console.log(`Propagating voltage ${voltage} to metal at (${i},${j}) layer ${l}`);
-                    }
 
                     if (i > 0) propogateVoltage(voltage, i-1, j, l);
                     if (j > 0) propogateVoltage(voltage, i, j-1, l);
@@ -2090,6 +2080,49 @@ Grid size: ${gridSize}x${gridSize}`;
                 window.addEventListener('load', () => {
                     commandInput.focus();
                 });
+
+                // Easter egg: Ctrl + * to unlock Not gate (Hitchhiker's Guide reference - 42)
+                
+                // Test function to verify the Easter egg is working
+                window.testEasterEgg = function() {
+                    if (typeof drawNotGate === 'function') {
+                        drawNotGate();
+                    }
+                };
+                
+                document.addEventListener('keydown', (e) => {
+                    // Debug logging to see what keys are being pressed
+                    // console.log('🎹 Key event detected:', {
+                    //     key: e.key,
+                    //     code: e.code,
+                    //     ctrlKey: e.ctrlKey,
+                    //     shiftKey: e.shiftKey,
+                    //     altKey: e.altKey,
+                    //     metaKey: e.metaKey,
+                    //     target: e.target.tagName
+                    // });
+                    
+                    // Test for Ctrl + * (Hitchhiker's Guide reference - 42!)
+                    if (e.ctrlKey && e.key === '*') {
+                        console.log('🎯 Easter egg triggered! Ctrl + * detected! (Hitchhiker\'s Guide reference!)');
+                        unlockNotGate();
+                    }
+                });
+                
+                function unlockNotGate() {
+                    // Only allow for instructors
+                    <?php if ($USER && $USER->instructor) : ?>
+                    // Draw the Not gate
+                    if (typeof drawNotGate === 'function') {
+                        drawNotGate();
+                    }
+                    <?php else : ?>
+                    // Students can't unlock it
+                    console.log('❌ Not gate Easter egg attempted by non-instructor');
+                    <?php endif; ?>
+                }
+                
+
             </script>
         </center>
     </body>
