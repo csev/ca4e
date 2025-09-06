@@ -921,8 +921,10 @@ $_SESSION['GSRF'] = 10;
                                 processed.add(`${point.x},${point.y}`);
                             });
                             
-                            // Remove the starting point from remaining (processed points can't start new segments)
-                            remaining.delete(`${startX},${startY}`);
+                            // Remove ALL points in the line from remaining (processed points can't start new segments)
+                            bestLine.forEach(point => {
+                                remaining.delete(`${point.x},${point.y}`);
+                            });
                         }
                         
                         // Now add overlapping points to show connections
