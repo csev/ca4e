@@ -868,7 +868,9 @@ $_SESSION['GSRF'] = 10;
                         }
                         
                         // Now break the connected region into line segments
+                        // Use processed points approach: processed points can't start new segments but can be part of segments
                         const remaining = new Set(allConnected.map(p => `${p.x},${p.y}`));
+                        const processed = new Set();
                         
                         while (remaining.size > 0) {
                             const start = remaining.values().next().value;
@@ -876,54 +878,51 @@ $_SESSION['GSRF'] = 10;
                             
                             // Try to find horizontal line
                             let horizontalLine = [{x: startX, y: startY}];
-                            remaining.delete(start);
-                            
-                            // Extend horizontally
                             let x = startX + 1;
-                            while (remaining.has(`${x},${startY}`)) {
+                            while (remaining.has(`${x},${startY}`) || processed.has(`${x},${startY}`)) {
                                 horizontalLine.push({x, y: startY});
-                                remaining.delete(`${x},${startY}`);
                                 x++;
                             }
-                            
                             x = startX - 1;
-                            while (remaining.has(`${x},${startY}`)) {
+                            while (remaining.has(`${x},${startY}`) || processed.has(`${x},${startY}`)) {
                                 horizontalLine.unshift({x, y: startY});
-                                remaining.delete(`${x},${startY}`);
                                 x--;
-                            }
-                            
-                            // If horizontal line is longer than 1, use it
-                            if (horizontalLine.length > 1) {
-                                segments.push(horizontalLine);
-                                continue;
                             }
                             
                             // Try vertical line
                             let verticalLine = [{x: startX, y: startY}];
-                            
-                            // Extend vertically
                             let y = startY + 1;
-                            while (remaining.has(`${startX},${y}`)) {
+                            while (remaining.has(`${startX},${y}`) || processed.has(`${startX},${y}`)) {
                                 verticalLine.push({x: startX, y});
-                                remaining.delete(`${startX},${y}`);
                                 y++;
                             }
-                            
                             y = startY - 1;
-                            while (remaining.has(`${startX},${y}`)) {
+                            while (remaining.has(`${startX},${y}`) || processed.has(`${startX},${y}`)) {
                                 verticalLine.unshift({x: startX, y});
-                                remaining.delete(`${startX},${y}`);
                                 y--;
                             }
                             
-                            // If vertical line is longer than 1, use it
-                            if (verticalLine.length > 1) {
-                                segments.push(verticalLine);
+                            // Choose the longer line
+                            let bestLine;
+                            if (horizontalLine.length >= verticalLine.length && horizontalLine.length > 1) {
+                                bestLine = horizontalLine;
+                            } else if (verticalLine.length > 1) {
+                                bestLine = verticalLine;
                             } else {
                                 // Single point
-                                segments.push([{x: startX, y: startY}]);
+                                bestLine = [{x: startX, y: startY}];
                             }
+                            
+                            // Add the line to segments
+                            segments.push(bestLine);
+                            
+                            // Mark all points in the line as processed
+                            bestLine.forEach(point => {
+                                processed.add(`${point.x},${point.y}`);
+                            });
+                            
+                            // Remove the starting point from remaining (processed points can't start new segments)
+                            remaining.delete(`${startX},${startY}`);
                         }
                         
                         // Now add overlapping points to show connections
@@ -963,85 +962,6 @@ $_SESSION['GSRF'] = 10;
                     }
                     
                     
-                    // Helper function to adjust endpoints of single-grid-wide lines
-                    function adjustEndPoint(segment, layerIndex) {
-
-                        return segment;
-
-                        // Only process if line is one grid cell wide
-                        const minX = Math.min(...segment.map(p => p.x));
-                        const maxX = Math.max(...segment.map(p => p.x));
-                        const minY = Math.min(...segment.map(p => p.y));
-                        const maxY = Math.max(...segment.map(p => p.y));
-                        console.log(`Adjusting endpoints for segment: ${JSON.stringify(segment)}`);
-                        console.log(`MinX: ${minX}, MaxX: ${maxX}, MinY: ${minY}, MaxY: ${maxY}`);
-                        
-                        const width = maxX - minX + 1;
-                        const height = maxY - minY + 1;
-                        
-                        // Must be exactly one grid cell wide in one dimension
-                        if (width > 1 && height > 1) {
-                            return segment; // Not a single-grid-wide line
-                        }
-                        
-                        let newMinX = minX;
-                        let newMaxX = maxX;
-                        let newMinY = minY;
-                        let newMaxY = maxY;
-                        
-                        if (width === 1) {
-                            console.log(`Adjusting vertical line`);
-                            // Vertical line - check above and below endpoints
-                            const x = minX;
-                            
-                            // Check above the top endpoint
-                            if (minY > 0 && grid[minY - 1][x][layerIndex]) {
-                                console.log(`Adjusting vertical line above endpoint`);
-                                newMinY = minY - 1;
-                            }
-                            
-                            // Check below the bottom endpoint
-                            if (maxY < gridSize - 1 && grid[maxY + 1][x][layerIndex]) {
-                                console.log(`Adjusting vertical line below endpoint`);
-                                newMaxY = maxY + 1;
-                            }
-                        }
-
-                        if (height === 1) {
-                            // Horizontal line - check left and right of endpoints
-                            const y = minY;
-                            
-                            // Check left of the left endpoint
-                            if (minX > 0 && grid[y][minX - 1][layerIndex]) {
-                                console.log(`Adjusting horizontal line left endpoint`);
-                                newMinX = minX - 1;
-                            }
-                            
-                            // Check right of the right endpoint
-                            if (maxX < gridSize - 1 && grid[y][maxX + 1][layerIndex]) {
-                                console.log(`Adjusting horizontal line right endpoint`);
-                                newMaxX = maxX + 1;
-                            }
-                        }
-
-                        console.log(`New endpoints: ${JSON.stringify(newMinX, newMaxX, newMinY, newMaxY)}`);
-                        
-                        // Create new segment with extended endpoints
-                        const adjustedSegment = [];
-                        if (width === 1) {
-                            // Vertical line
-                            for (let y = newMinY; y <= newMaxY; y++) {
-                                adjustedSegment.push({x: newMinX, y: y});
-                            }
-                        } else {
-                            // Horizontal line
-                            for (let x = newMinX; x <= newMaxX; x++) {
-                                adjustedSegment.push({x: x, y: newMinY});
-                            }
-                        }
-                        
-                        return adjustedSegment;
-                    }
                     
                     // Helper function to create draw command from segment
                     function createDrawCommand(segment, layerName, layerIndex) {
@@ -1055,10 +975,8 @@ $_SESSION['GSRF'] = 10;
                             const maxY = Math.max(...segment.map(p => p.y));
                             return `draw ${layerName} from (${minX}, ${minY}) to (${maxX}, ${maxY})`;
                         } else {
-                            // Adjust endpoints for single-grid-wide lines
-                            const adjustedSegment = adjustEndPoint(segment, layerIndex);
-                            const first = adjustedSegment[0];
-                            const last = adjustedSegment[adjustedSegment.length - 1];
+                            const first = segment[0];
+                            const last = segment[segment.length - 1];
                             return `draw ${layerName} from (${first.x}, ${first.y}) to (${last.x}, ${last.y})`;
                         }
                     }
