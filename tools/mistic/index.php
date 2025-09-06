@@ -1,6 +1,7 @@
 <?php
 
 require_once "../config.php";
+require_once "register.php";
 
 use \Tsugi\Core\LTIX;
 
@@ -15,12 +16,12 @@ $_SESSION['GSRF'] = 10;
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Mistic VLSI Layout</title>
+        <title><?php echo(htmlentities($REGISTER_LTI2["name"])); ?></title>
         <link rel="stylesheet" href="style.css">
     </head>
     <body class="tool-interface">
         <center>
-            <h1>Mistic VLSI Layout</h1>
+            <h1><?php echo(htmlentities($REGISTER_LTI2["name"])); ?></h1>
             <div id="toolbar">
                 <div class="draw-dropdown">
                     <button class="draw-dropdown-btn" id="layersDropdownBtn" onclick="toggleLayersDropdown()">
