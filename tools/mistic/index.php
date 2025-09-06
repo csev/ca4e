@@ -86,10 +86,10 @@ $_SESSION['GSRF'] = 10;
 <?php if ($USER) : ?>
                 <button id="assignmentBtn" style="background-color:#fff0e6;">Assignment</button>
 <?php endif; ?>
-<?php if ($USER && $USER->instructor) : ?>
-
-<?php endif; ?>
                 <button onclick="readCircuit()" style="background-color: #607D8B; color: white;">Read Circuit</button>
+<?php if ($USER && $USER->instructor) : ?>
+                <a href="instructor.php" style="background-color: #28a745; color: white; font-size: 14px; padding: 8px 15px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; min-width: 60px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-decoration: none; display: inline-block; margin: 2px;">Instructor</a>
+<?php endif; ?>
                 <button onclick="openDocumentation()" style="background-color: #FF9800; color: white; font-weight: bold; font-size: 16px; width: 40px; height: 40px; border-radius: 50%;">?</button>
             </div>
             <div id="canvasContainer" style="position:relative; display:inline-block;">

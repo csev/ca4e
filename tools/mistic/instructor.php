@@ -20,22 +20,47 @@ $oldsettings = Settings::linkGetAll();
 // Get any due date information
 $dueDate = SettingsForm::getDueDate();
 
-$tool_menu = false;
-if ( $LAUNCH->link && $LAUNCH->user && $LAUNCH->user->instructor ) {
-    $tool_menu = new \Tsugi\UI\MenuSet();
-    $tool_menu->addLeft('Student Data', 'grades.php');
-    if ( $CFG->launchactivity ) {
-        $tool_menu->addRight(__('Launches'), 'analytics');
-    }
-    $tool_menu->addRight(__('Settings'), '#', /* push */ false, SettingsForm::attr());
-}
+$OUTPUT->suppressSiteNav();
 
 $OUTPUT->header();
+?>
+<style>
+/* Anchor tag styles matching index.php toolbar buttons */
+#toolbar a {
+    display: inline-block;
+    font-size: 14px;
+    padding: 8px 15px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    cursor: pointer;
+    min-width: 60px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-decoration: none;
+    color: #333;
+    background-color: #f8f9fa;
+    margin: 2px;
+}
+
+#toolbar a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    text-decoration: none;
+    color: #333;
+}
+
+#toolbar a:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+#toolbar a:visited {
+    color: #333;
+}
+</style>
+<?php
 
 $OUTPUT->bodyStart();
-$nav_menu = $OUTPUT->closeMenuSet();
-
-$OUTPUT->topNav($tool_menu, $nav_menu);
 
 if ( $USER->instructor ) {
     SettingsForm::start();
@@ -49,7 +74,16 @@ if ( $dueDate->message ) {
     echo('<p style="color:red;">'.$dueDate->message.'</p>'."\n");
 }
 ?>
-<button onclick="alert('yada')">🗑️</button>
+<center>
+    <h1>Mistic VLSI Layout - Instructor</h1>
+    <div id="toolbar">
+        <a href="index.php">Back To Tool</a>
+        <a href="grades.php">Student Data</a>
+        <a href="#" data-toggle="modal" data-target="#tsugi_settings_dialog">Settings</a>
+        <a href="analytics">Launches</a>
+    </div>
+</center>
+  
 <?php
 
 $OUTPUT->footerStart();
