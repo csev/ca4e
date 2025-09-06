@@ -45,6 +45,13 @@
     "slides": [
         "{apphome}/lectures/02-SolidState.pptx"
     ],
+     "lti" : [
+        {
+            "title" : "Mistic: Building VLSI Circuits",
+            "launch" : "tools/mistic/?assn=not",
+            "resource_link_id" : "ca4e_02_not"
+        }
+    ],
     "discussions" : [
         {
         "title" : "Transistors and Solid State Computing",
@@ -60,13 +67,6 @@
     "description": "We move from the electrical aspects of computing to the more abstract logical domain.",
     "slides": [
         "{apphome}/lectures/03-DigitalLogic.pptx"
-    ],
-     "lti" : [
-        {
-            "title" : "Mistic: Building VLSI Circuits",
-            "launch" : "tools/mistic/?assn=not",
-            "resource_link_id" : "ca4e_03_not"
-        }
     ],
     "discussions" : [
         {
