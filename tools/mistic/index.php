@@ -813,6 +813,27 @@ $_SESSION['GSRF'] = 10;
                     // Analyze the circuit and generate commands
                     const commands = [];
                     
+                    // Helper function to check if a connected area forms a rectangle
+                    function isConnectedAreaRectangle(connectedCells, layerIndex) {
+                        if (connectedCells.length < 4) return false;
+                        
+                        const minX = Math.min(...connectedCells.map(p => p.x));
+                        const maxX = Math.max(...connectedCells.map(p => p.x));
+                        const minY = Math.min(...connectedCells.map(p => p.y));
+                        const maxY = Math.max(...connectedCells.map(p => p.y));
+                        
+                        // Check if all points in the bounding box are filled
+                        for (let x = minX; x <= maxX; x++) {
+                            for (let y = minY; y <= maxY; y++) {
+                                if (!grid[y][x][layerIndex]) return false;
+                            }
+                        }
+                        
+                        // Check if we have exactly the right number of points for a rectangle
+                        const expectedPoints = (maxX - minX + 1) * (maxY - minY + 1);
+                        return connectedCells.length === expectedPoints;
+                    }
+                    
                     // Helper function to find connected line segments
                     function findConnectedLineSegments(startX, startY, layerIndex) {
                         const visited = new Set();
@@ -839,6 +860,12 @@ $_SESSION['GSRF'] = 10;
                         collectConnected(startX, startY);
                         
                         if (allConnected.length === 0) return segments;
+                        
+                        // Check if this connected area forms a rectangle first
+                        if (isConnectedAreaRectangle(allConnected, layerIndex)) {
+                            segments.push(allConnected);
+                            return segments;
+                        }
                         
                         // Now break the connected region into line segments
                         const remaining = new Set(allConnected.map(p => `${p.x},${p.y}`));
@@ -935,11 +962,18 @@ $_SESSION['GSRF'] = 10;
                         return finalSegments;
                     }
                     
+                    
                     // Helper function to create draw command from segment
-                    function createDrawCommand(segment, layerName) {
+                    function createDrawCommand(segment, layerName, layerIndex) {
                         if (segment.length === 1) {
                             const p = segment[0];
                             return `draw ${layerName} at (${p.x}, ${p.y})`;
+                        } else if (isConnectedAreaRectangle(segment, layerIndex)) {
+                            const minX = Math.min(...segment.map(p => p.x));
+                            const maxX = Math.max(...segment.map(p => p.x));
+                            const minY = Math.min(...segment.map(p => p.y));
+                            const maxY = Math.max(...segment.map(p => p.y));
+                            return `draw ${layerName} from (${minX}, ${minY}) to (${maxX}, ${maxY})`;
                         } else {
                             const first = segment[0];
                             const last = segment[segment.length - 1];
@@ -979,7 +1013,7 @@ $_SESSION['GSRF'] = 10;
                                         // TODO: Add edge expansion logic here
                                         // Check if we can expand edges without pulling in open grid points
                                         
-                                        const command = createDrawCommand(segment, layer.name);
+                                        const command = createDrawCommand(segment, layer.name, layer.index);
                                         commands.push(command);
                                         
                                         // Mark all cells in segment as processed
@@ -1083,10 +1117,8 @@ $_SESSION['GSRF'] = 10;
                         
                         // Speak with pauses
                         let speechQueue = [];
-                        speechQueue.push("Circuit drawing commands.");
                         
                         Object.keys(layerGroups).forEach(layer => {
-                            speechQueue.push(`${layer}:`);
                             layerGroups[layer].forEach(cmd => {
                                 speechQueue.push(cmd);
                                 speechQueue.push("pause"); // 0.5 second pause
