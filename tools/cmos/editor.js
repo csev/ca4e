@@ -759,6 +759,26 @@ class CircuitEditor {
         return this.setSwitchVoltage(label, false);
     }
 
+    setSwitchNeutral(label) {
+        const switchComponent = this.getSwitchByLabel(label);
+        if (switchComponent) {
+            // Set switch to neutral state (off)
+            if (switchComponent.isOn) {
+                switchComponent.toggle();
+                this.circuit.fullRecompute();
+                this.draw();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    getAllSwitchLabels() {
+        return this.circuit.components
+            .filter(component => component instanceof Switch && component.label)
+            .map(switchComponent => switchComponent.label);
+    }
+
     updateComponentButtons() {
         // Remove active class from all component buttons
         document.querySelectorAll('.component-button').forEach(button => {

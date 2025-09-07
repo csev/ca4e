@@ -322,6 +322,9 @@ $LTI = LTIX::session_start();
                 <span class="ca4e-icon ca4e-label"></span>
             </button>
             <button id="clear" class="toolbar-button">Clear All</button>
+<?php if ($USER) : ?>
+            <button id="assignmentButton" class="toolbar-button" style="background-color: #4CAF50;">Assignment</button>
+<?php endif; ?>
             <button id="aboutButton" class="mode-button" title="About">
                 <span class="ca4e-icon ca4e-about"></span>
             </button>
@@ -348,9 +351,43 @@ $LTI = LTIX::session_start();
         </div>
     </div>
 
+<?php if ($USER) : ?>
+    <!-- Assignment Modal -->
+    <div id="assignmentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>CMOS Circuit Assignment</h2>
+            <div id="assignmentInstructions">
+                <p>
+                    <strong>Assignment:</strong> Design a CMOS NOT gate circuit.<br><br>
+                    <strong>Instructions:</strong><br>
+                    1. Add a switch component and label it "A" (this will be your input)<br>
+                    2. Add a probe component and label it "Q" (this will be your output)<br>
+                    3. Design a CMOS NOT gate using NMOS and PMOS transistors<br>
+                    4. Connect the components properly<br>
+                    5. Test your circuit by setting the switch to high and low states<br>
+                    6. When ready, press "Grade" to check your circuit.<br><br>
+                    <strong>Note:</strong> When you successfully complete this assignment, your grade will be automatically submitted to your LMS.
+                </p>
+                <div id="gradingSection" style="margin-top: 20px; display: none;">
+                    <h3>Circuit Grading</h3>
+                    <div id="stepDisplay">
+                        <p id="stepText">Ready to grade your circuit!</p>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: space-between;">
+                    <button id="nextBtn" onclick="nextStep()" style="background-color: #2196F3; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; display: none;">Next</button>
+                    <button id="gradeBtn" onclick="startGrading()" style="background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Grade</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
     <script src="components.js"></script>
     <script src="circuit.js"></script>
     <script src="editor.js"></script>
+    <script src="exercises.js"></script>
     <script>
         // Utility functions to read probe values
         function getProbeVoltage(label) {
@@ -397,6 +434,157 @@ $LTI = LTIX::session_start();
         // Example usage from browser console:
         // setSwitchHigh('input1')  // Sets switch labeled 'input1' to VCC (5V)
         // setSwitchLow('input1')   // Sets switch labeled 'input1' to GND (0V)
+
+<?php if ($USER) : ?>
+        // Autograder functionality
+        let currentExercise = null;
+
+        // Modal functionality
+        const aboutModal = document.getElementById('aboutModal');
+        const assignmentModal = document.getElementById('assignmentModal');
+        const aboutButton = document.getElementById('aboutButton');
+        const assignmentButton = document.getElementById('assignmentButton');
+
+        // Close modal functionality
+        function closeModal(modal) {
+            modal.style.display = 'none';
+        }
+
+        function closeAssignmentModal() {
+            closeModal(assignmentModal);
+        }
+
+        // Show modal functionality
+        function showAboutModal() {
+            aboutModal.style.display = 'block';
+        }
+
+        function showAssignmentModal() {
+            assignmentModal.style.display = 'block';
+        }
+
+        // Event listeners for modals
+        aboutButton.addEventListener('click', showAboutModal);
+        assignmentButton.addEventListener('click', showAssignmentModal);
+
+        // Close modals when clicking the X
+        document.querySelectorAll('.close').forEach(closeBtn => {
+            closeBtn.addEventListener('click', function() {
+                const modal = this.closest('.modal');
+                closeModal(modal);
+            });
+        });
+
+        // Close modals when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                closeModal(event.target);
+            }
+        });
+
+        // Grading functions
+        function startGrading() {
+            if (currentExercise) {
+                currentExercise.startGrading();
+            }
+        }
+
+        function nextStep() {
+            if (currentExercise) {
+                currentExercise.nextStep();
+            }
+        }
+
+        function resetAllSwitches() {
+            if (currentExercise) {
+                currentExercise.resetAllSwitches();
+            }
+        }
+
+        function resetToBeginningScreen() {
+            if (currentExercise) {
+                currentExercise.resetGrading();
+            }
+        }
+
+        function resetGrading() {
+            if (currentExercise) {
+                currentExercise.resetGrading();
+            }
+        }
+
+        // LTI Grade Submission Function
+        function submitGradeToLMS(grade) {
+            console.log('Submitting grade to LMS:', grade);
+            
+            // Check if we're in an LTI session (user is authenticated)
+            console.log('User is authenticated via LTI, proceeding with grade submission...');
+            
+            // Submit the grade via AJAX using form data (as expected by the endpoint)
+            const formData = new FormData();
+            formData.append('grade', grade);
+            formData.append('code', 'CMOS_NOT_GATE_COMPLETED'); // Add a code identifier for the assignment
+            
+            console.log('Sending grade=' + grade);
+            
+            fetch('<?php echo addSession($CFG->wwwroot . '/api/grade-submit.php'); ?>', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                console.log('Response received:', response);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Grade response received...');
+                console.log(data);
+                
+                if (data.status === 'success') {
+                    console.log('Grade submitted successfully:', data);
+                    // Show success message to user
+                    const stepText = document.getElementById('stepText');
+                    if (stepText) {
+                        stepText.innerHTML = `<span style="color: green;">✓ Assignment completed! Grade ${grade} submitted to LMS.</span>`;
+                    }
+                    // Show alert to user
+                    alert(`🎉 Congratulations! Your grade of 1.0 has been successfully submitted to the LMS.`);
+                } else {
+                    console.error('Grade submission failed:', data);
+                    // Show error message to user
+                    const stepText = document.getElementById('stepText');
+                    if (stepText) {
+                        stepText.innerHTML = `<span style="color: orange;">⚠ Assignment completed, but grade submission failed: ${data.detail}</span>`;
+                    }
+                    // Show error alert to user
+                    alert(`⚠️ Grade submission failed: ${data.detail}\n\nYour assignment was completed successfully, but the grade could not be sent to the LMS. Please contact your instructor.`);
+                }
+            })
+            .catch(error => {
+                console.error('Error submitting grade:', error);
+                // Show error message to user
+                const stepText = document.getElementById('stepText');
+                if (stepText) {
+                    stepText.innerHTML = `<span style="color: orange;">⚠ Assignment completed, but grade submission failed: ${error.message}</span>`;
+                }
+                // Show error alert to user
+                alert(`⚠️ Grade submission error: ${error.message}\n\nYour assignment was completed successfully, but there was a technical error sending the grade to the LMS. Please contact your instructor.`);
+            });
+        }
+
+        // Initialize the exercise when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create the CMOS NOT gate exercise instance
+            currentExercise = new CmosNotGateExercise();
+            
+            // Override the exercise's submitGradeToLMS method to use the global function
+            if (currentExercise) {
+                currentExercise.submitGradeToLMS = submitGradeToLMS;
+            }
+        });
+<?php endif; ?>
     </script>
 </body>
 </html> 
