@@ -327,6 +327,9 @@ $_SESSION['GSRF'] = 10;
 <?php if ($USER) : ?>
             <button id="assignmentButton" class="toolbar-button" style="background-color: #4CAF50;">Assignment</button>
 <?php endif; ?>
+<?php if ($USER && $USER->instructor) : ?>
+            <a href="instructor.php" style="background-color: #28a745; color: white; font-size: 14px; padding: 8px 15px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; min-width: 60px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-decoration: none; display: inline-block; margin: 2px;">Instructor</a>
+<?php endif; ?>
             <button id="aboutButton" class="mode-button" title="About">
                 <span class="ca4e-icon ca4e-about"></span>
             </button>
