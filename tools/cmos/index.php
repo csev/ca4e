@@ -589,6 +589,125 @@ $_SESSION['GSRF'] = 10;
                 currentExercise.submitGradeToLMS = submitGradeToLMS;
             }
         });
+
+        // Easter egg: Auto-draw CMOS NOT gate
+        function drawCmosNotGate() {
+            console.log('🎯 Drawing CMOS NOT gate easter egg!');
+            
+            if (!window.circuitEditor) {
+                console.error('Circuit editor not available');
+                return;
+            }
+            
+            // Create CMOS NOT gate components
+            // Position them in a logical layout
+            
+            // Input switch (A) - positioned on the left
+            const inputSwitch = new Switch(100, 200);
+            inputSwitch.label = "A";
+            window.circuitEditor.circuit.addComponent(inputSwitch);
+            
+            // PMOS transistor (pull-up network) - positioned in upper area
+            const pmosTransistor = new PMOS(200, 150);
+            window.circuitEditor.circuit.addComponent(pmosTransistor);
+            
+            // NMOS transistor (pull-down network) - positioned in lower area  
+            const nmosTransistor = new NMOS(200, 250);
+            window.circuitEditor.circuit.addComponent(nmosTransistor);
+            
+            // Output probe (Q) - positioned on the right
+            const outputProbe = new Probe(300, 200);
+            outputProbe.label = "Q";
+            window.circuitEditor.circuit.addComponent(outputProbe);
+            
+            // Create wires to connect the CMOS NOT gate
+            // 1. Switch output → PMOS gate (input signal)
+            const wire1 = new Wire(
+                inputSwitch, 
+                { x: inputSwitch.outputs[0].x, y: inputSwitch.outputs[0].y },
+                pmosTransistor,
+                { x: pmosTransistor.inputs[0].x, y: pmosTransistor.inputs[0].y }
+            );
+            window.circuitEditor.circuit.addWire(wire1);
+            
+            // 2. Switch output → NMOS gate (input signal)
+            const wire2 = new Wire(
+                inputSwitch,
+                { x: inputSwitch.outputs[0].x, y: inputSwitch.outputs[0].y },
+                nmosTransistor,
+                { x: nmosTransistor.inputs[0].x, y: nmosTransistor.inputs[0].y }
+            );
+            window.circuitEditor.circuit.addWire(wire2);
+            
+            // 3. VDD → PMOS source (pull-up) - PMOS source is the top terminal
+            const wire3 = new Wire(
+                window.circuitEditor.vddBar,
+                { x: window.circuitEditor.vddBar.outputs[0].x, y: window.circuitEditor.vddBar.outputs[0].y, relativePosition: 0.5 },
+                pmosTransistor,
+                { x: pmosTransistor.inputs[1].x, y: pmosTransistor.inputs[1].y }
+            );
+            window.circuitEditor.circuit.addWire(wire3);
+            
+            // 4. PMOS drain → NMOS drain (output node) - PMOS drain is the bottom terminal
+            const wire4 = new Wire(
+                pmosTransistor,
+                { x: pmosTransistor.inputs[2].x, y: pmosTransistor.inputs[2].y },
+                nmosTransistor,
+                { x: nmosTransistor.inputs[1].x, y: nmosTransistor.inputs[1].y }
+            );
+            window.circuitEditor.circuit.addWire(wire4);
+            
+            // 5. NMOS source → GND (pull-down)
+            const wire5 = new Wire(
+                nmosTransistor,
+                { x: nmosTransistor.inputs[2].x, y: nmosTransistor.inputs[2].y },
+                window.circuitEditor.gndBar,
+                { x: window.circuitEditor.gndBar.inputs[0].x, y: window.circuitEditor.gndBar.inputs[0].y, relativePosition: 0.5 }
+            );
+            window.circuitEditor.circuit.addWire(wire5);
+            
+            // 6. Output node → Probe input - connect to PMOS drain (bottom terminal)
+            const wire6 = new Wire(
+                pmosTransistor,
+                { x: pmosTransistor.inputs[2].x, y: pmosTransistor.inputs[2].y },
+                outputProbe,
+                { x: outputProbe.inputs[0].x, y: outputProbe.inputs[0].y }
+            );
+            window.circuitEditor.circuit.addWire(wire6);
+            
+            // Redraw the circuit to show the new components and wires
+            window.circuitEditor.draw();
+            
+            console.log('✨ CMOS NOT gate magically appeared!');
+        }
+
+        // Test function to verify the Easter egg is working
+        window.testCmosEasterEgg = function() {
+            if (typeof drawCmosNotGate === 'function') {
+                drawCmosNotGate();
+            }
+        };
+        
+        document.addEventListener('keydown', (e) => {
+            // Test for Ctrl + * (Hitchhiker's Guide reference - 42!)
+            if (e.ctrlKey && e.key === '*') {
+                console.log('🎯 CMOS Easter egg triggered! Ctrl + * detected! (Hitchhiker\'s Guide reference!)');
+                unlockCmosNotGate();
+            }
+        });
+        
+        function unlockCmosNotGate() {
+            // Only allow for instructors
+            <?php if ($USER && $USER->instructor) : ?>
+            // Draw the CMOS NOT gate
+            if (typeof drawCmosNotGate === 'function') {
+                drawCmosNotGate();
+            }
+            <?php else : ?>
+            // Students can't unlock it
+            console.log('❌ CMOS NOT gate Easter egg attempted by non-instructor');
+            <?php endif; ?>
+        }
 <?php endif; ?>
     </script>
 </body>

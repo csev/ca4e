@@ -779,6 +779,22 @@ class CircuitEditor {
             .map(switchComponent => switchComponent.label);
     }
 
+    clear() {
+        // Store references to bars before clearing
+        const vddBar = this.circuit.components.find(c => c.type === 'VDD_BAR');
+        const gndBar = this.circuit.components.find(c => c.type === 'GND_BAR');
+        
+        // Clear the circuit
+        this.circuit.clear();
+        
+        // Update the bars' dimensions if needed
+        if (vddBar) vddBar.updateDimensions(this.canvas.width);
+        if (gndBar) gndBar.updateDimensions(this.canvas.width);
+        
+        // Redraw the canvas
+        this.draw();
+    }
+
     updateComponentButtons() {
         // Remove active class from all component buttons
         document.querySelectorAll('.component-button').forEach(button => {
