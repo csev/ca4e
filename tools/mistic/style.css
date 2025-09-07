@@ -252,6 +252,7 @@ h3 {
     padding: 20px;
     overflow-y: auto;
     height: calc(100% - 50px);
+    user-select: text;
 }
 
 .assignment-modal .close-btn {
