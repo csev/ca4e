@@ -2,6 +2,7 @@
 
 require_once "../config.php";
 require_once "register.php";
+require_once "assignments.php";
 
 use \Tsugi\Core\LTIX;
 use \Tsugi\Core\Settings; 
