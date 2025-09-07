@@ -7,6 +7,8 @@ use \Tsugi\Core\LTIX;
 // Initialize LTI if we received a launch.  If this was a non-LTI GET,
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
+
+$_SESSION['GSRF'] = 10;
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -369,16 +371,16 @@ $LTI = LTIX::session_start();
                     6. When ready, press "Grade" to check your circuit.<br><br>
                     <strong>Note:</strong> When you successfully complete this assignment, your grade will be automatically submitted to your LMS.
                 </p>
-                <div id="gradingSection" style="margin-top: 20px; display: none;">
-                    <h3>Circuit Grading</h3>
-                    <div id="stepDisplay">
-                        <p id="stepText">Ready to grade your circuit!</p>
-                    </div>
+            </div>
+            <div id="gradingSection" style="margin-top: 20px; display: none;">
+                <h3>Circuit Grading</h3>
+                <div id="stepDisplay">
+                    <p id="stepText">Ready to grade your circuit!</p>
                 </div>
-                <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: space-between;">
-                    <button id="nextBtn" onclick="nextStep()" style="background-color: #2196F3; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; display: none;">Next</button>
-                    <button id="gradeBtn" onclick="startGrading()" style="background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Grade</button>
-                </div>
+            </div>
+            <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: space-between;">
+                <button id="nextBtn" onclick="nextStep()" style="background-color: #2196F3; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; display: none;">Next</button>
+                <button id="gradeBtn" onclick="startGrading()" style="background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Grade</button>
             </div>
         </div>
     </div>
