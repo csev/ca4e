@@ -689,8 +689,8 @@ $_SESSION['GSRF'] = 10;
             // Note: We don't call clear() to preserve the power rails
             
             // 1. Create input switches (A and B)
-            const switchA = new Switch(200, 250, 'A');
-            const switchB = new Switch(200, 550, 'B');
+            const switchA = new Switch(200, 200, 'A');
+            const switchB = new Switch(200, 450, 'B');
             window.circuitEditor.circuit.addComponent(switchA);
             window.circuitEditor.circuit.addComponent(switchB);
             
@@ -701,8 +701,8 @@ $_SESSION['GSRF'] = 10;
             window.circuitEditor.circuit.addComponent(pmos2);
             
             // 3. Create NMOS transistors (pull-down network - parallel)
-            const nmos1 = new NMOS(350, 400); // Top NMOS
-            const nmos2 = new NMOS(450, 400); // Bottom NMOS
+            const nmos1 = new NMOS(350, 320); // Top NMOS
+            const nmos2 = new NMOS(450, 320); // Bottom NMOS
             window.circuitEditor.circuit.addComponent(nmos1);
             window.circuitEditor.circuit.addComponent(nmos2);
             
