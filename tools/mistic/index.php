@@ -1558,7 +1558,7 @@ $_SESSION['GSRF'] = 10;
                 }
 
                 // JavaScript API for probe access
-                window.MisticProbes = {
+                window.CircuitProbes = {
                     // Get the voltage value at a probe with the given label
                     getProbeValue: function(label) {
                         for (let key in probeLabels) {

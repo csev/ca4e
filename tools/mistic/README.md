@@ -40,27 +40,27 @@ The probe feature allows you to place labeled test points on your circuit for mo
 
 #### JavaScript API
 
-Probes can be accessed and controlled via JavaScript using the global `MisticProbes` object:
+Probes can be accessed and controlled via JavaScript using the global `CircuitProbes` object:
 
 ```javascript
 // Read voltage at probe labeled "A"
-let voltage = MisticProbes.getProbeValue("A");
+let voltage = CircuitProbes.getProbeValue("A");
 // Returns: 1 (high), -1 (low), or 0 (neutral)
 
 // Set voltage at probe labeled "B"
-MisticProbes.setProbeValue("B", 1); // Set to high voltage
-MisticProbes.setProbeValue("B", -1); // Set to low voltage
+CircuitProbes.setProbeValue("B", 1); // Set to high voltage
+CircuitProbes.setProbeValue("B", -1); // Set to low voltage
 
 // Get all probe labels in the circuit
-let labels = MisticProbes.getProbeLabels();
+let labels = CircuitProbes.getProbeLabels();
 // Returns: ["A", "B", "1", "2"]
 
 // Get probe positions
-let locations = MisticProbes.getProbeLocations();
+let locations = CircuitProbes.getProbeLocations();
 // Returns: {A: {x: 5, y: 3}, B: {x: 2, y: 1}}
 
 // Force circuit recomputation
-MisticProbes.recompute();
+CircuitProbes.recompute();
 ```
 
 ## Circuit Simulation
@@ -147,7 +147,7 @@ The tool automatically simulates electrical behavior:
 
 ## API Reference
 
-### MisticProbes Object
+### CircuitProbes Object
 
 #### Methods
 
@@ -186,16 +186,16 @@ The tool automatically simulates electrical behavior:
 // Place probes at inputs (A, B) and output (C)
 
 // Test case 1: A=0, B=0
-MisticProbes.setProbeValue("A", -1);
-MisticProbes.setProbeValue("B", -1);
-MisticProbes.recompute();
-let output1 = MisticProbes.getProbeValue("C");
+CircuitProbes.setProbeValue("A", -1);
+CircuitProbes.setProbeValue("B", -1);
+CircuitProbes.recompute();
+let output1 = CircuitProbes.getProbeValue("C");
 
 // Test case 2: A=1, B=1  
-MisticProbes.setProbeValue("A", 1);
-MisticProbes.setProbeValue("B", 1);
-MisticProbes.recompute();
-let output2 = MisticProbes.getProbeValue("C");
+CircuitProbes.setProbeValue("A", 1);
+CircuitProbes.setProbeValue("B", 1);
+CircuitProbes.recompute();
+let output2 = CircuitProbes.getProbeValue("C");
 ```
 
 ### Automated Circuit Testing
@@ -205,11 +205,11 @@ const inputs = [[-1, -1], [-1, 1], [1, -1], [1, 1]];
 const results = [];
 
 for (let [a, b] of inputs) {
-    MisticProbes.setProbeValue("A", a);
-    MisticProbes.setProbeValue("B", b);
-    MisticProbes.recompute();
+    CircuitProbes.setProbeValue("A", a);
+    CircuitProbes.setProbeValue("B", b);
+    CircuitProbes.recompute();
     
-    const output = MisticProbes.getProbeValue("C");
+    const output = CircuitProbes.getProbeValue("C");
     results.push({A: a, B: b, C: output});
 }
 
@@ -221,7 +221,7 @@ console.table(results);
 ### Common Issues
 
 1. **Probe not responding**: Ensure the probe is properly placed and labeled
-2. **Circuit not updating**: Call `MisticProbes.recompute()` after changes
+2. **Circuit not updating**: Call `CircuitProbes.recompute()` after changes
 3. **Short circuit (🔥)**: Check for conflicting voltage sources
 4. **Transistor not switching**: Verify polysilicon gate voltage levels
 

@@ -126,8 +126,8 @@ class Exercise {
      */
     resetAllProbesToZero() {
         // Reset all probe voltage types to '0' (neutral)
-        if (typeof window.MisticProbes !== 'undefined') {
-            window.MisticProbes.resetAllProbes();
+        if (typeof window.CircuitProbes !== 'undefined') {
+            window.CircuitProbes.resetAllProbes();
         }
         
         // Recompute the circuit with all probes at zero
@@ -223,16 +223,16 @@ class Exercise {
     testCircuit(inputProbe, inputValue, outputProbe, expectedOutput) {
         console.log(`Testing circuit with ${inputProbe}=${inputValue === -1 ? 'GND' : 'VCC'}, expecting ${outputProbe}=${expectedOutput === -1 ? 'GND' : 'VCC'}`);
         
-        if (typeof window.MisticProbes === 'undefined') {
-            console.error('MisticProbes not available');
+        if (typeof window.CircuitProbes === 'undefined') {
+            console.error('CircuitProbes not available');
             return false;
         }
 
         // Set the input probe to the input value
-        window.MisticProbes.setProbeValue(inputProbe, inputValue);
+        window.CircuitProbes.setProbeValue(inputProbe, inputValue);
         
         // Recompute the circuit
-        window.MisticProbes.recompute();
+        window.CircuitProbes.recompute();
         console.log('Circuit recomputed');
         
         // Force a complete redraw to show voltage propagation
@@ -242,7 +242,7 @@ class Exercise {
         }
         
         // Get the output value
-        const outputValue = window.MisticProbes.getProbeValue(outputProbe);
+        const outputValue = window.CircuitProbes.getProbeValue(outputProbe);
         console.log(`Probe ${outputProbe} voltage: ${outputValue} (should be ${expectedOutput === -1 ? 'GND' : 'VCC'})`);
         
         return outputValue === expectedOutput;
@@ -254,12 +254,12 @@ class Exercise {
      * @returns {boolean} - Whether all required probes are present
      */
     checkProbes(requiredProbes) {
-        if (typeof window.MisticProbes === 'undefined') {
-            console.error('MisticProbes not available');
+        if (typeof window.CircuitProbes === 'undefined') {
+            console.error('CircuitProbes not available');
             return false;
         }
 
-        const probeLabels = window.MisticProbes.getProbeLabels();
+        const probeLabels = window.CircuitProbes.getProbeLabels();
         
         for (const requiredProbe of requiredProbes) {
             if (!probeLabels.includes(requiredProbe)) {
@@ -416,16 +416,16 @@ class NandGateExercise extends Exercise {
     testNandGate(inputA, inputB, expectedOutput, testDescription) {
         console.log(`Testing NAND gate: ${testDescription}`);
         
-        if (typeof window.MisticProbes === 'undefined') {
-            return { success: false, error: 'MisticProbes not available' };
+        if (typeof window.CircuitProbes === 'undefined') {
+            return { success: false, error: 'CircuitProbes not available' };
         }
 
         // Set both input probes
-        window.MisticProbes.setProbeValue('A', inputA);
-        window.MisticProbes.setProbeValue('B', inputB);
+        window.CircuitProbes.setProbeValue('A', inputA);
+        window.CircuitProbes.setProbeValue('B', inputB);
         
         // Recompute the circuit
-        window.MisticProbes.recompute();
+        window.CircuitProbes.recompute();
         
         // Force a complete redraw to show voltage propagation
         if (typeof redrawAllTiles === 'function') {
@@ -433,7 +433,7 @@ class NandGateExercise extends Exercise {
         }
         
         // Get the output value
-        const outputValue = window.MisticProbes.getProbeValue('Q');
+        const outputValue = window.CircuitProbes.getProbeValue('Q');
         console.log(`NAND gate test result: ${testDescription} - Output: ${outputValue}, Expected: ${expectedOutput}`);
         
         if (outputValue === expectedOutput) {
