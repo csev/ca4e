@@ -308,8 +308,7 @@ class CmosNotGateExercise extends Exercise {
             3. Design a CMOS NOT gate using NMOS and PMOS transistors<br>
             4. Connect the components properly<br>
             5. Test your circuit by setting the switch to high and low states<br>
-            6. When ready, press "Grade" to check your circuit.<br><br>
-            <strong>Note:</strong> When you successfully complete this assignment, your grade will be automatically submitted to your LMS.
+            6. When ready, press "Grade" to check your circuit.
         `;
         
         super(
@@ -395,8 +394,7 @@ class CmosNorGateExercise extends Exercise {
             3. Design a CMOS NOR gate using NMOS and PMOS transistors<br>
             4. Connect the components properly (PMOS in series, NMOS in parallel)<br>
             5. Test your circuit by setting the switches to different combinations<br>
-            6. When ready, press "Grade" to check your circuit.<br><br>
-            <strong>Note:</strong> When you successfully complete this assignment, your grade will be automatically submitted to your LMS.
+            6. When ready, press "Grade" to check your circuit.
         `;
         
         super(

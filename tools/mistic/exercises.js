@@ -15,10 +15,11 @@
  * - Circuit testing utilities
  */
 class Exercise {
-    constructor(name, description, steps) {
+    constructor(name, description, steps, instructions = '') {
         this.name = name;
         this.description = description;
         this.steps = steps.map(step => ({ ...step, status: "pending" }));
+        this.instructions = instructions;
         this.currentStep = 0;
         this.isGrading = false;
     }
@@ -289,10 +290,18 @@ class NotGateExercise extends Exercise {
             { name: "Test A=VCC → Q=GND", status: "pending" }
         ];
         
+        const instructions = `In this assignment you will lay out a NOT gate. 
+            Place a probe with the label "A" on the input to your NOT gate. Place a probe with the label 
+            "Q" on the output of your NOT gate.
+            Do not place a VCC or GND on the trace that has the probe.
+            If you place a VCC or GND for testing place the probes on the same 
+            square as the test points so the test points are cleared. Then press "Grade" to check your circuit.`;
+        
         super(
             "NOT Gate Exercise",
             "Design and test a NOT gate circuit with input A and output Q",
-            steps
+            steps,
+            instructions
         );
     }
 
@@ -358,10 +367,18 @@ class NandGateExercise extends Exercise {
             { name: "Test A=VCC, B=VCC → Q=GND", status: "pending" }
         ];
         
+        const instructions = `In this assignment you will lay out a NAND gate. 
+            Place probes with the labels "A" and "B" on the inputs to your NAND gate. Place a probe with the label 
+            "Q" on the output of your NAND gate.
+            Do not place a VCC or GND on the trace that has the probe.
+            If you place a VCC or GND for testing place the probes on the same 
+            square as the test points so the test points are cleared. Then press "Grade" to check your circuit.`;
+        
         super(
             "NAND Gate Exercise",
             "Design and test a NAND gate circuit with inputs A, B and output Q",
-            steps
+            steps,
+            instructions
         );
     }
 
@@ -448,6 +465,123 @@ class NandGateExercise extends Exercise {
 }
 
 /**
+ * NOR Gate Exercise Class
+ * 
+ * Implements the specific grading logic for a NOR gate exercise.
+ * Tests that the circuit correctly implements a NOR gate with:
+ * - Input probes A, B and output probe Q
+ * - A=GND, B=GND → Q=VCC
+ * - A=GND, B=VCC → Q=GND
+ * - A=VCC, B=GND → Q=GND
+ * - A=VCC, B=VCC → Q=GND
+ */
+class NorGateExercise extends Exercise {
+    constructor() {
+        const steps = [
+            { name: "Check for A, B and Q probes", status: "pending" },
+            { name: "Test A=GND, B=GND → Q=VCC", status: "pending" },
+            { name: "Test A=GND, B=VCC → Q=GND", status: "pending" },
+            { name: "Test A=VCC, B=GND → Q=GND", status: "pending" },
+            { name: "Test A=VCC, B=VCC → Q=GND", status: "pending" }
+        ];
+        
+        const instructions = `In this assignment you will lay out a NOR gate. 
+            Place probes with the labels "A" and "B" on the inputs to your NOR gate. Place a probe with the label 
+            "Q" on the output of your NOR gate.
+            Do not place a VCC or GND on the trace that has the probe.
+            If you place a VCC or GND for testing place the probes on the same 
+            square as the test points so the test points are cleared. Then press "Grade" to check your circuit.`;
+        
+        super(
+            "NOR Gate Exercise",
+            "Design and test a NOR gate circuit with inputs A, B and output Q",
+            steps,
+            instructions
+        );
+    }
+
+    /**
+     * Execute a specific step for the NOR gate exercise
+     * @param {number} stepIndex - The index of the step to execute
+     * @returns {Object} - {success: boolean, error?: string}
+     */
+    executeStep(stepIndex) {
+        switch (stepIndex) {
+            case 0:
+                // Step 1: Check for A, B and Q probes
+                if (this.checkProbes(['A', 'B', 'Q'])) {
+                    return { success: true };
+                } else {
+                    return { 
+                        success: false, 
+                        error: 'You need exactly one probe labeled "A", one labeled "B", and one labeled "Q".' 
+                    };
+                }
+                
+            case 1:
+                // Step 2: Test A=GND, B=GND → Q=VCC
+                return this.testNorGate(-1, -1, 1, 'A=GND, B=GND → Q=VCC');
+                
+            case 2:
+                // Step 3: Test A=GND, B=VCC → Q=GND
+                return this.testNorGate(-1, 1, -1, 'A=GND, B=VCC → Q=GND');
+                
+            case 3:
+                // Step 4: Test A=VCC, B=GND → Q=GND
+                return this.testNorGate(1, -1, -1, 'A=VCC, B=GND → Q=GND');
+                
+            case 4:
+                // Step 5: Test A=VCC, B=VCC → Q=GND
+                return this.testNorGate(1, 1, -1, 'A=VCC, B=VCC → Q=GND');
+                
+            default:
+                return { success: false, error: 'Unknown step' };
+        }
+    }
+
+    /**
+     * Test NOR gate with specific input values
+     * @param {number} inputA - Input A value (-1 for GND, 1 for VCC)
+     * @param {number} inputB - Input B value (-1 for GND, 1 for VCC)
+     * @param {number} expectedOutput - Expected output value (-1 for GND, 1 for VCC)
+     * @param {string} testDescription - Description of the test for error messages
+     * @returns {Object} - {success: boolean, error?: string}
+     */
+    testNorGate(inputA, inputB, expectedOutput, testDescription) {
+        console.log(`Testing NOR gate: ${testDescription}`);
+        
+        if (typeof window.CircuitProbes === 'undefined') {
+            return { success: false, error: 'CircuitProbes not available' };
+        }
+
+        // Set both input probes
+        window.CircuitProbes.setProbeValue('A', inputA);
+        window.CircuitProbes.setProbeValue('B', inputB);
+        
+        // Recompute the circuit
+        window.CircuitProbes.recompute();
+        
+        // Force a complete redraw to show voltage propagation
+        if (typeof redrawAllTiles === 'function') {
+            redrawAllTiles();
+        }
+        
+        // Get the output value
+        const outputValue = window.CircuitProbes.getProbeValue('Q');
+        console.log(`NOR gate test result: ${testDescription} - Output: ${outputValue}, Expected: ${expectedOutput}`);
+        
+        if (outputValue === expectedOutput) {
+            return { success: true };
+        } else {
+            return { 
+                success: false, 
+                error: `When ${testDescription}, the output should be ${expectedOutput === -1 ? 'GND' : 'VCC'}. Check your NOR gate implementation.` 
+            };
+        }
+    }
+}
+
+/**
  * Exercise Factory
  * 
  * Creates exercise instances based on exercise type
@@ -461,6 +595,9 @@ class ExerciseFactory {
             case 'nand':
             case 'nandgate':
                 return new NandGateExercise();
+            case 'nor':
+            case 'norgate':
+                return new NorGateExercise();
             default:
                 throw new Error(`Unknown exercise type: ${exerciseType}`);
         }
@@ -469,5 +606,5 @@ class ExerciseFactory {
 
 // Export classes for use in other files
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { Exercise, NotGateExercise, NandGateExercise, ExerciseFactory };
+    module.exports = { Exercise, NotGateExercise, NandGateExercise, NorGateExercise, ExerciseFactory };
 }

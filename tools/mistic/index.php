@@ -4,12 +4,24 @@ require_once "../config.php";
 require_once "register.php";
 
 use \Tsugi\Core\LTIX;
+use \Tsugi\Core\Settings; 
 
 // Initialize LTI if we received a launch.  If this was a non-LTI GET,
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
 
 $_SESSION['GSRF'] = 10;
+
+// See if we have an assignment confuigured, if not check for a custom variable
+$assn = Settings::linkGet('exercise');
+$custom = LTIX::ltiCustomGet('exercise'); 
+    
+if ( $assn && isset($assignments[$assn]) ) {
+    // Configured
+} else if ( strlen($custom) > 0 && isset($assignments[$custom]) ) {
+    Settings::linkSet('exercise', $custom);
+    $assn = $custom;
+}
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -111,15 +123,8 @@ $_SESSION['GSRF'] = 10;
                         <button class="close-btn" onclick="closeAssignmentModal()" title="Close">×</button>
                     </div>
                     <div class="modal-content">
-                        <p id="assignmentInstructions">In this assignment you will lay out a Not gate. 
-                            Place a probe with the label "A" on the input to your NOT gate. Place a probe with the label 
-                            "Q" on the output of your NOT gate.
-                            Do not place a VCC or GND on the trace that has the probe.
-                            If you place a VCC or GND for testing place the probes on the same 
-                            square as the test points so the test points are cleared. Then press "Grade" to check your circuit.
-                            <?php if ($USER) : ?>
-                            <br><br><strong>Note:</strong> When you successfully complete this assignment, your grade will be automatically submitted to your LMS.
-                            <?php endif; ?>
+                        <p id="assignmentInstructions">
+                            <!-- Instructions will be loaded dynamically from the exercise class -->
                         </p>
                         <div id="gradingSection" style="margin-top: 20px; display: none;">
                             <h3>Circuit Grading</h3>
@@ -498,6 +503,13 @@ $_SESSION['GSRF'] = 10;
 <?php if ($USER) : ?>
                 // Assignment modal functions
                 function showAssignmentModal() {
+                    // Load instructions from the current exercise
+                    if (currentExercise && currentExercise.instructions) {
+                        const instructionsElement = document.getElementById('assignmentInstructions');
+                        if (instructionsElement) {
+                            instructionsElement.innerHTML = currentExercise.instructions;
+                        }
+                    }
                     // Reset to beginning state when opening
                     resetToBeginningScreen();
                     assignmentModal.classList.remove('hidden');
@@ -627,8 +639,14 @@ $_SESSION['GSRF'] = 10;
 
                 // Initialize the exercise when the page loads
                 document.addEventListener('DOMContentLoaded', function() {
-                    // Create the NOT gate exercise instance
-                    currentExercise = new NotGateExercise();
+                    // Create the appropriate exercise instance based on assignment
+                    if ( '<?php echo $assn; ?>' == 'NandGateExercise') {
+                        currentExercise = new NandGateExercise();
+                    } else if ( '<?php echo $assn; ?>' == 'NorGateExercise') {
+                        currentExercise = new NorGateExercise();
+                    } else {
+                        currentExercise = new NotGateExercise();
+                    }
                     
                     // Override the exercise's submitGradeToLMS method to use the global function
                     if (currentExercise) {
