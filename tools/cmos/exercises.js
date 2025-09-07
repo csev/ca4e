@@ -15,10 +15,11 @@
  * - Circuit testing utilities
  */
 class Exercise {
-    constructor(name, description, steps) {
+    constructor(name, description, steps, instructions = '') {
         this.name = name;
         this.description = description;
         this.steps = steps.map(step => ({ ...step, status: "pending" }));
+        this.instructions = instructions;
         this.currentStep = 0;
         this.isGrading = false;
     }
@@ -299,10 +300,23 @@ class CmosNotGateExercise extends Exercise {
             { name: "Test A=high → Q=low (0V)", status: "pending" }
         ];
         
+        const instructions = `
+            <strong>Assignment:</strong> Design a CMOS NOT gate circuit.<br><br>
+            <strong>Instructions:</strong><br>
+            1. Add a switch component and label it "A" (this will be your input)<br>
+            2. Add a probe component and label it "Q" (this will be your output)<br>
+            3. Design a CMOS NOT gate using NMOS and PMOS transistors<br>
+            4. Connect the components properly<br>
+            5. Test your circuit by setting the switch to high and low states<br>
+            6. When ready, press "Grade" to check your circuit.<br><br>
+            <strong>Note:</strong> When you successfully complete this assignment, your grade will be automatically submitted to your LMS.
+        `;
+        
         super(
             "CMOS NOT Gate Exercise",
             "Design and test a CMOS NOT gate circuit with input switch A and output probe Q",
-            steps
+            steps,
+            instructions
         );
     }
 
@@ -353,35 +367,52 @@ class CmosNotGateExercise extends Exercise {
 }
 
 /**
- * CMOS NAND Gate Exercise Class
+ * CMOS NOR Gate Exercise Class
  * 
- * Implements the specific grading logic for a CMOS NAND gate exercise.
- * This is a placeholder for future implementation.
+ * Implements the specific grading logic for a CMOS NOR gate exercise.
+ * Tests that the circuit correctly implements a NOR gate with:
+ * - Input switches A, B and output probe Q
+ * - A=low, B=low → Q=high (5V)
+ * - A=low, B=high → Q=low (0V)
+ * - A=high, B=low → Q=low (0V)
+ * - A=high, B=high → Q=low (0V)
  */
-class CmosNandGateExercise extends Exercise {
+class CmosNorGateExercise extends Exercise {
     constructor() {
         const steps = [
             { name: "Check for input switches A, B and output probe Q", status: "pending" },
             { name: "Test A=low, B=low → Q=high (5V)", status: "pending" },
-            { name: "Test A=low, B=high → Q=high (5V)", status: "pending" },
-            { name: "Test A=high, B=low → Q=high (5V)", status: "pending" },
+            { name: "Test A=low, B=high → Q=low (0V)", status: "pending" },
+            { name: "Test A=high, B=low → Q=low (0V)", status: "pending" },
             { name: "Test A=high, B=high → Q=low (0V)", status: "pending" }
         ];
         
+        const instructions = `
+            <strong>Assignment:</strong> Design a CMOS NOR gate circuit.<br><br>
+            <strong>Instructions:</strong><br>
+            1. Add two switch components and label them "A" and "B" (these will be your inputs)<br>
+            2. Add a probe component and label it "Q" (this will be your output)<br>
+            3. Design a CMOS NOR gate using NMOS and PMOS transistors<br>
+            4. Connect the components properly (PMOS in series, NMOS in parallel)<br>
+            5. Test your circuit by setting the switches to different combinations<br>
+            6. When ready, press "Grade" to check your circuit.<br><br>
+            <strong>Note:</strong> When you successfully complete this assignment, your grade will be automatically submitted to your LMS.
+        `;
+        
         super(
-            "CMOS NAND Gate Exercise",
-            "Design and test a CMOS NAND gate circuit with input switches A, B and output probe Q",
-            steps
+            "CMOS NOR Gate Exercise",
+            "Design and test a CMOS NOR gate circuit with input switches A, B and output probe Q",
+            steps,
+            instructions
         );
     }
 
     /**
-     * Execute a specific step for the CMOS NAND gate exercise
+     * Execute a specific step for the CMOS NOR gate exercise
      * @param {number} stepIndex - The index of the step to execute
      * @returns {Object} - {success: boolean, error?: string}
      */
     executeStep(stepIndex) {
-        // TODO: Implement CMOS NAND gate testing logic
         switch (stepIndex) {
             case 0:
                 // Step 1: Check for A, B switches and Q probe
@@ -396,19 +427,19 @@ class CmosNandGateExercise extends Exercise {
                 
             case 1:
                 // Step 2: Test A=low, B=low → Q=high (5V)
-                return this.testCmosNandGate('low', 'low', 5, 'A=low, B=low → Q=high (5V)');
+                return this.testCmosNorGate('low', 'low', 5, 'A=low, B=low → Q=high (5V)');
                 
             case 2:
-                // Step 3: Test A=low, B=high → Q=high (5V)
-                return this.testCmosNandGate('low', 'high', 5, 'A=low, B=high → Q=high (5V)');
+                // Step 3: Test A=low, B=high → Q=low (0V)
+                return this.testCmosNorGate('low', 'high', 0, 'A=low, B=high → Q=low (0V)');
                 
             case 3:
-                // Step 4: Test A=high, B=low → Q=high (5V)
-                return this.testCmosNandGate('high', 'low', 5, 'A=high, B=low → Q=high (5V)');
+                // Step 4: Test A=high, B=low → Q=low (0V)
+                return this.testCmosNorGate('high', 'low', 0, 'A=high, B=low → Q=low (0V)');
                 
             case 4:
                 // Step 5: Test A=high, B=high → Q=low (0V)
-                return this.testCmosNandGate('high', 'high', 0, 'A=high, B=high → Q=low (0V)');
+                return this.testCmosNorGate('high', 'high', 0, 'A=high, B=high → Q=low (0V)');
                 
             default:
                 return { success: false, error: 'Unknown step' };
@@ -416,15 +447,15 @@ class CmosNandGateExercise extends Exercise {
     }
 
     /**
-     * Test CMOS NAND gate with specific input values
+     * Test CMOS NOR gate with specific input values
      * @param {string} inputA - Input A state ('high' or 'low')
      * @param {string} inputB - Input B state ('high' or 'low')
      * @param {number} expectedVoltage - Expected output voltage (5 for high, 0 for low)
      * @param {string} testDescription - Description of the test for error messages
      * @returns {Object} - {success: boolean, error?: string}
      */
-    testCmosNandGate(inputA, inputB, expectedVoltage, testDescription) {
-        console.log(`Testing CMOS NAND gate: ${testDescription}`);
+    testCmosNorGate(inputA, inputB, expectedVoltage, testDescription) {
+        console.log(`Testing CMOS NOR gate: ${testDescription}`);
         
         if (typeof window.circuitEditor === 'undefined') {
             return { success: false, error: 'Circuit editor not available' };
@@ -445,7 +476,7 @@ class CmosNandGateExercise extends Exercise {
         
         // Get the output voltage
         const outputVoltage = window.circuitEditor.getProbeVoltageByLabel('Q');
-        console.log(`CMOS NAND gate test result: ${testDescription} - Output: ${outputVoltage}V, Expected: ${expectedVoltage}V`);
+        console.log(`CMOS NOR gate test result: ${testDescription} - Output: ${outputVoltage}V, Expected: ${expectedVoltage}V`);
         
         // Allow for small voltage tolerance (within 0.5V)
         const tolerance = 0.5;
@@ -456,7 +487,7 @@ class CmosNandGateExercise extends Exercise {
         } else {
             return { 
                 success: false, 
-                error: `When ${testDescription}, the output should be ${expectedVoltage}V. Check your CMOS NAND gate implementation.` 
+                error: `When ${testDescription}, the output should be ${expectedVoltage}V. Check your CMOS NOR gate implementation.` 
             };
         }
     }
@@ -474,10 +505,10 @@ class ExerciseFactory {
             case 'notgate':
             case 'cmosnot':
                 return new CmosNotGateExercise();
-            case 'nand':
-            case 'nandgate':
-            case 'cmosnand':
-                return new CmosNandGateExercise();
+            case 'nor':
+            case 'norgate':
+            case 'cmosnor':
+                return new CmosNorGateExercise();
             default:
                 throw new Error(`Unknown exercise type: ${exerciseType}`);
         }
@@ -486,5 +517,5 @@ class ExerciseFactory {
 
 // Export classes for use in other files
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { Exercise, CmosNotGateExercise, CmosNandGateExercise, ExerciseFactory };
+    module.exports = { Exercise, CmosNotGateExercise, CmosNorGateExercise, ExerciseFactory };
 }

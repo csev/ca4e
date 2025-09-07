@@ -3,12 +3,24 @@
 require_once "../config.php";
 
 use \Tsugi\Core\LTIX;
+use \Tsugi\Core\Settings; 
 
 // Initialize LTI if we received a launch.  If this was a non-LTI GET,
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
 
 $_SESSION['GSRF'] = 10;
+
+// See if we have an assignment confuigured, if not check for a custom variable
+$assn = Settings::linkGet('exercise');
+$custom = LTIX::ltiCustomGet('exercise'); 
+    
+if ( $assn && isset($assignments[$assn]) ) {
+    // Configured
+} else if ( strlen($custom) > 0 && isset($assignments[$custom]) ) {
+    Settings::linkSet('exercise', $custom);
+    $assn = $custom;
+}   
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -393,16 +405,8 @@ $_SESSION['GSRF'] = 10;
             </div>
             <div class="modal-body">
             <div id="assignmentInstructions">
-                <p>
-                    <strong>Assignment:</strong> Design a CMOS NOT gate circuit.<br><br>
-                    <strong>Instructions:</strong><br>
-                    1. Add a switch component and label it "A" (this will be your input)<br>
-                    2. Add a probe component and label it "Q" (this will be your output)<br>
-                    3. Design a CMOS NOT gate using NMOS and PMOS transistors<br>
-                    4. Connect the components properly<br>
-                    5. Test your circuit by setting the switch to high and low states<br>
-                    6. When ready, press "Grade" to check your circuit.<br><br>
-                    <strong>Note:</strong> When you successfully complete this assignment, your grade will be automatically submitted to your LMS.
+                <p id="assignmentInstructionsText">
+                    <!-- Instructions will be loaded dynamically from the exercise class -->
                 </p>
             </div>
             <div id="gradingSection" style="margin-top: 20px; display: none;">
@@ -496,6 +500,13 @@ $_SESSION['GSRF'] = 10;
         }
 
         function showAssignmentModal() {
+            // Load instructions from the current exercise
+            if (currentExercise && currentExercise.instructions) {
+                const instructionsElement = document.getElementById('assignmentInstructionsText');
+                if (instructionsElement) {
+                    instructionsElement.innerHTML = currentExercise.instructions;
+                }
+            }
             assignmentModal.style.display = 'block';
         }
 
@@ -664,7 +675,11 @@ $_SESSION['GSRF'] = 10;
         // Initialize the exercise when the page loads
         document.addEventListener('DOMContentLoaded', function() {
             // Create the CMOS NOT gate exercise instance
-            currentExercise = new CmosNotGateExercise();
+           if ( '<?php echo $assn; ?>' == 'CmosNorGateExercise') {
+                currentExercise = new CmosNorGateExercise();
+            } else {
+                currentExercise = new CmosNotGateExercise();
+            }
             
             // Override the exercise's submitGradeToLMS method to use the global function
             if (currentExercise) {
