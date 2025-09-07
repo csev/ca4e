@@ -50,6 +50,7 @@
             "title" : "Building a Not Gate with CMOS Transistors",
             "launch" : "tools/cmos/",
             "resource_link_id" : "ca4e_02_cmos_not",
+            "target": "_blank",
             "custom" : [
                 {
                     "key": "exercise",
@@ -61,6 +62,7 @@
             "title" : "Building a Nor Gate with CMOS Transistors",
             "launch" : "tools/cmos/",
             "resource_link_id" : "ca4e_02_cmos_nor",
+            "target": "_blank",
             "custom" : [
                 {
                     "key": "exercise",
@@ -72,6 +74,7 @@
             "title" : "Mistic: Building a Not Gate with VLSI Layout",
             "launch" : "tools/mistic/",
             "resource_link_id" : "ca4e_02_vlsi_not",
+            "target": "_blank",
             "custom" : [
                 {
                     "key": "exercise",
@@ -83,6 +86,7 @@
             "title" : "Mistic: Building a Nor Gate with VLSI Layout",
             "launch" : "tools/mistic/",
             "resource_link_id" : "ca4e_02_vlsi_nor",
+            "target": "_blank",
             "custom" : [
                 {
                     "key": "exercise",
