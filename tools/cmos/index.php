@@ -689,8 +689,10 @@ $_SESSION['GSRF'] = 10;
             // Note: We don't call clear() to preserve the power rails
             
             // 1. Create input switches (A and B)
-            const switchA = new Switch(200, 200, 'A');
-            const switchB = new Switch(200, 450, 'B');
+            const switchA = new Switch(200, 200);
+            switchA.label = "A";
+            const switchB = new Switch(200, 450);
+            switchB.label = "B";
             window.circuitEditor.circuit.addComponent(switchA);
             window.circuitEditor.circuit.addComponent(switchB);
             
@@ -707,7 +709,8 @@ $_SESSION['GSRF'] = 10;
             window.circuitEditor.circuit.addComponent(nmos2);
             
             // 4. Create output probe
-            const outputProbe = new Probe(500, 200, 'Q');
+            const outputProbe = new Probe(500, 200);
+            outputProbe.label = "Q";
             window.circuitEditor.circuit.addComponent(outputProbe);
             
             // 5. Create all the wires for a proper CMOS NOR gate
