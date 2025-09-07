@@ -218,20 +218,47 @@ $_SESSION['GSRF'] = 10;
         .modal-content {
             background-color: #fefefe;
             margin: 15% auto;
-            padding: 20px;
+            padding: 0;
             border: 1px solid #888;
             width: 80%;
             max-width: 500px;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        .modal-header {
+            background-color: #f0f0f0;
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+            border-radius: 8px 8px 0 0;
+            cursor: move;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: #333;
+            flex: 1;
+        }
+
+        .modal-body {
+            padding: 20px;
         }
 
         .close {
             color: #aaa;
-            float: right;
             font-size: 28px;
             font-weight: bold;
             cursor: pointer;
+            line-height: 1;
+            margin: 0;
+            padding: 0;
+            border: none;
+            background: none;
         }
 
         .close:hover,
@@ -360,8 +387,11 @@ $_SESSION['GSRF'] = 10;
     <!-- Assignment Modal -->
     <div id="assignmentModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>CMOS Circuit Assignment</h2>
+            <div class="modal-header">
+                <h2>CMOS Circuit Assignment</h2>
+                <span class="close">&times;</span>
+            </div>
+            <div class="modal-body">
             <div id="assignmentInstructions">
                 <p>
                     <strong>Assignment:</strong> Design a CMOS NOT gate circuit.<br><br>
@@ -384,6 +414,7 @@ $_SESSION['GSRF'] = 10;
             <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: space-between;">
                 <button id="nextBtn" onclick="nextStep()" style="background-color: #2196F3; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; display: none;">Next</button>
                 <button id="gradeBtn" onclick="startGrading()" style="background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Grade</button>
+            </div>
             </div>
         </div>
     </div>
@@ -486,6 +517,57 @@ $_SESSION['GSRF'] = 10;
                 closeModal(event.target);
             }
         });
+
+        // Make assignment modal draggable
+        function makeModalDraggable(modal) {
+            const modalContent = modal.querySelector('.modal-content');
+            const modalHeader = modal.querySelector('.modal-header');
+            
+            let isDragging = false;
+            let currentX;
+            let currentY;
+            let initialX;
+            let initialY;
+            let xOffset = 0;
+            let yOffset = 0;
+
+            modalHeader.addEventListener('mousedown', dragStart);
+            document.addEventListener('mousemove', drag);
+            document.addEventListener('mouseup', dragEnd);
+
+            function dragStart(e) {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+
+                if (e.target === modalHeader || modalHeader.contains(e.target)) {
+                    isDragging = true;
+                    modalContent.style.cursor = 'grabbing';
+                }
+            }
+
+            function drag(e) {
+                if (isDragging) {
+                    e.preventDefault();
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+
+                    xOffset = currentX;
+                    yOffset = currentY;
+
+                    modalContent.style.transform = `translate(${currentX}px, ${currentY}px)`;
+                }
+            }
+
+            function dragEnd(e) {
+                initialX = currentX;
+                initialY = currentY;
+                isDragging = false;
+                modalContent.style.cursor = 'move';
+            }
+        }
+
+        // Initialize draggable functionality for assignment modal
+        makeModalDraggable(assignmentModal);
 
         // Grading functions
         function startGrading() {
