@@ -930,9 +930,9 @@ if ( $assn && isset($assignments[$assn]) ) {
                 console.log('🎯 CMOS Easter egg triggered! Ctrl + * detected! (Hitchhiker\'s Guide reference!)');
                 unlockCmosNotGate();
             }
-            // Test for Ctrl + & (NOR gate)
-            if (e.ctrlKey && e.key === '&') {
-                console.log('🎯 CMOS NOR Easter egg triggered! Ctrl + & detected!');
+            // Test for Ctrl + | (NOR gate)
+            if (e.ctrlKey && e.key === '|') {
+                console.log('🎯 CMOS NOR Easter egg triggered! Ctrl + | detected!');
                 unlockCmosNorGate();
             }
         });
