@@ -1,6 +1,7 @@
 <?php
 require_once "../config.php";
 require_once "register.php";
+require_once "assignments.php";
 
 use \Tsugi\Core\LTIX;
 use \Tsugi\Core\Settings;
@@ -65,6 +66,7 @@ $OUTPUT->bodyStart();
 
 if ( $USER->instructor ) {
     SettingsForm::start();
+    SettingsForm::select("exercise", __('Please select an assignment'),$assignments); 
     SettingsForm::dueDate();
     SettingsForm::done();
     SettingsForm::end();

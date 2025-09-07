@@ -136,6 +136,7 @@ $_SESSION['GSRF'] = 10;
 <?php endif; ?>
             </div>
 
+            <script src="exercises.js"></script>
             <script>
                 const canvas = document.getElementById('vlsiCanvas');
                 const ctx = canvas.getContext('2d');
@@ -180,13 +181,8 @@ $_SESSION['GSRF'] = 10;
                 let probeLabels = {}; // Store probe labels: {x_y: 'label'}
                 let probeVoltages = {}; // Store probe voltage types: {x_y: 'VCC'|'GND'|'0'}
                 
-                // Grading variables
-                let currentStep = 0;
-                let gradingSteps = [
-                    { name: "Check for A and Q probes", status: "pending" },
-                    { name: "Test A=GND → Q=VCC", status: "pending" },
-                    { name: "Test A=VCC → Q=GND", status: "pending" }
-                ];
+                // Exercise instance
+                let currentExercise = null;
 
                 function createGrid(size) {
                     return Array(size).fill().map(() => Array(size).fill().map(() => Array(8).fill(false)));
@@ -533,167 +529,34 @@ $_SESSION['GSRF'] = 10;
 
                 // Grading functions
                 function startGrading() {
-                    currentStep = 0;
-                    document.getElementById('gradingSection').style.display = 'block';
-                    // Hide the instructions
-                    document.getElementById('assignmentInstructions').style.display = 'none';
-                    // Change Grade button to Reset
-                    const gradeBtn = document.getElementById('gradeBtn');
-                    gradeBtn.textContent = 'Reset';
-                    gradeBtn.onclick = resetGrading;
-                    gradeBtn.style.backgroundColor = '#FF9800';
-                    nextStep();
+                    if (currentExercise) {
+                        currentExercise.startGrading();
+                    }
                 }
 
                 function nextStep() {
-                    if (currentStep >= gradingSteps.length) {
-                        // All steps completed successfully
-                        const stepText = document.getElementById('stepText');
-                        stepText.innerHTML = '<span style="color: green;">✓ All tests passed! Submitting grade...</span>';
-                        
-                        // Submit grade to LMS if this is an LTI session
-                        if (typeof submitGradeToLMS === 'function') {
-                            submitGradeToLMS(1.0); // Perfect score for completing all steps
-                        }
-                        
-                        // Reset all probes to zero voltage after successful grade
-                        resetAllProbesToZero();
-                        // Close the assignment dialog
-                        closeAssignmentModal();
-                        return;
-                    }
-
-                    const step = gradingSteps[currentStep];
-                    const stepText = document.getElementById('stepText');
-                    
-                    switch (currentStep) {
-                        case 0:
-                            // Step 1: Check for A and out probes
-                            if (checkProbes()) {
-                                stepText.innerHTML = `<span style="color: green;">✓ ${step.name}</span>`;
-                                step.status = "passed";
-                                currentStep++;
-                                document.getElementById('nextBtn').style.display = 'inline-block';
-                            } else {
-                                stepText.innerHTML = `<span style="color: red;">✗ ${step.name}</span><br>
-                                    <small>Error: You need exactly one probe labeled "A" and one probe labeled "Q".</small>`;
-                                step.status = "failed";
-                            }
-                            break;
-                            
-                        case 1:
-                            // Step 2: Test A=GND → Q=VCC
-                            if (testCircuit(-1, 1)) {
-                                stepText.innerHTML = `<span style="color: green;">✓ ${step.name}</span>`;
-                                step.status = "passed";
-                                currentStep++;
-                                document.getElementById('nextBtn').style.display = 'inline-block';
-                            } else {
-                                stepText.innerHTML = `<span style="color: red;">✗ ${step.name}</span><br>
-                                    <small>Error: When A=GND, the output should be VCC. Check your NOT gate implementation.</small>`;
-                                step.status = "failed";
-                            }
-                            break;
-                            
-                        case 2:
-                            // Step 3: Test A=VCC → Q=GND
-                            if (testCircuit(1, -1)) {
-                                stepText.innerHTML = `<span style="color: green;">✓ ${step.name}</span>`;
-                                step.status = "passed";
-                                currentStep++;
-                                document.getElementById('nextBtn').style.display = 'inline-block';
-                            } else {
-                                stepText.innerHTML = `<span style="color: red;">✗ ${step.name}</span><br>
-                                    <small>Error: When A=VCC, the output should be GND. Check your NOT gate implementation.</small>`;
-                                step.status = "failed";
-                            }
-                            break;
+                    if (currentExercise) {
+                        currentExercise.nextStep();
                     }
                 }
 
-                function checkProbes() {
-                    const probeLabels = window.MisticProbes.getProbeLabels();
-                    const hasA = probeLabels.includes('A');
-                    const hasQ = probeLabels.includes('Q');
-                    return hasA && hasQ && probeLabels.length === 2;
-                }
-
-                function testCircuit(inputValue, expectedOutput) {
-                    console.log(`Testing circuit with A=${inputValue === -1 ? 'GND' : 'VCC'}, expecting Q=${expectedOutput === -1 ? 'GND' : 'VCC'}`);
-                    
-                    // Set the A probe to the input value
-                    window.MisticProbes.setProbeValue('A', inputValue);
-                    // console.log(`Set probe A to voltage ${inputValue} (treating as ${inputValue === -1 ? 'GND' : 'VCC'})`);
-                    
-                    // Recompute the circuit
-                    window.MisticProbes.recompute();
-                    console.log('Circuit recomputed');
-                    
-                    // Force a complete redraw to show voltage propagation
-                    redrawAllTiles();
-                    console.log('Canvas redrawn to show voltages');
-                    
-                    // Get the output value
-                    const outputValue = window.MisticProbes.getProbeValue('Q');
-                    console.log(`Probe Q voltage: ${outputValue} (should be ${expectedOutput === -1 ? 'GND' : 'VCC'})`);
-                    
-                    // Also check what voltages are at various points in the circuit
-                    console.log('Checking circuit voltages...');
-                    for (let y = 0; y < gridSize; y++) {
-                        for (let x = 0; x < gridSize; x++) {
-                            if (grid[y][x][layerMetal] || grid[y][x][layerPolysilicon]) {
-                                let voltage = 0;
-                                for (let l = 0; l < 8; l++) {
-                                    if (volts[y][x][l] != 0) {
-                                        voltage = volts[y][x][l];
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    
-                    return outputValue === expectedOutput;
-                }
 
                 function resetAllProbesToZero() {
-                    // console.log('Resetting all probes to zero voltage after successful grade');
-                    // Reset all probe voltage types to '0' (neutral)
-                    Object.keys(probeVoltages).forEach(key => {
-                        probeVoltages[key] = '0';
-                    });
-                    // Recompute the circuit with all probes at zero
-                    compute();
-                    // Redraw to show the reset state
-                    redrawAllTiles();
-                    console.log('All probes reset to zero voltage');
+                    if (currentExercise) {
+                        currentExercise.resetAllProbesToZero();
+                    }
                 }
 
                 function resetToBeginningScreen() {
-                    console.log('Resetting to beginning screen');
-                    // Reset grading state
-                    currentStep = 0;
-                    gradingSteps.forEach(step => {
-                        step.status = "pending";
-                    });
-                    // Hide grading section
-                    document.getElementById('gradingSection').style.display = 'none';
-                    document.getElementById('nextBtn').style.display = 'none';
-                    // Show the instructions again
-                    document.getElementById('assignmentInstructions').style.display = 'block';
-                    // Reset step text
-                    document.getElementById('stepText').innerHTML = 'Ready to grade your circuit!';
-                    // Reset Grade button back to original state
-                    const gradeBtn = document.getElementById('gradeBtn');
-                    gradeBtn.textContent = 'Grade';
-                    gradeBtn.onclick = startGrading;
-                    gradeBtn.style.backgroundColor = '#4CAF50';
-                    console.log('Reset to beginning screen completed');
+                    if (currentExercise) {
+                        currentExercise.resetGrading();
+                    }
                 }
 
                 function resetGrading() {
-                    console.log('Resetting grading process');
-                    resetToBeginningScreen();
+                    if (currentExercise) {
+                        currentExercise.resetGrading();
+                    }
                 }
 
                 // LTI Grade Submission Function
@@ -761,6 +624,17 @@ $_SESSION['GSRF'] = 10;
                     console.log('Anonymous user - grade not submitted to LMS:', grade);
                     <?php endif; ?>
                 }
+
+                // Initialize the exercise when the page loads
+                document.addEventListener('DOMContentLoaded', function() {
+                    // Create the NOT gate exercise instance
+                    currentExercise = new NotGateExercise();
+                    
+                    // Override the exercise's submitGradeToLMS method to use the global function
+                    if (currentExercise) {
+                        currentExercise.submitGradeToLMS = submitGradeToLMS;
+                    }
+                });
 
                 function drawNotGate() {
                     // Clear the canvas first
