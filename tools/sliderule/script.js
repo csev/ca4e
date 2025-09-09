@@ -519,7 +519,7 @@ class TraditionalSlideRule {
 
 // Initialize the slide rule when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    const slideRule = new TraditionalSlideRule();
+    window.slideRule = new TraditionalSlideRule();
     
     // Add demonstration button
     const demoButton = document.createElement('button');
@@ -547,7 +547,7 @@ document.addEventListener('DOMContentLoaded', () => {
         demoButton.style.background = '#95a5a6';
         
         try {
-            await slideRule.demonstrateCalculation();
+            await window.slideRule.demonstrateCalculation();
         } finally {
             demoButton.disabled = false;
             demoButton.textContent = 'Demonstrate: 2.5 × 3.2 = 8.0';
@@ -576,9 +576,71 @@ document.addEventListener('DOMContentLoaded', () => {
         resetButton.style.background = '#e74c3c';
     });
     resetButton.addEventListener('click', () => {
-        slideRule.resetSlideRule();
+        window.slideRule.resetSlideRule();
     });
     
+    // Create Assignment button (only for authenticated users)
+    let assignmentButton = null;
+    let instructorButton = null;
+    
+    if (USER_AUTHENTICATED) {
+        assignmentButton = document.createElement('button');
+        assignmentButton.id = 'assignmentButton';
+        assignmentButton.className = 'assignment-button';
+        assignmentButton.textContent = 'Assignment';
+        assignmentButton.style.cssText = `
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        `;
+        assignmentButton.addEventListener('mouseenter', () => {
+            assignmentButton.style.background = '#45a049';
+        });
+        assignmentButton.addEventListener('mouseleave', () => {
+            assignmentButton.style.background = '#4CAF50';
+        });
+        
+        // Add click event listener for assignment button
+        assignmentButton.addEventListener('click', function() {
+            if (window.showAssignmentModal) {
+                window.showAssignmentModal();
+            }
+        });
+    }
+    
+    if (USER_IS_INSTRUCTOR) {
+        instructorButton = document.createElement('a');
+        instructorButton.href = INSTRUCTOR_URL;
+        instructorButton.textContent = 'Instructor';
+        instructorButton.style.cssText = `
+            background: #28a745;
+            color: white;
+            font-size: 14px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            min-width: 60px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+        `;
+        instructorButton.addEventListener('mouseenter', () => {
+            instructorButton.style.background = '#218838';
+        });
+        instructorButton.addEventListener('mouseleave', () => {
+            instructorButton.style.background = '#28a745';
+        });
+    }
+
     // Create a button container
     const buttonContainer = document.createElement('div');
     buttonContainer.style.cssText = `
@@ -586,7 +648,12 @@ document.addEventListener('DOMContentLoaded', () => {
         gap: 10px;
         justify-content: center;
         margin-top: 10px;
+        flex-wrap: wrap;
     `;
+    
+    // Add buttons in order
+    if (assignmentButton) buttonContainer.appendChild(assignmentButton);
+    if (instructorButton) buttonContainer.appendChild(instructorButton);
     buttonContainer.appendChild(demoButton);
     buttonContainer.appendChild(resetButton);
     

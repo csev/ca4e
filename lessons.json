@@ -29,6 +29,20 @@
     "slides": [
         "{apphome}/lectures/01-Origins.pptx"
     ],
+     "lti" : [
+        {
+            "title" : "Using a Slide Rule for Multiplication",
+            "launch" : "tools/sliderule/",
+            "resource_link_id" : "ca4e_01_sliderule",
+            "target": "_blank",
+            "custom" : [
+                {
+                    "key": "exercise",
+                    "value": "CmosNotGateExercise"
+                }
+            ]
+        }
+    ],
     "discussions" : [
         {
         "title" : "History / Introduction",
