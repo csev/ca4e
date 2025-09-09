@@ -15,7 +15,7 @@ $_SESSION['GSRF'] = 10;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Traditional Slide Rule</title>
+    <title>Slide Rule</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         .modal {
@@ -100,10 +100,11 @@ $_SESSION['GSRF'] = 10;
         <header>
             <div class="header-content">
                 <div class="title-section">
-                    <h1>Traditional Slide Rule</h1>
-                    <p>For multiplication and division</p>
+                    <h1>Slide Rule</h1>
                 </div>
+<?php if (! $USER) : ?>
                 <a href="../index.php" class="home-link" title="Go to Home">🏠</a>
+<?php endif; ?>
             </div>
         </header>
         

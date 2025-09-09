@@ -651,11 +651,11 @@ document.addEventListener('DOMContentLoaded', () => {
         flex-wrap: wrap;
     `;
     
-    // Add buttons in order
-    if (assignmentButton) buttonContainer.appendChild(assignmentButton);
-    if (instructorButton) buttonContainer.appendChild(instructorButton);
+    // Add buttons in order: Demonstrate, Reset, Assignment, Instructor
     buttonContainer.appendChild(demoButton);
     buttonContainer.appendChild(resetButton);
+    if (assignmentButton) buttonContainer.appendChild(assignmentButton);
+    if (instructorButton) buttonContainer.appendChild(instructorButton);
     
     document.querySelector('.controls').appendChild(buttonContainer);
 }); 

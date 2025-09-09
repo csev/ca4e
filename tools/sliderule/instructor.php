@@ -76,7 +76,7 @@ if ( $dueDate->message ) {
 }
 ?>
 <center>
-    <h1>Traditional Slide Rule - Instructor</h1>
+    <h1>Slide Rule - Instructor</h1>
     <div id="toolbar">
         <a href="index.php">Back To Tool</a>
         <a href="grades.php">Student Data</a>
