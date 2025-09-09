@@ -368,6 +368,42 @@ $LTI = LTIX::session_start();
             background-color: #34495e;
             transform: scale(1.1);
         }
+
+        .instructor-button {
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            cursor: pointer;
+            min-width: 60px;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            font-size: 14px;
+            display: inline-block;
+            margin-right: 10px;
+            height: 40px;
+            line-height: 24px;
+            box-sizing: border-box;
+        }
+
+        .instructor-button:hover {
+            background-color: #218838;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: white;
+        }
+
+        .instructor-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .instructor-button:visited {
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -406,6 +442,9 @@ $LTI = LTIX::session_start();
             </select>
         </div>
         <div class="right-section">
+<?php if ($USER && $USER->instructor) : ?>
+            <a href="<?php echo addSession('instructor.php'); ?>" class="instructor-button" title="Instructor Panel">Instructor</a>
+<?php endif; ?>
             <button id="helpButton" class="help-button" title="Open Help">?</button>
         </div>
     </div>
