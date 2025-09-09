@@ -1,12 +1,19 @@
 <?php
 
 require_once "../config.php";
+require_once "assignments.php";
 
 use \Tsugi\Core\LTIX;
+use \Tsugi\Core\Settings;
 
 // Initialize LTI if we received a launch.  If this was a non-LTI GET,
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
+
+// See if we have an assignment configured, if not check for a custom variable
+$assn = Settings::linkGetCustom('exercise');
+// Make sure it is a valid assignment
+if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -78,6 +85,17 @@ $LTI = LTIX::session_start();
             cursor: not-allowed;
         }
 
+        .assignment-btn {
+            background-color: #fff0e6 !important;
+            color: #333 !important;
+            border: 1px solid #ddd !important;
+        }
+
+        .assignment-btn:hover {
+            background-color: #ffe4cc !important;
+            color: #333 !important;
+        }
+
         .instructor-button {
             background-color: #28a745;
             color: white;
@@ -107,6 +125,124 @@ $LTI = LTIX::session_start();
 
         .instructor-button:visited {
             color: white;
+        }
+
+        /* Assignment Modal Styles */
+        .assignment-modal {
+            position: fixed;
+            background: white;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 1000;
+            width: 500px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .assignment-modal.hidden {
+            display: none;
+        }
+
+        .modal-header {
+            background: #007bff;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 6px 6px 0 0;
+            cursor: grab;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .modal-header:active {
+            cursor: grabbing;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+        }
+
+        .modal-content {
+            padding: 20px;
+        }
+
+        .modal-content h3 {
+            margin-top: 0;
+            color: #007bff;
+        }
+
+        .modal-content h4 {
+            color: #333;
+            margin-top: 15px;
+            margin-bottom: 8px;
+        }
+
+        .modal-content ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+
+        .modal-content li {
+            margin: 4px 0;
+        }
+
+        .modal-content pre {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+        }
+
+        #gradeBtn {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        #gradeBtn:hover {
+            background-color: #218838;
+        }
+
+        #stepDisplay {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 4px;
+            background: #f8f9fa;
+        }
+
+        #stepDisplay .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        #stepDisplay .error {
+            color: #dc3545;
+            font-weight: bold;
         }
         
         .running {
@@ -226,6 +362,9 @@ $LTI = LTIX::session_start();
                     <button id="reset">Reset</button>
                     <button id="step">Step</button>
                     <button id="start">Start</button>
+<?php if ($USER) : ?>
+                    <button id="assignmentBtn" class="assignment-btn">Assignment</button>
+<?php endif; ?>
 <?php if ($USER && $USER->instructor) : ?>
                     <a href="<?php echo addSession('instructor.php'); ?>" class="instructor-button" title="Instructor Panel">Instructor</a>
 <?php endif; ?>
@@ -577,5 +716,184 @@ HALT`;
             }, 1000); // Wait 1 second for component to initialize
         });
     </script>
+
+<?php if ($USER) : ?>
+    <!-- Assignment Modal -->
+    <div id="assignmentModal" class="assignment-modal hidden">
+        <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
+            <span>📋 Assignment</span>
+            <button class="close-btn" onclick="closeAssignmentModal()" title="Close">×</button>
+        </div>
+        <div class="modal-content">
+            <p id="assignmentInstructions">
+                <!-- Instructions will be loaded dynamically from the exercise class -->
+            </p>
+            <div id="gradingSection" style="margin-top: 20px; display: none;">
+                <h3>Program Grading</h3>
+                <div id="stepDisplay"></div>
+                <button id="gradeBtn" onclick="startGrading()">Start Grading</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="exercises.js"></script>
+    <script>
+        // Assignment modal elements
+        const assignmentModal = document.getElementById('assignmentModal');
+        const assignmentModalHeader = document.getElementById('assignmentModalHeader');
+        const assignmentBtn = document.getElementById('assignmentBtn');
+        let modalUserMoved = false; // if user drags, we keep their position
+
+        // Assignment modal functions
+        function showAssignmentModal() {
+            // Load instructions from the current exercise
+            if (currentExercise && currentExercise.instructions) {
+                const instructionsElement = document.getElementById('assignmentInstructions');
+                if (instructionsElement) {
+                    instructionsElement.innerHTML = currentExercise.instructions;
+                }
+            }
+            
+            assignmentModal.classList.remove('hidden');
+            centerAssignmentModal();
+        }
+
+        function closeAssignmentModal() {
+            // Simply hide the modal - don't reset immediately to avoid conflicts
+            assignmentModal.classList.add('hidden');
+        }
+
+        function centerAssignmentModal() {
+            // Only set initial position if modal doesn't already have a position
+            if (!assignmentModal.style.left && !assignmentModal.style.top) {
+                console.log('centerAssignmentModal');
+                const modalW = assignmentModal.offsetWidth;
+                const modalH = assignmentModal.offsetHeight;
+                // Position modal nudged to the right, near the top of viewport
+                const left = Math.max(0, Math.floor((window.innerWidth - modalW) * 0.7)); // 70% from left edge
+                const top = Math.max(20, Math.floor(window.innerHeight * 0.1)); // 10% from top, minimum 20px
+                assignmentModal.style.left = left + 'px';
+                assignmentModal.style.top = top + 'px';
+            }
+        }
+
+        // Assignment button click handler
+        assignmentBtn.addEventListener('click', showAssignmentModal);
+
+        // Grading functions
+        function startGrading() {
+            if (currentExercise) {
+                currentExercise.startGrading();
+            }
+        }
+
+        // Grade submission function
+        function submitGradeToLMS(grade) {
+            const formData = new FormData();
+            formData.append('grade', grade);
+            formData.append('code', 'CDC8512_EXERCISE_COMPLETED');
+            
+            console.log('Sending grade=' + grade);
+            
+            fetch('<?php echo addSession($CFG->wwwroot . '/api/grade-submit.php'); ?>', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Grade submission response:', data);
+                if (data.status === 'success') {
+                    // Show success message
+                    alert('🎉 Excellent work! Your assignment has been completed successfully and your grade has been submitted to the LMS.');
+                } else {
+                    console.error('Grade submission failed:', data);
+                    // Show error alert to user
+                    alert(`⚠️ Grade submission failed: ${data.detail}\n\nYour assignment was completed successfully, but the grade could not be sent to the LMS. Please contact your instructor.`);
+                }
+            })
+            .catch(error => {
+                console.error('Grade submission error:', error);
+                // Show error alert to user
+                alert(`⚠️ Grade submission error: ${error.message}\n\nYour assignment was completed successfully, but there was a technical error sending the grade to the LMS. Please contact your instructor.`);
+            });
+        }
+
+        // Initialize the exercise when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Create the appropriate exercise instance based on assignment
+            if ( '<?php echo $assn; ?>' == 'PrintOut42Exercise') {
+                currentExercise = new PrintOut42Exercise();
+            }
+            
+            // Override the exercise's submitGradeToLMS method to use the global function
+            if (currentExercise) {
+                currentExercise.submitGradeToLMS = submitGradeToLMS;
+            }
+        });
+
+        // Make modal draggable
+        (function enableAssignmentDrag() {
+            if (!assignmentModal || !assignmentModalHeader) return;
+            let dragging = false;
+            let startClientX = 0, startClientY = 0;
+            let startLeft = 0, startTop = 0;
+
+            function onPointerDown(e) {
+                dragging = true;
+                modalUserMoved = true;
+                // For position: fixed, use viewport coordinates directly
+                startLeft = parseInt(assignmentModal.style.left) || 0;
+                startTop = parseInt(assignmentModal.style.top) || 0;
+                if (e.touches) {
+                    startClientX = e.touches[0].clientX;
+                    startClientY = e.touches[0].clientY;
+                } else {
+                    startClientX = e.clientX;
+                    startClientY = e.clientY;
+                }
+                assignmentModalHeader.style.cursor = 'grabbing';
+                window.addEventListener('mousemove', onPointerMove, { passive: false });
+                window.addEventListener('mouseup', onPointerUp, { passive: false });
+                window.addEventListener('touchmove', onPointerMove, { passive: false });
+                window.addEventListener('touchend', onPointerUp, { passive: false });
+                e.preventDefault();
+            }
+
+            function onPointerMove(e) {
+                if (!dragging) return;
+                let currentClientX, currentClientY;
+                if (e.touches) {
+                    currentClientX = e.touches[0].clientX;
+                    currentClientY = e.touches[0].clientY;
+                } else {
+                    currentClientX = e.clientX;
+                    currentClientY = e.clientY;
+                }
+                const dx = currentClientX - startClientX;
+                const dy = currentClientY - startClientY;
+                // Remove canvas container constraints - allow modal to move freely on screen
+                const maxLeft = window.innerWidth - assignmentModal.offsetWidth;
+                const maxTop = window.innerHeight - assignmentModal.offsetHeight;
+                const newLeft = Math.max(0, Math.min(maxLeft, startLeft + dx));
+                const newTop = Math.max(0, Math.min(maxTop, startTop + dy));
+                assignmentModal.style.left = newLeft + 'px';
+                assignmentModal.style.top = newTop + 'px';
+            }
+
+            function onPointerUp(e) {
+                dragging = false;
+                assignmentModalHeader.style.cursor = 'grab';
+                window.removeEventListener('mousemove', onPointerMove);
+                window.removeEventListener('mouseup', onPointerUp);
+                window.removeEventListener('touchmove', onPointerMove);
+                window.removeEventListener('touchend', onPointerUp);
+            }
+
+            assignmentModalHeader.addEventListener('mousedown', onPointerDown);
+            assignmentModalHeader.addEventListener('touchstart', onPointerDown, { passive: false });
+        })();
+    </script>
+<?php endif; ?>
+
 </body>
 </html>

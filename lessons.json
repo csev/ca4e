@@ -125,6 +125,20 @@
     "slides": [
         "{apphome}/lectures/03-DigitalLogic.pptx"
     ],
+     "lti" : [
+        {
+            "title" : "Building a Half-Adder",
+            "launch" : "tools/gates/",
+            "resource_link_id" : "ca4e_03_halfadder",
+            "target": "_blank",
+            "custom" : [
+                {
+                    "key": "exercise",
+                    "value": "HalfAdder"
+                }
+            ]
+        }
+    ],
     "discussions" : [
         {
         "title" : "Digital Logic",
@@ -141,7 +155,32 @@
     "slides": [
         "{apphome}/lectures/04-CPU-Machine-Code.pptx"
     ],
-
+     "lti" : [
+        {
+            "title" : "Print out '42'",
+            "launch" : "tools/cdc8512/",
+            "resource_link_id" : "ca4e_04_42",
+            "target": "_blank",
+            "custom" : [
+                {
+                    "key": "exercise",
+                    "value": "FourtyTwo"
+                }
+            ]
+        },
+        {
+            "title" : "WASM",
+            "launch" : "tools/wasm/",
+            "resource_link_id" : "ca4e_04_wasm",
+            "target": "_blank",
+            "custom" : [
+                {
+                    "key": "exercise",
+                    "value": "Wasm"
+                }
+            ]
+        }
+    ],
     "discussions" : [
         {
         "title" : "CPU Design and Machine Code",
