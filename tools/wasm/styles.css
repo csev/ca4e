@@ -37,6 +37,45 @@ header {
     flex: 1;
 }
 
+.header-links {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.instructor-button {
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    min-width: 60px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-size: 14px;
+    display: inline-block;
+    backdrop-filter: blur(10px);
+}
+
+.instructor-button:hover {
+    background-color: #218838;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    text-decoration: none;
+    color: white;
+}
+
+.instructor-button:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.instructor-button:visited {
+    color: white;
+}
+
 .home-link {
     display: inline-block;
     font-size: 2rem;

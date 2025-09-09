@@ -77,6 +77,37 @@ $LTI = LTIX::session_start();
             background-color: #6c757d;
             cursor: not-allowed;
         }
+
+        .instructor-button {
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-block;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .instructor-button:hover {
+            background-color: #218838;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            text-decoration: none;
+            color: white;
+        }
+
+        .instructor-button:active {
+            transform: translateY(1px);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .instructor-button:visited {
+            color: white;
+        }
         
         .running {
             background-color: #dc3545 !important;
@@ -195,6 +226,9 @@ $LTI = LTIX::session_start();
                     <button id="reset">Reset</button>
                     <button id="step">Step</button>
                     <button id="start">Start</button>
+<?php if ($USER && $USER->instructor) : ?>
+                    <a href="<?php echo addSession('instructor.php'); ?>" class="instructor-button" title="Instructor Panel">Instructor</a>
+<?php endif; ?>
                     <button id="help" style="background-color: #28a745; font-weight: bold;">?</button>
                 </div>
             </div>

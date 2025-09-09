@@ -23,7 +23,12 @@ $LTI = LTIX::session_start();
                     <h1>WASM Playground</h1>
                     <p>A teaching tool for learning WebAssembly Text (WAT) format - ES Module Version</p>
                 </div>
-                <a href="../index.php" class="home-link" title="Go to Home">🏠</a>
+                <div class="header-links">
+<?php if ($USER && $USER->instructor) : ?>
+                    <a href="<?php echo addSession('instructor.php'); ?>" class="instructor-button" title="Instructor Panel">Instructor</a>
+<?php endif; ?>
+                    <a href="../index.php" class="home-link" title="Go to Home">🏠</a>
+                </div>
             </div>
         </header>
         
