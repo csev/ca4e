@@ -10,18 +10,14 @@ use \Tsugi\Core\Settings;
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
 
+// Allow the grading web services to work
 $_SESSION['GSRF'] = 10;
 
-// See if we have an assignment confuigured, if not check for a custom variable
-$assn = Settings::linkGet('exercise');
-$custom = LTIX::ltiCustomGet('exercise'); 
-    
-if ( $assn && isset($assignments[$assn]) ) {
-    // Configured
-} else if ( strlen($custom) > 0 && isset($assignments[$custom]) ) {
-    Settings::linkSet('exercise', $custom);
-    $assn = $custom;
-}   
+// See if we have an assignment configured, if not check for a custom variable
+$assn = Settings::linkGetCustom('exercise');
+// Make sure it is a valid assignment
+if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
+
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
