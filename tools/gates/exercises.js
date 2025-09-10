@@ -281,6 +281,18 @@ class HalfAdderExercise extends Exercise {
         if (!this.isGrading) {
             this.failedAttempts++;
         }
+        
+        // Hide the start grading section and show the grading section
+        const startGradingSection = document.getElementById('startGradingSection');
+        if (startGradingSection) {
+            startGradingSection.style.display = 'none';
+        }
+        
+        const gradingSection = document.getElementById('gradingSection');
+        if (gradingSection) {
+            gradingSection.style.display = 'block';
+        }
+        
         super.startGrading();
     }
 
@@ -290,6 +302,17 @@ class HalfAdderExercise extends Exercise {
     resetGrading() {
         super.resetGrading();
         this.hideHintButton();
+        
+        // Show the start grading section and hide the grading section
+        const startGradingSection = document.getElementById('startGradingSection');
+        if (startGradingSection) {
+            startGradingSection.style.display = 'block';
+        }
+        
+        const gradingSection = document.getElementById('gradingSection');
+        if (gradingSection) {
+            gradingSection.style.display = 'none';
+        }
     }
 
     /**
@@ -590,12 +613,42 @@ class HalfAdderExercise extends Exercise {
             return { passed: false, message: 'Could not find input labeled "B". Make sure you have an INPUT component labeled "B".' };
         }
 
-        // Allow some time for circuit to stabilize
-        // In a real implementation, we might need to wait or force an update
+        // Force immediate circuit update and wait for completion
+        window.circuitEditor.circuit.update();
         
-        // Get the output values
+        // Debug logging
+        console.log(`Testing half adder: ${testDescription}`);
+        console.log(`Set A=${inputA}, B=${inputB}`);
+        
+        // Debug: Check if components exist and their connections
+        const gates = window.circuitEditor.gates;
+        const inputAGate = gates.find(g => g.type === 'INPUT' && g.label.toUpperCase() === 'A');
+        const inputBGate = gates.find(g => g.type === 'INPUT' && g.label.toUpperCase() === 'B');
+        const outputS = gates.find(g => g.type === 'OUTPUT' && g.label.toUpperCase() === 'S');
+        const outputC = gates.find(g => g.type === 'OUTPUT' && g.label.toUpperCase() === 'C');
+        const xorGate = gates.find(g => g.type === 'XOR');
+        const andGate = gates.find(g => g.type === 'AND');
+        
+        console.log('Circuit components:');
+        console.log('- Input A:', inputAGate ? `found, state=${inputAGate.state}` : 'NOT FOUND');
+        console.log('- Input B:', inputBGate ? `found, state=${inputBGate.state}` : 'NOT FOUND');
+        console.log('- XOR gate:', xorGate ? 'found' : 'NOT FOUND');
+        console.log('- AND gate:', andGate ? 'found' : 'NOT FOUND');
+        console.log('- Output S:', outputS ? `found, connected=${outputS.inputNodes[0]?.connected}` : 'NOT FOUND');
+        console.log('- Output C:', outputC ? `found, connected=${outputC.inputNodes[0]?.connected}` : 'NOT FOUND');
+        
+        if (outputS && outputS.inputNodes[0]) {
+            console.log('- Output S input node sourceValue:', outputS.inputNodes[0].sourceValue);
+        }
+        if (outputC && outputC.inputNodes[0]) {
+            console.log('- Output C input node sourceValue:', outputC.inputNodes[0].sourceValue);
+        }
+        
+        // Get the output values after circuit update
         const actualS = window.circuitEditor.getOutputByLabel('S');
         const actualC = window.circuitEditor.getOutputByLabel('C');
+        
+        console.log(`Got outputs: S=${actualS}, C=${actualC}`);
 
         if (actualS === undefined) {
             return { passed: false, message: 'Could not read output "S". Make sure you have an OUTPUT component labeled "S" and it is connected to the XOR gate.' };

@@ -1479,11 +1479,22 @@ class CircuitEditor {
 
         // Get the input node value (outputs only have one input node)
         const inputNode = outputGate.inputNodes[0];
-        if (!inputNode || !inputNode.connected) {
+        if (!inputNode) {
             return undefined;
         }
 
-        return inputNode.sourceValue;
+        // Convert sourceValue to boolean - handle different value types
+        const sourceValue = inputNode.sourceValue;
+        if (sourceValue === undefined || sourceValue === null) {
+            // Only return undefined if there's no sourceValue AND not connected
+            if (!inputNode.connected) {
+                return undefined;
+            }
+        }
+        
+        // Return boolean value (true for 1/high, false for 0/low)
+        // Note: false is a valid output value, so convert explicitly
+        return Boolean(sourceValue);
     }
 
     toggleScreenReader() {

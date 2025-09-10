@@ -10,6 +10,9 @@ use \Tsugi\Core\Settings;
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
 
+// Allow the grading web services to work
+$_SESSION['GSRF'] = 10;
+
 // See if we have an assignment configured, if not check for a custom variable
 $assn = Settings::linkGetCustom('exercise');
 // Make sure it is a valid assignment
@@ -706,6 +709,9 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             <p id="assignmentInstructions">
                 <!-- Instructions will be loaded dynamically from the exercise class -->
             </p>
+            <div id="startGradingSection" style="margin-top: 20px; text-align: center;">
+                <button id="startGradeBtn" onclick="startGrading()" style="background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-size: 14px;">Start Grading</button>
+            </div>
             <div id="gradingSection" style="margin-top: 20px; display: none;">
                 <h3>Circuit Grading</h3>
                 <div id="stepDisplay"></div>
@@ -716,6 +722,9 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 
     <script src="exercises.js"></script>
     <script>
+        // Debug: Check if HalfAdderExercise is loaded
+        console.log('HalfAdderExercise class available:', typeof HalfAdderExercise);
+        
         // Assignment modal elements
         const assignmentModal = document.getElementById('assignmentModal');
         const assignmentModalHeader = document.getElementById('assignmentModalHeader');
@@ -743,10 +752,16 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     instructionsElement.innerHTML = currentExercise.instructions;
                 }
                 
-                // Show the grading section when we have an exercise
+                // Hide the grading section initially - it will be shown when grading starts
                 const gradingSection = document.getElementById('gradingSection');
                 if (gradingSection) {
-                    gradingSection.style.display = 'block';
+                    gradingSection.style.display = 'none';
+                }
+                
+                // Show the start grading section
+                const startGradingSection = document.getElementById('startGradingSection');
+                if (startGradingSection) {
+                    startGradingSection.style.display = 'block';
                 }
             } else {
                 // Show default message if no exercise is configured
@@ -845,11 +860,17 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOMContentLoaded - initializing exercise');
             console.log('Assignment value:', '<?php echo $assn; ?>');
+            console.log('HalfAdderExercise class available at init:', typeof HalfAdderExercise);
             
             // Create the appropriate exercise instance based on assignment
             if ( '<?php echo $assn; ?>' == 'HalfAdderExercise') {
                 console.log('Creating HalfAdderExercise');
-                currentExercise = new HalfAdderExercise();
+                try {
+                    currentExercise = new HalfAdderExercise();
+                    console.log('HalfAdderExercise created successfully');
+                } catch (error) {
+                    console.error('Error creating HalfAdderExercise:', error);
+                }
             } else {
                 console.log('No matching exercise found for assignment:', '<?php echo $assn; ?>');
             }
