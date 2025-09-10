@@ -1626,7 +1626,29 @@ class CircuitEditor {
             }
             
             const componentType = parts[1].toLowerCase();
-            const label = parts[2] || null;
+            let label = null;
+            let customPosition = null;
+            
+            // Parse command for label and optional coordinates
+            // Format: place <type> [label] [at (x,y)]
+            const commandStr = command.toLowerCase();
+            const atMatch = commandStr.match(/at\s*\((\d+)\s*,\s*(\d+)\)/);
+            
+            if (atMatch) {
+                // Extract coordinates
+                customPosition = {
+                    x: parseInt(atMatch[1]),
+                    y: parseInt(atMatch[2])
+                };
+                
+                // Extract label (everything between componentType and "at")
+                const beforeAt = commandStr.split(/\s+at\s*\(/)[0];
+                const labelParts = beforeAt.split(' ').slice(2); // Remove 'place' and componentType
+                label = labelParts.length > 0 ? labelParts.join(' ') : null;
+            } else {
+                // No coordinates, just get label
+                label = parts[2] || null;
+            }
             
             // Validate component type
             const validTypes = ['input', 'output', 'and', 'or', 'not', 'nand', 'nor', 'xor', 'full-adder', 'nixie', 'clock', 'sr-flip-flop', 'jk-flip-flop', '1-bit-latch', '3-bit-latch', '3-bit-adder'];
@@ -1664,8 +1686,8 @@ class CircuitEditor {
             
             const gateType = componentMap[componentType];
             
-            // Find a good placement position
-            const position = this.findPlacementPosition();
+            // Use custom position if provided, otherwise find a good placement position
+            const position = customPosition || this.findPlacementPosition();
             
             let newGate;
             if (gateType === 'CLOCK_PULSE') {
@@ -1761,6 +1783,49 @@ class CircuitEditor {
             this.scheduleCircuitUpdate();
             
             return `Deleted ${componentType} "${label}"`;
+        } else if (parts[0] === 'move') {
+            // Parse: move [component-label] to (x,y)
+            if (parts.length < 2) {
+                return 'Error: Please specify a component label. Example: move gate1 to (100, 200)';
+            }
+            
+            const componentLabel = parts[1];
+            
+            // Parse coordinates from "to (x,y)" format
+            const commandStr = command.toLowerCase();
+            const coordsMatch = commandStr.match(/to\s*\((\d+)\s*,\s*(\d+)\)/);
+            
+            if (!coordsMatch) {
+                return 'Error: Invalid coordinates format. Use: move [label] to (x,y)';
+            }
+            
+            const newX = parseInt(coordsMatch[1]);
+            const newY = parseInt(coordsMatch[2]);
+            
+            // Find the component with the matching label
+            const targetGate = this.gates.find(gate => 
+                gate.label.toLowerCase() === componentLabel.toLowerCase()
+            );
+            
+            if (!targetGate) {
+                return `Error: Component with label "${componentLabel}" not found.`;
+            }
+            
+            // Store old position for the return message
+            const oldX = Math.round(targetGate.x);
+            const oldY = Math.round(targetGate.y);
+            
+            // Move the component to new position
+            targetGate.x = newX;
+            targetGate.y = newY;
+            
+            // Update the component's nodes to match the new position
+            targetGate.initializeNodes();
+            
+            // Schedule a circuit update to redraw and recalculate connections
+            this.scheduleCircuitUpdate();
+            
+            return `Moved "${componentLabel}" from (${oldX}, ${oldY}) to (${newX}, ${newY})`;
         } else if (parts[0] === 'connect') {
             // Parse: connect [from-component] [from-connector] to [to-component] [to-connector]
             if (parts.length < 5) {
@@ -1848,7 +1913,8 @@ class CircuitEditor {
             return 'Circuit cleared';
         } else if (parts[0] === 'help') {
             return `Available commands:
-- place [component-type] [optional-label] - Place a component
+- place [component-type] [optional-label] [at (x,y)] - Place a component
+- move [component-label] to (x,y) - Move a component to new coordinates
 - delete [component-type] [label] - Delete a component
 - connect [from] [from-connector] to [to] [to-connector] - Connect components
 - read - Read circuit status

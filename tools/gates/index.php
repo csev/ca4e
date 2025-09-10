@@ -733,6 +733,9 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 currentExercise.resetGrading();
             }
             
+            // Always reset to initial dialog state
+            resetModalToInitialState();
+            
             // Load instructions from the current exercise
             if (currentExercise && currentExercise.instructions) {
                 const instructionsElement = document.getElementById('assignmentInstructions');
@@ -922,6 +925,41 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             assignmentModalHeader.addEventListener('touchstart', onPointerDown, { passive: false });
         })();
 
+        // Reset assignment modal to initial state
+        function resetModalToInitialState() {
+            // Hide any hint modal that might be open
+            const hintModal = document.getElementById('hintModal');
+            if (hintModal) {
+                hintModal.classList.add('hidden');
+            }
+            
+            // Hide hint button if it exists
+            const hintBtn = document.getElementById('hintBtn');
+            if (hintBtn) {
+                hintBtn.style.display = 'none';
+            }
+            
+            // Clear step display
+            const stepDisplay = document.getElementById('stepDisplay');
+            if (stepDisplay) {
+                stepDisplay.innerHTML = '';
+            }
+            
+            // Reset grade button to initial state
+            const gradeBtn = document.getElementById('gradeBtn');
+            if (gradeBtn) {
+                gradeBtn.textContent = 'Start Grading';
+                gradeBtn.onclick = () => startGrading();
+                gradeBtn.style.backgroundColor = '#28a745'; // Green
+            }
+            
+            // Show instructions section
+            const instructionsElement = document.getElementById('assignmentInstructions');
+            if (instructionsElement) {
+                instructionsElement.style.display = 'block';
+            }
+        }
+
         // Easter egg: Ctrl + * to draw a half adder circuit
         function drawHalfAdder() {
             // Clear the circuit first
@@ -930,14 +968,14 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 window.circuitEditor.wires = [];
                 window.circuitEditor.render();
                 
-                // Execute the commands to build a half adder circuit
+                // Execute the commands to build a half adder circuit with compact layout
                 const commands = [
-                    'place input A',
-                    'place input B', 
-                    'place xor SUM_GATE',
-                    'place and CARRY_GATE',
-                    'place output S',
-                    'place output C'
+                    'place input A at (100, 100)',
+                    'place input B at (100, 200)', 
+                    'place xor SUM_GATE at (200, 100)',
+                    'place and CARRY_GATE at (200, 200)',
+                    'place output S at (300, 100)',
+                    'place output C at (300, 200)'
                 ];
                 
                 // Execute each command with a small delay to see the construction
