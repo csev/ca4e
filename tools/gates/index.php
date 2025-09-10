@@ -14,6 +14,7 @@ $LTI = LTIX::session_start();
 $assn = Settings::linkGetCustom('exercise');
 // Make sure it is a valid assignment
 if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
+
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -843,10 +844,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             console.log('Assignment value:', '<?php echo $assn; ?>');
             
             // Create the appropriate exercise instance based on assignment
-            if ( '<?php echo $assn; ?>' == 'PrintOut42Exercise') {
-                console.log('Creating PrintOut42Exercise');
-                currentExercise = new PrintOut42Exercise();
-            } else if ( '<?php echo $assn; ?>' == 'HalfAdderExercise') {
+            if ( '<?php echo $assn; ?>' == 'HalfAdderExercise') {
                 console.log('Creating HalfAdderExercise');
                 currentExercise = new HalfAdderExercise();
             } else {
@@ -923,6 +921,84 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             assignmentModalHeader.addEventListener('mousedown', onPointerDown);
             assignmentModalHeader.addEventListener('touchstart', onPointerDown, { passive: false });
         })();
+
+        // Easter egg: Ctrl + * to draw a half adder circuit
+        function drawHalfAdder() {
+            // Clear the circuit first
+            if (window.circuitEditor) {
+                window.circuitEditor.gates = [];
+                window.circuitEditor.wires = [];
+                window.circuitEditor.render();
+                
+                // Execute the commands to build a half adder circuit
+                const commands = [
+                    'place input A',
+                    'place input B', 
+                    'place xor SUM_GATE',
+                    'place and CARRY_GATE',
+                    'place output S',
+                    'place output C'
+                ];
+                
+                // Execute each command with a small delay to see the construction
+                commands.forEach((cmd, index) => {
+                    setTimeout(() => {
+                        const result = window.circuitEditor.executeCommand(cmd);
+                        console.log(`Easter egg command: ${cmd} -> ${result}`);
+                        
+                        // After placing all components, connect them
+                        if (index === commands.length - 1) {
+                            setTimeout(() => {
+                                // Connect the circuits to form the half adder
+                                const connections = [
+                                    'connect A output to SUM_GATE input-1',
+                                    'connect B output to SUM_GATE input-2',
+                                    'connect A output to CARRY_GATE input-1', 
+                                    'connect B output to CARRY_GATE input-2',
+                                    'connect SUM_GATE output to S input',
+                                    'connect CARRY_GATE output to C input'
+                                ];
+                                
+                                connections.forEach((conn, connIndex) => {
+                                    setTimeout(() => {
+                                        const result = window.circuitEditor.executeCommand(conn);
+                                        console.log(`Easter egg connection: ${conn} -> ${result}`);
+                                    }, connIndex * 200);
+                                });
+                            }, 500);
+                        }
+                    }, index * 300);
+                });
+                
+                // Show a message
+                setTimeout(() => {
+                    const status = document.getElementById('status');
+                    if (status) {
+                        status.textContent = '🎉 Easter egg: Half adder circuit created! (Ctrl + *)';
+                    }
+                }, (commands.length * 300) + 2000);
+            }
+        }
+        
+        function unlockHalfAdder() {
+            // Only allow for instructors (and students for this educational tool)
+            <?php if ($USER) : ?>
+                console.log('🎯 Half adder Easter egg triggered! Drawing circuit...');
+                drawHalfAdder();
+            <?php else : ?>
+                console.log('❌ Half adder Easter egg attempted by anonymous user');
+            <?php endif; ?>
+        }
+        
+        // Easter egg event listener
+        document.addEventListener('keydown', (e) => {
+            // Test for Ctrl + * (half adder reference!)
+            if (e.ctrlKey && e.key === '*') {
+                console.log('🎯 Easter egg triggered! Ctrl + * detected! (Half adder reference!)');
+                unlockHalfAdder();
+                e.preventDefault(); // Prevent any default browser behavior
+            }
+        });
     </script>
 <?php endif; ?>
 
