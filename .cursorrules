@@ -178,6 +178,434 @@ fetch('<?php echo addSession('grade-submit.php'); ?>', {
 - Grade passback failures
 - Configuration path issues
 
+## Autograder Implementation Patterns
+
+### Overview
+CA4E tools use a standardized autograder system that provides step-by-step grading with interactive UI components. The system consists of Exercise classes, assignment configuration, and modal-based grading interfaces.
+
+### 1. Assignment Configuration
+
+#### assignments.php
+Each tool needs an `assignments.php` file to define available exercises:
+```php
+<?php
+$assignments = array(
+    'HelloWorldExercise' => 'Hello, World!',
+    'SimplePrint42Exercise' => 'Simple Print 42 (MISTIC)',
+    'PrintOut42Exercise' => 'Print out 42',
+);
+```
+
+#### LTI Custom Variable Setup
+Assignments are configured via LTI custom variable `exercise`:
+```php
+// In tool's index.php
+$assn = Settings::linkGetCustom('exercise');
+// Make sure it is a valid assignment
+if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
+```
+
+### 2. Assignment Button Visibility
+
+#### Standard Pattern
+```php
+<?php if ($USER && $assn) : ?>
+    <button id="assignmentBtn" class="assignment-btn">Assignment</button>
+<?php endif; ?>
+```
+
+#### With Instructor Testing Support
+```php
+<?php if ($USER && ($assn || ($USER && $USER->instructor))) : ?>
+    <button id="assignmentBtn" class="assignment-btn">Assignment</button>
+<?php endif; ?>
+```
+
+### 3. Assignment Modal Structure
+
+#### HTML Modal Template
+```html
+<?php if ($USER && ($assn || ($USER && $USER->instructor))) : ?>
+<!-- Assignment Modal -->
+<div id="assignmentModal" class="assignment-modal hidden">
+    <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
+        <span>📋 Assignment</span>
+        <button class="close-btn" onclick="closeAssignmentModal()" title="Close">×</button>
+    </div>
+    <div class="modal-content">
+        <p id="assignmentInstructions">
+            <!-- Instructions will be loaded dynamically from the exercise class -->
+        </p>
+        <div id="gradingSection" style="margin-top: 20px; display: none;">
+            <h3>Program Grading</h3> <!-- Or "WASM Grading", "Circuit Grading", etc. -->
+            <div id="stepDisplay"></div>
+            <button id="gradeBtn" onclick="startGrading()">Start Grading</button>
+        </div>
+        <div id="startGradingSection" style="margin-top: 20px;">
+            <button id="startGradeBtn" onclick="startGrading()">Start Grading</button>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+```
+
+#### Modal CSS (Essential Classes)
+```css
+.assignment-modal {
+    position: fixed;
+    background: white;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    z-index: 1000;
+    width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.assignment-modal.hidden {
+    display: none;
+}
+
+.modal-header {
+    background: #007bff;
+    color: white;
+    padding: 12px 16px;
+    cursor: grab;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.spinner-gear {
+    display: inline-block;
+    animation: spin 2s linear infinite;
+    font-size: 20px;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+```
+
+### 4. Exercise Base Class Structure
+
+#### exercises.js Base Class Template
+```javascript
+class Exercise {
+    constructor(name, description, steps, instructions = '') {
+        this.name = name;
+        this.description = description;
+        this.steps = steps.map(step => ({ ...step, status: "pending" }));
+        this.instructions = instructions;
+        this.currentStep = 0;
+        this.isGrading = false;
+    }
+
+    startGrading() {
+        this.currentStep = 0;
+        this.isGrading = true;
+        this.hideInstructions();
+        this.showGradingSection();
+        this.hideStartGradingButton();
+        this.updateGradeButton();
+        this.nextStep();
+    }
+
+    resetGrading() {
+        this.currentStep = 0;
+        this.isGrading = false;
+        this.steps.forEach(step => { step.status = "pending"; });
+        this.showInstructions();
+        this.hideGradingSection();
+        this.showStartGradingButton();
+        this.clearStepDisplay();
+    }
+
+    // UI Management Methods
+    showGradingSection() {
+        const section = document.getElementById('gradingSection');
+        if (section) section.style.display = 'block';
+    }
+
+    hideGradingSection() {
+        const section = document.getElementById('gradingSection');
+        if (section) section.style.display = 'none';
+    }
+
+    showStartGradingButton() {
+        const section = document.getElementById('startGradingSection');
+        if (section) section.style.display = 'block';
+    }
+
+    hideStartGradingButton() {
+        const section = document.getElementById('startGradingSection');
+        if (section) section.style.display = 'none';
+    }
+
+    showNextButton() {
+        const button = document.getElementById('gradeBtn');
+        if (button) {
+            button.textContent = 'Next';
+            button.onclick = () => this.continueGrading();
+        }
+    }
+
+    showExecutingIndicator() {
+        const display = document.getElementById('stepDisplay');
+        if (display) {
+            display.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px; padding: 15px;">
+                    <div class="spinner-gear">⚙️</div>
+                    <span>Executing program...</span>
+                </div>
+            `;
+        }
+    }
+
+    // Override submitGradeToLMS method (will be replaced by global function)
+    submitGradeToLMS(grade) {
+        console.log(`Grade ${grade} would be submitted to LMS`);
+    }
+}
+```
+
+### 5. Specific Exercise Implementation
+
+#### Example Exercise Class
+```javascript
+class HelloWorldExercise extends Exercise {
+    constructor() {
+        const steps = [
+            { name: "Compilation Check", description: "Check if code compiles without errors" },
+            { name: "Execution Check", description: "Check if program runs successfully" },
+            { name: "Output Verification", description: "Check if program outputs expected result" }
+        ];
+
+        const instructions = `
+            <h3>Hello, World!</h3>
+            <p>Write a program that outputs "Hello, World!".</p>
+        `;
+
+        super("Hello World", "Output 'Hello, World!'", steps, instructions);
+    }
+
+    checkStep(stepIndex) {
+        switch (stepIndex) {
+            case 0: return this.checkCompilation();
+            case 1: return this.checkExecution();
+            case 2: return this.checkOutput();
+            default: return { passed: false, message: "Unknown step" };
+        }
+    }
+
+    checkOutput() {
+        const output = document.getElementById('output');
+        if (!output) {
+            return { passed: false, message: "Cannot find output display." };
+        }
+
+        const outputText = output.textContent || output.innerText;
+        if (outputText.includes('Hello, World!')) {
+            return { passed: true, message: "✅ Program correctly outputs 'Hello, World!'!" };
+        } else {
+            return { passed: false, message: `Expected 'Hello, World!', but got: ${outputText}` };
+        }
+    }
+}
+```
+
+### 6. Modal Event Handlers
+
+#### JavaScript Modal Management
+```javascript
+// Assignment modal functions
+function showAssignmentModal() {
+    // Reset the grading state to ensure fresh start
+    if (currentExercise) {
+        currentExercise.resetGrading();
+    }
+    
+    // Load instructions from the current exercise
+    if (currentExercise && currentExercise.instructions) {
+        const instructionsElement = document.getElementById('assignmentInstructions');
+        if (instructionsElement) {
+            let instructions = currentExercise.instructions;
+            
+            // Add testing note for instructors when no assignment is configured
+            if (!assn && isInstructor) {
+                instructions = '<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 4px; margin-bottom: 15px;"><strong>🧪 Instructor Testing Mode</strong><br>No assignment is currently configured. This is the default exercise for testing the grading system.</div>' + instructions;
+            }
+            
+            instructionsElement.innerHTML = instructions;
+        }
+    }
+    
+    assignmentModal.classList.remove('hidden');
+    centerAssignmentModal();
+}
+
+function closeAssignmentModal() {
+    // Reset the grading state when closing
+    if (currentExercise) {
+        currentExercise.resetGrading();
+    }
+    
+    // Hide the modal
+    assignmentModal.classList.add('hidden');
+}
+```
+
+### 7. Exercise Initialization
+
+#### Assignment-Based Exercise Creation
+```javascript
+document.addEventListener('DOMContentLoaded', function() {
+    // Create the appropriate exercise instance based on assignment
+    if ( 'HelloWorldExercise' == assignmentType) {
+        currentExercise = new HelloWorldExercise();
+    } else if ( 'SimplePrint42Exercise' == assignmentType) {
+        currentExercise = new SimplePrint42Exercise();
+    } else if ( '' == assignmentType && isInstructor) {
+        // Default assignment for instructor testing
+        currentExercise = new HelloWorldExercise();
+    }
+    
+    // Override the exercise's submitGradeToLMS method to use the global function
+    if (currentExercise) {
+        currentExercise.submitGradeToLMS = submitGradeToLMS;
+    }
+});
+```
+
+### 8. Grade Submission Integration
+
+#### Global Grade Submission Function
+```javascript
+function submitGradeToLMS(grade) {
+    const formData = new FormData();
+    formData.append('grade', grade);
+    formData.append('code', 'EXERCISE_COMPLETED');
+    
+    fetch(gradeSubmitUrl, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('🎉 Excellent work! Your assignment has been completed successfully and your grade has been submitted to the LMS.');
+        } else {
+            alert(`⚠️ Grade submission failed: ${data.detail}`);
+        }
+    })
+    .catch(error => {
+        alert(`⚠️ Grade submission error: ${error.message}`);
+    });
+}
+```
+
+### 9. Interactive Grading Flow
+
+#### Multi-Step Grading with Next Buttons
+For tools that need interactive step-by-step grading:
+```javascript
+// In Exercise base class
+executeStep(stepIndex) {
+    const step = this.steps[stepIndex];
+    const result = this.checkStep(stepIndex);
+    
+    step.status = result.passed ? "passed" : "failed";
+    this.displayStepResult(stepIndex, result);
+    
+    if (!result.passed) {
+        this.isGrading = false;
+        this.showRetryButton();
+    } else if (stepIndex < this.steps.length - 1) {
+        // Show Next button for intermediate steps
+        this.showNextButton();
+    }
+}
+
+// In specific exercise classes
+continueGrading() {
+    // Special handling for specific steps (e.g., auto-run code)
+    if (this.currentStep === 1) {
+        // Trigger execution automatically
+        const runButton = document.getElementById('runButton');
+        if (runButton) {
+            runButton.click();
+            setTimeout(() => {
+                super.continueGrading();
+            }, 1000);
+        } else {
+            super.continueGrading();
+        }
+    } else {
+        super.continueGrading();
+    }
+}
+```
+
+### 10. Common Patterns by Tool Type
+
+#### Code-Based Tools (WASM, CDC8512)
+- Check compilation/assembly
+- Check execution
+- Check output content
+
+#### Circuit/Logic Tools
+- Check component placement
+- Check connections
+- Check simulation results
+
+#### Calculator Tools
+- Check input handling
+- Check calculation accuracy
+- Check display formatting
+
+### 11. Instructor Features
+
+#### Default Testing Assignments
+```javascript
+// Allow instructors to test without configured assignment
+if ( '' == assignmentType && isInstructor) {
+    currentExercise = new DefaultTestExercise();
+}
+```
+
+#### Testing Mode Indicators
+```html
+<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
+    <strong>🧪 Instructor Testing Mode</strong><br>
+    No assignment is currently configured. This is the default exercise for testing the grading system.
+</div>
+```
+
+### 12. Error Handling Patterns
+
+#### Common Error Checks
+```javascript
+// Check for required DOM elements
+const output = document.getElementById('output');
+if (!output) {
+    return { passed: false, message: "Cannot find output display." };
+}
+
+// Check for placeholder content
+const outputText = output.textContent || output.innerText;
+if (outputText.includes('Output will appear here') || outputText.trim() === '') {
+    return { passed: false, message: "No output detected. Please run your program first." };
+}
+
+// Check for error states
+const errorOutput = document.getElementById('errorOutput');
+if (errorOutput && !errorOutput.classList.contains('hidden') && errorOutput.textContent.trim()) {
+    return { passed: false, message: `Error detected: ${errorOutput.textContent}` };
+}
+```
+
 ## Resources
 - Tsugi Documentation: `tsugi/vendor/tsugi/lib/docs/`
 - LTI Specification: IMS Global Learning Consortium
