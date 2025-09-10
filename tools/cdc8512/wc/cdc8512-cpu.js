@@ -70,8 +70,47 @@ export class CDC8512CPU extends LitElement {
 
   changeInstruction(index) {
     return (e) => {
-      console.log("changeInstruction", index, e.target.value);
-      this.instructions[index] = e.target.value;
+      let value = e.target.value;
+      console.log("changeInstruction", index, value);
+      
+      let updated = false;
+      
+      // Handle binary input (0b format or pure binary)
+      if (value.startsWith('0b')) {
+        const binaryValue = value.substring(2);
+        const numValue = parseInt(binaryValue, 2);
+        if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
+          this.instructions[index] = numValue;
+          updated = true;
+        }
+      } else if (/^[01]+$/.test(value)) {
+        // Pure binary string (only 0s and 1s)
+        const numValue = parseInt(value, 2);
+        if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
+          this.instructions[index] = numValue;
+          updated = true;
+        }
+      } else if (value.startsWith('0x')) {
+        // Handle hex input
+        const hexValue = value.substring(2);
+        const numValue = parseInt(hexValue, 16);
+        if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
+          this.instructions[index] = numValue;
+          updated = true;
+        }
+      } else {
+        // Handle decimal input
+        const numValue = parseInt(value, 10);
+        if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
+          this.instructions[index] = numValue;
+          updated = true;
+        }
+      }
+      
+      // Trigger re-render to update tooltips and displays
+      if (updated) {
+        this.requestUpdate();
+      }
     }
   }
 

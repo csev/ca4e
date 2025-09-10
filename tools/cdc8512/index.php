@@ -10,6 +10,8 @@ use \Tsugi\Core\Settings;
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
 
+$_SESSION['GSRF'] = 10;
+
 // See if we have an assignment configured, if not check for a custom variable
 $assn = Settings::linkGetCustom('exercise');
 // Make sure it is a valid assignment
@@ -245,6 +247,17 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             font-weight: bold;
         }
         
+        .spinner-gear {
+            display: inline-block;
+            animation: spin 2s linear infinite;
+            font-size: 20px;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
         .running {
             background-color: #dc3545 !important;
         }
@@ -362,7 +375,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     <button id="reset">Reset</button>
                     <button id="step">Step</button>
                     <button id="start">Start</button>
-<?php if ($USER) : ?>
+<?php if ($USER && ($assn || ($USER && $USER->instructor))) : ?>
                     <button id="assignmentBtn" class="assignment-btn">Assignment</button>
 <?php endif; ?>
 <?php if ($USER && $USER->instructor) : ?>
@@ -723,7 +736,7 @@ HALT`;
         });
     </script>
 
-<?php if ($USER) : ?>
+<?php if ($USER && ($assn || ($USER && $USER->instructor))) : ?>
     <!-- Assignment Modal -->
     <div id="assignmentModal" class="assignment-modal hidden">
         <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
@@ -734,8 +747,7 @@ HALT`;
             <p id="assignmentInstructions">
                 <!-- Instructions will be loaded dynamically from the exercise class -->
             </p>
-            <div id="gradingSection" style="margin-top: 20px; display: none;">
-                <h3>Program Grading</h3>
+            <div id="gradingSection" style="margin-top: 20px;">
                 <div id="stepDisplay"></div>
                 <button id="gradeBtn" onclick="startGrading()">Start Grading</button>
             </div>
@@ -752,11 +764,23 @@ HALT`;
 
         // Assignment modal functions
         function showAssignmentModal() {
+            // Reset the grading state to ensure fresh start
+            if (currentExercise) {
+                currentExercise.resetGrading();
+            }
+            
             // Load instructions from the current exercise
             if (currentExercise && currentExercise.instructions) {
                 const instructionsElement = document.getElementById('assignmentInstructions');
                 if (instructionsElement) {
-                    instructionsElement.innerHTML = currentExercise.instructions;
+                    let instructions = currentExercise.instructions;
+                    
+                    // Add testing note for instructors when no assignment is configured
+                    <?php if (!$assn && $USER && $USER->instructor) : ?>
+                    instructions = '<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 4px; margin-bottom: 15px;"><strong>🧪 Instructor Testing Mode</strong><br>No assignment is currently configured. This is the default SimplePrint42Exercise for testing the grading system.</div>' + instructions;
+                    <?php endif; ?>
+                    
+                    instructionsElement.innerHTML = instructions;
                 }
             }
             
@@ -765,7 +789,12 @@ HALT`;
         }
 
         function closeAssignmentModal() {
-            // Simply hide the modal - don't reset immediately to avoid conflicts
+            // Reset the grading state when closing
+            if (currentExercise) {
+                currentExercise.resetGrading();
+            }
+            
+            // Hide the modal
             assignmentModal.classList.add('hidden');
         }
 
@@ -829,6 +858,11 @@ HALT`;
             // Create the appropriate exercise instance based on assignment
             if ( '<?php echo $assn; ?>' == 'PrintOut42Exercise') {
                 currentExercise = new PrintOut42Exercise();
+            } else if ( '<?php echo $assn; ?>' == 'SimplePrint42Exercise') {
+                currentExercise = new SimplePrint42Exercise();
+            } else if ( '<?php echo $assn; ?>' == '' && <?php echo $USER && $USER->instructor ? 'true' : 'false'; ?>) {
+                // Default assignment for instructor testing
+                currentExercise = new SimplePrint42Exercise();
             }
             
             // Override the exercise's submitGradeToLMS method to use the global function
