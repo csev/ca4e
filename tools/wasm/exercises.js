@@ -30,8 +30,9 @@ class Exercise {
     startGrading() {
         this.currentStep = 0;
         this.isGrading = true;
-        this.showGradingSection();
         this.hideInstructions();
+        this.showGradingSection();
+        this.hideStartGradingButton();
         this.updateGradeButton();
         this.nextStep();
     }
@@ -45,15 +46,28 @@ class Exercise {
         this.steps.forEach(step => {
             step.status = "pending";
         });
-        this.hideGradingSection();
         this.showInstructions();
-        this.resetGradeButton();
+        this.hideGradingSection();
+        this.showStartGradingButton();
+        this.clearStepDisplay();
     }
 
     /**
      * Move to the next step in the grading process
      */
     nextStep() {
+        if (this.currentStep < this.steps.length) {
+            this.executeStep(this.currentStep);
+            this.currentStep++;
+        }
+        
+        if (this.currentStep >= this.steps.length) {
+            this.completeGrading();
+        }
+    }
+    
+    continueGrading() {
+        // Continue to next step (called by Next button)
         if (this.currentStep < this.steps.length) {
             this.executeStep(this.currentStep);
             this.currentStep++;
@@ -77,6 +91,9 @@ class Exercise {
         if (!result.passed) {
             this.isGrading = false;
             this.showRetryButton();
+        } else if (stepIndex < this.steps.length - 1) {
+            // Show Next button for intermediate steps
+            this.showNextButton();
         }
     }
 
@@ -149,6 +166,31 @@ class Exercise {
             button.onclick = () => this.startGrading();
         }
     }
+    
+    showNextButton() {
+        const button = document.getElementById('gradeBtn');
+        if (button) {
+            button.textContent = 'Next';
+            button.onclick = () => this.continueGrading();
+        }
+    }
+
+    hideStartGradingButton() {
+        const section = document.getElementById('startGradingSection');
+        if (section) section.style.display = 'none';
+    }
+
+    showStartGradingButton() {
+        const section = document.getElementById('startGradingSection');
+        if (section) section.style.display = 'block';
+    }
+
+    clearStepDisplay() {
+        const display = document.getElementById('stepDisplay');
+        if (display) {
+            display.innerHTML = '';
+        }
+    }
 
     displayStepResult(stepIndex, result) {
         const display = document.getElementById('stepDisplay');
@@ -168,6 +210,130 @@ class Exercise {
                 <h4>🎉 Exercise Complete!</h4>
                 <p class="success">All steps passed successfully. Submitting grade...</p>
             `;
+        }
+    }
+}
+
+/**
+ * Hello World Exercise
+ * 
+ * Students need to write a WebAssembly program that outputs "Hello, World!"
+ */
+class HelloWorldExercise extends Exercise {
+    constructor() {
+        const steps = [
+            { name: "WAT Compilation", description: "Check if WAT code compiles to WASM without errors" },
+            { name: "WASM Execution", description: "Check if WASM module runs successfully" },
+            { name: "Output Verification", description: "Check if program outputs 'Hello, World!'" }
+        ];
+
+        const instructions = `
+            <h3>Hello, World!</h3>
+            <p>Write a WebAssembly Text (WAT) program that outputs "Hello, World!".</p>
+            <!--
+            <h4>Requirements:</h4>
+            <ul>
+                <li>Your WAT code must compile to WASM without errors</li>
+                <li>Your WASM module must execute successfully</li>
+                <li>Your program must output "Hello, World!"</li>
+            </ul>
+            <h4>Instructions:</h4>
+            <ul>
+                <li>You can load the sample Hello World program using the "Load Sample" button</li>
+                <li>Click "Compile & Run WAT" to execute your program</li>
+                <li>When ready, click "Start Grading" to test your program</li>
+            </ul>
+            <h4>Expected Output:</h4>
+            <pre>Output
+
+Hello, World!</pre>
+            -->
+        `;
+
+        super("Hello World", "Output 'Hello, World!' using WebAssembly", steps, instructions);
+    }
+
+    continueGrading() {
+        // Special handling for step 1 (execution) - automatically run the WASM
+        if (this.currentStep === 1) {
+            // Trigger the "Compile & Run WAT" button
+            const runButton = document.getElementById('runWasm');
+            if (runButton) {
+                runButton.click();
+                // Wait a moment for execution to complete, then continue
+                setTimeout(() => {
+                    super.continueGrading();
+                }, 1000);
+            } else {
+                super.continueGrading();
+            }
+        } else {
+            super.continueGrading();
+        }
+    }
+
+    checkStep(stepIndex) {
+        switch (stepIndex) {
+            case 0: // WAT Compilation
+                return this.checkCompilation();
+            case 1: // WASM Execution
+                return this.checkExecution();
+            case 2: // Output Verification
+                return this.checkOutput();
+            default:
+                return { passed: false, message: "Unknown step" };
+        }
+    }
+
+    checkCompilation() {
+        // Check for errors in the error output
+        const errorOutput = document.getElementById('errorOutput');
+        if (errorOutput && !errorOutput.classList.contains('hidden') && errorOutput.textContent.trim()) {
+            return { passed: false, message: `Compilation failed: ${errorOutput.textContent}` };
+        }
+
+        // Check if there's any output (indicating compilation occurred)
+        const output = document.getElementById('output');
+        if (!output) {
+            return { passed: false, message: "Cannot find output display." };
+        }
+
+        const outputText = output.textContent || output.innerText;
+        if (outputText.includes('Output will appear here') || outputText.trim() === '') {
+            return { passed: false, message: "No compilation detected. Click 'Compile & Run WAT' to compile your program." };
+        }
+
+        return { passed: true, message: "✅ WAT code compiled successfully." };
+    }
+
+    checkExecution() {
+        // Check if WASM module executed successfully
+        const output = document.getElementById('output');
+        if (!output) {
+            return { passed: false, message: "Cannot find output display." };
+        }
+
+        // Check if there's any output (indicating execution occurred)
+        const outputText = output.textContent || output.innerText;
+        if (outputText.includes('Output will appear here') || outputText.trim() === '') {
+            return { passed: false, message: "No output detected. Click 'Compile & Run WAT' to execute your program." };
+        }
+
+        return { passed: true, message: "✅ WASM module executed successfully." };
+    }
+
+    checkOutput() {
+        // Check if program outputs "Hello, World!"
+        const output = document.getElementById('output');
+        if (!output) {
+            return { passed: false, message: "Cannot find output display." };
+        }
+
+        const outputText = output.textContent || output.innerText;
+        if (outputText.includes('Hello, World!')) {
+            return { passed: true, message: "✅ Program correctly outputs 'Hello, World!'!" };
+        } else {
+            return { passed: false, message: `Expected output 'Hello, World!', but got: ${outputText}` };
         }
     }
 }

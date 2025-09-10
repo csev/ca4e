@@ -60,6 +60,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 <div id="output" class="output-area">
                     <p class="placeholder">Output will appear here when you run your WASM code...</p>
                 </div>
+                <div id="wasmOutput" class="wasm-output-area hidden">
+                    <h3>Console Output:</h3>
+                    <pre id="consoleOutput"></pre>
+                    <h3>Function Result:</h3>
+                    <pre id="functionResult"></pre>
+                </div>
                 <div id="errorOutput" class="error-area hidden"></div>
             </div>
         </main>
@@ -100,6 +106,9 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 <div id="stepDisplay"></div>
                 <button id="gradeBtn" onclick="startGrading()">Start Grading</button>
             </div>
+            <div id="startGradingSection" style="margin-top: 20px;">
+                <button id="startGradeBtn" onclick="startGrading()">Start Grading</button>
+            </div>
         </div>
     </div>
 <?php endif; ?>
@@ -125,6 +134,11 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             console.log('showAssignmentModal called');
             console.log('currentExercise:', currentExercise);
             console.log('assignmentModal:', assignmentModal);
+            
+            // Reset the grading state to ensure fresh start
+            if (currentExercise) {
+                currentExercise.resetGrading();
+            }
             
             // Load instructions from the current exercise
             if (currentExercise && currentExercise.instructions) {
@@ -153,7 +167,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         }
 
         function closeAssignmentModal() {
-            // Simply hide the modal - don't reset immediately to avoid conflicts
+            // Reset the grading state when closing
+            if (currentExercise) {
+                currentExercise.resetGrading();
+            }
+            
+            // Hide the modal
             assignmentModal.classList.add('hidden');
         }
 
@@ -220,7 +239,10 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             console.log('Assignment value:', '<?php echo $assn; ?>');
             
             // Create the appropriate exercise instance based on assignment
-            if ( '<?php echo $assn; ?>' == 'PrintOut42Exercise') {
+            if ( '<?php echo $assn; ?>' == 'HelloWorldExercise') {
+                console.log('Creating HelloWorldExercise');
+                currentExercise = new HelloWorldExercise();
+            } else if ( '<?php echo $assn; ?>' == 'PrintOut42Exercise') {
                 console.log('Creating PrintOut42Exercise');
                 currentExercise = new PrintOut42Exercise();
             } else {
