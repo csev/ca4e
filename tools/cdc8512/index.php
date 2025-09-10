@@ -624,7 +624,13 @@ HALT`;
                         startButton.classList.remove('running');
                         updateStatus();
                     } else {
-                        // Currently stopped, so start
+                        // Currently stopped, check if halted and reset PC to 0 (restart)
+                        if (status.halted) {
+                            emulator.cpu.pc = 0;
+                            console.log('CPU was halted, resetting PC to 0 for restart');
+                        }
+                        
+                        // Start execution
                         emulator.start();
                         startButton.textContent = 'Stop';
                         startButton.classList.add('running');
