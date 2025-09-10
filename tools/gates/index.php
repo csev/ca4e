@@ -727,11 +727,22 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             console.log('currentExercise:', currentExercise);
             console.log('assignmentModal:', assignmentModal);
             
+            // Reset the grading state to ensure fresh start
+            if (currentExercise) {
+                currentExercise.resetGrading();
+            }
+            
             // Load instructions from the current exercise
             if (currentExercise && currentExercise.instructions) {
                 const instructionsElement = document.getElementById('assignmentInstructions');
                 if (instructionsElement) {
                     instructionsElement.innerHTML = currentExercise.instructions;
+                }
+                
+                // Show the grading section when we have an exercise
+                const gradingSection = document.getElementById('gradingSection');
+                if (gradingSection) {
+                    gradingSection.style.display = 'block';
                 }
             } else {
                 // Show default message if no exercise is configured
@@ -742,6 +753,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         <p>The instructor has not yet configured an assignment for this tool.</p>
                         <p>Please contact your instructor or try again later.</p>
                     `;
+                }
+                
+                // Hide the grading section when no exercise is configured
+                const gradingSection = document.getElementById('gradingSection');
+                if (gradingSection) {
+                    gradingSection.style.display = 'none';
                 }
             }
             
@@ -754,7 +771,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         }
 
         function closeAssignmentModal() {
-            // Simply hide the modal - don't reset immediately to avoid conflicts
+            // Reset the grading state when closing
+            if (currentExercise) {
+                currentExercise.resetGrading();
+            }
+            
+            // Hide the modal
             assignmentModal.classList.add('hidden');
         }
 
@@ -824,6 +846,9 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             if ( '<?php echo $assn; ?>' == 'PrintOut42Exercise') {
                 console.log('Creating PrintOut42Exercise');
                 currentExercise = new PrintOut42Exercise();
+            } else if ( '<?php echo $assn; ?>' == 'HalfAdderExercise') {
+                console.log('Creating HalfAdderExercise');
+                currentExercise = new HalfAdderExercise();
             } else {
                 console.log('No matching exercise found for assignment:', '<?php echo $assn; ?>');
             }
