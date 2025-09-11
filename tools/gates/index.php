@@ -860,7 +860,8 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOMContentLoaded - initializing exercise');
             console.log('Assignment value:', '<?php echo $assn; ?>');
-            console.log('HalfAdderExercise class available at init:', typeof HalfAdderExercise);
+            console.log('HalfAdderExercise class available:', typeof HalfAdderExercise);
+            console.log('FullAdderExercise class available:', typeof FullAdderExercise);
             
             // Create the appropriate exercise instance based on assignment
             if ( '<?php echo $assn; ?>' == 'HalfAdderExercise') {
@@ -870,6 +871,14 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     console.log('HalfAdderExercise created successfully');
                 } catch (error) {
                     console.error('Error creating HalfAdderExercise:', error);
+                }
+            } else if ( '<?php echo $assn; ?>' == 'FullAdderExercise') {
+                console.log('Creating FullAdderExercise');
+                try {
+                    currentExercise = new FullAdderExercise();
+                    console.log('FullAdderExercise created successfully');
+                } catch (error) {
+                    console.error('Error creating FullAdderExercise:', error);
                 }
             } else {
                 console.log('No matching exercise found for assignment:', '<?php echo $assn; ?>');
@@ -1048,6 +1057,130 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 console.log('❌ Half adder Easter egg attempted by anonymous user');
             <?php endif; ?>
         }
+
+        /**
+         * Full Adder Easter Egg Functions
+         */
+        function drawFullAdder() {
+            if (window.circuitEditor) {
+                // Clear existing circuit
+                window.circuitEditor.gates = [];
+                window.circuitEditor.wires = [];
+                window.circuitEditor.render();
+                
+                // Commands to create a full adder circuit layout
+                const commands = [
+                    // Inputs on the left
+                    'place input a at (100, 100)',
+                    'place input b at (100, 175)', 
+                    'place input cin at (100, 250)',
+                    
+                    // Logic gates in the middle
+                    'place xor xor1 at (200, 125)',     // A ⊕ B
+                    'place xor xor2 at (300, 150)',     // (A ⊕ B) ⊕ Cin = Sum
+                    'place and and1 at (200, 200)',     // A ∧ B
+                    'place and and2 at (300, 225)',     // Cin ∧ (A ⊕ B)
+                    'place or or1 at (400, 212)',       // Carry logic
+                    
+                    // Outputs on the right
+                    'place output s at (450, 150)',     // Sum output
+                    'place output cout at (450, 212)'   // Carry output
+                ];
+                
+                // Connection commands (using proper connector syntax)
+                const connections = [
+                    // Connect inputs to first XOR and AND
+                    'connect a output to xor1 input-1',
+                    'connect b output to xor1 input-2', 
+                    'connect a output to and1 input-1',
+                    'connect b output to and1 input-2',
+                    
+                    // Connect XOR1 output to second stage
+                    'connect xor1 output to xor2 input-1',
+                    'connect xor1 output to and2 input-1',
+                    
+                    // Connect Cin to second stage
+                    'connect cin output to xor2 input-2',
+                    'connect cin output to and2 input-2',
+                    
+                    // Connect to carry OR gate
+                    'connect and1 output to or1 input-1',
+                    'connect and2 output to or1 input-2',
+                    
+                    // Connect to outputs
+                    'connect xor2 output to s input',
+                    'connect or1 output to cout input'
+                ];
+                
+                let commandIndex = 0;
+                
+                function executeNextCommand() {
+                    if (commandIndex < commands.length) {
+                        const cmd = commands[commandIndex];
+                        const result = window.circuitEditor.executeCommand(cmd);
+                        console.log(`Full adder Easter egg command: ${cmd} -> ${result}`);
+                        commandIndex++;
+                        setTimeout(executeNextCommand, 200);
+                    } else {
+                        // Debug: List all gates before starting connections
+                        console.log('All gates after placement:');
+                        window.circuitEditor.gates.forEach((gate, index) => {
+                            console.log(`  ${index}: ${gate.type} "${gate.label}" at (${gate.x}, ${gate.y})`);
+                        });
+                        
+                        // Now execute connections
+                        let connectionIndex = 0;
+                        
+                        function executeNextConnection() {
+                            if (connectionIndex < connections.length) {
+                                const conn = connections[connectionIndex];
+                                console.log(`Attempting connection: ${conn}`);
+                                
+                                // Check if the components exist before connecting
+                                const parts = conn.split(' to ');
+                                if (parts.length === 2) {
+                                    const fromLabel = parts[0].replace('connect ', '');
+                                    const toLabel = parts[1];
+                                    
+                                    const fromGate = window.circuitEditor.gates.find(g => g.label === fromLabel);
+                                    const toGate = window.circuitEditor.gates.find(g => g.label === toLabel);
+                                    
+                                    console.log(`From gate (${fromLabel}):`, fromGate ? 'found' : 'NOT FOUND');
+                                    console.log(`To gate (${toLabel}):`, toGate ? 'found' : 'NOT FOUND');
+                                }
+                                
+                                const result = window.circuitEditor.executeCommand(conn);
+                                console.log(`Full adder Easter egg connection: ${conn} -> ${result}`);
+                                connectionIndex++;
+                                setTimeout(executeNextConnection, 300);
+                            } else {
+                                // Update status
+                                const status = document.getElementById('status');
+                                if (status) {
+                                    status.textContent = '🎉 Easter egg: Full adder circuit created! (Ctrl + +)';
+                                    setTimeout(() => {
+                                        status.textContent = '';
+                                    }, 3000);
+                                }
+                            }
+                        }
+                        
+                        setTimeout(executeNextConnection, 1000);
+                    }
+                }
+                
+                executeNextCommand();
+            }
+        }
+
+        function unlockFullAdder() {
+            <?php if ($USER) : ?>
+                console.log('🎯 Full adder Easter egg triggered! Drawing circuit...');
+                drawFullAdder();
+            <?php else : ?>
+                console.log('❌ Full adder Easter egg attempted by anonymous user');
+            <?php endif; ?>
+        }
         
         // Easter egg event listener
         document.addEventListener('keydown', (e) => {
@@ -1055,6 +1188,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             if (e.ctrlKey && e.key === '*') {
                 console.log('🎯 Easter egg triggered! Ctrl + * detected! (Half adder reference!)');
                 unlockHalfAdder();
+                e.preventDefault(); // Prevent any default browser behavior
+            }
+            // Test for Ctrl + + (full adder reference - ironic!)
+            else if (e.ctrlKey && e.key === '+') {
+                console.log('🎯 Easter egg triggered! Ctrl + + detected! (Full adder reference - ironic!)');
+                unlockFullAdder();
                 e.preventDefault(); // Prevent any default browser behavior
             }
         });
