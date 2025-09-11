@@ -388,6 +388,8 @@ class HalfAdderExercise extends Exercise {
         const gradingSection = document.getElementById('gradingSection');
         
         if (assignmentInstructions) {
+            // Make sure the instructions are visible
+            assignmentInstructions.style.display = 'block';
             // Replace the content with hint information
             assignmentInstructions.innerHTML = `
                 <div style="text-align: center; margin-bottom: 20px;">
@@ -723,18 +725,6 @@ class FullAdderExercise extends Exercise {
                 <li>Use appropriate logic gates to implement the full adder</li>
                 <li>Connect the circuits to implement the full adder logic</li>
             </ul>
-            
-            <h4>Full Adder Logic:</h4>
-            <ul>
-                <li><strong>Sum (S):</strong> A ⊕ B ⊕ Cin (three-way XOR)</li>
-                <li><strong>Carry-out (Cout):</strong> (A ∧ B) ∨ (Cin ∧ (A ⊕ B))</li>
-            </ul>
-            
-            <h4>Implementation Options:</h4>
-            <ul>
-                <li><strong>Option 1:</strong> Use two half adders + OR gate</li>
-                <li><strong>Option 2:</strong> Direct implementation with XOR, AND, and OR gates</li>
-            </ul>
         `;
 
         super("Full Adder", "Build a full adder circuit with three inputs and two outputs", steps, instructions);
@@ -820,7 +810,7 @@ class FullAdderExercise extends Exercise {
             if (!hintBtn) {
                 hintBtn = document.createElement('button');
                 hintBtn.id = 'hintBtn';
-                hintBtn.textContent = 'Need Help? Show Hints';
+                hintBtn.textContent = 'Hint';
                 hintBtn.style.cssText = `
                     background-color: #17a2b8;
                     color: white;
@@ -858,6 +848,8 @@ class FullAdderExercise extends Exercise {
         const gradingSection = document.getElementById('gradingSection');
         
         if (assignmentInstructions) {
+            // Make sure the instructions are visible
+            assignmentInstructions.style.display = 'block';
             // Replace the content with hint information
             assignmentInstructions.innerHTML = `
                 <div style="text-align: center; margin-bottom: 20px;">
@@ -933,7 +925,7 @@ class FullAdderExercise extends Exercise {
                 
                 <h4>Circuit Logic:</h4>
                 <ul>
-                    <li><strong>Sum (S):</strong> A ⊕ B ⊕ Cin (three-way XOR)</li>
+                    <li><strong>Sum (S):</strong> (A ⊕ B) ⊕ Cin (two XOR gates in series)</li>
                     <li><strong>Carry-out (Cout):</strong> (A ∧ B) ∨ (Cin ∧ (A ⊕ B))</li>
                 </ul>
                 
@@ -950,8 +942,9 @@ class FullAdderExercise extends Exercise {
                 <ol>
                     <li>Place three INPUT components: A, B, Cin</li>
                     <li>Place two OUTPUT components: S, Cout</li>
-                    <li>Use XOR gates to create A ⊕ B ⊕ Cin for sum</li>
-                    <li>Use AND and OR gates for carry logic</li>
+                    <li>Use first XOR gate: A ⊕ B</li>
+                    <li>Use second XOR gate: (A ⊕ B) ⊕ Cin for final sum</li>
+                    <li>Use AND gates and OR gate for carry logic: (A ∧ B) ∨ (Cin ∧ (A ⊕ B))</li>
                 </ol>
                 
                 <div style="margin-top: 20px; text-align: center;">

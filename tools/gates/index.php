@@ -1083,8 +1083,8 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     'place or or1 at (400, 212)',       // Carry logic
                     
                     // Outputs on the right
-                    'place output s at (450, 150)',     // Sum output
-                    'place output cout at (450, 212)'   // Carry output
+                    'place output s at (500, 150)',     // Sum output
+                    'place output cout at (500, 212)'   // Carry output
                 ];
                 
                 // Connection commands (using proper connector syntax)
@@ -1117,40 +1117,17 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 function executeNextCommand() {
                     if (commandIndex < commands.length) {
                         const cmd = commands[commandIndex];
-                        const result = window.circuitEditor.executeCommand(cmd);
-                        console.log(`Full adder Easter egg command: ${cmd} -> ${result}`);
+                        window.circuitEditor.executeCommand(cmd);
                         commandIndex++;
                         setTimeout(executeNextCommand, 200);
                     } else {
-                        // Debug: List all gates before starting connections
-                        console.log('All gates after placement:');
-                        window.circuitEditor.gates.forEach((gate, index) => {
-                            console.log(`  ${index}: ${gate.type} "${gate.label}" at (${gate.x}, ${gate.y})`);
-                        });
-                        
                         // Now execute connections
                         let connectionIndex = 0;
                         
                         function executeNextConnection() {
                             if (connectionIndex < connections.length) {
                                 const conn = connections[connectionIndex];
-                                console.log(`Attempting connection: ${conn}`);
-                                
-                                // Check if the components exist before connecting
-                                const parts = conn.split(' to ');
-                                if (parts.length === 2) {
-                                    const fromLabel = parts[0].replace('connect ', '');
-                                    const toLabel = parts[1];
-                                    
-                                    const fromGate = window.circuitEditor.gates.find(g => g.label === fromLabel);
-                                    const toGate = window.circuitEditor.gates.find(g => g.label === toLabel);
-                                    
-                                    console.log(`From gate (${fromLabel}):`, fromGate ? 'found' : 'NOT FOUND');
-                                    console.log(`To gate (${toLabel}):`, toGate ? 'found' : 'NOT FOUND');
-                                }
-                                
-                                const result = window.circuitEditor.executeCommand(conn);
-                                console.log(`Full adder Easter egg connection: ${conn} -> ${result}`);
+                                window.circuitEditor.executeCommand(conn);
                                 connectionIndex++;
                                 setTimeout(executeNextConnection, 300);
                             } else {

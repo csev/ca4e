@@ -134,7 +134,19 @@
             "custom" : [
                 {
                     "key": "exercise",
-                    "value": "HalfAdder"
+                    "value": "HalfAdderExercise"
+                }
+            ]
+        },
+        {
+            "title" : "Building a Full-Adder",
+            "launch" : "tools/gates/",
+            "resource_link_id" : "ca4e_03_full_adder",
+            "target": "_blank",
+            "custom" : [
+                {
+                    "key": "exercise",
+                    "value": "FullAdderExercise"
                 }
             ]
         }
