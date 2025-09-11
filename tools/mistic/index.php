@@ -679,6 +679,17 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         console.log(`Executed: ${command} -> ${result}`);
                     });
                     
+                    // Add probe labels for NOT gate manually (since executeCommand would prompt for labels)
+                    // Add input probe A at (1, 6)
+                    grid[6][1][7] = true; // layer 7 is probe layer
+                    probeLabels['1_6'] = 'A';
+                    
+                    // Add output probe Q at (8, 6) 
+                    grid[6][8][7] = true; // layer 7 is probe layer
+                    probeLabels['8_6'] = 'Q';
+                    
+                    console.log('Added probe labels: A at (1,6) and Q at (8,6)');
+                    
                     // Redraw everything
                     redrawAllTiles();
                 }
