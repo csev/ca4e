@@ -2739,6 +2739,177 @@ Examples:
 // Initialize the circuit editor when the page loads
 window.addEventListener('load', () => {
     window.circuitEditor = new CircuitEditor();
+    
+    // Initialize save/restore functionality
+    const saveRestoreManager = new SaveRestoreManager('gates', {
+        defaultNamePrefix: 'Gates_Circuit_',
+        maxSaves: 25
+    });
+    
+    // Clean up any potentially corrupted save data from development
+    try {
+        const savedData = localStorage.getItem('ca4e_gates_saves');
+        if (savedData) {
+            const saves = JSON.parse(savedData);
+            let needsCleanup = false;
+            
+            for (const [name, save] of Object.entries(saves)) {
+                if (save.data && save.data.wires) {
+                    for (const wire of save.data.wires) {
+                        // Check if this has corrupted wire format
+                        if (!wire.startGateLabel || !wire.endGateLabel) {
+                            needsCleanup = true;
+                            break;
+                        }
+                    }
+                }
+                if (needsCleanup) break;
+            }
+            
+            if (needsCleanup) {
+                console.log('Cleaning up corrupted Gates save data...');
+                localStorage.removeItem('ca4e_gates_saves');
+            }
+        }
+    } catch (error) {
+        console.warn('Error checking Gates save data, clearing:', error);
+        localStorage.removeItem('ca4e_gates_saves');
+    }
+
+    // Functions to get/set circuit data for save/restore
+    function getCurrentCircuitData() {
+        return {
+            gates: window.circuitEditor.gates.map(gate => ({
+                type: gate.type,
+                x: gate.x,
+                y: gate.y,
+                label: gate.label,
+                state: gate.state,
+                selected: false // Don't save selection state
+            })),
+            wires: window.circuitEditor.wires.map(wire => {
+                try {
+                    // Validate wire structure before accessing properties
+                    if (!wire.start || !wire.end || !wire.startGate || !wire.endGate) {
+                        return null;
+                    }
+                    
+                    return {
+                        startGateLabel: wire.startGate.label,
+                        startNodeIndex: wire.startGate.outputNodes.indexOf(wire.start),
+                        endGateLabel: wire.endGate.label,
+                        endNodeIndex: wire.endGate.inputNodes.indexOf(wire.end),
+                        waypoints: wire.waypoints ? [...wire.waypoints] : []
+                    };
+                } catch (error) {
+                    console.error('Error serializing wire:', error, wire);
+                    return null;
+                }
+            }).filter(wire => wire !== null)
+        };
+    }
+
+    function setCircuitData(data) {
+        if (data && data.gates) {
+            // Clear existing circuit
+            window.circuitEditor.clear();
+            
+            // Recreate gates
+            const gateMap = new Map();
+            data.gates.forEach(gateData => {
+                let gate = null;
+                
+                // Create gate based on type (same logic as in handleMouseDown)
+                if (gateData.type === 'CLOCK_PULSE') {
+                    gate = new ClockPulse(gateData.x, gateData.y, window.circuitEditor);
+                } else if (gateData.type === 'FULL_ADDER') {
+                    gate = new FullAdder(gateData.x, gateData.y, window.circuitEditor);
+                } else if (gateData.type === 'NIXIE_DISPLAY') {
+                    gate = new NixieDisplay(gateData.x, gateData.y, window.circuitEditor);
+                } else if (gateData.type === 'THREE_BIT_ADDER') {
+                    gate = new ThreeBitAdder(gateData.x, gateData.y, window.circuitEditor);
+                } else if (gateData.type === 'THREE_BIT_LATCH') {
+                    gate = new ThreeBitLatch(gateData.x, gateData.y, window.circuitEditor);
+                } else if (gateData.type === 'JK_FLIP_FLOP') {
+                    gate = new JKFlipFlop(gateData.x, gateData.y, window.circuitEditor);
+                } else if (gateData.type === 'ONE_BIT_LATCH') {
+                    gate = new OneBitLatch(gateData.x, gateData.y, window.circuitEditor);
+                } else if (gateData.type === 'SR_FLIP_FLOP') {
+                    gate = new SRFlipFlop(gateData.x, gateData.y, window.circuitEditor);
+                } else {
+                    gate = new Gate(gateData.type, gateData.x, gateData.y, window.circuitEditor);
+                }
+                
+                if (gate) {
+                    // Restore gate properties
+                    if (gateData.state !== undefined) gate.state = gateData.state;
+                    
+                    // Assign ordinal and update label (same as in handleMouseDown)
+                    gate.ordinal = window.circuitEditor.getGateOrdinal(gate);
+                    gate.updateLabelWithOrdinal();
+                    
+                    // Use the original saved label for wire mapping, but new label for display
+                    gateMap.set(gateData.label, gate);
+                    window.circuitEditor.gates.push(gate);
+                }
+            });
+            
+            // Recreate wires
+            if (data.wires) {
+                data.wires.forEach(wireData => {
+                    try {
+                        // Validate wire data structure
+                        if (!wireData.startGateLabel || !wireData.endGateLabel) {
+                            return;
+                        }
+                        
+                        const startGate = gateMap.get(wireData.startGateLabel);
+                        const endGate = gateMap.get(wireData.endGateLabel);
+                        
+                        if (startGate && endGate) {
+                            const startNode = startGate.outputNodes[wireData.startNodeIndex];
+                            const endNode = endGate.inputNodes[wireData.endNodeIndex];
+                            
+                            if (startNode && endNode) {
+                                const wire = {
+                                    start: startNode,
+                                    end: endNode,
+                                    startGate: startGate,
+                                    endGate: endGate,
+                                    waypoints: wireData.waypoints || []
+                                };
+                                
+                                // Update connection states (same as createWire method)
+                                startGate.connectNode(startNode, false); // false = output node
+                                endGate.connectNode(endNode, true);      // true = input node
+                                
+                                window.circuitEditor.wires.push(wire);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error restoring wire:', error, wireData);
+                    }
+                });
+            }
+            
+            // Redraw and recompute
+            window.circuitEditor.render();
+            
+            // Update circuit layout and compute
+            window.circuitEditor.circuit.setLayout(window.circuitEditor.gates, window.circuitEditor.wires);
+            window.circuitEditor.circuit.update();
+        }
+    }
+
+    // Initialize save/restore buttons
+    saveRestoreManager.createButtons({
+        saveButtonId: 'saveCircuit',
+        loadButtonId: 'loadCircuit',
+        deleteButtonId: 'deleteCircuit',
+        manageButtonId: 'manageCircuits',
+        getDataCallback: getCurrentCircuitData,
+        setDataCallback: setCircuitData
+    });
 });
 
 // Add styles for screen reader elements

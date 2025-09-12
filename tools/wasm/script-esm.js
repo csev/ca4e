@@ -58,6 +58,66 @@ export class WasmEditor {
                 this.runWasm();
             }
         });
+        
+        // Initialize save/restore functionality
+        this.initializeSaveRestore();
+    }
+    
+    initializeSaveRestore() {
+        // Clean up any potentially corrupted save data from development
+        try {
+            const savedData = localStorage.getItem('ca4e_wasm_saves');
+            if (savedData) {
+                const saves = JSON.parse(savedData);
+                let needsCleanup = false;
+                
+                for (const [name, save] of Object.entries(saves)) {
+                    if (save.data && !save.data.code) {
+                        needsCleanup = true;
+                        break;
+                    }
+                }
+                
+                if (needsCleanup) {
+                    console.log('Cleaning up corrupted WASM save data...');
+                    localStorage.removeItem('ca4e_wasm_saves');
+                }
+            }
+        } catch (error) {
+            console.warn('Error checking WASM save data, clearing:', error);
+            localStorage.removeItem('ca4e_wasm_saves');
+        }
+        
+        const saveRestoreManager = new SaveRestoreManager('wasm', {
+            defaultNamePrefix: 'WAT_Code_',
+            maxSaves: 25
+        });
+
+        // Functions to get/set code data for save/restore
+        const getCurrentCodeData = () => {
+            return {
+                code: this.editor.value,
+                timestamp: new Date().toISOString()
+            };
+        };
+
+        const setCodeData = (data) => {
+            if (data && data.code) {
+                this.editor.value = data.code;
+                this.clearOutput();
+                this.showMessage('Code loaded successfully', 'success');
+            }
+        };
+
+        // Initialize save/restore buttons
+        saveRestoreManager.createButtons({
+            saveButtonId: 'saveCode',
+            loadButtonId: 'loadCode',
+            deleteButtonId: 'deleteCode',
+            manageButtonId: 'manageCode',
+            getDataCallback: getCurrentCodeData,
+            setDataCallback: setCodeData
+        });
     }
     
     loadDefaultExample() {

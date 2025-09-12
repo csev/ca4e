@@ -90,6 +90,10 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     </div>
                 </div>
                 <button onclick="confirmClear()" style="background-color: #ffe6e6;">🗑️</button>
+                <button id="saveLayout" style="background-color: #28a745; color: white;">💾 Save</button>
+                <button id="loadLayout" style="background-color: #007bff; color: white;">📁 Load</button>
+                <button id="deleteLayout" style="background-color: #dc3545; color: white;">🗑️ Delete</button>
+                <button id="manageLayouts" style="background-color: #6c757d; color: white;">📋 Manage</button>
                 <button onclick="toggleCommandLine()" style="background-color: #6c757d; color: white;">Commands</button>
 <?php if ($USER) : ?>
                 <button id="assignmentBtn" style="background-color:#fff0e6;">Assignment</button>
@@ -136,6 +140,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 <?php endif; ?>
             </div>
 
+            <script src="../common/save-restore.js"></script>
             <script src="exercises.js"></script>
             <script>
                 const canvas = document.getElementById('vlsiCanvas');
@@ -183,6 +188,77 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 
                 // Exercise instance
                 let currentExercise = null;
+
+                // Initialize save/restore manager
+                const saveRestoreManager = new SaveRestoreManager('mistic', {
+                    defaultNamePrefix: 'MISTIC_Layout_',
+                    maxSaves: 25
+                });
+                
+                // Clean up any potentially corrupted save data from development
+                try {
+                    const savedData = localStorage.getItem('ca4e_mistic_saves');
+                    if (savedData) {
+                        const saves = JSON.parse(savedData);
+                        let needsCleanup = false;
+                        
+                        for (const [name, save] of Object.entries(saves)) {
+                            if (save.data && (!save.data.grid || !save.data.volts)) {
+                                needsCleanup = true;
+                                break;
+                            }
+                        }
+                        
+                        if (needsCleanup) {
+                            console.log('Cleaning up corrupted MISTIC save data...');
+                            localStorage.removeItem('ca4e_mistic_saves');
+                        }
+                    }
+                } catch (error) {
+                    console.warn('Error checking MISTIC save data, clearing:', error);
+                    localStorage.removeItem('ca4e_mistic_saves');
+                }
+
+                // Functions to get/set layout data for save/restore
+                function getCurrentLayoutData() {
+                    return {
+                        grid: grid,
+                        volts: volts,
+                        probeLabels: probeLabels,
+                        probeVoltages: probeVoltages,
+                        gridSize: gridSize,
+                        currentLayer: currentLayer
+                    };
+                }
+
+                function setLayoutData(data) {
+                    if (data && data.grid && data.volts) {
+                        // Resize grid if necessary
+                        if (data.gridSize && data.gridSize !== gridSize) {
+                            resizeGrid(data.gridSize);
+                        }
+                        
+                        grid = data.grid;
+                        volts = data.volts;
+                        probeLabels = data.probeLabels || {};
+                        probeVoltages = data.probeVoltages || {};
+                        currentLayer = data.currentLayer || '';
+                        
+                        // Update UI
+                        redrawAllTiles();
+                        compute();
+                    }
+                }
+
+                // Initialize save/restore buttons
+                saveRestoreManager.createButtons({
+                    saveButtonId: 'saveLayout',
+                    loadButtonId: 'loadLayout',
+                    deleteButtonId: 'deleteLayout',
+                    manageButtonId: 'manageLayouts',
+                    getDataCallback: getCurrentLayoutData,
+                    setDataCallback: setLayoutData
+                });
 
                 function createGrid(size) {
                     return Array(size).fill().map(() => Array(size).fill().map(() => Array(8).fill(false)));

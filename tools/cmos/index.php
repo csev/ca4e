@@ -360,6 +360,10 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 <span class="ca4e-icon ca4e-label"></span>
             </button>
             <button id="clear" class="toolbar-button">Clear All</button>
+            <button id="saveCircuit" class="toolbar-button" style="background-color: #28a745; color: white;">💾 Save</button>
+            <button id="loadCircuit" class="toolbar-button" style="background-color: #007bff; color: white;">📁 Load</button>
+            <button id="deleteCircuit" class="toolbar-button" style="background-color: #dc3545; color: white;">🗑️ Delete</button>
+            <button id="manageCircuits" class="toolbar-button" style="background-color: #6c757d; color: white;">📋 Manage</button>
 <?php if ($USER) : ?>
             <button id="assignmentButton" class="toolbar-button" style="background-color: #4CAF50;">Assignment</button>
 <?php endif; ?>
@@ -421,6 +425,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     </div>
 <?php endif; ?>
 
+    <script src="../common/save-restore.js"></script>
     <script src="components.js"></script>
     <script src="circuit.js"></script>
     <script src="editor.js"></script>

@@ -585,6 +585,10 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         <div class="center-section">
             <button id="tagMode" class="mode-button">🏷️ Tag</button>
             <button id="delete" class="icon-button">🗑️</button>
+            <button id="saveCircuit" class="mode-button" style="background-color: #28a745; color: white;">💾 Save</button>
+            <button id="loadCircuit" class="mode-button" style="background-color: #007bff; color: white;">📁 Load</button>
+            <button id="deleteCircuit" class="mode-button" style="background-color: #dc3545; color: white;">🗑️ Delete</button>
+            <button id="manageCircuits" class="mode-button" style="background-color: #6c757d; color: white;">📋 Manage</button>
         </div>
         <div class="commands-selector">
             <select id="commandsSelector">
@@ -632,6 +636,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     </div>
 
     <!-- Load the gate definitions first -->
+    <script src="../common/save-restore.js"></script>
     <script src="gates.js"></script>
     <!-- Then load the main editor code -->
     <script src="main.js"></script>

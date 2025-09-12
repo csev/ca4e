@@ -816,6 +816,174 @@ window.addEventListener('load', () => {
     const canvas = document.getElementById('circuitCanvas');
     window.circuitEditor = new CircuitEditor('circuitCanvas');
     window.circuitEditor.draw();
+    
+    // Initialize save/restore functionality
+    const saveRestoreManager = new SaveRestoreManager('cmos', {
+        defaultNamePrefix: 'CMOS_Circuit_',
+        maxSaves: 25
+    });
+    
+    // Clean up any potentially corrupted save data from development
+    try {
+        const savedData = localStorage.getItem('ca4e_cmos_saves');
+        if (savedData) {
+            const saves = JSON.parse(savedData);
+            let needsCleanup = false;
+            
+            for (const [name, save] of Object.entries(saves)) {
+                if (save.data && save.data.wires) {
+                    for (const wire of save.data.wires) {
+                        // Check if this has the old gates format
+                        if (wire.startGateLabel || wire.endGateLabel || 
+                            (wire.start && wire.start.gate)) {
+                            needsCleanup = true;
+                            break;
+                        }
+                    }
+                }
+                if (needsCleanup) break;
+            }
+            
+            if (needsCleanup) {
+                console.log('Cleaning up corrupted CMOS save data...');
+                localStorage.removeItem('ca4e_cmos_saves');
+            }
+        }
+    } catch (error) {
+        console.warn('Error checking save data, clearing:', error);
+        localStorage.removeItem('ca4e_cmos_saves');
+    }
+
+    // Functions to get/set circuit data for save/restore
+    function getCurrentCircuitData() {
+        // Create a unique ID for each component based on type and position
+        const getComponentId = (comp) => `${comp.type}_${comp.x}_${comp.y}`;
+        
+        return {
+            components: window.circuitEditor.circuit.components.map((comp, index) => ({
+                id: getComponentId(comp),
+                index: index,
+                type: comp.type,
+                x: comp.x,
+                y: comp.y,
+                label: comp.label,
+                isOn: comp.isOn,
+                voltage: comp.voltage,
+                width: comp.width,
+                height: comp.height
+            })),
+            wires: window.circuitEditor.circuit.wires.map(wire => {
+                try {
+                    return {
+                        startComponentId: wire.startComponent ? getComponentId(wire.startComponent) : null,
+                        endComponentId: wire.endComponent ? getComponentId(wire.endComponent) : null,
+                        startPoint: wire.startPoint,
+                        endPoint: wire.endPoint,
+                        voltage: wire.voltage
+                    };
+                } catch (error) {
+                    console.error('Error serializing wire:', error, wire);
+                    return null;
+                }
+            }).filter(wire => wire !== null)
+        };
+    }
+
+    function setCircuitData(data) {
+        if (data && data.components) {
+            // Clear existing circuit
+            window.circuitEditor.circuit.clear();
+            
+            // Create a map to store components by their ID for wire restoration
+            const componentMap = new Map();
+            
+            // Recreate components
+            data.components.forEach(compData => {
+                let component = null;
+                switch(compData.type) {
+                    case 'SWITCH':
+                        component = new Switch(compData.x, compData.y);
+                        if (compData.isOn !== undefined) component.isOn = compData.isOn;
+                        break;
+                    case 'PROBE':
+                        component = new Probe(compData.x, compData.y);
+                        break;
+                    case 'NMOS':
+                        component = new NMOS(compData.x, compData.y);
+                        break;
+                    case 'PMOS':
+                        component = new PMOS(compData.x, compData.y);
+                        break;
+                    case 'VDD_BAR':
+                    case 'GND_BAR':
+                        // Skip bars as they are automatically created, but add them to the map
+                        const existingBar = window.circuitEditor.circuit.components.find(comp => comp.type === compData.type);
+                        if (existingBar && compData.id) {
+                            componentMap.set(compData.id, existingBar);
+                        }
+                        return;
+                }
+                
+                if (component) {
+                    if (compData.label) component.label = compData.label;
+                    if (compData.voltage !== undefined) component.voltage = compData.voltage;
+                    window.circuitEditor.circuit.addComponent(component);
+                    
+                    // Add to component map for wire restoration
+                    if (compData.id) {
+                        componentMap.set(compData.id, component);
+                    }
+                }
+            });
+            
+            // Recreate wires
+            if (data.wires) {
+                data.wires.forEach(wireData => {
+                    try {
+                        // Check if this is old format data (with gates pattern)
+                        if (wireData.startGateLabel || wireData.endGateLabel) {
+                            console.warn('Skipping wire with old format data');
+                            return;
+                        }
+                        
+                        const startComponent = wireData.startComponentId ? componentMap.get(wireData.startComponentId) : null;
+                        const endComponent = wireData.endComponentId ? componentMap.get(wireData.endComponentId) : null;
+                        
+                        if (startComponent && endComponent && wireData.startPoint && wireData.endPoint) {
+                            const wire = new Wire(
+                                startComponent,
+                                wireData.startPoint,
+                                endComponent,
+                                wireData.endPoint
+                            );
+                            
+                            if (wireData.voltage !== undefined) {
+                                wire.voltage = wireData.voltage;
+                            }
+                            
+                            window.circuitEditor.circuit.addWire(wire);
+                        }
+                    } catch (error) {
+                        console.error('Error restoring wire:', error, wireData);
+                    }
+                });
+            }
+            
+            // Redraw and recompute
+            window.circuitEditor.draw();
+            window.circuitEditor.circuit.fullRecompute();
+        }
+    }
+
+    // Initialize save/restore buttons
+    saveRestoreManager.createButtons({
+        saveButtonId: 'saveCircuit',
+        loadButtonId: 'loadCircuit',
+        deleteButtonId: 'deleteCircuit',
+        manageButtonId: 'manageCircuits',
+        getDataCallback: getCurrentCircuitData,
+        setDataCallback: setCircuitData
+    });
 });
 
 window.addEventListener('resize', () => {

@@ -45,6 +45,10 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 <div class="editor-controls">
                     <button id="clearEditor" class="btn">Clear</button>
                     <button id="runWasm" class="btn btn-primary">Compile & Run WAT</button>
+                    <button id="saveCode" class="btn" style="background-color: #28a745; color: white;">💾 Save</button>
+                    <button id="loadCode" class="btn" style="background-color: #007bff; color: white;">📁 Load</button>
+                    <button id="deleteCode" class="btn" style="background-color: #dc3545; color: white;">🗑️ Delete</button>
+                    <button id="manageCode" class="btn" style="background-color: #6c757d; color: white;">📋 Manage</button>
 <?php if ($USER) : ?>
                     <button id="assignmentBtn" class="btn btn-assignment">Assignment</button>
 <?php endif; ?>
@@ -113,6 +117,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     </div>
 <?php endif; ?>
     
+    <script src="../common/save-restore.js"></script>
     <script type="module">
         import { WasmEditor } from './script-esm.js';
         document.addEventListener('DOMContentLoaded', () => {
