@@ -695,6 +695,61 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 }
 <?php endif; ?>
 
+                function flashCommandOutline(command) {
+                    // Parse the command to extract coordinates
+                    const match = command.match(/from \((\d+), (\d+)\) to \((\d+), (\d+)\)|at \((\d+), (\d+)\)/);
+                    if (!match) return; // Skip if no coordinates found
+                    
+                    let x1, y1, x2, y2;
+                    if (match[1] !== undefined) {
+                        // "from (x1, y1) to (x2, y2)" format
+                        x1 = parseInt(match[1]);
+                        y1 = parseInt(match[2]);
+                        x2 = parseInt(match[3]);
+                        y2 = parseInt(match[4]);
+                    } else if (match[5] !== undefined) {
+                        // "at (x, y)" format - single point
+                        x1 = x2 = parseInt(match[5]);
+                        y1 = y2 = parseInt(match[6]);
+                    } else {
+                        return; // No valid coordinates
+                    }
+                    
+                    // Calculate canvas coordinates
+                    const tileSize = canvas.width / gridSize;
+                    const canvasX1 = x1 * tileSize;
+                    const canvasY1 = y1 * tileSize;
+                    const canvasX2 = (x2 + 1) * tileSize;
+                    const canvasY2 = (y2 + 1) * tileSize;
+                    
+                    // Flash the outline
+                    let flashCount = 0;
+                    const maxFlashes = 4; // 2 complete on/off cycles
+                    
+                    function flash() {
+                        if (flashCount >= maxFlashes) return;
+                        
+                        // Draw outline
+                        ctx.save();
+                        ctx.strokeStyle = flashCount % 2 === 0 ? '#000000' : '#ffffff';
+                        ctx.lineWidth = 3;
+                        ctx.setLineDash([5, 5]);
+                        ctx.strokeRect(canvasX1, canvasY1, canvasX2 - canvasX1, canvasY2 - canvasY1);
+                        ctx.restore();
+                        
+                        flashCount++;
+                        setTimeout(() => {
+                            // Clear the flash by redrawing that area
+                            redrawAllTiles();
+                            if (flashCount < maxFlashes) {
+                                setTimeout(flash, 600);
+                            }
+                        }, 600);
+                    }
+                    
+                    flash();
+                }
+
                 function readCircuit() {
                     console.log("=== CIRCUIT ANALYSIS ===");
                     console.log("Reading current circuit layout...");
@@ -926,13 +981,6 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         }
                     });
                     
-                    // Handle probes separately
-                    Object.keys(probeLabels).forEach(key => {
-                        const [x, y] = key.split('_').map(Number);
-                        const voltageType = probeVoltages[key] || '0';
-                        commands.push(`draw probe "${probeLabels[key]}" at (${x}, ${y}) with voltage ${voltageType}`);
-                    });
-                    
                     // Output the commands in a clean format
                     console.log("=== DRAWING COMMANDS FOR ACCESSIBILITY ===");
                     console.log("Commands to recreate this circuit:");
@@ -953,8 +1001,23 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     console.log(`Probes found: ${Object.keys(probeLabels).length}`);
                     Object.keys(probeLabels).forEach(key => {
                         const [x, y] = key.split('_');
-                        const voltageType = probeVoltages[key] || '0';
-                        console.log(`  - Probe "${probeLabels[key]}" at (${x}, ${y}) with voltage ${voltageType}`);
+                        const voltageType = probeVoltages[key];
+                        if (voltageType && voltageType !== undefined) {
+                            console.log(`  - Probe "${probeLabels[key]}" at (${x}, ${y}) with voltage ${voltageType}`);
+                        } else {
+                            console.log(`  - Probe "${probeLabels[key]}" at (${x}, ${y})`);
+                        }
+                    });
+                    
+                    // Handle probes separately - add them last so they're read last
+                    Object.keys(probeLabels).forEach(key => {
+                        const [x, y] = key.split('_').map(Number);
+                        const voltageType = probeVoltages[key];
+                        if (voltageType && voltageType !== undefined) {
+                            commands.push(`draw probe "${probeLabels[key]}" at (${x}, ${y}) with voltage ${voltageType}`);
+                        } else {
+                            commands.push(`draw probe "${probeLabels[key]}" at (${x}, ${y})`);
+                        }
                     });
                     
                     // Speak the commands with pauses and proper ordering
@@ -1020,8 +1083,29 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         
                         Object.keys(layerGroups).forEach(layer => {
                             layerGroups[layer].forEach(cmd => {
-                                speechQueue.push(cmd);
-                                speechQueue.push("pause"); // 0.5 second pause
+                                // Special handling for probe commands to add pause between name and "at"
+                                if (cmd.includes('probe')) {
+                                    const probeMatch = cmd.match(/draw probe "([^"]+)" at \((\d+), (\d+)\)(?:\s+with voltage (.+))?/);
+                                    if (probeMatch) {
+                                        const probeName = probeMatch[1];
+                                        const x = probeMatch[2];
+                                        const y = probeMatch[3];
+                                        const voltage = probeMatch[4];
+                                        
+                                        speechQueue.push(`draw probe ${probeName}`);
+                                        speechQueue.push("pause"); // Pause between name and "at"
+                                        if (voltage) {
+                                            speechQueue.push(`at (${x}, ${y}) with voltage ${voltage}`);
+                                        } else {
+                                            speechQueue.push(`at (${x}, ${y})`);
+                                        }
+                                    } else {
+                                        speechQueue.push(cmd);
+                                    }
+                                } else {
+                                    speechQueue.push(cmd);
+                                }
+                                speechQueue.push("pause"); // 0.5 second pause after each command
                             });
                         });
                         
@@ -1035,6 +1119,9 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                                 // Wait 500ms then continue
                                 setTimeout(speakNext, 500);
                             } else {
+                                // Flash outline for draw commands
+                                flashCommandOutline(text);
+                                
                                 const utterance = new SpeechSynthesisUtterance(text);
                                 utterance.rate = 0.8;
                                 utterance.pitch = 1.0;
