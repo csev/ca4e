@@ -91,6 +91,10 @@ class Exercise {
         if (!result.passed) {
             this.isGrading = false;
             this.showRetryButton();
+            // Show hint button if available (only for exercises that have them)
+            if (typeof this.showHints === 'function') {
+                this.showHintButton();
+            }
         } else if (stepIndex < this.steps.length - 1) {
             // Show Next button for intermediate steps
             this.showNextButton();
@@ -164,6 +168,23 @@ class Exercise {
         if (button) {
             button.textContent = 'Retry Grading';
             button.onclick = () => this.startGrading();
+            button.style.backgroundColor = '#dc3545'; // Red color for retry
+        }
+    }
+
+    showHintButton() {
+        const stepDisplay = document.getElementById('stepDisplay');
+        if (stepDisplay && !document.getElementById('hintButton')) {
+            const hintButtonHtml = `
+                <div style="margin-top: 15px; text-align: center;">
+                    <button id="hintButton" onclick="currentExercise.showHints()" 
+                            style="background-color: #ffc107; color: #212529; border: 1px solid #ffc107; 
+                                   padding: 8px 16px; border-radius: 4px; cursor: pointer;">
+                        💡 Show Hints
+                    </button>
+                </div>
+            `;
+            stepDisplay.innerHTML += hintButtonHtml;
         }
     }
     
@@ -360,12 +381,6 @@ class PrintOut42Exercise extends Exercise {
                 <li>Your WASM module must execute successfully</li>
                 <li>Your program must output the number 42</li>
             </ul>
-            <h4>Hints:</h4>
-            <ul>
-                <li>Use the <code>i32.const</code> instruction to load the value 42</li>
-                <li>Export a function that returns the value</li>
-                <li>The output will be displayed when your function is called</li>
-            </ul>
             <h4>Example structure:</h4>
             <pre>
 (module
@@ -445,7 +460,37 @@ class PrintOut42Exercise extends Exercise {
             return { passed: false, message: `Expected output '42', but got: ${outputText}` };
         }
     }
+
+    showHints() {
+        // Remove the hint button first
+        const hintButton = document.getElementById('hintButton');
+        if (hintButton) {
+            hintButton.parentElement.remove();
+        }
+
+        const hintsHtml = `
+            <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 4px; margin-top: 15px;">
+                <h4>💡 Hints:</h4>
+                <ul>
+                    <li>Use the <code>i32.const</code> instruction to load the value 42</li>
+                    <li>Export a function that returns the value</li>
+                    <li>The output will be displayed when your function is called</li>
+                </ul>
+                <h4>Example structure:</h4>
+                <pre>(module
+  (func $get42 (result i32)
+    i32.const 42
+  )
+  (export "get42" (func $get42))
+)</pre>
+            </div>
+        `;
+        
+        const stepDisplay = document.getElementById('stepDisplay');
+        if (stepDisplay) {
+            stepDisplay.innerHTML += hintsHtml;
+        }
+    }
 }
 
-// Global variable to hold the current exercise instance
-let currentExercise = null;
+// Global variable to hold the current exercise instance (declared in index.php)

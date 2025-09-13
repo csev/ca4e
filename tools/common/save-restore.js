@@ -273,15 +273,57 @@ class SaveRestoreManager {
     }
     
     /**
-     * Create standard save/restore buttons and attach event listeners
+     * Create storage dropdown with save/load/delete options
+     * @param {Object} config - Configuration object with callbacks
+     */
+    createStorageDropdown(config) {
+        const {
+            dropdownId = 'storageDropdown',
+            getDataCallback,
+            setDataCallback,
+            successCallback = null
+        } = config;
+        
+        const dropdown = document.getElementById(dropdownId);
+        if (!dropdown) {
+            console.warn(`Storage dropdown element with id '${dropdownId}' not found`);
+            return;
+        }
+        
+        dropdown.addEventListener('change', (e) => {
+            const action = e.target.value;
+            
+            if (action === 'save' && getDataCallback) {
+                this.showSaveDialog(getDataCallback, successCallback);
+            } else if (action === 'load' && setDataCallback) {
+                this.showLoadDialog(setDataCallback, successCallback);
+            } else if (action === 'delete') {
+                this.showDeleteDialog(successCallback);
+            }
+            
+            // Reset dropdown to default after action
+            setTimeout(() => {
+                e.target.value = '';
+            }, 100);
+        });
+    }
+    
+    /**
+     * Legacy method for backward compatibility - now creates dropdown
      * @param {Object} config - Configuration object with callbacks
      */
     createButtons(config) {
+        // For backward compatibility, try to find a storage dropdown first
+        const storageDropdown = document.getElementById('storageDropdown');
+        if (storageDropdown) {
+            return this.createStorageDropdown(config);
+        }
+        
+        // Fallback to old button system if dropdown not found
         const {
             saveButtonId = 'saveButton',
-            loadButtonId = 'loadButton',
+            loadButtonId = 'loadButton', 
             deleteButtonId = 'deleteButton',
-            manageButtonId = 'manageButton',
             getDataCallback,
             setDataCallback,
             successCallback = null
@@ -308,14 +350,6 @@ class SaveRestoreManager {
         if (deleteButton) {
             deleteButton.addEventListener('click', () => {
                 this.showDeleteDialog(successCallback);
-            });
-        }
-        
-        // Manage button
-        const manageButton = document.getElementById(manageButtonId);
-        if (manageButton) {
-            manageButton.addEventListener('click', () => {
-                this.showManageDialog();
             });
         }
     }

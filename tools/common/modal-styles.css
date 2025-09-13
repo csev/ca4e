@@ -1,0 +1,301 @@
+/**
+ * Common Modal Styles for CA4E Tools
+ * Provides consistent, functional modal styling across all tools
+ */
+
+/* Base modal styling */
+.assignment-modal {
+    position: fixed;
+    background: white;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    z-index: 1000;
+    width: 500px;
+    max-width: 90vw;
+    max-height: 85vh;
+    
+    /* Remove overflow from main modal - content should handle its own scrolling */
+    overflow: visible;
+    
+    /* Ensure proper positioning */
+    top: 10vh;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.assignment-modal.hidden {
+    display: none;
+}
+
+/* Modal header - draggable area */
+.assignment-modal .modal-header {
+    background: #007bff;
+    color: white;
+    padding: 12px 16px;
+    cursor: grab;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 6px 6px 0 0;
+    
+    /* Prevent text selection during drag */
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.assignment-modal .modal-header:active {
+    cursor: grabbing;
+}
+
+/* Close button */
+.assignment-modal .close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.assignment-modal .close-btn:hover {
+    background-color: rgba(255,255,255,0.2);
+    border-radius: 50%;
+}
+
+/* Modal content - scrollable area */
+.assignment-modal .modal-content {
+    padding: 20px;
+    background: white;
+    border-radius: 0 0 6px 6px;
+    
+    /* This is where scrolling should happen if needed */
+    max-height: calc(85vh - 60px); /* Account for header height */
+    overflow-y: auto;
+    
+    /* Smooth scrolling */
+    scroll-behavior: smooth;
+}
+
+/* Instructions section */
+.assignment-modal #assignmentInstructions {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.assignment-modal #assignmentInstructions h3 {
+    color: #007bff;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+.assignment-modal #assignmentInstructions h4 {
+    color: #495057;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.assignment-modal #assignmentInstructions p {
+    margin-bottom: 15px;
+}
+
+.assignment-modal #assignmentInstructions ul {
+    margin-bottom: 15px;
+    padding-left: 20px;
+}
+
+.assignment-modal #assignmentInstructions li {
+    margin-bottom: 8px;
+}
+
+.assignment-modal #assignmentInstructions pre {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 12px;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.assignment-modal #assignmentInstructions code {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 3px;
+    padding: 2px 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+}
+
+/* Grading section */
+.assignment-modal #gradingSection {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: 20px;
+}
+
+.assignment-modal #gradingSection h3 {
+    color: #28a745;
+    margin-top: 0;
+    margin-bottom: 15px;
+}
+
+/* Step display area */
+.assignment-modal #stepDisplay {
+    margin-bottom: 15px;
+    min-height: 40px;
+}
+
+/* Button styling */
+.assignment-modal button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.assignment-modal button:hover {
+    background-color: #0056b3;
+}
+
+.assignment-modal button:last-child {
+    margin-right: 0;
+}
+
+.assignment-modal #gradeBtn,
+.assignment-modal #startGradeBtn {
+    background-color: #28a745;
+}
+
+.assignment-modal #gradeBtn:hover,
+.assignment-modal #startGradeBtn:hover {
+    background-color: #218838;
+}
+
+/* Grading step result styles */
+.step-result {
+    padding: 12px;
+    border-radius: 6px;
+    margin: 10px 0;
+    font-weight: 500;
+}
+
+.step-passed {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.step-failed {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+.final-result {
+    padding: 15px;
+    border-radius: 6px;
+    margin: 15px 0;
+    font-weight: bold;
+    text-align: center;
+}
+
+.final-result.success {
+    background-color: #d4edda;
+    border: 2px solid #28a745;
+    color: #155724;
+}
+
+.final-result.failure {
+    background-color: #f8d7da;
+    border: 2px solid #dc3545;
+    color: #721c24;
+}
+
+/* Spinner animation for loading states */
+.spinner-gear {
+    display: inline-block;
+    animation: spin 2s linear infinite;
+    font-size: 20px;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Hint styling */
+.hint-section {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 15px;
+}
+
+.hint-section h4 {
+    color: #856404;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.hint-section ul {
+    margin-bottom: 15px;
+}
+
+.hint-section pre {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 12px;
+    margin: 10px 0;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .assignment-modal {
+        width: 95vw;
+        max-width: 95vw;
+        left: 2.5vw;
+        transform: none;
+    }
+    
+    .assignment-modal .modal-content {
+        padding: 15px;
+        max-height: calc(85vh - 50px);
+    }
+    
+    .assignment-modal .modal-header {
+        padding: 10px 15px;
+    }
+}
+
+/* Ensure proper z-index stacking */
+.assignment-modal {
+    z-index: 1000;
+}
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+    overflow: hidden;
+}

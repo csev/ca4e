@@ -26,6 +26,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     <title>CMOS Circuit Editor</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../common/modal-styles.css">
     <style>
         body {
             margin: 0;
@@ -177,6 +178,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             justify-content: center;
         }
 
+
         .ca4e-move::before {
             content: "\f256"; /* Font Awesome hand pointer icon */
             font-family: "Font Awesome 6 Free";
@@ -213,7 +215,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             font-weight: 900;
         }
 
-        .modal {
+        .modal:not(.assignment-modal) {
             display: none;
             position: fixed;
             z-index: 1000;
@@ -224,7 +226,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             background-color: rgba(0,0,0,0.4);
         }
 
-        .modal-content {
+        .modal:not(.assignment-modal) .modal-content {
             background-color: #fefefe;
             margin: 15% auto;
             padding: 0;
@@ -360,10 +362,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 <span class="ca4e-icon ca4e-label"></span>
             </button>
             <button id="clear" class="toolbar-button">Clear All</button>
-            <button id="saveCircuit" class="toolbar-button" style="background-color: #28a745; color: white;">💾 Save</button>
-            <button id="loadCircuit" class="toolbar-button" style="background-color: #007bff; color: white;">📁 Load</button>
-            <button id="deleteCircuit" class="toolbar-button" style="background-color: #dc3545; color: white;">🗑️ Delete</button>
-            <button id="manageCircuits" class="toolbar-button" style="background-color: #6c757d; color: white;">📋 Manage</button>
+            <select id="storageDropdown" class="toolbar-button" style="background-color: #6c757d; color: white; border: none; border-radius: 4px; padding: 8px 12px;">
+                <option value="">💾 Storage</option>
+                <option value="save">💾 Save Circuit</option>
+                <option value="load">📁 Load Circuit</option>
+                <option value="delete">🗑️ Delete Circuit</option>
+            </select>
 <?php if ($USER) : ?>
             <button id="assignmentButton" class="toolbar-button" style="background-color: #4CAF50;">Assignment</button>
 <?php endif; ?>
@@ -381,6 +385,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     <div class="status-bar">
         <span id="coordinates">Position: 0, 0</span>
         <span id="voltage">Voltage: N/A</span>
+        <span id="selectedTool">Selected: None</span>
     </div>
 
     <div id="aboutModal" class="modal">
@@ -398,34 +403,31 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 
 <?php if ($USER) : ?>
     <!-- Assignment Modal -->
-    <div id="assignmentModal" class="modal">
+    <div id="assignmentModal" class="assignment-modal hidden">
+        <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
+            <span>📋 Assignment</span>
+            <button class="close-btn" onclick="closeAssignmentModal()" title="Close">×</button>
+        </div>
         <div class="modal-content">
-            <div class="modal-header">
-                <h2>CMOS Circuit Assignment</h2>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-            <div id="assignmentInstructions">
-                <p id="assignmentInstructionsText">
-                    <!-- Instructions will be loaded dynamically from the exercise class -->
-                </p>
-            </div>
+            <p id="assignmentInstructions">
+                <!-- Instructions will be loaded dynamically from the exercise class -->
+            </p>
             <div id="gradingSection" style="margin-top: 20px; display: none;">
                 <h3>Circuit Grading</h3>
-                <div id="stepDisplay">
-                    <p id="stepText">Ready to grade your circuit!</p>
-                </div>
+                <div id="stepDisplay"></div>
+                <button id="gradeBtn" onclick="startGrading()">Grade</button>
             </div>
-            <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: space-between;">
-                <button id="nextBtn" onclick="nextStep()" style="background-color: #2196F3; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; display: none;">Next</button>
-                <button id="gradeBtn" onclick="startGrading()" style="background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Grade</button>
-            </div>
+            <div id="startGradingSection" style="margin-top: 20px;">
+                <button id="startGradeBtn" onclick="startGrading()">Start Grading</button>
             </div>
         </div>
     </div>
 <?php endif; ?>
 
     <script src="../common/save-restore.js"></script>
+    <script src="../common/modal-manager.js"></script>
+    <script src="../common/grading-interface.js"></script>
+    <script src="../common/tool-utilities.js"></script>
     <script src="components.js"></script>
     <script src="circuit.js"></script>
     <script src="editor.js"></script>
@@ -480,136 +482,41 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 <?php if ($USER) : ?>
         // Autograder functionality
         let currentExercise = null;
+        const gradeSubmitUrl = '<?php echo addSession("grade-submit.php"); ?>';
+        const isInstructor = <?php echo $USER && $USER->instructor ? 'true' : 'false'; ?>;
+        const assignmentType = '<?php echo $assn; ?>';
 
-        // Modal functionality
+        // About modal functionality (keep simple modal for about)
         const aboutModal = document.getElementById('aboutModal');
-        const assignmentModal = document.getElementById('assignmentModal');
         const aboutButton = document.getElementById('aboutButton');
-        const assignmentButton = document.getElementById('assignmentButton');
 
-        // Close modal functionality
-        function closeModal(modal) {
-            modal.style.display = 'none';
-        }
-
-        function closeAssignmentModal() {
-            closeModal(assignmentModal);
-        }
-
-        // Show modal functionality
         function showAboutModal() {
             aboutModal.style.display = 'block';
         }
 
-        function showAssignmentModal() {
-            // Load instructions from the current exercise
-            if (currentExercise && currentExercise.instructions) {
-                const instructionsElement = document.getElementById('assignmentInstructionsText');
-                if (instructionsElement) {
-                    instructionsElement.innerHTML = currentExercise.instructions;
-                }
-            }
-            assignmentModal.style.display = 'block';
-        }
-
-        // Event listeners for modals
         aboutButton.addEventListener('click', showAboutModal);
-        assignmentButton.addEventListener('click', showAssignmentModal);
 
         // Close modals when clicking the X
         document.querySelectorAll('.close').forEach(closeBtn => {
             closeBtn.addEventListener('click', function() {
                 const modal = this.closest('.modal');
-                closeModal(modal);
+                modal.style.display = 'none';
             });
         });
 
         // Close modals when clicking outside
         window.addEventListener('click', function(event) {
             if (event.target.classList.contains('modal')) {
-                closeModal(event.target);
+                event.target.style.display = 'none';
             }
         });
 
-        // Make assignment modal draggable
-        function makeModalDraggable(modal) {
-            const modalContent = modal.querySelector('.modal-content');
-            const modalHeader = modal.querySelector('.modal-header');
-            
-            let isDragging = false;
-            let currentX;
-            let currentY;
-            let initialX;
-            let initialY;
-            let xOffset = 0;
-            let yOffset = 0;
+        // Initialize assignment modal with common utilities (moved to after exercise creation)
 
-            modalHeader.addEventListener('mousedown', dragStart);
-            document.addEventListener('mousemove', drag);
-            document.addEventListener('mouseup', dragEnd);
-
-            function dragStart(e) {
-                initialX = e.clientX - xOffset;
-                initialY = e.clientY - yOffset;
-
-                if (e.target === modalHeader || modalHeader.contains(e.target)) {
-                    isDragging = true;
-                    modalContent.style.cursor = 'grabbing';
-                }
-            }
-
-            function drag(e) {
-                if (isDragging) {
-                    e.preventDefault();
-                    currentX = e.clientX - initialX;
-                    currentY = e.clientY - initialY;
-
-                    xOffset = currentX;
-                    yOffset = currentY;
-
-                    modalContent.style.transform = `translate(${currentX}px, ${currentY}px)`;
-                }
-            }
-
-            function dragEnd(e) {
-                initialX = currentX;
-                initialY = currentY;
-                isDragging = false;
-                modalContent.style.cursor = 'move';
-            }
-        }
-
-        // Initialize draggable functionality for assignment modal
-        makeModalDraggable(assignmentModal);
-
-        // Grading functions
-        function startGrading() {
-            if (currentExercise) {
-                currentExercise.startGrading();
-            }
-        }
-
-        function nextStep() {
-            if (currentExercise) {
-                currentExercise.nextStep();
-            }
-        }
-
+        // Grading functions (now handled by common utilities, but keeping for compatibility)
         function resetAllSwitches() {
             if (currentExercise) {
                 currentExercise.resetAllSwitches();
-            }
-        }
-
-        function resetToBeginningScreen() {
-            if (currentExercise) {
-                currentExercise.resetGrading();
-            }
-        }
-
-        function resetGrading() {
-            if (currentExercise) {
-                currentExercise.resetGrading();
             }
         }
 
@@ -687,7 +594,24 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             if (currentExercise) {
                 currentExercise.submitGradeToLMS = submitGradeToLMS;
             }
+            
+        // Initialize assignment modal with common utilities (after exercise is created)
+        assignmentModalManager.initialize({
+            modalId: 'assignmentModal',
+            buttonId: 'assignmentButton',
+            exerciseInstance: currentExercise,
+            gradeSubmitUrl: gradeSubmitUrl,
+            isInstructor: isInstructor,
+            assignmentType: assignmentType
         });
+    });
+
+    // Global function for HTML onclick handlers
+    function closeAssignmentModal() {
+        if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
+            assignmentModalManager.hide();
+        }
+    }
 
         // Easter egg: Auto-draw CMOS NOT gate
         function drawCmosNotGate() {

@@ -25,6 +25,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title><?php echo(htmlentities($REGISTER_LTI2["name"])); ?></title>
         <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="../common/modal-styles.css">
     </head>
     <body class="tool-interface">
         <center>
@@ -90,10 +91,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     </div>
                 </div>
                 <button onclick="confirmClear()" style="background-color: #ffe6e6;">🗑️</button>
-                <button id="saveLayout" style="background-color: #28a745; color: white;">💾 Save</button>
-                <button id="loadLayout" style="background-color: #007bff; color: white;">📁 Load</button>
-                <button id="deleteLayout" style="background-color: #dc3545; color: white;">🗑️ Delete</button>
-                <button id="manageLayouts" style="background-color: #6c757d; color: white;">📋 Manage</button>
+                <select id="storageDropdown" style="padding: 6px 12px; background-color: #6c757d; color: white; border: none; border-radius: 4px;">
+                    <option value="">💾 Storage</option>
+                    <option value="save">💾 Save Layout</option>
+                    <option value="load">📁 Load Layout</option>
+                    <option value="delete">🗑️ Delete Layout</option>
+                </select>
                 <button onclick="toggleCommandLine()" style="background-color: #6c757d; color: white;">Commands</button>
 <?php if ($USER) : ?>
                 <button id="assignmentBtn" style="background-color:#fff0e6;">Assignment</button>
@@ -126,14 +129,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                             <!-- Instructions will be loaded dynamically from the exercise class -->
                         </p>
                         <div id="gradingSection" style="margin-top: 20px; display: none;">
-                            <h3>Circuit Grading</h3>
-                            <div id="stepDisplay">
-                                <p id="stepText">Ready to grade your circuit!</p>
-                            </div>
+                            <h3>VLSI Layout Grading</h3>
+                            <div id="stepDisplay"></div>
+                            <button id="gradeBtn" onclick="startGrading()">Start Grading</button>
                         </div>
-                        <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: space-between;">
-                            <button id="nextBtn" onclick="nextStep()" style="background-color: #2196F3; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; display: none;">Next</button>
-                            <button id="gradeBtn" onclick="startGrading()" style="background-color: #4CAF50; color: white; padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer;">Grade</button>
+                        <div id="startGradingSection" style="margin-top: 20px;">
+                            <button id="startGradeBtn" onclick="startGrading()">Start Grading</button>
                         </div>
                     </div>
                 </div>
@@ -141,6 +142,9 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             </div>
 
             <script src="../common/save-restore.js"></script>
+            <script src="../common/modal-manager.js"></script>
+            <script src="../common/grading-interface.js"></script>
+            <script src="../common/tool-utilities.js"></script>
             <script src="exercises.js"></script>
             <script>
                 const canvas = document.getElementById('vlsiCanvas');
@@ -250,12 +254,9 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     }
                 }
 
-                // Initialize save/restore buttons
-                saveRestoreManager.createButtons({
-                    saveButtonId: 'saveLayout',
-                    loadButtonId: 'loadLayout',
-                    deleteButtonId: 'deleteLayout',
-                    manageButtonId: 'manageLayouts',
+                // Initialize save/restore dropdown
+                saveRestoreManager.createStorageDropdown({
+                    dropdownId: 'storageDropdown',
                     getDataCallback: getCurrentLayoutData,
                     setDataCallback: setLayoutData
                 });
@@ -572,48 +573,24 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 }
 
 <?php if ($USER) : ?>
-                // Assignment modal functions
-                function showAssignmentModal() {
-                    // Load instructions from the current exercise
-                    if (currentExercise && currentExercise.instructions) {
-                        const instructionsElement = document.getElementById('assignmentInstructions');
-                        if (instructionsElement) {
-                            instructionsElement.innerHTML = currentExercise.instructions;
-                        }
-                    }
-                    // Reset to beginning state when opening
-                    resetToBeginningScreen();
-                    assignmentModal.classList.remove('hidden');
-                    centerAssignmentModal();
-                }
+                // Assignment modal variables
+                const gradeSubmitUrl = '<?php echo addSession("grade-submit.php"); ?>';
+                const isInstructor = <?php echo $USER && $USER->instructor ? 'true' : 'false'; ?>;
+                const assignmentType = '<?php echo $assn; ?>';
 
-                function closeAssignmentModal() {
-                    console.log('closeAssignmentModal');
-                    // Simply hide the modal - don't reset immediately to avoid conflicts
-                    assignmentModal.classList.add('hidden');
-                }
+                // Initialize assignment modal using common utilities (moved to after exercise creation)
 
-                function centerAssignmentModal() {
-                    // Only set initial position if modal doesn't already have a position
-                    if (!assignmentModal.style.left && !assignmentModal.style.top) {
-                        console.log('centerAssignmentModal');
-                        const modalW = assignmentModal.offsetWidth;
-                        const modalH = assignmentModal.offsetHeight;
-                        // Position modal nudged to the right, near the top of viewport
-                        const left = Math.max(0, Math.floor((window.innerWidth - modalW) * 0.7)); // 70% from left edge
-                        const top = Math.max(20, Math.floor(window.innerHeight * 0.1)); // 10% from top, minimum 20px
-                        assignmentModal.style.left = left + 'px';
-                        assignmentModal.style.top = top + 'px';
-                    }
-                }
-
-                // Assignment button click handler
-                assignmentBtn.addEventListener('click', showAssignmentModal);
-
-                // Grading functions
-                function startGrading() {
+                // Keep compatibility functions
+                function resetToBeginningScreen() {
                     if (currentExercise) {
-                        currentExercise.startGrading();
+                        currentExercise.resetGrading();
+                    }
+                }
+
+                // Global function for HTML onclick handlers
+                function closeAssignmentModal() {
+                    if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
+                        assignmentModalManager.hide();
                     }
                 }
 
@@ -691,6 +668,11 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                             // Show error alert to user
                             alert(`⚠️ Grade submission failed: ${data.detail}\n\nYour assignment was completed successfully, but the grade could not be sent to the LMS. Please contact your instructor.`);
                         }
+                        
+                        // Close the assignment modal after showing the alert
+                        if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
+                            assignmentModalManager.hide();
+                        }
                     })
                     .catch(error => {
                         console.error('Error submitting grade:', error);
@@ -701,6 +683,11 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         }
                         // Show error alert to user
                         alert(`⚠️ Grade submission error: ${error.message}\n\nYour assignment was completed successfully, but there was a technical error sending the grade to the LMS. Please contact your instructor.`);
+                        
+                        // Close the assignment modal after showing the alert
+                        if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
+                            assignmentModalManager.hide();
+                        }
                     });
                     <?php else : ?>
                     // User is not authenticated (anonymous access), just log it
@@ -723,6 +710,16 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     if (currentExercise) {
                         currentExercise.submitGradeToLMS = submitGradeToLMS;
                     }
+                    
+                    // Initialize assignment modal with common utilities (after exercise is created)
+                    assignmentModalManager.initialize({
+                        modalId: 'assignmentModal',
+                        buttonId: 'assignmentBtn',
+                        exerciseInstance: currentExercise,
+                        gradeSubmitUrl: gradeSubmitUrl,
+                        isInstructor: isInstructor,
+                        assignmentType: assignmentType
+                    });
                 });
 
                 function drawNotGate() {

@@ -30,6 +30,7 @@ class Exercise {
     startGrading() {
         this.currentStep = 0;
         this.isGrading = true;
+        this.hideStartGradingSection();
         this.showGradingSection();
         this.hideInstructions();
         this.updateGradeButton();
@@ -46,9 +47,10 @@ class Exercise {
             step.status = "pending";
         });
         this.hideGradingSection();
+        this.showStartGradingSection();
         this.showInstructions();
         this.resetGradeButton();
-        this.resetStepText();
+        this.resetStepDisplay();
     }
 
     /**
@@ -61,26 +63,35 @@ class Exercise {
         }
 
         const step = this.steps[this.currentStep];
-        const stepText = document.getElementById('stepText');
+        const stepDisplay = document.getElementById('stepDisplay');
         
         try {
             const result = this.executeStep(this.currentStep);
             
             if (result.success) {
-                stepText.innerHTML = `<span style="color: green;">✓ ${step.name}</span>`;
+                stepDisplay.innerHTML = `<div class="step-result step-passed">
+                    <strong>✓ ${step.name}</strong><br>
+                    ${result.message || 'Step completed successfully'}
+                </div>`;
                 step.status = "passed";
                 this.currentStep++;
                 this.showNextButton();
             } else {
-                stepText.innerHTML = `<span style="color: red;">✗ ${step.name}</span><br>
-                    <small>Error: ${result.error}</small>`;
+                stepDisplay.innerHTML = `<div class="step-result step-failed">
+                    <strong>✗ ${step.name}</strong><br>
+                    ${result.error}
+                </div>`;
                 step.status = "failed";
+                this.showRestartButton();
             }
         } catch (error) {
             console.error('Error executing step:', error);
-            stepText.innerHTML = `<span style="color: red;">✗ ${step.name}</span><br>
-                <small>Error: ${error.message}</small>`;
+            stepDisplay.innerHTML = `<div class="step-result step-failed">
+                <strong>✗ ${step.name}</strong><br>
+                ${error.message}
+            </div>`;
             step.status = "failed";
+            this.showRestartButton();
         }
     }
 
@@ -97,8 +108,11 @@ class Exercise {
      * Handle completion of all steps
      */
     handleAllStepsCompleted() {
-        const stepText = document.getElementById('stepText');
-        stepText.innerHTML = '<span style="color: green;">✓ All tests passed! Submitting grade...</span>';
+        const stepDisplay = document.getElementById('stepDisplay');
+        stepDisplay.innerHTML = `<div class="final-result success">
+            <strong>🎉 Excellent Work!</strong><br>
+            All tests passed! Submitting grade...
+        </div>`;
         
         // Submit grade to LMS if this is an LTI session
         if (typeof this.submitGradeToLMS === 'function') {
@@ -107,8 +121,7 @@ class Exercise {
         
         // Reset all probes to zero voltage after successful grade
         this.resetAllProbesToZero();
-        // Close the assignment dialog
-        this.closeAssignmentModal();
+        // Modal will be closed after the grade submission alert is dismissed
     }
 
     /**
@@ -127,7 +140,7 @@ class Exercise {
      */
     resetAllProbesToZero() {
         // Reset all probe voltage types to '0' (neutral)
-        if (typeof window.CircuitProbes !== 'undefined') {
+        if (typeof window.CircuitProbes !== 'undefined' && typeof window.CircuitProbes.resetAllProbes === 'function') {
             window.CircuitProbes.resetAllProbes();
         }
         
@@ -178,9 +191,9 @@ class Exercise {
     updateGradeButton() {
         const gradeBtn = document.getElementById('gradeBtn');
         if (gradeBtn) {
-            gradeBtn.textContent = 'Reset';
-            gradeBtn.onclick = () => this.resetGrading();
-            gradeBtn.style.backgroundColor = '#FF9800';
+            gradeBtn.textContent = 'Grade';
+            gradeBtn.onclick = () => this.nextStep();
+            gradeBtn.style.backgroundColor = '#28a745';
         }
     }
 
@@ -193,17 +206,50 @@ class Exercise {
         }
     }
 
-    showNextButton() {
-        const nextBtn = document.getElementById('nextBtn');
-        if (nextBtn) {
-            nextBtn.style.display = 'inline-block';
+    continueGrading() {
+        // Continue to next step (called by Next button)
+        if (this.currentStep < this.steps.length) {
+            this.nextStep();
+        } else {
+            this.handleAllStepsCompleted();
         }
     }
 
-    resetStepText() {
-        const stepText = document.getElementById('stepText');
-        if (stepText) {
-            stepText.innerHTML = 'Ready to grade your circuit!';
+    showNextButton() {
+        const button = document.getElementById('gradeBtn');
+        if (button) {
+            button.textContent = 'Next';
+            button.onclick = () => this.continueGrading();
+        }
+    }
+
+    showRestartButton() {
+        const button = document.getElementById('gradeBtn');
+        if (button) {
+            button.textContent = 'Restart';
+            button.onclick = () => this.resetGrading();
+            button.style.backgroundColor = '#dc3545'; // Red color for restart
+        }
+    }
+
+    hideStartGradingSection() {
+        const section = document.getElementById('startGradingSection');
+        if (section) {
+            section.style.display = 'none';
+        }
+    }
+
+    showStartGradingSection() {
+        const section = document.getElementById('startGradingSection');
+        if (section) {
+            section.style.display = 'block';
+        }
+    }
+
+    resetStepDisplay() {
+        const stepDisplay = document.getElementById('stepDisplay');
+        if (stepDisplay) {
+            stepDisplay.innerHTML = '<p>Ready to grade your VLSI layout!</p>';
         }
     }
 

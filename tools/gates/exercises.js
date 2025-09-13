@@ -1182,5 +1182,4 @@ class FullAdderExercise extends Exercise {
     }
 }
 
-// Global variable to hold the current exercise instance
-let currentExercise = null;
+// Global variable to hold the current exercise instance (declared in index.php)

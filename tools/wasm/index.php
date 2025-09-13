@@ -21,6 +21,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WASM Editor - ES Module Example</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="../common/modal-styles.css">
 </head>
 <body>
     <div class="container">
@@ -45,10 +46,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 <div class="editor-controls">
                     <button id="clearEditor" class="btn">Clear</button>
                     <button id="runWasm" class="btn btn-primary">Compile & Run WAT</button>
-                    <button id="saveCode" class="btn" style="background-color: #28a745; color: white;">💾 Save</button>
-                    <button id="loadCode" class="btn" style="background-color: #007bff; color: white;">📁 Load</button>
-                    <button id="deleteCode" class="btn" style="background-color: #dc3545; color: white;">🗑️ Delete</button>
-                    <button id="manageCode" class="btn" style="background-color: #6c757d; color: white;">📋 Manage</button>
+                    <select id="storageDropdown" class="btn" style="background-color: #6c757d; color: white; border: 1px solid #6c757d; padding: 8px 12px; border-radius: 4px;">
+                        <option value="">💾 Storage</option>
+                        <option value="save">💾 Save</option>
+                        <option value="load">📁 Load</option>
+                        <option value="delete">🗑️ Delete</option>
+                    </select>
 <?php if ($USER) : ?>
                     <button id="assignmentBtn" class="btn btn-assignment">Assignment</button>
 <?php endif; ?>
@@ -108,7 +111,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             <div id="gradingSection" style="margin-top: 20px; display: none;">
                 <h3>WASM Grading</h3>
                 <div id="stepDisplay"></div>
-                <button id="gradeBtn" onclick="startGrading()">Start Grading</button>
+                <button id="gradeBtn" onclick="startGrading()">Grade</button>
             </div>
             <div id="startGradingSection" style="margin-top: 20px;">
                 <button id="startGradeBtn" onclick="startGrading()">Start Grading</button>
@@ -118,6 +121,9 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 <?php endif; ?>
     
     <script src="../common/save-restore.js"></script>
+    <script src="../common/modal-manager.js"></script>
+    <script src="../common/grading-interface.js"></script>
+    <script src="../common/tool-utilities.js"></script>
     <script type="module">
         import { WasmEditor } from './script-esm.js';
         document.addEventListener('DOMContentLoaded', () => {
@@ -128,90 +134,23 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 <?php if ($USER) : ?>
     <script src="exercises.js"></script>
     <script>
-        // Assignment modal elements
-        const assignmentModal = document.getElementById('assignmentModal');
-        const assignmentModalHeader = document.getElementById('assignmentModalHeader');
-        const assignmentBtn = document.getElementById('assignmentBtn');
-        let modalUserMoved = false; // if user drags, we keep their position
+        let currentExercise = null;
+        const gradeSubmitUrl = '<?php echo addSession($CFG->wwwroot . '/api/grade-submit.php'); ?>';
+        const isInstructor = <?php echo $USER && $USER->instructor ? 'true' : 'false'; ?>;
+        const assignmentType = '<?php echo $assn; ?>';
 
-        // Assignment modal functions
-        function showAssignmentModal() {
-            console.log('showAssignmentModal called');
-            console.log('currentExercise:', currentExercise);
-            console.log('assignmentModal:', assignmentModal);
+        // LTI Grade Submission Function
+        window.submitGradeToLMS = function(grade) {
+            console.log('Submitting grade to LMS:', grade);
             
-            // Reset the grading state to ensure fresh start
-            if (currentExercise) {
-                currentExercise.resetGrading();
-            }
+            // Check if we're in an LTI session (user is authenticated)
+            <?php if ($USER) : ?>
+            console.log('User is authenticated via LTI, proceeding with grade submission...');
             
-            // Load instructions from the current exercise
-            if (currentExercise && currentExercise.instructions) {
-                const instructionsElement = document.getElementById('assignmentInstructions');
-                if (instructionsElement) {
-                    instructionsElement.innerHTML = currentExercise.instructions;
-                }
-            } else {
-                // Show default message if no exercise is configured
-                const instructionsElement = document.getElementById('assignmentInstructions');
-                if (instructionsElement) {
-                    instructionsElement.innerHTML = `
-                        <h3>No Assignment Configured</h3>
-                        <p>The instructor has not yet configured an assignment for this tool.</p>
-                        <p>Please contact your instructor or try again later.</p>
-                    `;
-                }
-            }
-            
-            if (assignmentModal) {
-                assignmentModal.classList.remove('hidden');
-                centerAssignmentModal();
-            } else {
-                console.error('Assignment modal not found!');
-            }
-        }
-
-        function closeAssignmentModal() {
-            // Reset the grading state when closing
-            if (currentExercise) {
-                currentExercise.resetGrading();
-            }
-            
-            // Hide the modal
-            assignmentModal.classList.add('hidden');
-        }
-
-        function centerAssignmentModal() {
-            // Only set initial position if modal doesn't already have a position
-            if (!assignmentModal.style.left && !assignmentModal.style.top) {
-                console.log('centerAssignmentModal');
-                const modalW = assignmentModal.offsetWidth;
-                const modalH = assignmentModal.offsetHeight;
-                // Position modal nudged to the right, near the top of viewport
-                const left = Math.max(0, Math.floor((window.innerWidth - modalW) * 0.7)); // 70% from left edge
-                const top = Math.max(20, Math.floor(window.innerHeight * 0.1)); // 10% from top, minimum 20px
-                assignmentModal.style.left = left + 'px';
-                assignmentModal.style.top = top + 'px';
-            }
-        }
-
-        // Assignment button click handler
-        if (assignmentBtn) {
-            assignmentBtn.addEventListener('click', showAssignmentModal);
-        }
-
-        // Grading functions
-        function startGrading() {
-            if (currentExercise) {
-                currentExercise.startGrading();
-            }
-        }
-
-        // Grade submission function
-        function submitGradeToLMS(grade) {
+            // Submit the grade via AJAX using form data (as expected by the endpoint)
             const formData = new FormData();
             formData.append('grade', grade);
-            formData.append('code', 'WASM_EXERCISE_COMPLETED');
+            formData.append('code', 'WASM_EXERCISE_COMPLETED'); // Add a code identifier for the assignment
             
             console.log('Sending grade=' + grade);
             
@@ -219,111 +158,79 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('Response received:', response);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
-                console.log('Grade submission response:', data);
+                console.log('Grade response received...');
+                console.log(data);
+                
                 if (data.status === 'success') {
-                    // Show success message
-                    alert('🎉 Excellent work! Your assignment has been completed successfully and your grade has been submitted to the LMS.');
+                    console.log('Grade submitted successfully:', data);
+                    // Show success message to user
+                    alert(`🎉 Congratulations! Your grade of 1.0 has been successfully submitted to the LMS.`);
                 } else {
                     console.error('Grade submission failed:', data);
                     // Show error alert to user
                     alert(`⚠️ Grade submission failed: ${data.detail}\n\nYour assignment was completed successfully, but the grade could not be sent to the LMS. Please contact your instructor.`);
                 }
+                
+                // Close the assignment modal after showing the alert
+                if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
+                    assignmentModalManager.hide();
+                }
             })
             .catch(error => {
-                console.error('Grade submission error:', error);
+                console.error('Error submitting grade:', error);
                 // Show error alert to user
                 alert(`⚠️ Grade submission error: ${error.message}\n\nYour assignment was completed successfully, but there was a technical error sending the grade to the LMS. Please contact your instructor.`);
+                
+                // Close the assignment modal after showing the alert
+                if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
+                    assignmentModalManager.hide();
+                }
             });
+            <?php else : ?>
+            // User is not authenticated (anonymous access), just log it
+            console.log('Anonymous user - grade not submitted to LMS:', grade);
+            <?php endif; ?>
+        };
+
+        // Global function for HTML onclick handlers
+        function closeAssignmentModal() {
+            if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
+                assignmentModalManager.hide();
+            }
         }
 
-        // Initialize the exercise when the page loads
+        // Initialize the exercise and assignment modal when the page loads
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('DOMContentLoaded - initializing exercise');
-            console.log('Assignment value:', '<?php echo $assn; ?>');
-            
             // Create the appropriate exercise instance based on assignment
-            if ( '<?php echo $assn; ?>' == 'HelloWorldExercise') {
-                console.log('Creating HelloWorldExercise');
+            if (assignmentType == 'HelloWorldExercise') {
                 currentExercise = new HelloWorldExercise();
-            } else if ( '<?php echo $assn; ?>' == 'PrintOut42Exercise') {
-                console.log('Creating PrintOut42Exercise');
+            } else if (assignmentType == 'PrintOut42Exercise') {
                 currentExercise = new PrintOut42Exercise();
-            } else {
-                console.log('No matching exercise found for assignment:', '<?php echo $assn; ?>');
             }
             
-            // Override the exercise's submitGradeToLMS method to use the global function
+            // Override the exercise's submitGradeToLMS method to use the common function
             if (currentExercise) {
-                currentExercise.submitGradeToLMS = submitGradeToLMS;
-                console.log('Exercise initialized successfully:', currentExercise);
-            } else {
-                console.log('No exercise was created - currentExercise is null');
+                currentExercise.submitGradeToLMS = window.submitGradeToLMS;
             }
+            
+            // Initialize assignment modal using common utilities
+            assignmentModalManager.initialize({
+                modalId: 'assignmentModal',
+                buttonId: 'assignmentBtn',
+                exerciseInstance: currentExercise,
+                gradeSubmitUrl: gradeSubmitUrl,
+                isInstructor: isInstructor,
+                assignmentType: assignmentType
+            });
         });
-
-        // Make modal draggable
-        (function enableAssignmentDrag() {
-            if (!assignmentModal || !assignmentModalHeader) return;
-            let dragging = false;
-            let startClientX = 0, startClientY = 0;
-            let startLeft = 0, startTop = 0;
-
-            function onPointerDown(e) {
-                dragging = true;
-                modalUserMoved = true;
-                // For position: fixed, use viewport coordinates directly
-                startLeft = parseInt(assignmentModal.style.left) || 0;
-                startTop = parseInt(assignmentModal.style.top) || 0;
-                if (e.touches) {
-                    startClientX = e.touches[0].clientX;
-                    startClientY = e.touches[0].clientY;
-                } else {
-                    startClientX = e.clientX;
-                    startClientY = e.clientY;
-                }
-                assignmentModalHeader.style.cursor = 'grabbing';
-                window.addEventListener('mousemove', onPointerMove, { passive: false });
-                window.addEventListener('mouseup', onPointerUp, { passive: false });
-                window.addEventListener('touchmove', onPointerMove, { passive: false });
-                window.addEventListener('touchend', onPointerUp, { passive: false });
-                e.preventDefault();
-            }
-
-            function onPointerMove(e) {
-                if (!dragging) return;
-                let currentClientX, currentClientY;
-                if (e.touches) {
-                    currentClientX = e.touches[0].clientX;
-                    currentClientY = e.touches[0].clientY;
-                } else {
-                    currentClientX = e.clientX;
-                    currentClientY = e.clientY;
-                }
-                const dx = currentClientX - startClientX;
-                const dy = currentClientY - startClientY;
-                // Remove canvas container constraints - allow modal to move freely on screen
-                const maxLeft = window.innerWidth - assignmentModal.offsetWidth;
-                const maxTop = window.innerHeight - assignmentModal.offsetHeight;
-                const newLeft = Math.max(0, Math.min(maxLeft, startLeft + dx));
-                const newTop = Math.max(0, Math.min(maxTop, startTop + dy));
-                assignmentModal.style.left = newLeft + 'px';
-                assignmentModal.style.top = newTop + 'px';
-            }
-
-            function onPointerUp(e) {
-                dragging = false;
-                assignmentModalHeader.style.cursor = 'grab';
-                window.removeEventListener('mousemove', onPointerMove);
-                window.removeEventListener('mouseup', onPointerUp);
-                window.removeEventListener('touchmove', onPointerMove);
-                window.removeEventListener('touchend', onPointerUp);
-            }
-
-            assignmentModalHeader.addEventListener('mousedown', onPointerDown);
-            assignmentModalHeader.addEventListener('touchstart', onPointerDown, { passive: false });
-        })();
     </script>
 <?php endif; ?>
 

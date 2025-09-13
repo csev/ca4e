@@ -24,6 +24,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Circuit Editor</title>
+    <link rel="stylesheet" href="../common/modal-styles.css">
     <style>
         body {
             margin: 0;
@@ -266,8 +267,8 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             color: white;
         }
 
-        /* Add modal styles */
-        .modal {
+        /* Add modal styles (only for non-assignment modals) */
+        .modal:not(.assignment-modal) {
             display: none;
             position: fixed;
             z-index: 1000;
@@ -278,7 +279,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             background-color: rgba(0,0,0,0.5);
         }
 
-        .modal-content {
+        .modal:not(.assignment-modal) .modal-content {
             background-color: #fefefe;
             margin: 15% auto;
             padding: 20px;
@@ -440,91 +441,6 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
 
-        /* Assignment Modal Styles */
-        .assignment-modal {
-            position: fixed;
-            background: white;
-            border: 2px solid #007bff;
-            border-radius: 8px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            z-index: 1000;
-            width: 500px;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .assignment-modal.hidden {
-            display: none;
-        }
-
-        .assignment-modal .modal-header {
-            background: #007bff;
-            color: white;
-            padding: 12px 16px;
-            border-radius: 6px 6px 0 0;
-            cursor: grab;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: bold;
-        }
-
-        .assignment-modal .modal-header:active {
-            cursor: grabbing;
-        }
-
-        .assignment-modal .close-btn {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            padding: 0;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .assignment-modal .close-btn:hover {
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-        }
-
-        .assignment-modal .modal-content {
-            padding: 20px;
-        }
-
-        .assignment-modal .modal-content h3 {
-            margin-top: 0;
-            color: #007bff;
-        }
-
-        .assignment-modal .modal-content h4 {
-            color: #333;
-            margin-top: 15px;
-            margin-bottom: 8px;
-        }
-
-        .assignment-modal .modal-content ul {
-            margin: 8px 0;
-            padding-left: 20px;
-        }
-
-        .assignment-modal .modal-content li {
-            margin: 4px 0;
-        }
-
-        .assignment-modal .modal-content pre {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            padding: 12px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-            overflow-x: auto;
-        }
 
         #gradeBtn {
             background-color: #28a745;
@@ -585,10 +501,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         <div class="center-section">
             <button id="tagMode" class="mode-button">🏷️ Tag</button>
             <button id="delete" class="icon-button">🗑️</button>
-            <button id="saveCircuit" class="mode-button" style="background-color: #28a745; color: white;">💾 Save</button>
-            <button id="loadCircuit" class="mode-button" style="background-color: #007bff; color: white;">📁 Load</button>
-            <button id="deleteCircuit" class="mode-button" style="background-color: #dc3545; color: white;">🗑️ Delete</button>
-            <button id="manageCircuits" class="mode-button" style="background-color: #6c757d; color: white;">📋 Manage</button>
+            <select id="storageDropdown" class="mode-button" style="background-color: #6c757d; color: white; border: none; border-radius: 4px; padding: 8px 12px;">
+                <option value="">💾 Storage</option>
+                <option value="save">💾 Save Circuit</option>
+                <option value="load">📁 Load Circuit</option>
+                <option value="delete">🗑️ Delete Circuit</option>
+            </select>
         </div>
         <div class="commands-selector">
             <select id="commandsSelector">
@@ -637,6 +555,9 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 
     <!-- Load the gate definitions first -->
     <script src="../common/save-restore.js"></script>
+    <script src="../common/modal-manager.js"></script>
+    <script src="../common/grading-interface.js"></script>
+    <script src="../common/tool-utilities.js"></script>
     <script src="gates.js"></script>
     <!-- Then load the main editor code -->
     <script src="main.js"></script>
@@ -730,103 +651,18 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         // Debug: Check if HalfAdderExercise is loaded
         console.log('HalfAdderExercise class available:', typeof HalfAdderExercise);
         
-        // Assignment modal elements
-        const assignmentModal = document.getElementById('assignmentModal');
-        const assignmentModalHeader = document.getElementById('assignmentModalHeader');
-        const assignmentBtn = document.getElementById('assignmentBtn');
-        let modalUserMoved = false; // if user drags, we keep their position
+        // Assignment modal variables
+        let currentExercise = null;
+        const gradeSubmitUrl = '<?php echo addSession("grade-submit.php"); ?>';
+        const isInstructor = <?php echo $USER && $USER->instructor ? 'true' : 'false'; ?>;
+        const assignmentType = '<?php echo $assn; ?>';
 
-        // Assignment modal functions
-        function showAssignmentModal() {
-            console.log('showAssignmentModal called');
-            console.log('currentExercise:', currentExercise);
-            console.log('assignmentModal:', assignmentModal);
-            
-            // Reset the grading state to ensure fresh start
+        // Initialize assignment modal using common utilities (moved to after exercise creation)
+
+        // Keep compatibility function for modal state reset
+        function resetModalToInitialState() {
             if (currentExercise) {
                 currentExercise.resetGrading();
-            }
-            
-            // Always reset to initial dialog state
-            resetModalToInitialState();
-            
-            // Load instructions from the current exercise
-            if (currentExercise && currentExercise.instructions) {
-                const instructionsElement = document.getElementById('assignmentInstructions');
-                if (instructionsElement) {
-                    instructionsElement.innerHTML = currentExercise.instructions;
-                }
-                
-                // Hide the grading section initially - it will be shown when grading starts
-                const gradingSection = document.getElementById('gradingSection');
-                if (gradingSection) {
-                    gradingSection.style.display = 'none';
-                }
-                
-                // Show the start grading section
-                const startGradingSection = document.getElementById('startGradingSection');
-                if (startGradingSection) {
-                    startGradingSection.style.display = 'block';
-                }
-            } else {
-                // Show default message if no exercise is configured
-                const instructionsElement = document.getElementById('assignmentInstructions');
-                if (instructionsElement) {
-                    instructionsElement.innerHTML = `
-                        <h3>No Assignment Configured</h3>
-                        <p>The instructor has not yet configured an assignment for this tool.</p>
-                        <p>Please contact your instructor or try again later.</p>
-                    `;
-                }
-                
-                // Hide the grading section when no exercise is configured
-                const gradingSection = document.getElementById('gradingSection');
-                if (gradingSection) {
-                    gradingSection.style.display = 'none';
-                }
-            }
-            
-            if (assignmentModal) {
-                assignmentModal.classList.remove('hidden');
-                centerAssignmentModal();
-            } else {
-                console.error('Assignment modal not found!');
-            }
-        }
-
-        function closeAssignmentModal() {
-            // Reset the grading state when closing
-            if (currentExercise) {
-                currentExercise.resetGrading();
-            }
-            
-            // Hide the modal
-            assignmentModal.classList.add('hidden');
-        }
-
-        function centerAssignmentModal() {
-            // Only set initial position if modal doesn't already have a position
-            if (!assignmentModal.style.left && !assignmentModal.style.top) {
-                console.log('centerAssignmentModal');
-                const modalW = assignmentModal.offsetWidth;
-                const modalH = assignmentModal.offsetHeight;
-                // Position modal nudged to the right, near the top of viewport
-                const left = Math.max(0, Math.floor((window.innerWidth - modalW) * 0.7)); // 70% from left edge
-                const top = Math.max(20, Math.floor(window.innerHeight * 0.1)); // 10% from top, minimum 20px
-                assignmentModal.style.left = left + 'px';
-                assignmentModal.style.top = top + 'px';
-            }
-        }
-
-        // Assignment button click handler
-        if (assignmentBtn) {
-            assignmentBtn.addEventListener('click', showAssignmentModal);
-        }
-
-        // Grading functions
-        function startGrading() {
-            if (currentExercise) {
-                currentExercise.startGrading();
             }
         }
 
@@ -853,12 +689,29 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     // Show error alert to user
                     alert(`⚠️ Grade submission failed: ${data.detail}\n\nYour assignment was completed successfully, but the grade could not be sent to the LMS. Please contact your instructor.`);
                 }
+                
+                // Close the assignment modal after showing the alert
+                if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
+                    assignmentModalManager.hide();
+                }
             })
             .catch(error => {
                 console.error('Grade submission error:', error);
                 // Show error alert to user
                 alert(`⚠️ Grade submission error: ${error.message}\n\nYour assignment was completed successfully, but there was a technical error sending the grade to the LMS. Please contact your instructor.`);
+                
+                // Close the assignment modal after showing the alert
+                if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
+                    assignmentModalManager.hide();
+                }
             });
+        }
+
+        // Global function for HTML onclick handlers
+        function closeAssignmentModal() {
+            if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
+                assignmentModalManager.hide();
+            }
         }
 
         // Initialize the exercise when the page loads
@@ -896,71 +749,19 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             } else {
                 console.log('No exercise was created - currentExercise is null');
             }
+            
+            // Initialize assignment modal with common utilities (after exercise is created)
+            assignmentModalManager.initialize({
+                modalId: 'assignmentModal',
+                buttonId: 'assignmentBtn',
+                exerciseInstance: currentExercise,
+                gradeSubmitUrl: gradeSubmitUrl,
+                isInstructor: isInstructor,
+                assignmentType: assignmentType
+            });
         });
 
-        // Make modal draggable
-        (function enableAssignmentDrag() {
-            if (!assignmentModal || !assignmentModalHeader) return;
-            let dragging = false;
-            let startClientX = 0, startClientY = 0;
-            let startLeft = 0, startTop = 0;
-
-            function onPointerDown(e) {
-                dragging = true;
-                modalUserMoved = true;
-                // For position: fixed, use viewport coordinates directly
-                startLeft = parseInt(assignmentModal.style.left) || 0;
-                startTop = parseInt(assignmentModal.style.top) || 0;
-                if (e.touches) {
-                    startClientX = e.touches[0].clientX;
-                    startClientY = e.touches[0].clientY;
-                } else {
-                    startClientX = e.clientX;
-                    startClientY = e.clientY;
-                }
-                assignmentModalHeader.style.cursor = 'grabbing';
-                window.addEventListener('mousemove', onPointerMove, { passive: false });
-                window.addEventListener('mouseup', onPointerUp, { passive: false });
-                window.addEventListener('touchmove', onPointerMove, { passive: false });
-                window.addEventListener('touchend', onPointerUp, { passive: false });
-                e.preventDefault();
-            }
-
-            function onPointerMove(e) {
-                if (!dragging) return;
-                let currentClientX, currentClientY;
-                if (e.touches) {
-                    currentClientX = e.touches[0].clientX;
-                    currentClientY = e.touches[0].clientY;
-                } else {
-                    currentClientX = e.clientX;
-                    currentClientY = e.clientY;
-                }
-                const dx = currentClientX - startClientX;
-                const dy = currentClientY - startClientY;
-                // Remove canvas container constraints - allow modal to move freely on screen
-                const maxLeft = window.innerWidth - assignmentModal.offsetWidth;
-                const maxTop = window.innerHeight - assignmentModal.offsetHeight;
-                const newLeft = Math.max(0, Math.min(maxLeft, startLeft + dx));
-                const newTop = Math.max(0, Math.min(maxTop, startTop + dy));
-                assignmentModal.style.left = newLeft + 'px';
-                assignmentModal.style.top = newTop + 'px';
-            }
-
-            function onPointerUp(e) {
-                dragging = false;
-                assignmentModalHeader.style.cursor = 'grab';
-                window.removeEventListener('mousemove', onPointerMove);
-                window.removeEventListener('mouseup', onPointerUp);
-                window.removeEventListener('touchmove', onPointerMove);
-                window.removeEventListener('touchend', onPointerUp);
-            }
-
-            assignmentModalHeader.addEventListener('mousedown', onPointerDown);
-            assignmentModalHeader.addEventListener('touchstart', onPointerDown, { passive: false });
-        })();
-
-        // Reset assignment modal to initial state
+        // Reset assignment modal to initial state (kept for compatibility)
         function resetModalToInitialState() {
             // Hide any hint modal that might be open
             const hintModal = document.getElementById('hintModal');

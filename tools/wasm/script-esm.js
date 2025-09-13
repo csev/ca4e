@@ -110,11 +110,8 @@ export class WasmEditor {
         };
 
         // Initialize save/restore buttons
-        saveRestoreManager.createButtons({
-            saveButtonId: 'saveCode',
-            loadButtonId: 'loadCode',
-            deleteButtonId: 'deleteCode',
-            manageButtonId: 'manageCode',
+        saveRestoreManager.createStorageDropdown({
+            dropdownId: 'storageDropdown',
             getDataCallback: getCurrentCodeData,
             setDataCallback: setCodeData
         });

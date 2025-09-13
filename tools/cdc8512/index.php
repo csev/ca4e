@@ -352,10 +352,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             <textarea id="assembly-input" rows="8" cols="50"></textarea>
             <br><br>
             <button id="assemble">Assemble</button>
-            <button id="save-assembly">Save</button>
-            <button id="load-assembly">Load</button>
-            <button id="delete-assembly">Delete</button>
-            <button id="manage-saved">Manage</button>
+            <select id="storageDropdown" style="background-color: #6c757d; color: white; border: 1px solid #6c757d; padding: 8px 12px; border-radius: 4px; margin: 0 5px;">
+                <option value="">💾 Storage</option>
+                <option value="save">💾 Save</option>
+                <option value="load">📁 Load</option>
+                <option value="delete">🗑️ Delete</option>
+            </select>
             <button id="clear-assembly">Clear</button>
         </div>
         
@@ -521,82 +523,82 @@ HALT`;
                     document.getElementById('assembly-input').value = '';
                 });
 
-                document.getElementById('save-assembly').addEventListener('click', () => {
-                    const assemblyCode = document.getElementById('assembly-input').value;
-                    if (assemblyCode.trim()) {
-                        const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
-                        const programName = prompt('Enter a name for this program:', `Program_${timestamp}`);
-                        if (programName) {
-                            const savedPrograms = JSON.parse(localStorage.getItem('cdc8512_programs') || '{}');
-                            savedPrograms[programName] = {
-                                code: assemblyCode,
-                                timestamp: new Date().toISOString()
-                            };
-                            localStorage.setItem('cdc8512_programs', JSON.stringify(savedPrograms));
-                            alert(`Program "${programName}" saved successfully!`);
+                // Storage dropdown event handler
+                document.getElementById('storageDropdown').addEventListener('change', (e) => {
+                    const action = e.target.value;
+                    
+                    if (action === 'save') {
+                        const assemblyCode = document.getElementById('assembly-input').value;
+                        if (assemblyCode.trim()) {
+                            const timestamp = new Date().toISOString().slice(0, 19).replace('T', ' ');
+                            const programName = prompt('Enter a name for this program:', `Program_${timestamp}`);
+                            if (programName) {
+                                const savedPrograms = JSON.parse(localStorage.getItem('cdc8512_programs') || '{}');
+                                savedPrograms[programName] = {
+                                    code: assemblyCode,
+                                    timestamp: new Date().toISOString()
+                                };
+                                localStorage.setItem('cdc8512_programs', JSON.stringify(savedPrograms));
+                                alert(`Program "${programName}" saved successfully!`);
+                            }
+                        } else {
+                            alert('Please enter some assembly code to save');
                         }
-                    } else {
-                        alert('Please enter some assembly code to save');
-                    }
-                });
-
-                document.getElementById('load-assembly').addEventListener('click', () => {
-                    const savedPrograms = JSON.parse(localStorage.getItem('cdc8512_programs') || '{}');
-                    const programNames = Object.keys(savedPrograms);
-                    
-                    if (programNames.length === 0) {
-                        alert('No saved programs found');
-                        return;
-                    }
-                    
-                    const programName = prompt('Enter the name of the program to load:\n\nAvailable programs:\n' + programNames.join('\n'));
-                    if (programName && savedPrograms[programName]) {
-                        document.getElementById('assembly-input').value = savedPrograms[programName].code;
-                        alert(`Program "${programName}" loaded successfully!`);
-                    } else if (programName) {
-                        alert(`Program "${programName}" not found`);
-                    }
-                });
-
-                document.getElementById('delete-assembly').addEventListener('click', () => {
-                    const savedPrograms = JSON.parse(localStorage.getItem('cdc8512_programs') || '{}');
-                    const programNames = Object.keys(savedPrograms);
-                    
-                    if (programNames.length === 0) {
-                        alert('No saved programs found');
-                        return;
-                    }
-                    
-                    const programName = prompt('Enter the name of the program to delete:\n\nAvailable programs:\n' + programNames.join('\n'));
-                    if (programName && savedPrograms[programName]) {
-                        if (confirm(`Are you sure you want to delete "${programName}"?`)) {
-                            delete savedPrograms[programName];
-                            localStorage.setItem('cdc8512_programs', JSON.stringify(savedPrograms));
-                            alert(`Program "${programName}" deleted successfully!`);
+                    } else if (action === 'load') {
+                        const savedPrograms = JSON.parse(localStorage.getItem('cdc8512_programs') || '{}');
+                        const programNames = Object.keys(savedPrograms);
+                        
+                        if (programNames.length === 0) {
+                            alert('No saved programs found');
+                            return;
                         }
-                    } else if (programName) {
-                        alert(`Program "${programName}" not found`);
+                        
+                        let message = 'Enter the name of the program to load:\n\nAvailable programs:\n';
+                        programNames.forEach(name => {
+                            const program = savedPrograms[name];
+                            const date = new Date(program.timestamp).toLocaleString();
+                            message += `${name} (${date})\n`;
+                        });
+                        
+                        const programName = prompt(message);
+                        if (programName && savedPrograms[programName]) {
+                            document.getElementById('assembly-input').value = savedPrograms[programName].code;
+                            alert(`Program "${programName}" loaded successfully!`);
+                        } else if (programName) {
+                            alert(`Program "${programName}" not found`);
+                        }
+                    } else if (action === 'delete') {
+                        const savedPrograms = JSON.parse(localStorage.getItem('cdc8512_programs') || '{}');
+                        const programNames = Object.keys(savedPrograms);
+                        
+                        if (programNames.length === 0) {
+                            alert('No saved programs found');
+                            return;
+                        }
+                        
+                        let message = 'Enter the name of the program to delete:\n\nAvailable programs:\n';
+                        programNames.forEach(name => {
+                            const program = savedPrograms[name];
+                            const date = new Date(program.timestamp).toLocaleString();
+                            message += `${name} (${date})\n`;
+                        });
+                        
+                        const programName = prompt(message);
+                        if (programName && savedPrograms[programName]) {
+                            if (confirm(`Are you sure you want to delete "${programName}"?`)) {
+                                delete savedPrograms[programName];
+                                localStorage.setItem('cdc8512_programs', JSON.stringify(savedPrograms));
+                                alert(`Program "${programName}" deleted successfully!`);
+                            }
+                        } else if (programName) {
+                            alert(`Program "${programName}" not found`);
+                        }
                     }
-                });
-
-                document.getElementById('manage-saved').addEventListener('click', () => {
-                    const savedPrograms = JSON.parse(localStorage.getItem('cdc8512_programs') || '{}');
-                    const programNames = Object.keys(savedPrograms);
                     
-                    if (programNames.length === 0) {
-                        alert('No saved programs found');
-                        return;
-                    }
-                    
-                    let message = 'Saved Programs:\n\n';
-                    programNames.forEach(name => {
-                        const program = savedPrograms[name];
-                        const date = new Date(program.timestamp).toLocaleString();
-                        message += `${name} (saved: ${date})\n`;
-                    });
-                    message += '\nTo load: Click "Load" and enter the program name\nTo delete: Click "Delete" and enter the program name';
-                    
-                    alert(message);
+                    // Reset dropdown to default after action
+                    setTimeout(() => {
+                        e.target.value = '';
+                    }, 100);
                 });
 
                 document.getElementById('help').addEventListener('click', () => {

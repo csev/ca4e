@@ -976,11 +976,8 @@ window.addEventListener('load', () => {
     }
 
     // Initialize save/restore buttons
-    saveRestoreManager.createButtons({
-        saveButtonId: 'saveCircuit',
-        loadButtonId: 'loadCircuit',
-        deleteButtonId: 'deleteCircuit',
-        manageButtonId: 'manageCircuits',
+    saveRestoreManager.createStorageDropdown({
+        dropdownId: 'storageDropdown',
         getDataCallback: getCurrentCircuitData,
         setDataCallback: setCircuitData
     });
