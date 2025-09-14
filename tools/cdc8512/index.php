@@ -839,6 +839,11 @@ HALT`;
                 if (data.status === 'success') {
                     // Show success message
                     alert('🎉 Excellent work! Your assignment has been completed successfully and your grade has been submitted to the LMS.');
+                    // Close the assignment modal automatically
+                    const assignmentModal = document.getElementById('assignmentModal');
+                    if (assignmentModal) {
+                        assignmentModal.classList.add('hidden');
+                    }
                 } else {
                     console.error('Grade submission failed:', data);
                     // Show error alert to user
