@@ -350,24 +350,6 @@ class PrintOut42Exercise extends Exercise {
         const instructions = `
             <h3>Print Out 42</h3>
             <p>Write a CDC8512 assembly program that outputs the number 42.</p>
-            <h4>Requirements:</h4>
-            <ul>
-                <li>Your program must assemble without errors</li>
-                <li>Your program must run to completion (HALT instruction)</li>
-                <li>Your program must output the number 42</li>
-            </ul>
-            <h4>Hints:</h4>
-            <ul>
-                <li>Use the SET instruction to load the value 42 into a register</li>
-                <li>Use the PS (Print String/Number) instruction to output the value</li>
-                <li>End your program with HALT</li>
-            </ul>
-            <h4>Example structure:</h4>
-            <pre>
-SET X1, 42
-PS
-HALT
-            </pre>
         `;
 
         super("Print Out 42", "Output the number 42 using CDC8512 assembly", steps, instructions);
