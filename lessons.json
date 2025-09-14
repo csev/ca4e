@@ -97,6 +97,18 @@
             ]
         },
         {
+            "title" : "Mistic: Building a Nand Gate with VLSI Layout",
+            "launch" : "tools/mistic/",
+            "resource_link_id" : "ca4e_02_vlsi_nand",
+            "target": "_blank",
+            "custom" : [
+                {
+                    "key": "exercise",
+                    "value": "NandGateExercise"
+                }
+             ]
+        },
+        {
             "title" : "Mistic: Building a Nor Gate with VLSI Layout",
             "launch" : "tools/mistic/",
             "resource_link_id" : "ca4e_02_vlsi_nor",
@@ -171,24 +183,24 @@
         {
             "title" : "Print out '42'",
             "launch" : "tools/cdc8512/",
-            "resource_link_id" : "ca4e_04_42",
+            "resource_link_id" : "ca4e_04_mistic_42",
             "target": "_blank",
             "custom" : [
                 {
                     "key": "exercise",
-                    "value": "FourtyTwo"
+                    "value": "PrintOut42Exercise"
                 }
             ]
         },
         {
             "title" : "WASM",
             "launch" : "tools/wasm/",
-            "resource_link_id" : "ca4e_04_wasm",
+            "resource_link_id" : "ca4e_04_wasm_hello",
             "target": "_blank",
             "custom" : [
                 {
                     "key": "exercise",
-                    "value": "Wasm"
+                    "value": "HelloWorldExercise"
                 }
             ]
         }

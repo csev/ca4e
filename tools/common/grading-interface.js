@@ -82,14 +82,6 @@ class GradingInterface {
         });
     }
     
-    /**
-     * Show retry button
-     */
-    showRetryButton() {
-        this.updateGradeButton('Retry', () => {
-            if (window.startGrading) window.startGrading();
-        });
-    }
     
     /**
      * Show executing indicator
@@ -166,9 +158,6 @@ class GradingInterface {
                     <p><strong>Grade: ${percentage}%</strong></p>
                     <button onclick="submitGradeToLMS(${grade})" class="submit-grade-btn">
                         Submit Partial Grade to LMS
-                    </button>
-                    <button onclick="startGrading()" class="retry-btn">
-                        Try Again
                     </button>
                 </div>
             `;
@@ -275,20 +264,6 @@ class GradingInterface {
                 background-color: #218838;
             }
             
-            .retry-btn {
-                background-color: #007bff;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                margin: 5px;
-                font-size: 16px;
-            }
-            
-            .retry-btn:hover {
-                background-color: #0056b3;
-            }
         `;
         document.head.appendChild(style);
     }

@@ -90,7 +90,7 @@ class Exercise {
         
         if (!result.passed) {
             this.isGrading = false;
-            this.showRetryButton();
+            this.hideGradeButton();
             // Show hint button if available (only for exercises that have them)
             if (typeof this.showHints === 'function') {
                 this.showHintButton();
@@ -152,6 +152,7 @@ class Exercise {
         if (button) {
             button.textContent = 'Start Grading';
             button.onclick = () => this.startGrading();
+            button.style.display = 'inline-block'; // Make sure button is visible
         }
     }
 
@@ -160,17 +161,10 @@ class Exercise {
         if (button) {
             button.textContent = 'Start Grading';
             button.onclick = () => this.startGrading();
+            button.style.display = 'inline-block'; // Make sure button is visible after reset
         }
     }
 
-    showRetryButton() {
-        const button = document.getElementById('gradeBtn');
-        if (button) {
-            button.textContent = 'Retry Grading';
-            button.onclick = () => this.startGrading();
-            button.style.backgroundColor = '#dc3545'; // Red color for retry
-        }
-    }
 
     showHintButton() {
         const stepDisplay = document.getElementById('stepDisplay');
@@ -193,6 +187,14 @@ class Exercise {
         if (button) {
             button.textContent = 'Next';
             button.onclick = () => this.continueGrading();
+            button.style.display = 'inline-block'; // Make sure button is visible
+        }
+    }
+
+    hideGradeButton() {
+        const button = document.getElementById('gradeBtn');
+        if (button) {
+            button.style.display = 'none';
         }
     }
 

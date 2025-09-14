@@ -8,6 +8,9 @@ use \Tsugi\Core\LTIX;
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
 
+// There is always one exercise
+$assn = "SlideRuleMultiplicationExercise";
+
 // Allow the grading web services to work
 $_SESSION['GSRF'] = 10; 
 ?><!DOCTYPE html>

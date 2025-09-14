@@ -76,7 +76,7 @@ class Exercise {
         
         if (!result.passed) {
             this.isGrading = false;
-            this.showRetryButton();
+            this.hideGradeButton();
         } else if (stepIndex < this.steps.length - 1) {
             // Show Next button for intermediate steps that passed
             this.showNextButton();
@@ -134,6 +134,7 @@ class Exercise {
         if (button) {
             button.textContent = 'Start Grading';
             button.onclick = () => this.startGrading();
+            button.style.display = 'inline-block'; // Make sure button is visible
         }
     }
 
@@ -142,22 +143,24 @@ class Exercise {
         if (button) {
             button.textContent = 'Start Grading';
             button.onclick = () => this.startGrading();
+            button.style.display = 'inline-block'; // Make sure button is visible after reset
         }
     }
 
-    showRetryButton() {
+    hideGradeButton() {
         const button = document.getElementById('gradeBtn');
         if (button) {
-            button.textContent = 'Retry Grading';
-            button.onclick = () => this.startGrading();
+            button.style.display = 'none';
         }
     }
+
 
     showNextButton() {
         const button = document.getElementById('gradeBtn');
         if (button) {
             button.textContent = 'Next';
             button.onclick = () => this.nextStep();
+            button.style.display = 'inline-block'; // Make sure button is visible
         }
     }
 
@@ -327,7 +330,7 @@ class HalfAdderExercise extends Exercise {
         
         if (!result.passed) {
             this.isGrading = false;
-            this.showRetryButton();
+            this.hideGradeButton();
             
             // Show hint button after 2 failed attempts
             if (this.failedAttempts >= 2) {
@@ -787,7 +790,7 @@ class FullAdderExercise extends Exercise {
         
         if (!result.passed) {
             this.isGrading = false;
-            this.showRetryButton();
+            this.hideGradeButton();
             
             // Show hint button after 2 failed attempts
             if (this.failedAttempts >= 2) {

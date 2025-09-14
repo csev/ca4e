@@ -14,6 +14,7 @@ $_SESSION['GSRF'] = 10;
 
 // See if we have an assignment configured, if not check for a custom variable
 $assn = Settings::linkGetCustom('exercise');
+
 // Make sure it is a valid assignment
 if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 ?><!DOCTYPE html>

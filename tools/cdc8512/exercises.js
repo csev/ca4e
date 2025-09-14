@@ -77,7 +77,7 @@ class Exercise {
         
         if (!result.passed) {
             this.isGrading = false;
-            this.showRetryButton();
+            this.hideGradeButton();
         }
     }
 
@@ -135,6 +135,7 @@ class Exercise {
         if (button) {
             button.textContent = 'Start Grading';
             button.onclick = () => this.startGrading();
+            button.style.display = 'inline-block'; // Make sure button is visible
         }
     }
 
@@ -143,17 +144,17 @@ class Exercise {
         if (button) {
             button.textContent = 'Start Grading';
             button.onclick = () => this.startGrading();
+            button.style.display = 'inline-block'; // Make sure button is visible after reset
         }
     }
 
-    showRetryButton() {
+    hideGradeButton() {
         const button = document.getElementById('gradeBtn');
         if (button) {
-            button.textContent = 'Retry Grading';
-            button.onclick = () => this.startGrading();
-            button.style.display = 'inline-block';
+            button.style.display = 'none';
         }
     }
+
 
     displayStepResult(stepIndex, result) {
         const display = document.getElementById('stepDisplay');

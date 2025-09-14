@@ -82,7 +82,7 @@ class Exercise {
                     ${result.error}
                 </div>`;
                 step.status = "failed";
-                this.showRestartButton();
+                this.hideGradeButton();
             }
         } catch (error) {
             console.error('Error executing step:', error);
@@ -91,7 +91,7 @@ class Exercise {
                 ${error.message}
             </div>`;
             step.status = "failed";
-            this.showRestartButton();
+            this.hideGradeButton();
         }
     }
 
@@ -203,6 +203,7 @@ class Exercise {
             gradeBtn.textContent = 'Grade';
             gradeBtn.onclick = () => this.startGrading();
             gradeBtn.style.backgroundColor = '#4CAF50';
+            gradeBtn.style.display = 'inline-block'; // Make sure button is visible after reset
         }
     }
 
@@ -220,17 +221,17 @@ class Exercise {
         if (button) {
             button.textContent = 'Next';
             button.onclick = () => this.continueGrading();
+            button.style.display = 'inline-block'; // Make sure button is visible
         }
     }
 
-    showRestartButton() {
+    hideGradeButton() {
         const button = document.getElementById('gradeBtn');
         if (button) {
-            button.textContent = 'Restart';
-            button.onclick = () => this.resetGrading();
-            button.style.backgroundColor = '#dc3545'; // Red color for restart
+            button.style.display = 'none';
         }
     }
+
 
     hideStartGradingSection() {
         const section = document.getElementById('startGradingSection');
