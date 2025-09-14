@@ -855,13 +855,8 @@ HALT`;
         // Initialize the exercise when the page loads
         document.addEventListener('DOMContentLoaded', function() {
             // Create the appropriate exercise instance based on assignment
-            if ( '<?php echo $assn; ?>' == 'PrintOut42Exercise') {
-                currentExercise = new PrintOut42Exercise();
-            } else if ( '<?php echo $assn; ?>' == 'SimplePrint42Exercise') {
-                currentExercise = new SimplePrint42Exercise();
-            } else if ( '<?php echo $assn; ?>' == '' && <?php echo $USER && $USER->instructor ? 'true' : 'false'; ?>) {
-                // Default assignment for instructor testing
-                currentExercise = new SimplePrint42Exercise();
+            if ( '<?php echo $assn; ?>' == 'Print42Exercise') {
+                currentExercise = new Print42Exercise();
             }
             
             // Override the exercise's submitGradeToLMS method to use the global function

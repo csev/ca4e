@@ -217,7 +217,7 @@ class Exercise {
  * Students need to have a CDC8512 program that outputs the number 42
  * This version skips assembly and just runs the program to check output
  */
-class SimplePrint42Exercise extends Exercise {
+class Print42Exercise extends Exercise {
     constructor() {
         const steps = [
             { name: "Program Execution", description: "Run program and check if it halts with output '42'" }
@@ -330,90 +330,6 @@ class SimplePrint42Exercise extends Exercise {
             
         } catch (error) {
             return { passed: false, message: `Error during execution: ${error.message}` };
-        }
-    }
-}
-
-/**
- * Print Out 42 Exercise
- * 
- * Students need to write a CDC8512 assembly program that outputs the number 42
- */
-class PrintOut42Exercise extends Exercise {
-    constructor() {
-        const steps = [
-            { name: "Program Assembly", description: "Check if program assembles without errors" },
-            { name: "Program Execution", description: "Check if program runs to completion" },
-            { name: "Output Verification", description: "Check if program outputs '42'" }
-        ];
-
-        const instructions = `
-            <h3>Print Out 42</h3>
-            <p>Write a CDC8512 assembly program that outputs the number 42.</p>
-        `;
-
-        super("Print Out 42", "Output the number 42 using CDC8512 assembly", steps, instructions);
-    }
-
-    checkStep(stepIndex) {
-        switch (stepIndex) {
-            case 0: // Program Assembly
-                return this.checkAssembly();
-            case 1: // Program Execution
-                return this.checkExecution();
-            case 2: // Output Verification
-                return this.checkOutput();
-            default:
-                return { passed: false, message: "Unknown step" };
-        }
-    }
-
-    checkAssembly() {
-        // Check if the program assembled successfully
-        // This would need to integrate with the CDC8512 emulator
-        const assemblyInput = document.getElementById('assembly-input');
-        if (!assemblyInput || !assemblyInput.value.trim()) {
-            return { passed: false, message: "No assembly code found. Please enter your program in the assembly editor." };
-        }
-
-        // Basic check for required instructions
-        const code = assemblyInput.value.toUpperCase();
-        if (!code.includes('HALT')) {
-            return { passed: false, message: "Program must end with HALT instruction." };
-        }
-
-        // Try to assemble (this would need integration with the actual assembler)
-        try {
-            // This is a placeholder - in real implementation, we'd call the assembler
-            return { passed: true, message: "✅ Program assembled successfully." };
-        } catch (error) {
-            return { passed: false, message: `Assembly failed: ${error.message}` };
-        }
-    }
-
-    checkExecution() {
-        // Check if program runs to completion
-        // This would need to integrate with the CDC8512 emulator
-        try {
-            // Placeholder - in real implementation, we'd run the emulator
-            return { passed: true, message: "✅ Program executed successfully to completion." };
-        } catch (error) {
-            return { passed: false, message: `Execution failed: ${error.message}` };
-        }
-    }
-
-    checkOutput() {
-        // Check if program outputs 42
-        const outputElement = document.getElementById('output');
-        if (!outputElement) {
-            return { passed: false, message: "Cannot find output display." };
-        }
-
-        const output = outputElement.textContent || outputElement.innerText;
-        if (output.includes('42')) {
-            return { passed: true, message: "✅ Program correctly outputs 42!" };
-        } else {
-            return { passed: false, message: `Expected output '42', but got: ${output}` };
         }
     }
 }

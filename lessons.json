@@ -183,12 +183,12 @@
         {
             "title" : "Print out '42'",
             "launch" : "tools/cdc8512/",
-            "resource_link_id" : "ca4e_04_mistic_42",
+            "resource_link_id" : "ca4e_04_cdc_42",
             "target": "_blank",
             "custom" : [
                 {
                     "key": "exercise",
-                    "value": "PrintOut42Exercise"
+                    "value": "Print42Exercise"
                 }
             ]
         },
