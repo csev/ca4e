@@ -517,7 +517,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             </select>
         </div>
         <div class="right-section">
-<?php if ($USER) : ?>
+<?php if ($USER && $assn) : ?>
             <button id="assignmentBtn" class="assignment-btn" title="Open Assignment">Assignment</button>
 <?php endif; ?>
 <?php if ($USER && $USER->instructor) : ?>
@@ -624,7 +624,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         });
     </script>
 
-<?php if ($USER) : ?>
+<?php if ($USER && $assn) : ?>
     <!-- Assignment Modal -->
     <div id="assignmentModal" class="assignment-modal hidden">
         <div id="assignmentModalHeader" class="modal-header" title="Drag to move">

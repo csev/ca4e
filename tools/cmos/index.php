@@ -368,7 +368,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 <option value="load">📁 Load Circuit</option>
                 <option value="delete">🗑️ Delete Circuit</option>
             </select>
-<?php if ($USER) : ?>
+<?php if ($USER && $assn) : ?>
             <button id="assignmentButton" class="toolbar-button" style="background-color: #4CAF50;">Assignment</button>
 <?php endif; ?>
 <?php if ($USER && $USER->instructor) : ?>
@@ -401,7 +401,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         </div>
     </div>
 
-<?php if ($USER) : ?>
+<?php if ($USER && $assn) : ?>
     <!-- Assignment Modal -->
     <div id="assignmentModal" class="assignment-modal hidden">
         <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
@@ -479,7 +479,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         // setSwitchHigh('input1')  // Sets switch labeled 'input1' to VCC (5V)
         // setSwitchLow('input1')   // Sets switch labeled 'input1' to GND (0V)
 
-<?php if ($USER) : ?>
+<?php if ($USER && $assn) : ?>
         // Autograder functionality
         let currentExercise = null;
         const gradeSubmitUrl = '<?php echo addSession("grade-submit.php"); ?>';

@@ -583,7 +583,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let assignmentButton = null;
     let instructorButton = null;
     
-    if (USER_AUTHENTICATED) {
+    if (USER_AUTHENTICATED && ASSIGNMENT_TYPE) {
         assignmentButton = document.createElement('button');
         assignmentButton.id = 'assignmentButton';
         assignmentButton.className = 'assignment-button';

@@ -159,7 +159,7 @@ $_SESSION['GSRF'] = 10;
         </div>
     </div>
 
-<?php if ($USER) : ?>
+<?php if ($USER && $assn) : ?>
     <!-- Assignment Modal -->
     <div id="assignmentModal" class="modal">
         <div class="modal-content">
@@ -197,9 +197,10 @@ $_SESSION['GSRF'] = 10;
         const USER_AUTHENTICATED = <?php echo $USER ? 'true' : 'false'; ?>;
         const USER_IS_INSTRUCTOR = <?php echo ($USER && $USER->instructor) ? 'true' : 'false'; ?>;
         const INSTRUCTOR_URL = '<?php echo addSession("instructor.php"); ?>';
+        const ASSIGNMENT_TYPE = '<?php echo $assn; ?>';
     </script>
     <script>
-<?php if ($USER) : ?>
+<?php if ($USER && $assn) : ?>
         // Autograder functionality
         let currentExercise = null;
 

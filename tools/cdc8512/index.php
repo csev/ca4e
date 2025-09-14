@@ -377,7 +377,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     <button id="reset">Reset</button>
                     <button id="step">Step</button>
                     <button id="start">Start</button>
-<?php if ($USER && ($assn || ($USER && $USER->instructor))) : ?>
+<?php if ($USER && $assn) : ?>
                     <button id="assignmentBtn" class="assignment-btn">Assignment</button>
 <?php endif; ?>
 <?php if ($USER && $USER->instructor) : ?>
@@ -738,7 +738,7 @@ HALT`;
         });
     </script>
 
-<?php if ($USER && ($assn || ($USER && $USER->instructor))) : ?>
+<?php if ($USER && $assn) : ?>
     <!-- Assignment Modal -->
     <div id="assignmentModal" class="assignment-modal hidden">
         <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
@@ -777,10 +777,6 @@ HALT`;
                 if (instructionsElement) {
                     let instructions = currentExercise.instructions;
                     
-                    // Add testing note for instructors when no assignment is configured
-                    <?php if (!$assn && $USER && $USER->instructor) : ?>
-                    instructions = '<div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 4px; margin-bottom: 15px;"><strong>🧪 Instructor Testing Mode</strong><br>No assignment is currently configured. This is the default SimplePrint42Exercise for testing the grading system.</div>' + instructions;
-                    <?php endif; ?>
                     
                     instructionsElement.innerHTML = instructions;
                 }

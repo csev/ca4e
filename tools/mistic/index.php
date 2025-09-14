@@ -98,7 +98,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     <option value="delete">🗑️ Delete Layout</option>
                 </select>
                 <button onclick="toggleCommandLine()" style="background-color: #6c757d; color: white;">Commands</button>
-<?php if ($USER) : ?>
+<?php if ($USER && $assn) : ?>
                 <button id="assignmentBtn" style="background-color:#fff0e6;">Assignment</button>
 <?php endif; ?>
                 <button onclick="readCircuit()" style="background-color: #607D8B; color: white;">Read Circuit</button>
@@ -118,7 +118,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         <canvas id="layerCanvas" width="220" height="240" style="border:1px solid #000000;"></canvas>
                     </div>
                 </div>
-<?php if ($USER) : ?>
+<?php if ($USER && $assn) : ?>
                 <div id="assignmentModal" class="assignment-modal hidden">
                     <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
                         <span>📋 Assignment</span>
@@ -154,7 +154,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 const layerModal = document.getElementById('layerModal');
                 const layerModalHeader = document.getElementById('layerModalHeader');
                 const canvasContainer = document.getElementById('canvasContainer');
-<?php if ($USER) : ?>
+<?php if ($USER && $assn) : ?>
                 const assignmentModal = document.getElementById('assignmentModal');
                 const assignmentModalHeader = document.getElementById('assignmentModalHeader');
                 const assignmentBtn = document.getElementById('assignmentBtn');

@@ -52,7 +52,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         <option value="load">📁 Load</option>
                         <option value="delete">🗑️ Delete</option>
                     </select>
-<?php if ($USER) : ?>
+<?php if ($USER && $assn) : ?>
                     <button id="assignmentBtn" class="btn btn-assignment">Assignment</button>
 <?php endif; ?>
                 </div>
@@ -97,7 +97,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         </div>
     </div>
 
-<?php if ($USER) : ?>
+<?php if ($USER && $assn) : ?>
     <!-- Assignment Modal -->
     <div id="assignmentModal" class="assignment-modal hidden">
         <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
@@ -131,7 +131,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         });
     </script>
 
-<?php if ($USER) : ?>
+<?php if ($USER && $assn) : ?>
     <script src="exercises.js"></script>
     <script>
         let currentExercise = null;

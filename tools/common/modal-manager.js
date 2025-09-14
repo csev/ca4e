@@ -374,15 +374,6 @@ class AssignmentModalManager {
             if (instructionsElement) {
                 let instructions = this.currentExercise.instructions;
                 
-                // Add testing note for instructors when no assignment is configured
-                if (!this.assignmentType && this.isInstructor) {
-                    instructions = `
-                        <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 10px; border-radius: 4px; margin-bottom: 15px;">
-                            <strong>🧪 Instructor Testing Mode</strong><br>
-                            No assignment is currently configured. This is the default exercise for testing the grading system.
-                        </div>
-                    ` + instructions;
-                }
                 
                 instructionsElement.innerHTML = instructions;
             }
