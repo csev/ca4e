@@ -4,7 +4,7 @@
 This document outlines comprehensive testing procedures for the MISTIC VLSI Layout tool, including UI validation, error detection, assignment functionality, and easter egg testing.
 
 ## Test Environment Setup
-1. Access the tool via LTI launch at the /tools URL or direct URL
+1. Access the tool via LTI launch at the /tools URL or direct URL at /tools/toolname
 2. Ensure you have instructor privileges for easter egg testing
 3. Have multiple browser tabs/windows ready for different test scenarios
 

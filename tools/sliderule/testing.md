@@ -4,7 +4,7 @@
 This document outlines comprehensive testing procedures for the Sliderule tool, including UI validation, error detection, assignment functionality, and slide rule operation testing.
 
 ## Test Environment Setup
-1. Access the tool via LTI launch at the /tools URL or direct URL
+1. Access the tool via LTI launch at the /tools URL or direct URL at /tools/toolname
 2. Have multiple browser tabs/windows ready for different test scenarios
 3. Note: Sliderule tool does not have easter eggs, so testing focuses on manual slide rule operation
 
