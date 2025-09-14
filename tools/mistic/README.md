@@ -236,6 +236,13 @@ console.table(results);
 - **v1.1**: Added probe feature with JavaScript API
 - **v1.0**: Initial release with basic VLSI layout and simulation
 
+## About Computer Architecture for Everybody
+
+This MISTIC VLSI tool is part of the **Computer Architecture for Everybody** course, 
+available at [www.ca4e.com](https://www.ca4e.com). The course provides hands-on 
+learning experiences for understanding computer architecture concepts through 
+interactive tools and exercises.
+
 ## License
 
 This tool is part of the CA4E (Computer Architecture for Everyone) educational project.

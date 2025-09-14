@@ -293,6 +293,13 @@ The PHP compiler service (`wat2wasm.php`) can be modified to:
 - Add validation rules
 - Implement caching
 
+## About Computer Architecture for Everybody
+
+This WASM tool is part of the **Computer Architecture for Everybody** course, 
+available at [www.ca4e.com](https://www.ca4e.com). The course provides hands-on 
+learning experiences for understanding computer architecture concepts through 
+interactive tools and exercises.
+
 ## License
 
 This project is part of the Computer Architecture for Everyone (CA4E) educational materials.

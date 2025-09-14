@@ -223,3 +223,10 @@ connect adder1 output-1 to sum input
 connect adder1 output-2 to cout input
 read
 ```
+
+## About Computer Architecture for Everybody
+
+This Gates circuit simulator is part of the **Computer Architecture for Everybody** course, 
+available at [www.ca4e.com](https://www.ca4e.com). The course provides hands-on 
+learning experiences for understanding computer architecture concepts through 
+interactive tools and exercises.

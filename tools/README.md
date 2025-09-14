@@ -14,4 +14,11 @@ https://www.ca4e.com/tsugi/store/
 If you log in to www.ca4e.com, you can request a key and just use
 the autograders hosted on this site for free via LTI in your LMS.
 
+## About Computer Architecture for Everybody
+
+This collection of tools is part of the **Computer Architecture for Everybody** course, 
+available at [www.ca4e.com](https://www.ca4e.com). The course provides hands-on 
+learning experiences for understanding computer architecture concepts through 
+interactive tools and exercises.
+
 
