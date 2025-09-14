@@ -234,10 +234,7 @@ class SlideRuleMultiplicationExercise {
                 this.submitGradeToLMS(1.0);
                 
                 if (gradeBtn) gradeBtn.style.display = 'none';
-                if (nextBtn) {
-                    nextBtn.textContent = 'Try Again';
-                    nextBtn.style.display = 'inline-block';
-                }
+                if (nextBtn) nextBtn.style.display = 'none';
             } else {
                 feedback += `
                     <div style="background: #f8d7da; padding: 15px; border-radius: 8px; margin: 10px 0; border: 1px solid #f5c6cb;">

@@ -82,6 +82,88 @@ class CDC8512Exercise extends Exercise {
  * Students need to have a CDC8512 program that outputs the number 42
  * This version skips assembly and just runs the program to check output
  */
+class HelloWorldExercise extends CDC8512Exercise {
+    constructor() {
+        const steps = [
+            { name: "Program Execution", description: "Run program and check if it outputs 'Hello, World!'" }
+        ];
+
+        const instructions = `
+            <h3>Hello, World!</h3>
+            <p>Write a CDC8512 program that outputs "Hello, World!" or "Hello World!".</p>
+        `;
+
+        super("Hello World", "Output 'Hello, World!' using CDC8512", steps, instructions);
+    }
+
+    checkStep(stepIndex) {
+        switch (stepIndex) {
+            case 0: // Program Execution and Output Check
+                return this.checkExecutionAndOutput();
+            default:
+                return { passed: false, message: "Unknown step" };
+        }
+    }
+
+    async checkExecutionAndOutput() {
+        try {
+            // Get the emulator instance
+            const emulator = window.emulator;
+            if (!emulator) {
+                return { passed: false, message: "Emulator not found. Please refresh the page." };
+            }
+
+            // Clear any existing output
+            emulator.output = '';
+
+            // Reset CPU state but preserve the loaded program
+            emulator.cpu.pc = 0;
+            emulator.cpu.comparison = '=';
+            emulator.cpu.mode = 0;
+            emulator.cpu.a0 = 0;
+            emulator.cpu.a1 = 0;
+            emulator.cpu.a2 = 0;
+            emulator.cpu.a3 = 0;
+            emulator.cpu.x0 = 0;
+            emulator.cpu.x1 = 0;
+            emulator.cpu.x2 = 0;
+            emulator.cpu.x3 = 0;
+
+            // Start the program
+            emulator.start();
+
+            // Wait for program to complete (with timeout)
+            const timeout = 5000; // 5 seconds
+            const startTime = Date.now();
+            
+            while (Date.now() - startTime < timeout) {
+                const status = emulator.getStatus();
+                
+                if (!status.running) {
+                    // Program has stopped (regardless of how it stopped)
+                    const output = emulator.output.trim();
+                    
+                    if (output.includes('Hello, World!') || output.includes('Hello World!')) {
+                        return { passed: true, message: "✅ Program successfully outputs 'Hello, World!'!" };
+                    } else {
+                        return { passed: false, message: `Expected 'Hello, World!' or 'Hello World!' but got: "${output}"` };
+                    }
+                }
+                
+                // Wait a bit before checking again
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            // Timeout reached
+            emulator.stop(); // Stop the program if it's still running
+            return { passed: false, message: "Program did not complete within 5 seconds. Check for infinite loops." };
+            
+        } catch (error) {
+            return { passed: false, message: `Error during execution: ${error.message}` };
+        }
+    }
+}
+
 class Print42Exercise extends CDC8512Exercise {
     constructor() {
         const steps = [
@@ -89,17 +171,11 @@ class Print42Exercise extends CDC8512Exercise {
         ];
 
         const instructions = `
-            <h3>Print Out 42 (Simple)</h3>
-            <p>Load or write a CDC8512 program that outputs the number 42.</p>
-            <h4>Requirements:</h4>
-            <ul>
-                <li>Your program must run to completion (HALT instruction)</li>
-                <li>Your program must output the number 42</li>
-                <li>When ready, click "Start Grading" to test your program</li>
-            </ul>
+            <h3>Print 42</h3>
+            <p>Write a CDC8512 program that outputs the number 42.</p>
         `;
 
-        super("Simple Print 42", "Output the number 42 using CDC8512", steps, instructions);
+        super("Print 42", "Output the number 42 using CDC8512", steps, instructions);
     }
 
     checkStep(stepIndex) {
@@ -169,20 +245,15 @@ class Print42Exercise extends CDC8512Exercise {
             while (Date.now() - startTime < maxWaitTime) {
                 const status = emulator.getStatus();
                 
-                if (status.halted) {
-                    // Program has halted, check the output
+                if (!status.running) {
+                    // Program has stopped (regardless of how it stopped)
                     const output = status.output ? status.output.trim() : '';
                     
                     if (output.includes('42')) {
                         return { passed: true, message: "✅ Program executed successfully and output '42'!" };
                     } else {
-                        return { passed: false, message: `Program halted but output was '${output}', expected '42'.` };
+                        return { passed: false, message: `Program stopped but output was '${output}', expected '42'.` };
                     }
-                }
-                
-                if (!status.running) {
-                    // Program stopped but didn't halt properly
-                    return { passed: false, message: "Program stopped without reaching HALT instruction." };
                 }
                 
                 // Wait a bit before checking again

@@ -861,7 +861,9 @@ HALT`;
         // Initialize the exercise when the page loads
         document.addEventListener('DOMContentLoaded', function() {
             // Create the appropriate exercise instance based on assignment
-            if ( '<?php echo $assn; ?>' == 'Print42Exercise') {
+            if ( '<?php echo $assn; ?>' == 'HelloWorldExercise') {
+                currentExercise = new HelloWorldExercise();
+            } else if ( '<?php echo $assn; ?>' == 'Print42Exercise') {
                 currentExercise = new Print42Exercise();
             }
             
