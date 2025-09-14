@@ -96,10 +96,11 @@ class Exercise {
         if (allPassed) {
             this.showSuccess();
             this.submitGradeToLMS(1.0); // Perfect score
+            // Only show the button again when grading is successful
+            this.showGradeButton();
+            this.resetGradeButton();
         }
-        // Always show the button again when grading is complete
-        this.showGradeButton();
-        this.resetGradeButton();
+        // If not all passed, don't show any buttons (they should already be hidden)
     }
 
     /**
