@@ -6,26 +6,13 @@
  */
 
 /**
- * Base Exercise Class
- * 
- * Provides common functionality for all CMOS exercises including:
- * - Step management
- * - UI state handling
- * - Grade submission
- * - Circuit testing utilities
+ * CMOS-specific Exercise class that extends the common base
+ * The base Exercise class is loaded from ../common/exercise-base.js
  */
-class Exercise {
-    constructor(name, description, steps, instructions = '') {
-        this.name = name;
-        this.description = description;
-        this.steps = steps.map(step => ({ ...step, status: "pending" }));
-        this.instructions = instructions;
-        this.currentStep = 0;
-        this.isGrading = false;
-    }
+class CMOSExercise extends Exercise {
 
     /**
-     * Start the grading process
+     * Start the grading process with CMOS-specific behavior
      */
     startGrading() {
         this.currentStep = 0;
@@ -38,7 +25,7 @@ class Exercise {
     }
 
     /**
-     * Reset the grading process
+     * Reset the grading process with CMOS-specific behavior
      */
     resetGrading() {
         this.currentStep = 0;
@@ -350,7 +337,7 @@ class Exercise {
  * - A=low → Q=high (5V)
  * - A=high → Q=low (0V)
  */
-class CmosNotGateExercise extends Exercise {
+class CmosNotGateExercise extends CMOSExercise {
     constructor() {
         const steps = [
             { name: "Check for input switch A and output probe Q", status: "pending" },
@@ -434,7 +421,7 @@ class CmosNotGateExercise extends Exercise {
  * - A=high, B=low → Q=low (0V)
  * - A=high, B=high → Q=low (0V)
  */
-class CmosNorGateExercise extends Exercise {
+class CmosNorGateExercise extends CMOSExercise {
     constructor() {
         const steps = [
             { name: "Check for input switches A, B and output probe Q", status: "pending" },

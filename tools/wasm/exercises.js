@@ -6,80 +6,12 @@
  */
 
 /**
- * Base Exercise Class
- * 
- * Provides common functionality for all WASM exercises including:
- * - Step management
- * - UI state handling
- * - Grade submission
- * - WASM execution utilities
+ * WASM-specific Exercise class that extends the common base
+ * The base Exercise class is loaded from ../common/exercise-base.js
  */
-class Exercise {
-    constructor(name, description, steps, instructions = '') {
-        this.name = name;
-        this.description = description;
-        this.steps = steps.map(step => ({ ...step, status: "pending" }));
-        this.instructions = instructions;
-        this.currentStep = 0;
-        this.isGrading = false;
-    }
-
+class WASMExercise extends Exercise {
     /**
-     * Start the grading process
-     */
-    startGrading() {
-        this.currentStep = 0;
-        this.isGrading = true;
-        this.hideInstructions();
-        this.showGradingSection();
-        this.hideStartGradingButton();
-        this.updateGradeButton();
-        this.nextStep();
-    }
-
-    /**
-     * Reset the grading process
-     */
-    resetGrading() {
-        this.currentStep = 0;
-        this.isGrading = false;
-        this.steps.forEach(step => {
-            step.status = "pending";
-        });
-        this.showInstructions();
-        this.hideGradingSection();
-        this.showStartGradingButton();
-        this.clearStepDisplay();
-    }
-
-    /**
-     * Move to the next step in the grading process
-     */
-    nextStep() {
-        if (this.currentStep < this.steps.length) {
-            this.executeStep(this.currentStep);
-            this.currentStep++;
-        }
-        
-        if (this.currentStep >= this.steps.length) {
-            this.completeGrading();
-        }
-    }
-    
-    continueGrading() {
-        // Continue to next step (called by Next button)
-        if (this.currentStep < this.steps.length) {
-            this.executeStep(this.currentStep);
-            this.currentStep++;
-        }
-        
-        if (this.currentStep >= this.steps.length) {
-            this.completeGrading();
-        }
-    }
-
-    /**
-     * Execute a specific grading step
+     * Execute a specific grading step with WASM-specific behavior
      */
     executeStep(stepIndex) {
         const step = this.steps[stepIndex];
@@ -101,71 +33,6 @@ class Exercise {
         }
     }
 
-    /**
-     * Override this method in subclasses to implement specific step checking logic
-     */
-    checkStep(stepIndex) {
-        return { passed: false, message: "Step checking not implemented" };
-    }
-
-    /**
-     * Complete the grading process
-     */
-    completeGrading() {
-        const allPassed = this.steps.every(step => step.status === "passed");
-        if (allPassed) {
-            this.showSuccess();
-            this.submitGradeToLMS(1.0); // Perfect score
-        }
-    }
-
-    /**
-     * Submit grade to LMS - will be overridden by global function
-     */
-    submitGradeToLMS(grade) {
-        console.log(`Grade ${grade} would be submitted to LMS`);
-    }
-
-    // UI Management Methods
-    showGradingSection() {
-        const section = document.getElementById('gradingSection');
-        if (section) section.style.display = 'block';
-    }
-
-    hideGradingSection() {
-        const section = document.getElementById('gradingSection');
-        if (section) section.style.display = 'none';
-    }
-
-    showInstructions() {
-        const instructions = document.getElementById('assignmentInstructions');
-        if (instructions) instructions.style.display = 'block';
-    }
-
-    hideInstructions() {
-        const instructions = document.getElementById('assignmentInstructions');
-        if (instructions) instructions.style.display = 'none';
-    }
-
-    updateGradeButton() {
-        const button = document.getElementById('gradeBtn');
-        if (button) {
-            button.textContent = 'Start Grading';
-            button.onclick = () => this.startGrading();
-            button.style.display = 'inline-block'; // Make sure button is visible
-        }
-    }
-
-    resetGradeButton() {
-        const button = document.getElementById('gradeBtn');
-        if (button) {
-            button.textContent = 'Start Grading';
-            button.onclick = () => this.startGrading();
-            button.style.display = 'inline-block'; // Make sure button is visible after reset
-        }
-    }
-
-
     showHintButton() {
         const stepDisplay = document.getElementById('stepDisplay');
         if (stepDisplay && !document.getElementById('hintButton')) {
@@ -181,60 +48,6 @@ class Exercise {
             stepDisplay.innerHTML += hintButtonHtml;
         }
     }
-    
-    showNextButton() {
-        const button = document.getElementById('gradeBtn');
-        if (button) {
-            button.textContent = 'Next';
-            button.onclick = () => this.continueGrading();
-            button.style.display = 'inline-block'; // Make sure button is visible
-        }
-    }
-
-    hideGradeButton() {
-        const button = document.getElementById('gradeBtn');
-        if (button) {
-            button.style.display = 'none';
-        }
-    }
-
-    hideStartGradingButton() {
-        const section = document.getElementById('startGradingSection');
-        if (section) section.style.display = 'none';
-    }
-
-    showStartGradingButton() {
-        const section = document.getElementById('startGradingSection');
-        if (section) section.style.display = 'block';
-    }
-
-    clearStepDisplay() {
-        const display = document.getElementById('stepDisplay');
-        if (display) {
-            display.innerHTML = '';
-        }
-    }
-
-    displayStepResult(stepIndex, result) {
-        const display = document.getElementById('stepDisplay');
-        if (display) {
-            const step = this.steps[stepIndex];
-            display.innerHTML = `
-                <h4>Step ${stepIndex + 1}: ${step.name}</h4>
-                <p class="${result.passed ? 'success' : 'error'}">${result.message}</p>
-            `;
-        }
-    }
-
-    showSuccess() {
-        const display = document.getElementById('stepDisplay');
-        if (display) {
-            display.innerHTML = `
-                <h4>🎉 Exercise Complete!</h4>
-                <p class="success">All steps passed successfully. Submitting grade...</p>
-            `;
-        }
-    }
 }
 
 /**
@@ -242,7 +55,7 @@ class Exercise {
  * 
  * Students need to write a WebAssembly program that outputs "Hello, World!"
  */
-class HelloWorldExercise extends Exercise {
+class HelloWorldExercise extends WASMExercise {
     constructor() {
         const steps = [
             { name: "WAT Compilation", description: "Check if WAT code compiles to WASM without errors" },
@@ -366,7 +179,7 @@ Hello, World!</pre>
  * 
  * Students need to write a WebAssembly program that outputs the number 42
  */
-class PrintOut42Exercise extends Exercise {
+class PrintOut42Exercise extends WASMExercise {
     constructor() {
         const steps = [
             { name: "WAT Compilation", description: "Check if WAT code compiles to WASM without errors" },

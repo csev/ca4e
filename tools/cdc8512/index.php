@@ -757,6 +757,7 @@ HALT`;
         </div>
     </div>
 
+    <script src="../common/exercise-base.js"></script>
     <script src="exercises.js"></script>
     <script>
         // Assignment modal elements

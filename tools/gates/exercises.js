@@ -6,23 +6,10 @@
  */
 
 /**
- * Base Exercise Class
- * 
- * Provides common functionality for all Gates exercises including:
- * - Step management
- * - UI state handling
- * - Grade submission
- * - Circuit testing utilities
+ * Gates-specific Exercise class that extends the common base
+ * The base Exercise class is loaded from ../common/exercise-base.js
  */
-class Exercise {
-    constructor(name, description, steps, instructions = '') {
-        this.name = name;
-        this.description = description;
-        this.steps = steps.map(step => ({ ...step, status: "pending" }));
-        this.instructions = instructions;
-        this.currentStep = 0;
-        this.isGrading = false;
-    }
+class GatesExercise extends Exercise {
 
     /**
      * Start the grading process
@@ -192,7 +179,7 @@ class Exercise {
  * Students need to build a half adder circuit using XOR and AND gates
  * with inputs A and B, and outputs S (sum) and C (carry)
  */
-class HalfAdderExercise extends Exercise {
+class HalfAdderExercise extends GatesExercise {
     constructor() {
         const steps = [
             { name: "Check Component Labels", description: "Verify inputs A, B and outputs S, C are properly labeled" },
@@ -702,7 +689,7 @@ class HalfAdderExercise extends Exercise {
  * Students need to build a full adder circuit that adds three single bits (A, B, Cin)
  * and produces sum (S) and carry-out (Cout) outputs
  */
-class FullAdderExercise extends Exercise {
+class FullAdderExercise extends GatesExercise {
     constructor() {
         const steps = [
             { name: "Check Component Labels", description: "Verify inputs A, B, Cin and outputs S, Cout are properly labeled" },

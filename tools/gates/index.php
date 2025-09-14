@@ -646,6 +646,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         </div>
     </div>
 
+    <script src="../common/exercise-base.js"></script>
     <script src="exercises.js"></script>
     <script>
         // Debug: Check if HalfAdderExercise is loaded

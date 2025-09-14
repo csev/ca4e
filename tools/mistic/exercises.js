@@ -6,23 +6,10 @@
  */
 
 /**
- * Base Exercise Class
- * 
- * Provides common functionality for all VLSI exercises including:
- * - Step management
- * - UI state handling
- * - Grade submission
- * - Circuit testing utilities
+ * MISTIC-specific Exercise class that extends the common base
+ * The base Exercise class is loaded from ../common/exercise-base.js
  */
-class Exercise {
-    constructor(name, description, steps, instructions = '') {
-        this.name = name;
-        this.description = description;
-        this.steps = steps.map(step => ({ ...step, status: "pending" }));
-        this.instructions = instructions;
-        this.currentStep = 0;
-        this.isGrading = false;
-    }
+class MISTICExercise extends Exercise {
 
     /**
      * Start the grading process
@@ -329,7 +316,7 @@ class Exercise {
  * - A=GND → Q=VCC
  * - A=VCC → Q=GND
  */
-class NotGateExercise extends Exercise {
+class NotGateExercise extends MISTICExercise {
     constructor() {
         const steps = [
             { name: "Check for A and Q probes", status: "pending" },
@@ -404,7 +391,7 @@ class NotGateExercise extends Exercise {
  * Implements the specific grading logic for a NAND gate exercise.
  * This is a placeholder for future implementation.
  */
-class NandGateExercise extends Exercise {
+class NandGateExercise extends MISTICExercise {
     constructor() {
         const steps = [
             { name: "Check for A, B and Q probes", status: "pending" },
@@ -522,7 +509,7 @@ class NandGateExercise extends Exercise {
  * - A=VCC, B=GND → Q=GND
  * - A=VCC, B=VCC → Q=GND
  */
-class NorGateExercise extends Exercise {
+class NorGateExercise extends MISTICExercise {
     constructor() {
         const steps = [
             { name: "Check for A, B and Q probes", status: "pending" },

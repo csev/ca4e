@@ -145,7 +145,8 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             <script src="../common/modal-manager.js"></script>
             <script src="../common/grading-interface.js"></script>
             <script src="../common/tool-utilities.js"></script>
-            <script src="exercises.js"></script>
+            <script src="../common/exercise-base.js"></script>
+    <script src="exercises.js"></script>
             <script>
                 const canvas = document.getElementById('vlsiCanvas');
                 const ctx = canvas.getContext('2d');

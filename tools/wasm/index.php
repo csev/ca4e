@@ -132,6 +132,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     </script>
 
 <?php if ($USER && $assn) : ?>
+    <script src="../common/exercise-base.js"></script>
     <script src="exercises.js"></script>
     <script>
         let currentExercise = null;

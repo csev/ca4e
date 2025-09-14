@@ -431,6 +431,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     <script src="components.js"></script>
     <script src="circuit.js"></script>
     <script src="editor.js"></script>
+    <script src="../common/exercise-base.js"></script>
     <script src="exercises.js"></script>
     <script>
         // Utility functions to read probe values

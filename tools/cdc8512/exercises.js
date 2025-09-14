@@ -6,26 +6,12 @@
  */
 
 /**
- * Base Exercise Class
- * 
- * Provides common functionality for all CDC8512 exercises including:
- * - Step management
- * - UI state handling
- * - Grade submission
- * - Program execution utilities
+ * CDC8512-specific Exercise class that extends the common base
+ * The base Exercise class is loaded from ../common/exercise-base.js
  */
-class Exercise {
-    constructor(name, description, steps, instructions = '') {
-        this.name = name;
-        this.description = description;
-        this.steps = steps.map(step => ({ ...step, status: "pending" }));
-        this.instructions = instructions;
-        this.currentStep = 0;
-        this.isGrading = false;
-    }
-
+class CDC8512Exercise extends Exercise {
     /**
-     * Start the grading process
+     * Start the grading process with CDC8512-specific behavior
      */
     startGrading() {
         this.currentStep = 0;
@@ -37,7 +23,7 @@ class Exercise {
     }
 
     /**
-     * Reset the grading process
+     * Reset the grading process with CDC8512-specific behavior
      */
     resetGrading() {
         this.currentStep = 0;
@@ -52,21 +38,7 @@ class Exercise {
     }
 
     /**
-     * Move to the next step in the grading process
-     */
-    async nextStep() {
-        if (this.currentStep < this.steps.length) {
-            await this.executeStep(this.currentStep);
-            this.currentStep++;
-        }
-        
-        if (this.currentStep >= this.steps.length) {
-            this.completeGrading();
-        }
-    }
-
-    /**
-     * Execute a specific grading step
+     * Execute a specific grading step with async support
      */
     async executeStep(stepIndex) {
         const step = this.steps[stepIndex];
@@ -82,14 +54,7 @@ class Exercise {
     }
 
     /**
-     * Override this method in subclasses to implement specific step checking logic
-     */
-    checkStep(stepIndex) {
-        return { passed: false, message: "Step checking not implemented" };
-    }
-
-    /**
-     * Complete the grading process
+     * Complete the grading process with CDC8512-specific behavior
      */
     completeGrading() {
         const allPassed = this.steps.every(step => step.status === "passed");
@@ -103,111 +68,10 @@ class Exercise {
         // If not all passed, don't show any buttons (they should already be hidden)
     }
 
-    /**
-     * Submit grade to LMS - will be overridden by global function
-     */
-    submitGradeToLMS(grade) {
-        console.log(`Grade ${grade} would be submitted to LMS`);
-    }
-
-    // UI Management Methods
-    showGradingSection() {
-        const section = document.getElementById('gradingSection');
-        if (section) section.style.display = 'block';
-    }
-
-    hideGradingSection() {
-        const section = document.getElementById('gradingSection');
-        if (section) section.style.display = 'none';
-    }
-
-    showInstructions() {
-        const instructions = document.getElementById('assignmentInstructions');
-        if (instructions) instructions.style.display = 'block';
-    }
-
-    hideInstructions() {
-        const instructions = document.getElementById('assignmentInstructions');
-        if (instructions) instructions.style.display = 'none';
-    }
-
-    updateGradeButton() {
-        const button = document.getElementById('gradeBtn');
-        if (button) {
-            button.textContent = 'Start Grading';
-            button.onclick = () => this.startGrading();
-            button.style.display = 'inline-block'; // Make sure button is visible
-        }
-    }
-
-    resetGradeButton() {
-        const button = document.getElementById('gradeBtn');
-        if (button) {
-            button.textContent = 'Start Grading';
-            button.onclick = () => this.startGrading();
-            button.style.display = 'inline-block'; // Make sure button is visible after reset
-        }
-    }
-
-    hideGradeButton() {
-        const button = document.getElementById('gradeBtn');
-        if (button) {
-            button.style.display = 'none';
-        }
-    }
-
-
-    displayStepResult(stepIndex, result) {
-        const display = document.getElementById('stepDisplay');
-        if (display) {
-            const step = this.steps[stepIndex];
-            display.innerHTML = `
-                <h4>Step ${stepIndex + 1}: ${step.name}</h4>
-                <p class="${result.passed ? 'success' : 'error'}">${result.message}</p>
-            `;
-        }
-    }
-
-    showSuccess() {
-        const display = document.getElementById('stepDisplay');
-        if (display) {
-            display.innerHTML = `
-                <h4>🎉 Exercise Complete!</h4>
-                <p class="success">All steps passed successfully. Submitting grade...</p>
-            `;
-        }
-    }
-
-    clearStepDisplay() {
-        const display = document.getElementById('stepDisplay');
-        if (display) {
-            display.innerHTML = '';
-        }
-    }
-
-    hideGradeButton() {
-        const button = document.getElementById('gradeBtn');
-        if (button) {
-            button.style.display = 'none';
-        }
-    }
-
     showGradeButton() {
         const button = document.getElementById('gradeBtn');
         if (button) {
             button.style.display = 'inline-block';
-        }
-    }
-
-    showExecutingIndicator() {
-        const display = document.getElementById('stepDisplay');
-        if (display) {
-            display.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 10px; padding: 15px;">
-                    <div class="spinner-gear">⚙️</div>
-                    <span>Executing program...</span>
-                </div>
-            `;
         }
     }
 }
@@ -218,7 +82,7 @@ class Exercise {
  * Students need to have a CDC8512 program that outputs the number 42
  * This version skips assembly and just runs the program to check output
  */
-class Print42Exercise extends Exercise {
+class Print42Exercise extends CDC8512Exercise {
     constructor() {
         const steps = [
             { name: "Program Execution", description: "Run program and check if it halts with output '42'" }
