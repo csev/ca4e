@@ -384,6 +384,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 <?php if ($USER && $USER->instructor) : ?>
                     <a href="<?php echo addSession('instructor.php'); ?>" class="instructor-button" title="Instructor Panel">Instructor</a>
 <?php endif; ?>
+                    <button id="asciiChart" style="background-color: #17a2b8; font-weight: bold;" title="ASCII Chart">ASCII</button>
                     <button id="help" style="background-color: #28a745; font-weight: bold;">?</button>
                 </div>
             </div>
@@ -756,6 +757,20 @@ HALT`;
             </div>
         </div>
     </div>
+<?php endif; ?>
+
+    <!-- ASCII Chart Modal -->
+    <div id="asciiChartModal" class="assignment-modal hidden">
+        <div id="asciiChartModalHeader" class="modal-header" title="Drag to move">
+            <span>📊 ASCII Chart</span>
+            <button class="close-btn" onclick="closeAsciiChartModal()" title="Close">×</button>
+        </div>
+        <div class="modal-content">
+            <div id="asciiChartContent">
+                <!-- ASCII chart will be generated here -->
+            </div>
+        </div>
+    </div>
 
     <script src="../common/exercise-base.js"></script>
     <script src="exercises.js"></script>
@@ -934,8 +949,130 @@ HALT`;
             assignmentModalHeader.addEventListener('mousedown', onPointerDown);
             assignmentModalHeader.addEventListener('touchstart', onPointerDown, { passive: false });
         })();
+
+        // ASCII Chart Modal functionality
+        const asciiChartModal = document.getElementById('asciiChartModal');
+        const asciiChartModalHeader = document.getElementById('asciiChartModalHeader');
+        const asciiChartBtn = document.getElementById('asciiChart');
+
+        // ASCII Chart functions
+        function showAsciiChartModal() {
+            generateAsciiChart();
+            asciiChartModal.classList.remove('hidden');
+            centerAsciiChartModal();
+        }
+
+        function closeAsciiChartModal() {
+            asciiChartModal.classList.add('hidden');
+        }
+
+        function centerAsciiChartModal() {
+            // Only set initial position if modal doesn't already have a position
+            if (!asciiChartModal.style.left && !asciiChartModal.style.top) {
+                const modalWidth = asciiChartModal.offsetWidth;
+                const modalHeight = asciiChartModal.offsetHeight;
+                const left = (window.innerWidth - modalWidth) / 2;
+                const top = (window.innerHeight - modalHeight) / 2;
+                asciiChartModal.style.left = Math.max(0, left) + 'px';
+                asciiChartModal.style.top = Math.max(0, top) + 'px';
+            }
+        }
+
+        function generateAsciiChart() {
+            const content = document.getElementById('asciiChartContent');
+            let html = '<h3>ASCII Character Chart</h3>';
+            html += '<p>Use these values in your CDC8512 programs with the SET instruction:</p>';
+            
+            // Printable ASCII characters (32-126)
+            html += '<div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; font-family: monospace; font-size: 14px; margin: 10px 0;">';
+            
+            for (let i = 32; i <= 126; i++) {
+                const char = String.fromCharCode(i);
+                const hex = i.toString(16).toUpperCase().padStart(2, '0');
+                const binary = i.toString(2).padStart(8, '0');
+                
+                // Special handling for common characters
+                let displayChar = char;
+                if (char === ' ') displayChar = 'SP';
+                else if (char === '\t') displayChar = 'TAB';
+                else if (char === '\n') displayChar = 'LF';
+                else if (char === '\r') displayChar = 'CR';
+                
+                html += `<div style="border: 1px solid #ccc; padding: 6px; text-align: center; background: ${i % 2 === 0 ? '#f9f9f9' : '#fff'};">
+                    <div style="font-weight: bold; font-size: 16px;">${displayChar}</div>
+                    <div style="color: #666; font-size: 12px;">${i}</div>
+                    <div style="color: #0066cc; font-size: 12px;">0x${hex}</div>
+                    <div style="color: #cc6600; font-size: 11px;">${binary}</div>
+                </div>`;
+            }
+            
+            html += '</div>';
+            
+            content.innerHTML = html;
+        }
+
+        // Event listeners
+        asciiChartBtn.addEventListener('click', showAsciiChartModal);
+
+        // Make ASCII chart modal draggable
+        (function enableAsciiChartDrag() {
+            if (!asciiChartModal || !asciiChartModalHeader) return;
+            let dragging = false;
+            let startClientX = 0, startClientY = 0;
+            let startLeft = 0, startTop = 0;
+
+            function onPointerDown(e) {
+                dragging = true;
+                asciiChartModalHeader.style.cursor = 'grabbing';
+                if (e.touches) {
+                    startClientX = e.touches[0].clientX;
+                    startClientY = e.touches[0].clientY;
+                } else {
+                    startClientX = e.clientX;
+                    startClientY = e.clientY;
+                }
+                startLeft = parseInt(asciiChartModal.style.left) || 0;
+                startTop = parseInt(asciiChartModal.style.top) || 0;
+                e.preventDefault();
+                window.addEventListener('mousemove', onPointerMove);
+                window.addEventListener('mouseup', onPointerUp);
+                window.addEventListener('touchmove', onPointerMove, { passive: false });
+                window.addEventListener('touchend', onPointerUp);
+            }
+
+            function onPointerMove(e) {
+                if (!dragging) return;
+                let currentClientX, currentClientY;
+                if (e.touches) {
+                    currentClientX = e.touches[0].clientX;
+                    currentClientY = e.touches[0].clientY;
+                } else {
+                    currentClientX = e.clientX;
+                    currentClientY = e.clientY;
+                }
+                const dx = currentClientX - startClientX;
+                const dy = currentClientY - startClientY;
+                const maxLeft = window.innerWidth - asciiChartModal.offsetWidth;
+                const maxTop = window.innerHeight - asciiChartModal.offsetHeight;
+                const newLeft = Math.max(0, Math.min(maxLeft, startLeft + dx));
+                const newTop = Math.max(0, Math.min(maxTop, startTop + dy));
+                asciiChartModal.style.left = newLeft + 'px';
+                asciiChartModal.style.top = newTop + 'px';
+            }
+
+            function onPointerUp(e) {
+                dragging = false;
+                asciiChartModalHeader.style.cursor = 'grab';
+                window.removeEventListener('mousemove', onPointerMove);
+                window.removeEventListener('mouseup', onPointerUp);
+                window.removeEventListener('touchmove', onPointerMove);
+                window.removeEventListener('touchend', onPointerUp);
+            }
+
+            asciiChartModalHeader.addEventListener('mousedown', onPointerDown);
+            asciiChartModalHeader.addEventListener('touchstart', onPointerDown, { passive: false });
+        })();
     </script>
-<?php endif; ?>
 
 </body>
 </html>
