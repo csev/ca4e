@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CMOS Tool Documentation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        
+        .tip {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        
+        .warning {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .button-demo {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            margin: 5px;
+            font-size: 14px;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .close-btn:hover {
+            color: #000;
+        }
+        
+        .transistor-diagram {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .circuit-example {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="close-btn" onclick="window.close()">×</button>
+        
+        <h1>CMOS Tool Documentation</h1>
+        
+        <h2>Overview</h2>
+        <p>The CMOS (Complementary Metal-Oxide-Semiconductor) tool is an interactive circuit editor for designing and simulating simple digital logic circuits using CMOS transistor technology. This tool provides a hands-on way to learn about CMOS circuit design and transistor-level logic implementation.</p>
+        
+        <h2>What is CMOS?</h2>
+        <p>CMOS is a technology for constructing integrated circuits that uses both PMOS (P-channel MOSFET) and NMOS (N-channel MOSFET) transistors to create logic gates. CMOS circuits are known for their low power consumption and high noise immunity.</p>
+        
+        <div class="highlight">
+            <strong>Key Benefits of CMOS:</strong>
+            <ul>
+                <li>Low power consumption (only consumes power during switching)</li>
+                <li>High noise immunity</li>
+                <li>Wide operating voltage range</li>
+                <li>Excellent scalability</li>
+            </ul>
+        </div>
+        
+        <h2>Getting Started</h2>
+        
+        <h3>Basic CMOS NOT Gate</h3>
+        <p>The simplest CMOS circuit is a NOT gate (inverter), which consists of:</p>
+        <ul>
+            <li>One PMOS transistor (top)</li>
+            <li>One NMOS transistor (bottom)</li>
+            <li>Input connection</li>
+            <li>Output connection</li>
+            <li>VDD (power supply) and GND (ground) connections</li>
+        </ul>
+        
+        
+        <h3>CMOS NOR Gate</h3>
+        <p>A CMOS NOR gate requires:</p>
+        <ul>
+            <li>Two PMOS transistors in parallel (top)</li>
+            <li>Two NMOS transistors in series (bottom)</li>
+            <li>Two input connections (A and B)</li>
+            <li>One output connection</li>
+            <li>VDD and GND connections</li>
+        </ul>
+        
+        
+        <h2>Tool Features</h2>
+        
+        <h3>Component Library</h3>
+        <p>The tool provides the following components:</p>
+        <ul>
+            <li><strong>PMOS Transistor:</strong> P-channel MOSFET for pull-up networks</li>
+            <li><strong>NMOS Transistor:</strong> N-channel MOSFET for pull-down networks</li>
+            <li><strong>Input Switches:</strong> Toggle switches for circuit inputs</li>
+            <li><strong>Output Probes:</strong> For monitoring circuit outputs</li>
+            <li><strong>VDD/GND:</strong> Power supply and ground connections</li>
+            <li><strong>Wires:</strong> For connecting components</li>
+        </ul>
+        
+        <h3>Circuit Simulation</h3>
+        <p>The tool includes a real-time circuit simulator that:</p>
+        <ul>
+            <li>Calculates voltage levels throughout the circuit</li>
+            <li>Shows logic levels (HIGH/LOW) at each node</li>
+            <li>Updates in real-time as you modify the circuit</li>
+            <li>Handles transistor switching behavior</li>
+        </ul>
+        
+        <h3>Interactive Controls</h3>
+        <ul>
+            <li><strong>Component Placement:</strong> Click and drag to place components</li>
+            <li><strong>Wire Drawing:</strong> Click and drag to draw connections</li>
+            <li><strong>Input Toggle:</strong> Click input switches to change logic levels</li>
+            <li><strong>Component Movement:</strong> Drag components to reposition them</li>
+            <li><strong>Deletion:</strong> Right-click or use delete mode to remove components</li>
+        </ul>
+        
+        <h2>CMOS Design Principles</h2>
+        
+        <h3>Pull-Up and Pull-Down Networks</h3>
+        <p>CMOS logic gates consist of two complementary networks:</p>
+        <ul>
+            <li><strong>Pull-Up Network (PUN):</strong> Made of PMOS transistors, connects output to VDD</li>
+            <li><strong>Pull-Down Network (PDN):</strong> Made of NMOS transistors, connects output to GND</li>
+        </ul>
+        
+        <div class="tip">
+            <strong>💡 Key Rule:</strong> The pull-up and pull-down networks are complementary - when one is ON, the other is OFF, ensuring no direct path between VDD and GND.
+        </div>
+        
+        <h3>Transistor Behavior</h3>
+        <ul>
+            <li><strong>PMOS:</strong> Conducts when gate voltage is LOW (0V)</li>
+            <li><strong>NMOS:</strong> Conducts when gate voltage is HIGH (5V)</li>
+            <li><strong>Series Connection:</strong> Both transistors must be ON for current to flow</li>
+            <li><strong>Parallel Connection:</strong> Either transistor can be ON for current to flow</li>
+        </ul>
+        
+        <h2>Assignment Exercises</h2>
+        
+        <h3>CMOS NOT Gate Exercise</h3>
+        <p>Build a CMOS NOT gate circuit that inverts the input signal.</p>
+        <div class="tip">
+            <strong>Hint:</strong> Use one PMOS transistor in the pull-up network and one NMOS transistor in the pull-down network, both controlled by the same input.
+        </div>
+        
+        <h3>CMOS NOR Gate Exercise</h3>
+        <p>Build a CMOS NOR gate circuit that implements the NOR logic function.</p>
+        <div class="tip">
+            <strong>Hint:</strong> Use two PMOS transistors in parallel for the pull-up network and two NMOS transistors in series for the pull-down network.
+        </div>
+        
+        <h2>Circuit Analysis</h2>
+        
+        <h3>Truth Table Analysis</h3>
+        <p>For each circuit you build, verify its operation by testing all possible input combinations:</p>
+        
+        <div style="margin: 20px 0;">
+            <h4>NOT Gate Truth Table:</h4>
+            <table style="border-collapse: collapse; margin: 10px 0; font-family: 'Courier New', monospace;">
+                <tr style="background-color: #f8f9fa;">
+                    <th style="border: 1px solid #dee2e6; padding: 8px 12px;">Input</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px 12px;">Output</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">0</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">1</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">1</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">0</td>
+                </tr>
+            </table>
+            
+            <h4>NOR Gate Truth Table:</h4>
+            <table style="border-collapse: collapse; margin: 10px 0; font-family: 'Courier New', monospace;">
+                <tr style="background-color: #f8f9fa;">
+                    <th style="border: 1px solid #dee2e6; padding: 8px 12px;">A</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px 12px;">B</th>
+                    <th style="border: 1px solid #dee2e6; padding: 8px 12px;">Output</th>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">0</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">0</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">1</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">0</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">1</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">0</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">1</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">0</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">0</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">1</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">1</td>
+                    <td style="border: 1px solid #dee2e6; padding: 8px 12px; text-align: center;">0</td>
+                </tr>
+            </table>
+        </div>
+        
+        <h3>Voltage Analysis</h3>
+        <p>Use the voltage display to verify:</p>
+        <ul>
+            <li>Output voltage is close to VDD (5V) for logic HIGH</li>
+            <li>Output voltage is close to GND (0V) for logic LOW</li>
+            <li>No intermediate voltage levels (except during transitions)</li>
+        </ul>
+        
+        <h2>Troubleshooting</h2>
+        
+        <h3>Common Issues</h3>
+        <ul>
+            <li><strong>No Output:</strong> Check that all components are properly connected</li>
+            <li><strong>Wrong Logic Levels:</strong> Verify transistor types and connections</li>
+            <li><strong>Floating Output:</strong> Ensure output is connected to either pull-up or pull-down network</li>
+            <li><strong>Short Circuit:</strong> Check for direct connections between VDD and GND</li>
+        </ul>
+        
+        <div class="warning">
+            <strong>Note:</strong> The current simulator has limitations and may not handle complex circuits like NAND, NOR, XOR gates perfectly. It's designed primarily for simple two-transistor NOT gates and basic CMOS principles.
+        </div>
+        
+        <h3>Debugging Tips</h3>
+        <ul>
+            <li>Start with simple circuits and build complexity gradually</li>
+            <li>Use the voltage display to trace signal flow</li>
+            <li>Verify each transistor's gate connection</li>
+            <li>Check that pull-up and pull-down networks are complementary</li>
+        </ul>
+        
+        <h2>Advanced Features</h2>
+        
+        <h3>Easter Eggs</h3>
+        <p>The tool includes easter eggs for instructors:</p>
+        <ul>
+            <li><strong>Ctrl + *:</strong> Automatically creates a CMOS NOT gate circuit</li>
+            <li><strong>Ctrl + |:</strong> Automatically creates a CMOS NOR gate circuit</li>
+        </ul>
+        
+        <div class="tip">
+            <strong>Instructor Note:</strong> Easter eggs are only available to instructors and provide complete circuit solutions for testing and demonstration purposes.
+        </div>
+        
+        <h3>Assignment System</h3>
+        <p>For authenticated users, the tool includes:</p>
+        <ul>
+            <li><strong>Automatic Grading:</strong> Test your circuits against predefined criteria</li>
+            <li><strong>LMS Integration:</strong> Grades are automatically submitted to your Learning Management System</li>
+            <li><strong>Step-by-Step Feedback:</strong> Receive detailed feedback on each part of your assignment</li>
+            <li><strong>Circuit Validation:</strong> Verify that your design meets the assignment requirements</li>
+        </ul>
+        
+        <h2>Learning Resources</h2>
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/CMOS" target="_blank">CMOS Technology - Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Logic_gate" target="_blank">Logic Gates - Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/MOSFET" target="_blank">MOSFET - Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Inverter_(logic_gate)" target="_blank">NOT Gate (Inverter) - Wikipedia</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/NOR_gate" target="_blank">NOR Gate - Wikipedia</a></li>
+        </ul>
+        
+        <div class="highlight">
+            <strong>Remember:</strong> CMOS design is fundamental to modern digital electronics. Understanding how PMOS and NMOS transistors work together to create logic gates is essential for anyone studying computer architecture and digital circuit design.
+        </div>
+        
+        <hr style="margin: 40px 0; border: none; border-top: 2px solid #e9ecef;">
+        
+        <div style="text-align: center; padding: 20px; background-color: #f8f9fa; border-radius: 8px; margin-top: 30px;">
+            <h3 style="color: #2c3e50; margin-bottom: 15px;">About This Tool</h3>
+            <p style="margin: 0; color: #6c757d; font-size: 16px;">
+                This CMOS circuit editor is part of the <strong>Computer Architecture for Everybody</strong> course, 
+                available at <a href="https://www.ca4e.com" target="_blank" style="color: #3498db; text-decoration: none;">www.ca4e.com</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>

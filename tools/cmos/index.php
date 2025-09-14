@@ -374,8 +374,8 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 <?php if ($USER && $USER->instructor) : ?>
             <a href="instructor.php" style="background-color: #28a745; color: white; font-size: 14px; padding: 8px 15px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; min-width: 60px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-decoration: none; display: inline-block; margin: 2px;">Instructor</a>
 <?php endif; ?>
-            <button id="aboutButton" class="mode-button" title="About">
-                <span class="ca4e-icon ca4e-about"></span>
+            <button id="helpButton" class="mode-button" title="Documentation" onclick="openDocumentation()">
+                <span style="font-size: 18px; font-weight: bold;">?</span>
             </button>
         </div>
     </div>
@@ -388,18 +388,6 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         <span id="selectedTool">Selected: None</span>
     </div>
 
-    <div id="aboutModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>About CMOS Circuit Editor</h2>
-            <p>This is a web-based CMOS circuit editor for designing and simulating
-                simple digital logic circuits.
-                The underlying logic simulator has limitations.   It can design a two-transistor NOT gate 
-                but does not have a complete logic simulator to handle more
-                complex circuits like NAND, NOR, XOR, etc.
-            </p>
-        </div>
-    </div>
 
 <?php if ($USER && $assn) : ?>
     <!-- Assignment Modal -->
@@ -487,15 +475,10 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         const isInstructor = <?php echo $USER && $USER->instructor ? 'true' : 'false'; ?>;
         const assignmentType = '<?php echo $assn; ?>';
 
-        // About modal functionality (keep simple modal for about)
-        const aboutModal = document.getElementById('aboutModal');
-        const aboutButton = document.getElementById('aboutButton');
-
-        function showAboutModal() {
-            aboutModal.style.display = 'block';
+        // Documentation function
+        function openDocumentation() {
+            window.open('documentation.html', '_blank', 'width=1000,height=800,scrollbars=yes,resizable=yes');
         }
-
-        aboutButton.addEventListener('click', showAboutModal);
 
         // Close modals when clicking the X
         document.querySelectorAll('.close').forEach(closeBtn => {
