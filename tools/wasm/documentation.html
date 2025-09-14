@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WASM Tool Documentation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-left: 4px solid #3498db;
+            padding-left: 15px;
+        }
+        
+        h3 {
+            color: #2c3e50;
+            margin-top: 25px;
+            margin-bottom: 10px;
+        }
+        
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        
+        .tip {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        
+        .warning {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        
+        li {
+            margin: 8px 0;
+        }
+        
+        .button-demo {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            margin: 5px;
+            font-size: 14px;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+        
+        .close-btn:hover {
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="close-btn" onclick="window.close()">×</button>
+        
+        <h1>WASM Tool Documentation</h1>
+        
+        <h2>Overview</h2>
+        <p>The WASM (WebAssembly) Tool is an interactive learning environment for writing, compiling, and executing WebAssembly Text (WAT) format code. This tool provides a hands-on way to learn WebAssembly programming with real-time compilation and execution.</p>
+        
+        <h2>What is WebAssembly?</h2>
+        <p>WebAssembly (WASM) is a binary instruction format for a stack-based virtual machine. It's designed as a portable compilation target for programming languages, enabling deployment on the web for client and server applications.</p>
+        
+        <div class="highlight">
+            <strong>Key Benefits:</strong>
+            <ul>
+                <li>Near-native performance in web browsers</li>
+                <li>Language-agnostic compilation target</li>
+                <li>Secure sandboxed execution</li>
+                <li>Compact binary format</li>
+            </ul>
+        </div>
+        
+        <h2>Getting Started</h2>
+        
+        <h3>Basic WASM Module Structure</h3>
+        <div class="code-block">
+(module
+  (memory 1)
+  (export "memory" (memory 0))
+  
+  (func $main
+    ;; Your code here
+  )
+  (export "main" (func $main))
+)
+        </div>
+        
+        <h3>Writing Your First Program</h3>
+        <p>Here's a simple "Hello, World!" program in WAT format:</p>
+        <div class="code-block">
+(module
+  (memory 1)
+  (export "memory" (memory 0))
+  
+  (func $main
+    (i32.store8 (i32.const 0) (i32.const 72))   ; 'H'
+    (i32.store8 (i32.const 1) (i32.const 101))  ; 'e'
+    (i32.store8 (i32.const 2) (i32.const 108))  ; 'l'
+    (i32.store8 (i32.const 3) (i32.const 108))  ; 'l'
+    (i32.store8 (i32.const 4) (i32.const 111))  ; 'o'
+    (i32.store8 (i32.const 5) (i32.const 44))   ; ','
+    (i32.store8 (i32.const 6) (i32.const 32))   ; ' '
+    (i32.store8 (i32.const 7) (i32.const 87))   ; 'W'
+    (i32.store8 (i32.const 8) (i32.const 111))  ; 'o'
+    (i32.store8 (i32.const 9) (i32.const 114))  ; 'r'
+    (i32.store8 (i32.const 10) (i32.const 108)) ; 'l'
+    (i32.store8 (i32.const 11) (i32.const 100)) ; 'd'
+    (i32.store8 (i32.const 12) (i32.const 33))  ; '!'
+  )
+  (export "main" (func $main))
+)
+        </div>
+        
+        <h2>Tool Features</h2>
+        
+        <h3>Code Editor</h3>
+        <p>The main text area where you write your WAT code. Features include:</p>
+        <ul>
+            <li>Syntax highlighting for WAT format</li>
+            <li>Line numbers and proper formatting</li>
+            <li>Resizable editor window</li>
+            <li>Keyboard shortcuts (Ctrl+Enter to run)</li>
+        </ul>
+        
+        <h3>Control Buttons</h3>
+        <ul>
+            <li><span class="button-demo">Clear</span> - Clears the editor</li>
+            <li><span class="button-demo">Compile & Run WAT</span> - Compiles and executes your code</li>
+            <li><span class="button-demo">💾 Storage</span> - Save/load/delete your programs</li>
+            <li><span class="button-demo">Assignment</span> - Access graded exercises (when available)</li>
+            <li><span class="button-demo">?</span> - Open this documentation</li>
+        </ul>
+        
+        <h3>Output Display</h3>
+        <p>The output area shows:</p>
+        <ul>
+            <li>Program execution results</li>
+            <li>Error messages and debugging information</li>
+            <li>Console output from your WASM program</li>
+            <li>Function return values</li>
+        </ul>
+        
+        <h3>WASM Binary Viewer</h3>
+        <p>Click "Show WASM" to view the compiled binary in hexadecimal format, including:</p>
+        <ul>
+            <li>File size information</li>
+            <li>WASM magic number (0x0061736d)</li>
+            <li>Complete binary representation</li>
+        </ul>
+        
+        <h2>WAT Syntax Guide</h2>
+        
+        <h3>Basic Types</h3>
+        <div class="code-block">
+i32    ; 32-bit integer
+i64    ; 64-bit integer
+f32    ; 32-bit float
+f64    ; 64-bit float
+        </div>
+        
+        <h3>Memory Operations</h3>
+        <div class="code-block">
+(memory 1)                    ; Declare 1 page of memory (64KB)
+(i32.store8 (i32.const 0) (i32.const 65))  ; Store byte 65 at address 0
+(i32.load8_u (i32.const 0))   ; Load unsigned byte from address 0
+        </div>
+        
+        <h3>Constants and Arithmetic</h3>
+        <div class="code-block">
+(i32.const 42)        ; Push constant 42 onto stack
+(i32.add)             ; Pop two values, push their sum
+(i32.sub)             ; Pop two values, push their difference
+(i32.mul)             ; Pop two values, push their product
+        </div>
+        
+        <h3>Functions</h3>
+        <div class="code-block">
+(func $function_name
+  ;; function body
+)
+
+(export "function_name" (func $function_name))
+        </div>
+        
+        <h2>Common Patterns</h2>
+        
+        <h3>String Storage</h3>
+        <p>To store a string in memory, store each character as a byte:</p>
+        <div class="code-block">
+;; Store "Hi" at memory address 0
+(i32.store8 (i32.const 0) (i32.const 72))   ; 'H' = ASCII 72
+(i32.store8 (i32.const 1) (i32.const 105))  ; 'i' = ASCII 105
+        </div>
+        
+        <h3>Number to String Conversion</h3>
+        <div class="code-block">
+;; Convert number 42 to string "42"
+(i32.store8 (i32.const 0) (i32.const 52))   ; '4' = ASCII 52
+(i32.store8 (i32.const 1) (i32.const 50))   ; '2' = ASCII 50
+        </div>
+        
+        <h2>Assignment Exercises</h2>
+        
+        <h3>Hello World Exercise</h3>
+        <p>Write a WebAssembly program that outputs "Hello, World!" to memory.</p>
+        <div class="tip">
+            <strong>Hint:</strong> Use i32.store8 to store each character's ASCII value in consecutive memory locations.
+        </div>
+        
+        <h3>Print 42 Exercise</h3>
+        <p>Write a WebAssembly program that outputs the number 42 as a string.</p>
+        <div class="tip">
+            <strong>Hint:</strong> Convert the digits '4' and '2' to their ASCII values (52 and 50).
+        </div>
+        
+        <h2>Troubleshooting</h2>
+        
+        <h3>Common Errors</h3>
+        <ul>
+            <li><strong>Syntax Error:</strong> Check parentheses matching and proper WAT syntax</li>
+            <li><strong>Memory Error:</strong> Ensure you're not writing beyond allocated memory</li>
+            <li><strong>Export Error:</strong> Make sure to export your main function</li>
+            <li><strong>Type Error:</strong> Verify operand types match instruction requirements</li>
+        </ul>
+        
+        <div class="warning">
+            <strong>Note:</strong> WASM is a stack-based language. Operations pop values from the stack and push results back onto it. Make sure your stack is balanced!
+        </div>
+        
+        <h3>Debugging Tips</h3>
+        <ul>
+            <li>Start with simple programs and build complexity gradually</li>
+            <li>Use the WASM binary viewer to verify compilation</li>
+            <li>Check the console output for detailed error messages</li>
+            <li>Test individual instructions in isolation</li>
+        </ul>
+        
+        <h2>Advanced Features</h2>
+        
+        <h3>Storage System</h3>
+        <p>The tool includes a local storage system to save and load your programs:</p>
+        <ul>
+            <li><strong>Save:</strong> Store your current program locally</li>
+            <li><strong>Load:</strong> Retrieve a previously saved program</li>
+            <li><strong>Delete:</strong> Remove saved programs</li>
+        </ul>
+        
+        <h3>Keyboard Shortcuts</h3>
+        <ul>
+            <li><strong>Ctrl + Enter:</strong> Compile and run your program</li>
+            <li><strong>Tab:</strong> Indent code (in editor)</li>
+            <li><strong>Shift + Tab:</strong> Unindent code (in editor)</li>
+        </ul>
+        
+        <h2>Learning Resources</h2>
+        <ul>
+            <li><a href="https://webassembly.github.io/spec/core/" target="_blank">WebAssembly Specification</a></li>
+            <li><a href="https://developer.mozilla.org/en-US/docs/WebAssembly" target="_blank">MDN WebAssembly Guide</a></li>
+            <li><a href="https://webassembly.github.io/wabt/demo/wat2wasm/" target="_blank">WAT to WASM Converter</a></li>
+        </ul>
+        
+        <div class="highlight">
+            <strong>Remember:</strong> WebAssembly is designed for performance-critical applications. While it may seem verbose compared to high-level languages, it provides precise control over memory and execution, making it ideal for applications that need to run efficiently in web browsers.
+        </div>
+    </div>
+</body>
+</html>

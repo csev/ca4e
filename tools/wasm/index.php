@@ -14,48 +14,44 @@ $LTI = LTIX::session_start();
 $assn = Settings::linkGetCustom('exercise');
 // Make sure it is a valid assignment
 if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
+
+// Allow the grading web services to work
+$_SESSION['GSRF'] = 10; 
+
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WASM Editor - ES Module Example</title>
+    <title>Web Assembly Editor (WASM)</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="../common/modal-styles.css">
 </head>
 <body>
     <div class="container">
-        <header>
-            <div class="header-content">
-                <div class="title-section">
-                    <h1>WASM Playground</h1>
-                    <p>A teaching tool for learning WebAssembly Text (WAT) format - ES Module Version</p>
-                </div>
-                <div class="header-links">
-<?php if ($USER && $USER->instructor) : ?>
-                    <a href="<?php echo addSession('instructor.php'); ?>" class="instructor-button" title="Instructor Panel">Instructor</a>
-<?php endif; ?>
-                    <a href="../index.php" class="home-link" title="Go to Home">🏠</a>
-                </div>
-            </div>
-        </header>
-        
-        <main>
-            <div class="editor-section">
-                <h2>WAT Code Editor</h2>
-                <div class="editor-controls">
-                    <button id="clearEditor" class="btn">Clear</button>
-                    <button id="runWasm" class="btn btn-primary">Compile & Run WAT</button>
-                    <select id="storageDropdown" class="btn" style="background-color: #6c757d; color: white; border: 1px solid #6c757d; padding: 8px 12px; border-radius: 4px;">
-                        <option value="">💾 Storage</option>
-                        <option value="save">💾 Save</option>
-                        <option value="load">📁 Load</option>
-                        <option value="delete">🗑️ Delete</option>
-                    </select>
+        <center>
+            <h1>Web Assembly Editor (WASM)</h1>
+            <div id="toolbar">
+                <button id="runWasm" class="btn btn-primary">Compile & Run WAT</button>
+                <select id="storageDropdown" class="btn" style="background-color: #6c757d; color: white; border: 1px solid #6c757d; padding: 8px 12px; border-radius: 4px;">
+                    <option value="">💾 Storage</option>
+                    <option value="save">💾 Save</option>
+                    <option value="load">📁 Load</option>
+                    <option value="delete">🗑️ Delete</option>
+                </select>
 <?php if ($USER && $assn) : ?>
-                    <button id="assignmentBtn" class="btn btn-assignment">Assignment</button>
+                <button id="assignmentBtn" class="btn btn-assignment">Assignment</button>
+                <button id="clearEditor" class="btn">Clear</button>
 <?php endif; ?>
-                </div>
+<?php if ($USER && $USER->instructor) : ?>
+                <a href="<?php echo addSession('instructor.php'); ?>" class="btn instructor-button" title="Instructor Panel">Instructor</a>
+<?php endif; ?>
+                <button id="helpBtn" class="btn btn-help" onclick="openDocumentation()">?</button>
+            </div>
+        
+            <main>
+                <div class="editor-section">
+                    <h2>WAT Code Editor</h2>
                 <textarea id="wasmEditor" placeholder="Enter your WAT (WebAssembly Text) code here..."></textarea>
             </div>
             
@@ -75,7 +71,8 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 </div>
                 <div id="errorOutput" class="error-area hidden"></div>
             </div>
-        </main>
+            </main>
+        </center>
         
         <!-- WASM Hex Modal -->
         <div id="wasmModal" class="modal hidden">
@@ -206,6 +203,11 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
                 assignmentModalManager.hide();
             }
+        }
+
+        // Function to open documentation
+        function openDocumentation() {
+            window.open('documentation.html', '_blank', 'width=900,height=700,scrollbars=yes,resizable=yes');
         }
 
         // Initialize the exercise and assignment modal when the page loads
