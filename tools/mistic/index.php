@@ -1966,12 +1966,70 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         } else {
                             return 'Error: Invalid draw command. Use: draw <layer> at (x,y) or draw <layer> from (x,y) to (x,y)';
                         }
+                    } else if (parts[0] === 'place') {
+                        // Parse place commands like: place probe A at (5,5) or place probe at (5,5)
+                        if (parts.length < 4) {
+                            return 'Error: Invalid place command. Use: place probe [label] at (x,y)';
+                        }
+                        
+                        if (parts[1] !== 'probe') {
+                            return 'Error: Only "probe" is supported for place command. Use: place probe [label] at (x,y)';
+                        }
+                        
+                        // Parse coordinates
+                        const commandStr = command.toLowerCase();
+                        const coords = commandStr.match(/at\s*\((\d+)\s*,\s*(\d+)\)/);
+                        if (!coords) {
+                            return 'Error: Invalid coordinates. Use format: (x,y)';
+                        }
+                        const x = parseInt(coords[1]);
+                        const y = parseInt(coords[2]);
+                        
+                        if (x < 0 || x >= gridSize || y < 0 || y >= gridSize) {
+                            return `Error: Coordinates (${x},${y}) out of bounds. Grid size is ${gridSize}x${gridSize}`;
+                        }
+                        
+                        // Extract label (everything between "probe" and "at")
+                        const beforeAt = commandStr.split(/\s+at\s*\(/)[0];
+                        const labelParts = beforeAt.split(' ').slice(2); // Remove 'place' and 'probe'
+                        const label = labelParts.length > 0 ? labelParts.join(' ').trim() : null;
+                        
+                        // Clear all special layers at this position
+                        grid[y][x][getLayerIndex('contact')] = false;
+                        grid[y][x][getLayerIndex('VCC')] = false;
+                        grid[y][x][getLayerIndex('GND')] = false;
+                        grid[y][x][getLayerIndex('probe')] = false;
+                        
+                        // Clean up probe data if this was a probe location
+                        const key = x + '_' + y;
+                        if (probeLabels[key]) {
+                            delete probeLabels[key];
+                            delete probeVoltages[key];
+                        }
+                        
+                        // Set the probe layer
+                        grid[y][x][getLayerIndex('probe')] = true;
+                        
+                        // Handle probe label
+                        if (label && label.length > 0) {
+                            probeLabels[key] = label.charAt(0);
+                            // Automatically set all probes to zero voltage
+                            probeVoltages[key] = '0';
+                            redrawAllTiles();
+                            return `Placed probe "${label.charAt(0)}" at (${x},${y})`;
+                        } else {
+                            // If no label provided, remove the probe
+                            grid[y][x][getLayerIndex('probe')] = false;
+                            return 'Error: Probe label is required. Use: place probe [label] at (x,y)';
+                        }
+                        
                     } else if (parts[0] === 'help') {
                         return `Available commands:
 - clear: Clear the entire canvas
 - redraw: Redraw all tiles
 - draw <layer> at (x,y): Draw a single point (all layers)
 - draw <layer> from (x,y) to (x,y): Draw a rectangle (polysilicon, n+ diffusion, p+ diffusion, metal, vcc, gnd)
+- place probe [label] at (x,y): Place a probe with optional label
 - help: Show this help message
 
 Valid layers: polysilicon, n+ diffusion/n+, p+ diffusion/p+, contact/via, metal, vcc, gnd, probe
