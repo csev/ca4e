@@ -1976,9 +1976,8 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                             return 'Error: Only "probe" is supported for place command. Use: place probe [label] at (x,y)';
                         }
                         
-                        // Parse coordinates
-                        const commandStr = command.toLowerCase();
-                        const coords = commandStr.match(/at\s*\((\d+)\s*,\s*(\d+)\)/);
+                        // Parse coordinates (use case-insensitive matching)
+                        const coords = command.match(/at\s*\((\d+)\s*,\s*(\d+)\)/i);
                         if (!coords) {
                             return 'Error: Invalid coordinates. Use format: (x,y)';
                         }
@@ -1989,8 +1988,8 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                             return `Error: Coordinates (${x},${y}) out of bounds. Grid size is ${gridSize}x${gridSize}`;
                         }
                         
-                        // Extract label (everything between "probe" and "at")
-                        const beforeAt = commandStr.split(/\s+at\s*\(/)[0];
+                        // Extract label (everything between "probe" and "at") - preserve original case
+                        const beforeAt = command.split(/\s+at\s*\(/i)[0];
                         const labelParts = beforeAt.split(' ').slice(2); // Remove 'place' and 'probe'
                         const label = labelParts.length > 0 ? labelParts.join(' ').trim() : null;
                         
