@@ -1546,9 +1546,9 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     const top = 28;
                     const width = layerCanvas.width - padding * 2 - labelGutter;
                     const layerHeight = 30;
-                    const gapHeight = 12; // gap between metal and P+
+                    const gapHeight = 12; // gap between metal and P+ (metal is top)
 
-                    // Top to bottom visual order: N+, Poly, P+, gap, Metal (metal is bottom)
+                    // Top to bottom visual order: Metal, N+, Poly, P+ (metal is top)
                     const presentN = grid[gridY][gridX][layerNPlus];
                     const presentP = grid[gridY][gridX][layerPPlus];
                     const presentPoly = grid[gridY][gridX][layerPolysilicon];
@@ -1556,11 +1556,11 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     const viaPresent = grid[gridY][gridX][layerContact] || grid[gridY][gridX][layerVCC] || grid[gridY][gridX][layerGND];
 
                     const slots = [
-                        { name: 'N+ diffusion', color: layers['N+ diffusion'], present: presentN, height: layerHeight },
-                        { name: 'polysilicon', color: layers['polysilicon'], present: presentPoly, height: layerHeight },
-                        { name: 'P+ diffusion', color: layers['P+ diffusion'], present: presentP, height: layerHeight },
+                        { name: 'metal', color: layers['metal'], present: presentMetal, height: layerHeight },
                         { name: 'gap', color: 'rgba(0,0,0,0)', present: true, height: gapHeight },
-                        { name: 'metal', color: layers['metal'], present: presentMetal, height: layerHeight }
+                        { name: 'P+ diffusion', color: layers['P+ diffusion'], present: presentP, height: layerHeight },
+                        { name: 'polysilicon', color: layers['polysilicon'], present: presentPoly, height: layerHeight },
+                        { name: 'N+ diffusion', color: layers['N+ diffusion'], present: presentN, height: layerHeight }
                     ];
 
                     const viaWidth = Math.max(12, Math.floor(width * 0.4));
