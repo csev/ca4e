@@ -101,7 +101,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 <?php if ($USER && $assn) : ?>
                 <button id="assignmentBtn" style="background-color:#fff0e6;">Assignment</button>
 <?php endif; ?>
-                <button onclick="readCircuit()" style="background-color: #607D8B; color: white;">Read Circuit</button>
+                <button id="readCircuitBtn" onclick="readCircuit()" style="background-color: #607D8B; color: white;">Read Circuit</button>
 <?php if ($USER && $USER->instructor) : ?>
                 <a href="instructor.php" style="background-color: #28a745; color: white; font-size: 14px; padding: 8px 15px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; min-width: 60px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-decoration: none; display: inline-block; margin: 2px;">Instructor</a>
 <?php endif; ?>
@@ -155,6 +155,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 const layerModal = document.getElementById('layerModal');
                 const layerModalHeader = document.getElementById('layerModalHeader');
                 const canvasContainer = document.getElementById('canvasContainer');
+                const readCircuitBtn = document.getElementById('readCircuitBtn');
 <?php if ($USER && $assn) : ?>
                 const assignmentModal = document.getElementById('assignmentModal');
                 const assignmentModalHeader = document.getElementById('assignmentModalHeader');
@@ -193,6 +194,10 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 
                 // Exercise instance
                 let currentExercise = null;
+                
+                // Speech synthesis state
+                let isReadingCircuit = false;
+                let speakingTimeoutId = null;
 
                 // Initialize save/restore manager
                 const saveRestoreManager = new SaveRestoreManager('mistic', {
@@ -825,17 +830,42 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 }
 
                 function readCircuit() {
-                    console.log("=== CIRCUIT ANALYSIS ===");
-                    console.log("Reading current circuit layout...");
-                    
                     // Check if speech synthesis is available
                     if (!window.speechSynthesis) {
                         alert("Speech synthesis not available in this browser");
                         return;
                     }
                     
-                    // Stop any current speech
+                    // Toggle behavior: if already reading, stop
+                    if (isReadingCircuit) {
+                        console.log("Stopping circuit reading...");
+                        window.speechSynthesis.cancel();
+                        if (speakingTimeoutId) {
+                            clearTimeout(speakingTimeoutId);
+                            speakingTimeoutId = null;
+                        }
+                        isReadingCircuit = false;
+                        if (readCircuitBtn) {
+                            readCircuitBtn.textContent = 'Read Circuit';
+                        }
+                        return;
+                    }
+                    
+                    console.log("=== CIRCUIT ANALYSIS ===");
+                    console.log("Reading current circuit layout...");
+                    
+                    // Stop any current speech (in case something else was speaking)
                     window.speechSynthesis.cancel();
+                    if (speakingTimeoutId) {
+                        clearTimeout(speakingTimeoutId);
+                        speakingTimeoutId = null;
+                    }
+                    
+                    // Set state to reading
+                    isReadingCircuit = true;
+                    if (readCircuitBtn) {
+                        readCircuitBtn.textContent = 'Stop Reading';
+                    }
                     
                     // Analyze the circuit and generate commands
                     const commands = [];
@@ -1186,12 +1216,29 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         // Speak the queue with pauses
                         let index = 0;
                         function speakNext() {
-                            if (index >= speechQueue.length) return;
+                            // Check if reading was stopped
+                            if (!isReadingCircuit) {
+                                return;
+                            }
+                            
+                            if (index >= speechQueue.length) {
+                                // Finished speaking all items, reset the state
+                                isReadingCircuit = false;
+                                if (readCircuitBtn) {
+                                    readCircuitBtn.textContent = 'Read Circuit';
+                                }
+                                speakingTimeoutId = null;
+                                return;
+                            }
                             
                             const text = speechQueue[index];
+                            index++;
                             if (text === "pause") {
                                 // Wait 500ms then continue
-                                setTimeout(speakNext, 500);
+                                speakingTimeoutId = setTimeout(() => {
+                                    speakNext();
+                                    speakingTimeoutId = null;
+                                }, 500);
                             } else {
                                 // Flash outline for draw commands
                                 flashCommandOutline(text);
@@ -1215,15 +1262,16 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                                 utterance.onend = speakNext;
                                 window.speechSynthesis.speak(utterance);
                             }
-                            index++;
                         }
                         
                         speakNext();
                     }
                     
-                    speakCommands();
-                    
-                    console.log("Speaking circuit commands with pauses...");
+                    // Make sure we're still supposed to be reading before starting speech
+                    if (isReadingCircuit) {
+                        speakCommands();
+                        console.log("Speaking circuit commands with pauses...");
+                    }
                 }
 
                 // Drag handling for the modal (mouse + touch)
