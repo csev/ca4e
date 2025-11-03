@@ -64,7 +64,7 @@
         },
         {
             "title" : "Draft: Exploring Hardware Iteration - Part 4 (10:47)",
-            "media": "CA4E-Lectures/01-Origins/01-07-Origins-Iterations.m4v",
+            "media": "CA4E-Lectures/01-Origins/01-04-Origins-Iterations.m4v",
             "FCPX": "ca4e-media/01-Origins/01-04-Origins-Iterations",
             "youtube" : "8fRCMCM_KWI"
         }
@@ -84,6 +84,20 @@
     "description": "We look how the invention of the transistor changed everything.",
     "slides": [
         "{apphome}/lectures/02-SolidState.pptx"
+    ],
+    "videos" : [
+        {
+            "title" : "Solid State: Starting with Tubes - Part 1 (10:29)",
+            "media": "CA4E-Lectures/02-SolidState/02-01-SolidState-Tubes.m4v",
+            "FCPX": "ca4e-media/02-SolidState/02-01-SolidState-Tubes",
+            "youtube" : "eRDh3t1QL5Y"
+        },
+        {
+            "title" : "Solid State: From Tubes to Transistors - Part 2 (10:24)",
+            "media": "CA4E-Lectures/02-SolidState/02-02-SolidState-Transistors.m4v",
+            "FCPX": "ca4e-media/02-SolidState/02-02-SolidState-Transistors",
+            "youtube" : "V1BzdYrDakI"
+        }
     ],
      "lti" : [
         {
