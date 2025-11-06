@@ -88,6 +88,8 @@
         <div class="example">
             <code>draw metal at (5,5)</code> - Place metal at coordinate (5,5)<br>
             <code>draw polysilicon from (3,3) to (6,3)</code> - Draw polysilicon line from (3,3) to (6,3)<br>
+            <code>draw P+ from (6,1) to (6,7)</code> - Draw P+ diffusion region from (6,1) to (6,7)<br>
+            <code>draw N+ from (8,7) to (8,13)</code> - Draw N+ diffusion region from (8,7) to (8,13)<br>
             <code>draw via at (5,1)</code> - Place a via at (5,1)<br>
             <code>draw VCC at (1,1)</code> - Place VCC at (1,1)<br>
             <code>draw probe at (10,10)</code> - Place a probe at (10,10) (will prompt for label)<br>
@@ -113,9 +115,6 @@
         
         <h3>Assignment System</h3>
         <p>For authenticated users, the tool includes an assignment system with automatic grading. Complete assignments to test your circuit designs and receive grades.</p>
-        
-        <h3>NOT Gate Button</h3>
-        <p>Click the <strong>Not</strong> button to automatically draw a complete NOT gate circuit with all necessary components.</p>
         
         <h3>Read Circuit</h3>
         <p>Use the <strong>Read Circuit</strong> button to generate draw commands that can replicate your current circuit design. This feature also provides speech synthesis for accessibility.</p>
@@ -180,6 +179,21 @@
             <li><strong>Circuit Validation:</strong> Verify that your design meets the assignment requirements</li>
         </ul>
 
+        <div id="easterEggSection" style="display: none;">
+            <h2>🥚 Easter Eggs (Instructor Only)</h2>
+            <p>For instructors, the tool includes easter eggs to quickly populate circuits for testing and demonstration:</p>
+            <ul>
+                <li><strong>Ctrl + *</strong> - Automatically draws a complete NOT gate circuit (Hitchhiker's Guide reference - 42!)</li>
+                <li><strong>Ctrl + &</strong> - Automatically draws a complete NAND gate circuit</li>
+            </ul>
+            <div class="tip">
+                <strong>Instructor Note:</strong> Easter eggs are only available to instructors and provide complete circuit solutions for testing and demonstration purposes.
+            </div>
+            <div class="tip" style="margin-top: 15px;">
+                <strong>🎯 Meta Easter Egg:</strong> You found the easter egg documentation by using an easter egg! This is recursive irony at its finest. 🎉
+            </div>
+        </div>
+
         <h2>Learning Resources</h2>
         <ul>
             <li><a href="https://en.wikipedia.org/wiki/Very_Large_Scale_Integration" target="_blank">VLSI - Wikipedia</a></li>
@@ -204,5 +218,23 @@
             </p>
         </div>
     </div>
+
+    <script>
+        // Easter egg documentation easter egg - recursive irony! 🥚
+        console.log('Press CTRL-* to see easter egg documentation');
+        
+        document.addEventListener('keydown', function(e) {
+            // Check for Ctrl + * (Hitchhiker's Guide reference - 42!)
+            if (e.ctrlKey && e.key === '*') {
+                const easterEggSection = document.getElementById('easterEggSection');
+                if (easterEggSection) {
+                    easterEggSection.style.display = 'block';
+                    // Scroll to the easter egg section
+                    easterEggSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    console.log('🎯 Easter egg documentation revealed! (Hitchhiker\'s Guide reference - 42!)');
+                }
+            }
+        });
+    </script>
 </body>
 </html>
