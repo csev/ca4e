@@ -772,6 +772,69 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     // Redraw everything
                     redrawAllTiles();
                 }
+
+                function drawNandGate() {
+                    // Clear the canvas first
+                    clearCanvas();
+                    
+                    console.log('🎯 Creating NAND gate layout...');
+                    
+                    // Execute the exact draw commands for the NAND gate
+                    // Using the exact layout provided by the user
+                    const commands = [
+                        'draw VCC at (0, 1)',
+                        'draw GND at (0, 13)',
+                        'draw P+ from (6, 1) to (6, 7)',
+                        'draw P+ from (10, 1) to (10, 7)',
+                        'draw N+ from (8, 7) to (8, 13)',
+                        'draw polysilicon from (4, 3) to (4, 9)',
+                        'draw polysilicon from (4, 3) to (7, 3)',
+                        'draw polysilicon from (4, 9) to (9, 9)',
+                        'draw polysilicon from (2, 5) to (2, 11)',
+                        'draw polysilicon from (2, 11) to (9, 11)',
+                        'draw polysilicon from (8, 5) to (11, 5)',
+                        'draw metal from (0, 1) to (14, 1)',
+                        'draw metal from (0, 3) to (4, 3)',
+                        'draw metal from (0, 5) to (8, 5)',
+                        'draw metal from (6, 7) to (14, 7)',
+                        'draw metal from (0, 13) to (14, 13)',
+                        'draw via at (6, 1)',
+                        'draw via at (10, 1)',
+                        'draw via at (4, 3)',
+                        'draw via at (2, 5)',
+                        'draw via at (8, 5)',
+                        'draw via at (6, 7)',
+                        'draw via at (8, 7)',
+                        'draw via at (10, 7)',
+                        'draw via at (8, 13)'
+                    ];
+                    
+                    // Execute each command in order
+                    commands.forEach(command => {
+                        const result = executeCommand(command);
+                        console.log(`Executed: ${command} -> ${result}`);
+                    });
+                    
+                    // Add probe labels for NAND gate manually
+                    // Input probe A at (0, 3) - on the input A metal line
+                    grid[3][0][7] = true; // layer 7 is probe layer
+                    probeLabels['0_3'] = 'A';
+                    
+                    // Input probe B at (0, 5) - on the input B metal line
+                    grid[5][0][7] = true; // layer 7 is probe layer
+                    probeLabels['0_5'] = 'B';
+                    
+                    // Output probe Q at (14, 7) - on the output metal line
+                    grid[7][14][7] = true; // layer 7 is probe layer
+                    probeLabels['14_7'] = 'Q';
+                    
+                    console.log('Added probe labels: A at (0,3), B at (0,5), and Q at (14,7)');
+                    
+                    // Redraw everything
+                    redrawAllTiles();
+                    
+                    console.log('✨ NAND gate magically appeared!');
+                }
 <?php endif; ?>
 
                 function flashCommandOutline(command) {
@@ -2123,11 +2186,15 @@ Grid size: ${gridSize}x${gridSize}`;
                 });
 
                 // Easter egg: Ctrl + * to unlock Not gate (Hitchhiker's Guide reference - 42)
+                // Easter egg: Ctrl + & to unlock NAND gate
                 
                 // Test function to verify the Easter egg is working
                 window.testEasterEgg = function() {
                     if (typeof drawNotGate === 'function') {
                         drawNotGate();
+                    }
+                    if (typeof drawNandGate === 'function') {
+                        drawNandGate();
                     }
                 };
                 
@@ -2148,6 +2215,11 @@ Grid size: ${gridSize}x${gridSize}`;
                         console.log('🎯 Easter egg triggered! Ctrl + * detected! (Hitchhiker\'s Guide reference!)');
                         unlockNotGate();
                     }
+                    // Test for Ctrl + & (NAND gate)
+                    if (e.ctrlKey && e.key === '&') {
+                        console.log('🎯 NAND gate Easter egg triggered! Ctrl + & detected!');
+                        unlockNandGate();
+                    }
                 });
                 
                 function unlockNotGate() {
@@ -2160,6 +2232,19 @@ Grid size: ${gridSize}x${gridSize}`;
                     <?php else : ?>
                     // Students can't unlock it
                     console.log('❌ Not gate Easter egg attempted by non-instructor');
+                    <?php endif; ?>
+                }
+                
+                function unlockNandGate() {
+                    // Only allow for instructors
+                    <?php if ($USER && $USER->instructor) : ?>
+                    // Draw the NAND gate
+                    if (typeof drawNandGate === 'function') {
+                        drawNandGate();
+                    }
+                    <?php else : ?>
+                    // Students can't unlock it
+                    console.log('❌ NAND gate Easter egg attempted by non-instructor');
                     <?php endif; ?>
                 }
                 
