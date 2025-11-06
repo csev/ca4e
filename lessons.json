@@ -103,6 +103,12 @@
             "media": "CA4E-Lectures/02-SolidState/02-03-SolidState-Gates.m4v",
             "FCPX": "ca4e-media/02-SolidState/02-03-SolidState-Gates",
             "youtube" : "-qNm_MewmzM"
+        },
+        {
+            "title" : "Solid State: VLSI Design Layout - Part 5 (10:46)",
+            "media": "CA4E-Lectures/02-SolidState/02-05-SolidState-VLSI.m4v",
+            "FCPX": "ca4e-media/02-SolidState/02-05-SolidState-VLSI",
+            "youtube" : "9IoC-xn2bro"
         }
     ],
      "lti" : [
