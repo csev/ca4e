@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nixie Challenge Documentation</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        h1, h2, h3 {
+            color: #f97316;
+        }
+
+        a {
+            color: #38bdf8;
+        }
+
+        pre {
+            background: rgba(15, 23, 42, 0.9);
+            padding: 16px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Nixie Challenge</h1>
+    <p>The Nixie Challenge gives learners a hands-on way to practice converting numbers between base-10 and base-2. Inspired by classic nixie tubes, the interface glows with each conversion to reinforce the connection between binary bits and the glowing decimal digit.</p>
+
+    <h2>How It Works</h2>
+    <p>Two interactive exercises guide the learner through the conversions:</p>
+    <ol>
+        <li><strong>Base-10 → Base-2:</strong> A nixie tube displays a decimal value between 0 and 7. Learners toggle the 4s, 2s, and 1s switches to match the binary representation.</li>
+        <li><strong>Base-2 → Base-10:</strong> A random binary pattern appears. Learners type the decimal value, then reveal their answer on another nixie tube.</li>
+    </ol>
+
+    <div id="documentationEasterEgg" style="display: none;">
+        <h2>🥚 Instructor Easter Eggs</h2>
+        <p>Press <strong>Ctrl + *</strong> to reveal the secret practice toolkit:</p>
+        <ul>
+            <li><strong>Ctrl + *</strong> – Auto-generate the NOT gate nixie display (42 reference still intact).</li>
+            <li><strong>Ctrl + &amp;</strong> – Auto-generate the octal-to-binary processing nixie layout.</li>
+        </ul>
+        <p>These shortcuts exist in the interactive tool. The documentation version is hidden until you discover the same shortcut. Recursive easter eggs for the win.</p>
+    </div>
+
+    <h2>Integrating into a Course</h2>
+    <p>The tool works well as a warm-up activity before teaching binary arithmetic or as follow-up practice after introducing positional number systems.</p>
+
+    <h3>Suggested Learning Objectives</h3>
+    <ul>
+        <li>Convert three-bit binary numbers to decimal (0–7).</li>
+        <li>Convert decimal numbers (0–7) to binary.</li>
+        <li>Explain how the 4s, 2s, and 1s positions contribute to the final decimal value.</li>
+    </ul>
+
+    <h2>Accessibility Notes</h2>
+    <ul>
+        <li>Canvas elements include descriptive <code>aria-label</code> attributes.</li>
+        <li>Controls are accessible via keyboard (checkboxes support the space key to toggle).</li>
+        <li>Feedback messages use <code>role="status"</code> so screen readers announce the results.</li>
+    </ul>
+
+    <h2>Developer Notes</h2>
+    <p>The nixie display is implemented in <code>nixie.js</code> using the Canvas 2D API. The glow effect is borrowed from the <code>NixieDisplay</code> component used in the <em>Digital Gates</em> tool.</p>
+
+    <h3>Adding New Exercises</h3>
+    <ol>
+        <li>Extend <code>nixie.js</code> with your exercise logic.</li>
+        <li>Create new DOM sections in <code>index.php</code> for the activity UI.</li>
+        <li>Reuse <code>SimpleNixieDisplay</code> to show decimal values.</li>
+    </ol>
+
+    <h2>Testing Checklist</h2>
+    <ul>
+        <li>Verify both exercises load with random values between 0 and 7.</li>
+        <li>Ensure check buttons evaluate answers correctly and handle invalid input.</li>
+        <li>Confirm the nixie display updates after a correct answer.</li>
+        <li>Try the easter egg shortcut (Ctrl + *) within the main tool to reveal the instructor-only features.</li>
+    </ul>
+
+    <script>
+        console.log('Press CTRL-* to reveal the documentation easter egg.');
+
+        document.addEventListener('keydown', function (event) {
+            if (event.ctrlKey && event.key === '*') {
+                const section = document.getElementById('documentationEasterEgg');
+                if (section) {
+                    section.style.display = 'block';
+                    section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    console.log('🎯 Documentation easter egg revealed!');
+                }
+            }
+        });
+    </script>
+</body>
+</html>
+
+
