@@ -29,14 +29,17 @@
 </head>
 <body>
     <h1>Nixie Challenge</h1>
-    <p>The Nixie Challenge gives learners a hands-on way to practice converting numbers between base-10 and base-2. Inspired by classic nixie tubes, the interface glows with each conversion to reinforce the connection between binary bits and the glowing decimal digit.</p>
+    <p>The Nixie Challenge gives learners a hands-on way to practise binary fluency. The launch currently ships with two assignments: glowing nixie conversions between base-10 and base-2, and a text-based binary addition drill where each bit is entered individually.</p>
 
     <h2>How It Works</h2>
-    <p>Two interactive exercises guide the learner through the conversions:</p>
+    <p>Pick an assignment on the Instructor Dashboard (Settings → “Pick the assignment”). Learners see one activity at a time:</p>
     <ol>
-        <li><strong>Base-10 → Base-2:</strong> A nixie tube displays a decimal value between 0 and 7. Learners toggle the 4s, 2s, and 1s switches to match the binary representation.</li>
-        <li><strong>Base-2 → Base-10:</strong> A random binary pattern appears. Learners type the decimal value, then reveal their answer on another nixie tube.</li>
+        <li><strong>Base-10 ⇄ Base-2 conversions (Base2Conversions):</strong> Nixie tubes glow with random decimal values (1–7). Learners toggle the 4s/2s/1s switches or type decimal answers and receive instant feedback—no “Check” button required.</li>
+        <li><strong>Binary addition (BinaryAddition):</strong> Two three-bit numbers appear as rows of bits. Learners type each sum bit (including the carry) in individual inputs; feedback updates as soon as all boxes contain 0s or 1s.</li>
     </ol>
+
+    <h2>Assignment Management</h2>
+    <p>Visit <strong>Instructor Dashboard → Settings</strong> to choose the active assignment. The dropdown lists “Base-10 ⇄ Base-2 conversions” first, followed by “Binary addition practice”. All instructor dashboards also include Student Data and Launches shortcuts.</p>
 
     <div id="documentationEasterEgg" style="display: none;">
         <h2>🥚 Instructor Easter Eggs</h2>
@@ -53,9 +56,9 @@
 
     <h3>Suggested Learning Objectives</h3>
     <ul>
-        <li>Convert three-bit binary numbers to decimal (0–7).</li>
-        <li>Convert decimal numbers (0–7) to binary.</li>
-        <li>Explain how the 4s, 2s, and 1s positions contribute to the final decimal value.</li>
+        <li>Convert three-bit binary numbers to decimal (0–7) and vice versa.</li>
+        <li>Explain how the 4s/2s/1s positions contribute to the final decimal value.</li>
+        <li>Add two three-bit binary numbers and express the carry separately.</li>
     </ul>
 
     <h2>Accessibility Notes</h2>
@@ -66,20 +69,20 @@
     </ul>
 
     <h2>Developer Notes</h2>
-    <p>The nixie display is implemented in <code>nixie.js</code> using the Canvas 2D API. The glow effect is borrowed from the <code>NixieDisplay</code> component used in the <em>Digital Gates</em> tool.</p>
+    <p>The nixie display is implemented in <code>nixie.js</code> using the Canvas 2D API. The glow effect is borrowed from the <code>NixieDisplay</code> component used in the <em>Digital Gates</em> tool. Assignment routing happens in <code>index.php</code>, so adding new activities only requires adding markup + logic and registering the key in <code>assignments.php</code>.</p>
 
     <h3>Adding New Exercises</h3>
     <ol>
-        <li>Extend <code>nixie.js</code> with your exercise logic.</li>
-        <li>Create new DOM sections in <code>index.php</code> for the activity UI.</li>
-        <li>Reuse <code>SimpleNixieDisplay</code> to show decimal values.</li>
+        <li>Extend <code>assignments.php</code> and <code>index.php</code> with a new key + markup.</li>
+        <li>Implement the exercise logic inside <code>nixie.js</code> (see <code>initBase2Conversions</code> and <code>initBinaryAddition</code> for patterns).</li>
+        <li>Reuse <code>SimpleNixieDisplay</code> if the activity needs a nixie tube; otherwise create bespoke DOM components.</li>
     </ol>
 
     <h2>Testing Checklist</h2>
     <ul>
-        <li>Verify both exercises load with random values between 0 and 7.</li>
-        <li>Ensure check buttons evaluate answers correctly and handle invalid input.</li>
-        <li>Confirm the nixie display updates after a correct answer.</li>
+        <li>Ensure each assignment loads the appropriate UI after changing the dropdown in Settings.</li>
+        <li>Verify conversions auto-check bit toggles and decimal input, including validation for empty or out-of-range entries.</li>
+        <li>Verify binary addition only accepts 0/1, requires all bits before feedback, and highlights the correct sum with a carry.</li>
         <li>Try the easter egg shortcut (Ctrl + *) within the main tool to reveal the instructor-only features.</li>
     </ul>
 

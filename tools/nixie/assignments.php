@@ -1,8 +1,8 @@
 <?php
 
 $assignments = array(
-    'DecimalToBinary' => 'Convert decimal to binary (0-7)',
-    'BinaryToDecimal' => 'Convert binary to decimal (0-7)',
+    'Base2Conversions' => 'Base-10 ⇄ Base-2 conversions (0-7)',
+    'BinaryAddition' => 'Binary addition practice (3-bit + 3-bit)',
 );
 
 
