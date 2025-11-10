@@ -113,6 +113,21 @@ const HEX_DIGITS = '0123456789ABCDEF';
 const MAX_BINARY_ADDITION_SCORE = 10;
 const MAX_CONVERSION_SCORE = 10;
 
+function submitGradeToLms(grade, message) {
+    const url = window.gradeSubmitUrl || 'grade-submit.php';
+    fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `grade=${encodeURIComponent(grade)}`
+    }).then(() => {
+        if (message) {
+            alert(message);
+        }
+    }).catch(() => {
+        console.warn('Failed to submit grade to LMS');
+    });
+}
+
 function initTabbedCards() {
     document.querySelectorAll('.tabbed-card').forEach(card => {
         const buttons = card.querySelectorAll('.tab-btn');
@@ -189,6 +204,9 @@ function initBase2Conversions() {
         }
         score += 1;
         updateScoreDisplay();
+        if (score >= MAX_CONVERSION_SCORE) {
+            submitGradeToLms(1.0, 'Nice work! Your score for the decimal → binary conversions has been submitted to the LMS.');
+        }
     }
 
     function resetFeedback(element) {
@@ -503,6 +521,9 @@ function initHexConversions() {
         }
         score += 1;
         updateScoreDisplay();
+        if (score >= MAX_CONVERSION_SCORE) {
+            submitGradeToLms(1.0, 'Nice work! Your score for the hex conversions has been submitted to the LMS.');
+        }
     }
 
     function resetFeedback(element) {
@@ -841,17 +862,6 @@ function initBinaryAddition() {
         scoreDisplay.textContent = `Score: ${score}/${MAX_BINARY_ADDITION_SCORE}`;
     }
 
-    function sendLmsGrade(grade) {
-        const url = window.gradeSubmitUrl || 'grade-submit.php';
-        fetch(url, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `grade=${encodeURIComponent(grade)}`
-        }).catch(() => {
-            console.warn('Failed to submit grade to LMS');
-        });
-    }
-
     function incrementScore() {
         if (score >= MAX_BINARY_ADDITION_SCORE) {
             return;
@@ -859,7 +869,7 @@ function initBinaryAddition() {
         score += 1;
         updateScoreDisplay();
         if (score >= MAX_BINARY_ADDITION_SCORE) {
-            sendLmsGrade(1.0);
+            submitGradeToLms(1.0, 'Nice work! Your binary addition score has been submitted to the LMS.');
         }
     }
 
