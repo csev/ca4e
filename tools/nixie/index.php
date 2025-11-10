@@ -113,6 +113,7 @@ $tagline = $taglines[$assn] ?? 'Sharpen your digital logic intuition.';
                 <li>The nixie tube glows with the decimal number you are working with.</li>
                 <li>Remember: the switches represent 4, 2, and 1. Add them together to get the decimal value.</li>
                 <li>Practice until you can convert between bases without hints!</li>
+                <li><a href="https://en.wikipedia.org/wiki/Nixie_tube" target="_blank" rel="noopener">What is a Nixie Tube?</a></li>
             </ul>
         </section>
     <?php elseif ($assn === 'HexConversions') : ?>
@@ -162,6 +163,7 @@ $tagline = $taglines[$assn] ?? 'Sharpen your digital logic intuition.';
             <ul>
                 <li>Hex digits 0–9 map to decimal 0–9. A–F map to decimal 10–15.</li>
                 <li>Practice both directions to build hexadecimal fluency.</li>
+                <li><a href="https://en.wikipedia.org/wiki/Nixie_tube" target="_blank" rel="noopener">What is a Nixie Tube?</a></li>
             </ul>
         </section>
     <?php elseif ($assn === 'BinaryAddition') : ?>
@@ -240,6 +242,7 @@ $tagline = $taglines[$assn] ?? 'Sharpen your digital logic intuition.';
                 <li>Work from right to left just like decimal addition.</li>
                 <li>If you add two 1s, write 0 in that column and carry 1 to the next column.</li>
                 <li>The leftmost box is for the final carry (8s place). Leave it 0 if there is no carry.</li>
+                <li><a href="https://en.wikipedia.org/wiki/Nixie_tube" target="_blank" rel="noopener">What is a Nixie Tube?</a></li>
             </ul>
         </section>
     <?php else : ?>

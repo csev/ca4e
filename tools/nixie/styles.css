@@ -242,6 +242,15 @@ a.secondary-btn:hover {
     margin-bottom: 8px;
 }
 
+.resources a {
+    color: #fbbf24;
+    text-decoration: underline;
+}
+
+.resources a:hover {
+    color: #facc15;
+}
+
 .instructor-links {
     margin-top: 18px;
     display: flex;
