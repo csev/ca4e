@@ -42,6 +42,37 @@ class SimpleNixieDisplay {
         const tubeTopY = centerY - tubeHeight / 2;
         const tubeBottomY = centerY + tubeHeight / 2;
 
+        const nippleBaseY = tubeTopY + 3;
+        const nippleHeight = 30;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(centerX - 22, nippleBaseY);
+        ctx.lineTo(centerX + 22, nippleBaseY);
+        ctx.quadraticCurveTo(centerX + 18, nippleBaseY - 6, centerX + 12, nippleBaseY - 10);
+        ctx.quadraticCurveTo(centerX + 9, nippleBaseY - nippleHeight * 0.55, centerX, nippleBaseY - nippleHeight);
+        ctx.quadraticCurveTo(centerX - 9, nippleBaseY - nippleHeight * 0.55, centerX - 12, nippleBaseY - 10);
+        ctx.quadraticCurveTo(centerX - 18, nippleBaseY - 6, centerX - 22, nippleBaseY);
+        ctx.closePath();
+        const nippleGradient = ctx.createLinearGradient(0, nippleBaseY - nippleHeight, 0, nippleBaseY);
+        nippleGradient.addColorStop(0, '#14213a');
+        nippleGradient.addColorStop(1, '#1a1f2f');
+        ctx.fillStyle = nippleGradient;
+        ctx.fill();
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(centerX, nippleBaseY - nippleHeight, 4, 0, Math.PI * 2);
+        ctx.fillStyle = '#1a1f2f';
+        ctx.fill();
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.restore();
+
         // Cylindrical tube body (with clipping for interior effects)
         ctx.save();
         ctx.beginPath();

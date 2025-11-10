@@ -297,7 +297,6 @@ a.secondary-btn:hover {
     font-size: 0.85rem;
     color: #cbd5f5;
     letter-spacing: 0.05em;
-    text-transform: uppercase;
 }
 
 .operand-label {
@@ -355,7 +354,6 @@ a.secondary-btn:hover {
 .bit-strip .bit-pos {
     font-size: 0.8rem;
     letter-spacing: 0.03em;
-    text-transform: uppercase;
     text-align: center;
     width: 48px;
 }
