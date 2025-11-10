@@ -1,19 +1,19 @@
 # Nixie Challenge
 
-The Nixie Challenge is a Tsugi tool that helps learners strengthen their number-system intuition. The launch currently includes two assignments: glowing nixie conversions between base-10 and base-2, and a text-based binary addition drill.
+The Nixie Challenge is a Tsugi tool that helps learners strengthen their number-system intuition. The launch currently includes three assignments: glowing nixie conversions between base-10 and base-2, a seven-segment hex ⇄ decimal conversion drill, and a text-based binary addition activity.
 
 ## Features
 
-- Base-10 ⇄ Base-2 conversions with interactive bit toggles (4s, 2s, 1s) and instant feedback.
+- Base-10 ⇄ Base-2 conversions with per-bit inputs (4s, 2s, 1s) and instant feedback.
+- Hex ⇄ Decimal conversions rendered on a red-on-white seven-segment display.
 - Binary addition practice (3-bit + 3-bit) with one input per sum bit, including the final carry.
-- Simplified nixie tube rendering powered by the Canvas 2D API.
 - Instructor dashboard (Settings → “Pick the assignment”) plus Student Data and Launches views.
 - Keyboard-accessible controls, ARIA feedback announcements, and a documentation easter egg that mirrors the tool shortcuts.
 
 ## File Overview
 
 - `index.php` – Tsugi entry point, assignment routing, and UI markup.
-- `nixie.js` – Exercise logic (conversions + binary addition) and nixie renderer.
+- `nixie.js` – Exercise logic (conversions, hex practice, binary addition) and canvas renderers.
 - `styles.css` – Neon-inspired styling shared across assignments.
 - `documentation.html` – Tool overview and instructor notes.
 - `testing.md` – Manual testing checklist.
@@ -24,7 +24,7 @@ The Nixie Challenge is a Tsugi tool that helps learners strengthen their number-
 ## Future Ideas
 
 - Add automated grading integration for LMS grade passback.
-- Expand to additional binary skills (subtraction, two’s complement, etc.).
+- Expand to additional binary/hex skills (subtraction, two’s complement, etc.).
 - Record learner progress or streaks for gamification.
 
 
