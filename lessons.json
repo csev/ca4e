@@ -189,6 +189,14 @@
     "slides": [
         "{apphome}/lectures/03-DigitalLogic.pptx"
     ],
+    "videos" : [
+        {
+            "title" : "Digital Logic: Computer Architecture - Part 1 (7:23)",
+            "media": "CA4E-Lectures/03-Digital/03-01-Digital-Arch.m4v",
+            "FCPX": "ca4e-media/03-Digital/03-01-Digital-Arch",
+            "youtube" : "Nvd-Hp-df1M"
+        }
+     ],
      "lti" : [
         {
             "title" : "Building a Half-Adder",
