@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logic Truth Table Challenge – Documentation</title>
+    <style>
+        body {
+            font-family: "Inter", "Segoe UI", sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px 60px;
+            color: #0f172a;
+        }
+        h1, h2, h3 {
+            color: #ea580c;
+        }
+        code {
+            background: #f1f5f9;
+            padding: 0 4px;
+            border-radius: 4px;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        .note {
+            background: #fff7ed;
+            border-left: 4px solid #f97316;
+            padding: 12px 16px;
+            margin: 18px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Logic Truth Table Challenge</h1>
+    <p>
+        The Logic Truth Table Challenge is a Tsugi-based LTI tool that helps students master the
+        fundamental logic gates (NOT, AND, OR, XOR, NAND, NOR). 
+        Students complete partially blank truth tables while viewing a schematic of the selected gate.
+    </p>
+
+    <h2>Key Features</h2>
+    <ul>
+        <li>Accessible layout with high-contrast visuals and large interactive targets.</li>
+        <li>Instant feedback when a truth table is complete.</li>
+        <li>Auto-advance timer with optional manual control for extra review time.</li>
+        <li>Score tracking up to 10 points; reaching 10 sends a grade of 1.0 to the LMS.</li>
+        <li>Instructor dashboard for assignment selection, grades, and launch analytics.</li>
+    </ul>
+
+    <h2>Using the Tool</h2>
+    <ol>
+        <li>Enter 0 or 1 in each highlighted output cell.</li>
+        <li>Use the keyboard arrows to move between blanks or rely on the automatic focus assist.</li>
+        <li>The score increases by one for every correct table. After 10 correct tables a grade of 1.0 is submitted.</li>
+        <li>Keep practicing even after a perfect score—the grade only submits once per launch.</li>
+    </ol>
+
+    <h2>Instructor Options</h2>
+    <p>
+        Instructors can open the dashboard to choose assignments, review grades, or inspect launch data.
+        Currently a single assignment (<strong>All Gates Truth Tables</strong>) is available, mirroring the behaviour of the default launch.
+    </p>
+
+    <h2>Files</h2>
+    <ul>
+        <li><code>index.php</code> – main launch page and markup.</li>
+        <li><code>logic.js</code> – gate logic, scoring, UX, and LMS grade submission.</li>
+        <li><code>styles.css</code> – high contrast, accessible theme.</li>
+        <li><code>assignments.php</code> – assignment definitions exposed to the instructor dashboard.</li>
+        <li><code>grade-submit.php</code> – endpoint for sending grades via Tsugi’s <code>LTIX::gradeSend</code>.</li>
+        <li><code>documentation.html</code> – this document.</li>
+        <li><code>testing.md</code> – manual testing checklist.</li>
+        <li><code>README.md</code> – quick start and deployment notes.</li>
+    </ul>
+
+    <div class="note">
+        <strong>Accessibility</strong><br>
+        The tool honours reduced motion preferences, uses an aria-live region for feedback, supports keyboard navigation, and 
+        provides large, high-contrast controls for learners with low vision.
+    </div>
+</body>
+</html>
+
+

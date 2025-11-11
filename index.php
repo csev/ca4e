@@ -75,6 +75,12 @@ the sample content in various stages of completion:
 <li>
 <a href="tools/e6b"  target="_blank" class="text-primary">Online Pilot Wind Correction Calculator (E6B)</a>
 </li>
+<li>
+<a href="tools/truth"  target="_blank" class="text-primary">Logical Truth Table Practice</a>
+</li>
+<li>
+<a href="tools/nixie"  target="_blank" class="text-primary">Number conversion Practice - The Nixie Challenge</a>
+</li>
     <li>
       <a href="tools/cmos/" target="_blank" class="text-primary">CMOS Gate Builder</a>
     </li>
