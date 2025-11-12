@@ -194,13 +194,19 @@
             "title" : "Digital Logic: Computer Architecture - Part 1 (7:23)",
             "media": "CA4E-Lectures/03-Digital/03-01-Digital-Arch.m4v",
             "FCPX": "ca4e-media/03-Digital/03-01-Digital-Arch",
-            "youtube" : "Nvd-Hp-df1M"
+            "youtube" : "nZlKs4_ic14"
         },
         {
             "title" : "Digital Logic: Adding Numbers with Gates - Part 2 (14:04)",
             "media": "CA4E-Lectures/03-Digital/03-02-Digital-Gates.m4v",
             "FCPX": "ca4e-media/03-Digital/03-02-Digital-Gates",
             "youtube" : "hkeYhDXvc2k"
+        },
+        {
+            "title" : "Digital Logic: Storing Data with Gates - Part 3 (11:08)",
+            "media": "CA4E-Lectures/03-Digital/03-03-Digital-Latch.m4v",
+            "FCPX": "ca4e-media/03-Digital/03-03-Digital-Latch",
+            "youtube" : "a_EjfUA0Fpc"
         }
      ],
      "lti" : [
