@@ -17,12 +17,21 @@ body {
     padding: 40px 20px 80px;
 }
 
-header {
-    text-align: center;
+.app-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
     margin-bottom: 40px;
+    text-align: left;
 }
 
-header h1 {
+.app-header .header-main {
+    flex: 1 1 320px;
+}
+
+.app-header h1 {
     margin: 0 0 12px;
     font-size: 2.5rem;
     letter-spacing: 0.05em;
@@ -31,9 +40,42 @@ header h1 {
     text-shadow: 0 0 10px rgba(249, 115, 22, 0.6);
 }
 
-.tagline {
+.app-header .tagline {
     color: #cbd5f5;
     margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+}
+
+.auto-advance-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    background: rgba(148, 163, 184, 0.15);
+    border-radius: 999px;
+    padding: 6px 16px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    cursor: pointer;
+    color: #e2e8f0;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.35);
+}
+
+.auto-advance-toggle input {
+    transform: scale(1.2);
+}
+
+.auto-advance-toggle input:focus-visible {
+    outline: 2px solid #f97316;
+    outline-offset: 2px;
+}
+
+.auto-advance-toggle span {
+    font-weight: 600;
+    letter-spacing: 0.02em;
 }
 
 .challenge-section {

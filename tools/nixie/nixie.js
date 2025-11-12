@@ -199,6 +199,7 @@ function initBase2Conversions() {
     const decimalNixie = new SimpleNixieDisplay('decimalNixie');
 
     const decimalValueSpan = document.getElementById('decimalValue');
+    const autoAdvanceToggle = document.getElementById('autoAdvanceToggle');
     const decimalFeedback = document.getElementById('decimalFeedback');
     const conversionInputs = Array.from(document.querySelectorAll('.conversion-bit'));
     const nextDecimalBtn = document.getElementById('nextDecimalChallenge');
@@ -433,6 +434,9 @@ function initBase2Conversions() {
         if (decimalAutoTimeout) {
             return;
         }
+        if (autoAdvanceToggle && !autoAdvanceToggle.checked) {
+            return;
+        }
         let remaining = 5;
         decimalCountdownSpan.textContent = `(${remaining})`;
         decimalCountdownSpan.hidden = false;
@@ -473,6 +477,9 @@ function initBase2Conversions() {
         if (binaryAutoTimeout) {
             return;
         }
+        if (autoAdvanceToggle && !autoAdvanceToggle.checked) {
+            return;
+        }
         let remaining = 5;
         binaryCountdownSpan.textContent = `(${remaining})`;
         binaryCountdownSpan.hidden = false;
@@ -507,6 +514,15 @@ function initBase2Conversions() {
         nextBinaryChallenge();
     });
 
+    if (autoAdvanceToggle) {
+        autoAdvanceToggle.addEventListener('change', () => {
+            if (!autoAdvanceToggle.checked) {
+                cancelDecimalAutoAdvance();
+                cancelBinaryAutoAdvance();
+            }
+        });
+    }
+
     updateScoreDisplay();
     nextDecimalChallenge();
     nextBinaryChallenge();
@@ -514,6 +530,7 @@ function initBase2Conversions() {
 
 function initHexConversions() {
     const decimalValueSpan = document.getElementById('hexDecimalValue');
+    const autoAdvanceToggle = document.getElementById('autoAdvanceToggle');
     const hexDigitInput = document.getElementById('hexDigitInput');
     const hexDecimalFeedback = document.getElementById('hexDecimalFeedback');
     const nextHexDecimalBtn = document.getElementById('nextHexDecimal');
@@ -682,8 +699,14 @@ function initHexConversions() {
         evaluateHexDecimal();
     });
 
-    nextHexDecimalBtn.addEventListener('click', nextHexDecimalChallenge);
-    nextHexRandomBtn.addEventListener('click', nextHexRandomChallenge);
+    if (autoAdvanceToggle) {
+        autoAdvanceToggle.addEventListener('change', () => {
+            if (!autoAdvanceToggle.checked) {
+                cancelDecimalAutoAdvance();
+                cancelHexAutoAdvance();
+            }
+        });
+    }
 
     function cancelDecimalAutoAdvance() {
         if (decimalAutoTimeout) {
@@ -699,6 +722,9 @@ function initHexConversions() {
 
     function startDecimalAutoAdvance() {
         if (decimalAutoTimeout) {
+            return;
+        }
+        if (autoAdvanceToggle && !autoAdvanceToggle.checked) {
             return;
         }
         let remaining = 5;
@@ -739,6 +765,9 @@ function initHexConversions() {
 
     function startHexAutoAdvance() {
         if (hexAutoTimeout) {
+            return;
+        }
+        if (autoAdvanceToggle && !autoAdvanceToggle.checked) {
             return;
         }
         let remaining = 5;
@@ -791,6 +820,7 @@ function initBinaryAddition() {
     const sumDecSpan = document.getElementById('additionSumDec');
     const scoreDisplay = document.getElementById('additionScore');
     const countdownSpan = document.getElementById('additionCountdown');
+    const autoAdvanceToggle = document.getElementById('autoAdvanceToggle');
 
     if (!operandAContainer || !operandBContainer || sumInputs.length === 0 || !additionFeedback || !nextAdditionBtn || !operandADecSpan || !operandBDecSpan || !sumDecSpan || !scoreDisplay || !countdownSpan) {
         return;
@@ -920,6 +950,9 @@ function initBinaryAddition() {
         if (autoAdvanceTimeout) {
             return;
         }
+        if (autoAdvanceToggle && !autoAdvanceToggle.checked) {
+            return;
+        }
         let remaining = 5;
         countdownSpan.textContent = `(${remaining})`;
         countdownSpan.hidden = false;
@@ -1010,6 +1043,14 @@ function initBinaryAddition() {
         cancelAutoAdvance();
         nextAdditionChallenge();
     });
+
+    if (autoAdvanceToggle) {
+        autoAdvanceToggle.addEventListener('change', () => {
+            if (!autoAdvanceToggle.checked) {
+                cancelAutoAdvance();
+            }
+        });
+    }
 
     updateScoreDisplay();
     nextAdditionChallenge();

@@ -36,9 +36,17 @@ $tagline = $taglines[$assn] ?? 'Sharpen your digital logic intuition.';
 </head>
 <body>
 <div class="nixie-container" data-assignment="<?php echo htmlspecialchars($assn, ENT_QUOTES); ?>">
-    <header>
-        <h1><?php echo htmlentities($REGISTER_LTI2["name"]); ?></h1>
-        <p class="tagline"><?php echo htmlspecialchars($tagline); ?></p>
+    <header class="app-header">
+        <div class="header-main">
+            <h1><?php echo htmlentities($REGISTER_LTI2["name"]); ?></h1>
+            <p class="tagline"><?php echo htmlspecialchars($tagline); ?></p>
+        </div>
+        <div class="header-actions">
+            <label class="auto-advance-toggle">
+                <input type="checkbox" id="autoAdvanceToggle" checked>
+                <span>Auto advance</span>
+            </label>
+        </div>
     </header>
 
     <?php if ($assn === 'Base2Conversions') : ?>
