@@ -213,6 +213,12 @@
             "media": "CA4E-Lectures/03-Digital/03-04-Digital-Clock.m4v",
             "FCPX": "ca4e-media/03-Digital/03-04-Digital-Clock",
             "youtube" : "7HeXWTR6kxc"
+        },
+        {
+            "title" : "Digital: Building a two instruction CPU with Gates - Part 5 (9:49)",
+            "media": "CA4E-Lectures/03-Digital/03-05-Digital-CPU.m4v",
+            "FCPX": "ca4e-media/03-Digital/03-05-Digital-CPU",
+            "youtube" : "MmIEGsTQp-Q"
         }
      ],
      "lti" : [
