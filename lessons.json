@@ -207,6 +207,12 @@
             "media": "CA4E-Lectures/03-Digital/03-03-Digital-Latch.m4v",
             "FCPX": "ca4e-media/03-Digital/03-03-Digital-Latch",
             "youtube" : "a_EjfUA0Fpc"
+        },
+        {
+            "title" : "Digital Logic: Clocked Circuits and Clock Rates - Part 4 (7:34)",
+            "media": "CA4E-Lectures/03-Digital/03-04-Digital-Clock.m4v",
+            "FCPX": "ca4e-media/03-Digital/03-04-Digital-Clock",
+            "youtube" : "7HeXWTR6kxc"
         }
      ],
      "lti" : [
