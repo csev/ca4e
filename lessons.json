@@ -111,6 +111,12 @@
             "youtube" : "9IoC-xn2bro"
         }
     ],
+    "references" : [
+        {
+            "title" : "IEEE Spectrum: The Silicon Dioxide Solution",
+            "href" : "https://spectrum.ieee.org/the-silicon-dioxide-solution"
+        }   
+    ],  
      "lti" : [
         {
             "title" : "Building a Not Gate with CMOS Transistors",
