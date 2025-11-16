@@ -69,6 +69,16 @@
             "youtube" : "Um4UyGvlc44"
         }
     ],
+    "references" : [
+        {
+            "title" : "Film: Popular Mechanics - How Mechanical Computers Work",
+            "href" : "https://www.popularmechanics.com/technology/a19668/1953-video-how-mechanical-computers-work/"
+        },
+        {
+            "title" : "Mark I Fire Control Computer - Electromechanical Analog Computer",
+            "href" : "https://en.wikipedia.org/wiki/Mark_I_Fire_Control_Computer"
+        }   
+    ],  
     "discussions" : [
         {
         "title" : "History / Introduction",
