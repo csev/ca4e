@@ -139,6 +139,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             box-shadow: 0 4px 20px rgba(0,0,0,0.3);
             z-index: 1000;
             width: 500px;
+            max-width: 90vw;
             max-height: 80vh;
             overflow-y: auto;
         }
@@ -960,6 +961,17 @@ HALT`;
         // ASCII Chart functions
         function showAsciiChartModal() {
             if (!asciiChartModal) return;
+            
+            // Adjust modal width based on window size for better responsiveness
+            const windowWidth = window.innerWidth;
+            if (windowWidth < 600) {
+                asciiChartModal.style.width = '95vw';
+            } else if (windowWidth < 900) {
+                asciiChartModal.style.width = '85vw';
+            } else {
+                asciiChartModal.style.width = '700px'; // Wider for larger screens
+            }
+            
             generateAsciiChart();
             asciiChartModal.classList.remove('hidden');
             centerAsciiChartModal();
@@ -970,10 +982,10 @@ HALT`;
             asciiChartModal.classList.add('hidden');
         }
 
-        function centerAsciiChartModal() {
+        function centerAsciiChartModal(force = false) {
             if (!asciiChartModal) return;
-            // Only set initial position if modal doesn't already have a position
-            if (!asciiChartModal.style.left && !asciiChartModal.style.top) {
+            // Set initial position if modal doesn't already have a position, or if forced (for resize)
+            if (force || (!asciiChartModal.style.left && !asciiChartModal.style.top)) {
                 // Use requestAnimationFrame to ensure modal is rendered before getting dimensions
                 requestAnimationFrame(() => {
                     if (!asciiChartModal) return;
@@ -986,16 +998,44 @@ HALT`;
                     asciiChartModal.style.left = Math.max(0, left) + 'px';
                     asciiChartModal.style.top = Math.max(0, top) + 'px';
                 });
+            } else {
+                // If modal already has a position, just ensure it stays within viewport bounds
+                requestAnimationFrame(() => {
+                    if (!asciiChartModal) return;
+                    const rect = asciiChartModal.getBoundingClientRect();
+                    const modalWidth = rect.width || asciiChartModal.offsetWidth || 500;
+                    const modalHeight = rect.height || asciiChartModal.offsetHeight || 400;
+                    const currentLeft = parseInt(asciiChartModal.style.left) || 0;
+                    const currentTop = parseInt(asciiChartModal.style.top) || 0;
+                    
+                    // Keep modal within viewport bounds
+                    const maxLeft = window.innerWidth - modalWidth;
+                    const maxTop = window.innerHeight - modalHeight;
+                    const newLeft = Math.max(0, Math.min(maxLeft, currentLeft));
+                    const newTop = Math.max(0, Math.min(maxTop, currentTop));
+                    
+                    asciiChartModal.style.left = newLeft + 'px';
+                    asciiChartModal.style.top = newTop + 'px';
+                });
             }
         }
 
         function generateAsciiChart() {
             const content = document.getElementById('asciiChartContent');
-            let html = '<h3>ASCII Character Chart</h3>';
-            html += '<p>Use these values in your CDC8512 programs with the SET instruction:</p>';
+            if (!content) return;
             
-            // Printable ASCII characters (32-126)
-            html += '<div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; font-family: monospace; font-size: 14px; margin: 10px 0;">';
+            // Calculate responsive number of columns based on window width
+            // Each character cell is approximately 80-100px wide (including gap)
+            const modalWidth = asciiChartModal ? (asciiChartModal.offsetWidth || 500) : window.innerWidth;
+            const availableWidth = Math.min(modalWidth - 40, window.innerWidth - 40); // Account for padding
+            const minCellWidth = 80; // Minimum width per cell
+            const maxColumns = Math.max(3, Math.floor(availableWidth / minCellWidth));
+            const columns = Math.min(maxColumns, 8); // Cap at 8 columns for readability
+            
+            let html = '<h3>ASCII Character Chart</h3>';
+            
+            // Printable ASCII characters (32-126) with responsive grid
+            html += `<div style="display: grid; grid-template-columns: repeat(${columns}, 1fr); gap: 8px; font-family: monospace; font-size: 14px; margin: 10px 0;">`;
             
             for (let i = 32; i <= 126; i++) {
                 const char = String.fromCharCode(i);
@@ -1026,6 +1066,34 @@ HALT`;
         if (asciiChartBtn) {
             asciiChartBtn.addEventListener('click', showAsciiChartModal);
         }
+
+        // Handle window resize to keep ASCII chart modal responsive
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            if (!asciiChartModal || asciiChartModal.classList.contains('hidden')) return;
+            
+            // Debounce resize events for better performance
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                // Adjust modal width based on new window size
+                const windowWidth = window.innerWidth;
+                if (windowWidth < 600) {
+                    asciiChartModal.style.width = '95vw';
+                } else if (windowWidth < 900) {
+                    asciiChartModal.style.width = '85vw';
+                } else {
+                    asciiChartModal.style.width = '700px';
+                }
+                
+                centerAsciiChartModal(false); // Reposition without forcing center
+                
+                // Regenerate chart with responsive grid based on new modal width
+                const content = document.getElementById('asciiChartContent');
+                if (content) {
+                    generateAsciiChart();
+                }
+            }, 150);
+        });
 
         // Make ASCII chart modal draggable
         (function enableAsciiChartDrag() {
