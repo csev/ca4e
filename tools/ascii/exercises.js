@@ -26,8 +26,14 @@ class AsciiLookupExercise extends Exercise {
 
         const instructions = `
             <h3>ASCII Lookup Practice</h3>
-            <p>You will be asked 10 questions about ASCII character values.</p>
-            <p>For each question, you need to find the ASCII decimal value of the given character.</p>
+            <p>You will be asked 10 questions about ASCII character values in different formats.</p>
+            <p>Question types include:</p>
+            <ul>
+                <li><strong>Character → Decimal:</strong> Given a character, find its decimal value</li>
+                <li><strong>Character → Hex:</strong> Given a character, find its hexadecimal value</li>
+                <li><strong>Decimal → Character:</strong> Given a decimal value, find the character</li>
+                <li><strong>Hex → Character:</strong> Given a hexadecimal value, find the character</li>
+            </ul>
             <p>You can use the ASCII chart on the main page to look up the values.</p>
             <p><strong>Goal:</strong> Answer all 10 questions correctly to complete the exercise.</p>
             <p>Your score will be displayed as you progress through the questions.</p>
@@ -82,11 +88,12 @@ class AsciiLookupExercise extends Exercise {
     }
 
     /**
-     * Generate 10 random ASCII questions
+     * Generate 10 random ASCII questions with different types
      */
     generateQuestions() {
         this.questions = [];
         const usedChars = new Set();
+        const questionTypes = ['charToDecimal', 'charToHex', 'decimalToChar', 'hexToChar'];
         
         // Generate 10 unique questions from printable ASCII (32-126)
         while (this.questions.length < 10) {
@@ -97,9 +104,13 @@ class AsciiLookupExercise extends Exercise {
             if (usedChars.has(asciiValue)) continue;
             usedChars.add(asciiValue);
             
+            // Randomly select question type
+            const questionType = questionTypes[Math.floor(Math.random() * questionTypes.length)];
+            
             this.questions.push({
                 char: char,
                 asciiValue: asciiValue,
+                questionType: questionType,
                 answered: false,
                 correct: false
             });
@@ -129,18 +140,71 @@ class AsciiLookupExercise extends Exercise {
         }
         html += `<div class="question">`;
         html += `<div class="question-text">Question ${this.currentQuestionIndex + 1} of 10:</div>`;
-        html += `<div class="question-text">What is the ASCII decimal value of the character '<strong>${this.escapeHtml(question.char)}</strong>'?</div>`;
+        
+        // Display question based on type
+        let questionText = '';
+        let placeholder = '';
+        let inputType = 'text';
+        
+        switch (question.questionType) {
+            case 'charToDecimal':
+                questionText = `What is the ASCII <strong>decimal</strong> value of the character '<strong>${this.escapeHtml(question.char)}</strong>'?`;
+                placeholder = 'Enter decimal value (e.g., 65)';
+                inputType = 'number';
+                break;
+            case 'charToHex':
+                questionText = `What is the ASCII <strong>hexadecimal</strong> value of the character '<strong>${this.escapeHtml(question.char)}</strong>'?`;
+                placeholder = 'Enter hex value (e.g., 41 or 0x41)';
+                inputType = 'text';
+                break;
+            case 'decimalToChar':
+                questionText = `What is the character for ASCII decimal value <strong>${question.asciiValue}</strong>?`;
+                placeholder = 'Enter character (e.g., A)';
+                inputType = 'text';
+                break;
+            case 'hexToChar':
+                const hexValue = question.asciiValue.toString(16).toUpperCase().padStart(2, '0');
+                questionText = `What is the character for ASCII hexadecimal value <strong>0x${hexValue}</strong>?`;
+                placeholder = 'Enter character (e.g., A)';
+                inputType = 'text';
+                break;
+        }
+        
+        html += `<div class="question-text">${questionText}</div>`;
         
         // Show input field if not answered yet
         if (!question.answered) {
-            html += `<input type="number" id="answerInput" class="answer-input" placeholder="Enter decimal value" min="0" max="255">`;
+            html += `<input type="${inputType}" id="answerInput" class="answer-input" placeholder="${placeholder}" ${inputType === 'number' ? 'min="0" max="255"' : ''}>`;
             html += `<button onclick="currentExercise.checkAnswer()" style="margin-left: 10px; padding: 8px 16px;">Submit Answer</button>`;
         } else {
             // Show feedback
+            let correctAnswer = '';
+            let feedbackText = '';
+            
+            switch (question.questionType) {
+                case 'charToDecimal':
+                    correctAnswer = question.asciiValue.toString();
+                    feedbackText = `The ASCII decimal value of '${this.escapeHtml(question.char)}' is ${correctAnswer}.`;
+                    break;
+                case 'charToHex':
+                    correctAnswer = '0x' + question.asciiValue.toString(16).toUpperCase();
+                    feedbackText = `The ASCII hexadecimal value of '${this.escapeHtml(question.char)}' is ${correctAnswer}.`;
+                    break;
+                case 'decimalToChar':
+                    correctAnswer = question.char;
+                    feedbackText = `The character for ASCII decimal ${question.asciiValue} is '${this.escapeHtml(question.char)}'.`;
+                    break;
+                case 'hexToChar':
+                    const hexVal = question.asciiValue.toString(16).toUpperCase().padStart(2, '0');
+                    correctAnswer = question.char;
+                    feedbackText = `The character for ASCII hexadecimal 0x${hexVal} is '${this.escapeHtml(question.char)}'.`;
+                    break;
+            }
+            
             if (question.correct) {
-                html += `<div class="answer-feedback correct">✓ Correct! The ASCII value of '${this.escapeHtml(question.char)}' is ${question.asciiValue}.</div>`;
+                html += `<div class="answer-feedback correct">✓ Correct! ${feedbackText}</div>`;
             } else {
-                html += `<div class="answer-feedback incorrect">✗ Incorrect. The ASCII value of '${this.escapeHtml(question.char)}' is ${question.asciiValue}.</div>`;
+                html += `<div class="answer-feedback incorrect">✗ Incorrect. ${feedbackText}</div>`;
             }
         }
         
@@ -177,16 +241,55 @@ class AsciiLookupExercise extends Exercise {
         const input = document.getElementById('answerInput');
         if (!input) return;
 
-        const userAnswer = parseInt(input.value);
         const question = this.questions[this.currentQuestionIndex];
+        const userAnswer = input.value.trim();
+        let isCorrect = false;
 
-        if (isNaN(userAnswer)) {
-            alert('Please enter a valid number');
-            return;
+        // Validate and check answer based on question type
+        switch (question.questionType) {
+            case 'charToDecimal':
+                const decimalAnswer = parseInt(userAnswer);
+                if (isNaN(decimalAnswer)) {
+                    alert('Please enter a valid decimal number');
+                    return;
+                }
+                isCorrect = (decimalAnswer === question.asciiValue);
+                break;
+                
+            case 'charToHex':
+                // Accept hex with or without 0x prefix, case insensitive
+                let hexValue = userAnswer.replace(/^0x/i, '').toUpperCase();
+                const expectedHex = question.asciiValue.toString(16).toUpperCase().padStart(2, '0');
+                if (!/^[0-9A-F]+$/.test(hexValue)) {
+                    alert('Please enter a valid hexadecimal value (e.g., 41 or 0x41)');
+                    return;
+                }
+                // Normalize to 2 digits for comparison (pad with leading zero)
+                hexValue = hexValue.padStart(2, '0');
+                isCorrect = (hexValue === expectedHex);
+                break;
+                
+            case 'decimalToChar':
+                if (userAnswer.length === 0) {
+                    alert('Please enter a character');
+                    return;
+                }
+                // Accept single character, case sensitive
+                isCorrect = (userAnswer === question.char);
+                break;
+                
+            case 'hexToChar':
+                if (userAnswer.length === 0) {
+                    alert('Please enter a character');
+                    return;
+                }
+                // Accept single character, case sensitive
+                isCorrect = (userAnswer === question.char);
+                break;
         }
 
         question.answered = true;
-        question.correct = (userAnswer === question.asciiValue);
+        question.correct = isCorrect;
 
         if (question.correct) {
             this.score++;
