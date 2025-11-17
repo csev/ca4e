@@ -827,8 +827,10 @@ HALT`;
             }
         }
 
-        // Assignment button click handler
-        assignmentBtn.addEventListener('click', showAssignmentModal);
+        // Assignment button click handler (only if button exists)
+        if (assignmentBtn) {
+            assignmentBtn.addEventListener('click', showAssignmentModal);
+        }
 
         // Grading functions
         function startGrading() {
@@ -957,24 +959,33 @@ HALT`;
 
         // ASCII Chart functions
         function showAsciiChartModal() {
+            if (!asciiChartModal) return;
             generateAsciiChart();
             asciiChartModal.classList.remove('hidden');
             centerAsciiChartModal();
         }
 
         function closeAsciiChartModal() {
+            if (!asciiChartModal) return;
             asciiChartModal.classList.add('hidden');
         }
 
         function centerAsciiChartModal() {
+            if (!asciiChartModal) return;
             // Only set initial position if modal doesn't already have a position
             if (!asciiChartModal.style.left && !asciiChartModal.style.top) {
-                const modalWidth = asciiChartModal.offsetWidth;
-                const modalHeight = asciiChartModal.offsetHeight;
-                const left = (window.innerWidth - modalWidth) / 2;
-                const top = (window.innerHeight - modalHeight) / 2;
-                asciiChartModal.style.left = Math.max(0, left) + 'px';
-                asciiChartModal.style.top = Math.max(0, top) + 'px';
+                // Use requestAnimationFrame to ensure modal is rendered before getting dimensions
+                requestAnimationFrame(() => {
+                    if (!asciiChartModal) return;
+                    const rect = asciiChartModal.getBoundingClientRect();
+                    const modalWidth = rect.width || asciiChartModal.offsetWidth || 500; // fallback to default width
+                    const modalHeight = rect.height || asciiChartModal.offsetHeight || 400; // fallback to default height
+                    
+                    const left = (window.innerWidth - modalWidth) / 2;
+                    const top = (window.innerHeight - modalHeight) / 2;
+                    asciiChartModal.style.left = Math.max(0, left) + 'px';
+                    asciiChartModal.style.top = Math.max(0, top) + 'px';
+                });
             }
         }
 
@@ -1012,7 +1023,9 @@ HALT`;
         }
 
         // Event listeners
-        asciiChartBtn.addEventListener('click', showAsciiChartModal);
+        if (asciiChartBtn) {
+            asciiChartBtn.addEventListener('click', showAsciiChartModal);
+        }
 
         // Make ASCII chart modal draggable
         (function enableAsciiChartDrag() {
