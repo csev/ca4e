@@ -368,6 +368,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 <div class="nav-left">
                     <select id="load-program">
                         <option value="">-- Load Program --</option>
+                        <option value="add-sample">Load Add Sample</option>
                         <option value="hi">Load Hi</option>
                         <option value="hello">Load Hello</option>
                         <option value="hello-world">Load Hello World</option>
@@ -475,6 +476,19 @@ HALT`;
                         emulator.loadProgram(labelsDemo);
                         enableStepButton(); // Re-enable step button after loading program
                         document.getElementById('assembly-input').value = labelsDemo;
+                        updateStatus();
+                        updateTrace();
+                        updateOutput();
+                    } else if (value === 'add-sample') {
+                        emulator.loadAddSample();
+                        enableStepButton(); // Re-enable step button after loading program
+                        // Load assembly code into textarea
+                        document.getElementById('assembly-input').value = `SET A0, 1
+ADD X0, 5
+MOV X2, X0
+SET A2, 3
+HALT
+DATA 0x00 0x0A`;
                         updateStatus();
                         updateTrace();
                         updateOutput();

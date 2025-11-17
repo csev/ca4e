@@ -103,7 +103,7 @@ class CDC8512Emulator {
             
             if (instruction === 'DATA') {
                 inDataSegment = true;
-                address += 1; // DATA marker
+                // DATA directive doesn't generate instruction code, just sets data memory
                 continue;
             }
             
@@ -177,15 +177,13 @@ class CDC8512Emulator {
             }
             
             if (instruction === 'DATA') {
-                // Start data segment
+                // DATA directive - just sets data memory, doesn't generate instruction code
                 inDataSegment = true;
-                this.cpu.instructions[address] = 0x0F; // 00001111 - DATA marker
-                address += 1;
                 
-                // Extract string from quotes
-                const match = line.match(/DATA\s+'([^']*)'/);
-                if (match) {
-                    const str = match[1];
+                // Check if it's a quoted string
+                const stringMatch = line.match(/DATA\s+'([^']*)'/);
+                if (stringMatch) {
+                    const str = stringMatch[1];
                     console.log(`Loading data string: "${str}"`);
                     
                     // Load string into data memory starting at address 0
@@ -193,6 +191,40 @@ class CDC8512Emulator {
                         this.cpu.memory[i] = str.charCodeAt(i);
                     }
                     this.cpu.memory[str.length] = 0; // null terminator
+                } else {
+                    // Parse as list of hex numbers
+                    // Remove "DATA" and get the rest of the line
+                    const dataPart = line.replace(/^DATA\s+/i, '').trim();
+                    if (dataPart) {
+                        // Split by whitespace and parse hex numbers
+                        const hexValues = dataPart.split(/\s+/);
+                        console.log(`Loading data hex values:`, hexValues);
+                        
+                        let dataAddress = 0;
+                        for (const hexStr of hexValues) {
+                            // Parse hex value (supports 0x prefix or just hex digits)
+                            let value;
+                            if (hexStr.startsWith('0x') || hexStr.startsWith('0X')) {
+                                value = parseInt(hexStr, 16);
+                            } else if (/^[0-9A-Fa-f]+$/.test(hexStr)) {
+                                value = parseInt(hexStr, 16);
+                            } else {
+                                throw new Error(`Line ${lineNum + 1}: Invalid hex value in DATA directive: "${hexStr}"`);
+                            }
+                            
+                            if (isNaN(value) || value < 0 || value > 255) {
+                                throw new Error(`Line ${lineNum + 1}: Hex value out of range (0-255): "${hexStr}"`);
+                            }
+                            
+                            if (dataAddress >= 32) {
+                                throw new Error(`Line ${lineNum + 1}: Data memory overflow - too many values`);
+                            }
+                            
+                            this.cpu.memory[dataAddress] = value;
+                            console.log(`  memory[${dataAddress}] = 0x${value.toString(16).toUpperCase().padStart(2, '0')} (${value})`);
+                            dataAddress++;
+                        }
+                    }
                 }
                 continue;
             }
@@ -319,7 +351,7 @@ class CDC8512Emulator {
                 const reg = parts[1];
                 const value = this.parseValue(parts[2]);
                 const regNum = this.parseRegister(reg);
-                const opcode = 0x92 | regNum; // ADD opcode (10010rrr)
+                const opcode = 0x90 | regNum; // ADD opcode (10010rrr) - base is 0x90, not 0x92
                 this.cpu.instructions[address] = opcode;
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
@@ -918,6 +950,23 @@ INC A2
 PS
 HALT`;
         this.loadProgram(hiProgram);
+    }
+
+    // Load the Add Sample program - demonstrates loading from memory, adding, and storing
+    loadAddSample() {
+        this.reset();
+        // Put 10 (0x0A) in memory location 0x01 using DATA directive
+        // Load 0x01 into A0 (which loads memory[1] = 10 into X0)
+        // Add 5 to X0 (X0 becomes 15)
+        // Copy X0 to X2
+        // Store X2 into memory location 0x03
+        const addSampleProgram = `SET A0, 1
+ADD X0, 5
+MOV X2, X0
+SET A2, 3
+HALT
+DATA 0x00 0x0A`;
+        this.loadProgram(addSampleProgram);
     }
 
     // Get execution status
