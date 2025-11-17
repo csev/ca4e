@@ -376,9 +376,6 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     </select>
                 </div>
                 <div class="nav-right">
-                    <button id="reset">Reset</button>
-                    <button id="step">Step</button>
-                    <button id="start">Start</button>
 <?php if ($USER && $assn) : ?>
                     <button id="assignmentBtn" class="assignment-btn">Assignment</button>
 <?php endif; ?>
@@ -400,6 +397,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             </div>
         </div>
         
+        <!-- Control buttons positioned above registers -->
+        <div style="display: flex; gap: 6px; margin-bottom: 0; align-items: center;">
+            <button id="reset" style="padding: 4px 10px; font-size: 13px;">Reset</button>
+            <button id="step" style="padding: 4px 10px; font-size: 13px;">Step</button>
+            <button id="start" style="padding: 4px 10px; font-size: 13px;">Start</button>
+        </div>
         <!-- Your existing CDC8512 web component -->
         <cdc8512-cpu name="CA4E.com"></cdc8512-cpu>
         

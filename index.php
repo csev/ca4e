@@ -91,6 +91,9 @@ the sample content in various stages of completion:
     <li>
       <a href="tools/gates/" target="_blank" class="text-primary">Digital Logic Builder</a>
     </li>
+    <li>
+      <a href="tools/ascii/" target="_blank" class="text-primary">An ASCII chart</a>
+    </li>
 <li>
 <a href="tools/cdc8512"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator</a> (<a href="cdc8512/documentation.html"  target="_blank" class="text-primary">Documentation</a>)
 </li>
