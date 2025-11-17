@@ -95,7 +95,19 @@ class AsciiLookupExercise extends Exercise {
         const usedChars = new Set();
         const questionTypes = ['charToDecimal', 'charToHex', 'decimalToChar', 'hexToChar'];
         
-        // Generate 10 unique questions from printable ASCII (32-126)
+        // Easter egg: Always include "What is the decimal value for '*'?" (42 - the answer to everything!)
+        const asteriskValue = 42; // ASCII value for '*'
+        const asteriskChar = '*';
+        usedChars.add(asteriskValue);
+        this.questions.push({
+            char: asteriskChar,
+            asciiValue: asteriskValue,
+            questionType: 'charToDecimal', // Always ask for decimal value
+            answered: false,
+            correct: false
+        });
+        
+        // Generate 9 more unique questions from printable ASCII (32-126)
         while (this.questions.length < 10) {
             const asciiValue = Math.floor(Math.random() * (126 - 32 + 1)) + 32;
             const char = String.fromCharCode(asciiValue);
@@ -114,6 +126,13 @@ class AsciiLookupExercise extends Exercise {
                 answered: false,
                 correct: false
             });
+        }
+        
+        // Shuffle the questions so the easter egg doesn't always appear first
+        // But keep the asterisk question in the mix
+        for (let i = this.questions.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [this.questions[i], this.questions[j]] = [this.questions[j], this.questions[i]];
         }
     }
 
