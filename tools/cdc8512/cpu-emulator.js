@@ -972,20 +972,15 @@ DATA 0x00 0x0A`;
     // Load the Uppercase Sample program - converts lowercase letter to uppercase
     loadUppercaseSample() {
         this.reset();
-        // Load 0x70 (lowercase 'p') into data memory location 0
-        // Load from memory[0] into X0
-        // Compare X0 to 'a' (0x61) - if less than, it's already uppercase or not a letter
+        // Load 0x70 (lowercase 'p') directly into X2 using immediate instruction
+        // Compare X2 to 'a' (0x61) - if less than, it's already uppercase or not a letter
         // If >= 'a', subtract 0x20 to convert to uppercase
-        // Store the result in memory[0]
-        const uppercaseProgram = `SET A0, 0
-CMP X0, 0x61
+        const uppercaseProgram = `SET X2, 0x70
+CMP X2, 0x61
 JL skip
-SUB X0, 0x20
+SUB X2, 0x20
 skip:
-MOV X2, X0
-SET A2, 0
-HALT
-DATA 0x70`;
+HALT`;
         this.loadProgram(uppercaseProgram);
     }
 

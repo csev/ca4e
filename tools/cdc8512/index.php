@@ -510,15 +510,12 @@ HALT`;
                         emulator.loadUppercaseSample();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `SET A0, 0
-CMP X0, 0x61
+                        document.getElementById('assembly-input').value = `SET X2, 0x70
+CMP X2, 0x61
 JL skip
-SUB X0, 0x20
+SUB X2, 0x20
 skip:
-MOV X2, X0
-SET A2, 0
-HALT
-DATA 0x70`;
+HALT`;
                         updateStatus();
                         updateTrace();
                         updateOutput();
