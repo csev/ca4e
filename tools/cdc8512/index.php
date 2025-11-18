@@ -369,6 +369,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     <select id="load-program">
                         <option value="">-- Load Program --</option>
                         <option value="add-sample">Load Add Sample</option>
+                        <option value="uppercase-sample">Load Uppercase Sample</option>
                         <option value="hi">Load Hi</option>
                         <option value="hello">Load Hello</option>
                         <option value="hello-world">Load Hello World</option>
@@ -489,6 +490,22 @@ MOV X2, X0
 SET A2, 3
 HALT
 DATA 0x00 0x0A`;
+                        updateStatus();
+                        updateTrace();
+                        updateOutput();
+                    } else if (value === 'uppercase-sample') {
+                        emulator.loadUppercaseSample();
+                        enableStepButton(); // Re-enable step button after loading program
+                        // Load assembly code into textarea
+                        document.getElementById('assembly-input').value = `SET A0, 0
+CMP X0, 0x61
+JL skip
+SUB X0, 0x20
+skip:
+MOV X2, X0
+SET A2, 0
+HALT
+DATA 0x70`;
                         updateStatus();
                         updateTrace();
                         updateOutput();

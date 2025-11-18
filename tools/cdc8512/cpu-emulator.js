@@ -362,7 +362,7 @@ class CDC8512Emulator {
                 const reg = parts[1];
                 const value = this.parseValue(parts[2]);
                 const regNum = this.parseRegister(reg);
-                const opcode = 0x83 | regNum; // SUB opcode (10011rrr)
+                const opcode = 0x98 | regNum; // SUB opcode (10011rrr) - base is 0x98, not 0x83
                 this.cpu.instructions[address] = opcode;
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
@@ -967,6 +967,26 @@ SET A2, 3
 HALT
 DATA 0x00 0x0A`;
         this.loadProgram(addSampleProgram);
+    }
+
+    // Load the Uppercase Sample program - converts lowercase letter to uppercase
+    loadUppercaseSample() {
+        this.reset();
+        // Load 0x70 (lowercase 'p') into data memory location 0
+        // Load from memory[0] into X0
+        // Compare X0 to 'a' (0x61) - if less than, it's already uppercase or not a letter
+        // If >= 'a', subtract 0x20 to convert to uppercase
+        // Store the result in memory[0]
+        const uppercaseProgram = `SET A0, 0
+CMP X0, 0x61
+JL skip
+SUB X0, 0x20
+skip:
+MOV X2, X0
+SET A2, 0
+HALT
+DATA 0x70`;
+        this.loadProgram(uppercaseProgram);
     }
 
     // Get execution status
