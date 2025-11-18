@@ -989,6 +989,18 @@ DATA 0x70`;
         this.loadProgram(uppercaseProgram);
     }
 
+    // Load the Simple Sample program - demonstrates basic register operations with no immediates
+    loadSimpleSample() {
+        this.reset();
+        // Simple program using only register operations: ZERO, INC
+        const simpleProgram = `ZERO X2
+INC X2
+INC X2
+ZERO A2
+HALT`;
+        this.loadProgram(simpleProgram);
+    }
+
     // Get execution status
     getStatus() {
         return {

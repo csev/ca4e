@@ -368,6 +368,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 <div class="nav-left">
                     <select id="load-program">
                         <option value="">-- Load Program --</option>
+                        <option value="simple-sample">Load Simple Sample</option>
                         <option value="add-sample">Load Add Sample</option>
                         <option value="uppercase-sample">Load Uppercase Sample</option>
                         <option value="hi">Load Hi</option>
@@ -490,6 +491,18 @@ MOV X2, X0
 SET A2, 3
 HALT
 DATA 0x00 0x0A`;
+                        updateStatus();
+                        updateTrace();
+                        updateOutput();
+                    } else if (value === 'simple-sample') {
+                        emulator.loadSimpleSample();
+                        enableStepButton(); // Re-enable step button after loading program
+                        // Load assembly code into textarea
+                        document.getElementById('assembly-input').value = `ZERO X2
+INC X2
+INC X2
+ZERO A2
+HALT`;
                         updateStatus();
                         updateTrace();
                         updateOutput();
