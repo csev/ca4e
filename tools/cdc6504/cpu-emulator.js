@@ -21,7 +21,6 @@ class CDC6504Emulator {
         this.cpu.y = 0;    // Y register
         this.cpu.z = false; // Zero flag
         this.cpu.n = false; // Negative flag
-        this.cpu.c = false; // Carry flag
         this.cpu.mode = 0;  // Error mode
         
         // Clear instruction and data memory
@@ -110,7 +109,7 @@ class CDC6504Emulator {
             
             // Validate instruction (6502 instruction set)
             const validInstructions = ['LDA', 'LDX', 'LDY', 'STA', 'STX', 'STY', 'TAX', 'TAY', 'TXA', 'TYA', 'INX', 'INY', 'DEX', 'DEY',
-                                      'ADC', 'SBC', 'CMP', 'BEQ', 'BNE', 'BMI', 'BPL', 'BCS', 'BCC', 'JMP', 'BRK', 'CLR'];
+                                      'ADC', 'SBC', 'CMP', 'BEQ', 'BNE', 'BMI', 'BPL', 'JMP', 'BRK', 'CLA', 'CLX', 'CLY'];
             if (!validInstructions.includes(instruction)) {
                 errors.push(`Line ${lineNum + 1}: Unknown instruction "${instruction}"`);
                 continue;
@@ -119,15 +118,15 @@ class CDC6504Emulator {
             // Calculate instruction size and check for overflow (6502 instruction sizes)
             let instructionSize = 0;
             // 2-byte instructions (immediate or zero-page): LDA #, LDX #, LDY #, CMP #, ADC #, SBC #, STA $, STX $, STY $
-            // Branch instructions: BEQ, BNE, BMI, BPL, BCS, BCC (relative branches)
+            // Branch instructions: BEQ, BNE, BMI, BPL (relative branches)
             if (instruction === 'LDA' || instruction === 'LDX' || instruction === 'LDY' || instruction === 'STA' ||
                 instruction === 'STX' || instruction === 'STY' || instruction === 'ADC' || instruction === 'SBC' ||
                 instruction === 'CMP' || instruction === 'BEQ' || instruction === 'BNE' || instruction === 'BMI' ||
-                instruction === 'BPL' || instruction === 'BCS' || instruction === 'BCC' || instruction === 'JMP') {
+                instruction === 'BPL' || instruction === 'JMP') {
                 instructionSize = 2; // 2-byte instructions
             } else if (instruction === 'TAX' || instruction === 'TAY' || instruction === 'TXA' || instruction === 'TYA' ||
                        instruction === 'INX' || instruction === 'INY' || instruction === 'DEX' || instruction === 'DEY' ||
-                       instruction === 'BRK' || instruction === 'CLR') {
+                       instruction === 'BRK' || instruction === 'CLA' || instruction === 'CLX' || instruction === 'CLY') {
                 instructionSize = 1; // 1-byte instructions
             }
             
@@ -307,22 +306,19 @@ class CDC6504Emulator {
             } else if (instruction === 'BRK') {
                 this.cpu.instructions[address] = 0x00; // BRK opcode (6502 BRK = 0x00)
                 address += 1;
-            } else if (instruction === 'CLR') {
-                if (parts.length < 2) {
-                    throw new Error(`Line ${lineNum + 1}: CLR instruction requires register (e.g., CLR A, CLR X, CLR Y)`);
-                }
-                const reg = parts[1].toUpperCase();
-                let opcode;
-                if (reg === 'A' || reg === 'ACC') {
-                    opcode = 0x02; // CLR A
-                } else if (reg === 'X') {
-                    opcode = 0x12; // CLR X
-                } else if (reg === 'Y') {
-                    opcode = 0x22; // CLR Y
-                } else {
-                    throw new Error(`Line ${lineNum + 1}: Invalid register for CLR instruction. Must be A (or ACC), X, or Y`);
-                }
-                console.log(`Assembling CLR ${reg}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
+            } else if (instruction === 'CLA') {
+                const opcode = 0x02; // CLA - Clear accumulator
+                console.log(`Assembling CLA: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
+                this.cpu.instructions[address] = opcode;
+                address += 1;
+            } else if (instruction === 'CLX') {
+                const opcode = 0x12; // CLX - Clear X register
+                console.log(`Assembling CLX: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
+                this.cpu.instructions[address] = opcode;
+                address += 1;
+            } else if (instruction === 'CLY') {
+                const opcode = 0x22; // CLY - Clear Y register
+                console.log(`Assembling CLY: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
                 this.cpu.instructions[address] = opcode;
                 address += 1;
             } else if (instruction === 'CMP') {
@@ -341,7 +337,7 @@ class CDC6504Emulator {
                 this.cpu.instructions[address] = opcode;
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
-            } else if (instruction === 'BEQ' || instruction === 'BNE' || instruction === 'BMI' || instruction === 'BPL' || instruction === 'BCS' || instruction === 'BCC') {
+            } else if (instruction === 'BEQ' || instruction === 'BNE' || instruction === 'BMI' || instruction === 'BPL') {
                 if (parts.length < 2) {
                     throw new Error(`Line ${lineNum + 1}: ${instruction} instruction requires label or address (e.g., ${instruction} loop)`);
                 }
@@ -361,10 +357,6 @@ class CDC6504Emulator {
                     opcode = 0x30; // BMI (branch if minus/negative)
                 } else if (instruction === 'BPL') {
                     opcode = 0x10; // BPL (branch if plus/positive)
-                } else if (instruction === 'BCS') {
-                    opcode = 0xB0; // BCS (branch if carry set)
-                } else if (instruction === 'BCC') {
-                    opcode = 0x90; // BCC (branch if carry clear)
                 }
                 this.cpu.instructions[address] = opcode;
                 this.cpu.instructions[address + 1] = offset & 0xFF; // Signed byte
@@ -568,7 +560,6 @@ class CDC6504Emulator {
     updateStatusFlags(value) {
         this.cpu.z = (value === 0);
         this.cpu.n = ((value & 0x80) !== 0); // Negative flag (bit 7 set)
-        // Carry flag is updated separately for arithmetic operations
     }
 
     // Update status flags for comparison (6502 CMP semantics)
@@ -576,7 +567,6 @@ class CDC6504Emulator {
         const result = (acc - value) & 0xFF;
         this.cpu.z = (acc === value);
         this.cpu.n = ((result & 0x80) !== 0);
-        this.cpu.c = (acc >= value); // Carry set if acc >= value (no borrow)
     }
 
     // Execute a single instruction (6502)
@@ -686,51 +676,42 @@ class CDC6504Emulator {
             pcIncrement = 2;
         }
         // Arithmetic instructions (immediate mode)
-        else if (instruction === 0x69) { // ADC # - Add with carry immediate
+        else if (instruction === 0x69) { // ADC # - Add immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
             console.log(`  Executing: ADC #${immediate}`);
-            const sum = this.cpu.acc + immediate + (this.cpu.c ? 1 : 0);
-            this.cpu.c = (sum > 0xFF); // Carry set if overflow
+            const sum = this.cpu.acc + immediate;
             this.cpu.acc = sum & 0xFF;
             this.updateStatusFlags(this.cpu.acc);
             result = `ADC #${immediate}`;
             pcIncrement = 2;
         }
-        else if (instruction === 0xE9) { // SBC # - Subtract with carry immediate
+        else if (instruction === 0xE9) { // SBC # - Subtract immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
             console.log(`  Executing: SBC #${immediate}`);
-            // 6502 SBC: A = A - M - (1 - C)
-            // Use old carry value for calculation, then set new carry
-            const oldC = this.cpu.c;
-            const diff = this.cpu.acc - immediate - (oldC ? 0 : 1);
-            this.cpu.c = (this.cpu.acc >= immediate); // Carry set if no borrow (A >= M)
+            const diff = this.cpu.acc - immediate;
             this.cpu.acc = diff & 0xFF;
             this.updateStatusFlags(this.cpu.acc);
             result = `SBC #${immediate}`;
             pcIncrement = 2;
         }
         // Arithmetic instructions (zero-page addressing)
-        else if (instruction === 0x65) { // ADC $ - Add with carry from zero-page address
+        else if (instruction === 0x65) { // ADC $ - Add from zero-page address
             const addr = this.cpu.instructions[this.cpu.pc + 1];
             const value = this.cpu.memory[addr];
             console.log(`  Executing: ADC $${addr.toString(16).padStart(2, '0')} (value=${value})`);
             this.cpu.highlightMemory(addr);
-            const sum = this.cpu.acc + value + (this.cpu.c ? 1 : 0);
-            this.cpu.c = (sum > 0xFF); // Carry set if overflow
+            const sum = this.cpu.acc + value;
             this.cpu.acc = sum & 0xFF;
             this.updateStatusFlags(this.cpu.acc);
             result = `ADC $${addr.toString(16).padStart(2, '0')}`;
             pcIncrement = 2;
         }
-        else if (instruction === 0xE5) { // SBC $ - Subtract with carry from zero-page address
+        else if (instruction === 0xE5) { // SBC $ - Subtract from zero-page address
             const addr = this.cpu.instructions[this.cpu.pc + 1];
             const value = this.cpu.memory[addr];
             console.log(`  Executing: SBC $${addr.toString(16).padStart(2, '0')} (value=${value})`);
             this.cpu.highlightMemory(addr);
-            // 6502 SBC: A = A - M - (1 - C)
-            const oldC = this.cpu.c;
-            const diff = this.cpu.acc - value - (oldC ? 0 : 1);
-            this.cpu.c = (this.cpu.acc >= value); // Carry set if no borrow (A >= M)
+            const diff = this.cpu.acc - value;
             this.cpu.acc = diff & 0xFF;
             this.updateStatusFlags(this.cpu.acc);
             result = `SBC $${addr.toString(16).padStart(2, '0')}`;
@@ -795,28 +776,28 @@ class CDC6504Emulator {
             pcIncrement = 1;
         }
         // Clear instructions (zero out registers)
-        else if (instruction === 0x02) { // CLR A - Clear accumulator
-            console.log(`  Executing: CLR A`);
+        else if (instruction === 0x02) { // CLA - Clear accumulator
+            console.log(`  Executing: CLA`);
             this.cpu.acc = 0;
             this.cpu.z = true;  // Zero flag set (result is zero)
             this.cpu.n = false; // Negative flag clear (zero is not negative)
-            result = 'CLR A';
+            result = 'CLA';
             pcIncrement = 1;
         }
-        else if (instruction === 0x12) { // CLR X - Clear X register
-            console.log(`  Executing: CLR X`);
+        else if (instruction === 0x12) { // CLX - Clear X register
+            console.log(`  Executing: CLX`);
             this.cpu.x = 0;
             this.cpu.z = true;  // Zero flag set (result is zero)
             this.cpu.n = false; // Negative flag clear (zero is not negative)
-            result = 'CLR X';
+            result = 'CLX';
             pcIncrement = 1;
         }
-        else if (instruction === 0x22) { // CLR Y - Clear Y register
-            console.log(`  Executing: CLR Y`);
+        else if (instruction === 0x22) { // CLY - Clear Y register
+            console.log(`  Executing: CLY`);
             this.cpu.y = 0;
             this.cpu.z = true;  // Zero flag set (result is zero)
             this.cpu.n = false; // Negative flag clear (zero is not negative)
-            result = 'CLR Y';
+            result = 'CLY';
             pcIncrement = 1;
         }
         // Branch instructions (relative) - 6502 branches are relative to the instruction after the branch
@@ -897,8 +878,7 @@ class CDC6504Emulator {
                 x: this.cpu.x,
                 y: this.cpu.y,
                 z: this.cpu.z,
-                n: this.cpu.n,
-                c: this.cpu.c
+                n: this.cpu.n
             }
         });
         
@@ -1027,7 +1007,7 @@ BRK`;
     loadSimpleSample() {
         this.reset();
         // Simple program: zero X, increment X twice
-        const simpleProgram = `LDX #0        ; Zero X register
+        const simpleProgram = `CLX            ; Clear X register
 INX             ; Increment X
 INX             ; Increment X again
 BRK`;

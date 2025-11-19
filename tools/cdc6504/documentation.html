@@ -169,7 +169,7 @@
     <div class="container">
         <h1>CDC6504 CPU Assembly Language Reference</h1>
         <p style="font-size: 16px; color: #6c757d; margin-bottom: 20px;">
-            The CDC6504 is a limited 6502 emulator with PC, ACC, X, Y registers and status flags (Z, N, C). 
+            The CDC6504 is a limited 6502 emulator with PC, ACC, X, Y registers and status flags (Z, N). 
             This tool uses authentic 6502 opcodes and instruction syntax.
         </p>
         
@@ -258,27 +258,27 @@
                 <tr>
                     <td>ADC #value</td>
                     <td>01101001</td>
-                    <td>Add with carry (immediate): ACC = ACC + value + C flag</td>
+                    <td>Add (immediate): ACC = ACC + value</td>
                 </tr>
                 <tr>
                     <td>ADC $address</td>
                     <td>01100101</td>
-                    <td>Add with carry (from memory): ACC = ACC + memory[address] + C flag</td>
+                    <td>Add (from memory): ACC = ACC + memory[address]</td>
                 </tr>
                 <tr>
                     <td>SBC #value</td>
                     <td>11101001</td>
-                    <td>Subtract with carry (immediate): ACC = ACC - value - (1 - C flag)</td>
+                    <td>Subtract (immediate): ACC = ACC - value</td>
                 </tr>
                 <tr>
                     <td>SBC $address</td>
                     <td>11100101</td>
-                    <td>Subtract with carry (from memory): ACC = ACC - memory[address] - (1 - C flag)</td>
+                    <td>Subtract (from memory): ACC = ACC - memory[address]</td>
                 </tr>
                 <tr>
                     <td>CMP #value</td>
                     <td>11001001</td>
-                    <td>Compare accumulator with immediate value, sets Z, N, C flags</td>
+                    <td>Compare accumulator with immediate value, sets Z, N flags</td>
                 </tr>
             </table>
             
@@ -288,12 +288,7 @@
                 <div class="code-block">
 TXA            ; Transfer X to accumulator
 ADC #5         ; Add 5 to accumulator (which now contains X's value)
-                </div>
-                <p>Or store the register to memory first, then load and add:</p>
-                <div class="code-block">
-STX $10        ; Store X to memory
-LDA $10        ; Load X's value into accumulator
-ADC #5         ; Add 5
+TAX            ; Transfer accumulator back to X
                 </div>
             </div>
             
@@ -363,25 +358,25 @@ ADC #5         ; Add 5
                     <th>Description</th>
                 </tr>
                 <tr>
-                    <td>CLR A</td>
+                    <td>CLA</td>
                     <td>00000010</td>
                     <td>Clear accumulator (A = 0). Sets Z flag to 1, N flag to 0.</td>
                 </tr>
                 <tr>
-                    <td>CLR X</td>
+                    <td>CLX</td>
                     <td>00010010</td>
                     <td>Clear X register (X = 0). Sets Z flag to 1, N flag to 0.</td>
                 </tr>
                 <tr>
-                    <td>CLR Y</td>
+                    <td>CLY</td>
                     <td>00100010</td>
                     <td>Clear Y register (Y = 0). Sets Z flag to 1, N flag to 0.</td>
                 </tr>
             </table>
             
             <div class="tip">
-                <h4>💡 CLR Instructions</h4>
-                <p>The CLR instructions use unused 6502 opcodes (0x02, 0x12, 0x22) that are commonly used for extensions in different hardware applications. These instructions provide a convenient way to zero out registers and automatically set the status flags correctly.</p>
+                <h4>💡 Clear Instructions</h4>
+                <p>The clear instructions (CLA, CLX, CLY) use unused 6502 opcodes (0x02, 0x12, 0x22) that are commonly used for extensions in different hardware applications. These instructions provide a convenient way to zero out registers and automatically set the status flags correctly, following the same naming pattern as INX, INY, DEX, DEY.  These only work in this emulator andcannot be used in a real hardware 6502.</p>
             </div>
             
             <h3>Branch Instructions (Relative)</h3>
@@ -410,16 +405,6 @@ ADC #5         ; Add 5
                     <td>BPL label</td>
                     <td>00010000</td>
                     <td>Branch if plus (N flag clear)</td>
-                </tr>
-                <tr>
-                    <td>BCS label</td>
-                    <td>10110000</td>
-                    <td>Branch if carry set (C flag set)</td>
-                </tr>
-                <tr>
-                    <td>BCC label</td>
-                    <td>10010000</td>
-                    <td>Branch if carry clear (C flag clear)</td>
                 </tr>
             </table>
             
@@ -499,7 +484,6 @@ BRK
                     <ul>
                         <li><strong>Z</strong>: Zero flag - set when result equals zero</li>
                         <li><strong>N</strong>: Negative flag - set when bit 7 of result is set (signed negative)</li>
-                        <li><strong>C</strong>: Carry flag - set on arithmetic overflow/underflow</li>
                     </ul>
                 </div>
                 
@@ -524,7 +508,7 @@ BRK
             
             <div class="tip">
                 <h4>💡 Status Flags</h4>
-                <p>Status flags are automatically updated by arithmetic and comparison operations. Use branch instructions (BEQ, BNE, BMI, BPL, BCS, BCC) to conditionally jump based on flag states.</p>
+                <p>Status flags are automatically updated by arithmetic and comparison operations. Use branch instructions (BEQ, BNE, BMI, BPL) to conditionally jump based on flag states.</p>
             </div>
         </div>
         
@@ -558,7 +542,7 @@ DATA 'Hello World!'
             <div class="example">
                 <h4>Counter Loop (with Labels)</h4>
                 <div class="code-block">
-LDX #0         ; Initialize X register to 0
+CLX            ; Clear X register
 loop:
 TXA            ; Transfer X to accumulator
 CMP #5         ; Compare accumulator to 5
@@ -571,10 +555,10 @@ BRK            ; Stop
             </div>
             
             <div class="example">
-                <h4>Add with Carry</h4>
+                <h4>Add</h4>
                 <div class="code-block">
 LDA #10        ; Load 10 into accumulator
-ADC #5         ; Add 5 with carry (result = 15)
+ADC #5         ; Add 5 (result = 15)
 STA $00        ; Store result to memory address 0
 BRK
                 </div>
@@ -593,9 +577,9 @@ BRK
             <div class="example">
                 <h4>Clear Registers</h4>
                 <div class="code-block">
-CLR A          ; Clear accumulator (A = 0, Z = 1, N = 0)
-CLR X          ; Clear X register (X = 0, Z = 1, N = 0)
-CLR Y          ; Clear Y register (Y = 0, Z = 1, N = 0)
+CLA            ; Clear accumulator (A = 0, Z = 1, N = 0)
+CLX            ; Clear X register (X = 0, Z = 1, N = 0)
+CLY            ; Clear Y register (Y = 0, Z = 1, N = 0)
 BRK
                 </div>
             </div>
@@ -679,7 +663,7 @@ BRK
             <div class="example">
                 <h4>Test Invalid Instruction (Mode 1)</h4>
                 <div class="code-block">
-LDA #0
+CLA            ; Clear accumulator
 0xFF          ; Invalid instruction (0xFF - undefined opcode)
 BRK
                 </div>

@@ -39,7 +39,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             background: white;
             padding: 12px;
             border-radius: 6px;
-            margin-bottom: 15px;
+            margin-bottom: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
@@ -292,7 +292,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         }
         
         .printed-output {
-            margin: 6px 0;
+            margin: 6px 0 0 0;
         }
         
         .printed-label {
@@ -400,14 +400,8 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             </div>
         </div>
         
-        <!-- Control buttons positioned above registers -->
-        <div style="display: flex; gap: 6px; margin-bottom: 0; align-items: center;">
-            <button id="reset" style="padding: 4px 10px; font-size: 13px;">Reset</button>
-            <button id="step" style="padding: 4px 10px; font-size: 13px;">Step</button>
-            <button id="start" style="padding: 4px 10px; font-size: 13px;">Start</button>
-        </div>
         <!-- Your existing CDC6504 web component -->
-        <cdc6504-cpu name="CA4E.com"></cdc6504-cpu>
+        <cdc6504-cpu name="CA4E.com" id="cpu-component"></cdc6504-cpu>
         
         <div class="trace">
             <h3>Execution Trace</h3>
@@ -465,7 +459,7 @@ DATA 'Hello World!'`;
                     } else if (value === 'labels-demo') {
                         // Load a demo program that uses labels (6502)
                         // Simple loop that counts from 0 to 5
-                        const labelsDemo = `LDX #0         ; Load 0 into X register
+                        const labelsDemo = `CLX            ; Clear X register
 loop:
 TXA            ; Transfer X to accumulator
 CMP #5         ; Compare accumulator to 5
@@ -497,7 +491,7 @@ DATA 0x00 0x0A`;
                         emulator.loadSimpleSample();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `LDX #0         ; Zero X register
+                        document.getElementById('assembly-input').value = `CLX            ; Clear X register
 INX             ; Increment X
 INX             ; Increment X again
 BRK`;
@@ -651,7 +645,23 @@ BRK`;
 
 
                 
-                document.getElementById('reset').addEventListener('click', () => {
+                // Helper functions to get buttons from web component
+                function getResetButton() {
+                    return document.querySelector('#cpu-component')?.shadowRoot?.getElementById('reset-btn');
+                }
+                
+                function getStepButton() {
+                    return document.querySelector('#cpu-component')?.shadowRoot?.getElementById('step-btn');
+                }
+                
+                function getStartButton() {
+                    return document.querySelector('#cpu-component')?.shadowRoot?.getElementById('start-btn');
+                }
+                
+                // Listen for custom events from web component
+                const cpuComponent = document.getElementById('cpu-component');
+                
+                cpuComponent.addEventListener('cpu-reset', () => {
                     emulator.reset();
                     enableStepButton(); // Re-enable step button after reset
                     updateStatus();
@@ -659,28 +669,31 @@ BRK`;
                     updateOutput();
                 });
                 
-                document.getElementById('step').addEventListener('click', () => {
+                cpuComponent.addEventListener('cpu-step', () => {
                     const result = emulator.step();
                     if (result) {
                         console.log('Step result:', result);
                     } else {
                         // CPU halted, disable step button
-                        document.getElementById('step').disabled = true;
+                        const stepBtn = getStepButton();
+                        if (stepBtn) stepBtn.disabled = true;
                     }
                     updateStatus();
                     updateTrace();
                     updateOutput();
                 });
                 
-                document.getElementById('start').addEventListener('click', () => {
-                    const startButton = document.getElementById('start');
+                cpuComponent.addEventListener('cpu-start', () => {
+                    const startButton = getStartButton();
                     const status = emulator.getStatus();
                     
                     if (status.running) {
                         // Currently running, so stop
                         emulator.stop();
-                        startButton.textContent = 'Start';
-                        startButton.classList.remove('running');
+                        if (startButton) {
+                            startButton.textContent = 'Start';
+                            startButton.classList.remove('running');
+                        }
                         updateStatus();
                     } else {
                         // Currently stopped, check if halted and reset PC to 0 (restart)
@@ -691,19 +704,24 @@ BRK`;
                         
                         // Start execution
                         emulator.start();
-                        startButton.textContent = 'Stop';
-                        startButton.classList.add('running');
+                        if (startButton) {
+                            startButton.textContent = 'Stop';
+                            startButton.classList.add('running');
+                        }
                         updateStatus();
                         
                         // Set up a timer to update the UI during continuous execution
                         const updateInterval = setInterval(() => {
                             if (!emulator.getStatus().running) {
                                 clearInterval(updateInterval);
-                                startButton.textContent = 'Start';
-                                startButton.classList.remove('running');
+                                if (startButton) {
+                                    startButton.textContent = 'Start';
+                                    startButton.classList.remove('running');
+                                }
                                 // Check if CPU halted and disable step button if so
                                 if (emulator.getStatus().halted) {
-                                    document.getElementById('step').disabled = true;
+                                    const stepBtn = getStepButton();
+                                    if (stepBtn) stepBtn.disabled = true;
                                 }
                                 updateStatus();
                                 updateTrace();
@@ -719,7 +737,8 @@ BRK`;
                 
                 // Enable step button
                 function enableStepButton() {
-                    document.getElementById('step').disabled = false;
+                    const stepBtn = getStepButton();
+                    if (stepBtn) stepBtn.disabled = false;
                 }
                 
                 // Update functions
@@ -748,7 +767,7 @@ BRK`;
                     }
                     
                     const traceText = status.trace.map(step => 
-                        `PC: 0x${step.pc.toString(16).padStart(2, '0')} | ${step.instruction} | ACC: 0x${step.registers.acc.toString(16).padStart(2, '0')} | X: 0x${step.registers.x.toString(16).padStart(2, '0')} | Y: 0x${step.registers.y.toString(16).padStart(2, '0')} | Z:${step.registers.z} N:${step.registers.n} C:${step.registers.c}`
+                        `PC: 0x${step.pc.toString(16).padStart(2, '0')} | ${step.instruction} | ACC: 0x${step.registers.acc.toString(16).padStart(2, '0')} | X: 0x${step.registers.x.toString(16).padStart(2, '0')} | Y: 0x${step.registers.y.toString(16).padStart(2, '0')} | Z:${step.registers.z} N:${step.registers.n}`
                     ).join('\n');
                     
                     traceDiv.textContent = traceText;

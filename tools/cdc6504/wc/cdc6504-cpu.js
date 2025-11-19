@@ -19,7 +19,6 @@ export class CDC6504CPU extends LitElement {
       // Status flags
       z: { type: Boolean },   // Zero flag
       n: { type: Boolean },   // Negative flag
-      c: { type: Boolean },   // Carry flag
       mode: { type: Number }, // Error mode
       // Memory highlighting
       highlightedMemory: { type: Array },
@@ -42,14 +41,13 @@ export class CDC6504CPU extends LitElement {
     // Initialize status flags
     this.z = false;  // Zero flag
     this.n = false;  // Negative flag
-    this.c = false;  // Carry flag
     this.mode = 0;   // Error mode
     
     // Initialize memory highlighting
     this.highlightedMemory = [];
     
     // Initialize responsive layout
-    this.isMobile = window.innerWidth <= 1000;
+    this.isMobile = window.innerWidth <= 700;
     
     for (let i = 0; i < 256; i++) {
       this.memory.push(0);
@@ -241,19 +239,30 @@ export class CDC6504CPU extends LitElement {
     this.n = e.target.checked;
   }
 
-  changeC(e) {
-    this.c = e.target.checked;
+  // Button handlers - dispatch custom events for parent to handle
+  handleReset(e) {
+    e.preventDefault();
+    this.dispatchEvent(new CustomEvent('cpu-reset', { bubbles: true, composed: true }));
+  }
+
+  handleStep(e) {
+    e.preventDefault();
+    this.dispatchEvent(new CustomEvent('cpu-step', { bubbles: true, composed: true }));
+  }
+
+  handleStart(e) {
+    e.preventDefault();
+    this.dispatchEvent(new CustomEvent('cpu-start', { bubbles: true, composed: true }));
   }
 
   // Update status flags based on value (6502 style)
   updateStatusFlags(value) {
     this.z = (value === 0);
     this.n = ((value & 0x80) !== 0); // Negative flag (bit 7 set)
-    // Carry flag is not automatically updated by register changes
   }
 
   handleResize() {
-    this.isMobile = window.innerWidth <= 1000;
+    this.isMobile = window.innerWidth <= 700;
   }
 
   blurAcc(e) {
@@ -297,9 +306,9 @@ export class CDC6504CPU extends LitElement {
     // Disassemble a single 6502 instruction byte
     // 1-byte instructions
     if (instruction === 0x00) return "BRK";
-    if (instruction === 0x02) return "CLR A";
-    if (instruction === 0x12) return "CLR X";
-    if (instruction === 0x22) return "CLR Y";
+    if (instruction === 0x02) return "CLA";
+    if (instruction === 0x12) return "CLX";
+    if (instruction === 0x22) return "CLY";
     if (instruction === 0xE8) return "INX";
     if (instruction === 0xC8) return "INY";
     if (instruction === 0xCA) return "DEX";
@@ -551,7 +560,28 @@ export class CDC6504CPU extends LitElement {
         font-weight: bold;
       }
       
-      @media (max-width: 1000px) {
+        button {
+          transition: background-color 0.2s ease;
+        }
+        
+        button:hover {
+          background-color: #0056b3 !important;
+        }
+        
+        button:disabled {
+          background-color: #6c757d !important;
+          cursor: not-allowed;
+        }
+        
+        button.running {
+          background-color: #dc3545 !important;
+        }
+        
+        button.running:hover {
+          background-color: #c82333 !important;
+        }
+        
+        @media (max-width: 700px) {
         .container {
           padding: 10px;
         }
@@ -568,9 +598,18 @@ export class CDC6504CPU extends LitElement {
     return html`
           <div class="container">
               
-              <!-- 6502 Register Section -->
+              <!-- Control Buttons and Register Section -->
               <div class="mb-3">
                 <div style="display: flex; flex-direction: ${this.isMobile ? 'column' : 'row'}; gap: ${this.isMobile ? '0.25rem' : '1rem'}; ${this.isMobile ? 'border: 1px solid #dee2e6; border-radius: 0.375rem; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);' : ''} padding: ${this.isMobile ? '0.75rem' : '10px'};">
+                  <div style="${this.isMobile ? 'border: none; box-shadow: none; margin-bottom: 0.25rem;' : 'border: 1px solid #dee2e6; border-radius: 0.375rem; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);'}">
+                    <div style="padding: ${this.isMobile ? '0.25rem' : '1rem'};">
+                      <div style="display: flex; gap: 6px;">
+                        <button id="reset-btn" style="background-color: #007bff; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 13px;" @click=${this.handleReset}>Reset</button>
+                        <button id="step-btn" style="background-color: #007bff; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 13px;" @click=${this.handleStep}>Step</button>
+                        <button id="start-btn" style="background-color: #007bff; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 13px;" @click=${this.handleStart}>Start</button>
+                      </div>
+                    </div>
+                  </div>
                   <div style="${this.isMobile ? 'border: none; box-shadow: none; margin-bottom: 0.25rem;' : 'border: 1px solid #dee2e6; border-radius: 0.375rem; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);'}">
                     <div style="padding: ${this.isMobile ? '0.25rem' : '1rem'};">
                       <div style="display: flex; gap: 1rem;">
@@ -581,6 +620,14 @@ export class CDC6504CPU extends LitElement {
                         <div>
                           <small class="text-muted">MODE:</small><br>
                           <input type="text" size="2" class="font-monospace register-input ${this.mode >= 1 ? 'error-mode' : ''}" value="0x${this.toHex(this.mode)}" @input=${this.changeMode}>
+                        </div>
+                        <div>
+                          <small class="text-muted">Z:</small><br>
+                          <input type="checkbox" ${this.z ? 'checked' : ''} @change=${this.changeZ} style="width: 20px; height: 20px;">
+                        </div>
+                        <div>
+                          <small class="text-muted">N:</small><br>
+                          <input type="checkbox" ${this.n ? 'checked' : ''} @change=${this.changeN} style="width: 20px; height: 20px;">
                         </div>
                       </div>
                     </div>
@@ -599,24 +646,6 @@ export class CDC6504CPU extends LitElement {
                         <div>
                           <small class="text-muted">Y:</small><br>
                           <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.y)}" @input=${this.changeY} @blur=${this.blurY}>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div style="${this.isMobile ? 'border: none; box-shadow: none; margin-bottom: 0.25rem;' : 'border: 1px solid #dee2e6; border-radius: 0.375rem; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);'}">
-                    <div style="padding: ${this.isMobile ? '0.25rem' : '1rem'};">
-                      <div style="display: flex; gap: 0.5rem;">
-                        <div>
-                          <small class="text-muted">Z:</small><br>
-                          <input type="checkbox" ${this.z ? 'checked' : ''} @change=${this.changeZ} style="width: 20px; height: 20px;">
-                        </div>
-                        <div>
-                          <small class="text-muted">N:</small><br>
-                          <input type="checkbox" ${this.n ? 'checked' : ''} @change=${this.changeN} style="width: 20px; height: 20px;">
-                        </div>
-                        <div>
-                          <small class="text-muted">C:</small><br>
-                          <input type="checkbox" ${this.c ? 'checked' : ''} @change=${this.changeC} style="width: 20px; height: 20px;">
                         </div>
                       </div>
                     </div>
