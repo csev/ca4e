@@ -355,6 +355,35 @@ ADC #5         ; Add 5
                 </tr>
             </table>
             
+            <h3>Clear Instructions</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Assembly</th>
+                    <th>Opcode</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>CLR A</td>
+                    <td>00000010</td>
+                    <td>Clear accumulator (A = 0). Sets Z flag to 1, N flag to 0.</td>
+                </tr>
+                <tr>
+                    <td>CLR X</td>
+                    <td>00010010</td>
+                    <td>Clear X register (X = 0). Sets Z flag to 1, N flag to 0.</td>
+                </tr>
+                <tr>
+                    <td>CLR Y</td>
+                    <td>00100010</td>
+                    <td>Clear Y register (Y = 0). Sets Z flag to 1, N flag to 0.</td>
+                </tr>
+            </table>
+            
+            <div class="tip">
+                <h4>💡 CLR Instructions</h4>
+                <p>The CLR instructions use unused 6502 opcodes (0x02, 0x12, 0x22) that are commonly used for extensions in different hardware applications. These instructions provide a convenient way to zero out registers and automatically set the status flags correctly.</p>
+            </div>
+            
             <h3>Branch Instructions (Relative)</h3>
             <table class="instruction-table">
                 <tr>
@@ -557,6 +586,16 @@ BRK
 LDA #42        ; Load 42 into accumulator
 TAX            ; Transfer accumulator to X
 TXA            ; Transfer X back to accumulator
+BRK
+                </div>
+            </div>
+            
+            <div class="example">
+                <h4>Clear Registers</h4>
+                <div class="code-block">
+CLR A          ; Clear accumulator (A = 0, Z = 1, N = 0)
+CLR X          ; Clear X register (X = 0, Z = 1, N = 0)
+CLR Y          ; Clear Y register (Y = 0, Z = 1, N = 0)
 BRK
                 </div>
             </div>

@@ -297,6 +297,9 @@ export class CDC6504CPU extends LitElement {
     // Disassemble a single 6502 instruction byte
     // 1-byte instructions
     if (instruction === 0x00) return "BRK";
+    if (instruction === 0x02) return "CLR A";
+    if (instruction === 0x12) return "CLR X";
+    if (instruction === 0x22) return "CLR Y";
     if (instruction === 0xE8) return "INX";
     if (instruction === 0xC8) return "INY";
     if (instruction === 0xCA) return "DEX";

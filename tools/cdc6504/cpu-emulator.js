@@ -110,7 +110,7 @@ class CDC6504Emulator {
             
             // Validate instruction (6502 instruction set)
             const validInstructions = ['LDA', 'LDX', 'LDY', 'STA', 'STX', 'STY', 'TAX', 'TAY', 'TXA', 'TYA', 'INX', 'INY', 'DEX', 'DEY',
-                                      'ADC', 'SBC', 'CMP', 'BEQ', 'BNE', 'BMI', 'BPL', 'BCS', 'BCC', 'JMP', 'BRK'];
+                                      'ADC', 'SBC', 'CMP', 'BEQ', 'BNE', 'BMI', 'BPL', 'BCS', 'BCC', 'JMP', 'BRK', 'CLR'];
             if (!validInstructions.includes(instruction)) {
                 errors.push(`Line ${lineNum + 1}: Unknown instruction "${instruction}"`);
                 continue;
@@ -127,7 +127,7 @@ class CDC6504Emulator {
                 instructionSize = 2; // 2-byte instructions
             } else if (instruction === 'TAX' || instruction === 'TAY' || instruction === 'TXA' || instruction === 'TYA' ||
                        instruction === 'INX' || instruction === 'INY' || instruction === 'DEX' || instruction === 'DEY' ||
-                       instruction === 'BRK') {
+                       instruction === 'BRK' || instruction === 'CLR') {
                 instructionSize = 1; // 1-byte instructions
             }
             
@@ -306,6 +306,24 @@ class CDC6504Emulator {
                 address += 1;
             } else if (instruction === 'BRK') {
                 this.cpu.instructions[address] = 0x00; // BRK opcode (6502 BRK = 0x00)
+                address += 1;
+            } else if (instruction === 'CLR') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: CLR instruction requires register (e.g., CLR A, CLR X, CLR Y)`);
+                }
+                const reg = parts[1].toUpperCase();
+                let opcode;
+                if (reg === 'A' || reg === 'ACC') {
+                    opcode = 0x02; // CLR A
+                } else if (reg === 'X') {
+                    opcode = 0x12; // CLR X
+                } else if (reg === 'Y') {
+                    opcode = 0x22; // CLR Y
+                } else {
+                    throw new Error(`Line ${lineNum + 1}: Invalid register for CLR instruction. Must be A (or ACC), X, or Y`);
+                }
+                console.log(`Assembling CLR ${reg}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
+                this.cpu.instructions[address] = opcode;
                 address += 1;
             } else if (instruction === 'CMP') {
                 if (parts.length < 2) {
@@ -774,6 +792,31 @@ class CDC6504Emulator {
             this.cpu.acc = this.cpu.y;
             this.updateStatusFlags(this.cpu.acc);
             result = 'TYA';
+            pcIncrement = 1;
+        }
+        // Clear instructions (zero out registers)
+        else if (instruction === 0x02) { // CLR A - Clear accumulator
+            console.log(`  Executing: CLR A`);
+            this.cpu.acc = 0;
+            this.cpu.z = true;  // Zero flag set (result is zero)
+            this.cpu.n = false; // Negative flag clear (zero is not negative)
+            result = 'CLR A';
+            pcIncrement = 1;
+        }
+        else if (instruction === 0x12) { // CLR X - Clear X register
+            console.log(`  Executing: CLR X`);
+            this.cpu.x = 0;
+            this.cpu.z = true;  // Zero flag set (result is zero)
+            this.cpu.n = false; // Negative flag clear (zero is not negative)
+            result = 'CLR X';
+            pcIncrement = 1;
+        }
+        else if (instruction === 0x22) { // CLR Y - Clear Y register
+            console.log(`  Executing: CLR Y`);
+            this.cpu.y = 0;
+            this.cpu.z = true;  // Zero flag set (result is zero)
+            this.cpu.n = false; // Negative flag clear (zero is not negative)
+            result = 'CLR Y';
             pcIncrement = 1;
         }
         // Branch instructions (relative) - 6502 branches are relative to the instruction after the branch
