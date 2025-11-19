@@ -352,7 +352,6 @@ export class CDC8512CPU extends LitElement {
   disassembleInstruction(instruction) {
     // Disassemble a single instruction byte
     if (instruction === 0x00) return "HALT";
-    if (instruction === 0x01) return "PS";
     
     // 8-bit patterns
     if ((instruction >> 3) === 0x08) { // 01000xxx - ZERO

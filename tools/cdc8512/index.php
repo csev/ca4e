@@ -450,7 +450,6 @@ INC A2
 INC A2
 SET X2, 111
 INC A2
-PS
 HALT`;
                         updateStatus();
                         updateTrace();
@@ -458,8 +457,7 @@ HALT`;
                         emulator.loadHelloWorldProgram();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `PS
-HALT
+                        document.getElementById('assembly-input').value = `HALT
 DATA 'Hello World!'`;
                         updateStatus();
                         updateTrace();
@@ -527,7 +525,6 @@ HALT`;
 ZERO A2
 SET X2, 'i'
 INC A2
-PS
 HALT`;
                         updateStatus();
                         updateTrace();

@@ -112,7 +112,7 @@ class CDC8512Emulator {
             }
             
             // Validate instruction
-            const validInstructions = ['SET', 'CMP', 'ADD', 'SUB', 'JE', 'JL', 'JG', 'JP', 'INC', 'DEC', 'ZERO', 'PS', 'HALT', 'MOV', 'CMPZ'];
+            const validInstructions = ['SET', 'CMP', 'ADD', 'SUB', 'JE', 'JL', 'JG', 'JP', 'INC', 'DEC', 'ZERO', 'HALT', 'MOV', 'CMPZ'];
             if (!validInstructions.includes(instruction)) {
                 errors.push(`Line ${lineNum + 1}: Unknown instruction "${instruction}"`);
                 continue;
@@ -123,7 +123,7 @@ class CDC8512Emulator {
             if (instruction === 'SET' || instruction === 'CMP' || instruction === 'ADD' || instruction === 'SUB' ||
                 instruction === 'JE' || instruction === 'JL' || instruction === 'JG' || instruction === 'JP') {
                 instructionSize = 2; // 16-bit instructions
-            } else if (instruction === 'INC' || instruction === 'DEC' || instruction === 'ZERO' || instruction === 'PS' || instruction === 'HALT' ||
+            } else if (instruction === 'INC' || instruction === 'DEC' || instruction === 'ZERO' || instruction === 'HALT' ||
                        instruction === 'MOV' || instruction === 'CMPZ') {
                 instructionSize = 1; // 8-bit instructions
             }
@@ -278,9 +278,6 @@ class CDC8512Emulator {
                 const reg = parts[1];
                 const regNum = this.parseRegister(reg);
                 this.cpu.instructions[address] = 0x58 | regNum; // DEC opcode (01011rrr)
-                address += 1;
-            } else if (instruction === 'PS') {
-                this.cpu.instructions[address] = 0x01; // PS opcode (00000001)
                 address += 1;
             } else if (instruction === 'HALT') {
                 this.cpu.instructions[address] = 0x00; // HALT opcode (00000000)
@@ -477,14 +474,9 @@ class CDC8512Emulator {
         // 8-bit patterns (most specific) - check first
         if (instruction === 0x00) { // 00000000 - HALT
             console.log(`  Executing: HALT`);
+            this.printString(); // Print automatically on HALT
             this.running = false;
             result = 'HALT';
-            pcIncrement = 1;
-        }
-        else if (instruction === 0x01) { // 00000001 - PS
-            console.log(`  Executing: PS`);
-            this.printString();
-            result = 'PS';
             pcIncrement = 1;
         }
         else if (instruction === 0x0F) { // 00001111 - DATA
@@ -926,7 +918,6 @@ INC A2
 INC A2
 SET X2, 111
 INC A2
-PS
 HALT`;
         this.loadProgram(helloProgram);
     }
@@ -934,8 +925,7 @@ HALT`;
     // Load the Hello World program using DATA instruction
     loadHelloWorldProgram() {
         this.reset();
-        const helloWorldProgram = `PS
-HALT
+        const helloWorldProgram = `HALT
 DATA 'Hello World!'`;
         this.loadProgram(helloWorldProgram);
     }
@@ -947,7 +937,6 @@ DATA 'Hello World!'`;
 ZERO A2
 SET X2, 'i'
 INC A2
-PS
 HALT`;
         this.loadProgram(hiProgram);
     }

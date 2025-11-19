@@ -191,12 +191,7 @@
                 <tr>
                     <td>HALT</td>
                     <td>00000000</td>
-                    <td>Stop program execution</td>
-                </tr>
-                <tr>
-                    <td>PS</td>
-                    <td>00000001</td>
-                    <td>Print string from data memory (null-terminated)</td>
+                    <td>Stop program execution (automatically prints string from data memory)</td>
                 </tr>
             </table>
             
@@ -382,7 +377,6 @@ INC A2        ; Address 2
 INC A2        ; Address 3 (second 'l')
 SET X2, 'o'   ; Set X2 to ASCII 'o' (111)
 INC A2        ; Address 4
-PS            ; Print string
 HALT
                 </div>
             </div>
@@ -390,7 +384,6 @@ HALT
             <div class="example">
                 <h4>Hello World (with DATA)</h4>
                 <div class="code-block">
-PS            ; Print string
 HALT          ; Stop
 DATA 'Hello World!'
                 </div>
@@ -413,9 +406,8 @@ DEC X3        ; Subtract 1 from X3 so that it is now 'o'
 INC A3        ; Add 1 to A3 and store 'o' in location 0x04
 SET X3, 0     ; Set X3 to integer zero
 INC A3        ; Add 1 to A3 and store integer 0 in location 0x05
-PS            ; Print memory starting at data address 0 as an
-              ; ASCII string, stopping when a zero is encountered
-HALT
+HALT          ; Stop (automatically prints memory starting at data address 0 as an
+              ; ASCII string, stopping when a zero is encountered)
                 </div>
             </div>
             
