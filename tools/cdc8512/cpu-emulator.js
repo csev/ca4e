@@ -57,8 +57,8 @@ class CDC8512Emulator {
             .filter(line => {
                 // Skip empty lines
                 if (line.length === 0) return false;
-                // Skip lines that start with semicolon (comment-only lines)
-                if (line.startsWith(';')) return false;
+                // Skip lines that start with semicolon or hash (comment-only lines)
+                if (line.startsWith(';') || line.startsWith('#')) return false;
                 return true;
             });
         console.log('Parsed lines:', lines);
@@ -74,8 +74,8 @@ class CDC8512Emulator {
         
         for (let lineNum = 0; lineNum < lines.length; lineNum++) {
             const line = lines[lineNum];
-            // Remove comments (everything after semicolon) and trim
-            const codeLine = line.split(';')[0].trim();
+            // Remove comments (everything after semicolon or hash) and trim
+            const codeLine = line.split(/[;#]/)[0].trim();
             if (codeLine.length === 0) continue; // Skip lines that are only comments
             
             const parts = codeLine.split(/\s+/);
@@ -151,8 +151,8 @@ class CDC8512Emulator {
             const line = lines[lineNum];
             console.log('Processing line:', line);
             
-            // Remove comments (everything after semicolon) and trim
-            const codeLine = line.split(';')[0].trim();
+            // Remove comments (everything after semicolon or hash) and trim
+            const codeLine = line.split(/[;#]/)[0].trim();
             if (codeLine.length === 0) continue; // Skip lines that are only comments
             
             const parts = codeLine.split(/\s+/);

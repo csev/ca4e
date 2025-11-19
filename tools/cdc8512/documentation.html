@@ -287,19 +287,31 @@
                 </tr>
             </table>
             
-            <h3>Data Segment</h3>
+            <h3>Assembly Directives</h3>
             <table class="instruction-table">
                 <tr>
                     <th>Assembly</th>
-                    <th>Binary</th>
                     <th>Description</th>
                 </tr>
                 <tr>
                     <td>DATA 'string'</td>
-                    <td>00001111 + string + null</td>
-                    <td>Load string into data memory (processed during assembly)</td>
+                    <td>Pre-populates data memory (not instruction memory) with a null-terminated string. Data is loaded starting at memory address 0.</td>
+                </tr>
+                <tr>
+                    <td>DATA 0x00 0x0A ...</td>
+                    <td>Pre-populates data memory (not instruction memory) with a space-separated list of hexadecimal values. Data is loaded starting at memory address 0.</td>
                 </tr>
             </table>
+            
+            <h3>Comments</h3>
+            <p>Comments can be added to assembly code using either <code>;</code> (semicolon) or <code>#</code> (hash) characters. Everything from the comment character to the end of the line is ignored by the assembler.</p>
+            <div class="code-block">
+SET X0, 42   ; This is a comment using semicolon
+SET X1, 10   # This is a comment using hash
+INC X0       ; Comments can appear after instructions
+# This is a comment-only line
+HALT
+            </div>
         </div>
         
         <div id="registers" class="tab-content">
