@@ -419,7 +419,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         // Wait for the web component to be ready
         document.addEventListener('DOMContentLoaded', () => {
             // Get the CPU component
-            const cpuComponent = document.querySelector('cdc6504-cpu');
+            const cpuComponent = document.getElementById('cpu-component');
             
             // Wait for the component to be fully initialized
             setTimeout(() => {
@@ -659,8 +659,6 @@ BRK`;
                 }
                 
                 // Listen for custom events from web component
-                const cpuComponent = document.getElementById('cpu-component');
-                
                 cpuComponent.addEventListener('cpu-reset', () => {
                     emulator.reset();
                     enableStepButton(); // Re-enable step button after reset
