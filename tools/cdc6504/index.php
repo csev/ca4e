@@ -441,14 +441,14 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         emulator.loadHelloProgram();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `LDA ACC, 72    ; 'H'
+                        document.getElementById('assembly-input').value = `LDA #72        ; 'H'
 STA $00
-LDA ACC, 101   ; 'e'
+LDA #101       ; 'e'
 STA $01
-LDA ACC, 108   ; 'l'
+LDA #108       ; 'l'
 STA $02
 STA $03        ; 'l' again
-LDA ACC, 111   ; 'o'
+LDA #111       ; 'o'
 STA $04
 BRK`;
                         updateStatus();
@@ -464,15 +464,16 @@ DATA 'Hello World!'`;
                         updateOutput();
                     } else if (value === 'labels-demo') {
                         // Load a demo program that uses labels (6502)
-                        const labelsDemo = `LDX X, 0       ; Zero X register
+                        // Simple loop that counts from 0 to 5
+                        const labelsDemo = `LDX #0         ; Load 0 into X register
 loop:
 TXA            ; Transfer X to accumulator
-CMP ACC, 5     ; Compare accumulator to 5
-BEQ end        ; Branch if equal
+CMP #5         ; Compare accumulator to 5
+BEQ end        ; Branch if equal (Z flag set)
 INX            ; Increment X
 JMP loop       ; Jump to loop
 end:
-BRK`;
+BRK            ; Halt`;
                         emulator.reset();
                         emulator.loadProgram(labelsDemo);
                         enableStepButton(); // Re-enable step button after loading program
@@ -484,9 +485,9 @@ BRK`;
                         emulator.loadAddSample();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `LDA ACC, 10    ; Load 10 into accumulator
-ADC ACC, 5      ; Add 5 (result = 15)
-STA $03         ; Store result to memory[3]
+                        document.getElementById('assembly-input').value = `LDA #10        ; Load 10 into accumulator
+ADC #5         ; Add 5 (result = 15)
+STA $03        ; Store result to memory[3]
 BRK
 DATA 0x00 0x0A`;
                         updateStatus();
@@ -496,7 +497,7 @@ DATA 0x00 0x0A`;
                         emulator.loadSimpleSample();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `LDX X, 0       ; Zero X register
+                        document.getElementById('assembly-input').value = `LDX #0         ; Zero X register
 INX             ; Increment X
 INX             ; Increment X again
 BRK`;
@@ -507,10 +508,10 @@ BRK`;
                         emulator.loadUppercaseSample();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `LDA ACC, 0x70
-CMP ACC, 0x61
+                        document.getElementById('assembly-input').value = `LDA #0x70
+CMP #0x61
 BMI skip        ; Branch if minus (less than)
-SBC ACC, 0x20   ; Subtract 0x20 to convert to uppercase
+SBC #0x20       ; Subtract 0x20 to convert to uppercase
 skip:
 BRK`;
                         updateStatus();
@@ -520,9 +521,9 @@ BRK`;
                         emulator.loadHiProgram();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `LDA ACC, 'H'
+                        document.getElementById('assembly-input').value = `LDA #'H'
 STA $00
-LDA ACC, 'i'
+LDA #'i'
 STA $01
 BRK`;
                         updateStatus();
