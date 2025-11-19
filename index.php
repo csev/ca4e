@@ -95,7 +95,7 @@ the sample content in various stages of completion:
       <a href="tools/ascii/" target="_blank" class="text-primary">An ASCII chart</a>
     </li>
 <li>
-<a href="tools/cdc8512"  target="_blank" class="text-primary">A CDC8512 Microprocessor Emulator</a> (<a href="cdc8512/documentation.html"  target="_blank" class="text-primary">Documentation</a>)
+<a href="tools/cdc6504"  target="_blank" class="text-primary">A CDC6504 Microprocessor Emulator</a> (<a href="tools/cdc6504/documentation.html"  target="_blank" class="text-primary">Documentation</a>)
 </li>
 <li>
 <a href="tools/wasm"  target="_blank" class="text-primary">WASM Playground</a>

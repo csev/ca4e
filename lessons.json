@@ -294,7 +294,7 @@
      "lti" : [
         {
             "title" : "Print out '42'",
-            "launch" : "tools/cdc8512/",
+            "launch" : "tools/cdc6504/",
             "resource_link_id" : "ca4e_04_cdc_42",
             "target": "_blank",
             "custom" : [
