@@ -71,8 +71,8 @@ class CDC6504Emulator {
         
         for (let lineNum = 0; lineNum < lines.length; lineNum++) {
             const line = lines[lineNum];
-            // Remove comments (everything after semicolon or hash) and trim
-            const codeLine = line.split(/[;#]/)[0].trim();
+            // Remove comments (everything after semicolon only - # is used for immediate values)
+            const codeLine = line.split(/;/)[0].trim();
             if (codeLine.length === 0) continue; // Skip lines that are only comments
             
             const parts = codeLine.split(/\s+/);
@@ -154,8 +154,8 @@ class CDC6504Emulator {
             const line = lines[lineNum];
             console.log('Processing line:', line);
             
-            // Remove comments (everything after semicolon or hash) and trim
-            const codeLine = line.split(/[;#]/)[0].trim();
+            // Remove comments (everything after semicolon only - # is used for immediate values)
+            const codeLine = line.split(/;/)[0].trim();
             if (codeLine.length === 0) continue; // Skip lines that are only comments
             
             const parts = codeLine.split(/\s+/);
@@ -286,38 +286,6 @@ class CDC6504Emulator {
                     this.cpu.instructions[address + 1] = value;
                     address += 2;
                 }
-            } else if (instruction === 'INC' || instruction === 'INX' || instruction === 'INY') {
-                if (parts.length < 2) {
-                    throw new Error(`Line ${lineNum + 1}: ZERO instruction requires register (e.g., ZERO ACC)`);
-                }
-                const reg = parts[1];
-                const regNum = this.parseRegister(reg);
-                // Map to 6502: LDA #0 (A9 00), LDX #0 (A2 00), LDY #0 (A0 00)
-                let opcode;
-                if (regNum === 0) {
-                    opcode = 0xA9; // LDA #0
-                } else if (regNum === 1) {
-                    opcode = 0xA2; // LDX #0
-                } else if (regNum === 2) {
-                    opcode = 0xA0; // LDY #0
-                }
-                this.cpu.instructions[address] = opcode;
-                this.cpu.instructions[address + 1] = 0; // Zero value
-                address += 2;
-            } else if (instruction === 'CMPZ') {
-                if (parts.length < 2) {
-                    throw new Error(`Line ${lineNum + 1}: CMPZ instruction requires register (e.g., CMPZ ACC)`);
-                }
-                const reg = parts[1];
-                const regNum = this.parseRegister(reg);
-                // 6502 CMP #0 compares accumulator with zero
-                if (regNum !== 0) {
-                    throw new Error(`Line ${lineNum + 1}: CMPZ can only be used with ACC register (6502 CMP compares with accumulator)`);
-                }
-                const opcode = 0xC9; // CMP # (6502 immediate)
-                this.cpu.instructions[address] = opcode;
-                this.cpu.instructions[address + 1] = 0; // Compare with zero
-                address += 2;
             } else if (instruction === 'INX' || instruction === 'INY') {
                 let opcode;
                 if (instruction === 'INX') {

@@ -439,12 +439,13 @@ ADC #5         ; Add 5
             </table>
             
             <h3>Comments</h3>
-            <p>Comments can be added to assembly code using either <code>;</code> (semicolon) or <code>#</code> (hash) characters. Everything from the comment character to the end of the line is ignored by the assembler.</p>
+            <p>Comments can be added to assembly code using <code>;</code> (semicolon). Everything from the semicolon to the end of the line is ignored by the assembler.</p>
+            <p><strong>Note:</strong> The <code>#</code> character is used for immediate values (e.g., <code>LDA #42</code>), not for comments.</p>
             <div class="code-block">
 LDA #42      ; This is a comment using semicolon
-LDX #10      # This is a comment using hash
-INX          ; Comments can appear after instructions
-# This is a comment-only line
+LDX #10      ; Comments can appear after instructions
+INX          ; Another comment
+; This is a comment-only line
 BRK
             </div>
         </div>
