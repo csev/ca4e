@@ -11,18 +11,16 @@ export class CDC6504CPU extends LitElement {
       running: { type: Boolean },
       memory: { type: Array },
       instructions: { type: Array },
-      // Register properties
+      // 6502 Register properties
       pc: { type: Number },
-      comparison: { type: String },
-      mode: { type: Number },
-      a0: { type: Number },
-      a1: { type: Number },
-      a2: { type: Number },
-      a3: { type: Number },
-      x0: { type: Number },
-      x1: { type: Number },
-      x2: { type: Number },
-      x3: { type: Number },
+      acc: { type: Number },  // Accumulator (A register)
+      x: { type: Number },    // X register
+      y: { type: Number },    // Y register
+      // Status flags
+      z: { type: Boolean },   // Zero flag
+      n: { type: Boolean },   // Negative flag
+      c: { type: Boolean },   // Carry flag
+      mode: { type: Number }, // Error mode
       // Memory highlighting
       highlightedMemory: { type: Array },
       // Responsive layout
@@ -36,18 +34,16 @@ export class CDC6504CPU extends LitElement {
     this.memory = [];
     this.instructions = [];
     
-    // Initialize registers
+    // Initialize 6502 registers
     this.pc = 0;
-    this.comparison = "=";
-    this.mode = 0;
-    this.a0 = 0;
-    this.a1 = 0;
-    this.a2 = 0;
-    this.a3 = 0;
-    this.x0 = 0;
-    this.x1 = 0;
-    this.x2 = 0;
-    this.x3 = 0;
+    this.acc = 0;  // Accumulator
+    this.x = 0;    // X register
+    this.y = 0;    // Y register
+    // Initialize status flags
+    this.z = false;  // Zero flag
+    this.n = false;  // Negative flag
+    this.c = false;  // Carry flag
+    this.mode = 0;   // Error mode
     
     // Initialize memory highlighting
     this.highlightedMemory = [];
@@ -160,168 +156,116 @@ export class CDC6504CPU extends LitElement {
     }
   }
 
-  changeComparison(e) {
-    this.comparison = e.target.value;
-  }
-
-  changeA0(e) {
-    let value = e.target.value;
-    if (value.startsWith('0x')) {
-      value = value.substring(2);
-    }
-    const numValue = parseInt(value, 16);
-    if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
-      this.a0 = numValue;
-      // Hardware emulation: Load value from memory address A0 into X0 when A0 changes
-      this.x0 = this.memory[this.a0];
-    }
-  }
-
-  changeA1(e) {
-    let value = e.target.value;
-    if (value.startsWith('0x')) {
-      value = value.substring(2);
-    }
-    const numValue = parseInt(value, 16);
-    if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
-      this.a1 = numValue;
-      // Hardware emulation: Load value from memory address A1 into X1 when A1 changes
-      this.x1 = this.memory[this.a1];
-    }
-  }
-
-  changeA2(e) {
-    let value = e.target.value;
-    if (value.startsWith('0x')) {
-      value = value.substring(2);
-    }
-    const numValue = parseInt(value, 16);
-    if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
-      this.a2 = numValue;
-      // Hardware emulation: Store X2 value to memory address A2 when value changes
-      this.memory[this.a2] = this.x2;
-    }
-  }
-
-  changeA3(e) {
-    let value = e.target.value;
-    if (value.startsWith('0x')) {
-      value = value.substring(2);
-    }
-    const numValue = parseInt(value, 16);
-    if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
-      this.a3 = numValue;
-      // Hardware emulation: Store X3 value to memory address A3 when value changes
-      this.memory[this.a3] = this.x3;
-    }
-  }
-
-  changeX0(e) {
+  // 6502 Register change handlers
+  changeAcc(e) {
     let value = e.target.value;
     // Handle hex input (0x format)
     if (value.startsWith('0x')) {
       const hexValue = value.substring(2);
       const numValue = parseInt(hexValue, 16);
       if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
-        this.x0 = numValue;
+        this.acc = numValue;
+        this.updateStatusFlags(this.acc);
       }
     }
     // Handle ASCII character input
     else if (value.length === 1) {
       const charCode = value.charCodeAt(0);
       if (charCode >= 0 && charCode <= 255) {
-        this.x0 = charCode;
+        this.acc = charCode;
+        this.updateStatusFlags(this.acc);
       }
     } else if (value.length === 0) {
       // Empty input means space (ASCII 32)
-      this.x0 = 32;
+      this.acc = 32;
+      this.updateStatusFlags(this.acc);
     }
   }
 
-  changeX1(e) {
+  changeX(e) {
     let value = e.target.value;
     // Handle hex input (0x format)
     if (value.startsWith('0x')) {
       const hexValue = value.substring(2);
       const numValue = parseInt(hexValue, 16);
       if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
-        this.x1 = numValue;
+        this.x = numValue;
+        this.updateStatusFlags(this.x);
       }
     }
     // Handle ASCII character input
     else if (value.length === 1) {
       const charCode = value.charCodeAt(0);
       if (charCode >= 0 && charCode <= 255) {
-        this.x1 = charCode;
+        this.x = charCode;
+        this.updateStatusFlags(this.x);
       }
     } else if (value.length === 0) {
       // Empty input means space (ASCII 32)
-      this.x1 = 32;
+      this.x = 32;
+      this.updateStatusFlags(this.x);
     }
   }
 
-  changeX2(e) {
+  changeY(e) {
     let value = e.target.value;
     // Handle hex input (0x format)
     if (value.startsWith('0x')) {
       const hexValue = value.substring(2);
       const numValue = parseInt(hexValue, 16);
       if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
-        this.x2 = numValue;
+        this.y = numValue;
+        this.updateStatusFlags(this.y);
       }
     }
     // Handle ASCII character input
     else if (value.length === 1) {
       const charCode = value.charCodeAt(0);
       if (charCode >= 0 && charCode <= 255) {
-        this.x2 = charCode;
+        this.y = charCode;
+        this.updateStatusFlags(this.y);
       }
     } else if (value.length === 0) {
       // Empty input means space (ASCII 32)
-      this.x2 = 32;
+      this.y = 32;
+      this.updateStatusFlags(this.y);
     }
   }
 
-  changeX3(e) {
-    let value = e.target.value;
-    // Handle hex input (0x format)
-    if (value.startsWith('0x')) {
-      const hexValue = value.substring(2);
-      const numValue = parseInt(hexValue, 16);
-      if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
-        this.x3 = numValue;
-      }
-    }
-    // Handle ASCII character input
-    else if (value.length === 1) {
-      const charCode = value.charCodeAt(0);
-      if (charCode >= 0 && charCode <= 255) {
-        this.x3 = charCode;
-      }
-    } else if (value.length === 0) {
-      // Empty input means space (ASCII 32)
-      this.x3 = 32;
-    }
+  // Status flag change handlers
+  changeZ(e) {
+    this.z = e.target.checked;
+  }
+
+  changeN(e) {
+    this.n = e.target.checked;
+  }
+
+  changeC(e) {
+    this.c = e.target.checked;
+  }
+
+  // Update status flags based on value (6502 style)
+  updateStatusFlags(value) {
+    this.z = (value === 0);
+    this.n = ((value & 0x80) !== 0); // Negative flag (bit 7 set)
+    // Carry flag is not automatically updated by register changes
   }
 
   handleResize() {
     this.isMobile = window.innerWidth <= 1000;
   }
 
-  blurX0(e) {
-    e.target.value = `0x${this.toHex(this.x0)}`;
+  blurAcc(e) {
+    e.target.value = `0x${this.toHex(this.acc)}`;
   }
 
-  blurX1(e) {
-    e.target.value = `0x${this.toHex(this.x1)}`;
+  blurX(e) {
+    e.target.value = `0x${this.toHex(this.x)}`;
   }
 
-  blurX2(e) {
-    e.target.value = `0x${this.toHex(this.x2)}`;
-  }
-
-  blurX3(e) {
-    e.target.value = `0x${this.toHex(this.x3)}`;
+  blurY(e) {
+    e.target.value = `0x${this.toHex(this.y)}`;
   }
 
   blurMemory(index) {
@@ -350,54 +294,40 @@ export class CDC6504CPU extends LitElement {
   }
 
   disassembleInstruction(instruction) {
-    // Disassemble a single instruction byte
-    if (instruction === 0x00) return "HALT";
+    // Disassemble a single 6502 instruction byte
+    // 1-byte instructions
+    if (instruction === 0x00) return "BRK";
+    if (instruction === 0xE8) return "INX";
+    if (instruction === 0xC8) return "INY";
+    if (instruction === 0xCA) return "DEX";
+    if (instruction === 0x88) return "DEY";
+    if (instruction === 0xAA) return "TAX";
+    if (instruction === 0xA8) return "TAY";
+    if (instruction === 0x8A) return "TXA";
+    if (instruction === 0x98) return "TYA";
     
-    // 8-bit patterns
-    if ((instruction >> 3) === 0x08) { // 01000xxx - ZERO
-      const reg = instruction & 0x07;
-      return `ZERO ${this.getRegisterName(reg)}`;
-    }
-    if ((instruction >> 3) === 0x09) { // 01001xxx - CMPZ
-      const reg = instruction & 0x07;
-      return `CMPZ ${this.getRegisterName(reg)}`;
-    }
-    if ((instruction >> 3) === 0x0A) { // 01010xxx - INC
-      const reg = instruction & 0x07;
-      return `INC ${this.getRegisterName(reg)}`;
-    }
-    if ((instruction >> 3) === 0x0B) { // 01011xxx - DEC
-      const reg = instruction & 0x07;
-      return `DEC ${this.getRegisterName(reg)}`;
-    }
+    // 2-byte instructions (immediate or zero-page)
+    // These will show as needing an operand
+    if (instruction === 0xA9) return "LDA #";
+    if (instruction === 0xA2) return "LDX #";
+    if (instruction === 0xA0) return "LDY #";
+    if (instruction === 0x85) return "STA $";
+    if (instruction === 0x86) return "STX $";
+    if (instruction === 0x84) return "STY $";
+    if (instruction === 0xC9) return "CMP #";
+    if (instruction === 0x69) return "ADC #";
+    if (instruction === 0xE9) return "SBC #";
+    if (instruction === 0xF0) return "BEQ";
+    if (instruction === 0x30) return "BMI";
+    if (instruction === 0x10) return "BPL";
+    if (instruction === 0x4C) return "JMP $";
     
-    // 5-bit patterns for immediate instructions
-    if ((instruction >> 5) === 0x04) { // 100xxxxx - Immediate instructions
-      const subOpcode = (instruction >> 3) & 0x03;
-      const reg = instruction & 0x07;
-      const instructions = ["SET", "CMP", "ADD", "SUB"];
-      return `${instructions[subOpcode]} ${this.getRegisterName(reg)}, [immediate]`;
-    }
-    
-    // Jump instructions
-    if ((instruction >> 5) === 0x05) { // 10100xxx - Jump instructions
-      const jumpType = instruction & 0x03;
-      const jumpTypes = ["JE", "JL", "JG", "JP"];
-      return `${jumpTypes[jumpType]}, [address]`;
-    }
-    
-    // Register copy instructions
-    if ((instruction >> 6) === 0x03) { // 11xxxxxx - MOV
-      const destReg = (instruction >> 3) & 0x07;
-      const srcReg = instruction & 0x07;
-      return `MOV ${this.getRegisterName(destReg)}, ${this.getRegisterName(srcReg)}`;
-    }
-    
-    return "Invalid instruction";
+    return "???";
   }
 
   getRegisterName(regNum) {
-    const registers = ['A0', 'A1', 'A2', 'A3', 'X0', 'X1', 'X2', 'X3'];
+    // 6502 registers: 0=ACC, 1=X, 2=Y (limited set for now)
+    const registers = ['ACC', 'X', 'Y'];
     return registers[regNum] || `R${regNum}`;
   }
 
@@ -630,7 +560,7 @@ export class CDC6504CPU extends LitElement {
     return html`
           <div class="container">
               
-              <!-- Register Section -->
+              <!-- 6502 Register Section -->
               <div class="mb-3">
                 <div style="display: flex; flex-direction: ${this.isMobile ? 'column' : 'row'}; gap: ${this.isMobile ? '0.25rem' : '1rem'}; ${this.isMobile ? 'border: 1px solid #dee2e6; border-radius: 0.375rem; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);' : ''} padding: ${this.isMobile ? '0.75rem' : '10px'};">
                   <div style="${this.isMobile ? 'border: none; box-shadow: none; margin-bottom: 0.25rem;' : 'border: 1px solid #dee2e6; border-radius: 0.375rem; box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);'}">
@@ -639,14 +569,6 @@ export class CDC6504CPU extends LitElement {
                         <div>
                           <small class="text-muted">PC:</small><br>
                           <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.pc)}" @input=${this.changePC}>
-                        </div>
-                        <div>
-                          <small class="text-muted">CMP:</small><br>
-                          <select class="form-control form-control-sm font-monospace" @change=${this.changeComparison}>
-                            <option value="=" ${this.comparison === "=" ? "selected" : ""}>=</option>
-                            <option value="<" ${this.comparison === "<" ? "selected" : ""}><</option>
-                            <option value=">" ${this.comparison === ">" ? "selected" : ""}>></option>
-                          </select>
                         </div>
                         <div>
                           <small class="text-muted">MODE:</small><br>
@@ -659,20 +581,16 @@ export class CDC6504CPU extends LitElement {
                     <div style="padding: ${this.isMobile ? '0.25rem' : '1rem'};">
                       <div style="display: flex; gap: 0.5rem;">
                         <div>
-                          <small class="text-muted">A0:</small><br>
-                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.a0)}" @input=${this.changeA0}>
+                          <small class="text-muted">ACC:</small><br>
+                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.acc)}" @input=${this.changeAcc} @blur=${this.blurAcc}>
                         </div>
                         <div>
-                          <small class="text-muted">A1:</small><br>
-                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.a1)}" @input=${this.changeA1}>
+                          <small class="text-muted">X:</small><br>
+                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.x)}" @input=${this.changeX} @blur=${this.blurX}>
                         </div>
                         <div>
-                          <small class="text-muted">A2:</small><br>
-                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.a2)}" @change=${this.changeA2}>
-                        </div>
-                        <div>
-                          <small class="text-muted">A3:</small><br>
-                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.a3)}" @change=${this.changeA3}>
+                          <small class="text-muted">Y:</small><br>
+                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.y)}" @input=${this.changeY} @blur=${this.blurY}>
                         </div>
                       </div>
                     </div>
@@ -681,20 +599,16 @@ export class CDC6504CPU extends LitElement {
                     <div style="padding: ${this.isMobile ? '0.25rem' : '1rem'};">
                       <div style="display: flex; gap: 0.5rem;">
                         <div>
-                          <small class="text-muted">X0:</small><br>
-                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.x0)}" @input=${this.changeX0} @blur=${this.blurX0}>
+                          <small class="text-muted">Z:</small><br>
+                          <input type="checkbox" ${this.z ? 'checked' : ''} @change=${this.changeZ} style="width: 20px; height: 20px;">
                         </div>
                         <div>
-                          <small class="text-muted">X1:</small><br>
-                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.x1)}" @input=${this.changeX1} @blur=${this.blurX1}>
+                          <small class="text-muted">N:</small><br>
+                          <input type="checkbox" ${this.n ? 'checked' : ''} @change=${this.changeN} style="width: 20px; height: 20px;">
                         </div>
                         <div>
-                          <small class="text-muted">X2:</small><br>
-                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.x2)}" @input=${this.changeX2} @blur=${this.blurX2}>
-                        </div>
-                        <div>
-                          <small class="text-muted">X3:</small><br>
-                          <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.x3)}" @input=${this.changeX3} @blur=${this.blurX3}>
+                          <small class="text-muted">C:</small><br>
+                          <input type="checkbox" ${this.c ? 'checked' : ''} @change=${this.changeC} style="width: 20px; height: 20px;">
                         </div>
                       </div>
                     </div>

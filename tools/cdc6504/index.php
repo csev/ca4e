@@ -441,37 +441,38 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         emulator.loadHelloProgram();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `SET X2, 72
-SET A2, 0
-SET X2, 101
-INC A2
-SET X2, 108
-INC A2
-INC A2
-SET X2, 111
-INC A2
-HALT`;
+                        document.getElementById('assembly-input').value = `LDA ACC, 72    ; 'H'
+STA $00
+LDA ACC, 101   ; 'e'
+STA $01
+LDA ACC, 108   ; 'l'
+STA $02
+STA $03        ; 'l' again
+LDA ACC, 111   ; 'o'
+STA $04
+BRK`;
                         updateStatus();
                         updateTrace();
                     } else if (value === 'hello-world') {
                         emulator.loadHelloWorldProgram();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `HALT
+                        document.getElementById('assembly-input').value = `BRK
 DATA 'Hello World!'`;
                         updateStatus();
                         updateTrace();
                         updateOutput();
                     } else if (value === 'labels-demo') {
-                        // Load a demo program that uses labels
-                        const labelsDemo = `ZERO X0
+                        // Load a demo program that uses labels (6502)
+                        const labelsDemo = `LDX X, 0       ; Zero X register
 loop:
-CMP X0, 5
-JE end
-INC X0
-JP loop
+TXA            ; Transfer X to accumulator
+CMP ACC, 5     ; Compare accumulator to 5
+BEQ end        ; Branch if equal
+INX            ; Increment X
+JMP loop       ; Jump to loop
 end:
-HALT`;
+BRK`;
                         emulator.reset();
                         emulator.loadProgram(labelsDemo);
                         enableStepButton(); // Re-enable step button after loading program
@@ -483,11 +484,10 @@ HALT`;
                         emulator.loadAddSample();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `SET A0, 1
-ADD X0, 5
-MOV X2, X0
-SET A2, 3
-HALT
+                        document.getElementById('assembly-input').value = `LDA ACC, 10    ; Load 10 into accumulator
+ADC ACC, 5      ; Add 5 (result = 15)
+STA $03         ; Store result to memory[3]
+BRK
 DATA 0x00 0x0A`;
                         updateStatus();
                         updateTrace();
@@ -496,11 +496,10 @@ DATA 0x00 0x0A`;
                         emulator.loadSimpleSample();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `ZERO X2
-INC X2
-INC X2
-ZERO A2
-HALT`;
+                        document.getElementById('assembly-input').value = `LDX X, 0       ; Zero X register
+INX             ; Increment X
+INX             ; Increment X again
+BRK`;
                         updateStatus();
                         updateTrace();
                         updateOutput();
@@ -508,12 +507,12 @@ HALT`;
                         emulator.loadUppercaseSample();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `SET X2, 0x70
-CMP X2, 0x61
-JL skip
-SUB X2, 0x20
+                        document.getElementById('assembly-input').value = `LDA ACC, 0x70
+CMP ACC, 0x61
+BMI skip        ; Branch if minus (less than)
+SBC ACC, 0x20   ; Subtract 0x20 to convert to uppercase
 skip:
-HALT`;
+BRK`;
                         updateStatus();
                         updateTrace();
                         updateOutput();
@@ -521,11 +520,11 @@ HALT`;
                         emulator.loadHiProgram();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `SET X2, 'H'
-ZERO A2
-SET X2, 'i'
-INC A2
-HALT`;
+                        document.getElementById('assembly-input').value = `LDA ACC, 'H'
+STA $00
+LDA ACC, 'i'
+STA $01
+BRK`;
                         updateStatus();
                         updateTrace();
                         updateOutput();
@@ -732,8 +731,6 @@ HALT`;
                         document.getElementById('status').textContent = 'Error: Invalid instruction';
                     } else if (cpuComponent.mode === 2) {
                         document.getElementById('status').textContent = 'Error: Jump address out of range';
-                    } else if (cpuComponent.mode === 3) {
-                        document.getElementById('status').textContent = 'Error: A register address out of range';
                     } else {
                         document.getElementById('status').textContent = 
                             status.running ? 'Running' : status.halted ? 'Halted' : 'Stopped';
@@ -750,7 +747,7 @@ HALT`;
                     }
                     
                     const traceText = status.trace.map(step => 
-                        `PC: 0x${step.pc.toString(16).padStart(2, '0')} | ${step.instruction} | X2: 0x${step.registers.x2.toString(16).padStart(2, '0')} | A2: 0x${step.registers.a2.toString(16).padStart(2, '0')}`
+                        `PC: 0x${step.pc.toString(16).padStart(2, '0')} | ${step.instruction} | ACC: 0x${step.registers.acc.toString(16).padStart(2, '0')} | X: 0x${step.registers.x.toString(16).padStart(2, '0')} | Y: 0x${step.registers.y.toString(16).padStart(2, '0')} | Z:${step.registers.z} N:${step.registers.n} C:${step.registers.c}`
                     ).join('\n');
                     
                     traceDiv.textContent = traceText;

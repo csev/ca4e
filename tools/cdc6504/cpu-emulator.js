@@ -13,19 +13,16 @@ class CDC6504Emulator {
         this.executionTrace = [];
     }
 
-    // Reset the CPU to initial state
+    // Reset the CPU to initial state (6502)
     reset() {
         this.cpu.pc = 0;
-        this.cpu.comparison = '=';
-        this.cpu.mode = 0;
-        this.cpu.a0 = 0;
-        this.cpu.a1 = 0;
-        this.cpu.a2 = 0;
-        this.cpu.a3 = 0;
-        this.cpu.x0 = 0;
-        this.cpu.x1 = 0;
-        this.cpu.x2 = 0;
-        this.cpu.x3 = 0;
+        this.cpu.acc = 0;  // Accumulator
+        this.cpu.x = 0;    // X register
+        this.cpu.y = 0;    // Y register
+        this.cpu.z = false; // Zero flag
+        this.cpu.n = false; // Negative flag
+        this.cpu.c = false; // Carry flag
+        this.cpu.mode = 0;  // Error mode
         
         // Clear instruction and data memory
         for (let i = 0; i < 256; i++) {
@@ -111,21 +108,31 @@ class CDC6504Emulator {
                 continue;
             }
             
-            // Validate instruction
-            const validInstructions = ['SET', 'CMP', 'ADD', 'SUB', 'JE', 'JL', 'JG', 'JP', 'INC', 'DEC', 'ZERO', 'HALT', 'MOV', 'CMPZ'];
+            // Validate instruction (6502 instruction set)
+            const validInstructions = ['SET', 'CMP', 'ADD', 'SUB', 'JE', 'JL', 'JG', 'JP', 'INC', 'DEC', 'ZERO', 'HALT', 'MOV', 'CMPZ',
+                                      'LDA', 'LDX', 'LDY', 'STA', 'STX', 'STY', 'TAX', 'TAY', 'TXA', 'TYA', 'INX', 'INY', 'DEX', 'DEY',
+                                      'ADC', 'SBC', 'BEQ', 'BNE', 'BMI', 'BPL', 'BCS', 'BCC', 'JMP', 'BRK'];
             if (!validInstructions.includes(instruction)) {
                 errors.push(`Line ${lineNum + 1}: Unknown instruction "${instruction}"`);
                 continue;
             }
             
-            // Calculate instruction size and check for overflow
+            // Calculate instruction size and check for overflow (6502 instruction sizes)
             let instructionSize = 0;
+            // 2-byte instructions (immediate or zero-page): LDA #, LDX #, LDY #, CMP #, ADC #, SBC #, STA $, STX $, STY $, INC $, DEC $
+            // Branch instructions: BEQ, BNE, BMI, BPL, BCS, BCC (relative branches)
             if (instruction === 'SET' || instruction === 'CMP' || instruction === 'ADD' || instruction === 'SUB' ||
-                instruction === 'JE' || instruction === 'JL' || instruction === 'JG' || instruction === 'JP') {
-                instructionSize = 2; // 16-bit instructions
-            } else if (instruction === 'INC' || instruction === 'DEC' || instruction === 'ZERO' || instruction === 'HALT' ||
-                       instruction === 'MOV' || instruction === 'CMPZ') {
-                instructionSize = 1; // 8-bit instructions
+                instruction === 'JE' || instruction === 'JL' || instruction === 'JG' || instruction === 'JP' ||
+                instruction === 'LDA' || instruction === 'LDX' || instruction === 'LDY' || instruction === 'STA' ||
+                instruction === 'STX' || instruction === 'STY' || instruction === 'ADC' || instruction === 'SBC' ||
+                instruction === 'BEQ' || instruction === 'BNE' || instruction === 'BMI' || instruction === 'BPL' ||
+                instruction === 'BCS' || instruction === 'BCC' || instruction === 'INC' || instruction === 'DEC') {
+                instructionSize = 2; // 2-byte instructions
+            } else if (instruction === 'ZERO' || instruction === 'HALT' || instruction === 'MOV' || instruction === 'CMPZ' ||
+                       instruction === 'TAX' || instruction === 'TAY' || instruction === 'TXA' || instruction === 'TYA' ||
+                       instruction === 'INX' || instruction === 'INY' || instruction === 'DEX' || instruction === 'DEY' ||
+                       instruction === 'JMP' || instruction === 'BRK') {
+                instructionSize = 1; // 1-byte instructions (or 3-byte for JMP absolute, but we'll use zero-page)
             }
             
             if (address + instructionSize > maxInstructions) {
@@ -234,134 +241,280 @@ class CDC6504Emulator {
                 continue;
             }
             
-            if (instruction === 'SET') {
-                console.log('Processing SET instruction');
+            if (instruction === 'SET' || instruction === 'LDA' || instruction === 'LDX' || instruction === 'LDY') {
+                console.log(`Processing ${instruction} instruction`);
                 if (parts.length < 3) {
-                    throw new Error(`Line ${lineNum + 1}: SET instruction requires register and value (e.g., SET X0, 42)`);
+                    throw new Error(`Line ${lineNum + 1}: ${instruction} instruction requires register and value (e.g., ${instruction} ACC, 42)`);
                 }
                 const reg = parts[1];
                 const value = this.parseValue(parts[2]);
                 const regNum = this.parseRegister(reg);
-                const opcode = 0x80 | regNum;
-                console.log(`Assembling SET ${reg}: regNum=${regNum}, opcode=0x${opcode.toString(16).padStart(2, '0')} (${opcode.toString(2).padStart(8, '0')})`);
+                // Map to 6502 opcodes: LDA # (A9), LDX # (A2), LDY # (A0)
+                let opcode;
+                if (instruction === 'SET' || instruction === 'LDA') {
+                    // SET/LDA: Load accumulator immediate
+                    if (regNum !== 0) {
+                        throw new Error(`Line ${lineNum + 1}: LDA/SET can only be used with ACC register`);
+                    }
+                    opcode = 0xA9; // LDA # (6502 immediate)
+                } else if (instruction === 'LDX') {
+                    if (regNum !== 1) {
+                        throw new Error(`Line ${lineNum + 1}: LDX can only be used with X register`);
+                    }
+                    opcode = 0xA2; // LDX # (6502 immediate)
+                } else if (instruction === 'LDY') {
+                    if (regNum !== 2) {
+                        throw new Error(`Line ${lineNum + 1}: LDY can only be used with Y register`);
+                    }
+                    opcode = 0xA0; // LDY # (6502 immediate)
+                }
+                console.log(`Assembling ${instruction} ${reg}, ${value}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
                 this.cpu.instructions[address] = opcode;
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
             } else if (instruction === 'ZERO') {
                 if (parts.length < 2) {
-                    throw new Error(`Line ${lineNum + 1}: ZERO instruction requires register (e.g., ZERO X0)`);
+                    throw new Error(`Line ${lineNum + 1}: ZERO instruction requires register (e.g., ZERO ACC)`);
                 }
                 const reg = parts[1];
                 const regNum = this.parseRegister(reg);
-                this.cpu.instructions[address] = 0x40 | regNum; // ZERO opcode (01000rrr)
-                address += 1;
+                // Map to 6502: LDA #0 (A9 00), LDX #0 (A2 00), LDY #0 (A0 00)
+                let opcode;
+                if (regNum === 0) {
+                    opcode = 0xA9; // LDA #0
+                } else if (regNum === 1) {
+                    opcode = 0xA2; // LDX #0
+                } else if (regNum === 2) {
+                    opcode = 0xA0; // LDY #0
+                }
+                this.cpu.instructions[address] = opcode;
+                this.cpu.instructions[address + 1] = 0; // Zero value
+                address += 2;
             } else if (instruction === 'CMPZ') {
                 if (parts.length < 2) {
-                    throw new Error(`Line ${lineNum + 1}: CMPZ instruction requires register (e.g., CMPZ X0)`);
+                    throw new Error(`Line ${lineNum + 1}: CMPZ instruction requires register (e.g., CMPZ ACC)`);
                 }
                 const reg = parts[1];
                 const regNum = this.parseRegister(reg);
-                this.cpu.instructions[address] = 0x48 | regNum; // CMPZ opcode (01001rrr)
-                address += 1;
-            } else if (instruction === 'INC') {
-                if (parts.length < 2) {
-                    throw new Error(`Line ${lineNum + 1}: INC instruction requires register (e.g., INC X0)`);
+                // 6502 CMP #0 compares accumulator with zero
+                if (regNum !== 0) {
+                    throw new Error(`Line ${lineNum + 1}: CMPZ can only be used with ACC register (6502 CMP compares with accumulator)`);
                 }
-                const reg = parts[1];
-                const regNum = this.parseRegister(reg);
-                this.cpu.instructions[address] = 0x50 | regNum; // INC opcode (01010rrr)
-                address += 1;
-            } else if (instruction === 'DEC') {
-                if (parts.length < 2) {
-                    throw new Error(`Line ${lineNum + 1}: DEC instruction requires register (e.g., DEC X0)`);
+                const opcode = 0xC9; // CMP # (6502 immediate)
+                this.cpu.instructions[address] = opcode;
+                this.cpu.instructions[address + 1] = 0; // Compare with zero
+                address += 2;
+            } else if (instruction === 'INC' || instruction === 'INX' || instruction === 'INY') {
+                if (parts.length < 2 && instruction === 'INC') {
+                    throw new Error(`Line ${lineNum + 1}: INC instruction requires register (e.g., INC X)`);
                 }
-                const reg = parts[1];
-                const regNum = this.parseRegister(reg);
-                this.cpu.instructions[address] = 0x58 | regNum; // DEC opcode (01011rrr)
+                let opcode;
+                if (instruction === 'INX') {
+                    opcode = 0xE8; // INX (6502)
+                } else if (instruction === 'INY') {
+                    opcode = 0xC8; // INY (6502)
+                } else {
+                    // INC with register
+                    const reg = parts[1];
+                    const regNum = this.parseRegister(reg);
+                    if (regNum === 1) {
+                        opcode = 0xE8; // INX
+                    } else if (regNum === 2) {
+                        opcode = 0xC8; // INY
+                    } else {
+                        throw new Error(`Line ${lineNum + 1}: INC can only be used with X or Y register (use ADD for accumulator)`);
+                    }
+                }
+                this.cpu.instructions[address] = opcode;
                 address += 1;
-            } else if (instruction === 'HALT') {
-                this.cpu.instructions[address] = 0x00; // HALT opcode (00000000)
+            } else if (instruction === 'DEC' || instruction === 'DEX' || instruction === 'DEY') {
+                if (parts.length < 2 && instruction === 'DEC') {
+                    throw new Error(`Line ${lineNum + 1}: DEC instruction requires register (e.g., DEC X)`);
+                }
+                let opcode;
+                if (instruction === 'DEX') {
+                    opcode = 0xCA; // DEX (6502)
+                } else if (instruction === 'DEY') {
+                    opcode = 0x88; // DEY (6502)
+                } else {
+                    // DEC with register
+                    const reg = parts[1];
+                    const regNum = this.parseRegister(reg);
+                    if (regNum === 1) {
+                        opcode = 0xCA; // DEX
+                    } else if (regNum === 2) {
+                        opcode = 0x88; // DEY
+                    } else {
+                        throw new Error(`Line ${lineNum + 1}: DEC can only be used with X or Y register (use SUB for accumulator)`);
+                    }
+                }
+                this.cpu.instructions[address] = opcode;
+                address += 1;
+            } else if (instruction === 'HALT' || instruction === 'BRK') {
+                this.cpu.instructions[address] = 0x00; // BRK/HALT opcode (6502 BRK = 0x00)
                 address += 1;
             } else if (instruction === 'CMP') {
                 if (parts.length < 3) {
-                    throw new Error(`Line ${lineNum + 1}: CMP instruction requires register and value (e.g., CMP X0, 42)`);
+                    throw new Error(`Line ${lineNum + 1}: CMP instruction requires register and value (e.g., CMP ACC, 42)`);
                 }
                 const reg = parts[1];
                 const value = this.parseValue(parts[2]);
                 const regNum = this.parseRegister(reg);
-                const opcode = 0x88 | regNum; // CMP opcode (10001rrr)
-                console.log(`Assembling CMP ${reg}, ${value}: regNum=${regNum}, opcode=0x${opcode.toString(16).padStart(2, '0')} (${opcode.toString(2).padStart(8, '0')})`);
+                // 6502 CMP # compares with accumulator
+                if (regNum !== 0) {
+                    throw new Error(`Line ${lineNum + 1}: CMP can only be used with ACC register (6502 CMP compares with accumulator)`);
+                }
+                const opcode = 0xC9; // CMP # (6502 immediate)
+                console.log(`Assembling CMP ${reg}, ${value}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
                 this.cpu.instructions[address] = opcode;
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
-            } else if (instruction === 'JE') {
+            } else if (instruction === 'JE' || instruction === 'BEQ') {
                 if (parts.length < 2) {
-                    throw new Error(`Line ${lineNum + 1}: JE instruction requires label or address (e.g., JE loop)`);
+                    throw new Error(`Line ${lineNum + 1}: ${instruction} instruction requires label or address (e.g., ${instruction} loop)`);
+                }
+                const labelOrValue = parts[1];
+                const targetAddr = this.resolveLabelOrValue(labelOrValue, labels);
+                // Calculate relative branch offset (6502 BEQ is relative)
+                const offset = targetAddr - (address + 2);
+                if (offset < -128 || offset > 127) {
+                    throw new Error(`Line ${lineNum + 1}: Branch target too far (offset ${offset}, must be -128 to 127)`);
+                }
+                this.cpu.instructions[address] = 0xF0; // BEQ (6502 branch if zero)
+                this.cpu.instructions[address + 1] = offset & 0xFF; // Signed byte
+                address += 2;
+            } else if (instruction === 'JL' || instruction === 'BMI') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: ${instruction} instruction requires label or address (e.g., ${instruction} loop)`);
+                }
+                const labelOrValue = parts[1];
+                const targetAddr = this.resolveLabelOrValue(labelOrValue, labels);
+                const offset = targetAddr - (address + 2);
+                if (offset < -128 || offset > 127) {
+                    throw new Error(`Line ${lineNum + 1}: Branch target too far (offset ${offset}, must be -128 to 127)`);
+                }
+                this.cpu.instructions[address] = 0x30; // BMI (6502 branch if minus/negative)
+                this.cpu.instructions[address + 1] = offset & 0xFF;
+                address += 2;
+            } else if (instruction === 'JG' || instruction === 'BPL') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: ${instruction} instruction requires label or address (e.g., ${instruction} loop)`);
+                }
+                const labelOrValue = parts[1];
+                const targetAddr = this.resolveLabelOrValue(labelOrValue, labels);
+                const offset = targetAddr - (address + 2);
+                if (offset < -128 || offset > 127) {
+                    throw new Error(`Line ${lineNum + 1}: Branch target too far (offset ${offset}, must be -128 to 127)`);
+                }
+                this.cpu.instructions[address] = 0x10; // BPL (6502 branch if plus/positive)
+                this.cpu.instructions[address + 1] = offset & 0xFF;
+                address += 2;
+            } else if (instruction === 'JP' || instruction === 'JMP') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: ${instruction} instruction requires label or address (e.g., ${instruction} loop)`);
                 }
                 const labelOrValue = parts[1];
                 const value = this.resolveLabelOrValue(labelOrValue, labels);
-                this.cpu.instructions[address] = 0xA0; // JE opcode (10100000)
-                this.cpu.instructions[address + 1] = value;
+                // For 256-byte memory, use zero-page absolute jump (4C low high, but we'll use just low byte)
+                // Actually, let's use a simplified 2-byte JMP: opcode + address
+                this.cpu.instructions[address] = 0x4C; // JMP absolute (6502)
+                this.cpu.instructions[address + 1] = value; // Low byte (we only have 256 bytes, so this is sufficient)
                 address += 2;
-            } else if (instruction === 'JL') {
-                if (parts.length < 2) {
-                    throw new Error(`Line ${lineNum + 1}: JL instruction requires label or address (e.g., JL loop)`);
+            } else if (instruction === 'MOV' || instruction === 'TAX' || instruction === 'TAY' || instruction === 'TXA' || instruction === 'TYA') {
+                let opcode;
+                if (instruction === 'TAX') {
+                    opcode = 0xAA; // TAX (6502)
+                } else if (instruction === 'TAY') {
+                    opcode = 0xA8; // TAY (6502)
+                } else if (instruction === 'TXA') {
+                    opcode = 0x8A; // TXA (6502)
+                } else if (instruction === 'TYA') {
+                    opcode = 0x98; // TYA (6502)
+                } else {
+                    // MOV with two registers
+                    if (parts.length < 3) {
+                        throw new Error(`Line ${lineNum + 1}: MOV instruction requires destination and source registers (e.g., MOV X, ACC)`);
+                    }
+                    const destReg = parts[1];
+                    const srcReg = parts[2];
+                    const destNum = this.parseRegister(destReg);
+                    const srcNum = this.parseRegister(srcReg);
+                    // Map to 6502 transfer instructions
+                    if (destNum === 1 && srcNum === 0) {
+                        opcode = 0xAA; // TAX
+                    } else if (destNum === 2 && srcNum === 0) {
+                        opcode = 0xA8; // TAY
+                    } else if (destNum === 0 && srcNum === 1) {
+                        opcode = 0x8A; // TXA
+                    } else if (destNum === 0 && srcNum === 2) {
+                        opcode = 0x98; // TYA
+                    } else {
+                        throw new Error(`Line ${lineNum + 1}: MOV ${destReg}, ${srcReg} is not a valid 6502 transfer instruction`);
+                    }
                 }
-                const labelOrValue = parts[1];
-                const value = this.resolveLabelOrValue(labelOrValue, labels);
-                this.cpu.instructions[address] = 0xA1; // JL opcode (10100001)
-                this.cpu.instructions[address + 1] = value;
-                address += 2;
-            } else if (instruction === 'JG') {
-                if (parts.length < 2) {
-                    throw new Error(`Line ${lineNum + 1}: JG instruction requires label or address (e.g., JG loop)`);
-                }
-                const labelOrValue = parts[1];
-                const value = this.resolveLabelOrValue(labelOrValue, labels);
-                this.cpu.instructions[address] = 0xA2; // JG opcode (10100010)
-                this.cpu.instructions[address + 1] = value;
-                address += 2;
-            } else if (instruction === 'JP') {
-                if (parts.length < 2) {
-                    throw new Error(`Line ${lineNum + 1}: JP instruction requires label or address (e.g., JP loop)`);
-                }
-                const labelOrValue = parts[1];
-                const value = this.resolveLabelOrValue(labelOrValue, labels);
-                this.cpu.instructions[address] = 0xA3; // JP opcode (10100011)
-                this.cpu.instructions[address + 1] = value;
-                address += 2;
-            } else if (instruction === 'MOV') {
-                if (parts.length < 3) {
-                    throw new Error(`Line ${lineNum + 1}: MOV instruction requires destination and source registers (e.g., MOV X0, X1)`);
-                }
-                const destReg = parts[1];
-                const srcReg = parts[2];
-                const destNum = this.parseRegister(destReg);
-                const srcNum = this.parseRegister(srcReg);
-                const opcode = 0xC0 | (destNum << 3) | srcNum; // MOV opcode (11dddsss)
                 this.cpu.instructions[address] = opcode;
                 address += 1;
-            } else if (instruction === 'ADD') {
+            } else if (instruction === 'ADD' || instruction === 'ADC') {
                 if (parts.length < 3) {
-                    throw new Error(`Line ${lineNum + 1}: ADD instruction requires register and value (e.g., ADD X0, 42)`);
+                    throw new Error(`Line ${lineNum + 1}: ${instruction} instruction requires register and value (e.g., ${instruction} ACC, 42)`);
                 }
                 const reg = parts[1];
                 const value = this.parseValue(parts[2]);
                 const regNum = this.parseRegister(reg);
-                const opcode = 0x90 | regNum; // ADD opcode (10010rrr) - base is 0x90, not 0x92
+                // 6502 ADC # adds to accumulator
+                if (regNum !== 0) {
+                    throw new Error(`Line ${lineNum + 1}: ${instruction} can only be used with ACC register (6502 ADC adds to accumulator)`);
+                }
+                const opcode = 0x69; // ADC # (6502 immediate)
                 this.cpu.instructions[address] = opcode;
                 this.cpu.instructions[address + 1] = value;
                 address += 2;
-            } else if (instruction === 'SUB') {
+            } else if (instruction === 'SUB' || instruction === 'SBC') {
                 if (parts.length < 3) {
-                    throw new Error(`Line ${lineNum + 1}: SUB instruction requires register and value (e.g., SUB X0, 42)`);
+                    throw new Error(`Line ${lineNum + 1}: ${instruction} instruction requires register and value (e.g., ${instruction} ACC, 42)`);
                 }
                 const reg = parts[1];
                 const value = this.parseValue(parts[2]);
                 const regNum = this.parseRegister(reg);
-                const opcode = 0x98 | regNum; // SUB opcode (10011rrr) - base is 0x98, not 0x83
+                // 6502 SBC # subtracts from accumulator
+                if (regNum !== 0) {
+                    throw new Error(`Line ${lineNum + 1}: ${instruction} can only be used with ACC register (6502 SBC subtracts from accumulator)`);
+                }
+                const opcode = 0xE9; // SBC # (6502 immediate)
                 this.cpu.instructions[address] = opcode;
                 this.cpu.instructions[address + 1] = value;
+                address += 2;
+            } else if (instruction === 'CMPZ') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: CMPZ instruction requires register (e.g., CMPZ ACC)`);
+                }
+                const reg = parts[1];
+                const regNum = this.parseRegister(reg);
+                // 6502 CMP #0 compares accumulator with zero
+                if (regNum !== 0) {
+                    throw new Error(`Line ${lineNum + 1}: CMPZ can only be used with ACC register (6502 CMP compares with accumulator)`);
+                }
+                const opcode = 0xC9; // CMP # (6502 immediate)
+                this.cpu.instructions[address] = opcode;
+                this.cpu.instructions[address + 1] = 0; // Compare with zero
+                address += 2;
+            } else if (instruction === 'STA' || instruction === 'STX' || instruction === 'STY') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: ${instruction} instruction requires address (e.g., ${instruction} $10)`);
+                }
+                const addrStr = parts[1];
+                // Remove $ prefix if present
+                const addr = addrStr.startsWith('$') ? parseInt(addrStr.substring(1), 16) : this.parseValue(addrStr);
+                let opcode;
+                if (instruction === 'STA') {
+                    opcode = 0x85; // STA zero page (6502)
+                } else if (instruction === 'STX') {
+                    opcode = 0x86; // STX zero page (6502)
+                } else if (instruction === 'STY') {
+                    opcode = 0x84; // STY zero page (6502)
+                }
+                this.cpu.instructions[address] = opcode;
+                this.cpu.instructions[address + 1] = addr;
                 address += 2;
             } else {
                 // This should never happen since we validated instructions in the first pass
@@ -375,15 +528,16 @@ class CDC6504Emulator {
         console.log(`Program loaded: ${address} bytes`);
     }
 
-    // Parse register name to number
+    // Parse register name to number (6502 registers)
     parseRegister(reg) {
         const regMap = {
-            'A0': 0, 'A1': 1, 'A2': 2, 'A3': 3,
-            'X0': 4, 'X1': 5, 'X2': 6, 'X3': 7
+            'ACC': 0, 'A': 0,  // Accumulator
+            'X': 1,            // X register
+            'Y': 2             // Y register
         };
         const result = regMap[reg.toUpperCase()];
         if (result === undefined) {
-            throw new Error(`Invalid register name: "${reg}". Valid registers are: A0, A1, A2, A3, X0, X1, X2, X3`);
+            throw new Error(`Invalid register name: "${reg}". Valid registers are: ACC (or A), X, Y`);
         }
         console.log(`parseRegister('${reg}') = ${result}`);
         return result;
@@ -443,24 +597,28 @@ class CDC6504Emulator {
         return value;
     }
 
-    // Get register name from number (matches specification: 000=A0, 001=A1, 010=A2, 011=A3, 100=X0, 101=X1, 110=X2, 111=X3)
+    // Get register name from number (6502 registers)
     getRegisterName(reg) {
-        const names = ['a0', 'a1', 'a2', 'a3', 'x0', 'x1', 'x2', 'x3'];
-        return names[reg];
+        const names = ['acc', 'x', 'y'];
+        return names[reg] || '?';
     }
 
-    // Check A register addresses for out of range errors
-    checkAAddresses() {
-        if (this.cpu.a0 >= 32 || this.cpu.a1 >= 32 || this.cpu.a2 >= 32 || this.cpu.a3 >= 32) {
-            this.running = false;
-            this.cpu.mode = 3;
-            this.cpu.requestUpdate();
-            return true; // Error detected
-        }
-        return false; // No error
+    // Update status flags based on value (6502 semantics)
+    updateStatusFlags(value) {
+        this.cpu.z = (value === 0);
+        this.cpu.n = ((value & 0x80) !== 0); // Negative flag (bit 7 set)
+        // Carry flag is updated separately for arithmetic operations
     }
 
-    // Execute a single instruction
+    // Update status flags for comparison (6502 CMP semantics)
+    updateCompareFlags(acc, value) {
+        const result = (acc - value) & 0xFF;
+        this.cpu.z = (acc === value);
+        this.cpu.n = ((result & 0x80) !== 0);
+        this.cpu.c = (acc >= value); // Carry set if acc >= value (no borrow)
+    }
+
+    // Execute a single instruction (6502)
     executeStep() {
         if (this.running === false) return null;
         
@@ -471,382 +629,234 @@ class CDC6504Emulator {
         
         console.log(`Executing at PC=${this.cpu.pc}, instruction=0x${instruction.toString(16).padStart(2, '0')}`);
         
-        // 8-bit patterns (most specific) - check first
-        if (instruction === 0x00) { // 00000000 - HALT
-            console.log(`  Executing: HALT`);
-            this.printString(); // Print automatically on HALT
+        // Decode 6502 opcodes
+        if (instruction === 0x00) { // BRK - Break/Halt
+            console.log(`  Executing: BRK`);
+            this.printString(); // Print automatically on BRK
             this.running = false;
-            result = 'HALT';
+            result = 'BRK';
             pcIncrement = 1;
         }
-        else if (instruction === 0x0F) { // 00001111 - DATA
-            console.log(`  Executing: DATA`);
-            result = 'DATA';
-            pcIncrement = 1;
-        }
-        // 5-bit patterns (bits 7-3)
-        else if ((instruction >> 3) === 0x08) { // 01000xxx - ZERO
-            const register = instruction & 0x07;
-            const regName = this.getRegisterName(register);
-            console.log(`  Executing: ZERO ${regName}`);
-            this.cpu[regName] = 0;
-            
-            // Check A register addresses for out of range errors
-            if (this.checkAAddresses()) {
-                return 'ERROR: A register address out of range';
-            }
-            
-            // CDC 6500 load/store architecture: 
-            // A0/A1: Implicit LOAD from memory into X0/X1
-            // A2/A3: Implicit STORE from X2/X3 to memory
-            if (regName === 'a0') {
-                this.cpu.x0 = this.cpu.memory[this.cpu.a0];
-                this.cpu.highlightMemory(this.cpu.a0);
-                console.log(`Implicit load: memory[${this.cpu.a0}] (${this.cpu.x0}) -> X0`);
-            } else if (regName === 'a1') {
-                this.cpu.x1 = this.cpu.memory[this.cpu.a1];
-                this.cpu.highlightMemory(this.cpu.a1);
-                console.log(`Implicit load: memory[${this.cpu.a1}] (${this.cpu.x1}) -> X1`);
-            } else if (regName === 'a2') {
-                this.cpu.memory[this.cpu.a2] = this.cpu.x2;
-                this.cpu.highlightMemory(this.cpu.a2);
-                console.log(`Implicit store: X2 (${this.cpu.x2}) -> memory[${this.cpu.a2}]`);
-            } else if (regName === 'a3') {
-                this.cpu.memory[this.cpu.a3] = this.cpu.x3;
-                this.cpu.highlightMemory(this.cpu.a3);
-                console.log(`Implicit store: X3 (${this.cpu.x3}) -> memory[${this.cpu.a3}]`);
-            }
-            
-            result = `ZERO ${regName}`;
-            pcIncrement = 1;
-        }
-        else if ((instruction >> 3) === 0x09) { // 01001xxx - CMPZ
-            const register = instruction & 0x07;
-            const regName = this.getRegisterName(register);
-            console.log(`  Executing: CMPZ ${regName}`);
-            const value = this.cpu[regName];
-            const newComparison = value === 0 ? '=' : value < 0 ? '<' : '>';
-            this.cpu.comparison = newComparison;
-            console.log(`CMPZ ${regName}: ${value} vs 0 = ${this.cpu.comparison}`);
-            // Force a complete re-render to ensure comparison register updates
-            this.cpu.requestUpdate();
-            // Also try to directly update the dropdown element
-            const cmpSelect = this.cpu.shadowRoot?.querySelector('select[class*="form-control"]');
-            if (cmpSelect) {
-                cmpSelect.value = newComparison;
-            }
-            result = `CMPZ ${regName}`;
-            pcIncrement = 1;
-        }
-        else if ((instruction >> 3) === 0x0A) { // 01010xxx - INC
-            const register = instruction & 0x07;
-            const regName = this.getRegisterName(register);
-            console.log(`  Executing: INC ${regName}`);
-            this.cpu[regName] = (this.cpu[regName] + 1) & 0xFF;
-            
-            // Check A register addresses for out of range errors
-            if (this.checkAAddresses()) {
-                return 'ERROR: A register address out of range';
-            }
-            
-            // CDC 6500 load/store architecture: 
-            // A0/A1: Implicit LOAD from memory into X0/X1
-            // A2/A3: Implicit STORE from X2/X3 to memory
-            if (regName === 'a0') {
-                this.cpu.x0 = this.cpu.memory[this.cpu.a0];
-                this.cpu.highlightMemory(this.cpu.a0);
-                console.log(`Implicit load: memory[${this.cpu.a0}] (${this.cpu.x0}) -> X0`);
-            } else if (regName === 'a1') {
-                this.cpu.x1 = this.cpu.memory[this.cpu.a1];
-                this.cpu.highlightMemory(this.cpu.a1);
-                console.log(`Implicit load: memory[${this.cpu.a1}] (${this.cpu.x1}) -> X1`);
-            } else if (regName === 'a2') {
-                this.cpu.memory[this.cpu.a2] = this.cpu.x2;
-                this.cpu.highlightMemory(this.cpu.a2);
-                console.log(`Implicit store: X2 (${this.cpu.x2}) -> memory[${this.cpu.a2}]`);
-            } else if (regName === 'a3') {
-                this.cpu.memory[this.cpu.a3] = this.cpu.x3;
-                this.cpu.highlightMemory(this.cpu.a3);
-                console.log(`Implicit store: X3 (${this.cpu.x3}) -> memory[${this.cpu.a3}]`);
-            }
-            
-            result = `INC ${regName}`;
-            pcIncrement = 1;
-        }
-        else if ((instruction >> 3) === 0x0B) { // 01011xxx - DEC
-            const register = instruction & 0x07;
-            const regName = this.getRegisterName(register);
-            console.log(`  Executing: DEC ${regName}`);
-            this.cpu[regName] = (this.cpu[regName] - 1) & 0xFF;
-            
-            // Check A register addresses for out of range errors
-            if (this.checkAAddresses()) {
-                return 'ERROR: A register address out of range';
-            }
-            
-            // CDC 6500 load/store architecture: 
-            // A0/A1: Implicit LOAD from memory into X0/X1
-            // A2/A3: Implicit STORE from X2/X3 to memory
-            if (regName === 'a0') {
-                this.cpu.x0 = this.cpu.memory[this.cpu.a0];
-                this.cpu.highlightMemory(this.cpu.a0);
-                console.log(`Implicit load: memory[${this.cpu.a0}] (${this.cpu.x0}) -> X0`);
-            } else if (regName === 'a1') {
-                this.cpu.x1 = this.cpu.memory[this.cpu.a1];
-                this.cpu.highlightMemory(this.cpu.a1);
-                console.log(`Implicit load: memory[${this.cpu.a1}] (${this.cpu.x1}) -> X1`);
-            } else if (regName === 'a2') {
-                this.cpu.memory[this.cpu.a2] = this.cpu.x2;
-                this.cpu.highlightMemory(this.cpu.a2);
-                console.log(`Implicit store: X2 (${this.cpu.x2}) -> memory[${this.cpu.a2}]`);
-            } else if (regName === 'a3') {
-                this.cpu.memory[this.cpu.a3] = this.cpu.x3;
-                this.cpu.highlightMemory(this.cpu.a3);
-                console.log(`Implicit store: X3 (${this.cpu.x3}) -> memory[${this.cpu.a3}]`);
-            }
-            
-            result = `DEC ${regName}`;
-            pcIncrement = 1;
-        }
-        else if ((instruction >> 3) === 0x10) { // 10000xxx - SET (16-bit)
-            const register = instruction & 0x07;
+        // Load instructions (immediate mode)
+        else if (instruction === 0xA9) { // LDA # - Load accumulator immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
-            const regName = this.getRegisterName(register);
-            console.log(`  Executing: SET ${regName}, ${immediate}`);
-            this.cpu[regName] = immediate;
-            
-            // Check A register addresses for out of range errors
-            if (this.checkAAddresses()) {
-                return 'ERROR: A register address out of range';
-            }
-            
-            // CDC 6500 load/store architecture: 
-            // A0/A1: Implicit LOAD from memory into X0/X1
-            // A2/A3: Implicit STORE from X2/X3 to memory
-            if (regName === 'a0') {
-                this.cpu.x0 = this.cpu.memory[immediate];
-                this.cpu.highlightMemory(immediate);
-                console.log(`Implicit load: memory[${immediate}] (${this.cpu.x0}) -> X0`);
-            } else if (regName === 'a1') {
-                this.cpu.x1 = this.cpu.memory[immediate];
-                this.cpu.highlightMemory(immediate);
-                console.log(`Implicit load: memory[${immediate}] (${this.cpu.x1}) -> X1`);
-            } else if (regName === 'a2') {
-                this.cpu.memory[immediate] = this.cpu.x2;
-                this.cpu.highlightMemory(immediate);
-                console.log(`Implicit store: X2 (${this.cpu.x2}) -> memory[${immediate}]`);
-            } else if (regName === 'a3') {
-                this.cpu.memory[immediate] = this.cpu.x3;
-                this.cpu.highlightMemory(immediate);
-                console.log(`Implicit store: X3 (${this.cpu.x3}) -> memory[${immediate}]`);
-            }
-            
-            result = `SET ${regName}, ${immediate}`;
+            console.log(`  Executing: LDA #${immediate}`);
+            this.cpu.acc = immediate;
+            this.updateStatusFlags(this.cpu.acc);
+            result = `LDA #${immediate}`;
             pcIncrement = 2;
         }
-        else if ((instruction >> 3) === 0x11) { // 10001xxx - CMP (16-bit)
-            const register = instruction & 0x07;
+        else if (instruction === 0xA2) { // LDX # - Load X immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
-            const regName = this.getRegisterName(register);
-            console.log(`  Executing: CMP ${regName}, ${immediate}`);
-            const value = this.cpu[regName];
-            const newComparison = value === immediate ? '=' : value < immediate ? '<' : '>';
-            this.cpu.comparison = newComparison;
-            console.log(`CMP ${regName}: ${value} vs ${immediate} = ${this.cpu.comparison}`);
-            // Force a complete re-render to ensure comparison register updates
-            this.cpu.requestUpdate();
-            // Also try to directly update the dropdown element
-            const cmpSelect = this.cpu.shadowRoot?.querySelector('select[class*="form-control"]');
-            if (cmpSelect) {
-                cmpSelect.value = newComparison;
-            }
-            result = `CMP ${regName}, ${immediate}`;
+            console.log(`  Executing: LDX #${immediate}`);
+            this.cpu.x = immediate;
+            this.updateStatusFlags(this.cpu.x);
+            result = `LDX #${immediate}`;
             pcIncrement = 2;
         }
-        else if ((instruction >> 3) === 0x12) { // 10010xxx - ADD (16-bit)
-            const register = instruction & 0x07;
+        else if (instruction === 0xA0) { // LDY # - Load Y immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
-            const regName = this.getRegisterName(register);
-            console.log(`  Executing: ADD ${regName}, ${immediate}`);
-            this.cpu[regName] = (this.cpu[regName] + immediate) & 0xFF;
-            
-            // Check A register addresses for out of range errors
-            if (this.checkAAddresses()) {
-                return 'ERROR: A register address out of range';
-            }
-            
-            // CDC 6500 load/store architecture: 
-            // A0/A1: Implicit LOAD from memory into X0/X1
-            // A2/A3: Implicit STORE from X2/X3 to memory
-            if (regName === 'a0') {
-                this.cpu.x0 = this.cpu.memory[this.cpu.a0];
-                this.cpu.highlightMemory(this.cpu.a0);
-                console.log(`Implicit load: memory[${this.cpu.a0}] (${this.cpu.x0}) -> X0`);
-            } else if (regName === 'a1') {
-                this.cpu.x1 = this.cpu.memory[this.cpu.a1];
-                this.cpu.highlightMemory(this.cpu.a1);
-                console.log(`Implicit load: memory[${this.cpu.a1}] (${this.cpu.x1}) -> X1`);
-            } else if (regName === 'a2') {
-                this.cpu.memory[this.cpu.a2] = this.cpu.x2;
-                this.cpu.highlightMemory(this.cpu.a2);
-                console.log(`Implicit store: X2 (${this.cpu.x2}) -> memory[${this.cpu.a2}]`);
-            } else if (regName === 'a3') {
-                this.cpu.memory[this.cpu.a3] = this.cpu.x3;
-                this.cpu.highlightMemory(this.cpu.a3);
-                console.log(`Implicit store: X3 (${this.cpu.x3}) -> memory[${this.cpu.a3}]`);
-            }
-            
-            result = `ADD ${regName}, ${immediate}`;
+            console.log(`  Executing: LDY #${immediate}`);
+            this.cpu.y = immediate;
+            this.updateStatusFlags(this.cpu.y);
+            result = `LDY #${immediate}`;
             pcIncrement = 2;
         }
-        else if ((instruction >> 3) === 0x13) { // 10011xxx - SUB (16-bit)
-            const register = instruction & 0x07;
-            const immediate = this.cpu.instructions[this.cpu.pc + 1];
-            const regName = this.getRegisterName(register);
-            console.log(`  Executing: SUB ${regName}, ${immediate}`);
-            this.cpu[regName] = (this.cpu[regName] - immediate) & 0xFF;
-            
-            // Check A register addresses for out of range errors
-            if (this.checkAAddresses()) {
-                return 'ERROR: A register address out of range';
-            }
-            
-            // CDC 6500 load/store architecture: 
-            // A0/A1: Implicit LOAD from memory into X0/X1
-            // A2/A3: Implicit STORE from X2/X3 to memory
-            if (regName === 'a0') {
-                this.cpu.x0 = this.cpu.memory[this.cpu.a0];
-                this.cpu.highlightMemory(this.cpu.a0);
-                console.log(`Implicit load: memory[${this.cpu.a0}] (${this.cpu.x0}) -> X0`);
-            } else if (regName === 'a1') {
-                this.cpu.x1 = this.cpu.memory[this.cpu.a1];
-                this.cpu.highlightMemory(this.cpu.a1);
-                console.log(`Implicit load: memory[${this.cpu.a1}] (${this.cpu.x1}) -> X1`);
-            } else if (regName === 'a2') {
-                this.cpu.memory[this.cpu.a2] = this.cpu.x2;
-                this.cpu.highlightMemory(this.cpu.a2);
-                console.log(`Implicit store: X2 (${this.cpu.x2}) -> memory[${this.cpu.a2}]`);
-            } else if (regName === 'a3') {
-                this.cpu.memory[this.cpu.a3] = this.cpu.x3;
-                this.cpu.highlightMemory(this.cpu.a3);
-                console.log(`Implicit store: X3 (${this.cpu.x3}) -> memory[${this.cpu.a3}]`);
-            }
-            
-            result = `SUB ${regName}, ${immediate}`;
+        // Store instructions (zero page)
+        else if (instruction === 0x85) { // STA $ - Store accumulator zero page
+            const addr = this.cpu.instructions[this.cpu.pc + 1];
+            console.log(`  Executing: STA $${addr.toString(16).padStart(2, '0')}`);
+            this.cpu.memory[addr] = this.cpu.acc;
+            this.cpu.highlightMemory(addr);
+            result = `STA $${addr.toString(16).padStart(2, '0')}`;
             pcIncrement = 2;
         }
-        else if ((instruction >> 3) === 0x14) { // 10100xxx - Jump instructions (16-bit)
-            const jumpType = instruction & 0x03; // Get jump type from bits 1-0
+        else if (instruction === 0x86) { // STX $ - Store X zero page
+            const addr = this.cpu.instructions[this.cpu.pc + 1];
+            console.log(`  Executing: STX $${addr.toString(16).padStart(2, '0')}`);
+            this.cpu.memory[addr] = this.cpu.x;
+            this.cpu.highlightMemory(addr);
+            result = `STX $${addr.toString(16).padStart(2, '0')}`;
+            pcIncrement = 2;
+        }
+        else if (instruction === 0x84) { // STY $ - Store Y zero page
+            const addr = this.cpu.instructions[this.cpu.pc + 1];
+            console.log(`  Executing: STY $${addr.toString(16).padStart(2, '0')}`);
+            this.cpu.memory[addr] = this.cpu.y;
+            this.cpu.highlightMemory(addr);
+            result = `STY $${addr.toString(16).padStart(2, '0')}`;
+            pcIncrement = 2;
+        }
+        // Compare instruction
+        else if (instruction === 0xC9) { // CMP # - Compare accumulator immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
-            console.log(`Jump instruction decode: instruction=0x${instruction.toString(16).padStart(2, '0')}, jumpType=${jumpType}, immediate=${immediate}`);
-            
-            let shouldJump = false;
-            if (jumpType === 0x00) { // 10100000 - JE
-                shouldJump = this.cpu.comparison === '=';
-                console.log(`JE ${immediate}: comparison=${this.cpu.comparison}, shouldJump=${shouldJump}`);
-                result = `JE ${immediate}`;
-            } else if (jumpType === 0x01) { // 10100001 - JL
-                shouldJump = this.cpu.comparison === '<';
-                console.log(`JL ${immediate}: comparison=${this.cpu.comparison}, shouldJump=${shouldJump}`);
-                result = `JL ${immediate}`;
-            } else if (jumpType === 0x02) { // 10100010 - JG
-                shouldJump = this.cpu.comparison === '>';
-                console.log(`JG ${immediate}: comparison=${this.cpu.comparison}, shouldJump=${shouldJump}`);
-                result = `JG ${immediate}`;
-            } else if (jumpType === 0x03) { // 10100011 - JP
-                shouldJump = true; // Always jump
-                console.log(`JP ${immediate}: unconditional jump`);
-                result = `JP ${immediate}`;
-            }
-            
-            if (shouldJump) {
-                console.log(`JUMP: JUMPING to address ${immediate} (PC was ${this.cpu.pc})`);
-                this.cpu.pc = immediate;
-                pcIncrement = 0; // PC already set
+            console.log(`  Executing: CMP #${immediate}`);
+            this.updateCompareFlags(this.cpu.acc, immediate);
+            result = `CMP #${immediate}`;
+            pcIncrement = 2;
+        }
+        // Arithmetic instructions
+        else if (instruction === 0x69) { // ADC # - Add with carry immediate
+            const immediate = this.cpu.instructions[this.cpu.pc + 1];
+            console.log(`  Executing: ADC #${immediate}`);
+            const sum = this.cpu.acc + immediate + (this.cpu.c ? 1 : 0);
+            this.cpu.c = (sum > 0xFF); // Carry set if overflow
+            this.cpu.acc = sum & 0xFF;
+            this.updateStatusFlags(this.cpu.acc);
+            result = `ADC #${immediate}`;
+            pcIncrement = 2;
+        }
+        else if (instruction === 0xE9) { // SBC # - Subtract with carry immediate
+            const immediate = this.cpu.instructions[this.cpu.pc + 1];
+            console.log(`  Executing: SBC #${immediate}`);
+            // 6502 SBC: A = A - M - (1 - C)
+            // Use old carry value for calculation, then set new carry
+            const oldC = this.cpu.c;
+            const diff = this.cpu.acc - immediate - (oldC ? 0 : 1);
+            this.cpu.c = (this.cpu.acc >= immediate); // Carry set if no borrow (A >= M)
+            this.cpu.acc = diff & 0xFF;
+            this.updateStatusFlags(this.cpu.acc);
+            result = `SBC #${immediate}`;
+            pcIncrement = 2;
+        }
+        // Increment/Decrement instructions
+        else if (instruction === 0xE8) { // INX - Increment X
+            console.log(`  Executing: INX`);
+            this.cpu.x = (this.cpu.x + 1) & 0xFF;
+            this.updateStatusFlags(this.cpu.x);
+            result = 'INX';
+            pcIncrement = 1;
+        }
+        else if (instruction === 0xC8) { // INY - Increment Y
+            console.log(`  Executing: INY`);
+            this.cpu.y = (this.cpu.y + 1) & 0xFF;
+            this.updateStatusFlags(this.cpu.y);
+            result = 'INY';
+            pcIncrement = 1;
+        }
+        else if (instruction === 0xCA) { // DEX - Decrement X
+            console.log(`  Executing: DEX`);
+            this.cpu.x = (this.cpu.x - 1) & 0xFF;
+            this.updateStatusFlags(this.cpu.x);
+            result = 'DEX';
+            pcIncrement = 1;
+        }
+        else if (instruction === 0x88) { // DEY - Decrement Y
+            console.log(`  Executing: DEY`);
+            this.cpu.y = (this.cpu.y - 1) & 0xFF;
+            this.updateStatusFlags(this.cpu.y);
+            result = 'DEY';
+            pcIncrement = 1;
+        }
+        // Transfer instructions
+        else if (instruction === 0xAA) { // TAX - Transfer accumulator to X
+            console.log(`  Executing: TAX`);
+            this.cpu.x = this.cpu.acc;
+            this.updateStatusFlags(this.cpu.x);
+            result = 'TAX';
+            pcIncrement = 1;
+        }
+        else if (instruction === 0xA8) { // TAY - Transfer accumulator to Y
+            console.log(`  Executing: TAY`);
+            this.cpu.y = this.cpu.acc;
+            this.updateStatusFlags(this.cpu.y);
+            result = 'TAY';
+            pcIncrement = 1;
+        }
+        else if (instruction === 0x8A) { // TXA - Transfer X to accumulator
+            console.log(`  Executing: TXA`);
+            this.cpu.acc = this.cpu.x;
+            this.updateStatusFlags(this.cpu.acc);
+            result = 'TXA';
+            pcIncrement = 1;
+        }
+        else if (instruction === 0x98) { // TYA - Transfer Y to accumulator
+            console.log(`  Executing: TYA`);
+            this.cpu.acc = this.cpu.y;
+            this.updateStatusFlags(this.cpu.acc);
+            result = 'TYA';
+            pcIncrement = 1;
+        }
+        // Branch instructions (relative) - 6502 branches are relative to the instruction after the branch
+        else if (instruction === 0xF0) { // BEQ - Branch if equal (zero flag set)
+            const offset = this.cpu.instructions[this.cpu.pc + 1];
+            const signedOffset = (offset & 0x80) ? (offset - 256) : offset; // Sign extend
+            console.log(`  Executing: BEQ ${signedOffset > 0 ? '+' : ''}${signedOffset}`);
+            if (this.cpu.z) {
+                const newPC = (this.cpu.pc + 2 + signedOffset) & 0xFF;
+                this.cpu.pc = newPC;
+                pcIncrement = 0; // PC already updated
+                result = `BEQ +${signedOffset} (taken -> PC=${newPC})`;
             } else {
-                console.log(`JUMP: NOT jumping, continuing to next instruction (PC += 2)`);
-                pcIncrement = 2; // Skip the immediate byte
+                result = `BEQ +${signedOffset} (not taken)`;
+                pcIncrement = 2;
             }
         }
-        else if ((instruction >> 4) === 0x06) { // 0110ddss - ADD X[dd], X[ss]
-            const destReg = (instruction >> 2) & 0x03;
-            const srcReg = instruction & 0x03;
-            const destName = this.getRegisterName(destReg + 4); // X registers start at index 4
-            const srcName = this.getRegisterName(srcReg + 4);
-            console.log(`  Executing: ADD ${destName}, ${srcName}`);
-            this.cpu[destName] = (this.cpu[destName] + this.cpu[srcName]) & 0xFF;
-            result = `ADD ${destName}, ${srcName}`;
-            pcIncrement = 1;
+        else if (instruction === 0x30) { // BMI - Branch if minus (negative flag set)
+            const offset = this.cpu.instructions[this.cpu.pc + 1];
+            const signedOffset = (offset & 0x80) ? (offset - 256) : offset;
+            console.log(`  Executing: BMI ${signedOffset > 0 ? '+' : ''}${signedOffset}`);
+            if (this.cpu.n) {
+                const newPC = (this.cpu.pc + 2 + signedOffset) & 0xFF;
+                this.cpu.pc = newPC;
+                pcIncrement = 0;
+                result = `BMI +${signedOffset} (taken -> PC=${newPC})`;
+            } else {
+                result = `BMI +${signedOffset} (not taken)`;
+                pcIncrement = 2;
+            }
         }
-        else if ((instruction >> 4) === 0x07) { // 0111ddss - SUB X[dd], X[ss]
-            const destReg = (instruction >> 2) & 0x03;
-            const srcReg = instruction & 0x03;
-            const destName = this.getRegisterName(destReg + 4); // X registers start at index 4
-            const srcName = this.getRegisterName(srcReg + 4);
-            console.log(`  Executing: SUB ${destName}, ${srcName}`);
-            this.cpu[destName] = (this.cpu[destName] - this.cpu[srcName]) & 0xFF;
-            result = `SUB ${destName}, ${srcName}`;
-            pcIncrement = 1;
+        else if (instruction === 0x10) { // BPL - Branch if plus (negative flag clear)
+            const offset = this.cpu.instructions[this.cpu.pc + 1];
+            const signedOffset = (offset & 0x80) ? (offset - 256) : offset;
+            console.log(`  Executing: BPL ${signedOffset > 0 ? '+' : ''}${signedOffset}`);
+            if (!this.cpu.n) {
+                const newPC = (this.cpu.pc + 2 + signedOffset) & 0xFF;
+                this.cpu.pc = newPC;
+                pcIncrement = 0;
+                result = `BPL +${signedOffset} (taken -> PC=${newPC})`;
+            } else {
+                result = `BPL +${signedOffset} (not taken)`;
+                pcIncrement = 2;
+            }
         }
-        // 2-bit patterns (least specific) - check last
-        else if ((instruction >> 6) === 0x00) { // 00xxxxxx - Special instructions (already handled above)
-            console.log(`  ERROR: Invalid special instruction - halting CPU`);
-            this.running = false;
-            this.cpu.mode = 1;
-            result = 'ERROR: Invalid instruction';
-            pcIncrement = 1;
-        }
-        else if ((instruction >> 6) === 0x01) { // 01xxxxxx - Single register instructions (already handled above)
-            console.log(`  ERROR: Invalid single register instruction - halting CPU`);
-            this.running = false;
-            this.cpu.mode = 1;
-            result = 'ERROR: Invalid instruction';
-            pcIncrement = 1;
-        }
-        else if ((instruction >> 6) === 0x02) { // 10xxxxxx - Immediate instructions (already handled above)
-            console.log(`  ERROR: Invalid immediate instruction - halting CPU`);
-            this.running = false;
-            this.cpu.mode = 1;
-            result = 'ERROR: Invalid instruction';
-            pcIncrement = 1;
-        }
-        else if ((instruction >> 6) === 0x03) { // 11xxxxxx - Register copy instructions
-            const destReg = (instruction >> 3) & 0x07;
-            const srcReg = instruction & 0x07;
-            const destName = this.getRegisterName(destReg);
-            const srcName = this.getRegisterName(srcReg);
-            console.log(`  Executing: MOV ${destName}, ${srcName}`);
-            this.cpu[destName] = this.cpu[srcName];
-            result = `MOV ${destName}, ${srcName}`;
-            pcIncrement = 1;
+        // Jump instruction
+        else if (instruction === 0x4C) { // JMP - Jump absolute (zero-page for our 256-byte memory)
+            const addr = this.cpu.instructions[this.cpu.pc + 1];
+            console.log(`  Executing: JMP $${addr.toString(16).padStart(2, '0')}`);
+            this.cpu.pc = addr;
+            pcIncrement = 0; // PC already updated
+            result = `JMP $${addr.toString(16).padStart(2, '0')}`;
         }
         // Unknown instruction
         else {
-            console.log(`  ERROR: Invalid instruction - halting CPU`);
+            console.log(`  ERROR: Invalid instruction 0x${instruction.toString(16).padStart(2, '0')} - halting CPU`);
             this.running = false;
             this.cpu.mode = 1;
-            result = 'ERROR: Invalid instruction';
+            result = `ERROR: Invalid instruction 0x${instruction.toString(16).padStart(2, '0')}`;
             pcIncrement = 1;
         }
         
-        // Update PC
-        this.cpu.pc += pcIncrement;
+        // Save PC before updating for trace
+        const oldPC = this.cpu.pc;
+        
+        // Update PC (if not already updated by branch/jump)
+        if (pcIncrement > 0) {
+            this.cpu.pc = (this.cpu.pc + pcIncrement) & 0xFF;
+        }
         
         // Add to execution trace
         this.executionTrace.push({
-            pc: this.cpu.pc - pcIncrement,
+            pc: oldPC,
             instruction: result,
             registers: {
                 pc: this.cpu.pc,
-                a0: this.cpu.a0,
-                a1: this.cpu.a1,
-                a2: this.cpu.a2,
-                a3: this.cpu.a3,
-                x0: this.cpu.x0,
-                x1: this.cpu.x1,
-                x2: this.cpu.x2,
-                x3: this.cpu.x3,
-                comparison: this.cpu.comparison
+                acc: this.cpu.acc,
+                x: this.cpu.x,
+                y: this.cpu.y,
+                z: this.cpu.z,
+                n: this.cpu.n,
+                c: this.cpu.c
             }
         });
         
@@ -906,19 +916,20 @@ class CDC6504Emulator {
         return this.executeStep();
     }
 
-    // Load the Hello program
+    // Load the Hello program (6502)
     loadHelloProgram() {
         this.reset();
-        const helloProgram = `SET X2, 72
-SET A2, 0
-SET X2, 101
-INC A2
-SET X2, 108
-INC A2
-INC A2
-SET X2, 111
-INC A2
-HALT`;
+        // Store characters to memory using STA
+        const helloProgram = `LDA ACC, 72    ; 'H'
+STA $00
+LDA ACC, 101   ; 'e'
+STA $01
+LDA ACC, 108   ; 'l'
+STA $02
+STA $03        ; 'l' again
+LDA ACC, 111   ; 'o'
+STA $04
+BRK`;
         this.loadProgram(helloProgram);
     }
 
@@ -930,58 +941,54 @@ DATA 'Hello World!'`;
         this.loadProgram(helloWorldProgram);
     }
 
-    // Load the Hi program - simple program to print "Hi"
+    // Load the Hi program - simple program to print "Hi" (6502)
     loadHiProgram() {
         this.reset();
-        const hiProgram = `SET X2, 'H'
-ZERO A2
-SET X2, 'i'
-INC A2
-HALT`;
+        const hiProgram = `LDA ACC, 'H'
+STA $00
+LDA ACC, 'i'
+STA $01
+BRK`;
         this.loadProgram(hiProgram);
     }
 
-    // Load the Add Sample program - demonstrates loading from memory, adding, and storing
+    // Load the Add Sample program - demonstrates loading, adding, and storing (6502)
     loadAddSample() {
         this.reset();
         // Put 10 (0x0A) in memory location 0x01 using DATA directive
-        // Load 0x01 into A0 (which loads memory[1] = 10 into X0)
-        // Add 5 to X0 (X0 becomes 15)
-        // Copy X0 to X2
-        // Store X2 into memory location 0x03
-        const addSampleProgram = `SET A0, 1
-ADD X0, 5
-MOV X2, X0
-SET A2, 3
-HALT
+        // Load from memory[1] into accumulator (would need LDA $01, but we only have immediate)
+        // For now, just demonstrate: load 10, add 5, store result
+        const addSampleProgram = `LDA ACC, 10    ; Load 10 into accumulator
+ADC ACC, 5      ; Add 5 (result = 15)
+STA $03         ; Store result to memory[3]
+BRK
 DATA 0x00 0x0A`;
         this.loadProgram(addSampleProgram);
     }
 
-    // Load the Uppercase Sample program - converts lowercase letter to uppercase
+    // Load the Uppercase Sample program - converts lowercase letter to uppercase (6502)
     loadUppercaseSample() {
         this.reset();
-        // Load 0x70 (lowercase 'p') directly into X2 using immediate instruction
-        // Compare X2 to 'a' (0x61) - if less than, it's already uppercase or not a letter
+        // Load 0x70 (lowercase 'p') into accumulator
+        // Compare to 'a' (0x61) - if less than, it's already uppercase or not a letter
         // If >= 'a', subtract 0x20 to convert to uppercase
-        const uppercaseProgram = `SET X2, 0x70
-CMP X2, 0x61
-JL skip
-SUB X2, 0x20
+        const uppercaseProgram = `LDA ACC, 0x70
+CMP ACC, 0x61
+BMI skip        ; Branch if minus (less than)
+SBC ACC, 0x20   ; Subtract 0x20 to convert to uppercase
 skip:
-HALT`;
+BRK`;
         this.loadProgram(uppercaseProgram);
     }
 
-    // Load the Simple Sample program - demonstrates basic register operations with no immediates
+    // Load the Simple Sample program - demonstrates basic register operations (6502)
     loadSimpleSample() {
         this.reset();
-        // Simple program using only register operations: ZERO, INC
-        const simpleProgram = `ZERO X2
-INC X2
-INC X2
-ZERO A2
-HALT`;
+        // Simple program: zero X, increment X twice
+        const simpleProgram = `LDX X, 0       ; Zero X register
+INX             ; Increment X
+INX             ; Increment X again
+BRK`;
         this.loadProgram(simpleProgram);
     }
 
