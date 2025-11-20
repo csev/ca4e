@@ -742,13 +742,9 @@ BRK`;
                 // Update functions
                 function updateStatus() {
                     const status = emulator.getStatus();
-                    const cpuComponent = document.querySelector('cdc6504-cpu');
-                    
-                    // Check if mode register indicates error
-                    if (cpuComponent.mode === 1) {
-                        document.getElementById('status').textContent = 'Error: Invalid instruction';
-                    } else if (cpuComponent.mode === 2) {
-                        document.getElementById('status').textContent = 'Error: Jump address out of range';
+                    // Check for error messages
+                    if (status.errorMessage) {
+                        document.getElementById('status').textContent = `Error: ${status.errorMessage}`;
                     } else {
                         document.getElementById('status').textContent = 
                             status.running ? 'Running' : status.halted ? 'Halted' : 'Stopped';

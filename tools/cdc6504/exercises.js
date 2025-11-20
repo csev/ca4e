@@ -119,7 +119,7 @@ class HelloWorldExercise extends CDC6504Exercise {
             // Reset CPU state but preserve the loaded program
             emulator.cpu.pc = 0;
             emulator.cpu.comparison = '=';
-            emulator.cpu.mode = 0;
+            emulator.errorMessage = null;
             emulator.cpu.a0 = 0;
             emulator.cpu.a1 = 0;
             emulator.cpu.a2 = 0;
@@ -201,7 +201,7 @@ class Print42Exercise extends CDC6504Exercise {
             // Reset CPU state but preserve the loaded program
             emulator.cpu.pc = 0;
             emulator.cpu.comparison = '=';
-            emulator.cpu.mode = 0;
+            emulator.errorMessage = null;
             emulator.cpu.a0 = 0;
             emulator.cpu.a1 = 0;
             emulator.cpu.a2 = 0;

@@ -358,25 +358,22 @@ TAX            ; Transfer accumulator back to X
                     <th>Description</th>
                 </tr>
                 <tr>
-                    <td>CLA</td>
-                    <td>00000010</td>
-                    <td>Clear accumulator (A = 0). Sets Z flag to 1, N flag to 0.</td>
-                </tr>
-                <tr>
                     <td>CLX</td>
-                    <td>00010010</td>
+                    <td>11100010</td>
                     <td>Clear X register (X = 0). Sets Z flag to 1, N flag to 0.</td>
                 </tr>
                 <tr>
                     <td>CLY</td>
-                    <td>00100010</td>
+                    <td>11000010</td>
                     <td>Clear Y register (Y = 0). Sets Z flag to 1, N flag to 0.</td>
                 </tr>
             </table>
             
             <div class="tip">
                 <h4>💡 Clear Instructions</h4>
-                <p>The clear instructions (CLA, CLX, CLY) use unused 6502 opcodes (0x02, 0x12, 0x22) that are commonly used for extensions in different hardware applications. These instructions provide a convenient way to zero out registers and automatically set the status flags correctly, following the same naming pattern as INX, INY, DEX, DEY.  These only work in this emulator andcannot be used in a real hardware 6502.</p>
+                <p>The clear instructions (CLX, CLY) are 8-bit emulator-only instructions that use unused 6502 opcodes (0xE2, 0xC2).
+                In a real hardware 6502, you would use the 16-bit LDX #0 and LDY #0 instructions to clear
+                the registers.</p>
             </div>
             
             <h3>Branch Instructions (Relative)</h3>
@@ -491,7 +488,6 @@ BRK
                     <h4>Special Registers</h4>
                     <ul>
                         <li><strong>PC</strong>: Program Counter (current instruction address)</li>
-                        <li><strong>MODE</strong>: Error mode register (0x0 = normal, 0x1 = invalid instruction)</li>
                     </ul>
                 </div>
             </div>
@@ -577,7 +573,6 @@ BRK
             <div class="example">
                 <h4>Clear Registers</h4>
                 <div class="code-block">
-CLA            ; Clear accumulator (A = 0, Z = 1, N = 0)
 CLX            ; Clear X register (X = 0, Z = 1, N = 0)
 CLY            ; Clear Y register (Y = 0, Z = 1, N = 0)
 BRK
@@ -627,43 +622,62 @@ ADC #5         ; Add 5
 BRK
                 </div>
             </div>
+            
+            <div class="example">
+                <h4>Hello (using ADC/SBC)</h4>
+                <div class="code-block">
+; This will print:  Hello
+
+LDA #'H'       ; Load 'H' into accumulator
+STA $00        ; Store 'H' to memory address 0x00
+LDA #'e'       ; Load 'e' into accumulator
+STA $01        ; Store 'e' to memory address 0x01
+LDA #'l'       ; Load 'l' into accumulator
+STA $02        ; Store 'l' to memory address 0x02
+STA $03        ; Store 'l' again to address 0x03
+LDA #'l'       ; Load 'l' into accumulator (108)
+ADC #4         ; Add 4 to accumulator so it is now 'p' (108 + 4 = 112)
+SBC #1         ; Subtract 1 from accumulator so it is now 'o' (112 - 1 = 111)
+STA $04        ; Store 'o' to memory address 0x04
+LDA #0         ; Load zero into accumulator
+STA $05        ; Store zero to memory address 0x05 (null terminator)
+BRK            ; Stop (automatically prints memory starting at address 0 as an
+              ; ASCII string, stopping when a zero is encountered)
+                </div>
+            </div>
+            
+            <div class="example">
+                <h4>Register Copy</h4>
+                <div class="code-block">
+LDA #10        ; Load 10 into accumulator
+TAX            ; Transfer accumulator to X register
+TXA            ; Transfer X back to accumulator (copy complete)
+BRK
+                </div>
+            </div>
         </div>
         
         <div id="errors" class="tab-content">
             <h2>Error Handling</h2>
             
-            <div class="error-table">
-                <h3>Mode Register Error Codes</h3>
-                <table class="instruction-table">
-                    <tr>
-                        <th>Mode</th>
-                        <th>Error</th>
-                        <th>Trigger</th>
-                    </tr>
-                    <tr>
-                        <td>0x0</td>
-                        <td>Normal operation</td>
-                        <td>No error</td>
-                    </tr>
-                    <tr>
-                        <td>0x1</td>
-                        <td>Invalid instruction</td>
-                        <td>Unknown opcode</td>
-                    </tr>
-                    <tr>
-                        <td>0x2</td>
-                        <td>Jump address out of range</td>
-                        <td>Jump to address ≥ 256 (not applicable in zero-page mode)</td>
-                    </tr>
-                </table>
-            </div>
+            <p>When the CPU encounters an error (such as an invalid instruction), it will:</p>
+            <ul>
+                <li>Display the error message in the Status field</li>
+                <li>Stop execution immediately</li>
+                <li>Preserve the current CPU state for debugging</li>
+            </ul>
+            
+            <h3>Error Types</h3>
+            <ul>
+                <li><strong>Invalid instruction</strong>: Unknown or undefined opcode encountered during execution</li>
+            </ul>
             
             <h3>Error Test Programs</h3>
             
             <div class="example">
-                <h4>Test Invalid Instruction (Mode 1)</h4>
+                <h4>Test Invalid Instruction</h4>
                 <div class="code-block">
-CLA            ; Clear accumulator
+CLX            ; Clear X register
 0xFF          ; Invalid instruction (0xFF - undefined opcode)
 BRK
                 </div>
@@ -679,22 +693,23 @@ BRK
             <p>Labels are defined by ending a line with a colon (<code>:</code>):</p>
             <div class="code-block">
 start:        ; This defines a label called "start"
-SET X0, 0
+CLX           ; Clear X register
 loop:         ; This defines a label called "loop"
-INC X0
+INX           ; Increment X register
             </div>
             
             <h3>Label Usage</h3>
             <p>Labels can be used in jump instructions instead of hard-coded addresses:</p>
             <div class="code-block">
-SET X0, 0
+CLX           ; Clear X register
 loop:
-CMP X0, 5
-JE end        ; Jump to "end" label
-INC X0
-JL loop       ; Jump back to "loop" label
+TXA           ; Transfer X to accumulator
+CMP #5        ; Compare accumulator to 5
+BEQ end       ; Branch to "end" label if equal
+INX           ; Increment X register
+JMP loop      ; Jump back to "loop" label
 end:
-HALT
+BRK           ; Stop
             </div>
             
             <h3>Two-Pass Assembly</h3>

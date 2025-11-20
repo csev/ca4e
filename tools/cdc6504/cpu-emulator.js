@@ -11,6 +11,7 @@ class CDC6504Emulator {
         this.clockSpeed = 500; // 0.5 Hz = 500ms
         this.output = '';
         this.executionTrace = [];
+        this.errorMessage = null; // Error message if CPU stopped due to error
     }
 
     // Reset the CPU to initial state (6502)
@@ -21,7 +22,7 @@ class CDC6504Emulator {
         this.cpu.y = 0;    // Y register
         this.cpu.z = false; // Zero flag
         this.cpu.n = false; // Negative flag
-        this.cpu.mode = 0;  // Error mode
+        this.errorMessage = null; // Clear any error messages
         
         // Clear instruction and data memory
         for (let i = 0; i < 256; i++) {
@@ -109,7 +110,7 @@ class CDC6504Emulator {
             
             // Validate instruction (6502 instruction set)
             const validInstructions = ['LDA', 'LDX', 'LDY', 'STA', 'STX', 'STY', 'TAX', 'TAY', 'TXA', 'TYA', 'INX', 'INY', 'DEX', 'DEY',
-                                      'ADC', 'SBC', 'CMP', 'BEQ', 'BNE', 'BMI', 'BPL', 'JMP', 'BRK', 'CLA', 'CLX', 'CLY'];
+                                      'ADC', 'SBC', 'CMP', 'BEQ', 'BNE', 'BMI', 'BPL', 'JMP', 'BRK', 'CLX', 'CLY'];
             if (!validInstructions.includes(instruction)) {
                 errors.push(`Line ${lineNum + 1}: Unknown instruction "${instruction}"`);
                 continue;
@@ -126,7 +127,7 @@ class CDC6504Emulator {
                 instructionSize = 2; // 2-byte instructions
             } else if (instruction === 'TAX' || instruction === 'TAY' || instruction === 'TXA' || instruction === 'TYA' ||
                        instruction === 'INX' || instruction === 'INY' || instruction === 'DEX' || instruction === 'DEY' ||
-                       instruction === 'BRK' || instruction === 'CLA' || instruction === 'CLX' || instruction === 'CLY') {
+                       instruction === 'BRK' || instruction === 'CLX' || instruction === 'CLY') {
                 instructionSize = 1; // 1-byte instructions
             }
             
@@ -306,18 +307,13 @@ class CDC6504Emulator {
             } else if (instruction === 'BRK') {
                 this.cpu.instructions[address] = 0x00; // BRK opcode (6502 BRK = 0x00)
                 address += 1;
-            } else if (instruction === 'CLA') {
-                const opcode = 0x02; // CLA - Clear accumulator
-                console.log(`Assembling CLA: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
-                this.cpu.instructions[address] = opcode;
-                address += 1;
             } else if (instruction === 'CLX') {
-                const opcode = 0x12; // CLX - Clear X register
+                const opcode = 0xE2; // CLX - Clear X register (close to INX 0xE8)
                 console.log(`Assembling CLX: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
                 this.cpu.instructions[address] = opcode;
                 address += 1;
             } else if (instruction === 'CLY') {
-                const opcode = 0x22; // CLY - Clear Y register
+                const opcode = 0xC2; // CLY - Clear Y register (close to INY 0xC8)
                 console.log(`Assembling CLY: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
                 this.cpu.instructions[address] = opcode;
                 address += 1;
@@ -776,27 +772,17 @@ class CDC6504Emulator {
             pcIncrement = 1;
         }
         // Clear instructions (zero out registers)
-        else if (instruction === 0x02) { // CLA - Clear accumulator
-            console.log(`  Executing: CLA`);
-            this.cpu.acc = 0;
-            this.cpu.z = true;  // Zero flag set (result is zero)
-            this.cpu.n = false; // Negative flag clear (zero is not negative)
-            result = 'CLA';
-            pcIncrement = 1;
-        }
-        else if (instruction === 0x12) { // CLX - Clear X register
+        else if (instruction === 0xE2) { // CLX - Clear X register (close to INX 0xE8)
             console.log(`  Executing: CLX`);
             this.cpu.x = 0;
-            this.cpu.z = true;  // Zero flag set (result is zero)
-            this.cpu.n = false; // Negative flag clear (zero is not negative)
+            this.updateStatusFlags(this.cpu.x);
             result = 'CLX';
             pcIncrement = 1;
         }
-        else if (instruction === 0x22) { // CLY - Clear Y register
+        else if (instruction === 0xC2) { // CLY - Clear Y register (close to INY 0xC8)
             console.log(`  Executing: CLY`);
             this.cpu.y = 0;
-            this.cpu.z = true;  // Zero flag set (result is zero)
-            this.cpu.n = false; // Negative flag clear (zero is not negative)
+            this.updateStatusFlags(this.cpu.y);
             result = 'CLY';
             pcIncrement = 1;
         }
@@ -853,10 +839,11 @@ class CDC6504Emulator {
         }
         // Unknown instruction
         else {
-            console.log(`  ERROR: Invalid instruction 0x${instruction.toString(16).padStart(2, '0')} - halting CPU`);
+            const errorMsg = `Invalid instruction 0x${instruction.toString(16).padStart(2, '0')}`;
+            console.log(`  ERROR: ${errorMsg} - halting CPU`);
             this.running = false;
-            this.cpu.mode = 1;
-            result = `ERROR: Invalid instruction 0x${instruction.toString(16).padStart(2, '0')}`;
+            this.errorMessage = errorMsg;
+            result = `ERROR: ${errorMsg}`;
             pcIncrement = 1;
         }
         
@@ -1021,7 +1008,8 @@ BRK`;
             pc: this.cpu.pc,
             halted: !this.running && this.cpu.instructions[this.cpu.pc] === 0x00,
             output: this.output,
-            trace: this.executionTrace
+            trace: this.executionTrace,
+            errorMessage: this.errorMessage
         };
     }
 

@@ -19,7 +19,6 @@ export class CDC6504CPU extends LitElement {
       // Status flags
       z: { type: Boolean },   // Zero flag
       n: { type: Boolean },   // Negative flag
-      mode: { type: Number }, // Error mode
       // Memory highlighting
       highlightedMemory: { type: Array },
       // Responsive layout
@@ -41,7 +40,6 @@ export class CDC6504CPU extends LitElement {
     // Initialize status flags
     this.z = false;  // Zero flag
     this.n = false;  // Negative flag
-    this.mode = 0;   // Error mode
     
     // Initialize memory highlighting
     this.highlightedMemory = [];
@@ -140,17 +138,6 @@ export class CDC6504CPU extends LitElement {
     const numValue = parseInt(value, 16);
     if (!isNaN(numValue) && numValue >= 0 && numValue <= 255) {
       this.pc = numValue;
-    }
-  }
-
-  changeMode(e) {
-    let value = e.target.value;
-    if (value.startsWith('0x')) {
-      value = value.substring(2);
-    }
-    const numValue = parseInt(value, 16);
-    if (!isNaN(numValue) && numValue >= 0 && numValue <= 15) {
-      this.mode = numValue;
     }
   }
 
@@ -306,9 +293,8 @@ export class CDC6504CPU extends LitElement {
     // Disassemble a single 6502 instruction byte
     // 1-byte instructions
     if (instruction === 0x00) return "BRK";
-    if (instruction === 0x02) return "CLA";
-    if (instruction === 0x12) return "CLX";
-    if (instruction === 0x22) return "CLY";
+    if (instruction === 0xE2) return "CLX";
+    if (instruction === 0xC2) return "CLY";
     if (instruction === 0xE8) return "INX";
     if (instruction === 0xC8) return "INY";
     if (instruction === 0xCA) return "DEX";
@@ -447,12 +433,6 @@ export class CDC6504CPU extends LitElement {
         padding: 0.375rem 0.75rem;
         font-size: 0.875rem;
         font-family: 'Courier New', Courier, monospace;
-      }
-      
-      .error-mode {
-        background-color: #f8d7da !important;
-        border-color: #dc3545 !important;
-        color: #721c24 !important;
       }
       
       .form-control {
@@ -616,10 +596,6 @@ export class CDC6504CPU extends LitElement {
                         <div>
                           <small class="text-muted">PC:</small><br>
                           <input type="text" size="4" class="font-monospace register-input" value="0x${this.toHex(this.pc)}" @input=${this.changePC}>
-                        </div>
-                        <div>
-                          <small class="text-muted">MODE:</small><br>
-                          <input type="text" size="2" class="font-monospace register-input ${this.mode >= 1 ? 'error-mode' : ''}" value="0x${this.toHex(this.mode)}" @input=${this.changeMode}>
                         </div>
                         <div>
                           <small class="text-muted">Z:</small><br>
