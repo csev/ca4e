@@ -184,8 +184,144 @@
         
         <div id="instructions" class="tab-content active">
             <h2>Instruction Set Reference</h2>
+            <h3>Control Instructions (8-bit)</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Assembly</th>
+                    <th>Opcode</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>BRK</td>
+                    <td>00000000</td>
+                    <td>Break/Halt - Stop program execution (automatically prints data memory)</td>
+                </tr>
+            </table>
+            <div class="tip">
+                <h4>💡 X and Y Registers</h4>
+                <p>The X and Y registers are 8-bit registers that can be used for indexing and counting.  They are not used for arithmetic operations.  Data can be transferred between the X, Y, and ACC registers.
+                </p>
+            </p>
+            </div>
+
+            <h3>Increment/Decrement Instructions (8-bit)</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Assembly</th>
+                    <th>Opcode</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>CLX</td>
+                    <td>11100010</td>
+                    <td>Clear X register (X = 0). Sets Z flag to 1, N flag to 0. (*)</td>
+                </tr>
+                <tr>
+                    <td>CLY</td>
+                    <td>11000010</td>
+                    <td>Clear Y register (Y = 0). Sets Z flag to 1, N flag to 0s. (*)</td>
+                </tr>
+                <tr>
+                    <td>INX</td>
+                    <td>11101000</td>
+                    <td>Increment X register by 1</td>
+                </tr>
+                <tr>
+                    <td>INY</td>
+                    <td>11001000</td>
+                    <td>Increment Y register by 1</td>
+                </tr>
+                <tr>
+                    <td>DEX</td>
+                    <td>11001010</td>
+                    <td>Decrement X register by 1</td>
+                </tr>
+                <tr>
+                    <td>DEY</td>
+                    <td>10001000</td>
+                    <td>Decrement Y register by 1</td>
+                </tr>
+            </table>
+
+            <h3>Transfer Instructions(8-Bit)</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Assembly</th>
+                    <th>Opcode</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>TAX</td>
+                    <td>10101010</td>
+                    <td>Transfer accumulator to X register</td>
+                </tr>
+                <tr>
+                    <td>TAY</td>
+                    <td>10101000</td>
+                    <td>Transfer accumulator to Y register</td>
+                </tr>
+                <tr>
+                    <td>TXA</td>
+                    <td>10001010</td>
+                    <td>Transfer X register to accumulator</td>
+                </tr>
+                <tr>
+                    <td>TYA</td>
+                    <td>10011000</td>
+                    <td>Transfer Y register to accumulator</td>
+                </tr>
+            </table>
+
+            <div class="tip">
+                <h4>💡 ACC Register</h4>
+                <p>The ACC register is the primary register for arithmetic operations.  It is used to store the result of arithmetic operations.
+                </p>
+            </p>
+            </div>
+
+            <h3>Arithmetic Instructions (16-bit)</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Assembly</th>
+                    <th>Opcode</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>ADC #value</td>
+                    <td>01101001</td>
+                    <td>Add (immediate): ACC = ACC + value</td>
+                </tr>
+                <tr>
+                    <td>ADC $address</td>
+                    <td>01100101</td>
+                    <td>Add (from memory): ACC = ACC + memory[address]</td>
+                </tr>
+                <tr>
+                    <td>SBC #value</td>
+                    <td>11101001</td>
+                    <td>Subtract (immediate): ACC = ACC - value</td>
+                </tr>
+                <tr>
+                    <td>SBC $address</td>
+                    <td>11100101</td>
+                    <td>Subtract (from memory): ACC = ACC - memory[address]</td>
+                </tr>
+                <tr>
+                    <td>CMP #value</td>
+                    <td>11001001</td>
+                    <td>Compare accumulator with immediate value, sets Z, N flags</td>
+                </tr>
+            </table>
+
+            <div class="tip">
+                <h4>💡 16-bit instructions</h4>
+                <p>16-bit instructions take a parameter that is an 8-bit value.  It can be a hex number from 0-255, or a label, or a single ASCII character like 'h'.
+                These parameter values are stored in the byte immediately following the instruction for a total of 16-bits.  So we call them "immediate" instructions
+                </p>
+            </p>
+            </div>
             
-            <h3>Load Instructions</h3>
+            <h3>Load Instructions (16-Bit)</h3>
             <table class="instruction-table">
                 <tr>
                     <th>Assembly</th>
@@ -224,7 +360,7 @@
                 </tr>
             </table>
             
-            <h3>Store Instructions (Zero Page)</h3>
+            <h3>Store Instructions (16-bit)</h3>
             <table class="instruction-table">
                 <tr>
                     <th>Assembly</th>
@@ -248,135 +384,9 @@
                 </tr>
             </table>
             
-            <h3>Arithmetic Instructions</h3>
-            <table class="instruction-table">
-                <tr>
-                    <th>Assembly</th>
-                    <th>Opcode</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td>ADC #value</td>
-                    <td>01101001</td>
-                    <td>Add (immediate): ACC = ACC + value</td>
-                </tr>
-                <tr>
-                    <td>ADC $address</td>
-                    <td>01100101</td>
-                    <td>Add (from memory): ACC = ACC + memory[address]</td>
-                </tr>
-                <tr>
-                    <td>SBC #value</td>
-                    <td>11101001</td>
-                    <td>Subtract (immediate): ACC = ACC - value</td>
-                </tr>
-                <tr>
-                    <td>SBC $address</td>
-                    <td>11100101</td>
-                    <td>Subtract (from memory): ACC = ACC - memory[address]</td>
-                </tr>
-                <tr>
-                    <td>CMP #value</td>
-                    <td>11001001</td>
-                    <td>Compare accumulator with immediate value, sets Z, N flags</td>
-                </tr>
-            </table>
             
-            <div class="tip">
-                <h4>💡 Adding from Another Register</h4>
-                <p>To add the value from X or Y register to the accumulator, first transfer the register to accumulator, then add:</p>
-                <div class="code-block">
-TXA            ; Transfer X to accumulator
-ADC #5         ; Add 5 to accumulator (which now contains X's value)
-TAX            ; Transfer accumulator back to X
-                </div>
-            </div>
             
-            <h3>Increment/Decrement Instructions</h3>
-            <table class="instruction-table">
-                <tr>
-                    <th>Assembly</th>
-                    <th>Opcode</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td>INX</td>
-                    <td>11101000</td>
-                    <td>Increment X register by 1</td>
-                </tr>
-                <tr>
-                    <td>INY</td>
-                    <td>11001000</td>
-                    <td>Increment Y register by 1</td>
-                </tr>
-                <tr>
-                    <td>DEX</td>
-                    <td>11001010</td>
-                    <td>Decrement X register by 1</td>
-                </tr>
-                <tr>
-                    <td>DEY</td>
-                    <td>10001000</td>
-                    <td>Decrement Y register by 1</td>
-                </tr>
-            </table>
-            
-            <h3>Transfer Instructions</h3>
-            <table class="instruction-table">
-                <tr>
-                    <th>Assembly</th>
-                    <th>Opcode</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td>TAX</td>
-                    <td>10101010</td>
-                    <td>Transfer accumulator to X register</td>
-                </tr>
-                <tr>
-                    <td>TAY</td>
-                    <td>10101000</td>
-                    <td>Transfer accumulator to Y register</td>
-                </tr>
-                <tr>
-                    <td>TXA</td>
-                    <td>10001010</td>
-                    <td>Transfer X register to accumulator</td>
-                </tr>
-                <tr>
-                    <td>TYA</td>
-                    <td>10011000</td>
-                    <td>Transfer Y register to accumulator</td>
-                </tr>
-            </table>
-            
-            <h3>Clear Instructions</h3>
-            <table class="instruction-table">
-                <tr>
-                    <th>Assembly</th>
-                    <th>Opcode</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td>CLX</td>
-                    <td>11100010</td>
-                    <td>Clear X register (X = 0). Sets Z flag to 1, N flag to 0.</td>
-                </tr>
-                <tr>
-                    <td>CLY</td>
-                    <td>11000010</td>
-                    <td>Clear Y register (Y = 0). Sets Z flag to 1, N flag to 0.</td>
-                </tr>
-            </table>
-            
-            <div class="tip">
-                <h4>💡 Clear Instructions</h4>
-                <p>The clear instructions (CLX, CLY) are 8-bit emulator-only instructions that use unused 6502 opcodes (0xE2, 0xC2).
-                In a real hardware 6502, you would use the 16-bit LDX #0 and LDY #0 instructions to clear
-                the registers.</p>
-            </div>
-            
-            <h3>Branch Instructions (Relative)</h3>
+            <h3>Branch Instructions (16-bit)</h3>
             <table class="instruction-table">
                 <tr>
                     <th>Assembly</th>
@@ -405,7 +415,7 @@ TAX            ; Transfer accumulator back to X
                 </tr>
             </table>
             
-            <h3>Jump Instruction</h3>
+            <h3>Jump Instruction (16-bit)</h3>
             <table class="instruction-table">
                 <tr>
                     <th>Assembly</th>
@@ -418,20 +428,7 @@ TAX            ; Transfer accumulator back to X
                     <td>Unconditional jump to absolute address (zero-page)</td>
                 </tr>
             </table>
-            
-            <h3>Control Instructions</h3>
-            <table class="instruction-table">
-                <tr>
-                    <th>Assembly</th>
-                    <th>Opcode</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td>BRK</td>
-                    <td>00000000</td>
-                    <td>Break/Halt - Stop program execution (automatically prints string from data memory)</td>
-                </tr>
-            </table>
+        
             
             <h3>Assembly Directives</h3>
             <table class="instruction-table">
@@ -458,6 +455,13 @@ LDX #10      ; Comments can appear after instructions
 INX          ; Another comment
 ; This is a comment-only line
 BRK
+            </div>
+
+            <div class="tip">
+                <h4>(*) Emulator-only instructions</h4>
+                <p>The clear instructions (CLX, CLY) are 8-bit emulator-only instructions that use unused 6502 opcodes (0xE2, 0xC2).
+                In a real hardware 6502, you would use the 16-bit LDX #0 and LDY #0 instructions to clear
+                the registers.</p>
             </div>
         </div>
         
