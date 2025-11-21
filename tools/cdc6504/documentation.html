@@ -174,15 +174,62 @@
         </p>
         
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('instructions')">Instructions</button>
-            <button class="nav-tab" onclick="showTab('registers')">Registers</button>
+            <button class="nav-tab active" onclick="showTab('registers')">Registers</button>
+            <button class="nav-tab" onclick="showTab('instructions')">Instructions</button>
             <button class="nav-tab" onclick="showTab('examples')">Examples</button>
             <button class="nav-tab" onclick="showTab('errors')">Error Handling</button>
             <button class="nav-tab" onclick="showTab('labels')">Labels</button>
             <button class="nav-tab" onclick="showTab('references')">References</button>
         </div>
         
-        <div id="instructions" class="tab-content active">
+        <div id="registers" class="tab-content active">
+            <h2>Register Reference</h2>
+            
+            <div class="register-grid">
+                <div class="register-card">
+                    <h4>General Purpose Registers</h4>
+                    <p>6502 architecture registers</p>
+                    <ul>
+                        <li><strong>ACC</strong>: Accumulator (A register) - primary register for arithmetic and data operations</li>
+                        <li><strong>X</strong>: Index Register X - used for indexing and counting</li>
+                        <li><strong>Y</strong>: Index Register Y - used for indexing and counting</li>
+                    </ul>
+                </div>
+                
+                <div class="register-card">
+                    <h4>Status Flags</h4>
+                    <p>Condition flags set by arithmetic, comparison, and transfer operations. Flags are set by any operation altering ACC, X, or Y.</p>
+                    <ul>
+                        <li><strong>Z</strong>: Zero flag - set when result equals zero</li>
+                        <li><strong>N</strong>: Negative flag - set when bit 7 of result is set (signed negative)</li>
+                    </ul>
+                </div>
+                
+                <div class="register-card">
+                    <h4>Special Registers</h4>
+                    <ul>
+                        <li><strong>PC</strong>: Program Counter (current instruction address)</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="tip">
+                <h4>💡 6502 Architecture</h4>
+                <p>The CDC6504 emulates a simplified 6502 processor. The accumulator (ACC) is the primary register for arithmetic operations. Use STA/STX/STY to store registers to memory, and LDA/LDX/LDY to load from immediate values.</p>
+            </div>
+            
+            <div class="tip">
+                <h4>💡 ASCII Character Support</h4>
+                <p>Immediate values can be specified as single ASCII characters in quotes: <code>LDA #'A'</code> loads 65 (ASCII for 'A') into the accumulator. This works for all immediate instructions: LDA, LDX, LDY, CMP, ADC, SBC.</p>
+            </div>
+            
+            <div class="tip">
+                <h4>💡 Status Flags</h4>
+                <p>Status flags are automatically updated by arithmetic, comparison, and transfer operations. Flags are set by any operation touching ACC, X, or Y. Use branch instructions (BEQ, BNE, BMI, BPL) to conditionally jump based on flag states.</p>
+            </div>
+        </div>
+        
+        <div id="instructions" class="tab-content">
             <h2>Instruction Set Reference</h2>
             <h3>Control Instructions (8-bit)</h3>
             <table class="instruction-table">
@@ -197,12 +244,7 @@
                     <td>Break/Halt - Stop program execution (automatically prints data memory)</td>
                 </tr>
             </table>
-            <div class="tip">
-                <h4>💡 X and Y Registers</h4>
-                <p>The X and Y registers are 8-bit registers that can be used for indexing and counting.  They are not used for arithmetic operations.  Data can be transferred between the X, Y, and ACC registers.
-                </p>
-            </p>
-            </div>
+
 
             <h3>Increment/Decrement Instructions (8-bit)</h3>
             <table class="instruction-table">
@@ -273,11 +315,58 @@
             </table>
 
             <div class="tip">
-                <h4>💡 ACC Register</h4>
-                <p>The ACC register is the primary register for arithmetic operations.  It is used to store the result of arithmetic operations.
+                <h4>💡 16-bit instructions</h4>
+                <p>16-bit instructions take a parameter that is an 8-bit constant value (immediate values) or data memory address.
+                These parameter values are stored in the byte immediately following the instruction for a total of 16-bits.
+                So we call them "immediate" instructions
                 </p>
             </p>
             </div>
+            
+            <h3>Load Instructions (16-Bit)</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Assembly</th>
+                    <th>Opcode</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>LDA #value</td>
+                    <td>10101001</td>
+                    <td>Load accumulator with immediate value (ACC = value)</td>
+                </tr>
+                <tr>
+                    <td>LDA $address</td>
+                    <td>10100101</td>
+                    <td>Load accumulator from zero-page memory address
+                        (ACC = memory[address])</td>
+                </tr>
+                <tr>
+                    <td>LDX #value</td>
+                    <td>10100010</td>
+                    <td>Load X register with immediate value
+                        (X = value)</td>
+                </tr>
+                <tr>
+                    <td>LDX $address</td>
+                    <td>10100110</td>
+                    <td>Load X register from zero-page memory address
+                        (X = memory[address])</td>
+                </tr>
+                <tr>
+                    <td>LDY #value</td>
+                    <td>10100000</td>
+                    <td>Load Y register with immediate value
+                        (Y = value)</td>
+                </tr>
+                <tr>
+                    <td>LDY $address</td>
+                    <td>10100100</td>
+                    <td>Load Y register from zero-page memory address
+                        (Y = memory[address])</td>
+                </tr>
+            </table>
+
 
             <h3>Arithmetic Instructions (16-bit)</h3>
             <table class="instruction-table">
@@ -313,52 +402,6 @@
                 </tr>
             </table>
 
-            <div class="tip">
-                <h4>💡 16-bit instructions</h4>
-                <p>16-bit instructions take a parameter that is an 8-bit value.  It can be a hex number from 0-255, or a label, or a single ASCII character like 'h'.
-                These parameter values are stored in the byte immediately following the instruction for a total of 16-bits.  So we call them "immediate" instructions
-                </p>
-            </p>
-            </div>
-            
-            <h3>Load Instructions (16-Bit)</h3>
-            <table class="instruction-table">
-                <tr>
-                    <th>Assembly</th>
-                    <th>Opcode</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td>LDA #value</td>
-                    <td>10101001</td>
-                    <td>Load accumulator with immediate value (0-255, 0x00-0xFF, or 'A')</td>
-                </tr>
-                <tr>
-                    <td>LDA $address</td>
-                    <td>10100101</td>
-                    <td>Load accumulator from zero-page memory address</td>
-                </tr>
-                <tr>
-                    <td>LDX #value</td>
-                    <td>10100010</td>
-                    <td>Load X register with immediate value</td>
-                </tr>
-                <tr>
-                    <td>LDX $address</td>
-                    <td>10100110</td>
-                    <td>Load X register from zero-page memory address</td>
-                </tr>
-                <tr>
-                    <td>LDY #value</td>
-                    <td>10100000</td>
-                    <td>Load Y register with immediate value</td>
-                </tr>
-                <tr>
-                    <td>LDY $address</td>
-                    <td>10100100</td>
-                    <td>Load Y register from zero-page memory address</td>
-                </tr>
-            </table>
             
             <h3>Store Instructions (16-bit)</h3>
             <table class="instruction-table">
@@ -370,17 +413,20 @@
                 <tr>
                     <td>STA $address</td>
                     <td>10000101</td>
-                    <td>Store accumulator to zero-page memory address</td>
+                    <td>Store accumulator to zero-page memory address
+                        (memory[address] = ACC)</td>
                 </tr>
                 <tr>
                     <td>STX $address</td>
                     <td>10000110</td>
-                    <td>Store X register to zero-page memory address</td>
+                    <td>Store X register to zero-page memory address
+                        (memory[address] = X)</td>
                 </tr>
                 <tr>
                     <td>STY $address</td>
                     <td>10000100</td>
-                    <td>Store Y register to zero-page memory address</td>
+                    <td>Store Y register to zero-page memory address
+                        (memory[address] = Y)</td>
                 </tr>
             </table>
             
@@ -462,53 +508,6 @@ BRK
                 <p>The clear instructions (CLX, CLY) are 8-bit emulator-only instructions that use unused 6502 opcodes (0xE2, 0xC2).
                 In a real hardware 6502, you would use the 16-bit LDX #0 and LDY #0 instructions to clear
                 the registers.</p>
-            </div>
-        </div>
-        
-        <div id="registers" class="tab-content">
-            <h2>Register Reference</h2>
-            
-            <div class="register-grid">
-                <div class="register-card">
-                    <h4>General Purpose Registers</h4>
-                    <p>6502 architecture registers</p>
-                    <ul>
-                        <li><strong>ACC</strong>: Accumulator (A register) - primary register for arithmetic and data operations</li>
-                        <li><strong>X</strong>: Index Register X - used for indexing and counting</li>
-                        <li><strong>Y</strong>: Index Register Y - used for indexing and counting</li>
-                    </ul>
-                </div>
-                
-                <div class="register-card">
-                    <h4>Status Flags</h4>
-                    <p>Condition flags set by arithmetic and comparison operations</p>
-                    <ul>
-                        <li><strong>Z</strong>: Zero flag - set when result equals zero</li>
-                        <li><strong>N</strong>: Negative flag - set when bit 7 of result is set (signed negative)</li>
-                    </ul>
-                </div>
-                
-                <div class="register-card">
-                    <h4>Special Registers</h4>
-                    <ul>
-                        <li><strong>PC</strong>: Program Counter (current instruction address)</li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="tip">
-                <h4>💡 6502 Architecture</h4>
-                <p>The CDC6504 emulates a simplified 6502 processor. The accumulator (ACC) is the primary register for arithmetic operations. Use STA/STX/STY to store registers to memory, and LDA/LDX/LDY to load from immediate values.</p>
-            </div>
-            
-            <div class="tip">
-                <h4>💡 ASCII Character Support</h4>
-                <p>Immediate values can be specified as single ASCII characters in quotes: <code>LDA #'A'</code> loads 65 (ASCII for 'A') into the accumulator. This works for all immediate instructions: LDA, LDX, LDY, CMP, ADC, SBC.</p>
-            </div>
-            
-            <div class="tip">
-                <h4>💡 Status Flags</h4>
-                <p>Status flags are automatically updated by arithmetic and comparison operations. Use branch instructions (BEQ, BNE, BMI, BPL) to conditionally jump based on flag states.</p>
             </div>
         </div>
         
