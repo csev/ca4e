@@ -198,7 +198,8 @@
                 
                 <div class="register-card">
                     <h4>Status Flags</h4>
-                    <p>Condition flags set by arithmetic, comparison, and transfer operations. Flags are set by any operation altering ACC, X, or Y.</p>
+                    <p>Condition flags set by arithmetic, comparison, and transfer operations.
+                        Flags are set by any operation altering ACC, X, or Y.</p>
                     <ul>
                         <li><strong>Z</strong>: Zero flag - set when result equals zero</li>
                         <li><strong>N</strong>: Negative flag - set when bit 7 of result is set (signed negative)</li>
@@ -215,17 +216,21 @@
             
             <div class="tip">
                 <h4>💡 6502 Architecture</h4>
-                <p>The CDC6504 emulates a simplified 6502 processor. The accumulator (ACC) is the primary register for arithmetic operations. Use STA/STX/STY to store registers to memory, and LDA/LDX/LDY to load from immediate values.</p>
+                <p>The CDC6504 emulates a simplified 6502 processor. The accumulator (ACC) is the primary register for arithmetic operations.
+                    Use STA/STX/STY to store registers to memory, and LDA/LDX/LDY to load from immediate values.</p>
             </div>
             
             <div class="tip">
                 <h4>💡 ASCII Character Support</h4>
-                <p>Immediate values can be specified as single ASCII characters in quotes: <code>LDA #'A'</code> loads 65 (ASCII for 'A') into the accumulator. This works for all immediate instructions: LDA, LDX, LDY, CMP, ADC, SBC.</p>
+                <p>Immediate values can be specified as single ASCII characters in quotes: <code>LDA #'A'</code> loads 65 (ASCII for 'A') into the accumulator.
+                    This works for all immediate instructions: LDA, LDX, LDY, CMP, ADC, SBC.</p>
             </div>
             
             <div class="tip">
                 <h4>💡 Status Flags</h4>
-                <p>Status flags are automatically updated by arithmetic, comparison, and transfer operations. Flags are set by any operation touching ACC, X, or Y. Use branch instructions (BEQ, BNE, BMI, BPL) to conditionally jump based on flag states.</p>
+                <p>Status flags are automatically updated by arithmetic, comparison, and transfer operations.
+                    Flags are set by any operation touching ACC, X, or Y.
+                    Use branch instructions (BEQ, BNE, BMI, BPL) to conditionally jump based on flag states.</p>
             </div>
         </div>
         
@@ -493,7 +498,8 @@
             </table>
             
             <h3>Comments</h3>
-            <p>Comments can be added to assembly code using <code>;</code> (semicolon). Everything from the semicolon to the end of the line is ignored by the assembler.</p>
+            <p>Comments can be added to assembly code using <code>;</code> (semicolon).
+                Everything from the semicolon to the end of the line is ignored by the assembler.</p>
             <p><strong>Note:</strong> The <code>#</code> character is used for immediate values (e.g., <code>LDA #42</code>), not for comments.</p>
             <div class="code-block">
 LDA #42      ; This is a comment using semicolon
@@ -514,57 +520,120 @@ BRK
         <div id="examples" class="tab-content">
             <h2>Example Programs</h2>
             
+            <p style="margin-bottom: 20px;">These example programs are available in the "Load Program" dropdown menu in the emulator.
+                Each demonstrates different aspects of the CDC6504 instruction set.</p>
+            
             <div class="example">
-                <h4>Hello World (Manual)</h4>
+                <h4>Simple Sample</h4>
+                <p>This very basic example, computes 1+1 = 2 in the X register.
+                    It is kept simple to make it easy to examine the generated machine code.</p>
                 <div class="code-block">
-LDA #'H'       ; Load 'H' into accumulator
-STA $00        ; Store to memory address 0
-LDA #'e'       ; Load 'e' into accumulator
-STA $01        ; Store to memory address 1
-LDA #'l'       ; Load 'l' into accumulator
-STA $02        ; Store to memory address 2
-STA $03        ; Store 'l' again to address 3
-LDA #'o'       ; Load 'o' into accumulator
-STA $04        ; Store to memory address 4
-BRK            ; Halt (automatically prints string)
+CLX         ; Clear X register
+INX         ; Increment X
+INX         ; Increment X again
+BRK
+                </div>
+            </div>
+            
+            <div class="example">
+                <h4>Add Sample</h4>
+                <p>This program demonstrates immediate loading and immediate addition.
+                    After computing 10+5 it stores the result in memory location 3</p>
+                <div class="code-block">
+LDA #10     ; Load 10 into accumulator
+ADC #5      ; Add 5 (result = 15)
+STA $03     ; Store result to memory[3]
+BRK
+                </div>
+            </div>
+            
+            <div class="example">
+                <h4>Uppercase Sample</h4>
+                <p>This program demonstrates conditional branching and arithmetic to convert a character to upper case.
+                    It compares a character value with 0x61 (lowercase 'a'), and if the value is greater than or equal to 0x61,
+                    it subtracts 0x20 to convert to uppercase using the BMI (Branch if Minus) instruction.</p>
+                <div class="code-block">
+LDA #'p'     ; 0x70 is the ASCII value for 'p'
+CMP #'a'     ; 0x61 is the ASCII value for 'a'
+BMI skip     ; Branch if minus (less than)
+SBC #0x20    ; Subtract 0x20 to convert to uppercase
+skip:
+BRK
+                </div>
+            </div>
+            
+            <div class="example">
+                <h4>Hi</h4>
+                <p>A simple two-character string program that demonstrates loading ASCII characters using single quotes.
+                    It stores 'H' and 'i' into consecutive memory locations, creating the string "Hi"
+                    which is automatically printed when BRK executes.</p>
+                <div class="code-block">
+LDA #'H'
+STA $00
+LDA #'i'
+STA $01
+BRK
+                </div>
+            </div>
+            
+            <div class="example">
+                <h4>Hello</h4>
+                <p>This program manually constructs the string "Hello" by loading each character's ASCII value
+                    (using decimal numbers) and storing them to consecutive memory addresses.
+                    The BRK instruction automatically prints the null-terminated string from memory.</p>
+                <div class="code-block">
+LDA #72        ; 'H'
+STA $00
+LDA #101       ; 'e'
+STA $01
+LDA #108       ; 'l'
+STA $02
+STA $03        ; 'l' again
+LDA #111       ; 'o'
+STA $04
+BRK
                 </div>
             </div>
             
             <div class="example">
                 <h4>Hello World (with DATA)</h4>
+                <p>This program demonstrates the DATA directive, which provides a convenient way to pre-populate data memory with a string.
+                    The DATA directive automatically places the string in memory starting at address 0 and adds a null terminator,
+                    making it much simpler than manually storing each character.</p>
                 <div class="code-block">
-BRK            ; Stop
+BRK
 DATA 'Hello World!'
                 </div>
             </div>
             
             <div class="example">
                 <h4>Counter Loop (with Labels)</h4>
+                <p>This program demonstrates the use of labels for program flow control. 
+                    It uses a loop that increments the X register from 0 to 5, using labels "loop" and "end" for branching. 
+                    The program compares X to 5 using CMP and branches when equal using BEQ, 
+                    showing how labels make jump addresses easier to manage.  The program is a simple for loop.
+<pre>
+for(X=0; X&lt;5; X++) ;
+</pre>
+                </p>
                 <div class="code-block">
 CLX            ; Clear X register
 loop:
 TXA            ; Transfer X to accumulator
 CMP #5         ; Compare accumulator to 5
-BEQ end        ; Branch to end if equal (Z flag set)
-INX            ; Increment X register
-JMP loop       ; Jump back to loop
+BEQ end        ; Branch if equal (Z flag set)
+INX            ; Increment X
+JMP loop       ; Jump to loop
 end:
-BRK            ; Stop
-                </div>
-            </div>
-            
-            <div class="example">
-                <h4>Add</h4>
-                <div class="code-block">
-LDA #10        ; Load 10 into accumulator
-ADC #5         ; Add 5 (result = 15)
-STA $00        ; Store result to memory address 0
-BRK
+BRK            ; Halt
                 </div>
             </div>
             
             <div class="example">
                 <h4>Register Transfer</h4>
+                <p>This program demonstrates transferring data between registers using TAX and TXA instructions.
+                    It loads a value into the accumulator, transfers it to X, then transfers it back to the accumulator,
+                    showing how register transfers work.</p>
                 <div class="code-block">
 LDA #42        ; Load 42 into accumulator
 TAX            ; Transfer accumulator to X
@@ -574,16 +643,10 @@ BRK
             </div>
             
             <div class="example">
-                <h4>Clear Registers</h4>
-                <div class="code-block">
-CLX            ; Clear X register (X = 0, Z = 1, N = 0)
-CLY            ; Clear Y register (Y = 0, Z = 1, N = 0)
-BRK
-                </div>
-            </div>
-            
-            <div class="example">
                 <h4>Load from Memory Address</h4>
+                <p>This program demonstrates loading values from memory addresses.
+                    It stores a value to memory, then loads it back into different registers (ACC, X, and Y)
+                    using the LDA, LDX, and LDY instructions with memory addressing.</p>
                 <div class="code-block">
 ; Store a value in memory, then load it into registers
 LDA #100       ; Load 100 into accumulator
@@ -597,6 +660,9 @@ BRK
             
             <div class="example">
                 <h4>Add from Memory Address</h4>
+                <p>This program demonstrates adding values stored in memory.
+                    It stores two values to different memory addresses, then loads one and adds the other from memory
+                    using ADC with memory addressing mode.</p>
                 <div class="code-block">
 ; Store values in memory, then add them
 LDA #10        ; Load 10 into accumulator
@@ -610,6 +676,9 @@ BRK
             
             <div class="example">
                 <h4>Add from Another Register</h4>
+                <p>This program shows two methods for adding a register's value to the accumulator.
+                    Since arithmetic operations only work with the accumulator, you must transfer the register value to ACC first,
+                    or store it to memory and load it. Both approaches are demonstrated here.</p>
                 <div class="code-block">
 ; To add X register's value to accumulator:
 LDX #10        ; Load 10 into X register
@@ -627,7 +696,10 @@ BRK
             </div>
             
             <div class="example">
-                <h4>Hello (using ADC/SBC)</h4>
+                <h4>Hello (again)</h4>
+                <p>This program constructs "Hello" using arithmetic operations to derive some characters.
+                    It stores 'H', 'e', and 'l' directly, then uses ADC and SBC to calculate 'o' from 'l'
+                    by adding 4 and subtracting 1, demonstrating how arithmetic can be used for character manipulation.</p>
                 <div class="code-block">
 ; This will print:  Hello
 
@@ -648,16 +720,7 @@ BRK            ; Stop (automatically prints memory starting at address 0 as an
               ; ASCII string, stopping when a zero is encountered)
                 </div>
             </div>
-            
-            <div class="example">
-                <h4>Register Copy</h4>
-                <div class="code-block">
-LDA #10        ; Load 10 into accumulator
-TAX            ; Transfer accumulator to X register
-TXA            ; Transfer X back to accumulator (copy complete)
-BRK
-                </div>
-            </div>
+
         </div>
         
         <div id="errors" class="tab-content">
@@ -747,7 +810,8 @@ BRK           ; Stop
             
             <div class="tip">
                 <h4>💡 Historical Context</h4>
-                <p>The CDC6504 emulator uses authentic 6502 opcodes and instruction syntax. The 6502 was one of the most popular 8-bit microprocessors, used in systems like the Apple II, Commodore 64, and Atari 2600.</p>
+                <p>The CDC6504 emulator uses authentic 6502 opcodes and instruction syntax.
+                    The 6502 was one of the most popular 8-bit microprocessors, used in systems like the Apple II, Commodore 64, and Atari 2600.</p>
             </div>
         </div>
         
