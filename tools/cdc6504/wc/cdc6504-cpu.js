@@ -604,11 +604,11 @@ export class CDC6504CPU extends LitElement {
                         </div>
                         <div>
                           <small class="text-muted">Z:</small><br>
-                          <input type="checkbox" ${this.z ? 'checked' : ''} @change=${this.changeZ} style="width: 20px; height: 20px;">
+                          <input type="checkbox" .checked=${this.z} @change=${this.changeZ} style="width: 20px; height: 20px;">
                         </div>
                         <div>
                           <small class="text-muted">N:</small><br>
-                          <input type="checkbox" ${this.n ? 'checked' : ''} @change=${this.changeN} style="width: 20px; height: 20px;">
+                          <input type="checkbox" .checked=${this.n} @change=${this.changeN} style="width: 20px; height: 20px;">
                         </div>
                       </div>
                     </div>

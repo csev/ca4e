@@ -642,6 +642,8 @@ class CDC6504Emulator {
     updateStatusFlags(value) {
         this.cpu.z = (value === 0);
         this.cpu.n = ((value & 0x80) !== 0); // Negative flag (bit 7 set)
+        // Force update to ensure UI reflects flag changes
+        this.cpu.requestUpdate();
     }
 
     // Update status flags for comparison (6502 CMP semantics)
@@ -649,6 +651,8 @@ class CDC6504Emulator {
         const result = (acc - value) & 0xFF;
         this.cpu.z = (acc === value);
         this.cpu.n = ((result & 0x80) !== 0);
+        // Force update to ensure UI reflects flag changes
+        this.cpu.requestUpdate();
     }
 
     // Execute a single instruction (6502)
