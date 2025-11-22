@@ -630,19 +630,6 @@ BRK            ; Halt
             </div>
             
             <div class="example">
-                <h4>Register Transfer</h4>
-                <p>This program demonstrates transferring data between registers using TAX and TXA instructions.
-                    It loads a value into the accumulator, transfers it to X, then transfers it back to the accumulator,
-                    showing how register transfers work.</p>
-                <div class="code-block">
-LDA #42        ; Load 42 into accumulator
-TAX            ; Transfer accumulator to X
-TXA            ; Transfer X back to accumulator
-BRK
-                </div>
-            </div>
-            
-            <div class="example">
                 <h4>Load from Memory Address</h4>
                 <p>This program demonstrates loading values from memory addresses.
                     It stores a value to memory, then loads it back into different registers (ACC, X, and Y)
@@ -701,8 +688,6 @@ BRK
                     It stores 'H', 'e', and 'l' directly, then uses ADC and SBC to calculate 'o' from 'l'
                     by adding 4 and subtracting 1, demonstrating how arithmetic can be used for character manipulation.</p>
                 <div class="code-block">
-; This will print:  Hello
-
 LDA #'H'       ; Load 'H' into accumulator
 STA $00        ; Store 'H' to memory address 0x00
 LDA #'e'       ; Load 'e' into accumulator
@@ -716,8 +701,7 @@ SBC #1         ; Subtract 1 from accumulator so it is now 'o' (112 - 1 = 111)
 STA $04        ; Store 'o' to memory address 0x04
 LDA #0         ; Load zero into accumulator
 STA $05        ; Store zero to memory address 0x05 (null terminator)
-BRK            ; Stop (automatically prints memory starting at address 0 as an
-              ; ASCII string, stopping when a zero is encountered)
+BRK            ; Stop and print memory as an ASCII string
                 </div>
             </div>
 
