@@ -287,10 +287,20 @@
     "title": "CPU Design and Machine Code",
     "anchor": "cpu",
     "icon" : "fa-calculator",
-    "description": "Machine code - CDC 8512.",
+    "description": "Machine code - CDC 6504.",
     "slides": [
         "{apphome}/lectures/04-CPU-Machine-Code.pptx"
     ],
+    "references" : [
+        {
+            "title" : "ARM Instruction Set design history with Sophie Wilson)",
+            "href" : "https://www.youtube.com/watch?v=QqxThgLTLyk"
+        },
+        {
+            "title" : " The potted history of ARM",
+            "href" : "https://www.youtube.com/watch?v=t59EtDxpYmM"
+        }   
+    ],  
      "lti" : [
         {
             "title" : "Print out '42'",
