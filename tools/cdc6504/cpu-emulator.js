@@ -110,7 +110,7 @@ class CDC6504Emulator {
             
             // Validate instruction (6502 instruction set)
             const validInstructions = ['LDA', 'LDX', 'LDY', 'STA', 'STX', 'STY', 'TAX', 'TAY', 'TXA', 'TYA', 'INX', 'INY', 'DEX', 'DEY',
-                                      'ADC', 'SBC', 'CMP', 'BEQ', 'BNE', 'BMI', 'BPL', 'JMP', 'BRK', 'CLX', 'CLY'];
+                                      'ADC', 'SBC', 'CMP', 'CPX', 'CPY', 'BEQ', 'BNE', 'BMI', 'BPL', 'JMP', 'BRK', 'CLX', 'CLY'];
             if (!validInstructions.includes(instruction)) {
                 errors.push(`Line ${lineNum + 1}: Unknown instruction "${instruction}"`);
                 continue;
@@ -118,11 +118,11 @@ class CDC6504Emulator {
             
             // Calculate instruction size and check for overflow (6502 instruction sizes)
             let instructionSize = 0;
-            // 2-byte instructions (immediate or zero-page): LDA #, LDX #, LDY #, CMP #, ADC #, SBC #, STA $, STX $, STY $
+            // 2-byte instructions (immediate or zero-page): LDA #, LDX #, LDY #, CMP #, CPX #, CPY #, ADC #, SBC #, STA $, STX $, STY $
             // Branch instructions: BEQ, BNE, BMI, BPL (relative branches)
             if (instruction === 'LDA' || instruction === 'LDX' || instruction === 'LDY' || instruction === 'STA' ||
                 instruction === 'STX' || instruction === 'STY' || instruction === 'ADC' || instruction === 'SBC' ||
-                instruction === 'CMP' || instruction === 'BEQ' || instruction === 'BNE' || instruction === 'BMI' ||
+                instruction === 'CMP' || instruction === 'CPX' || instruction === 'CPY' || instruction === 'BEQ' || instruction === 'BNE' || instruction === 'BMI' ||
                 instruction === 'BPL' || instruction === 'JMP') {
                 instructionSize = 2; // 2-byte instructions
             } else if (instruction === 'TAX' || instruction === 'TAY' || instruction === 'TXA' || instruction === 'TYA' ||
@@ -319,20 +319,106 @@ class CDC6504Emulator {
                 address += 1;
             } else if (instruction === 'CMP') {
                 if (parts.length < 2) {
-                    throw new Error(`Line ${lineNum + 1}: CMP instruction requires value (e.g., CMP #42 or CMP 42)`);
+                    throw new Error(`Line ${lineNum + 1}: CMP instruction requires value or address (e.g., CMP #42 or CMP $10)`);
                 }
-                // Support both "#value" and "value" syntax (remove # if present)
-                let valueStr = parts[1];
-                if (valueStr.startsWith('#')) {
-                    valueStr = valueStr.substring(1);
+                const operand = parts[1];
+                
+                // Check if it's zero-page addressing ($address) or immediate (#value or value)
+                if (operand.startsWith('$')) {
+                    // Zero-page addressing: CMP $address
+                    const addrStr = operand.substring(1);
+                    const addr = addrStr.startsWith('0x') ? parseInt(addrStr.substring(2), 16) : parseInt(addrStr, 16);
+                    if (isNaN(addr) || addr < 0 || addr > 255) {
+                        throw new Error(`Line ${lineNum + 1}: Invalid address "${operand}". Must be between $00 and $FF`);
+                    }
+                    const opcode = 0xC5; // CMP $ (6502 zero-page)
+                    console.log(`Assembling CMP $${addr.toString(16).padStart(2, '0')}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
+                    this.cpu.instructions[address] = opcode;
+                    this.cpu.instructions[address + 1] = addr;
+                    address += 2;
+                } else {
+                    // Immediate mode: CMP #value
+                    // Support both "#value" and "value" syntax (remove # if present)
+                    let valueStr = operand;
+                    if (valueStr.startsWith('#')) {
+                        valueStr = valueStr.substring(1);
+                    }
+                    const value = this.parseValue(valueStr);
+                    // 6502 CMP # compares accumulator with immediate value
+                    const opcode = 0xC9; // CMP # (6502 immediate)
+                    console.log(`Assembling CMP #${value}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
+                    this.cpu.instructions[address] = opcode;
+                    this.cpu.instructions[address + 1] = value;
+                    address += 2;
                 }
-                const value = this.parseValue(valueStr);
-                // 6502 CMP # compares accumulator with immediate value
-                const opcode = 0xC9; // CMP # (6502 immediate)
-                console.log(`Assembling CMP #${value}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
-                this.cpu.instructions[address] = opcode;
-                this.cpu.instructions[address + 1] = value;
-                address += 2;
+            } else if (instruction === 'CPX') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: CPX instruction requires value or address (e.g., CPX #42 or CPX $10)`);
+                }
+                const operand = parts[1];
+                
+                // Check if it's zero-page addressing ($address) or immediate (#value or value)
+                if (operand.startsWith('$')) {
+                    // Zero-page addressing: CPX $address
+                    const addrStr = operand.substring(1);
+                    const addr = addrStr.startsWith('0x') ? parseInt(addrStr.substring(2), 16) : parseInt(addrStr, 16);
+                    if (isNaN(addr) || addr < 0 || addr > 255) {
+                        throw new Error(`Line ${lineNum + 1}: Invalid address "${operand}". Must be between $00 and $FF`);
+                    }
+                    const opcode = 0xE4; // CPX $ (6502 zero-page)
+                    console.log(`Assembling CPX $${addr.toString(16).padStart(2, '0')}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
+                    this.cpu.instructions[address] = opcode;
+                    this.cpu.instructions[address + 1] = addr;
+                    address += 2;
+                } else {
+                    // Immediate mode: CPX #value
+                    // Support both "#value" and "value" syntax (remove # if present)
+                    let valueStr = operand;
+                    if (valueStr.startsWith('#')) {
+                        valueStr = valueStr.substring(1);
+                    }
+                    const value = this.parseValue(valueStr);
+                    // 6502 CPX # compares X register with immediate value
+                    const opcode = 0xE0; // CPX # (6502 immediate)
+                    console.log(`Assembling CPX #${value}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
+                    this.cpu.instructions[address] = opcode;
+                    this.cpu.instructions[address + 1] = value;
+                    address += 2;
+                }
+            } else if (instruction === 'CPY') {
+                if (parts.length < 2) {
+                    throw new Error(`Line ${lineNum + 1}: CPY instruction requires value or address (e.g., CPY #42 or CPY $10)`);
+                }
+                const operand = parts[1];
+                
+                // Check if it's zero-page addressing ($address) or immediate (#value or value)
+                if (operand.startsWith('$')) {
+                    // Zero-page addressing: CPY $address
+                    const addrStr = operand.substring(1);
+                    const addr = addrStr.startsWith('0x') ? parseInt(addrStr.substring(2), 16) : parseInt(addrStr, 16);
+                    if (isNaN(addr) || addr < 0 || addr > 255) {
+                        throw new Error(`Line ${lineNum + 1}: Invalid address "${operand}". Must be between $00 and $FF`);
+                    }
+                    const opcode = 0xC4; // CPY $ (6502 zero-page)
+                    console.log(`Assembling CPY $${addr.toString(16).padStart(2, '0')}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
+                    this.cpu.instructions[address] = opcode;
+                    this.cpu.instructions[address + 1] = addr;
+                    address += 2;
+                } else {
+                    // Immediate mode: CPY #value
+                    // Support both "#value" and "value" syntax (remove # if present)
+                    let valueStr = operand;
+                    if (valueStr.startsWith('#')) {
+                        valueStr = valueStr.substring(1);
+                    }
+                    const value = this.parseValue(valueStr);
+                    // 6502 CPY # compares Y register with immediate value
+                    const opcode = 0xC0; // CPY # (6502 immediate)
+                    console.log(`Assembling CPY #${value}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
+                    this.cpu.instructions[address] = opcode;
+                    this.cpu.instructions[address + 1] = value;
+                    address += 2;
+                }
             } else if (instruction === 'BEQ' || instruction === 'BNE' || instruction === 'BMI' || instruction === 'BPL') {
                 if (parts.length < 2) {
                     throw new Error(`Line ${lineNum + 1}: ${instruction} instruction requires label or address (e.g., ${instruction} loop)`);
@@ -663,12 +749,53 @@ class CDC6504Emulator {
             result = `STY $${addr.toString(16).padStart(2, '0')}`;
             pcIncrement = 2;
         }
-        // Compare instruction
+        // Compare instructions
         else if (instruction === 0xC9) { // CMP # - Compare accumulator immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
             console.log(`  Executing: CMP #${immediate}`);
             this.updateCompareFlags(this.cpu.acc, immediate);
             result = `CMP #${immediate}`;
+            pcIncrement = 2;
+        }
+        else if (instruction === 0xC5) { // CMP $ - Compare accumulator with zero-page memory
+            const addr = this.cpu.instructions[this.cpu.pc + 1];
+            const memValue = this.cpu.memory[addr];
+            console.log(`  Executing: CMP $${addr.toString(16).padStart(2, '0')}`);
+            this.updateCompareFlags(this.cpu.acc, memValue);
+            this.cpu.highlightMemory(addr);
+            result = `CMP $${addr.toString(16).padStart(2, '0')}`;
+            pcIncrement = 2;
+        }
+        else if (instruction === 0xE0) { // CPX # - Compare X register immediate
+            const immediate = this.cpu.instructions[this.cpu.pc + 1];
+            console.log(`  Executing: CPX #${immediate}`);
+            this.updateCompareFlags(this.cpu.x, immediate);
+            result = `CPX #${immediate}`;
+            pcIncrement = 2;
+        }
+        else if (instruction === 0xE4) { // CPX $ - Compare X register with zero-page memory
+            const addr = this.cpu.instructions[this.cpu.pc + 1];
+            const memValue = this.cpu.memory[addr];
+            console.log(`  Executing: CPX $${addr.toString(16).padStart(2, '0')}`);
+            this.updateCompareFlags(this.cpu.x, memValue);
+            this.cpu.highlightMemory(addr);
+            result = `CPX $${addr.toString(16).padStart(2, '0')}`;
+            pcIncrement = 2;
+        }
+        else if (instruction === 0xC0) { // CPY # - Compare Y register immediate
+            const immediate = this.cpu.instructions[this.cpu.pc + 1];
+            console.log(`  Executing: CPY #${immediate}`);
+            this.updateCompareFlags(this.cpu.y, immediate);
+            result = `CPY #${immediate}`;
+            pcIncrement = 2;
+        }
+        else if (instruction === 0xC4) { // CPY $ - Compare Y register with zero-page memory
+            const addr = this.cpu.instructions[this.cpu.pc + 1];
+            const memValue = this.cpu.memory[addr];
+            console.log(`  Executing: CPY $${addr.toString(16).padStart(2, '0')}`);
+            this.updateCompareFlags(this.cpu.y, memValue);
+            this.cpu.highlightMemory(addr);
+            result = `CPY $${addr.toString(16).padStart(2, '0')}`;
             pcIncrement = 2;
         }
         // Arithmetic instructions (immediate mode)

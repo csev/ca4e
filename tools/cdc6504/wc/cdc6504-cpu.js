@@ -316,6 +316,11 @@ export class CDC6504CPU extends LitElement {
     if (instruction === 0x86) return "STX $";
     if (instruction === 0x84) return "STY $";
     if (instruction === 0xC9) return "CMP #";
+    if (instruction === 0xC5) return "CMP $";
+    if (instruction === 0xE0) return "CPX #";
+    if (instruction === 0xE4) return "CPX $";
+    if (instruction === 0xC0) return "CPY #";
+    if (instruction === 0xC4) return "CPY $";
     if (instruction === 0x69) return "ADC #";
     if (instruction === 0xE9) return "SBC #";
     if (instruction === 0x65) return "ADC $";

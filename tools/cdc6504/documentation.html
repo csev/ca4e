@@ -223,7 +223,7 @@
             <div class="tip">
                 <h4>💡 ASCII Character Support</h4>
                 <p>Immediate values can be specified as single ASCII characters in quotes: <code>LDA #'A'</code> loads 65 (ASCII for 'A') into the accumulator.
-                    This works for all immediate instructions: LDA, LDX, LDY, CMP, ADC, SBC.</p>
+                    This works for all immediate instructions: LDA, LDX, LDY, CMP, CPX, CPY, ADC, SBC.</p>
             </div>
             
             <div class="tip">
@@ -372,42 +372,6 @@
                 </tr>
             </table>
 
-
-            <h3>Arithmetic Instructions (16-bit)</h3>
-            <table class="instruction-table">
-                <tr>
-                    <th>Assembly</th>
-                    <th>Opcode</th>
-                    <th>Description</th>
-                </tr>
-                <tr>
-                    <td>ADC #value</td>
-                    <td>01101001</td>
-                    <td>Add (immediate): ACC = ACC + value</td>
-                </tr>
-                <tr>
-                    <td>ADC $address</td>
-                    <td>01100101</td>
-                    <td>Add (from memory): ACC = ACC + memory[address]</td>
-                </tr>
-                <tr>
-                    <td>SBC #value</td>
-                    <td>11101001</td>
-                    <td>Subtract (immediate): ACC = ACC - value</td>
-                </tr>
-                <tr>
-                    <td>SBC $address</td>
-                    <td>11100101</td>
-                    <td>Subtract (from memory): ACC = ACC - memory[address]</td>
-                </tr>
-                <tr>
-                    <td>CMP #value</td>
-                    <td>11001001</td>
-                    <td>Compare accumulator with immediate value, sets Z, N flags</td>
-                </tr>
-            </table>
-
-            
             <h3>Store Instructions (16-bit)</h3>
             <table class="instruction-table">
                 <tr>
@@ -434,8 +398,77 @@
                         (memory[address] = Y)</td>
                 </tr>
             </table>
-            
-            
+
+            <h3>Arithmetic Instructions (16-bit, ACC only)</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Assembly</th>
+                    <th>Opcode</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>ADC #value</td>
+                    <td>01101001</td>
+                    <td>Add (immediate): ACC = ACC + value</td>
+                </tr>
+                <tr>
+                    <td>ADC $address</td>
+                    <td>01100101</td>
+                    <td>Add (from memory): ACC = ACC + memory[address]</td>
+                </tr>
+                <tr>
+                    <td>SBC #value</td>
+                    <td>11101001</td>
+                    <td>Subtract (immediate): ACC = ACC - value</td>
+                </tr>
+                <tr>
+                    <td>SBC $address</td>
+                    <td>11100101</td>
+                    <td>Subtract (from memory): ACC = ACC - memory[address]</td>
+                </tr>
+            </table>
+
+            <h3>Comparison Instructions (16-bit)</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Assembly</th>
+                    <th>Opcode</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>CMP #value</td>
+                    <td>11001001</td>
+                    <td>Compare accumulator with immediate value, sets Z, N flags</td>
+                </tr>
+                <tr>
+                    <td>CMP $address</td>
+                    <td>11000101</td>
+                    <td>Compare accumulator with value at the memory address, sets Z, N flags
+                        (ACC compared with memory[address])</td>
+                </tr>
+                <tr>
+                    <td>CPX #value</td>
+                    <td>11100000</td>
+                    <td>Compare X register with immediate value, sets Z, N flags</td>
+                </tr>
+                <tr>
+                    <td>CPX $address</td>
+                    <td>11100100</td>
+                    <td>Compare X register with value at the memory address, sets Z, N flags
+                        (X compared with memory[address])</td>
+                </tr>
+                <tr>
+                    <td>CPY #value</td>
+                    <td>11000000</td>
+                    <td>Compare Y register with immediate value, sets Z, N flags</td>
+                </tr>
+                <tr>
+                    <td>CPY $address</td>
+                    <td>11000100</td>
+                    <td>Compare Y register with value at the memory address, sets Z, N flags
+                        (Y compared with memory[address])</td>
+                </tr>
+            </table>
             
             <h3>Branch Instructions (16-bit)</h3>
             <table class="instruction-table">
@@ -610,7 +643,7 @@ DATA 'Hello World!'
                 <h4>Counter Loop (with Labels)</h4>
                 <p>This program demonstrates the use of labels for program flow control. 
                     It uses a loop that increments the X register from 0 to 5, using labels "loop" and "end" for branching. 
-                    The program compares X to 5 using CMP and branches when equal using BEQ, 
+                    The program compares X to 5 using CPX and branches when equal using BEQ, 
                     showing how labels make jump addresses easier to manage.  The program is a simple for loop.
 <pre>
 for(X=0; X&lt;5; X++) ;
@@ -619,8 +652,7 @@ for(X=0; X&lt;5; X++) ;
                 <div class="code-block">
 CLX            ; Clear X register
 loop:
-TXA            ; Transfer X to accumulator
-CMP #5         ; Compare accumulator to 5
+CPX #5         ; Compare X register to 5 (simpler than TXA/CMP)
 BEQ end        ; Branch if equal (Z flag set)
 INX            ; Increment X
 JMP loop       ; Jump to loop
@@ -753,8 +785,7 @@ INX           ; Increment X register
             <div class="code-block">
 CLX           ; Clear X register
 loop:
-TXA           ; Transfer X to accumulator
-CMP #5        ; Compare accumulator to 5
+CPX #5        ; Compare X register to 5
 BEQ end       ; Branch to "end" label if equal
 INX           ; Increment X register
 JMP loop      ; Jump back to "loop" label

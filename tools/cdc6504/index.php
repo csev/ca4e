@@ -461,8 +461,7 @@ DATA 'Hello World!'`;
                         // Simple loop that counts from 0 to 5
                         const labelsDemo = `CLX            ; Clear X register
 loop:
-TXA            ; Transfer X to accumulator
-CMP #5         ; Compare accumulator to 5
+CPX #5         ; Compare X register to 5 (simpler than TXA/CMP)
 BEQ end        ; Branch if equal (Z flag set)
 INX            ; Increment X
 JMP loop       ; Jump to loop
