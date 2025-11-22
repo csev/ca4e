@@ -575,7 +575,7 @@ BRK
                 <div class="code-block">
 LDA #10     ; Load 10 into accumulator
 ADC #5      ; Add 5 (result = 15)
-STA $03     ; Store result to memory[3]
+STA $00     ; Store result to memory[0]
 BRK
                 </div>
             </div>
@@ -583,11 +583,11 @@ BRK
             <div class="example">
                 <h4>Uppercase Sample</h4>
                 <p>This program demonstrates conditional branching and arithmetic to convert a character to upper case.
-                    It compares a character value with 0x61 (lowercase 'a'), and if the value is greater than or equal to 0x61,
+                    It compares a character value with 'a' (lowercase), and if the value is greater than or equal to 'a',
                     it subtracts 0x20 to convert to uppercase using the BMI (Branch if Minus) instruction.</p>
                 <div class="code-block">
-LDA #'p'     ; 0x70 is the ASCII value for 'p'
-CMP #'a'     ; 0x61 is the ASCII value for 'a'
+LDA #'p'     ; Load 'p' into accumulator
+CMP #'a'     ; Compare with 'a'
 BMI skip     ; Branch if minus (less than)
 SBC #0x20    ; Subtract 0x20 to convert to uppercase
 skip:
@@ -612,17 +612,17 @@ BRK
             <div class="example">
                 <h4>Hello</h4>
                 <p>This program manually constructs the string "Hello" by loading each character's ASCII value
-                    (using decimal numbers) and storing them to consecutive memory addresses.
+                    (using character constants) and storing them to consecutive memory addresses.
                     The BRK instruction automatically prints the null-terminated string from memory.</p>
                 <div class="code-block">
-LDA #72        ; 'H'
+LDA #'H'       ; Load 'H' into accumulator
 STA $00
-LDA #101       ; 'e'
+LDA #'e'       ; Load 'e' into accumulator
 STA $01
-LDA #108       ; 'l'
+LDA #'l'       ; Load 'l' into accumulator
 STA $02
-STA $03        ; 'l' again
-LDA #111       ; 'o'
+STA $03        ; Store 'l' again
+LDA #'o'       ; Load 'o' into accumulator
 STA $04
 BRK
                 </div>
