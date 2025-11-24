@@ -1250,14 +1250,11 @@ BRK`;
     // Load the Add Sample program - demonstrates loading, adding, and storing (6502)
     loadAddSample() {
         this.reset();
-        // Put 10 (0x0A) in memory location 0x01 using DATA directive
-        // Load from memory[1] into accumulator (would need LDA $01, but we only have immediate)
-        // For now, just demonstrate: load 10, add 5, store result
-        const addSampleProgram = `LDA #10       ; Load 10 into accumulator
-ADC #5         ; Add 5 (result = 15)
-STA $03        ; Store result to memory[3]
-BRK
-DATA 0x00 0x0A`;
+        // Demonstrates immediate loading and addition: load 27, add 15, store result (42)
+        const addSampleProgram = `LDA #27       ; Load 27 into accumulator
+ADC #15        ; Add 15 (result = 42)
+STA $00        ; Store result to memory[0] (42 = '*')
+BRK`;
         this.loadProgram(addSampleProgram);
     }
 

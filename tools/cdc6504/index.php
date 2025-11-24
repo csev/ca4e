@@ -375,7 +375,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         <option value="hi">Load Hi</option>
                         <option value="hello">Load Hello</option>
                         <option value="hello-world">Load Hello World</option>
-                        <option value="labels-demo">Load Labels Demo</option>
+                        <option value="count-to-five">Load Count to Five</option>
                         <option value="toggle-assembler">Toggle Assembler</option>
                     </select>
                 </div>
@@ -457,10 +457,10 @@ DATA 'Hello World!'`;
                         updateStatus();
                         updateTrace();
                         updateOutput();
-                    } else if (value === 'labels-demo') {
+                    } else if (value === 'count-to-five') {
                         // Load a demo program that uses labels (6502)
                         // Simple loop that counts from 0 to 5
-                        const labelsDemo = `CLX            ; Clear X register
+                        const countToFive = `CLX            ; Clear X register
 loop:
 CPX #5         ; Compare X register to 5 (simpler than TXA/CMP)
 BEQ end        ; Branch if equal (Z flag set)
@@ -469,9 +469,9 @@ JMP loop       ; Jump to loop
 end:
 BRK            ; Halt`;
                         emulator.reset();
-                        emulator.loadProgram(labelsDemo);
+                        emulator.loadProgram(countToFive);
                         enableStepButton(); // Re-enable step button after loading program
-                        document.getElementById('assembly-input').value = labelsDemo;
+                        document.getElementById('assembly-input').value = countToFive;
                         updateStatus();
                         updateTrace();
                         updateOutput();
@@ -479,11 +479,10 @@ BRK            ; Halt`;
                         emulator.loadAddSample();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `LDA #10        ; Load 10 into accumulator
-ADC #5         ; Add 5 (result = 15)
-STA $03        ; Store result to memory[3]
-BRK
-DATA 0x00 0x0A`;
+                        document.getElementById('assembly-input').value = `LDA #27        ; Load 27 into accumulator
+ADC #15        ; Add 15 (result = 42)
+STA $00        ; Store result to memory[0] (42 = '*')
+BRK`;
                         updateStatus();
                         updateTrace();
                         updateOutput();
