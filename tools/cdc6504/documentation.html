@@ -399,6 +399,39 @@
                 </tr>
             </table>
 
+            <h3>Indexed Load/Store Instructions (16-bit)</h3>
+            <table class="instruction-table">
+                <tr>
+                    <th>Assembly</th>
+                    <th>Opcode</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>LDA $address,X</td>
+                    <td>10110101</td>
+                    <td>Load accumulator from zero-page indexed address
+                        (ACC = memory[(address + X) & 0xFF])</td>
+                </tr>
+                <tr>
+                    <td>LDA $address,Y</td>
+                    <td>10111001</td>
+                    <td>Load accumulator from zero-page indexed address
+                        (ACC = memory[(address + Y) & 0xFF])</td>
+                </tr>
+                <tr>
+                    <td>STA $address,X</td>
+                    <td>10010101</td>
+                    <td>Store accumulator to zero-page indexed address
+                        (memory[(address + X) & 0xFF] = ACC)</td>
+                </tr>
+                <tr>
+                    <td>STA $address,Y</td>
+                    <td>10011001</td>
+                    <td>Store accumulator to zero-page indexed address
+                        (memory[(address + Y) & 0xFF] = ACC)</td>
+                </tr>
+            </table>
+
             <h3>Arithmetic Instructions (16-bit, ACC only)</h3>
             <table class="instruction-table">
                 <tr>
@@ -734,6 +767,30 @@ STA $04        ; Store 'o' to memory address 0x04
 LDA #0         ; Load zero into accumulator
 STA $05        ; Store zero to memory address 0x05 (null terminator)
 BRK            ; Stop and print memory as an ASCII string
+                </div>
+            </div>
+            
+            <div class="example">
+                <h4>Convert String to Uppercase (Indexed Addressing)</h4>
+                <p>This program demonstrates indexed addressing and loops to convert a mixed-case string to uppercase.
+                    It uses the DATA directive to initialize a string, then loops through each character using X as an index.
+                    Each character is loaded using indexed addressing (LDA $00,X), converted to uppercase if needed,
+                    and stored back using indexed addressing (STA $00,X). The loop continues until it encounters the null terminator.</p>
+                <div class="code-block">
+CLX            ; Clear X register (index starts at 0)
+loop:
+LDA $00,X      ; Load character at memory[$00 + X] into accumulator
+BEQ done       ; Branch if zero (null terminator found)
+CMP #'a'       ; Compare with lowercase 'a'
+BMI cont       ; Branch if minus (less than 'a', already uppercase or not a letter)
+SBC #0x20      ; Subtract 0x20 to convert to uppercase
+STA $00,X      ; Store converted character back to memory[$00 + X]
+cont:
+INX            ; Increment X to next character
+JMP loop       ; Jump back to loop
+done:
+BRK            ; Stop and print converted string
+DATA 'Hello'
                 </div>
             </div>
 

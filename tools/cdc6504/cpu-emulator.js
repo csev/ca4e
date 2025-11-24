@@ -174,10 +174,8 @@ class CDC6504Emulator {
             const instruction = parts[0].toUpperCase();
             console.log('Instruction:', instruction);
             
-            // Clean up register names by removing commas
-            if (parts.length > 1) {
-                parts[1] = parts[1].replace(',', '');
-            }
+            // Don't remove commas yet - we need them for indexed addressing detection
+            // Commas will be handled in the specific instruction handlers
             
             if (instruction === 'DATA') {
                 // DATA directive - just sets data memory, doesn't generate instruction code
@@ -242,28 +240,88 @@ class CDC6504Emulator {
                 if (parts.length < 2) {
                     throw new Error(`Line ${lineNum + 1}: ${instruction} instruction requires value or address (e.g., ${instruction} #42 or ${instruction} $10)`);
                 }
-                const operand = parts[1];
+                // Handle indexed addressing where there might be whitespace: LDA $00, X
+                // Join parts[1] and parts[2] if parts[1] ends with comma
+                let operand = parts[1];
+                if (operand.endsWith(',') && parts.length > 2) {
+                    operand = operand + parts[2]; // Join $00, and X to get $00,X
+                }
                 
                 // Check if it's zero-page addressing ($address) or immediate (#value or value)
                 if (operand.startsWith('$')) {
-                    // Zero-page addressing: LDA $address, LDX $address, LDY $address
-                    const addrStr = operand.substring(1);
-                    const addr = addrStr.startsWith('0x') ? parseInt(addrStr.substring(2), 16) : parseInt(addrStr, 16);
-                    if (isNaN(addr) || addr < 0 || addr > 255) {
-                        throw new Error(`Line ${lineNum + 1}: Invalid address "${operand}". Must be between $00 and $FF`);
+                    // Check for indexed addressing: LDA $address,X or LDA $address,Y
+                    // Use string manipulation to handle $00,X correctly (regex has issues with $00)
+                    const commaIndex = operand.indexOf(',');
+                    console.log(`  Debug: operand="${operand}", commaIndex=${commaIndex}, instruction="${instruction}"`);
+                    if (commaIndex > 0 && instruction === 'LDA') {
+                        const addrPart = operand.substring(1, commaIndex); // Get part between $ and ,
+                        const indexPart = operand.substring(commaIndex + 1).trim().toUpperCase();
+                        console.log(`  Debug: addrPart="${addrPart}", indexPart="${indexPart}"`);
+                        if (indexPart === 'X' || indexPart === 'Y') {
+                            // Parse address (supports hex with 0x prefix or just hex digits)
+                            let addr;
+                            if (addrPart.startsWith('0x') || addrPart.startsWith('0X')) {
+                                addr = parseInt(addrPart.substring(2), 16);
+                            } else {
+                                // Try hex first, then decimal
+                                addr = parseInt(addrPart, 16);
+                                if (isNaN(addr)) {
+                                    addr = parseInt(addrPart, 10);
+                                }
+                            }
+                            if (isNaN(addr) || addr < 0 || addr > 255) {
+                                throw new Error(`Line ${lineNum + 1}: Invalid address "${operand}". Must be between $00 and $FF`);
+                            }
+                            let opcode;
+                            if (indexPart === 'X') {
+                                opcode = 0xB5; // LDA $nn,X (6502 zero-page indexed)
+                            } else {
+                                opcode = 0xB9; // LDA $nn,Y (6502 zero-page indexed, adapted)
+                            }
+                            console.log(`Assembling ${instruction} $${addr.toString(16).padStart(2, '0')},${indexPart}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
+                            this.cpu.instructions[address] = opcode;
+                            this.cpu.instructions[address + 1] = addr;
+                            address += 2;
+                        } else {
+                            // Not indexed addressing, treat as regular zero-page
+                            const addrStr = operand.substring(1);
+                            const addr = addrStr.startsWith('0x') ? parseInt(addrStr.substring(2), 16) : parseInt(addrStr, 16);
+                            if (isNaN(addr) || addr < 0 || addr > 255) {
+                                throw new Error(`Line ${lineNum + 1}: Invalid address "${operand}". Must be between $00 and $FF`);
+                            }
+                            let opcode;
+                            if (instruction === 'LDA') {
+                                opcode = 0xA5; // LDA $ (6502 zero-page)
+                            } else if (instruction === 'LDX') {
+                                opcode = 0xA6; // LDX $ (6502 zero-page)
+                            } else if (instruction === 'LDY') {
+                                opcode = 0xA4; // LDY $ (6502 zero-page)
+                            }
+                            console.log(`Assembling ${instruction} $${addr.toString(16).padStart(2, '0')}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
+                            this.cpu.instructions[address] = opcode;
+                            this.cpu.instructions[address + 1] = addr;
+                            address += 2;
+                        }
+                    } else {
+                        // Zero-page addressing: LDA $address, LDX $address, LDY $address
+                        const addrStr = operand.substring(1);
+                        const addr = addrStr.startsWith('0x') ? parseInt(addrStr.substring(2), 16) : parseInt(addrStr, 16);
+                        if (isNaN(addr) || addr < 0 || addr > 255) {
+                            throw new Error(`Line ${lineNum + 1}: Invalid address "${operand}". Must be between $00 and $FF`);
+                        }
+                        let opcode;
+                        if (instruction === 'LDA') {
+                            opcode = 0xA5; // LDA $ (6502 zero-page)
+                        } else if (instruction === 'LDX') {
+                            opcode = 0xA6; // LDX $ (6502 zero-page)
+                        } else if (instruction === 'LDY') {
+                            opcode = 0xA4; // LDY $ (6502 zero-page)
+                        }
+                        console.log(`Assembling ${instruction} $${addr.toString(16).padStart(2, '0')}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
+                        this.cpu.instructions[address] = opcode;
+                        this.cpu.instructions[address + 1] = addr;
+                        address += 2;
                     }
-                    let opcode;
-                    if (instruction === 'LDA') {
-                        opcode = 0xA5; // LDA $ (6502 zero-page)
-                    } else if (instruction === 'LDX') {
-                        opcode = 0xA6; // LDX $ (6502 zero-page)
-                    } else if (instruction === 'LDY') {
-                        opcode = 0xA4; // LDY $ (6502 zero-page)
-                    }
-                    console.log(`Assembling ${instruction} $${addr.toString(16).padStart(2, '0')}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
-                    this.cpu.instructions[address] = opcode;
-                    this.cpu.instructions[address + 1] = addr;
-                    address += 2;
                 } else {
                     // Immediate mode: LDA #value, LDX #value, LDY #value
                     // Support both "#value" and "value" syntax (remove # if present)
@@ -537,20 +595,75 @@ class CDC6504Emulator {
                 if (parts.length < 2) {
                     throw new Error(`Line ${lineNum + 1}: ${instruction} instruction requires address (e.g., ${instruction} $10)`);
                 }
-                const addrStr = parts[1];
-                // Remove $ prefix if present
-                const addr = addrStr.startsWith('$') ? parseInt(addrStr.substring(1), 16) : this.parseValue(addrStr);
-                let opcode;
-                if (instruction === 'STA') {
-                    opcode = 0x85; // STA zero page (6502)
-                } else if (instruction === 'STX') {
-                    opcode = 0x86; // STX zero page (6502)
-                } else if (instruction === 'STY') {
-                    opcode = 0x84; // STY zero page (6502)
+                // Handle indexed addressing where there might be whitespace: STA $00, X
+                // Join parts[1] and parts[2] if parts[1] ends with comma
+                let addrStr = parts[1];
+                if (addrStr.endsWith(',') && parts.length > 2) {
+                    addrStr = addrStr + parts[2]; // Join $00, and X to get $00,X
                 }
-                this.cpu.instructions[address] = opcode;
-                this.cpu.instructions[address + 1] = addr;
-                address += 2;
+                
+                // Check for indexed addressing: STA $address,X or STA $address,Y
+                // Use string manipulation to handle $00,X correctly
+                const commaIndex = addrStr.indexOf(',');
+                if (commaIndex > 0 && instruction === 'STA') {
+                    const addrPart = addrStr.substring(1, commaIndex); // Get part between $ and ,
+                    const indexPart = addrStr.substring(commaIndex + 1).trim().toUpperCase();
+                    if (indexPart === 'X' || indexPart === 'Y') {
+                        // Parse address (supports hex with 0x prefix or just hex digits)
+                        let addr;
+                        if (addrPart.startsWith('0x') || addrPart.startsWith('0X')) {
+                            addr = parseInt(addrPart.substring(2), 16);
+                        } else {
+                            // Try hex first, then decimal
+                            addr = parseInt(addrPart, 16);
+                            if (isNaN(addr)) {
+                                addr = parseInt(addrPart, 10);
+                            }
+                        }
+                        if (isNaN(addr) || addr < 0 || addr > 255) {
+                            throw new Error(`Line ${lineNum + 1}: Invalid address "${addrStr}". Must be between $00 and $FF`);
+                        }
+                        let opcode;
+                        if (indexPart === 'X') {
+                            opcode = 0x95; // STA $nn,X (6502 zero-page indexed)
+                        } else {
+                            opcode = 0x99; // STA $nn,Y (6502 zero-page indexed, adapted)
+                        }
+                        console.log(`Assembling ${instruction} $${addr.toString(16).padStart(2, '0')},${indexPart}: opcode=0x${opcode.toString(16).padStart(2, '0')}`);
+                        this.cpu.instructions[address] = opcode;
+                        this.cpu.instructions[address + 1] = addr;
+                        address += 2;
+                    } else {
+                        // Not indexed addressing, treat as regular zero-page
+                        const addr = addrStr.startsWith('$') ? parseInt(addrStr.substring(1), 16) : this.parseValue(addrStr);
+                        let opcode;
+                        if (instruction === 'STA') {
+                            opcode = 0x85; // STA zero page (6502)
+                        } else if (instruction === 'STX') {
+                            opcode = 0x86; // STX zero page (6502)
+                        } else if (instruction === 'STY') {
+                            opcode = 0x84; // STY zero page (6502)
+                        }
+                        this.cpu.instructions[address] = opcode;
+                        this.cpu.instructions[address + 1] = addr;
+                        address += 2;
+                    }
+                } else {
+                    // Regular zero-page addressing: STA $address, STX $address, STY $address
+                    // Remove $ prefix if present
+                    const addr = addrStr.startsWith('$') ? parseInt(addrStr.substring(1), 16) : this.parseValue(addrStr);
+                    let opcode;
+                    if (instruction === 'STA') {
+                        opcode = 0x85; // STA zero page (6502)
+                    } else if (instruction === 'STX') {
+                        opcode = 0x86; // STX zero page (6502)
+                    } else if (instruction === 'STY') {
+                        opcode = 0x84; // STY zero page (6502)
+                    }
+                    this.cpu.instructions[address] = opcode;
+                    this.cpu.instructions[address + 1] = addr;
+                    address += 2;
+                }
             } else {
                 // This should never happen since we validated instructions in the first pass
                 throw new Error(`Line ${lineNum + 1}: Unknown instruction "${instruction}"`);
@@ -710,6 +823,28 @@ class CDC6504Emulator {
             result = `LDA $${addr.toString(16).padStart(2, '0')}`;
             pcIncrement = 2;
         }
+        else if (instruction === 0xB5) { // LDA $nn,X - Load accumulator from zero-page indexed with X
+            const baseAddr = this.cpu.instructions[this.cpu.pc + 1];
+            const xValue = Number(this.cpu.x); // Ensure X is treated as a number
+            const effAddr = (baseAddr + xValue) & 0xFF; // Wrap within zero-page
+            console.log(`  Executing: LDA $${baseAddr.toString(16).padStart(2, '0')},X (X=${xValue}, effective: $${effAddr.toString(16).padStart(2, '0')})`);
+            this.cpu.acc = this.cpu.memory[effAddr];
+            this.cpu.highlightMemory(effAddr);
+            this.updateStatusFlags(this.cpu.acc);
+            result = `LDA $${baseAddr.toString(16).padStart(2, '0')},X`;
+            pcIncrement = 2;
+        }
+        else if (instruction === 0xB9) { // LDA $nn,Y - Load accumulator from zero-page indexed with Y
+            const baseAddr = this.cpu.instructions[this.cpu.pc + 1];
+            const yValue = Number(this.cpu.y); // Ensure Y is treated as a number
+            const effAddr = (baseAddr + yValue) & 0xFF; // Wrap within zero-page
+            console.log(`  Executing: LDA $${baseAddr.toString(16).padStart(2, '0')},Y (Y=${yValue}, effective: $${effAddr.toString(16).padStart(2, '0')})`);
+            this.cpu.acc = this.cpu.memory[effAddr];
+            this.cpu.highlightMemory(effAddr);
+            this.updateStatusFlags(this.cpu.acc);
+            result = `LDA $${baseAddr.toString(16).padStart(2, '0')},Y`;
+            pcIncrement = 2;
+        }
         else if (instruction === 0xA6) { // LDX $ - Load X from zero-page address
             const addr = this.cpu.instructions[this.cpu.pc + 1];
             console.log(`  Executing: LDX $${addr.toString(16).padStart(2, '0')}`);
@@ -735,6 +870,26 @@ class CDC6504Emulator {
             this.cpu.memory[addr] = this.cpu.acc;
             this.cpu.highlightMemory(addr);
             result = `STA $${addr.toString(16).padStart(2, '0')}`;
+            pcIncrement = 2;
+        }
+        else if (instruction === 0x95) { // STA $nn,X - Store accumulator to zero-page indexed with X
+            const baseAddr = this.cpu.instructions[this.cpu.pc + 1];
+            const xValue = Number(this.cpu.x); // Ensure X is treated as a number
+            const effAddr = (baseAddr + xValue) & 0xFF; // Wrap within zero-page
+            console.log(`  Executing: STA $${baseAddr.toString(16).padStart(2, '0')},X (X=${xValue}, effective: $${effAddr.toString(16).padStart(2, '0')})`);
+            this.cpu.memory[effAddr] = this.cpu.acc;
+            this.cpu.highlightMemory(effAddr);
+            result = `STA $${baseAddr.toString(16).padStart(2, '0')},X`;
+            pcIncrement = 2;
+        }
+        else if (instruction === 0x99) { // STA $nn,Y - Store accumulator to zero-page indexed with Y
+            const baseAddr = this.cpu.instructions[this.cpu.pc + 1];
+            const yValue = Number(this.cpu.y); // Ensure Y is treated as a number
+            const effAddr = (baseAddr + yValue) & 0xFF; // Wrap within zero-page
+            console.log(`  Executing: STA $${baseAddr.toString(16).padStart(2, '0')},Y (Y=${yValue}, effective: $${effAddr.toString(16).padStart(2, '0')})`);
+            this.cpu.memory[effAddr] = this.cpu.acc;
+            this.cpu.highlightMemory(effAddr);
+            result = `STA $${baseAddr.toString(16).padStart(2, '0')},Y`;
             pcIncrement = 2;
         }
         else if (instruction === 0x86) { // STX $ - Store X zero page
@@ -1112,13 +1267,35 @@ DATA 0x00 0x0A`;
         // Load 0x70 (lowercase 'p') into accumulator
         // Compare to 'a' (0x61) - if less than, it's already uppercase or not a letter
         // If >= 'a', subtract 0x20 to convert to uppercase
-        const uppercaseProgram = `LDA #0x70
-CMP #0x61
-BMI skip        ; Branch if minus (less than)
-SBC #0x20       ; Subtract 0x20 to convert to uppercase
+        const uppercaseProgram = `LDA #'p'     ; Load 'p' into accumulator
+CMP #'a'     ; Compare with 'a'
+BMI skip     ; Branch if minus (less than)
+SBC #0x20    ; Subtract 0x20 to convert to uppercase
 skip:
 BRK`;
         this.loadProgram(uppercaseProgram);
+    }
+
+    // Load the Uppercase String Sample program - converts a string to uppercase using indexed addressing
+    loadUppercaseStringSample() {
+        this.reset();
+        // Uses DATA to initialize string, then loops through converting each character
+        // Demonstrates indexed addressing (LDA $00,X and STA $00,X)
+        const uppercaseStringProgram = `CLX            ; Clear X register (index starts at 0)
+loop:
+LDA $00,X      ; Load character at memory[$00 + X] into accumulator
+BEQ done       ; Branch if zero (null terminator found)
+CMP #'a'       ; Compare with lowercase 'a'
+BMI cont       ; Branch if minus (less than 'a', already uppercase or not a letter)
+SBC #0x20      ; Subtract 0x20 to convert to uppercase
+STA $00,X      ; Store converted character back to memory[$00 + X]
+cont:
+INX            ; Increment X to next character
+JMP loop       ; Jump back to loop
+done:
+BRK            ; Stop and print converted string
+DATA 'Hello'`;
+        this.loadProgram(uppercaseStringProgram);
     }
 
     // Load the Simple Sample program - demonstrates basic register operations (6502)

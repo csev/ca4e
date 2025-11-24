@@ -371,6 +371,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         <option value="simple-sample">Load Simple Sample</option>
                         <option value="add-sample">Load Add Sample</option>
                         <option value="uppercase-sample">Load Uppercase Sample</option>
+                        <option value="uppercase-string-sample">Load Uppercase String Sample</option>
                         <option value="hi">Load Hi</option>
                         <option value="hello">Load Hello</option>
                         <option value="hello-world">Load Hello World</option>
@@ -501,12 +502,33 @@ BRK`;
                         emulator.loadUppercaseSample();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `LDA #0x70
-CMP #0x61
-BMI skip        ; Branch if minus (less than)
-SBC #0x20       ; Subtract 0x20 to convert to uppercase
+                        document.getElementById('assembly-input').value = `LDA #'p'     ; Load 'p' into accumulator
+CMP #'a'     ; Compare with 'a'
+BMI skip     ; Branch if minus (less than)
+SBC #0x20    ; Subtract 0x20 to convert to uppercase
 skip:
 BRK`;
+                        updateStatus();
+                        updateTrace();
+                        updateOutput();
+                    } else if (value === 'uppercase-string-sample') {
+                        emulator.loadUppercaseStringSample();
+                        enableStepButton(); // Re-enable step button after loading program
+                        // Load assembly code into textarea
+                        document.getElementById('assembly-input').value = `CLX            ; Clear X register (index starts at 0)
+loop:
+LDA $00,X      ; Load character at memory[$00 + X] into accumulator
+BEQ done       ; Branch if zero (null terminator found)
+CMP #'a'       ; Compare with lowercase 'a'
+BMI cont       ; Branch if minus (less than 'a', already uppercase or not a letter)
+SBC #0x20      ; Subtract 0x20 to convert to uppercase
+STA $00,X      ; Store converted character back to memory[$00 + X]
+cont:
+INX            ; Increment X to next character
+JMP loop       ; Jump back to loop
+done:
+BRK            ; Stop and print converted string
+DATA 'Hello'`;
                         updateStatus();
                         updateTrace();
                         updateOutput();
