@@ -291,6 +291,26 @@
     "slides": [
         "{apphome}/lectures/04-CPU-Machine-Code.pptx"
     ],
+    "videos" : [
+        {
+            "title" : "Exploring Microprocessors: From Python to Machine Language & the 6502 CPU - Part 1 (5:38)",
+            "media": "CA4E-Lectures/04-CPU/04-01-CPU-Intro.m4v",
+            "FCPX": "ca4e-media/04-Digital/04-01-CPU-Intro",
+            "youtube" : "IF0ZopcXRl8"
+        },
+        {
+            "title" : "Understanding Hexadecimal (Base 16) — Why Computers Use It & How to Think in It - Part 2 (12:24)",
+            "media": "CA4E-Lectures/04-CPU/04-02-CPU-Hex.m4v",
+            "FCPX": "ca4e-media/04-Digital/04-02-CPU-Hex",
+            "youtube" : "V_4Ord6x9H4"
+        },
+        {
+            "title" : "What Is Programming? From Python to Machine Language & Into the CPU - Part 3 (11:10)",
+            "media": "CA4E-Lectures/04-CPU/04-03-CPU-Coding.m4v",
+            "FCPX": "ca4e-media/04-Digital/04-03-CPU-Coding",
+            "youtube" : "dh6pI8Xjysc"
+        }
+     ],
     "references" : [
         {
             "title" : "ARM Instruction Set design history with Sophie Wilson)",
