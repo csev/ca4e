@@ -2,7 +2,7 @@
 
 int main() {
   register char *ch;
-  char mem[] = "Hello";
+  char mem[6] = "Hello";
 
   for(ch=mem; *ch; ch++) {
     if ( (*ch - 'a') < 0 ) continue;

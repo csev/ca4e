@@ -2,7 +2,7 @@
 
 int main() {
   register int xr,acc;
-  char mem[] = "Hello";
+  char mem[6] = "Hello";
 
   for(xr=0;mem[xr];xr++) {
     acc = mem[xr];
