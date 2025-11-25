@@ -309,6 +309,24 @@
             "media": "CA4E-Lectures/04-CPU/04-03-CPU-Coding.m4v",
             "FCPX": "ca4e-media/04-Digital/04-03-CPU-Coding",
             "youtube" : "dh6pI8Xjysc"
+        },
+        {
+            "title" : "Exploring the 6502 Architecture in the CDC6504 Emulator - Part 4 (9:49)",
+            "media": "CA4E-Lectures/04-CPU/04-04-CPU-Arch.m4v",
+            "FCPX": "ca4e-media/04-Digital/04-04-CPU-Arch",
+            "youtube" : "L2fzgapBoOg"
+        },
+        {
+            "title" : "Machine Language — Loops, Branching & Assembly vs. Machine Code - Part 5 (18:43)",
+            "media": "CA4E-Lectures/04-CPU/04-05-CPU-Machine.m4v",
+            "FCPX": "ca4e-media/04-Digital/04-05-CPU-Machine",
+            "youtube" : "h92PhKl2elU"
+        },
+        {
+            "title" : "CDC 6504 Assembly Language: Hello World, Math, and Upper Casing Strings - Part 6 (13:05)",
+            "media": "CA4E-Lectures/04-CPU/04-06-CPU-Assembly.m4v",
+            "FCPX": "ca4e-media/04-Digital/04-06-CPU-Assembly",
+            "youtube" : "h92PhKl2elU"
         }
      ],
     "references" : [
