@@ -327,6 +327,12 @@
             "media": "CA4E-Lectures/04-CPU/04-06-CPU-Assembly.m4v",
             "FCPX": "ca4e-media/04-Digital/04-06-CPU-Assembly",
             "youtube" : "h92PhKl2elU"
+        },
+        {
+            "title" : "From 6502 to ARM: The 50-Year Journey of CPU Evolution & Apple’s Big Switch - Part 7 (7:31)",
+            "media": "CA4E-Lectures/04-CPU/04-07-CPU-History.m4v",
+            "FCPX": "ca4e-media/04-Digital/04-07-CPU-History",
+            "youtube" : "h92PhKl2elU"
         }
      ],
     "references" : [
