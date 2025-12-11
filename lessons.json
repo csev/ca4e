@@ -139,6 +139,18 @@
     ],  
      "lti" : [
         {
+            "title" : "All Gates Truth Tables",
+            "launch" : "tools/truth/",
+            "resource_link_id" : "ca4e_02_truth_all",
+            "target": "_blank",
+            "custom" : [
+                {
+                    "key": "exercise",
+                    "value": "AllGates"
+                }
+            ]
+        },
+        {
             "title" : "Building a Not Gate with CMOS Transistors",
             "launch" : "tools/cmos/",
             "resource_link_id" : "ca4e_02_cmos_not",
