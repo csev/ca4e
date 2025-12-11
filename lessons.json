@@ -255,6 +255,18 @@
      ],
      "lti" : [
         {
+            "title" : "Base-10 ⇄ Base-2 conversions (0-7)",
+            "launch" : "tools/nixie/",
+            "resource_link_id" : "ca4e_03_nixie2",
+            "target": "_blank",
+            "custom" : [
+                {
+                    "key": "exercise",
+                    "value": "Base2Conversions"
+                }
+            ]
+        },
+        {
             "title" : "Building a Half-Adder",
             "launch" : "tools/gates/",
             "resource_link_id" : "ca4e_03_halfadder",
@@ -263,6 +275,18 @@
                 {
                     "key": "exercise",
                     "value": "HalfAdderExercise"
+                }
+            ]
+        },
+        {
+            "title" : "Binary addition practice (3-bit + 3-bit)",
+            "launch" : "tools/nixie/",
+            "resource_link_id" : "ca4e_03_nixie_add",
+            "target": "_blank",
+            "custom" : [
+                {
+                    "key": "exercise",
+                    "value": "BinaryAddition"
                 }
             ]
         },
@@ -360,6 +384,18 @@
         }   
     ],  
      "lti" : [
+        {
+            "title" : "Hex ⇄ Decimal conversions",
+            "launch" : "tools/nixie/",
+            "resource_link_id" : "ca4e_04_nixie16",
+            "target": "_blank",
+            "custom" : [
+                {
+                    "key": "exercise",
+                    "value": "HexConversions"
+                }
+            ]
+        },
         {
             "title" : "Print out '42'",
             "launch" : "tools/cdc6504/",
