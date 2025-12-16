@@ -559,6 +559,8 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     <script src="../common/grading-interface.js"></script>
     <script src="../common/tool-utilities.js"></script>
     <script src="gates.js"></script>
+    <!-- Load predefined circuits if available -->
+    <script src="predefined-circuits.js"></script>
     <!-- Then load the main editor code -->
     <script src="main.js"></script>
     <!-- Then load the circuit.js script -->
@@ -624,6 +626,11 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         });
     </script>
 
+    <!-- Set instructor status globally (needed for load dialog) -->
+    <script>
+        window.isInstructor = <?php echo $USER && $USER->instructor ? 'true' : 'false'; ?>;
+    </script>
+
 <?php if ($USER && $assn) : ?>
     <!-- Assignment Modal -->
     <div id="assignmentModal" class="assignment-modal hidden">
@@ -655,7 +662,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         // Assignment modal variables
         let currentExercise = null;
         const gradeSubmitUrl = '<?php echo addSession("grade-submit.php"); ?>';
-        const isInstructor = <?php echo $USER && $USER->instructor ? 'true' : 'false'; ?>;
+        const isInstructor = window.isInstructor; // Use the globally set value
         const assignmentType = '<?php echo $assn; ?>';
 
         // Initialize assignment modal using common utilities (moved to after exercise creation)

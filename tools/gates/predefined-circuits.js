@@ -1,0 +1,136 @@
+/**
+ * Predefined Circuits for Gates Tool
+ * Contains example circuits with multiple components that can be loaded
+ */
+
+// Initialize if not already defined (allows merging with other predefined circuits)
+if (!window.predefinedCircuits) {
+    window.predefinedCircuits = {};
+}
+
+// Merge gates-specific predefined circuits
+Object.assign(window.predefinedCircuits, {
+    'half-adder': {
+        name: 'Half Adder',
+        description: 'A half adder circuit that adds two binary digits (A and B) and produces a sum (S) and carry (C) output.',
+        instructorOnly: true,
+        gates: [
+            { type: 'INPUT', label: 'A', x: 100, y: 150, state: false },
+            { type: 'INPUT', label: 'B', x: 100, y: 250, state: false },
+            { type: 'XOR', label: 'XOR1', x: 250, y: 200, state: false },
+            { type: 'AND', label: 'AND1', x: 250, y: 300, state: false },
+            { type: 'OUTPUT', label: 'S', x: 400, y: 200, state: false },
+            { type: 'OUTPUT', label: 'C', x: 400, y: 300, state: false }
+        ],
+        wires: [
+            { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'AND1', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'B', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'B', startNodeIndex: 0, endGateLabel: 'AND1', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'XOR1', startNodeIndex: 0, endGateLabel: 'S', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'AND1', startNodeIndex: 0, endGateLabel: 'C', endNodeIndex: 0, waypoints: [] }
+        ]
+    },
+
+    'full-adder': {
+        name: 'Full Adder',
+        description: 'A full adder circuit that adds three binary digits (A, B, and Cin) and produces a sum (S) and carry (Cout) output.',
+        instructorOnly: true,
+        gates: [
+            { type: 'INPUT', label: 'A', x: 100, y: 150, state: false },
+            { type: 'INPUT', label: 'B', x: 100, y: 250, state: false },
+            { type: 'INPUT', label: 'Cin', x: 100, y: 350, state: false },
+            { type: 'XOR', label: 'XOR1', x: 250, y: 200, state: false },
+            { type: 'XOR', label: 'XOR2', x: 400, y: 200, state: false },
+            { type: 'AND', label: 'AND1', x: 250, y: 300, state: false },
+            { type: 'AND', label: 'AND2', x: 250, y: 400, state: false },
+            { type: 'OR', label: 'OR1', x: 400, y: 350, state: false },
+            { type: 'OUTPUT', label: 'S', x: 550, y: 200, state: false },
+            { type: 'OUTPUT', label: 'Cout', x: 550, y: 350, state: false }
+        ],
+        wires: [
+            { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'AND1', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'B', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'B', startNodeIndex: 0, endGateLabel: 'AND1', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'XOR1', startNodeIndex: 0, endGateLabel: 'XOR2', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'Cin', startNodeIndex: 0, endGateLabel: 'XOR2', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'Cin', startNodeIndex: 0, endGateLabel: 'AND2', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'XOR1', startNodeIndex: 0, endGateLabel: 'AND2', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'AND1', startNodeIndex: 0, endGateLabel: 'OR1', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'AND2', startNodeIndex: 0, endGateLabel: 'OR1', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'XOR2', startNodeIndex: 0, endGateLabel: 'S', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'OR1', startNodeIndex: 0, endGateLabel: 'Cout', endNodeIndex: 0, waypoints: [] }
+        ]
+    },
+
+    'and-gate-demo': {
+        name: 'AND Gate Demo',
+        description: 'Simple demonstration of an AND gate with two inputs and one output.',
+        instructorOnly: true,
+        gates: [
+            { type: 'INPUT', label: 'A', x: 100, y: 200, state: false },
+            { type: 'INPUT', label: 'B', x: 100, y: 300, state: false },
+            { type: 'AND', label: 'AND1', x: 250, y: 250, state: false },
+            { type: 'OUTPUT', label: 'Q', x: 400, y: 250, state: false }
+        ],
+        wires: [
+            { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'AND1', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'B', startNodeIndex: 0, endGateLabel: 'AND1', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'AND1', startNodeIndex: 0, endGateLabel: 'Q', endNodeIndex: 0, waypoints: [] }
+        ]
+    },
+
+    'or-gate-demo': {
+        name: 'OR Gate Demo',
+        description: 'Simple demonstration of an OR gate with two inputs and one output.',
+        instructorOnly: true,
+        gates: [
+            { type: 'INPUT', label: 'A', x: 100, y: 200, state: false },
+            { type: 'INPUT', label: 'B', x: 100, y: 300, state: false },
+            { type: 'OR', label: 'OR1', x: 250, y: 250, state: false },
+            { type: 'OUTPUT', label: 'Q', x: 400, y: 250, state: false }
+        ],
+        wires: [
+            { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'OR1', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'B', startNodeIndex: 0, endGateLabel: 'OR1', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'OR1', startNodeIndex: 0, endGateLabel: 'Q', endNodeIndex: 0, waypoints: [] }
+        ]
+    },
+
+    'xor-gate-demo': {
+        name: 'XOR Gate Demo',
+        description: 'Simple demonstration of an XOR (exclusive OR) gate with two inputs and one output.',
+        instructorOnly: true,
+        gates: [
+            { type: 'INPUT', label: 'A', x: 100, y: 200, state: false },
+            { type: 'INPUT', label: 'B', x: 100, y: 300, state: false },
+            { type: 'XOR', label: 'XOR1', x: 250, y: 250, state: false },
+            { type: 'OUTPUT', label: 'Q', x: 400, y: 250, state: false }
+        ],
+        wires: [
+            { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'B', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'XOR1', startNodeIndex: 0, endGateLabel: 'Q', endNodeIndex: 0, waypoints: [] }
+        ]
+    },
+
+    'flip-flop-demo': {
+        name: 'Flip-Flop Demo',
+        description: 'SR Flip-Flop demonstration circuit with Set and Reset inputs.',
+        instructorOnly: true,
+        gates: [
+            { type: 'INPUT', label: 'S', x: 100, y: 200, state: false },
+            { type: 'INPUT', label: 'R', x: 100, y: 300, state: false },
+            { type: 'SR_FLIP_FLOP', label: 'FF1', x: 250, y: 250, state: false },
+            { type: 'OUTPUT', label: 'Q', x: 400, y: 200, state: false },
+            { type: 'OUTPUT', label: 'Qbar', x: 400, y: 300, state: false }
+        ],
+        wires: [
+            { startGateLabel: 'S', startNodeIndex: 0, endGateLabel: 'FF1', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'R', startNodeIndex: 0, endGateLabel: 'FF1', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'FF1', startNodeIndex: 0, endGateLabel: 'Q', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'FF1', startNodeIndex: 1, endGateLabel: 'Qbar', endNodeIndex: 0, waypoints: [] }
+        ]
+    }
+});

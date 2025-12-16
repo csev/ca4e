@@ -2901,11 +2901,169 @@ window.addEventListener('load', () => {
         }
     }
 
-    // Initialize save/restore buttons
+    // Wrap setCircuitData to log circuit data when loaded from storage
+    const originalSetCircuitData = setCircuitData;
+    function wrappedSetCircuitData(data) {
+        // Log the circuit data in copy-paste format
+        if (data && data.gates) {
+            logCircuitForPredefined(data, 'loaded-circuit');
+        }
+        // Call the original function
+        return originalSetCircuitData(data);
+    }
+
+    // Helper function to format circuit data for copy-paste into predefined circuits
+    function logCircuitForPredefined(circuitData, circuitName = 'circuit-name') {
+        console.log('%c═══════════════════════════════════════════════════════════', 'color: #007bff; font-weight: bold;');
+        console.log('%cPredefined Circuit Format (Copy this to predefined-circuits.js)', 'color: #007bff; font-weight: bold; font-size: 14px;');
+        console.log('%cTip: You can also call logCurrentCircuit("name") from console to log the current circuit', 'color: #666; font-style: italic; font-size: 11px;');
+        console.log('%c═══════════════════════════════════════════════════════════', 'color: #007bff; font-weight: bold;');
+        
+        // Format gates array
+        let gatesStr = '        gates: [\n';
+        circuitData.gates.forEach((gate, index) => {
+            const comma = index < circuitData.gates.length - 1 ? ',' : '';
+            gatesStr += `            { type: '${gate.type}', label: '${gate.label}', x: ${gate.x}, y: ${gate.y}, state: ${gate.state !== undefined ? gate.state : false} }${comma}\n`;
+        });
+        gatesStr += '        ],';
+        
+        // Format wires array
+        let wiresStr = '        wires: [\n';
+        if (circuitData.wires && circuitData.wires.length > 0) {
+            circuitData.wires.forEach((wire, index) => {
+                const comma = index < circuitData.wires.length - 1 ? ',' : '';
+                const waypoints = wire.waypoints && wire.waypoints.length > 0 
+                    ? `, waypoints: [${wire.waypoints.map(wp => `{x: ${wp.x}, y: ${wp.y}}`).join(', ')}]` 
+                    : ', waypoints: []';
+                wiresStr += `            { startGateLabel: '${wire.startGateLabel}', startNodeIndex: ${wire.startNodeIndex}, endGateLabel: '${wire.endGateLabel}', endNodeIndex: ${wire.endNodeIndex}${waypoints} }${comma}\n`;
+            });
+        }
+        wiresStr += '        ]';
+        
+        // Output formatted code
+        const formattedCode = `    '${circuitName}': {
+        name: '${circuitName.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}',
+        description: 'Add description here',
+${gatesStr}
+${wiresStr}
+    }`;
+        
+        console.log(formattedCode);
+        console.log('%c═══════════════════════════════════════════════════════════', 'color: #007bff; font-weight: bold;');
+        console.log('%cRaw JSON (for debugging):', 'color: #666; font-style: italic;');
+        console.log(JSON.stringify(circuitData, null, 2));
+    }
+
+    // Make logging functions globally accessible
+    window.logCircuitForPredefined = logCircuitForPredefined;
+    window.logCurrentCircuit = function(circuitName = 'current-circuit') {
+        const circuitData = getCurrentCircuitData();
+        if (circuitData && circuitData.gates) {
+            logCircuitForPredefined(circuitData, circuitName);
+        } else {
+            console.warn('No circuit data available.');
+        }
+    };
+
+    // Override showLoadDialog to include predefined circuits
+    const originalShowLoadDialog = saveRestoreManager.showLoadDialog.bind(saveRestoreManager);
+    saveRestoreManager.showLoadDialog = function(setDataCallback, successCallback = null) {
+        const saveNames = this.getSaveNames();
+        const predefinedNames = window.predefinedCircuits ? Object.keys(window.predefinedCircuits) : [];
+        const isInstructor = window.isInstructor || false;
+        
+        // Combine saved and predefined circuits
+        const allCircuits = [];
+        
+        // Add predefined circuits first (filter out instructor-only for non-instructors)
+        if (window.predefinedCircuits && predefinedNames.length > 0) {
+            predefinedNames.forEach(name => {
+                const circuit = window.predefinedCircuits[name];
+                if (!circuit) {
+                    return;
+                }
+                // Skip instructor-only circuits for non-instructors
+                // Note: if instructorOnly is undefined/falsy, include it for everyone
+                if (circuit.instructorOnly === true && !isInstructor) {
+                    return;
+                }
+                allCircuits.push({
+                    name: name,
+                    displayName: circuit.name || name,
+                    isPredefined: true,
+                    data: circuit
+                });
+            });
+        }
+        
+        // Add saved circuits
+        saveNames.forEach(name => {
+            const info = this.getSaveInfo(name);
+            allCircuits.push({
+                name: name,
+                displayName: this.options.showTimestamps ? `${name} (${info.date})` : name,
+                isPredefined: false,
+                data: null // Will load from localStorage
+            });
+        });
+        
+        if (allCircuits.length === 0) {
+            alert(`No saved ${this.toolName} files or predefined circuits found`);
+            return;
+        }
+        
+        let message = `Enter the name of the ${this.toolName} to load:\n\nAvailable circuits:\n`;
+        allCircuits.forEach(circuit => {
+            message += `${circuit.displayName}\n`;
+        });
+        message += `\nTip: You can enter either the display name or the key name`;
+        
+        const loadName = prompt(message);
+        if (loadName) {
+            // Try to find by display name or key name
+            let circuitToLoad = allCircuits.find(c => 
+                c.displayName === loadName || 
+                c.name === loadName ||
+                c.displayName.toLowerCase().includes(loadName.toLowerCase()) ||
+                c.name.toLowerCase().includes(loadName.toLowerCase())
+            );
+            
+            // If not found, try exact match on key
+            if (!circuitToLoad) {
+                circuitToLoad = allCircuits.find(c => c.name === loadName);
+            }
+            
+            if (circuitToLoad) {
+                let data;
+                if (circuitToLoad.isPredefined) {
+                    // Load from predefined circuits
+                    data = {
+                        gates: circuitToLoad.data.gates,
+                        wires: circuitToLoad.data.wires
+                    };
+                } else {
+                    // Load from localStorage
+                    data = this.load(circuitToLoad.name);
+                }
+                
+                if (data) {
+                    setDataCallback(data);
+                    alert(`"${circuitToLoad.displayName}" loaded successfully!`);
+                    if (successCallback) successCallback(circuitToLoad.name, data);
+                } else {
+                    alert(`"${loadName}" not found`);
+                }
+            } else {
+                alert(`"${loadName}" not found. Please check the name and try again.`);
+            }
+        }
+    };
+
+    // Initialize save/restore buttons with wrapped callback
     saveRestoreManager.createStorageDropdown({
         dropdownId: 'storageDropdown',
         getDataCallback: getCurrentCircuitData,
-        setDataCallback: setCircuitData
+        setDataCallback: wrappedSetCircuitData
     });
 });
 
