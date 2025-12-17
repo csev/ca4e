@@ -25,6 +25,10 @@ function buildMenu() {
 
     if ( isset($_SESSION['id']) ) {
         $submenu = new \Tsugi\UI\Menu();
+        $submenu->addLink('Profile', $R.'profile');
+        if ( isset($CFG->google_map_api_key) ) {
+            $submenu->addLink('Map', $R.'map');
+        }
         if ( isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true" ) {
             $submenu->addLink('Administer', $T . 'admin/');
         }
