@@ -2,8 +2,14 @@
 
 $foot = '
 <p style="font-size: 75%; margin-top: 5em;">
-Copyright Creative Commons Attribution 3.0
-</p>';
+Copyright Creative Commons Attribution 3.0 - Charles R. Severance
+</p><script type="module" src="' . htmlspecialchars($CFG->wwwroot.'/lms/announce/tsugi-announce.js') .'"></script>
+<script>
+$(document).ready( function () {
+    $("#carousel").carousel();
+});     
+</script>   
+';
 
 $OUTPUT->setAppFooter($foot);
 

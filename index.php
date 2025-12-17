@@ -118,20 +118,4 @@ unless otherwise indicated.
 </div>
 <?php
 
-$foot = '
-<p style="font-size: 75%; margin-top: 5em;">
-Copyright Creative Commons Attribution 3.0
-</p>';
-
-$OUTPUT->setAppFooter($foot);
-
-$OUTPUT->footerStart();
-?>
-<script>
-$(document).ready( function () {
-    $('#carousel').carousel();
-});
-</script>
-
-<?php
-$OUTPUT->footerEnd();
+require_once "footer.php";
