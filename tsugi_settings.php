@@ -25,11 +25,11 @@ $CFG->context_title = "Computer Architecture for Everybody";
 
 $CFG->lessons = $CFG->dirroot.'/../lessons.json';
 
-// $CFG->giftquizzes = $CFG->dirroot.'/../dj4e-private/quiz';
+$CFG->giftquizzes = $CFG->dirroot.'/../dj4e-private/quiz';
 
 // $CFG->youtube_url = $CFG->apphome . '/mod/youtube/';
 
-// $CFG->tdiscus = $CFG->apphome . '/mod/tdiscus/';
+$CFG->tdiscus = $CFG->apphome . '/mod/tdiscus/';
 
 // $CFG->launcherror = $CFG->apphome . "/launcherror";
 
