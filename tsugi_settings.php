@@ -33,6 +33,10 @@ $CFG->tdiscus = $CFG->apphome . '/mod/tdiscus/';
 
 // $CFG->launcherror = $CFG->apphome . "/launcherror";
 
+$CFG->setExtension('lessons2_enable', true);
+$CFG->setExtension('lessons_debug_conversion', false);
+$CFG->lessons = $CFG->dirroot.'/../lessons-items.json';
+
 $CFG->setExtension('django_version', '4.2');
 $CFG->setExtension('django_version_short', '42');
 
