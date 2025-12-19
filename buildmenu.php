@@ -6,7 +6,8 @@ function buildMenu() {
     global $CFG;
     $R = $CFG->apphome . '/';
     $T = $CFG->wwwroot . '/';
-    $A = $CFG->wwwroot . '/lms/announce';
+    $L = $CFG->wwwroot . '/lms/';
+    $A = $L . 'announce';
 
     $adminmenu = isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true";
     $set = new \Tsugi\UI\MenuSet();
@@ -18,12 +19,12 @@ function buildMenu() {
     $view_url = U::addSession($A . '/index.php');
 
     if ( U::isNotEmpty($CFG->lessons) ) {
-        $set->addLeft('Lessons', $R.'lessons');
+        $set->addLeft('Lessons', $L.'lessons');
     }
-    if ( U::isNotEmpty($CFG->tdiscus) && $CFG->tdiscus ) $set->addLeft('Discussions', $R.'discussions');
+    if ( U::isNotEmpty($CFG->tdiscus) && $CFG->tdiscus ) $set->addLeft('Discussions', $L.'discussions');
 
     if ( U::isNotEmpty($CFG->lessons) && isset($_SESSION['id']) ) {
-        $set->addLeft('My Progress', $R.'assignments');
+        $set->addLeft('My Progress', $L.'assignments');
     }
 
     if ( U::isNotEmpty($CFG->lessons) && (! isset($_SESSION['id'])) && is_dir('assn') ) {
@@ -32,11 +33,12 @@ function buildMenu() {
 
     if ( isset($_SESSION['id']) ) {
         $submenu = new \Tsugi\UI\Menu();
-        $submenu->addLink('Profile', $R.'profile');
+        $submenu->addLink('Profile', $L.'profile');
         if ( isset($CFG->google_map_api_key) ) {
-            $submenu->addLink('Map', $R.'map');
+            $submenu->addLink('Map', $L.'map');
         }
-        $submenu->addLink('Announcements', $T.'lms/announce');
+        $submenu->addLink('Announcements', $L.'announce');
+        $submenu->addLink('Pages', $L.'pages');
         if ( isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true" ) {
             $submenu->addLink('Administer', $T . 'admin/');
         }

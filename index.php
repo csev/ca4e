@@ -3,6 +3,7 @@ use \Tsugi\Util\U;
 use \Tsugi\Util\Net;
 use \Tsugi\Core\LTIX;
 use \Tsugi\UI\Output;
+use \Tsugi\UI\Pages;
 
 require "top.php";
 require "nav.php";
@@ -55,9 +56,13 @@ code {
 -->
 </div>
 <h1>Computer Architecture for Everybody</h1>
-<p>
-<b>This web site and all the tools are under construction.</b>
-</p>
+<?php
+$front_page_text = null;
+if ( isset($_SESSION['id']) && isset($_SESSION['context_id']) ) $front_page_text = Pages::getFrontPageText($_SESSION['context_id']);
+if ( $front_page_text ) {
+    echo $front_page_text;
+} else {
+?>
 <p>
 This course will
 cover digitial electronics, how electronics can be used for
@@ -109,6 +114,7 @@ The course is not developed in a linear order.  These courses take a long time t
 I tend to work on things that I think will be most difficult first.  Most of the early work is to build
 and test autograders.
 </p>
+<?php } /* End of there is a front page */ ?>
 <h3>Copyright</h3>
 <p>
 The material produced specifically for this site is by Charles Severance and others
