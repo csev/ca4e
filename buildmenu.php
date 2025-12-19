@@ -38,6 +38,7 @@ function buildMenu() {
             $submenu->addLink('Map', $L.'map');
         }
         $submenu->addLink('Announcements', $L.'announce');
+        $submenu->addLink('Grades', $L.'grades');
         $submenu->addLink('Pages', $L.'pages');
         if ( isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true" ) {
             $submenu->addLink('Administer', $T . 'admin/');
