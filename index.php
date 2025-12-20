@@ -115,6 +115,14 @@ I tend to work on things that I think will be most difficult first.  Most of the
 and test autograders.
 </p>
 <?php } /* End of there is a front page */ ?>
+If you want to use these Creative Commons Licensed materials
+in your own classes you can
+<a href="materials.php">download or link</a> to the artifacts on this site,
+<a href="tsugi/cc/">export the course material</a> as an
+IMS Common Cartridge®, or apply for
+an IMS Learning Tools Interoperability® (LTI®)
+<a href="tsugi/admin/key/index.php">key and secret</a>
+ to launch the autograders from your LMS.
 <h3>Copyright</h3>
 <p>
 The material produced specifically for this site is by Charles Severance and others

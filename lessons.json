@@ -91,7 +91,7 @@
 {
     "title": "Solid State Computing",
     "anchor": "solid",
-    "icon" : "fa-plug fa-rotate-270",
+    "icon" : "fa-flask",
     "description": "We look how the invention of the transistor changed everything.",
     "slides": [
         "{apphome}/lectures/02-SolidState.pptx"
@@ -227,7 +227,7 @@
 {
     "title": "Digital Logic",
     "anchor": "digital",
-    "icon" : "fa-torii-gate",
+    "icon" : "fa-microchip",
     "description": "We move from the electrical aspects of computing to the more abstract logical domain.",
     "slides": [
         "{apphome}/lectures/03-DigitalLogic.pptx"
