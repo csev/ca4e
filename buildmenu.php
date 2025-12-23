@@ -54,7 +54,7 @@ function buildMenu() {
         $set->addRight('Login', $T.'login.php');
     }
 
-    $set->addRight('Instructor', 'https://online.dr-chuck.com');
+    $set->addRight('Instructor', 'https://online.dr-chuck.com', true, array('target' => '_self'));
 
     if ( isset($_SESSION['id']) ) {
         $set->addRight('<tsugi-announce json-url="'. htmlspecialchars($json_url) . '" dismiss-url="'. htmlspecialchars($dismiss_url) . '" view-url="'. htmlspecialchars($view_url) . '"> </tsugi-announce>', false);
