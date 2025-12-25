@@ -23,8 +23,6 @@ $CFG->theme = array(
 
 $CFG->context_title = "Computer Architecture for Everybody";
 
-$CFG->lessons = $CFG->dirroot.'/../lessons.json';
-
 $CFG->giftquizzes = $CFG->dirroot.'/../dj4e-private/quiz';
 
 // $CFG->youtube_url = $CFG->apphome . '/mod/youtube/';
@@ -32,6 +30,8 @@ $CFG->giftquizzes = $CFG->dirroot.'/../dj4e-private/quiz';
 $CFG->tdiscus = $CFG->apphome . '/mod/tdiscus/';
 
 // $CFG->launcherror = $CFG->apphome . "/launcherror";
+
+$CFG->lessons = $CFG->dirroot.'/../lessons.json';
 
 $CFG->setExtension('lessons2_enable', true);
 $CFG->setExtension('lessons_debug_conversion', false);
@@ -45,5 +45,6 @@ if ( file_exists($buildmenu) ) {
     require_once $buildmenu;
     $CFG->defaultmenu = buildMenu();
 }
+
 
 
