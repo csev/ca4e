@@ -12,12 +12,12 @@
     "discussions": [
         {
             "title": "Welcome to Computer Architecture Programming for Everybody",
-            "launch": "mod/tdiscus/",
+            "launch": "{apphome}/mod/tdiscus/",
             "resource_link_id": "discussion_welcome"
         },
         {
             "title": "Report Bugs in Course Material",
-            "launch": "mod/tdiscus/",
+            "launch": "{apphome}/mod/tdiscus/",
             "resource_link_id": "discussion_bugs"
         }
     ],
@@ -94,7 +94,7 @@
                 {
                     "type": "discussion",
                     "title": "History / Introduction",
-                    "launch": "mod/tdiscus/",
+                    "launch": "{apphome}/mod/tdiscus/",
                     "resource_link_id": "discuss_01_origins"
                 },
                 {
@@ -104,14 +104,79 @@
                 },
                 {
                     "type": "lti",
+                    "title": "Quiz: Origins of Computing",
+                    "launch": "{apphome}/mod/gift/?quiz=Origins.txt",
+                    "resource_link_id": "ca4e_01_hist_quiz",
+                    "custom": [
+                        {
+                            "key": "tries",
+                            "value": "3"
+                        },
+                        {
+                            "key": "delay",
+                            "value": "601"
+                        }
+                    ]
+                },  
+                {
+                    "type": "lti",
                     "title": "Using a Slide Rule for Multiplication",
-                    "launch": "tools/sliderule/",
+                    "launch": "{apphome}/tools/sliderule/",
                     "resource_link_id": "ca4e_01_sliderule",
                     "target": "_blank",
                     "custom": [
                         {
                             "key": "exercise",
                             "value": "CmosNotGateExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "Paper: Reflections on The Origins of Computing",
+                    "launch": "{apphome}/mod/aipaper/",
+                    "resource_link_id": "ca4e_0 _paper",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "instructions",
+                            "value": "Yada yada instrucrtions"
+                        },
+                        {
+                            "key": "submitpoints",
+                            "value": 50
+                        },
+                        {
+                            "key": "instructorpoints",
+                            "value": 10
+                        },
+                        {
+                            "key": "commentpoints",
+                            "value": 5
+                        },
+                        {
+                            "key": "mincomments",
+                            "value": 3
+                        },
+                        {
+                            "key": "userealnames",
+                            "value": 0
+                        },
+                        {
+                            "key": "allowall",
+                            "value": 1
+                        },
+                        {
+                            "key": "resubmit",
+                            "value": 1
+                        },
+                        {
+                            "key": "auto_timeout",
+                            "value": 172800
+                        },
+                        {
+                            "key": "auto_timeout",
+                            "value": 172800
                         }
                     ]
                 }
@@ -201,7 +266,7 @@
                 {
                     "type": "discussion",
                     "title": "Transistors and Solid State Computing",
-                    "launch": "mod/tdiscus/",
+                    "launch": "{apphome}/mod/tdiscus/",
                     "resource_link_id": "discuss_02_solid"
                 },
                 {
@@ -212,7 +277,7 @@
                 {
                     "type": "lti",
                     "title": "All Gates Truth Tables",
-                    "launch": "tools/truth/",
+                    "launch": "{apphome}/tools/truth/",
                     "resource_link_id": "ca4e_02_truth_all",
                     "target": "_blank",
                     "custom": [
@@ -225,7 +290,7 @@
                 {
                     "type": "lti",
                     "title": "Building a Not Gate with CMOS Transistors",
-                    "launch": "tools/cmos/",
+                    "launch": "{apphome}/tools/cmos/",
                     "resource_link_id": "ca4e_02_cmos_not",
                     "target": "_blank",
                     "custom": [
@@ -238,7 +303,7 @@
                 {
                     "type": "lti",
                     "title": "Building a Nor Gate with CMOS Transistors",
-                    "launch": "tools/cmos/",
+                    "launch": "{apphome}/tools/cmos/",
                     "resource_link_id": "ca4e_02_cmos_nor",
                     "target": "_blank",
                     "custom": [
@@ -251,7 +316,7 @@
                 {
                     "type": "lti",
                     "title": "Mistic: Building a Not Gate with VLSI Layout",
-                    "launch": "tools/mistic/",
+                    "launch": "{apphome}/tools/mistic/",
                     "resource_link_id": "ca4e_02_vlsi_not",
                     "target": "_blank",
                     "custom": [
@@ -264,7 +329,7 @@
                 {
                     "type": "lti",
                     "title": "Mistic: Building a Nand Gate with VLSI Layout",
-                    "launch": "tools/mistic/",
+                    "launch": "{apphome}/tools/mistic/",
                     "resource_link_id": "ca4e_02_vlsi_nand",
                     "target": "_blank",
                     "custom": [
@@ -277,7 +342,7 @@
                 {
                     "type": "lti",
                     "title": "Mistic: Building a Nor Gate with VLSI Layout",
-                    "launch": "tools/mistic/",
+                    "launch": "{apphome}/tools/mistic/",
                     "resource_link_id": "ca4e_02_vlsi_nor",
                     "target": "_blank",
                     "custom": [
@@ -360,7 +425,7 @@
                 {
                     "type": "discussion",
                     "title": "Digital Logic",
-                    "launch": "mod/tdiscus/",
+                    "launch": "{apphome}/mod/tdiscus/",
                     "resource_link_id": "discuss_03_logic"
                 },
                 {
@@ -371,7 +436,7 @@
                 {
                     "type": "lti",
                     "title": "Base-10 \u21c4 Base-2 conversions (0-7)",
-                    "launch": "tools/nixie/",
+                    "launch": "{apphome}/tools/nixie/",
                     "resource_link_id": "ca4e_03_nixie2",
                     "target": "_blank",
                     "custom": [
@@ -384,7 +449,7 @@
                 {
                     "type": "lti",
                     "title": "Building a Half-Adder",
-                    "launch": "tools/gates/",
+                    "launch": "{apphome}/tools/gates/",
                     "resource_link_id": "ca4e_03_halfadder",
                     "target": "_blank",
                     "custom": [
@@ -397,7 +462,7 @@
                 {
                     "type": "lti",
                     "title": "Binary addition practice (3-bit + 3-bit)",
-                    "launch": "tools/nixie/",
+                    "launch": "{apphome}/tools/nixie/",
                     "resource_link_id": "ca4e_03_nixie_add",
                     "target": "_blank",
                     "custom": [
@@ -410,7 +475,7 @@
                 {
                     "type": "lti",
                     "title": "Building a Full-Adder",
-                    "launch": "tools/gates/",
+                    "launch": "{apphome}/tools/gates/",
                     "resource_link_id": "ca4e_03_full_adder",
                     "target": "_blank",
                     "custom": [
@@ -527,7 +592,7 @@
                 {
                     "type": "discussion",
                     "title": "CPU Design and Machine Code",
-                    "launch": "mod/tdiscus/",
+                    "launch": "{apphome}/mod/tdiscus/",
                     "resource_link_id": "discuss_04_cpu"
                 },
                 {
@@ -538,7 +603,7 @@
                 {
                     "type": "lti",
                     "title": "Hex \u21c4 Decimal conversions",
-                    "launch": "tools/nixie/",
+                    "launch": "{apphome}/tools/nixie/",
                     "resource_link_id": "ca4e_04_nixie16",
                     "target": "_blank",
                     "custom": [
@@ -551,7 +616,7 @@
                 {
                     "type": "lti",
                     "title": "Print out '42'",
-                    "launch": "tools/cdc6504/",
+                    "launch": "{apphome}/tools/cdc6504/",
                     "resource_link_id": "ca4e_04_cdc_42",
                     "target": "_blank",
                     "custom": [
@@ -564,7 +629,7 @@
                 {
                     "type": "lti",
                     "title": "WASM",
-                    "launch": "tools/wasm/",
+                    "launch": "{apphome}/tools/wasm/",
                     "resource_link_id": "ca4e_04_wasm_hello",
                     "target": "_blank",
                     "custom": [
