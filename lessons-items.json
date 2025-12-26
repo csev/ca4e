@@ -136,7 +136,7 @@
                     "title": "Paper: Reflections on The Origins of Computing",
                     "launch": "{apphome}/mod/aipaper/",
                     "resource_link_id": "ca4e_0 _paper",
-                    "xtarget": "_blank",
+                    "target": "_blank",
                     "custom": [
                         {
                             "key": "instructions",
