@@ -140,11 +140,11 @@
                     "custom": [
                         {
                             "key": "instructions",
-                            "value": "Yada yada instrucrtions"
+                            "value": "CHoose a topic form the the Origins of computing lecture and reflect / expand on it.  Or alternatvely, pick a historical technolgy breakthrough the was not covered and write a small paper about it and why it should be included in the course"
                         },
                         {
                             "key": "submitpoints",
-                            "value": 50
+                            "value": 60
                         },
                         {
                             "key": "instructorpoints",
@@ -152,7 +152,7 @@
                         },
                         {
                             "key": "commentpoints",
-                            "value": 5
+                            "value": 10
                         },
                         {
                             "key": "mincomments",
@@ -169,10 +169,6 @@
                         {
                             "key": "resubmit",
                             "value": 1
-                        },
-                        {
-                            "key": "auto_timeout",
-                            "value": 172800
                         },
                         {
                             "key": "auto_timeout",
