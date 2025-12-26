@@ -136,11 +136,11 @@
                     "title": "Paper: Reflections on The Origins of Computing",
                     "launch": "{apphome}/mod/aipaper/",
                     "resource_link_id": "ca4e_0 _paper",
-                    "target": "_blank",
+                    "xtarget": "_blank",
                     "custom": [
                         {
                             "key": "instructions",
-                            "value": "Choose a topic from the Origins of Computing lecture and reflect on it by expanding your discussion beyond what was covered in class.\nAlternatively, select a significant historical technology breakthrough that was not covered in the lecture and write a short paper explaining the breakthrough and why it deserves inclusion in this course."
+                            "value": "Reflect on a topic in this section by adding additional detail, or describe a topic that you believe should have been included."
                         },
                         {
                             "key": "submitpoints",
