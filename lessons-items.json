@@ -105,7 +105,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: Origins of Computing",
-                    "launch": "{apphome}/mod/gift/?quiz=Origins.txt",
+                    "launch": "{apphome}/mod/gift/?quiz=01-Origins.txt",
                     "resource_link_id": "ca4e_01_hist_quiz",
                     "custom": [
                         {
@@ -272,6 +272,22 @@
                 },
                 {
                     "type": "lti",
+                    "title": "Quiz: Solid State Computing",
+                    "launch": "{apphome}/mod/gift/?quiz=02-SolidState.txt",
+                    "resource_link_id": "ca4e_02_solid_quiz",
+                    "custom": [
+                        {
+                            "key": "tries",
+                            "value": "3"
+                        },
+                        {
+                            "key": "delay",
+                            "value": "601"
+                        }
+                    ]
+                },  
+                {
+                    "type": "lti",
                     "title": "All Gates Truth Tables",
                     "launch": "{apphome}/tools/truth/",
                     "resource_link_id": "ca4e_02_truth_all",
@@ -429,6 +445,22 @@
                     "text": "Tools",
                     "level": 2
                 },
+                {
+                    "type": "lti",
+                    "title": "Quiz: Gates and Digital Logic",
+                    "launch": "{apphome}/mod/gift/?quiz=03-DigitalLogic.txt",
+                    "resource_link_id": "ca4e_03_logic_quiz",
+                    "custom": [
+                        {
+                            "key": "tries",
+                            "value": "3"
+                        },
+                        {
+                            "key": "delay",
+                            "value": "601"
+                        }
+                    ]
+                },  
                 {
                     "type": "lti",
                     "title": "Base-10 \u21c4 Base-2 conversions (0-7)",
@@ -596,6 +628,22 @@
                     "text": "Tools",
                     "level": 2
                 },
+                {
+                    "type": "lti",
+                    "title": "Quiz: CPU Design and Machine Code",
+                    "launch": "{apphome}/mod/gift/?quiz=04-MachineCode.txt",
+                    "resource_link_id": "ca4e_04_cpu_quiz",
+                    "custom": [
+                        {
+                            "key": "tries",
+                            "value": "3"
+                        },
+                        {
+                            "key": "delay",
+                            "value": "601"
+                        }
+                    ]
+                },  
                 {
                     "type": "lti",
                     "title": "Hex \u21c4 Decimal conversions",

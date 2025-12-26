@@ -23,7 +23,7 @@ $CFG->theme = array(
 
 $CFG->context_title = "Computer Architecture for Everybody";
 
-$CFG->giftquizzes = $CFG->dirroot.'/../dj4e-private/quiz';
+$CFG->giftquizzes = $CFG->dirroot.'/../ca4e-private/quiz';
 
 // $CFG->youtube_url = $CFG->apphome . '/mod/youtube/';
 
