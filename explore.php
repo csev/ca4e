@@ -145,7 +145,7 @@ One theory I have is wat about a year for AI to get smarter and then try it agai
 </p>
 <p>
 So here’s your challenge: check out the
-<a href="github.com/csev/ca4e" target="_blank">CA4E GitHub repository</a>
+<a href="https://www.github.com/csev/ca4e" target="_blank">CA4E GitHub repository</a>
 and fix one (or both) of these tools. Breadboard is more useful to me
 pedagogically, is closer to being complete, and is frankly easier than
 Analog. If you fix Breadboard, send me a PR — and then I’ll have to redo the
