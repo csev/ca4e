@@ -118,15 +118,6 @@ to settle. A common quick-and-dirty approach is to repeatedly recompute voltages
 “close enough.” Trust me — I tried that a LOT, and it was never successful.
 </p>
 <p>
-I also attempted to build another version that would let me explore the nature
-of transistor-based amplification. This involved analog computing with voltages
-changing over time. I got a prettty cool UI pretty quickly with AI - but
-when it came to circuit emulation - AI was so lost that I gave up quickly.
-</p>
-<p>
-<a href="tools/analog" target="_blank" class="text-primary">Analog</a>
-</p>
-<p>
 I’ll be honest: part of the problem is that I dropped out of Electrical
 Engineering shortly after I almost learned
 <a href="https://en.wikipedia.org/wiki/Mesh_analysis" target="_blank">Mesh Analysis</a>
@@ -139,6 +130,15 @@ to spend on it. For the record, AI knows a LOT
 about mesh and nodal analysis; it just can’t seem to write working code to
 implement them, no matter how carefully I prompt it.  By the way - I think
 Nodal analysis will win the day in these circuits.
+</p>
+<p>
+I also attempted to build another version that would let me explore the nature
+of transistor-based amplification. This involved analog computing with voltages
+changing over time. I got a prettty cool UI pretty quickly with AI - but
+when it came to circuit emulation - AI was so lost that I gave up quickly.
+</p>
+<p>
+<a href="tools/analog" target="_blank" class="text-primary">Analog</a>
 </p>
 <p>
 One theory I have is wat about a year for AI to get smarter and then try it again :)
