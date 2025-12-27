@@ -40,6 +40,8 @@ function buildMenu() {
         $submenu->addLink('Announcements', $L.'announce');
         $submenu->addLink('Grades', $L.'grades');
         $submenu->addLink('Pages', $L.'pages');
+        $submenu->addLink('LMS Integration', $T . 'settings');
+
         if ( isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true" ) {
             $submenu->addLink('Administer', $T . 'admin/');
         }

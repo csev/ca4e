@@ -37,6 +37,11 @@ $CFG->setExtension('lessons2_enable', true);
 $CFG->setExtension('lessons_debug_conversion', false);
 $CFG->lessons = $CFG->dirroot.'/../lessons-items.json';
 
+// Information on the owner of this system
+$CFG->ownername = 'Charles Severance';
+$CFG->owneremail = 'drchuck@learnxp.com';
+$CFG->providekeys = true;  // true
+
 $CFG->setExtension('django_version', '4.2');
 $CFG->setExtension('django_version_short', '42');
 
