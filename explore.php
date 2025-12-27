@@ -93,6 +93,61 @@ log in these same tools are used for assignments under lessons.
 <a href="tools/wasm"  target="_blank" class="text-primary">WASM Playground</a>
 </li>
 </ul>
+<p>
+Most of these tools were developed with extensive use 
+of <a href="https://cursor.com/download" target="_blank">Cursor.AI</a>.
+It was a great study of both the impressive capabilities and
+unfortunate limitations of AI.  I would say 80% impressive /
+20% disappointing - but things got bettwe as 2025 progressed.
+</p>
+<h2>A Challenge for You</h2>
+<p>
+One tool I really wanted to use early in the course was a breadboard emulation.
+I used AI to build a beautiful and functional UI, and it actually worked quite
+well for single components. Check out how it lights up the pins with their
+voltages 🙂 Unfortunately, once the circuits became more complex, the circuit
+emulation was never reliable.
+</p>
+<p>
+<a href="tools/breadboard" target="_blank" class="text-primary">Breadboard</a>
+</p>
+<p>
+I think the core problem is that the simulation needs to be analog and allowed
+to settle. A common quick-and-dirty approach is to repeatedly recompute voltages
+(perhaps 100 times), letting them converge and then stopping when things are
+“close enough.” Trust me — I tried that a LOT, and it was never successful.
+</p>
+<p>
+I also attempted to build another version that would let me explore the nature
+of transistor-based amplification. This involved analog computing with voltages
+changing over time. It was insanely difficult.
+</p>
+<p>
+<a href="tools/analog" target="_blank" class="text-primary">Analog</a>
+</p>
+<p>
+I’ll be honest: part of the problem is that I dropped out of Electrical
+Engineering shortly after I almost learned
+<a href="https://en.wikipedia.org/wiki/Mesh_analysis" target="_blank">Mesh Analysis</a>
+and
+<a href="https://en.wikipedia.org/wiki/Nodal_analysis" target="_blank">Nodal Analysis</a>.
+I knew enough to know just how hard this problem really is. After spending 40+
+hours begging AI to solve it — and watching it fail repeatedly — I finally
+decided to build the circuit emulation by hand when I had 40 hours of my own
+to spend on it. For the record, AI knows a LOT
+about mesh and nodal analysis; it just can’t seem to write working code to
+implement them, no matter how carefully I prompt it.  By the way - I think
+Nodal analysis will win the day in these circuits.
+</p>
+<p>
+So here’s your challenge: check out the
+<a href="github.com/csev/ca4e" target="_blank">CA4E GitHub repository</a>
+and fix one (or both) of these tools. Breadboard is more useful to me
+pedagogically, is closer to being complete, and is frankly easier than
+Analog. If you fix Breadboard, send me a PR — and then I’ll have to redo the
+course materials 🙂 Thanks in advance.
+</p>
+<h2>Copyright</h2>
 If you want to use these Creative Commons Licensed materials
 in your own classes you can
 <a href="materials.php">download or link</a> to the artifacts on this site,
