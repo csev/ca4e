@@ -22,6 +22,7 @@ function buildMenu() {
         $set->addLeft('Lessons', $L.'lessons');
     }
     if ( U::isNotEmpty($CFG->tdiscus) && $CFG->tdiscus ) $set->addLeft('Discussions', $L.'discussions');
+    $set->addLeft('Explore', $R.'explore');
 
     if ( U::isNotEmpty($CFG->lessons) && isset($_SESSION['id']) ) {
         $set->addLeft('My Progress', $L.'assignments');
