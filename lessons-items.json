@@ -117,7 +117,7 @@
                             "value": "601"
                         }
                     ]
-                },  
+                },
                 {
                     "type": "lti",
                     "title": "Using a Slide Rule for Multiplication",
@@ -241,6 +241,11 @@
                 },
                 {
                     "type": "reference",
+                    "title": "AT&T Archives: Genesis of the Transistor",
+                    "href": "https://www.youtube.com/watch?v=WiQvGRjrLnU"
+                },
+                {
+                    "type": "reference",
                     "title": "IEEE Spectrum: The Silicon Dioxide Solution",
                     "href": "https://spectrum.ieee.org/the-silicon-dioxide-solution"
                 },
@@ -248,11 +253,6 @@
                     "type": "reference",
                     "title": "YouTube: I Built A Dice Without Writing a Single Line of Code",
                     "href": "https://www.youtube.com/watch?v=2vmY57eflAU"
-                },
-                {
-                    "type": "reference",
-                    "title": "AT&T Archives: Genesis of the Transistor",
-                    "href": "https://www.youtube.com/watch?v=WiQvGRjrLnU"
                 },
                 {
                     "type": "header",
@@ -285,7 +285,7 @@
                             "value": "601"
                         }
                     ]
-                },  
+                },
                 {
                     "type": "lti",
                     "title": "All Gates Truth Tables",
@@ -460,10 +460,10 @@
                             "value": "601"
                         }
                     ]
-                },  
+                },
                 {
                     "type": "lti",
-                    "title": "Base-10 \u21c4 Base-2 conversions (0-7)",
+                    "title": "Base-10 ⇄ Base-2 conversions (0-7)",
                     "launch": "{apphome}/tools/nixie/",
                     "resource_link_id": "ca4e_03_nixie2",
                     "target": "_blank",
@@ -545,7 +545,7 @@
                 },
                 {
                     "type": "video",
-                    "title": "Understanding Hexadecimal (Base 16) \u2014 Why Computers Use It & How to Think in It - Part 2 (12:24)",
+                    "title": "Understanding Hexadecimal (Base 16) — Why Computers Use It & How to Think in It - Part 2 (12:24)",
                     "media": "CA4E-Lectures/04-CPU/04-02-CPU-Hex.m4v",
                     "FCPX": "ca4e-media/04-Digital/04-02-CPU-Hex",
                     "youtube": "V_4Ord6x9H4"
@@ -566,7 +566,7 @@
                 },
                 {
                     "type": "video",
-                    "title": "Machine Language \u2014 Loops, Branching & Assembly vs. Machine Code - Part 5 (18:43)",
+                    "title": "Machine Language — Loops, Branching & Assembly vs. Machine Code - Part 5 (18:43)",
                     "media": "CA4E-Lectures/04-CPU/04-05-CPU-Machine.m4v",
                     "FCPX": "ca4e-media/04-Digital/04-05-CPU-Machine",
                     "youtube": "h92PhKl2elU"
@@ -587,7 +587,7 @@
                 },
                 {
                     "type": "video",
-                    "title": "From 6502 to ARM: The 50-Year Journey of CPU Evolution & Apple\u2019s CPU Strategy- Part 8 (7:31)",
+                    "title": "From 6502 to ARM: The 50-Year Journey of CPU Evolution & Apple’s CPU Strategy- Part 8 (7:31)",
                     "media": "CA4E-Lectures/04-CPU/04-08-CPU-History.m4v",
                     "FCPX": "ca4e-media/04-Digital/04-08-CPU-History",
                     "youtube": "bsUKo48cMrA"
@@ -643,10 +643,10 @@
                             "value": "601"
                         }
                     ]
-                },  
+                },
                 {
                     "type": "lti",
-                    "title": "Hex \u21c4 Decimal conversions",
+                    "title": "Hex ⇄ Decimal conversions",
                     "launch": "{apphome}/tools/nixie/",
                     "resource_link_id": "ca4e_04_nixie16",
                     "target": "_blank",
