@@ -346,14 +346,21 @@ class CmosNotGateExercise extends CMOSExercise {
         ];
         
         const instructions = `
-            <strong>Assignment:</strong> Design a CMOS NOT gate circuit.<br><br>
-            <strong>Instructions:</strong><br>
-            1. Add a switch component and label it "A" (this will be your input)<br>
-            2. Add a probe component and label it "Q" (this will be your output)<br>
-            3. Design a CMOS NOT gate using NMOS and PMOS transistors<br>
-            4. Connect the components properly<br>
-            5. Test your circuit by setting the switch to high and low states<br>
-            6. When ready, press "Grade" to check your circuit.
+            <div id="instructionsContent">
+                <strong>Assignment:</strong> Design a CMOS NOT gate circuit.<br><br>
+                <button onclick="showReferenceImage('images/not.png')" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">📷 View Reference Image</button><br><br>
+                <strong>Instructions:</strong><br>
+                1. Add a switch component and label it "A" (this will be your input)<br>
+                2. Add a probe component and label it "Q" (this will be your output)<br>
+                3. Design a CMOS NOT gate using NMOS and PMOS transistors<br>
+                4. Connect the components properly<br>
+                5. Test your circuit by setting the switch to high and low states<br>
+                6. When ready, press "Grade" to check your circuit.
+            </div>
+            <div id="imageContent" style="display: none; text-align: center; position: relative;">
+                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0;">×</button>
+                <img src="images/not.png" alt="CMOS NOT Gate Reference" style="max-width: 100%; max-height: 500px; margin-top: 20px;">
+            </div>
         `;
         
         super(
@@ -432,14 +439,21 @@ class CmosNorGateExercise extends CMOSExercise {
         ];
         
         const instructions = `
-            <strong>Assignment:</strong> Design a CMOS NOR gate circuit.<br><br>
-            <strong>Instructions:</strong><br>
-            1. Add two switch components and label them "A" and "B" (these will be your inputs)<br>
-            2. Add a probe component and label it "Q" (this will be your output)<br>
-            3. Design a CMOS NOR gate using NMOS and PMOS transistors<br>
-            4. Connect the components properly (PMOS in series, NMOS in parallel)<br>
-            5. Test your circuit by setting the switches to different combinations<br>
-            6. When ready, press "Grade" to check your circuit.
+            <div id="instructionsContent">
+                <strong>Assignment:</strong> Design a CMOS NOR gate circuit.<br><br>
+                <button onclick="showReferenceImage('images/nor.png')" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">📷 View Reference Image</button><br><br>
+                <strong>Instructions:</strong><br>
+                1. Add two switch components and label them "A" and "B" (these will be your inputs)<br>
+                2. Add a probe component and label it "Q" (this will be your output)<br>
+                3. Design a CMOS NOR gate using NMOS and PMOS transistors<br>
+                4. Connect the components properly (PMOS in series, NMOS in parallel)<br>
+                5. Test your circuit by setting the switches to different combinations<br>
+                6. When ready, press "Grade" to check your circuit.
+            </div>
+            <div id="imageContent" style="display: none; text-align: center; position: relative;">
+                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0;">×</button>
+                <img src="images/nor.png" alt="CMOS NOR Gate Reference" style="max-width: 100%; max-height: 500px; margin-top: 20px;">
+            </div>
         `;
         
         super(

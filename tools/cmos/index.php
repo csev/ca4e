@@ -480,6 +480,31 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             window.open('documentation.html', '_blank', 'width=1000,height=800,scrollbars=yes,resizable=yes');
         }
 
+        // Show reference image in assignment dialog
+        function showReferenceImage(imagePath) {
+            const instructionsContent = document.getElementById('instructionsContent');
+            const imageContent = document.getElementById('imageContent');
+            if (instructionsContent && imageContent) {
+                instructionsContent.style.display = 'none';
+                imageContent.style.display = 'block';
+                // Update image source if needed
+                const img = imageContent.querySelector('img');
+                if (img) {
+                    img.src = imagePath;
+                }
+            }
+        }
+
+        // Show instructions in assignment dialog
+        function showInstructions() {
+            const instructionsContent = document.getElementById('instructionsContent');
+            const imageContent = document.getElementById('imageContent');
+            if (instructionsContent && imageContent) {
+                instructionsContent.style.display = 'block';
+                imageContent.style.display = 'none';
+            }
+        }
+
         // Close modals when clicking the X
         document.querySelectorAll('.close').forEach(closeBtn => {
             closeBtn.addEventListener('click', function() {
