@@ -46,30 +46,41 @@
                 {
                     "type": "video",
                     "title": "Origins of Data, Computing: Lines, Curves, and Numbers - Part 1 (11:10)",
-                    "media": "CA4E-Lectures/01-Origins/01-01-Origins-StoneHenge.m4v",
-                    "FCPX": "ca4e-media/01-Origins/01-01-Origins-StoneHenge",
+                    "reference": "CA4E-Lectures/01-Origins/01-01-Origins-StoneHenge.m4v",
+                    "media": "ca4e-media/01-Origins/01-01-Origins-StoneHenge",
                     "youtube": "TorNiFp_hyY"
                 },
                 {
                     "type": "video",
                     "title": "Exploring Analog / Continuous Computing Devices - Part 2 (14:15)",
-                    "media": "CA4E-Lectures/01-Origins/01-02-Origins-SlideRule.m4v",
-                    "FCPX": "ca4e-media/01-Origins/01-02-Origins-SlideRule",
+                    "reference": "CA4E-Lectures/01-Origins/01-02-Origins-SlideRule.m4v",
+                    "media": "ca4e-media/01-Origins/01-02-Origins-SlideRule",
                     "youtube": "BruoDcgZzPQ"
                 },
                 {
                     "type": "video",
                     "title": "Exploring Physical Digital Devices - Part 3 (11:03)",
-                    "media": "CA4E-Lectures/01-Origins/01-03-Origins-Digital.m4v",
-                    "FCPX": "ca4e-media/01-Origins/01-03-Origins-Digital",
+                    "reference": "CA4E-Lectures/01-Origins/01-03-Origins-Digital.m4v",
+                    "media": "ca4e-media/01-Origins/01-03-Origins-Digital",
                     "youtube": "w5eWEZ4o6KM"
                 },
                 {
                     "type": "video",
                     "title": "Exploring Hardware Iteration - Part 4 (10:58)",
-                    "media": "CA4E-Lectures/01-Origins/01-04-Origins-Iterations.m4v",
-                    "FCPX": "ca4e-media/01-Origins/01-04-Origins-Iterations",
+                    "reference": "CA4E-Lectures/01-Origins/01-04-Origins-Iterations.m4v",
+                    "media": "ca4e-media/01-Origins/01-04-Origins-Iterations",
                     "youtube": "Um4UyGvlc44"
+                },
+                {
+                    "type": "header",
+                    "text": "Discussions",
+                    "level": 2
+                },
+                {
+                    "type": "discussion",
+                    "title": "History / Introduction",
+                    "launch": "{apphome}/mod/tdiscus/",
+                    "resource_link_id": "discuss_01_origins"
                 },
                 {
                     "type": "header",
@@ -85,17 +96,6 @@
                     "type": "reference",
                     "title": "Mark I Fire Control Computer - Electromechanical Analog Computer",
                     "href": "https://en.wikipedia.org/wiki/Mark_I_Fire_Control_Computer"
-                },
-                {
-                    "type": "header",
-                    "text": "Discussions",
-                    "level": 2
-                },
-                {
-                    "type": "discussion",
-                    "title": "History / Introduction",
-                    "launch": "{apphome}/mod/tdiscus/",
-                    "resource_link_id": "discuss_01_origins"
                 },
                 {
                     "type": "header",
@@ -202,37 +202,59 @@
                 {
                     "type": "video",
                     "title": "Solid State: Starting with Tubes - Part 1 (10:29)",
-                    "media": "CA4E-Lectures/02-SolidState/02-01-SolidState-Tubes.m4v",
-                    "FCPX": "ca4e-media/02-SolidState/02-01-SolidState-Tubes",
+                    "reference": "CA4E-Lectures/02-SolidState/02-01-SolidState-Tubes.m4v",
+                    "media": "ca4e-media/02-SolidState/02-01-SolidState-Tubes",
                     "youtube": "eRDh3t1QL5Y"
                 },
                 {
                     "type": "video",
                     "title": "Solid State: From Tubes to Transistors - Part 2 (10:24)",
-                    "media": "CA4E-Lectures/02-SolidState/02-02-SolidState-Transistors.m4v",
-                    "FCPX": "ca4e-media/02-SolidState/02-02-SolidState-Transistors",
+                    "reference": "CA4E-Lectures/02-SolidState/02-02-SolidState-Transistors.m4v",
+                    "media": "ca4e-media/02-SolidState/02-02-SolidState-Transistors",
                     "youtube": "V1BzdYrDakI"
                 },
                 {
                     "type": "video",
                     "title": "Solid State: From Transistors to Gates - Part 3 (17:31)",
-                    "media": "CA4E-Lectures/02-SolidState/02-03-SolidState-Gates.m4v",
-                    "FCPX": "ca4e-media/02-SolidState/02-03-SolidState-Gates",
+                    "reference": "CA4E-Lectures/02-SolidState/02-03-SolidState-Gates.m4v",
+                    "media": "ca4e-media/02-SolidState/02-03-SolidState-Gates",
                     "youtube": "-qNm_MewmzM"
                 },
                 {
                     "type": "video",
                     "title": "Solid State: From Transistors to Wafers - Part 4 (9:18)",
-                    "media": "CA4E-Lectures/02-SolidState/02-04-SolidState-Gates.m4v",
-                    "FCPX": "ca4e-media/02-SolidState/02-04-SolidState-Gates",
+                    "reference": "CA4E-Lectures/02-SolidState/02-04-SolidState-Gates.m4v",
+                    "media": "ca4e-media/02-SolidState/02-04-SolidState-Gates",
                     "youtube": "z4U3el4fgXo"
                 },
                 {
                     "type": "video",
                     "title": "Solid State: VLSI Design Layout - Part 5 (10:46)",
-                    "media": "CA4E-Lectures/02-SolidState/02-05-SolidState-VLSI.m4v",
-                    "FCPX": "ca4e-media/02-SolidState/02-05-SolidState-VLSI",
+                    "reference": "CA4E-Lectures/02-SolidState/02-05-SolidState-VLSI.m4v",
+                    "media": "ca4e-media/02-SolidState/02-05-SolidState-VLSI",
                     "youtube": "9IoC-xn2bro"
+                },
+                {
+                    "type": "header",
+                    "text": "Demonstrations",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": " Layout of a Nor Gate in the CMOS Editor for DJ4E",
+                    "youtube": "iiqLOn-WHA0",
+                    "media": "ca4e-media/02-SolidStat/02-10-SolidState-CMOS-Nor.mov"
+                }, 
+                {
+                    "type": "header",
+                    "text": "Discussions",
+                    "level": 2
+                },
+                {
+                    "type": "discussion",
+                    "title": "Transistors and Solid State Computing",
+                    "launch": "{apphome}/mod/tdiscus/",
+                    "resource_link_id": "discuss_02_solid"
                 },
                 {
                     "type": "header",
@@ -253,17 +275,6 @@
                     "type": "reference",
                     "title": "YouTube: I Built A Dice Without Writing a Single Line of Code",
                     "href": "https://www.youtube.com/watch?v=2vmY57eflAU"
-                },
-                {
-                    "type": "header",
-                    "text": "Discussions",
-                    "level": 2
-                },
-                {
-                    "type": "discussion",
-                    "title": "Transistors and Solid State Computing",
-                    "launch": "{apphome}/mod/tdiscus/",
-                    "resource_link_id": "discuss_02_solid"
                 },
                 {
                     "type": "header",
@@ -390,43 +401,43 @@
                 {
                     "type": "video",
                     "title": "Digital Logic: Computer Architecture - Part 1 (7:23)",
-                    "media": "CA4E-Lectures/03-Digital/03-01-Digital-Arch.m4v",
-                    "FCPX": "ca4e-media/03-Digital/03-01-Digital-Arch",
+                    "reference": "CA4E-Lectures/03-Digital/03-01-Digital-Arch.m4v",
+                    "media": "ca4e-media/03-Digital/03-01-Digital-Arch",
                     "youtube": "nZlKs4_ic14"
                 },
                 {
                     "type": "video",
                     "title": "Digital Logic: Adding Numbers with Gates - Part 2 (14:04)",
-                    "media": "CA4E-Lectures/03-Digital/03-02-Digital-Gates.m4v",
-                    "FCPX": "ca4e-media/03-Digital/03-02-Digital-Gates",
+                    "reference": "CA4E-Lectures/03-Digital/03-02-Digital-Gates.m4v",
+                    "media": "ca4e-media/03-Digital/03-02-Digital-Gates",
                     "youtube": "hkeYhDXvc2k"
                 },
                 {
                     "type": "video",
                     "title": "Digital Logic: Storing Data with Gates - Part 3 (11:08)",
-                    "media": "CA4E-Lectures/03-Digital/03-03-Digital-Latch.m4v",
-                    "FCPX": "ca4e-media/03-Digital/03-03-Digital-Latch",
+                    "reference": "CA4E-Lectures/03-Digital/03-03-Digital-Latch.m4v",
+                    "media": "ca4e-media/03-Digital/03-03-Digital-Latch",
                     "youtube": "a_EjfUA0Fpc"
                 },
                 {
                     "type": "video",
                     "title": "Digital Logic: Clocked Circuits and Clock Rates - Part 4 (7:34)",
-                    "media": "CA4E-Lectures/03-Digital/03-04-Digital-Clock.m4v",
-                    "FCPX": "ca4e-media/03-Digital/03-04-Digital-Clock",
+                    "reference": "CA4E-Lectures/03-Digital/03-04-Digital-Clock.m4v",
+                    "media": "ca4e-media/03-Digital/03-04-Digital-Clock",
                     "youtube": "7HeXWTR6kxc"
                 },
                 {
                     "type": "video",
                     "title": "Digital: Building a Two Instruction CPU with Gates - Part 5 (9:49)",
-                    "media": "CA4E-Lectures/03-Digital/03-05-Digital-CPU.m4v",
-                    "FCPX": "ca4e-media/03-Digital/03-05-Digital-CPU",
+                    "reference": "CA4E-Lectures/03-Digital/03-05-Digital-CPU.m4v",
+                    "media": "ca4e-media/03-Digital/03-05-Digital-CPU",
                     "youtube": "MmIEGsTQp-Q"
                 },
                 {
                     "type": "video",
                     "title": "Digital: CPU Architecture - Storing Code in Memory - Part 6 (4:18)",
-                    "media": "CA4E-Lectures/03-Digital/03-06-Digital-Code.m4v",
-                    "FCPX": "ca4e-media/03-Digital/03-06-Digital-Code",
+                    "reference": "CA4E-Lectures/03-Digital/03-06-Digital-Code.m4v",
+                    "media": "ca4e-media/03-Digital/03-06-Digital-Code",
                     "youtube": "fM0-1Hc8vKM"
                 },
                 {
@@ -539,58 +550,69 @@
                 {
                     "type": "video",
                     "title": "Exploring Microprocessors: From Python to Machine Language & the 6502 CPU - Part 1 (5:38)",
-                    "media": "CA4E-Lectures/04-CPU/04-01-CPU-Intro.m4v",
-                    "FCPX": "ca4e-media/04-Digital/04-01-CPU-Intro",
+                    "reference": "CA4E-Lectures/04-CPU/04-01-CPU-Intro.m4v",
+                    "media": "ca4e-media/04-Digital/04-01-CPU-Intro",
                     "youtube": "IF0ZopcXRl8"
                 },
                 {
                     "type": "video",
                     "title": "Understanding Hexadecimal (Base 16) — Why Computers Use It & How to Think in It - Part 2 (12:24)",
-                    "media": "CA4E-Lectures/04-CPU/04-02-CPU-Hex.m4v",
-                    "FCPX": "ca4e-media/04-Digital/04-02-CPU-Hex",
+                    "reference": "CA4E-Lectures/04-CPU/04-02-CPU-Hex.m4v",
+                    "media": "ca4e-media/04-Digital/04-02-CPU-Hex",
                     "youtube": "V_4Ord6x9H4"
                 },
                 {
                     "type": "video",
                     "title": "What Is Programming? From Python to Machine Language & Into the CPU - Part 3 (11:10)",
-                    "media": "CA4E-Lectures/04-CPU/04-03-CPU-Coding.m4v",
-                    "FCPX": "ca4e-media/04-Digital/04-03-CPU-Coding",
+                    "reference": "CA4E-Lectures/04-CPU/04-03-CPU-Coding.m4v",
+                    "media": "ca4e-media/04-Digital/04-03-CPU-Coding",
                     "youtube": "dh6pI8Xjysc"
                 },
                 {
                     "type": "video",
                     "title": "Exploring the 6502 Architecture in the CDC6504 Emulator - Part 4 (9:49)",
-                    "media": "CA4E-Lectures/04-CPU/04-04-CPU-Arch.m4v",
-                    "FCPX": "ca4e-media/04-Digital/04-04-CPU-Arch",
+                    "reference": "CA4E-Lectures/04-CPU/04-04-CPU-Arch.m4v",
+                    "media": "ca4e-media/04-Digital/04-04-CPU-Arch",
                     "youtube": "L2fzgapBoOg"
                 },
                 {
                     "type": "video",
                     "title": "Machine Language — Loops, Branching & Assembly vs. Machine Code - Part 5 (18:43)",
-                    "media": "CA4E-Lectures/04-CPU/04-05-CPU-Machine.m4v",
-                    "FCPX": "ca4e-media/04-Digital/04-05-CPU-Machine",
+                    "reference": "CA4E-Lectures/04-CPU/04-05-CPU-Machine.m4v",
+                    "media": "ca4e-media/04-Digital/04-05-CPU-Machine",
                     "youtube": "h92PhKl2elU"
                 },
                 {
                     "type": "video",
                     "title": "CDC 6504 Assembly Language: Hello World, Math, and Upper Casing Strings - Part 6 (13:05)",
-                    "media": "CA4E-Lectures/04-CPU/04-06-CPU-Assembly.m4v",
-                    "FCPX": "ca4e-media/04-Digital/04-06-CPU-Assembly",
+                    "reference": "CA4E-Lectures/04-CPU/04-06-CPU-Assembly.m4v",
+                    "media": "ca4e-media/04-Digital/04-06-CPU-Assembly",
                     "youtube": "BGIr2P2bpUY"
                 },
                 {
                     "type": "video",
                     "title": "From 6502 to Web Assembly: Modern Day Emulators - Part 7 (10:56)",
-                    "media": "CA4E-Lectures/04-CPU/04-07-CPU-Emulators.m4v",
-                    "FCPX": "ca4e-media/04-Digital/04-07-CPU-Emulators",
+                    "reference": "CA4E-Lectures/04-CPU/04-07-CPU-Emulators.m4v",
+                    "media": "ca4e-media/04-Digital/04-07-CPU-Emulators",
                     "youtube": "1rtZKNme9HE"
                 },
                 {
                     "type": "video",
                     "title": "From 6502 to ARM: The 50-Year Journey of CPU Evolution & Apple’s CPU Strategy- Part 8 (7:31)",
-                    "media": "CA4E-Lectures/04-CPU/04-08-CPU-History.m4v",
-                    "FCPX": "ca4e-media/04-Digital/04-08-CPU-History",
+                    "reference": "CA4E-Lectures/04-CPU/04-08-CPU-History.m4v",
+                    "media": "ca4e-media/04-Digital/04-08-CPU-History",
                     "youtube": "bsUKo48cMrA"
+                },
+                {
+                    "type": "header",
+                    "text": "Discussions",
+                    "level": 2
+                },
+                {
+                    "type": "discussion",
+                    "title": "CPU Design and Machine Code",
+                    "launch": "{apphome}/mod/tdiscus/",
+                    "resource_link_id": "discuss_04_cpu"
                 },
                 {
                     "type": "header",
@@ -611,17 +633,6 @@
                     "type": "reference",
                     "title": "Fun: The 6502 Rotate Right Myth",
                     "href": "https://www.youtube.com/watch?v=Uk_QC1eU0Fg"
-                },
-                {
-                    "type": "header",
-                    "text": "Discussions",
-                    "level": 2
-                },
-                {
-                    "type": "discussion",
-                    "title": "CPU Design and Machine Code",
-                    "launch": "{apphome}/mod/tdiscus/",
-                    "resource_link_id": "discuss_04_cpu"
                 },
                 {
                     "type": "header",
