@@ -254,6 +254,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         probeVoltages = data.probeVoltages || {};
                         currentLayer = data.currentLayer || '';
                         
+                        // Ensure canvas size matches grid size after loading
+                        // Calculate canvas size based on current gridSize and tileSize
+                        const pixelSize = gridSize * tileSize;
+                        canvas.width = pixelSize;
+                        canvas.height = pixelSize;
+                        
                         // Update UI
                         redrawAllTiles();
                         compute();
