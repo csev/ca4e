@@ -241,10 +241,22 @@
                 },
                 {
                     "type": "video",
-                    "title": " Layout of a Nor Gate in the CMOS Editor for DJ4E",
+                    "title": "Building a CMOS Nor Gate From Transistors (8:04)",
                     "youtube": "iiqLOn-WHA0",
                     "media": "ca4e-media/02-SolidStat/02-10-SolidState-CMOS-Nor.mov"
-                }, 
+                },
+                {
+                    "type": "video",
+                    "title": "VLSI Not Gate Layout (9:37)",
+                    "youtube": "ryVUYyCXsaM",
+                    "media": "ca4e-media/02-Solid-State/02-11-SolidState-VLSI-Not.mov"
+                },
+                {
+                    "type": "video",
+                    "title": "VLSI NAND Gate Layout | Computer Architecture for Everybody (9:02)",
+                    "youtube": "IYf7Wtrf8Ig",
+                    "media": "ca4e-media/02-SolidState/02-12-SolidState-VLSI-Nand.mov"
+                },
                 {
                     "type": "header",
                     "text": "Discussions",
