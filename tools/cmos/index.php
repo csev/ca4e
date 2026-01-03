@@ -484,9 +484,13 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         function showReferenceImage(imagePath) {
             const instructionsContent = document.getElementById('instructionsContent');
             const imageContent = document.getElementById('imageContent');
+            const truthTableContent = document.getElementById('truthTableContent');
             if (instructionsContent && imageContent) {
                 instructionsContent.style.display = 'none';
                 imageContent.style.display = 'block';
+                if (truthTableContent) {
+                    truthTableContent.style.display = 'none';
+                }
                 // Update image source if needed
                 const img = imageContent.querySelector('img');
                 if (img) {
@@ -495,13 +499,33 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             }
         }
 
+        // Show truth table in assignment dialog
+        function showTruthTable() {
+            const instructionsContent = document.getElementById('instructionsContent');
+            const imageContent = document.getElementById('imageContent');
+            const truthTableContent = document.getElementById('truthTableContent');
+            if (instructionsContent && truthTableContent) {
+                instructionsContent.style.display = 'none';
+                truthTableContent.style.display = 'block';
+                if (imageContent) {
+                    imageContent.style.display = 'none';
+                }
+            }
+        }
+
         // Show instructions in assignment dialog
         function showInstructions() {
             const instructionsContent = document.getElementById('instructionsContent');
             const imageContent = document.getElementById('imageContent');
-            if (instructionsContent && imageContent) {
+            const truthTableContent = document.getElementById('truthTableContent');
+            if (instructionsContent) {
                 instructionsContent.style.display = 'block';
-                imageContent.style.display = 'none';
+                if (imageContent) {
+                    imageContent.style.display = 'none';
+                }
+                if (truthTableContent) {
+                    truthTableContent.style.display = 'none';
+                }
             }
         }
 

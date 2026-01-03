@@ -348,7 +348,7 @@ class CmosNotGateExercise extends CMOSExercise {
         const instructions = `
             <div id="instructionsContent">
                 <strong>Assignment:</strong> Design a CMOS NOT gate circuit.<br><br>
-                <button onclick="showReferenceImage('images/not.png')" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">📷 View Reference Image</button><br><br>
+                <button onclick="showReferenceImage('images/not.png')" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">View Reference Image</button><br><br>
                 <strong>Instructions:</strong><br>
                 1. Add a switch component and label it "A" (this will be your input)<br>
                 2. Add a probe component and label it "Q" (this will be your output)<br>
@@ -357,9 +357,9 @@ class CmosNotGateExercise extends CMOSExercise {
                 5. Test your circuit by setting the switch to high and low states<br>
                 6. When ready, press "Grade" to check your circuit.
             </div>
-            <div id="imageContent" style="display: none; text-align: center; position: relative;">
-                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0;">×</button>
-                <img src="images/not.png" alt="CMOS NOT Gate Reference" style="max-width: 100%; max-height: 500px; margin-top: 20px;">
+            <div id="imageContent" style="display: none; text-align: center; position: relative; padding: 20px; box-sizing: border-box;">
+                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0; z-index: 10;">×</button>
+                <img src="images/not.png" alt="A CMOS Not gate - it has a PMOS transistor at the top connected between VDD and the common OUT line. It has an NMOS transistor at the bottom connected between the common OUT line and the ground. The Input (A) is connected to the gate input of both transistors." style="max-width: 100%; max-height: 350px; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto;">
             </div>
         `;
         
@@ -441,7 +441,8 @@ class CmosNorGateExercise extends CMOSExercise {
         const instructions = `
             <div id="instructionsContent">
                 <strong>Assignment:</strong> Design a CMOS NOR gate circuit.<br><br>
-                <button onclick="showReferenceImage('images/nor.png')" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">📷 View Reference Image</button><br><br>
+                <button onclick="showReferenceImage('images/nor.png')" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; margin-right: 10px;">View Reference Image</button>
+                <button onclick="showTruthTable()" style="background-color: #2196F3; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">View Truth Table</button><br><br>
                 <strong>Instructions:</strong><br>
                 1. Add two switch components and label them "A" and "B" (these will be your inputs)<br>
                 2. Add a probe component and label it "Q" (this will be your output)<br>
@@ -450,9 +451,44 @@ class CmosNorGateExercise extends CMOSExercise {
                 5. Test your circuit by setting the switches to different combinations<br>
                 6. When ready, press "Grade" to check your circuit.
             </div>
-            <div id="imageContent" style="display: none; text-align: center; position: relative;">
-                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0;">×</button>
-                <img src="images/nor.png" alt="CMOS NOR Gate Reference" style="max-width: 100%; max-height: 500px; margin-top: 20px;">
+            <div id="imageContent" style="display: none; text-align: center; position: relative; padding: 20px; box-sizing: border-box;">
+                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0; z-index: 10;">×</button>
+                <img src="images/nor.png" alt="This is a NOR gate with two PMOS transistors in series at the top connecting to the OUT wire. On the bottom there are two parallel NMOS transistors connected between the OUT wire and the ground." style="max-width: 100%; max-height: 350px; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto;">
+            </div>
+            <div id="truthTableContent" style="display: none; position: relative; padding: 20px; box-sizing: border-box;">
+                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0; z-index: 10;">×</button>
+                <h3 style="margin-top: 0;">NOR Gate Truth Table</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                    <thead>
+                        <tr style="background-color: #f0f0f0;">
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">A</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">B</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">Q (Output)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0 (Low)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0 (Low)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1 (High)</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0 (Low)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1 (High)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0 (Low)</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1 (High)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0 (Low)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0 (Low)</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1 (High)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1 (High)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0 (Low)</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         `;
         
