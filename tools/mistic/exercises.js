@@ -324,12 +324,23 @@ class NotGateExercise extends MISTICExercise {
             { name: "Test A=VCC → Q=GND", status: "pending" }
         ];
         
-        const instructions = `In this assignment you will lay out a NOT gate. 
-            Place a probe with the label "A" on the input to your NOT gate. Place a probe with the label 
-            "Q" on the output of your NOT gate.
-            Do not place a VCC or GND on the trace that has the probe.
-            If you place a VCC or GND for testing place the probes on the same 
-            square as the test points so the test points are cleared. Then press "Grade" to check your circuit.`;
+        const instructions = `
+            <div id="instructionsContent" style="text-align: left;">
+                <strong>Assignment:</strong> Design a VLSI NOT gate layout.<br><br>
+                <button onclick="showReferenceImage('images/not.png')" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">View Reference Image</button><br><br>
+                <strong>Instructions:</strong><br>
+                1. Place a probe with the label "A" on the input to your NOT gate<br>
+                2. Place a probe with the label "Q" on the output of your NOT gate<br>
+                3. Design a VLSI NOT gate layout using polysilicon, diffusion regions, and metal layers<br>
+                4. Do not place a VCC or GND on the trace that has the probe<br>
+                5. If you place a VCC or GND for testing, place the probes on the same square as the test points so the test points are cleared<br>
+                6. When ready, press "Grade" to check your circuit.
+            </div>
+            <div id="imageContent" style="display: none; text-align: center; position: relative; padding: 20px; box-sizing: border-box;">
+                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0; z-index: 10;">×</button>
+                <img src="images/not.png" alt="A VLSI NOT gate layout showing the transistor structure" style="max-width: 100%; max-height: 350px; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto;">
+            </div>
+        `;
         
         super(
             "NOT Gate Exercise",
@@ -401,12 +412,59 @@ class NandGateExercise extends MISTICExercise {
             { name: "Test A=VCC, B=VCC → Q=GND", status: "pending" }
         ];
         
-        const instructions = `In this assignment you will lay out a NAND gate. 
-            Place probes with the labels "A" and "B" on the inputs to your NAND gate. Place a probe with the label 
-            "Q" on the output of your NAND gate.
-            Do not place a VCC or GND on the trace that has the probe.
-            If you place a VCC or GND for testing place the probes on the same 
-            square as the test points so the test points are cleared. Then press "Grade" to check your circuit.`;
+        const instructions = `
+            <div id="instructionsContent" style="text-align: left;">
+                <strong>Assignment:</strong> Design a VLSI NAND gate layout.<br><br>
+                <button onclick="showReferenceImage('images/nand.png')" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; margin-right: 10px;">View Reference Image</button>
+                <button onclick="showTruthTable()" style="background-color: #2196F3; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">View Truth Table</button><br><br>
+                <strong>Instructions:</strong><br>
+                1. Place probes with the labels "A" and "B" on the inputs to your NAND gate<br>
+                2. Place a probe with the label "Q" on the output of your NAND gate<br>
+                3. Design a VLSI NAND gate layout using polysilicon, diffusion regions, and metal layers<br>
+                4. Do not place a VCC or GND on the trace that has the probe<br>
+                5. If you place a VCC or GND for testing, place the probes on the same square as the test points so the test points are cleared<br>
+                6. When ready, press "Grade" to check your circuit.
+            </div>
+            <div id="imageContent" style="display: none; text-align: center; position: relative; padding: 20px; box-sizing: border-box;">
+                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0; z-index: 10;">×</button>
+                <img src="images/nand.png" alt="A VLSI NAND gate layout showing the transistor structure" style="max-width: 100%; max-height: 350px; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto;">
+            </div>
+            <div id="truthTableContent" style="display: none; position: relative; padding: 20px; box-sizing: border-box;">
+                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0; z-index: 10;">×</button>
+                <h3 style="margin-top: 0;">NAND Gate Truth Table</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                    <thead>
+                        <tr style="background-color: #f0f0f0;">
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">A</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">B</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">Q (Output)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0 (GND)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0 (GND)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1 (VCC)</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0 (GND)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1 (VCC)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1 (VCC)</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1 (VCC)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0 (GND)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1 (VCC)</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1 (VCC)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1 (VCC)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0 (GND)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        `;
         
         super(
             "NAND Gate Exercise",
@@ -519,12 +577,59 @@ class NorGateExercise extends MISTICExercise {
             { name: "Test A=VCC, B=VCC → Q=GND", status: "pending" }
         ];
         
-        const instructions = `In this assignment you will lay out a NOR gate. 
-            Place probes with the labels "A" and "B" on the inputs to your NOR gate. Place a probe with the label 
-            "Q" on the output of your NOR gate.
-            Do not place a VCC or GND on the trace that has the probe.
-            If you place a VCC or GND for testing place the probes on the same 
-            square as the test points so the test points are cleared. Then press "Grade" to check your circuit.`;
+        const instructions = `
+            <div id="instructionsContent" style="text-align: left;">
+                <strong>Assignment:</strong> Design a VLSI NOR gate layout.<br><br>
+                <button onclick="showReferenceImage('images/nor.png')" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px; margin-right: 10px;">View Reference Image</button>
+                <button onclick="showTruthTable()" style="background-color: #2196F3; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 15px;">View Truth Table</button><br><br>
+                <strong>Instructions:</strong><br>
+                1. Place probes with the labels "A" and "B" on the inputs to your NOR gate<br>
+                2. Place a probe with the label "Q" on the output of your NOR gate<br>
+                3. Design a VLSI NOR gate layout using polysilicon, diffusion regions, and metal layers<br>
+                4. Do not place a VCC or GND on the trace that has the probe<br>
+                5. If you place a VCC or GND for testing, place the probes on the same square as the test points so the test points are cleared<br>
+                6. When ready, press "Grade" to check your circuit.
+            </div>
+            <div id="imageContent" style="display: none; text-align: center; position: relative; padding: 20px; box-sizing: border-box;">
+                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0; z-index: 10;">×</button>
+                <img src="images/nor.png" alt="A VLSI NOR gate layout showing the transistor structure" style="max-width: 100%; max-height: 350px; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto;">
+            </div>
+            <div id="truthTableContent" style="display: none; position: relative; padding: 20px; box-sizing: border-box;">
+                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0; z-index: 10;">×</button>
+                <h3 style="margin-top: 0;">NOR Gate Truth Table</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                    <thead>
+                        <tr style="background-color: #f0f0f0;">
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">A</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">B</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">Q (Output)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0 (GND)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0 (GND)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1 (VCC)</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0 (GND)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1 (VCC)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0 (GND)</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1 (VCC)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0 (GND)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0 (GND)</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1 (VCC)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1 (VCC)</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0 (GND)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        `;
         
         super(
             "NOR Gate Exercise",
