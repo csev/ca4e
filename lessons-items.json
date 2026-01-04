@@ -529,6 +529,41 @@
                 },
                 {
                     "type": "header",
+                    "text": "Demonstrations",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Half Adder Assignment Walkthrough",
+                    "youtube": "eJQlIlypCJo",
+                    "media": "ca4e-media/03-Digital/03-13-Digital-Gates-Half.mov"
+                },
+                {
+                    "type": "video",
+                    "title": "Gates Layout Tool Walkthrough",
+                    "youtube": "FMj-VXfet6k",
+                    "media": "ca4e-media/03-Digital/03-11-Digital-Gates-Tool.mov"
+                },
+                {
+                    "type": "video",
+                    "title": "Autograded AND Gate Assignment Walkthrough",
+                    "youtube": "p-kLkObk-18",
+                    "media": "ca4e-media/03-Digital/03-12-Digital-Gates-And.mov"
+                },
+                {
+                    "type": "video",
+                    "title": "Building a Clocked Counter with Adders and Latches",
+                    "youtube": "jh5WK3HF3o8",
+                    "media": "ca4e-media/03-Digital/03-14-Digital-Gates-Counter.mov"
+                },
+                {
+                    "type": "video",
+                    "title": "Building a Tiny CPU: A Two-Instruction Computer Walkthrough",
+                    "youtube": "5sF_GXJgjCE",
+                    "media": "ca4e-media/03-Digital/03-15-Digital-Gates-Instruction.mov"
+                },
+                {
+                    "type": "header",
                     "text": "Discussions",
                     "level": 2
                 },
