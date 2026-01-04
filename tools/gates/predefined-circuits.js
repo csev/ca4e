@@ -132,5 +132,59 @@ Object.assign(window.predefinedCircuits, {
             { startGateLabel: 'FF1', startNodeIndex: 0, endGateLabel: 'Q', endNodeIndex: 0, waypoints: [] },
             { startGateLabel: 'FF1', startNodeIndex: 1, endGateLabel: 'Qbar', endNodeIndex: 0, waypoints: [] }
         ]
+    },
+
+    'counter': {
+        name: 'Counter',
+        description: 'A 3-bit counter circuit using a 3-bit latch and 3-bit adder with clock input.',
+        instructorOnly: true,
+        gates: [
+            { type: 'THREE_BIT_LATCH', label: 'Latch1', x: 334, y: 169, state: false },
+            { type: 'THREE_BIT_ADDER', label: 'Adder1', x: 509, y: 168, state: false },
+            { type: 'INPUT', label: 'INPUT1', x: 522, y: 76, state: true },
+            { type: 'CLOCK_PULSE', label: 'CLK1', x: 265, y: 52, state: true }
+        ],
+        wires: [
+            { startGateLabel: 'Latch1', startNodeIndex: 0, endGateLabel: 'Adder1', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'Latch1', startNodeIndex: 1, endGateLabel: 'Adder1', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'Latch1', startNodeIndex: 2, endGateLabel: 'Adder1', endNodeIndex: 2, waypoints: [] },
+            { startGateLabel: 'Adder1', startNodeIndex: 0, endGateLabel: 'Latch1', endNodeIndex: 1, waypoints: [{x: 419, y: 264}, {x: 232, y: 181}] },
+            { startGateLabel: 'Adder1', startNodeIndex: 1, endGateLabel: 'Latch1', endNodeIndex: 2, waypoints: [{x: 420, y: 296}, {x: 230, y: 212}] },
+            { startGateLabel: 'Adder1', startNodeIndex: 2, endGateLabel: 'Latch1', endNodeIndex: 3, waypoints: [{x: 422, y: 326}, {x: 232, y: 246}] },
+            { startGateLabel: 'INPUT1', startNodeIndex: 0, endGateLabel: 'Adder1', endNodeIndex: 3, waypoints: [] },
+            { startGateLabel: 'CLK1', startNodeIndex: 0, endGateLabel: 'Latch1', endNodeIndex: 0, waypoints: [] }
+        ]
+    },
+
+    'instruction': {
+        name: 'Instruction',
+        description: 'An instruction circuit using a register, adder, and instruction input with AND gates.',
+        instructorOnly: true,
+        gates: [
+            { type: 'THREE_BIT_LATCH', label: 'Register', x: 334, y: 169, state: false },
+            { type: 'THREE_BIT_ADDER', label: 'Adder', x: 509, y: 168, state: false },
+            { type: 'INPUT', label: 'INPUT1', x: 522, y: 76, state: true },
+            { type: 'CLOCK_PULSE', label: 'CLK1', x: 231, y: 69, state: true },
+            { type: 'AND', label: 'AND1', x: 157, y: 118, state: false },
+            { type: 'AND', label: 'AND2', x: 195, y: 169, state: false },
+            { type: 'AND', label: 'AND4', x: 246, y: 218, state: false },
+            { type: 'INPUT', label: 'Instruction', x: 56, y: 157, state: false }
+        ],
+        wires: [
+            { startGateLabel: 'Register', startNodeIndex: 0, endGateLabel: 'Adder', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'Register', startNodeIndex: 1, endGateLabel: 'Adder', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'Register', startNodeIndex: 2, endGateLabel: 'Adder', endNodeIndex: 2, waypoints: [] },
+            { startGateLabel: 'INPUT1', startNodeIndex: 0, endGateLabel: 'Adder', endNodeIndex: 3, waypoints: [] },
+            { startGateLabel: 'CLK1', startNodeIndex: 0, endGateLabel: 'Register', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'AND1', startNodeIndex: 0, endGateLabel: 'Register', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'AND2', startNodeIndex: 0, endGateLabel: 'Register', endNodeIndex: 2, waypoints: [] },
+            { startGateLabel: 'AND4', startNodeIndex: 0, endGateLabel: 'Register', endNodeIndex: 3, waypoints: [] },
+            { startGateLabel: 'Adder', startNodeIndex: 2, endGateLabel: 'AND4', endNodeIndex: 1, waypoints: [{x: 391, y: 335}, {x: 183, y: 304}] },
+            { startGateLabel: 'Adder', startNodeIndex: 1, endGateLabel: 'AND2', endNodeIndex: 1, waypoints: [{x: 388, y: 305}, {x: 153, y: 275}] },
+            { startGateLabel: 'Adder', startNodeIndex: 0, endGateLabel: 'AND1', endNodeIndex: 1, waypoints: [{x: 388, y: 276}, {x: 121, y: 229}] },
+            { startGateLabel: 'Instruction', startNodeIndex: 0, endGateLabel: 'AND1', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'Instruction', startNodeIndex: 0, endGateLabel: 'AND2', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'Instruction', startNodeIndex: 0, endGateLabel: 'AND4', endNodeIndex: 0, waypoints: [] }
+        ]
     }
 });
