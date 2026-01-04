@@ -178,8 +178,6 @@
 </head>
 <body>
     <div class="container">
-        <a href="index.html" class="back-button">← Back to Circuit Editor</a>
-        
         <h1>Digital Circuit Editor - Help Guide</h1>
         
         <div class="navigation">
@@ -284,6 +282,32 @@
                 <li><code>delete input a</code> - Deletes input labeled "a"</li>
                 <li><code>delete and gate1</code> - Deletes AND gate labeled "gate1"</li>
             </ul>
+
+            <h3>Component Types for Commands</h3>
+            <p>When using the <code>place</code> or <code>delete</code> commands, use these exact component type names:</p>
+            <div class="connector-list">
+                <strong>Basic Gates:</strong><br>
+                • <code>and</code> - AND gate<br>
+                • <code>or</code> - OR gate<br>
+                • <code>not</code> - NOT gate (inverter)<br>
+                • <code>nand</code> - NAND gate<br>
+                • <code>nor</code> - NOR gate<br>
+                • <code>xor</code> - XOR gate<br><br>
+                
+                <strong>Input/Output:</strong><br>
+                • <code>input</code> - User-controlled input signal<br>
+                • <code>output</code> - Displays output value<br>
+                • <code>clock</code> - Clock pulse generator<br><br>
+                
+                <strong>Complex Components:</strong><br>
+                • <code>full-adder</code> - Full adder circuit<br>
+                • <code>3-bit-adder</code> - 3-bit adder circuit<br>
+                • <code>sr-flip-flop</code> - SR flip-flop<br>
+                • <code>jk-flip-flop</code> - JK flip-flop<br>
+                • <code>1-bit-latch</code> - 1-bit latch<br>
+                • <code>3-bit-latch</code> - 3-bit latch<br>
+                • <code>nixie</code> - Nixie display<br>
+            </div>
 
             <h4>Connecting Components</h4>
             <div class="command-example">connect [from] [from-connector] to [to] [to-connector]</div>
