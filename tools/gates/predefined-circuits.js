@@ -64,54 +64,6 @@ Object.assign(window.predefinedCircuits, {
         ]
     },
 
-    'and-gate-demo': {
-        name: 'AND',
-        description: 'Simple demonstration of an AND gate with two inputs and one output.',
-        gates: [
-            { type: 'INPUT', label: 'A', x: 100, y: 67, state: false },
-            { type: 'INPUT', label: 'B', x: 100, y: 167, state: false },
-            { type: 'AND', label: 'AND1', x: 250, y: 117, state: false },
-            { type: 'OUTPUT', label: 'Q', x: 400, y: 117, state: false }
-        ],
-        wires: [
-            { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'AND1', endNodeIndex: 0, waypoints: [] },
-            { startGateLabel: 'B', startNodeIndex: 0, endGateLabel: 'AND1', endNodeIndex: 1, waypoints: [] },
-            { startGateLabel: 'AND1', startNodeIndex: 0, endGateLabel: 'Q', endNodeIndex: 0, waypoints: [] }
-        ]
-    },
-
-    'or-gate-demo': {
-        name: 'OR',
-        description: 'Simple demonstration of an OR gate with two inputs and one output.',
-        gates: [
-            { type: 'INPUT', label: 'A', x: 100, y: 67, state: false },
-            { type: 'INPUT', label: 'B', x: 100, y: 167, state: false },
-            { type: 'OR', label: 'OR1', x: 250, y: 117, state: false },
-            { type: 'OUTPUT', label: 'Q', x: 400, y: 117, state: false }
-        ],
-        wires: [
-            { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'OR1', endNodeIndex: 0, waypoints: [] },
-            { startGateLabel: 'B', startNodeIndex: 0, endGateLabel: 'OR1', endNodeIndex: 1, waypoints: [] },
-            { startGateLabel: 'OR1', startNodeIndex: 0, endGateLabel: 'Q', endNodeIndex: 0, waypoints: [] }
-        ]
-    },
-
-    'xor-gate-demo': {
-        name: 'XOR',
-        description: 'Simple demonstration of an XOR (exclusive OR) gate with two inputs and one output.',
-        gates: [
-            { type: 'INPUT', label: 'A', x: 100, y: 67, state: false },
-            { type: 'INPUT', label: 'B', x: 100, y: 167, state: false },
-            { type: 'XOR', label: 'XOR1', x: 250, y: 117, state: false },
-            { type: 'OUTPUT', label: 'Q', x: 400, y: 117, state: false }
-        ],
-        wires: [
-            { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 0, waypoints: [] },
-            { startGateLabel: 'B', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 1, waypoints: [] },
-            { startGateLabel: 'XOR1', startNodeIndex: 0, endGateLabel: 'Q', endNodeIndex: 0, waypoints: [] }
-        ]
-    },
-
     'flip-flop-demo': {
         name: 'SR',
         description: 'SR Flip-Flop demonstration circuit with Set and Reset inputs.',
