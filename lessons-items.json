@@ -480,6 +480,11 @@
                 },
                 {
                     "type": "header",
+                    "text": "References",
+                    "level": 2
+                },
+                {
+                    "type": "header",
                     "text": "Tools",
                     "level": 2
                 },
