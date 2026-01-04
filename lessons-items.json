@@ -99,7 +99,7 @@
                 },
                 {
                     "type": "header",
-                    "text": "Tools",
+                    "text": "Assessments",
                     "level": 2
                 },
                 {
@@ -335,7 +335,7 @@
                 },
                 {
                     "type": "header",
-                    "text": "Tools",
+                    "text": "Assessments",
                     "level": 2
                 },
                 {
@@ -540,7 +540,7 @@
                 },
                 {
                     "type": "header",
-                    "text": "Tools",
+                    "text": "Assessments",
                     "level": 2
                 },
                 {
@@ -748,7 +748,7 @@
                 },
                 {
                     "type": "header",
-                    "text": "Tools",
+                    "text": "Assessments",
                     "level": 2
                 },
                 {
@@ -810,11 +810,6 @@
                     "type": "header",
                     "text": "Bonus",
                     "level": 2
-                },
-                {
-                    "type": "video",
-                    "title": " IEEE Computing Conversations: Computer History Museum John C. Hollar ",
-                    "youtube": "poh9ROv_LR8"
                 },
                 {
                     "type": "video",

@@ -780,11 +780,20 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         document.addEventListener('DOMContentLoaded', function() {
             console.log('DOMContentLoaded - initializing exercise');
             console.log('Assignment value:', '<?php echo $assn; ?>');
+            console.log('AndGateExercise class available:', typeof AndGateExercise);
             console.log('HalfAdderExercise class available:', typeof HalfAdderExercise);
             console.log('FullAdderExercise class available:', typeof FullAdderExercise);
             
             // Create the appropriate exercise instance based on assignment
-            if ( '<?php echo $assn; ?>' == 'HalfAdderExercise') {
+            if ( '<?php echo $assn; ?>' == 'AndGateExercise') {
+                console.log('Creating AndGateExercise');
+                try {
+                    currentExercise = new AndGateExercise();
+                    console.log('AndGateExercise created successfully');
+                } catch (error) {
+                    console.error('Error creating AndGateExercise:', error);
+                }
+            } else if ( '<?php echo $assn; ?>' == 'HalfAdderExercise') {
                 console.log('Creating HalfAdderExercise');
                 try {
                     currentExercise = new HalfAdderExercise();

@@ -1249,4 +1249,264 @@ class FullAdderExercise extends GatesExercise {
     }
 }
 
+/**
+ * AND Gate Exercise
+ * 
+ * Students need to build a simple AND gate circuit with inputs A and B and output Q
+ */
+class AndGateExercise extends GatesExercise {
+    constructor() {
+        const steps = [
+            { name: "Check Component Labels", description: "Verify inputs A, B and output Q are properly labeled" },
+            { name: "Check AND Gate", description: "Verify an AND gate is present" },
+            { name: "Test A=0, B=0 → Q=0", description: "Test truth table row 1" },
+            { name: "Test A=0, B=1 → Q=0", description: "Test truth table row 2" },
+            { name: "Test A=1, B=0 → Q=0", description: "Test truth table row 3" },
+            { name: "Test A=1, B=1 → Q=1", description: "Test truth table row 4" }
+        ];
+
+        const instructions = `
+            <div id="instructionsContent" style="text-align: left;">
+                <h3>AND Gate Circuit</h3>
+                <p>Build a simple AND gate circuit with two inputs and one output.</p>
+                
+                <h4>Requirements:</h4>
+                <ul>
+                    <li>Create two INPUT components labeled "A" and "B"</li>
+                    <li>Create one OUTPUT component labeled "Q"</li>
+                    <li>Place one AND gate</li>
+                    <li>Connect input A to the first input of the AND gate</li>
+                    <li>Connect input B to the second input of the AND gate</li>
+                    <li>Connect the AND gate output to output Q</li>
+                </ul>
+                
+                <h4>AND Gate Truth Table:</h4>
+                <table style="border-collapse: collapse; margin: 10px 0; width: 100%;">
+                    <tr style="border: 1px solid #ccc; background: #f5f5f5;">
+                        <th style="padding: 8px; border: 1px solid #ccc;">A</th>
+                        <th style="padding: 8px; border: 1px solid #ccc;">B</th>
+                        <th style="padding: 8px; border: 1px solid #ccc;">Q</th>
+                    </tr>
+                    <tr style="border: 1px solid #ccc;">
+                        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
+                        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
+                        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
+                    </tr>
+                    <tr style="border: 1px solid #ccc;">
+                        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
+                        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">1</td>
+                        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
+                    </tr>
+                    <tr style="border: 1px solid #ccc;">
+                        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">1</td>
+                        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
+                        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
+                    </tr>
+                    <tr style="border: 1px solid #ccc;">
+                        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">1</td>
+                        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">1</td>
+                        <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">1</td>
+                    </tr>
+                </table>
+            </div>
+        `;
+
+        super("AND Gate", "Build an AND gate circuit with inputs A and B and output Q", steps, instructions);
+    }
+
+    /**
+     * Override startGrading to manage UI
+     */
+    startGrading() {
+        // Hide the start grading section and show the grading section
+        const startGradingSection = document.getElementById('startGradingSection');
+        if (startGradingSection) {
+            startGradingSection.style.display = 'none';
+        }
+        
+        const gradingSection = document.getElementById('gradingSection');
+        if (gradingSection) {
+            gradingSection.style.display = 'block';
+        }
+        
+        super.startGrading();
+    }
+
+    /**
+     * Override resetGrading to manage UI
+     */
+    resetGrading() {
+        super.resetGrading();
+        
+        // Show the start grading section and hide the grading section
+        const startGradingSection = document.getElementById('startGradingSection');
+        if (startGradingSection) {
+            startGradingSection.style.display = 'block';
+        }
+        
+        const gradingSection = document.getElementById('gradingSection');
+        if (gradingSection) {
+            gradingSection.style.display = 'none';
+        }
+    }
+
+    checkStep(stepIndex) {
+        switch (stepIndex) {
+            case 0: // Check Component Labels
+                return this.checkComponentLabels();
+            case 1: // Check AND Gate
+                return this.checkAndGate();
+            case 2: // Test A=0, B=0 → Q=0
+                return this.testAndGate(false, false, false, "A=0, B=0 → Q=0");
+            case 3: // Test A=0, B=1 → Q=0
+                return this.testAndGate(false, true, false, "A=0, B=1 → Q=0");
+            case 4: // Test A=1, B=0 → Q=0
+                return this.testAndGate(true, false, false, "A=1, B=0 → Q=0");
+            case 5: // Test A=1, B=1 → Q=1
+                return this.testAndGate(true, true, true, "A=1, B=1 → Q=1");
+            default:
+                return { passed: false, message: "Unknown step" };
+        }
+    }
+
+    /**
+     * Check if required input and output components are properly labeled
+     */
+    checkComponentLabels() {
+        if (typeof window.circuitEditor === 'undefined') {
+            return { passed: false, message: "Circuit editor not available." };
+        }
+
+        // Check for required inputs and outputs
+        const requiredInputs = ['A', 'B'];
+        const requiredOutputs = ['Q'];
+        
+        const gates = window.circuitEditor.gates;
+        const inputGates = gates.filter(gate => gate.type === 'INPUT');
+        const outputGates = gates.filter(gate => gate.type === 'OUTPUT');
+
+        // Check input count
+        if (inputGates.length !== 2) {
+            return { 
+                passed: false, 
+                message: `Expected exactly 2 INPUT components, found ${inputGates.length}. Please add INPUT components and label them "A" and "B".` 
+            };
+        }
+
+        // Check output count
+        if (outputGates.length !== 1) {
+            return { 
+                passed: false, 
+                message: `Expected exactly 1 OUTPUT component, found ${outputGates.length}. Please add an OUTPUT component and label it "Q".` 
+            };
+        }
+
+        // Check input labels (case insensitive)
+        const inputLabels = inputGates.map(gate => gate.label.toUpperCase());
+        for (const requiredLabel of requiredInputs) {
+            if (!inputLabels.includes(requiredLabel)) {
+                return { 
+                    passed: false, 
+                    message: `Missing input labeled "${requiredLabel}". Found inputs: ${inputLabels.join(', ')}. Please use the Tag tool to label your inputs.` 
+                };
+            }
+        }
+
+        // Check output labels (case insensitive)
+        const outputLabels = outputGates.map(gate => gate.label.toUpperCase());
+        for (const requiredLabel of requiredOutputs) {
+            if (!outputLabels.includes(requiredLabel)) {
+                return { 
+                    passed: false, 
+                    message: `Missing output labeled "${requiredLabel}". Found outputs: ${outputLabels.join(', ')}. Please use the Tag tool to label your output.` 
+                };
+            }
+        }
+
+        return { passed: true, message: "✅ All required components are properly labeled (inputs A, B and output Q)." };
+    }
+
+    /**
+     * Check if an AND gate is present
+     */
+    checkAndGate() {
+        if (typeof window.circuitEditor === 'undefined') {
+            return { passed: false, message: "Circuit editor not available." };
+        }
+
+        const gates = window.circuitEditor.gates;
+        const andGates = gates.filter(gate => gate.type === 'AND');
+
+        // Check for exactly one AND gate
+        if (andGates.length === 0) {
+            return { 
+                passed: false, 
+                message: "Missing AND gate. An AND gate circuit requires exactly one AND gate." 
+            };
+        }
+        if (andGates.length > 1) {
+            return { 
+                passed: false, 
+                message: `Found ${andGates.length} AND gates. An AND gate circuit requires exactly one AND gate.` 
+            };
+        }
+
+        return { passed: true, message: "✅ AND gate found." };
+    }
+
+    /**
+     * Test the AND gate circuit with specific input values
+     * @param {boolean} inputA - Value for input A
+     * @param {boolean} inputB - Value for input B  
+     * @param {boolean} expectedQ - Expected output Q
+     * @param {string} testDescription - Description for error messages
+     */
+    testAndGate(inputA, inputB, expectedQ, testDescription) {
+        if (typeof window.circuitEditor === 'undefined') {
+            return { passed: false, message: "Circuit editor not available." };
+        }
+
+        // Set the input values
+        const setA = window.circuitEditor.setInputByLabel('A', inputA);
+        const setB = window.circuitEditor.setInputByLabel('B', inputB);
+
+        if (!setA) {
+            return { passed: false, message: 'Could not find input labeled "A". Make sure you have an INPUT component labeled "A".' };
+        }
+        if (!setB) {
+            return { passed: false, message: 'Could not find input labeled "B". Make sure you have an INPUT component labeled "B".' };
+        }
+
+        // Force immediate circuit update
+        window.circuitEditor.circuit.update();
+        
+        // Get the output value
+        const actualQ = window.circuitEditor.getOutputByLabel('Q');
+        
+        if (actualQ === undefined) {
+            return { passed: false, message: 'Could not read output "Q". Make sure you have an OUTPUT component labeled "Q" and it is connected to the AND gate output.' };
+        }
+
+        // Check if output matches expected value
+        if (actualQ !== expectedQ) {
+            const actualQStr = actualQ ? '1' : '0';
+            const expectedQStr = expectedQ ? '1' : '0';
+            
+            return { 
+                passed: false, 
+                message: `Test failed for ${testDescription}. Expected Q=${expectedQStr}, but got Q=${actualQStr}. Check your circuit connections.` 
+            };
+        }
+
+        const inputAStr = inputA ? '1' : '0';
+        const inputBStr = inputB ? '1' : '0';
+        const outputQStr = expectedQ ? '1' : '0';
+        
+        return { 
+            passed: true, 
+            message: `✅ Test passed: A=${inputAStr}, B=${inputBStr} → Q=${outputQStr}` 
+        };
+    }
+}
+
 // Global variable to hold the current exercise instance (declared in index.php)
