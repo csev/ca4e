@@ -175,6 +175,26 @@
                             "value": 172800
                         }
                     ]
+                },
+                {
+                    "type": "header",
+                    "text": "Bonus",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Video:  Monash Museum of Computing History Interviews ",
+                    "youtube": "o7_dQbKPG_Q"
+                },
+                {
+                    "type": "video",
+                    "title": "Video: IEEE Computer: Alan Turing at Bletchley Park ",
+                    "youtube": "5nK_ft0Lf1s"
+                },
+                {
+                    "type": "video",
+                    "title": " Niklaus Wirth on Teaching Computer Science ",
+                    "youtube": "BJIqHIYSDrk"
                 }
             ]
         },
@@ -274,14 +294,14 @@
                     "level": 2
                 },
                 {
-                    "type": "reference",
+                    "type": "video",
                     "title": " AT&T Archives: A Modern Aladdin's Lamp, about vacuum tubes,1940 ",
-                    "href": "https://www.youtube.com/watch?v=_-JzxX75oYc"
+                    "youtube": "_-JzxX75oYc"
                 },
                 {
-                    "type": "reference",
+                    "type": "video",
                     "title": "AT&T Archives: Genesis of the Transistor",
-                    "href": "https://www.youtube.com/watch?v=WiQvGRjrLnU"
+                    "youtube": "WiQvGRjrLnU"
                 },
                 {
                     "type": "reference",
@@ -289,19 +309,19 @@
                     "href": "https://spectrum.ieee.org/the-silicon-dioxide-solution"
                 },
                 {
-                    "type": "reference",
+                    "type": "video",
                     "title": " The Transistor: a 1953 documentary, anticipating its coming impact on technology ",
-                    "href": "https://www.youtube.com/watch?v=V9xUQWo4vN0"
+                    "youtube": "V9xUQWo4vN0"
                 },
                 {
-                    "type": "reference",
+                    "type": "video",
                     "title": "AT&T Archives: Microworld",
-                    "href": "https://www.youtube.com/watch?v=q2kd1B0Ybto"
+                    "youtube": "q2kd1B0Ybto"
                 },
                 {
-                    "type": "reference",
+                    "type": "video",
                     "title": "YouTube: I Built A Dice Without Writing a Single Line of Code",
-                    "href": "https://www.youtube.com/watch?v=cZxBj7fzkkk"
+                    "youtube": "cZxBj7fzkkk"
                 },
                 {
                     "type": "header",
@@ -401,6 +421,26 @@
                             "value": "NorGateExercise"
                         }
                     ]
+                },
+                {
+                    "type": "header",
+                    "text": "Bonus",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": " IEEE Computing Conversations: Gordon Bell on the Building Blocks of Computing",
+                    "youtube": "8skBtQS-VVE"
+                },
+                {
+                    "type": "video",
+                    "title": "IEEE Computing Conversations: The Living Computer Museum ",
+                    "youtube": "ZHU4nzIsaIM"
+                },
+                {
+                    "type": "video",
+                    "title": " IEEE Computing Conversations: Resurrecting the CDC 6500 Supercomputer video ",
+                    "youtube": "wDc1630krls"
                 }
             ]
         },
@@ -480,11 +520,6 @@
                 },
                 {
                     "type": "header",
-                    "text": "References",
-                    "level": 2
-                },
-                {
-                    "type": "header",
                     "text": "Tools",
                     "level": 2
                 },
@@ -555,6 +590,21 @@
                             "value": "FullAdderExercise"
                         }
                     ]
+                },
+                {
+                    "type": "header",
+                    "text": "Bonus",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": " IEEE Computing Conversations: Massimo Banzi: Building Arduino ",
+                    "youtube": "0VAbvQ2Ti50"
+                },
+                {
+                    "type": "video",
+                    "title": "IEEE Computing Conversations:  Andrew S. Tanenbaum: The Impact of MINIX ",
+                    "youtube": "86_BkFsb4e"
                 }
             ]
         },
@@ -652,19 +702,19 @@
                     "level": 2
                 },
                 {
-                    "type": "reference",
+                    "type": "video",
                     "title": "ARM Instruction Set design history with Sophie Wilson)",
-                    "href": "https://www.youtube.com/watch?v=QqxThgLTLyk"
+                    "youtube": "QqxThgLTLyk"
                 },
                 {
-                    "type": "reference",
+                    "type": "video",
                     "title": " The potted history of ARM",
-                    "href": "https://www.youtube.com/watch?v=t59EtDxpYmM"
+                    "youtube": "t59EtDxpYmM"
                 },
                 {
-                    "type": "reference",
+                    "type": "video",
                     "title": "Fun: The 6502 Rotate Right Myth",
-                    "href": "https://www.youtube.com/watch?v=Uk_QC1eU0Fg"
+                    "youtube": "Uk_QC1eU0Fg"
                 },
                 {
                     "type": "header",
@@ -725,6 +775,21 @@
                             "value": "HelloWorldExercise"
                         }
                     ]
+                },
+                {
+                    "type": "header",
+                    "text": "Bonus",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": " IEEE Computing Conversations: Computer History Museum John C. Hollar ",
+                    "youtube": "poh9ROv_LR8"
+                },
+                {
+                    "type": "video",
+                    "title": "IEEE  Computing Conversations: Eben Upton on the Raspberry Pi ",
+                    "youtube": "P5KEiuTT_E8"
                 }
             ]
         }
