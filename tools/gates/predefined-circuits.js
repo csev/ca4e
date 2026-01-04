@@ -67,7 +67,6 @@ Object.assign(window.predefinedCircuits, {
     'and-gate-demo': {
         name: 'AND',
         description: 'Simple demonstration of an AND gate with two inputs and one output.',
-        instructorOnly: true,
         gates: [
             { type: 'INPUT', label: 'A', x: 100, y: 67, state: false },
             { type: 'INPUT', label: 'B', x: 100, y: 167, state: false },
@@ -84,7 +83,6 @@ Object.assign(window.predefinedCircuits, {
     'or-gate-demo': {
         name: 'OR',
         description: 'Simple demonstration of an OR gate with two inputs and one output.',
-        instructorOnly: true,
         gates: [
             { type: 'INPUT', label: 'A', x: 100, y: 67, state: false },
             { type: 'INPUT', label: 'B', x: 100, y: 167, state: false },
@@ -101,7 +99,6 @@ Object.assign(window.predefinedCircuits, {
     'xor-gate-demo': {
         name: 'XOR',
         description: 'Simple demonstration of an XOR (exclusive OR) gate with two inputs and one output.',
-        instructorOnly: true,
         gates: [
             { type: 'INPUT', label: 'A', x: 100, y: 67, state: false },
             { type: 'INPUT', label: 'B', x: 100, y: 167, state: false },
@@ -118,7 +115,6 @@ Object.assign(window.predefinedCircuits, {
     'flip-flop-demo': {
         name: 'SR',
         description: 'SR Flip-Flop demonstration circuit with Set and Reset inputs.',
-        instructorOnly: true,
         gates: [
             { type: 'INPUT', label: 'S', x: 100, y: 67, state: false },
             { type: 'INPUT', label: 'R', x: 100, y: 167, state: false },
@@ -137,7 +133,6 @@ Object.assign(window.predefinedCircuits, {
     'counter': {
         name: 'Counter',
         description: 'A 3-bit counter circuit using a 3-bit latch and 3-bit adder with clock input.',
-        instructorOnly: true,
         gates: [
             { type: 'THREE_BIT_LATCH', label: 'Latch1', x: 334, y: 169, state: false },
             { type: 'THREE_BIT_ADDER', label: 'Adder1', x: 509, y: 168, state: false },
@@ -159,7 +154,6 @@ Object.assign(window.predefinedCircuits, {
     'instruction': {
         name: 'Instruction',
         description: 'An instruction circuit using a register, adder, and instruction input with AND gates.',
-        instructorOnly: true,
         gates: [
             { type: 'THREE_BIT_LATCH', label: 'Register', x: 334, y: 169, state: false },
             { type: 'THREE_BIT_ADDER', label: 'Adder', x: 509, y: 168, state: false },
