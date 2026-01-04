@@ -561,6 +561,18 @@
                 },
                 {
                     "type": "lti",
+                    "title": "Building an And Gate",
+                    "launch": "{apphome}/tools/gates/",
+                    "resource_link_id": "ca4e_03_and",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "AndGateExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
                     "title": "Base-10 ⇄ Base-2 conversions (0-7)",
                     "launch": "{apphome}/tools/nixie/",
                     "resource_link_id": "ca4e_03_nixie2",
