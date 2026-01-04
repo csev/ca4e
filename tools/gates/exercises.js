@@ -191,70 +191,65 @@ class HalfAdderExercise extends GatesExercise {
         ];
 
         const instructions = `
-            <h3>Half Adder Circuit</h3>
-            <p>Build a half adder circuit that adds two single bits and produces a sum and carry output.</p>
-            
-            <h4>Requirements:</h4>
-            <ul>
-                <li>Use exactly one XOR gate and one AND gate</li>
-                <li>Create two input components labeled "A" and "B"</li>
-                <li>Create two output components labeled "S" (sum) and "C" (carry)</li>
-                <li>Connect the circuits to implement the half adder logic</li>
-            </ul>
-            
-            <!--
-            <h4>Half Adder Truth Table:</h4>
-            <table style="border-collapse: collapse; margin: 10px 0;">
-                <tr style="border: 1px solid #ccc; background: #f5f5f5;">
-                    <th style="padding: 8px; border: 1px solid #ccc;">A</th>
-                    <th style="padding: 8px; border: 1px solid #ccc;">B</th>
-                    <th style="padding: 8px; border: 1px solid #ccc;">S (Sum)</th>
-                    <th style="padding: 8px; border: 1px solid #ccc;">C (Carry)</th>
-                </tr>
-                <tr style="border: 1px solid #ccc;">
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
-                </tr>
-                <tr style="border: 1px solid #ccc;">
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">1</td>
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">1</td>
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
-                </tr>
-                <tr style="border: 1px solid #ccc;">
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">1</td>
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">1</td>
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
-                </tr>
-                <tr style="border: 1px solid #ccc;">
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">1</td>
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">1</td>
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">0</td>
-                    <td style="padding: 8px; border: 1px solid #ccc; text-align: center;">1</td>
-                </tr>
-            </table>
-            
-            <h4>Circuit Logic:</h4>
-            <ul>
-                <li><strong>Sum (S):</strong> A XOR B (exclusive OR of inputs)</li>
-                <li><strong>Carry (C):</strong> A AND B (logical AND of inputs)</li>
-            </ul>
-            
-            <h4>Instructions:</h4>
-            <ol>
-                <li>Place two INPUT components and label them "A" and "B"</li>
-                <li>Place two OUTPUT components and label them "S" and "C"</li>
-                <li>Place one XOR gate for the sum output</li>
-                <li>Place one AND gate for the carry output</li>
-                <li>Connect A and B inputs to both the XOR and AND gates</li>
-                <li>Connect XOR output to S and AND output to C</li>
-                <li>Test your circuit with different input combinations</li>
-                <li>When ready, press "Start Grading" to test your circuit</li>
-            </ol>
-            -->
+            <div id="instructionsContent" style="text-align: left;">
+                <h3>Half Adder Circuit</h3>
+                <p>Build a half adder circuit that adds two single bits and produces a sum and carry output.</p>
+                
+                <button onclick="showReferenceImage('images/half-adder.png')" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 8px; margin-right: 10px;">View Reference Diagram</button>
+                <button onclick="showTruthTable()" style="background-color: #2196F3; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 8px;">View Truth Table</button><br>
+                
+                <h4>Requirements:</h4>
+                <ul>
+                    <li>Use exactly one XOR gate and one AND gate</li>
+                    <li>Create two input components labeled "A" and "B"</li>
+                    <li>Create two output components labeled "S" (sum) and "C" (carry)</li>
+                    <li>Connect the circuits to implement the half adder logic</li>
+                </ul>
+            </div>
+            <div id="imageContent" style="display: none; text-align: center; position: relative; padding: 20px; box-sizing: border-box;">
+                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0; z-index: 10;">×</button>
+                <img src="images/half-adder.png" alt="A half adder circuit diagram showing the logic gate implementation" style="max-width: 100%; max-height: 350px; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto;">
+            </div>
+            <div id="truthTableContent" style="display: none; position: relative; padding: 20px; box-sizing: border-box;">
+                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0; z-index: 10;">×</button>
+                <h3 style="margin-top: 0;">Half Adder Truth Table</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                    <thead>
+                        <tr style="background-color: #f0f0f0;">
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">A</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">B</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">S (Sum)</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">C (Carry)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         `;
 
         super("Half Adder", "Build a half adder circuit using XOR and AND gates", steps, instructions);
@@ -705,16 +700,98 @@ class FullAdderExercise extends GatesExercise {
         ];
 
         const instructions = `
-            <h3>Full Adder Circuit</h3>
-            <p>Build a full adder circuit that adds three single bits and produces a sum and carry output.</p>
-            
-            <h4>Requirements:</h4>
-            <ul>
-                <li>Create three input components labeled "A", "B", and "Cin" (carry-in)</li>
-                <li>Create two output components labeled "S" (sum) and "Cout" (carry-out)</li>
-                <li>Use appropriate logic gates to implement the full adder</li>
-                <li>Connect the circuits to implement the full adder logic</li>
-            </ul>
+            <div id="instructionsContent" style="text-align: left;">
+                <h3>Full Adder Circuit</h3>
+                <p>Build a full adder circuit that adds three single bits and produces a sum and carry output.</p>
+                
+                <button onclick="showReferenceImage('images/full-adder.png')" style="background-color: #4CAF50; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 8px; margin-right: 10px;">View Reference Diagram</button>
+                <button onclick="showTruthTable()" style="background-color: #2196F3; color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-bottom: 8px;">View Truth Table</button><br>
+                
+                <h4>Requirements:</h4>
+                <ul>
+                    <li>Create three input components labeled "A", "B", and "Cin" (carry-in)</li>
+                    <li>Create two output components labeled "S" (sum) and "Cout" (carry-out)</li>
+                    <li>Use appropriate logic gates to implement the full adder</li>
+                    <li>Connect the circuits to implement the full adder logic</li>
+                </ul>
+            </div>
+            <div id="imageContent" style="display: none; text-align: center; position: relative; padding: 20px; box-sizing: border-box;">
+                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0; z-index: 10;">×</button>
+                <img src="images/full-adder.png" alt="A full adder circuit diagram showing the logic gate implementation" style="max-width: 100%; max-height: 350px; width: auto; height: auto; object-fit: contain; display: block; margin: 0 auto;">
+            </div>
+            <div id="truthTableContent" style="display: none; position: relative; padding: 20px; box-sizing: border-box;">
+                <button onclick="showInstructions()" style="position: absolute; top: 10px; right: 10px; background: transparent; color: #333; border: none; width: 30px; height: 30px; cursor: pointer; font-size: 24px; line-height: 1; font-weight: bold; padding: 0; z-index: 10;">×</button>
+                <h3 style="margin-top: 0;">Full Adder Truth Table</h3>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+                    <thead>
+                        <tr style="background-color: #f0f0f0;">
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">A</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">B</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">Cin</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">S (Sum)</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">Cout (Carry)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #f8d7da;">0</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1</td>
+                        </tr>
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1</td>
+                            <td style="border: 1px solid #ddd; padding: 10px; text-align: center; background-color: #d4edda;">1</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         `;
 
         super("Full Adder", "Build a full adder circuit with three inputs and two outputs", steps, instructions);
