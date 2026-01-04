@@ -15,12 +15,12 @@ Object.assign(window.predefinedCircuits, {
         description: 'A half adder circuit that adds two binary digits (A and B) and produces a sum (SUM) and carry (COUT) output.',
         instructorOnly: true,
         gates: [
-            { type: 'INPUT', label: 'A', x: 100, y: 150, state: false },
-            { type: 'INPUT', label: 'B', x: 100, y: 250, state: false },
-            { type: 'XOR', label: 'XOR1', x: 250, y: 200, state: false },
-            { type: 'AND', label: 'AND1', x: 250, y: 300, state: false },
-            { type: 'OUTPUT', label: 'SUM', x: 400, y: 200, state: false },
-            { type: 'OUTPUT', label: 'COUT', x: 400, y: 300, state: false }
+            { type: 'INPUT', label: 'A', x: 100, y: 75, state: false },
+            { type: 'INPUT', label: 'B', x: 100, y: 175, state: false },
+            { type: 'XOR', label: 'XOR1', x: 250, y: 125, state: false },
+            { type: 'AND', label: 'AND1', x: 250, y: 225, state: false },
+            { type: 'OUTPUT', label: 'SUM', x: 400, y: 125, state: false },
+            { type: 'OUTPUT', label: 'COUT', x: 400, y: 225, state: false }
         ],
         wires: [
             { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 0, waypoints: [] },
@@ -37,16 +37,16 @@ Object.assign(window.predefinedCircuits, {
         description: 'A full adder circuit that adds three binary digits (A, B, and CIN) and produces a sum (SUM) and carry (COUT) output.',
         instructorOnly: true,
         gates: [
-            { type: 'INPUT', label: 'CIN', x: 100, y: 150, state: false },
-            { type: 'INPUT', label: 'A', x: 100, y: 250, state: false },
-            { type: 'INPUT', label: 'B', x: 100, y: 350, state: false },
-            { type: 'XOR', label: 'XOR1', x: 250, y: 200, state: false },
-            { type: 'XOR', label: 'XOR2', x: 400, y: 200, state: false },
-            { type: 'AND', label: 'AND1', x: 250, y: 300, state: false },
-            { type: 'AND', label: 'AND2', x: 250, y: 400, state: false },
-            { type: 'OR', label: 'OR1', x: 400, y: 350, state: false },
-            { type: 'OUTPUT', label: 'SUM', x: 550, y: 200, state: false },
-            { type: 'OUTPUT', label: 'COUT', x: 550, y: 350, state: false }
+            { type: 'INPUT', label: 'CIN', x: 100, y: 75, state: false },
+            { type: 'INPUT', label: 'A', x: 100, y: 175, state: false },
+            { type: 'INPUT', label: 'B', x: 100, y: 275, state: false },
+            { type: 'XOR', label: 'XOR1', x: 250, y: 125, state: false },
+            { type: 'XOR', label: 'XOR2', x: 400, y: 125, state: false },
+            { type: 'AND', label: 'AND1', x: 250, y: 225, state: false },
+            { type: 'AND', label: 'AND2', x: 250, y: 325, state: false },
+            { type: 'OR', label: 'OR1', x: 400, y: 275, state: false },
+            { type: 'OUTPUT', label: 'SUM', x: 550, y: 125, state: false },
+            { type: 'OUTPUT', label: 'COUT', x: 550, y: 275, state: false }
         ],
         wires: [
             { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 0, waypoints: [] },
@@ -65,14 +65,14 @@ Object.assign(window.predefinedCircuits, {
     },
 
     'and-gate-demo': {
-        name: 'AND Gate Demo',
+        name: 'AND',
         description: 'Simple demonstration of an AND gate with two inputs and one output.',
         instructorOnly: true,
         gates: [
-            { type: 'INPUT', label: 'A', x: 100, y: 200, state: false },
-            { type: 'INPUT', label: 'B', x: 100, y: 300, state: false },
-            { type: 'AND', label: 'AND1', x: 250, y: 250, state: false },
-            { type: 'OUTPUT', label: 'Q', x: 400, y: 250, state: false }
+            { type: 'INPUT', label: 'A', x: 100, y: 67, state: false },
+            { type: 'INPUT', label: 'B', x: 100, y: 167, state: false },
+            { type: 'AND', label: 'AND1', x: 250, y: 117, state: false },
+            { type: 'OUTPUT', label: 'Q', x: 400, y: 117, state: false }
         ],
         wires: [
             { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'AND1', endNodeIndex: 0, waypoints: [] },
@@ -82,14 +82,14 @@ Object.assign(window.predefinedCircuits, {
     },
 
     'or-gate-demo': {
-        name: 'OR Gate Demo',
+        name: 'OR',
         description: 'Simple demonstration of an OR gate with two inputs and one output.',
         instructorOnly: true,
         gates: [
-            { type: 'INPUT', label: 'A', x: 100, y: 200, state: false },
-            { type: 'INPUT', label: 'B', x: 100, y: 300, state: false },
-            { type: 'OR', label: 'OR1', x: 250, y: 250, state: false },
-            { type: 'OUTPUT', label: 'Q', x: 400, y: 250, state: false }
+            { type: 'INPUT', label: 'A', x: 100, y: 67, state: false },
+            { type: 'INPUT', label: 'B', x: 100, y: 167, state: false },
+            { type: 'OR', label: 'OR1', x: 250, y: 117, state: false },
+            { type: 'OUTPUT', label: 'Q', x: 400, y: 117, state: false }
         ],
         wires: [
             { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'OR1', endNodeIndex: 0, waypoints: [] },
@@ -99,14 +99,14 @@ Object.assign(window.predefinedCircuits, {
     },
 
     'xor-gate-demo': {
-        name: 'XOR Gate Demo',
+        name: 'XOR',
         description: 'Simple demonstration of an XOR (exclusive OR) gate with two inputs and one output.',
         instructorOnly: true,
         gates: [
-            { type: 'INPUT', label: 'A', x: 100, y: 200, state: false },
-            { type: 'INPUT', label: 'B', x: 100, y: 300, state: false },
-            { type: 'XOR', label: 'XOR1', x: 250, y: 250, state: false },
-            { type: 'OUTPUT', label: 'Q', x: 400, y: 250, state: false }
+            { type: 'INPUT', label: 'A', x: 100, y: 67, state: false },
+            { type: 'INPUT', label: 'B', x: 100, y: 167, state: false },
+            { type: 'XOR', label: 'XOR1', x: 250, y: 117, state: false },
+            { type: 'OUTPUT', label: 'Q', x: 400, y: 117, state: false }
         ],
         wires: [
             { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 0, waypoints: [] },
@@ -116,15 +116,15 @@ Object.assign(window.predefinedCircuits, {
     },
 
     'flip-flop-demo': {
-        name: 'Flip-Flop Demo',
+        name: 'SR',
         description: 'SR Flip-Flop demonstration circuit with Set and Reset inputs.',
         instructorOnly: true,
         gates: [
-            { type: 'INPUT', label: 'S', x: 100, y: 200, state: false },
-            { type: 'INPUT', label: 'R', x: 100, y: 300, state: false },
-            { type: 'SR_FLIP_FLOP', label: 'FF1', x: 250, y: 250, state: false },
-            { type: 'OUTPUT', label: 'Q', x: 400, y: 200, state: false },
-            { type: 'OUTPUT', label: 'Qbar', x: 400, y: 300, state: false }
+            { type: 'INPUT', label: 'S', x: 100, y: 67, state: false },
+            { type: 'INPUT', label: 'R', x: 100, y: 167, state: false },
+            { type: 'SR_FLIP_FLOP', label: 'FF1', x: 250, y: 117, state: false },
+            { type: 'OUTPUT', label: 'Q', x: 400, y: 67, state: false },
+            { type: 'OUTPUT', label: 'Qbar', x: 400, y: 167, state: false }
         ],
         wires: [
             { startGateLabel: 'S', startNodeIndex: 0, endGateLabel: 'FF1', endNodeIndex: 0, waypoints: [] },
