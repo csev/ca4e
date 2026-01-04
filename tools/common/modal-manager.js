@@ -226,10 +226,12 @@ class ModalManager {
             const modalWidth = modalElement.offsetWidth;
             const modalHeight = modalElement.offsetHeight;
             
-            // Constrain to viewport
-            const maxLeft = viewportWidth - modalWidth;
+            // Constrain to viewport - allow modal to move until half remains visible
+            // This prevents the modal from completely vanishing while allowing it to be pushed mostly off-screen
+            const minLeft = -(modalWidth / 2);
+            const maxLeft = viewportWidth - (modalWidth / 2);
             const maxTop = viewportHeight - modalHeight;
-            newLeft = Math.max(0, Math.min(maxLeft, newLeft));
+            newLeft = Math.max(minLeft, Math.min(maxLeft, newLeft));
             newTop = Math.max(0, Math.min(maxTop, newTop));
             
             // Apply position
