@@ -82,6 +82,9 @@ class CircuitEditor {
         // Add waypoints visibility flag
         this.showWaypoints = true;
         
+        // Add command input visibility flag
+        this.showCommandInput = false;
+        
         // Command history system
         this.commandHistory = [];
         this.historyIndex = -1;
@@ -118,6 +121,27 @@ class CircuitEditor {
                     this.showMessage(this.showWaypoints ? 'Waypoints shown' : 'Waypoints hidden');
                     if (this.screenReaderMode) {
                         this.announce(this.showWaypoints ? 'Waypoints shown' : 'Waypoints hidden');
+                    }
+                    break;
+                    
+                case 'commandInputToggle':
+                    this.showCommandInput = !this.showCommandInput;
+                    const commandLine = document.getElementById('commandLine');
+                    if (commandLine) {
+                        if (this.showCommandInput) {
+                            commandLine.classList.remove('hidden');
+                        } else {
+                            commandLine.classList.add('hidden');
+                        }
+                        // Also adjust canvas margin when toggling
+                        const canvas = document.getElementById('circuitCanvas');
+                        if (canvas) {
+                            canvas.style.marginBottom = this.showCommandInput ? '100px' : '0px';
+                        }
+                    }
+                    this.showMessage(this.showCommandInput ? 'Commands shown' : 'Commands hidden');
+                    if (this.screenReaderMode) {
+                        this.announce(this.showCommandInput ? 'Commands shown' : 'Commands hidden');
                     }
                     break;
                     

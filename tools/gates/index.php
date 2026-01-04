@@ -132,6 +132,10 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             z-index: 1000;
         }
 
+        .command-line.hidden {
+            display: none !important;
+        }
+
         .command-line input {
             width: 100%;
             background-color: #34495e;
@@ -163,7 +167,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         /* Adjust canvas height to make room for command line */
         #circuitCanvas {
             margin-top: 60px;
-            margin-bottom: 100px;
+            margin-bottom: 0px;
             background-color: white;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -512,6 +516,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             <select id="commandsSelector">
                 <option value="">Select Command</option>
                 <option value="waypointsToggle">👁️ Toggle Waypoints</option>
+                <option value="commandInputToggle">⌨️ Toggle Commands</option>
                 <option value="clear">🧹 Clear All</option>
                 <option value="screenReaderToggle">🔊 Toggle Screen Reader</option>
             </select>
@@ -536,7 +541,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     <div class="tooltip" id="tooltip"></div>
 
     <!-- Command line interface -->
-    <div class="command-line">
+    <div id="commandLine" class="command-line hidden">
         <input type="text" id="commandInput" placeholder="Type commands here... (e.g., 'place input a', 'place and', 'delete input a', 'connect a output to gate1 input-1')">
         <div class="status" id="status">Ready. Type 'help' for available commands.</div>
     </div>
