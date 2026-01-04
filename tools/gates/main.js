@@ -2844,11 +2844,16 @@ window.addEventListener('load', () => {
                     // Restore gate properties
                     if (gateData.state !== undefined) gate.state = gateData.state;
                     
-                    // Assign ordinal and update label (same as in handleMouseDown)
-                    gate.ordinal = window.circuitEditor.getGateOrdinal(gate);
-                    gate.updateLabelWithOrdinal();
+                    // Set the label from gateData first (if provided)
+                    if (gateData.label) {
+                        gate.label = gateData.label;
+                    } else {
+                        // Only assign ordinal and update label if no label was provided
+                        gate.ordinal = window.circuitEditor.getGateOrdinal(gate);
+                        gate.updateLabelWithOrdinal();
+                    }
                     
-                    // Use the original saved label for wire mapping, but new label for display
+                    // Use the original saved label for wire mapping
                     gateMap.set(gateData.label, gate);
                     window.circuitEditor.gates.push(gate);
                 }

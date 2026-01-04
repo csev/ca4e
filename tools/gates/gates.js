@@ -613,14 +613,14 @@ class FullAdder extends Gate {
         ctx.fillStyle = '#000';
         ctx.font = Gate.squareFont;
         ctx.textAlign = 'right';
-        ctx.fillText('Cin', this.x - 35, this.y - 17); // Aligned with S
-        ctx.fillText('A', this.x - 35, this.y + 3);        // Aligned with Cout
+        ctx.fillText('CIN', this.x - 35, this.y - 17); // Aligned with SUM
+        ctx.fillText('A', this.x - 35, this.y + 3);        // Aligned with COUT
         ctx.fillText('B', this.x - 35, this.y + 23);   // Below
 
         // Draw output labels
         ctx.textAlign = 'left';
-        ctx.fillText('S', this.x + 35, this.y - 17);
-        ctx.fillText('Cout', this.x + 35, this.y + 3);
+        ctx.fillText('SUM', this.x + 35, this.y - 17);
+        ctx.fillText('COUT', this.x + 35, this.y + 3);
 
         // Draw component label
         ctx.textAlign = 'center';

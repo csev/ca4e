@@ -182,12 +182,12 @@ class GatesExercise extends Exercise {
 class HalfAdderExercise extends GatesExercise {
     constructor() {
         const steps = [
-            { name: "Check Component Labels", description: "Verify inputs A, B and outputs S, C are properly labeled" },
+            { name: "Check Component Labels", description: "Verify inputs A, B and outputs SUM, COUT are properly labeled" },
             { name: "Check Required Gates", description: "Verify XOR and AND gates are present" },
-            { name: "Test A=0, B=0 → S=0, C=0", description: "Test truth table row 1" },
-            { name: "Test A=0, B=1 → S=1, C=0", description: "Test truth table row 2" },
-            { name: "Test A=1, B=0 → S=1, C=0", description: "Test truth table row 3" },
-            { name: "Test A=1, B=1 → S=0, C=1", description: "Test truth table row 4" }
+            { name: "Test A=0, B=0 → SUM=0, COUT=0", description: "Test truth table row 1" },
+            { name: "Test A=0, B=1 → SUM=1, COUT=0", description: "Test truth table row 2" },
+            { name: "Test A=1, B=0 → SUM=1, COUT=0", description: "Test truth table row 3" },
+            { name: "Test A=1, B=1 → SUM=0, COUT=1", description: "Test truth table row 4" }
         ];
 
         const instructions = `
@@ -202,7 +202,7 @@ class HalfAdderExercise extends GatesExercise {
                 <ul>
                     <li>Use exactly one XOR gate and one AND gate</li>
                     <li>Create two input components labeled "A" and "B"</li>
-                    <li>Create two output components labeled "S" (sum) and "C" (carry)</li>
+                    <li>Create two output components labeled "SUM" (sum) and "COUT" (carry)</li>
                     <li>Connect the circuits to implement the half adder logic</li>
                 </ul>
             </div>
@@ -218,8 +218,8 @@ class HalfAdderExercise extends GatesExercise {
                         <tr style="background-color: #f0f0f0;">
                             <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">A</th>
                             <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">B</th>
-                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">S (Sum)</th>
-                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">C (Carry)</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">SUM</th>
+                            <th style="border: 1px solid #ddd; padding: 10px; text-align: center;">COUT</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -424,12 +424,12 @@ class HalfAdderExercise extends GatesExercise {
                 <h4>Step-by-Step Implementation:</h4>
                 <ol>
                     <li>Place two INPUT components and label them "A" and "B"</li>
-                    <li>Place two OUTPUT components and label them "S" and "C"</li>
+                    <li>Place two OUTPUT components and label them "SUM" and "COUT"</li>
                     <li>Place one XOR gate for the sum logic</li>
                     <li>Place one AND gate for the carry logic</li>
                     <li>Connect both inputs (A and B) to both gates</li>
-                    <li>Connect the XOR gate output to the S output</li>
-                    <li>Connect the AND gate output to the C output</li>
+                    <li>Connect the XOR gate output to the SUM output</li>
+                    <li>Connect the AND gate output to the COUT output</li>
                 </ol>
                 
                 <div style="margin-top: 20px; text-align: center;">
@@ -472,14 +472,14 @@ class HalfAdderExercise extends GatesExercise {
                 return this.checkComponentLabels();
             case 1: // Check Required Gates
                 return this.checkRequiredGates();
-            case 2: // Test A=0, B=0 → S=0, C=0
-                return this.testHalfAdder(false, false, false, false, "A=0, B=0 → S=0, C=0");
-            case 3: // Test A=0, B=1 → S=1, C=0
-                return this.testHalfAdder(false, true, true, false, "A=0, B=1 → S=1, C=0");
-            case 4: // Test A=1, B=0 → S=1, C=0
-                return this.testHalfAdder(true, false, true, false, "A=1, B=0 → S=1, C=0");
-            case 5: // Test A=1, B=1 → S=0, C=1
-                return this.testHalfAdder(true, true, false, true, "A=1, B=1 → S=0, C=1");
+            case 2: // Test A=0, B=0 → SUM=0, COUT=0
+                return this.testHalfAdder(false, false, false, false, "A=0, B=0 → SUM=0, COUT=0");
+            case 3: // Test A=0, B=1 → SUM=1, COUT=0
+                return this.testHalfAdder(false, true, true, false, "A=0, B=1 → SUM=1, COUT=0");
+            case 4: // Test A=1, B=0 → SUM=1, COUT=0
+                return this.testHalfAdder(true, false, true, false, "A=1, B=0 → SUM=1, COUT=0");
+            case 5: // Test A=1, B=1 → SUM=0, COUT=1
+                return this.testHalfAdder(true, true, false, true, "A=1, B=1 → SUM=0, COUT=1");
             default:
                 return { passed: false, message: "Unknown step" };
         }
@@ -495,7 +495,7 @@ class HalfAdderExercise extends GatesExercise {
 
         // Check for required inputs
         const requiredInputs = ['A', 'B'];
-        const requiredOutputs = ['S', 'C'];
+        const requiredOutputs = ['SUM', 'COUT'];
         
         const gates = window.circuitEditor.gates;
         const inputGates = gates.filter(gate => gate.type === 'INPUT');
@@ -513,7 +513,7 @@ class HalfAdderExercise extends GatesExercise {
         if (outputGates.length !== 2) {
             return { 
                 passed: false, 
-                message: `Expected exactly 2 OUTPUT components, found ${outputGates.length}. Please add OUTPUT components and label them "S" and "C".` 
+                message: `Expected exactly 2 OUTPUT components, found ${outputGates.length}. Please add OUTPUT components and label them "SUM" and "COUT".` 
             };
         }
 
@@ -539,7 +539,7 @@ class HalfAdderExercise extends GatesExercise {
             }
         }
 
-        return { passed: true, message: "✅ All required components are properly labeled (inputs A, B and outputs S, C)." };
+        return { passed: true, message: "✅ All required components are properly labeled (inputs A, B and outputs SUM, COUT)." };
     }
 
     /**
@@ -620,8 +620,8 @@ class HalfAdderExercise extends GatesExercise {
         const gates = window.circuitEditor.gates;
         const inputAGate = gates.find(g => g.type === 'INPUT' && g.label.toUpperCase() === 'A');
         const inputBGate = gates.find(g => g.type === 'INPUT' && g.label.toUpperCase() === 'B');
-        const outputS = gates.find(g => g.type === 'OUTPUT' && g.label.toUpperCase() === 'S');
-        const outputC = gates.find(g => g.type === 'OUTPUT' && g.label.toUpperCase() === 'C');
+        const outputSum = gates.find(g => g.type === 'OUTPUT' && g.label.toUpperCase() === 'SUM');
+        const outputCout = gates.find(g => g.type === 'OUTPUT' && g.label.toUpperCase() === 'COUT');
         const xorGate = gates.find(g => g.type === 'XOR');
         const andGate = gates.find(g => g.type === 'AND');
         
@@ -630,50 +630,50 @@ class HalfAdderExercise extends GatesExercise {
         console.log('- Input B:', inputBGate ? `found, state=${inputBGate.state}` : 'NOT FOUND');
         console.log('- XOR gate:', xorGate ? 'found' : 'NOT FOUND');
         console.log('- AND gate:', andGate ? 'found' : 'NOT FOUND');
-        console.log('- Output S:', outputS ? `found, connected=${outputS.inputNodes[0]?.connected}` : 'NOT FOUND');
-        console.log('- Output C:', outputC ? `found, connected=${outputC.inputNodes[0]?.connected}` : 'NOT FOUND');
+        console.log('- Output SUM:', outputSum ? `found, connected=${outputSum.inputNodes[0]?.connected}` : 'NOT FOUND');
+        console.log('- Output COUT:', outputCout ? `found, connected=${outputCout.inputNodes[0]?.connected}` : 'NOT FOUND');
         
-        if (outputS && outputS.inputNodes[0]) {
-            console.log('- Output S input node sourceValue:', outputS.inputNodes[0].sourceValue);
+        if (outputSum && outputSum.inputNodes[0]) {
+            console.log('- Output SUM input node sourceValue:', outputSum.inputNodes[0].sourceValue);
         }
-        if (outputC && outputC.inputNodes[0]) {
-            console.log('- Output C input node sourceValue:', outputC.inputNodes[0].sourceValue);
+        if (outputCout && outputCout.inputNodes[0]) {
+            console.log('- Output COUT input node sourceValue:', outputCout.inputNodes[0].sourceValue);
         }
         
         // Get the output values after circuit update
-        const actualS = window.circuitEditor.getOutputByLabel('S');
-        const actualC = window.circuitEditor.getOutputByLabel('C');
+        const actualSum = window.circuitEditor.getOutputByLabel('SUM');
+        const actualCout = window.circuitEditor.getOutputByLabel('COUT');
         
-        console.log(`Got outputs: S=${actualS}, C=${actualC}`);
+        console.log(`Got outputs: SUM=${actualSum}, COUT=${actualCout}`);
 
-        if (actualS === undefined) {
-            return { passed: false, message: 'Could not read output "S". Make sure you have an OUTPUT component labeled "S" and it is connected to the XOR gate.' };
+        if (actualSum === undefined) {
+            return { passed: false, message: 'Could not read output "SUM". Make sure you have an OUTPUT component labeled "SUM" and it is connected to the XOR gate.' };
         }
-        if (actualC === undefined) {
-            return { passed: false, message: 'Could not read output "C". Make sure you have an OUTPUT component labeled "C" and it is connected to the AND gate.' };
+        if (actualCout === undefined) {
+            return { passed: false, message: 'Could not read output "COUT". Make sure you have an OUTPUT component labeled "COUT" and it is connected to the AND gate.' };
         }
 
         // Check if outputs match expected values
-        if (actualS !== expectedS || actualC !== expectedC) {
-            const actualSStr = actualS ? '1' : '0';
-            const actualCStr = actualC ? '1' : '0';
-            const expectedSStr = expectedS ? '1' : '0';
-            const expectedCStr = expectedC ? '1' : '0';
+        if (actualSum !== expectedS || actualCout !== expectedC) {
+            const actualSumStr = actualSum ? '1' : '0';
+            const actualCoutStr = actualCout ? '1' : '0';
+            const expectedSumStr = expectedS ? '1' : '0';
+            const expectedCoutStr = expectedC ? '1' : '0';
             
             return { 
                 passed: false, 
-                message: `Test failed for ${testDescription}. Expected S=${expectedSStr}, C=${expectedCStr}, but got S=${actualSStr}, C=${actualCStr}. Check your circuit connections.` 
+                message: `Test failed for ${testDescription}. Expected SUM=${expectedSumStr}, COUT=${expectedCoutStr}, but got SUM=${actualSumStr}, COUT=${actualCoutStr}. Check your circuit connections.` 
             };
         }
 
         const inputAStr = inputA ? '1' : '0';
         const inputBStr = inputB ? '1' : '0';
-        const outputSStr = expectedS ? '1' : '0';
-        const outputCStr = expectedC ? '1' : '0';
+        const outputSumStr = expectedS ? '1' : '0';
+        const outputCoutStr = expectedC ? '1' : '0';
         
         return { 
             passed: true, 
-            message: `✅ Test passed: A=${inputAStr}, B=${inputBStr} → S=${outputSStr}, C=${outputCStr}` 
+            message: `✅ Test passed: A=${inputAStr}, B=${inputBStr} → SUM=${outputSumStr}, COUT=${outputCoutStr}` 
         };
     }
 }
@@ -709,8 +709,8 @@ class FullAdderExercise extends GatesExercise {
                 
                 <h4>Requirements:</h4>
                 <ul>
-                    <li>Create three input components labeled "A", "B", and "Cin" (carry-in)</li>
-                    <li>Create two output components labeled "S" (sum) and "Cout" (carry-out)</li>
+                    <li>Create three input components labeled "CIN", "A", and "B" (CIN is carry-in)</li>
+                    <li>Create two output components labeled "SUM" (sum) and "COUT" (carry-out)</li>
                     <li>Use appropriate logic gates to implement the full adder</li>
                     <li>Connect the circuits to implement the full adder logic</li>
                 </ul>
@@ -1007,11 +1007,11 @@ class FullAdderExercise extends GatesExercise {
                 
                 <h5>Option 2: Direct Gate Implementation</h5>
                 <ol>
-                    <li>Place three INPUT components: A, B, Cin</li>
-                    <li>Place two OUTPUT components: S, Cout</li>
+                    <li>Place three INPUT components: CIN, A, B</li>
+                    <li>Place two OUTPUT components: SUM, COUT</li>
                     <li>Use first XOR gate: A ⊕ B</li>
-                    <li>Use second XOR gate: (A ⊕ B) ⊕ Cin for final sum</li>
-                    <li>Use AND gates and OR gate for carry logic: (A ∧ B) ∨ (Cin ∧ (A ⊕ B))</li>
+                    <li>Use second XOR gate: (A ⊕ B) ⊕ CIN for final sum</li>
+                    <li>Use AND gates and OR gate for carry logic: (A ∧ B) ∨ (CIN ∧ (A ⊕ B))</li>
                 </ol>
                 
                 <div style="margin-top: 20px; text-align: center;">
@@ -1084,8 +1084,8 @@ class FullAdderExercise extends GatesExercise {
         }
 
         // Check for required inputs and outputs
-        const requiredInputs = ['A', 'B', 'CIN'];
-        const requiredOutputs = ['S', 'COUT'];
+        const requiredInputs = ['CIN', 'A', 'B'];
+        const requiredOutputs = ['SUM', 'COUT'];
         
         const gates = window.circuitEditor.gates;
         const inputGates = gates.filter(gate => gate.type === 'INPUT');
@@ -1095,7 +1095,7 @@ class FullAdderExercise extends GatesExercise {
         if (inputGates.length !== 3) {
             return { 
                 passed: false, 
-                message: `Expected exactly 3 INPUT components, found ${inputGates.length}. Please add INPUT components and label them "A", "B", and "Cin".` 
+                message: `Expected exactly 3 INPUT components, found ${inputGates.length}. Please add INPUT components and label them "CIN", "A", and "B".` 
             };
         }
 
@@ -1103,7 +1103,7 @@ class FullAdderExercise extends GatesExercise {
         if (outputGates.length !== 2) {
             return { 
                 passed: false, 
-                message: `Expected exactly 2 OUTPUT components, found ${outputGates.length}. Please add OUTPUT components and label them "S" and "Cout".` 
+                message: `Expected exactly 2 OUTPUT components, found ${outputGates.length}. Please add OUTPUT components and label them "SUM" and "COUT".` 
             };
         }
 
@@ -1129,7 +1129,7 @@ class FullAdderExercise extends GatesExercise {
             }
         }
 
-        return { passed: true, message: "✅ All required components are properly labeled (inputs A, B, Cin and outputs S, Cout)." };
+        return { passed: true, message: "✅ All required components are properly labeled (inputs CIN, A, B and outputs SUM, COUT)." };
     }
 
     /**
@@ -1189,18 +1189,18 @@ class FullAdderExercise extends GatesExercise {
         }
 
         // Set the input values
+        const setCin = window.circuitEditor.setInputByLabel('CIN', inputCin);
         const setA = window.circuitEditor.setInputByLabel('A', inputA);
         const setB = window.circuitEditor.setInputByLabel('B', inputB);
-        const setCin = window.circuitEditor.setInputByLabel('Cin', inputCin);
 
+        if (!setCin) {
+            return { passed: false, message: 'Could not find input labeled "CIN". Make sure you have an INPUT component labeled "CIN".' };
+        }
         if (!setA) {
             return { passed: false, message: 'Could not find input labeled "A". Make sure you have an INPUT component labeled "A".' };
         }
         if (!setB) {
             return { passed: false, message: 'Could not find input labeled "B". Make sure you have an INPUT component labeled "B".' };
-        }
-        if (!setCin) {
-            return { passed: false, message: 'Could not find input labeled "Cin". Make sure you have an INPUT component labeled "Cin".' };
         }
 
         // Force immediate circuit update
@@ -1208,43 +1208,43 @@ class FullAdderExercise extends GatesExercise {
         
         // Debug logging
         console.log(`Testing full adder: ${testDescription}`);
-        console.log(`Set A=${inputA}, B=${inputB}, Cin=${inputCin}`);
+        console.log(`Set CIN=${inputCin}, A=${inputA}, B=${inputB}`);
         
         // Get the output values
-        const actualS = window.circuitEditor.getOutputByLabel('S');
-        const actualCout = window.circuitEditor.getOutputByLabel('Cout');
+        const actualSum = window.circuitEditor.getOutputByLabel('SUM');
+        const actualCout = window.circuitEditor.getOutputByLabel('COUT');
         
-        console.log(`Got outputs: S=${actualS}, Cout=${actualCout}`);
+        console.log(`Got outputs: SUM=${actualSum}, COUT=${actualCout}`);
 
-        if (actualS === undefined) {
-            return { passed: false, message: 'Could not read output "S". Make sure you have an OUTPUT component labeled "S" and it is connected to the sum logic.' };
+        if (actualSum === undefined) {
+            return { passed: false, message: 'Could not read output "SUM". Make sure you have an OUTPUT component labeled "SUM" and it is connected to the sum logic.' };
         }
         if (actualCout === undefined) {
-            return { passed: false, message: 'Could not read output "Cout". Make sure you have an OUTPUT component labeled "Cout" and it is connected to the carry logic.' };
+            return { passed: false, message: 'Could not read output "COUT". Make sure you have an OUTPUT component labeled "COUT" and it is connected to the carry logic.' };
         }
 
         // Check if outputs match expected values
-        if (actualS !== expectedS || actualCout !== expectedCout) {
-            const actualSStr = actualS ? '1' : '0';
+        if (actualSum !== expectedS || actualCout !== expectedCout) {
+            const actualSumStr = actualSum ? '1' : '0';
             const actualCoutStr = actualCout ? '1' : '0';
-            const expectedSStr = expectedS ? '1' : '0';
+            const expectedSumStr = expectedS ? '1' : '0';
             const expectedCoutStr = expectedCout ? '1' : '0';
             
             return { 
                 passed: false, 
-                message: `Test failed for ${testDescription}. Expected S=${expectedSStr}, Cout=${expectedCoutStr}, but got S=${actualSStr}, Cout=${actualCoutStr}. Check your circuit connections.` 
+                message: `Test failed for ${testDescription}. Expected SUM=${expectedSumStr}, COUT=${expectedCoutStr}, but got SUM=${actualSumStr}, COUT=${actualCoutStr}. Check your circuit connections.` 
             };
         }
 
+        const inputCinStr = inputCin ? '1' : '0';
         const inputAStr = inputA ? '1' : '0';
         const inputBStr = inputB ? '1' : '0';
-        const inputCinStr = inputCin ? '1' : '0';
-        const outputSStr = expectedS ? '1' : '0';
+        const outputSumStr = expectedS ? '1' : '0';
         const outputCoutStr = expectedCout ? '1' : '0';
         
         return { 
             passed: true, 
-            message: `✅ Test passed: A=${inputAStr}, B=${inputBStr}, Cin=${inputCinStr} → S=${outputSStr}, Cout=${outputCoutStr}` 
+            message: `✅ Test passed: CIN=${inputCinStr}, A=${inputAStr}, B=${inputBStr} → SUM=${outputSumStr}, COUT=${outputCoutStr}` 
         };
     }
 }

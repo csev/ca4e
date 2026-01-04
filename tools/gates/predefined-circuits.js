@@ -12,41 +12,41 @@ if (!window.predefinedCircuits) {
 Object.assign(window.predefinedCircuits, {
     'half-adder': {
         name: 'Half Adder',
-        description: 'A half adder circuit that adds two binary digits (A and B) and produces a sum (S) and carry (C) output.',
+        description: 'A half adder circuit that adds two binary digits (A and B) and produces a sum (SUM) and carry (COUT) output.',
         instructorOnly: true,
         gates: [
             { type: 'INPUT', label: 'A', x: 100, y: 150, state: false },
             { type: 'INPUT', label: 'B', x: 100, y: 250, state: false },
             { type: 'XOR', label: 'XOR1', x: 250, y: 200, state: false },
             { type: 'AND', label: 'AND1', x: 250, y: 300, state: false },
-            { type: 'OUTPUT', label: 'S', x: 400, y: 200, state: false },
-            { type: 'OUTPUT', label: 'C', x: 400, y: 300, state: false }
+            { type: 'OUTPUT', label: 'SUM', x: 400, y: 200, state: false },
+            { type: 'OUTPUT', label: 'COUT', x: 400, y: 300, state: false }
         ],
         wires: [
             { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 0, waypoints: [] },
             { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'AND1', endNodeIndex: 0, waypoints: [] },
             { startGateLabel: 'B', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 1, waypoints: [] },
             { startGateLabel: 'B', startNodeIndex: 0, endGateLabel: 'AND1', endNodeIndex: 1, waypoints: [] },
-            { startGateLabel: 'XOR1', startNodeIndex: 0, endGateLabel: 'S', endNodeIndex: 0, waypoints: [] },
-            { startGateLabel: 'AND1', startNodeIndex: 0, endGateLabel: 'C', endNodeIndex: 0, waypoints: [] }
+            { startGateLabel: 'XOR1', startNodeIndex: 0, endGateLabel: 'SUM', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'AND1', startNodeIndex: 0, endGateLabel: 'COUT', endNodeIndex: 0, waypoints: [] }
         ]
     },
 
     'full-adder': {
         name: 'Full Adder',
-        description: 'A full adder circuit that adds three binary digits (A, B, and Cin) and produces a sum (S) and carry (Cout) output.',
+        description: 'A full adder circuit that adds three binary digits (A, B, and CIN) and produces a sum (SUM) and carry (COUT) output.',
         instructorOnly: true,
         gates: [
-            { type: 'INPUT', label: 'A', x: 100, y: 150, state: false },
-            { type: 'INPUT', label: 'B', x: 100, y: 250, state: false },
-            { type: 'INPUT', label: 'Cin', x: 100, y: 350, state: false },
+            { type: 'INPUT', label: 'CIN', x: 100, y: 150, state: false },
+            { type: 'INPUT', label: 'A', x: 100, y: 250, state: false },
+            { type: 'INPUT', label: 'B', x: 100, y: 350, state: false },
             { type: 'XOR', label: 'XOR1', x: 250, y: 200, state: false },
             { type: 'XOR', label: 'XOR2', x: 400, y: 200, state: false },
             { type: 'AND', label: 'AND1', x: 250, y: 300, state: false },
             { type: 'AND', label: 'AND2', x: 250, y: 400, state: false },
             { type: 'OR', label: 'OR1', x: 400, y: 350, state: false },
-            { type: 'OUTPUT', label: 'S', x: 550, y: 200, state: false },
-            { type: 'OUTPUT', label: 'Cout', x: 550, y: 350, state: false }
+            { type: 'OUTPUT', label: 'SUM', x: 550, y: 200, state: false },
+            { type: 'OUTPUT', label: 'COUT', x: 550, y: 350, state: false }
         ],
         wires: [
             { startGateLabel: 'A', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 0, waypoints: [] },
@@ -54,13 +54,13 @@ Object.assign(window.predefinedCircuits, {
             { startGateLabel: 'B', startNodeIndex: 0, endGateLabel: 'XOR1', endNodeIndex: 1, waypoints: [] },
             { startGateLabel: 'B', startNodeIndex: 0, endGateLabel: 'AND1', endNodeIndex: 1, waypoints: [] },
             { startGateLabel: 'XOR1', startNodeIndex: 0, endGateLabel: 'XOR2', endNodeIndex: 0, waypoints: [] },
-            { startGateLabel: 'Cin', startNodeIndex: 0, endGateLabel: 'XOR2', endNodeIndex: 1, waypoints: [] },
-            { startGateLabel: 'Cin', startNodeIndex: 0, endGateLabel: 'AND2', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'CIN', startNodeIndex: 0, endGateLabel: 'XOR2', endNodeIndex: 1, waypoints: [] },
+            { startGateLabel: 'CIN', startNodeIndex: 0, endGateLabel: 'AND2', endNodeIndex: 0, waypoints: [] },
             { startGateLabel: 'XOR1', startNodeIndex: 0, endGateLabel: 'AND2', endNodeIndex: 1, waypoints: [] },
             { startGateLabel: 'AND1', startNodeIndex: 0, endGateLabel: 'OR1', endNodeIndex: 0, waypoints: [] },
             { startGateLabel: 'AND2', startNodeIndex: 0, endGateLabel: 'OR1', endNodeIndex: 1, waypoints: [] },
-            { startGateLabel: 'XOR2', startNodeIndex: 0, endGateLabel: 'S', endNodeIndex: 0, waypoints: [] },
-            { startGateLabel: 'OR1', startNodeIndex: 0, endGateLabel: 'Cout', endNodeIndex: 0, waypoints: [] }
+            { startGateLabel: 'XOR2', startNodeIndex: 0, endGateLabel: 'SUM', endNodeIndex: 0, waypoints: [] },
+            { startGateLabel: 'OR1', startNodeIndex: 0, endGateLabel: 'COUT', endNodeIndex: 0, waypoints: [] }
         ]
     },
 
