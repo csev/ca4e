@@ -84,16 +84,47 @@ class CDC6504Exercise extends Exercise {
  */
 class HelloWorldExercise extends CDC6504Exercise {
     constructor() {
+        // List of fun random words to randomly choose from
+        const phrases = [
+            'Awesome!',
+            'Fantastic!',
+            'Brilliant!',
+            'Excellent!',
+            'Wonderful!',
+            'Amazing!',
+            'Incredible!',
+            'Superb!',
+            'Outstanding!',
+            'Terrific!',
+            'Magnificent!',
+            'Spectacular!',
+            'Phenomenal!',
+            'Extraordinary!',
+            'Marvelous!',
+            'Stupendous!'
+        ];
+        
+        // Randomly select a phrase (use local variable before super())
+        const randomIndex = Math.floor(Math.random() * phrases.length);
+        const targetPhrase = phrases[randomIndex];
+        
         const steps = [
-            { name: "Program Execution", description: "Run program and check if it outputs 'Hello, World!'" }
+            { name: "Program Execution", description: `Run program and check if it outputs '${targetPhrase}'` }
         ];
 
         const instructions = `
-            <h3>Hello, World!</h3>
-            <p>Write a CDC6504 program that outputs "Hello, World!" or "Hello World!".</p>
+            <h3>Output a Fun Word</h3>
+            <p><strong>Your task:</strong> Using the Assembly editor, adapt the Hello World sample code to output the following word:</p>
+            <p style="font-size: 18px; font-weight: bold; color: #007bff; padding: 10px; background: #f0f0f0; border-radius: 4px; text-align: center;">
+                "${targetPhrase}"
+            </p>
+            <p>The autograder will check that your program output contains this word. Your output can contain additional text before or after the word.</p>
         `;
 
-        super("Hello World", "Output 'Hello, World!' using CDC6504", steps, instructions);
+        super("Hello World", `Output '${targetPhrase}' using CDC6504`, steps, instructions);
+        
+        // Now assign to this.targetPhrase after super() has been called
+        this.targetPhrase = targetPhrase;
     }
 
     checkStep(stepIndex) {
@@ -148,10 +179,11 @@ class HelloWorldExercise extends CDC6504Exercise {
                         window.updateOutput();
                     }
                     
-                    if (output.includes('Hello, World!') || output.includes('Hello World!')) {
-                        return { passed: true, message: "✅ Program successfully outputs 'Hello, World!'!" };
+                    // Check if output contains the target phrase
+                    if (output.includes(this.targetPhrase)) {
+                        return { passed: true, message: `✅ Program output contains '${this.targetPhrase}'!` };
                     } else {
-                        return { passed: false, message: `Expected 'Hello, World!' or 'Hello World!' but got: "${output}"` };
+                        return { passed: false, message: `Expected output to contain '${this.targetPhrase}' but got: "${output}"` };
                     }
                 }
                 
@@ -172,12 +204,14 @@ class HelloWorldExercise extends CDC6504Exercise {
 class Print42Exercise extends CDC6504Exercise {
     constructor() {
         const steps = [
+            { name: "Code Check", description: "Verify that your code does not use the DATA operation" },
             { name: "Program Execution", description: "Run program and check if it halts with output '42'" }
         ];
 
         const instructions = `
             <h3>Print 42</h3>
             <p>Write a CDC6504 program that outputs the number 42.</p>
+            <p><strong>Important:</strong> You must not use the DATA operation in your assembly code. You need to store '42' into memory 42 using instructions.</p>
         `;
 
         super("Print 42", "Output the number 42 using CDC6504", steps, instructions);
@@ -185,11 +219,38 @@ class Print42Exercise extends CDC6504Exercise {
 
     checkStep(stepIndex) {
         switch (stepIndex) {
-            case 0: // Program Execution and Output Check
+            case 0: // Code Check - No DATA operation
+                return this.checkNoDataOperation();
+            case 1: // Program Execution and Output Check
                 return this.checkExecutionAndOutput();
             default:
                 return { passed: false, message: "Unknown step" };
         }
+    }
+
+    checkNoDataOperation() {
+        // Get the assembly code from the editor
+        const assemblyInput = document.getElementById('assembly-input');
+        if (!assemblyInput) {
+            return { passed: false, message: "Cannot find assembly editor. Please refresh the page." };
+        }
+
+        const assemblyCode = assemblyInput.value.trim();
+        
+        if (!assemblyCode) {
+            return { passed: false, message: "No assembly code found. Please enter your program in the assembly editor." };
+        }
+
+        // Check for DATA operation (case-insensitive)
+        const codeUpper = assemblyCode.toUpperCase();
+        if (codeUpper.includes('DATA')) {
+            return { 
+                passed: false, 
+                message: "Your code contains a DATA operation. You must not use DATA - calculate or load the value 42 using instructions instead." 
+            };
+        }
+
+        return { passed: true, message: "✅ Code does not use DATA operation." };
     }
 
     async checkExecutionAndOutput() {
@@ -257,127 +318,6 @@ class Print42Exercise extends CDC6504Exercise {
                         return { passed: true, message: "✅ Program executed successfully and output '42'!" };
                     } else {
                         return { passed: false, message: `Program stopped but output was '${output}', expected '42'.` };
-                    }
-                }
-                
-                // Wait a bit before checking again
-                await new Promise(resolve => setTimeout(resolve, 100));
-            }
-            
-            // Timeout reached
-            emulator.stop(); // Stop the program if it's still running
-            return { passed: false, message: "Program did not complete within 5 seconds. Check for infinite loops." };
-            
-        } catch (error) {
-            return { passed: false, message: `Error during execution: ${error.message}` };
-        }
-    }
-}
-
-/**
- * Random Phrase Exercise
- * 
- * Students need to output a randomly selected phrase
- * The phrase is chosen at exercise creation time and displayed in instructions
- */
-class RandomPhraseExercise extends CDC6504Exercise {
-    constructor() {
-        // List of phrases to randomly choose from
-        const phrases = [
-            'Hello, World!',
-            'Hello World!',
-            'Hi there!',
-            'Good morning!',
-            'Welcome!',
-            'Greetings!',
-            'Hello everyone!',
-            'Hello friend!',
-            'Hello student!',
-            'Hello CA4E!',
-            'Hello CDC6504!',
-            'Hello assembly!',
-            'Hello computer!',
-            'Hello program!',
-            'Hello code!'
-        ];
-        
-        // Randomly select a phrase
-        const randomIndex = Math.floor(Math.random() * phrases.length);
-        this.targetPhrase = phrases[randomIndex];
-        
-        const steps = [
-            { name: "Program Execution", description: `Run program and check if it outputs '${this.targetPhrase}'` }
-        ];
-
-        const instructions = `
-            <h3>Output a Specific Phrase</h3>
-            <p><strong>Your task:</strong> Write a CDC6504 program that outputs the following phrase:</p>
-            <p style="font-size: 18px; font-weight: bold; color: #007bff; padding: 10px; background: #f0f0f0; border-radius: 4px; text-align: center;">
-                "${this.targetPhrase}"
-            </p>
-            <p>The autograder will check that your program output contains this phrase. Your output can contain additional text before or after the phrase.</p>
-        `;
-
-        super("Random Phrase", `Output '${this.targetPhrase}' using CDC6504`, steps, instructions);
-    }
-
-    checkStep(stepIndex) {
-        switch (stepIndex) {
-            case 0: // Program Execution and Output Check
-                return this.checkExecutionAndOutput();
-            default:
-                return { passed: false, message: "Unknown step" };
-        }
-    }
-
-    async checkExecutionAndOutput() {
-        try {
-            // Get the emulator instance
-            const emulator = window.emulator;
-            if (!emulator) {
-                return { passed: false, message: "Emulator not found. Please refresh the page." };
-            }
-
-            // Clear any existing output
-            emulator.output = '';
-
-            // Reset CPU state but preserve the loaded program
-            emulator.cpu.pc = 0;
-            emulator.cpu.comparison = '=';
-            emulator.errorMessage = null;
-            emulator.cpu.a0 = 0;
-            emulator.cpu.a1 = 0;
-            emulator.cpu.a2 = 0;
-            emulator.cpu.a3 = 0;
-            emulator.cpu.x0 = 0;
-            emulator.cpu.x1 = 0;
-            emulator.cpu.x2 = 0;
-            emulator.cpu.x3 = 0;
-
-            // Start the program
-            emulator.start();
-
-            // Wait for program to complete (with timeout)
-            const timeout = 5000; // 5 seconds
-            const startTime = Date.now();
-            
-            while (Date.now() - startTime < timeout) {
-                const status = emulator.getStatus();
-                
-                if (!status.running) {
-                    // Program has stopped (regardless of how it stopped)
-                    const output = emulator.output.trim();
-                    
-                    // Update the UI to show the output
-                    if (typeof window.updateOutput === 'function') {
-                        window.updateOutput();
-                    }
-                    
-                    // Check if output contains the target phrase
-                    if (output.includes(this.targetPhrase)) {
-                        return { passed: true, message: `✅ Program output contains '${this.targetPhrase}'!` };
-                    } else {
-                        return { passed: false, message: `Expected output to contain '${this.targetPhrase}' but got: "${output}"` };
                     }
                 }
                 
