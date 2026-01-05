@@ -14,6 +14,7 @@ class CDC6504Emulator {
         this.errorMessage = null; // Error message if CPU stopped due to error
         this.narrateEnabled = false; // Enable/disable narration
         this.executionPromise = null; // Promise for async execution loop
+        this.isNarrationMode = false; // Track if currently running in narration mode
     }
 
     // Convert a hex number to speech-friendly format (e.g., 0x03 -> "zero-x-zero-three")
@@ -1395,35 +1396,55 @@ class CDC6504Emulator {
         
         // If narration is enabled, use async execution that waits for speech
         if (this.narrateEnabled) {
+            this.isNarrationMode = true;
             this.runWithNarration();
         } else {
             // Normal clock-based execution when narration is disabled
-            this.clockInterval = setInterval(async () => {
-                if (!this.running) {
-                    this.stop();
-                    return;
-                }
-                const result = await this.executeStep();
-                // If executeStep returns null (halted) or the program has halted, stop execution
-                if (result === null || !this.running) {
-                    this.stop();
-                    return;
-                }
-            }, this.clockSpeed);
+            this.isNarrationMode = false;
+            this.startClockExecution();
         }
     }
 
-    // Run execution with narration - waits for each instruction's speech to complete
-    async runWithNarration() {
-        while (this.running) {
+    // Start clock-based execution
+    startClockExecution(use1Hz = false) {
+        // Use 1Hz (1000ms) when switching from narration mode, otherwise use default clockSpeed
+        const clockRate = use1Hz ? 1000 : this.clockSpeed;
+        this.clockInterval = setInterval(async () => {
+            if (!this.running) {
+                this.stop();
+                return;
+            }
             const result = await this.executeStep();
             // If executeStep returns null (halted) or the program has halted, stop execution
             if (result === null || !this.running) {
                 this.stop();
                 return;
             }
+        }, clockRate);
+    }
+
+    // Run execution with narration - waits for each instruction's speech to complete
+    async runWithNarration() {
+        while (this.running && this.narrateEnabled) {
+            const result = await this.executeStep();
+            // If executeStep returns null (halted) or the program has halted, stop execution
+            if (result === null || !this.running) {
+                this.stop();
+                return;
+            }
+            // If narration was disabled mid-execution, switch to clock mode at 1Hz
+            if (!this.narrateEnabled) {
+                this.isNarrationMode = false;
+                this.startClockExecution(true); // Use 1Hz when switching from narration
+                return;
+            }
             // Small delay between instructions for visual clarity (even when narrating)
             await new Promise(resolve => setTimeout(resolve, 100));
+        }
+        // If we exit the loop and still running, switch to clock mode
+        if (this.running && !this.narrateEnabled) {
+            this.isNarrationMode = false;
+            this.startClockExecution(true); // Use 1Hz when switching from narration
         }
     }
 

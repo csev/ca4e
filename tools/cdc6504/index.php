@@ -711,10 +711,13 @@ BRK`;
                 const narrateToggle = document.getElementById('narrate-toggle');
                 if (narrateToggle) {
                     narrateToggle.addEventListener('change', (e) => {
+                        const wasEnabled = emulator.narrateEnabled;
                         emulator.narrateEnabled = e.target.checked;
-                        // If disabling, stop any ongoing narration
-                        if (!e.target.checked) {
+                        
+                        // If disabling narration mid-execution, switch to clock mode
+                        if (!e.target.checked && wasEnabled && emulator.running) {
                             emulator.stopNarration();
+                            // The runWithNarration loop will detect the change and switch to clock mode
                         }
                     });
                 }
