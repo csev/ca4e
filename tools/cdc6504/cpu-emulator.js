@@ -29,6 +29,9 @@ class CDC6504Emulator {
         this.cpu.instructions = new Array(256).fill(0);
         this.cpu.memory = new Array(256).fill(0);
         
+        // Increment version counter to force input recreation
+        this.cpu.memoryVersion = (this.cpu.memoryVersion || 0) + 1;
+        
         this.running = false;
         this.output = '';
         this.executionTrace = [];
