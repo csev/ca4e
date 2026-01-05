@@ -904,13 +904,13 @@ class ThreeBitLatch extends Gate {
         ctx.textAlign = 'right';
         ctx.fillText('I1', this.x - this.width/2 - 5, this.y - Gate.twoInputSquareVeritcalOffset);
         ctx.fillText('I2', this.x - this.width/2 - 5, this.y);
-        ctx.fillText('I3', this.x - this.width/2 - 5, this.y + Gate.twoInputSquareVeritcalOffset);
+        ctx.fillText('I4', this.x - this.width/2 - 5, this.y + Gate.twoInputSquareVeritcalOffset);
 
         // Draw output labels
         ctx.textAlign = 'left';
         ctx.fillText('O1', this.x + this.width/2 + 5, this.y - Gate.twoInputSquareVeritcalOffset);
         ctx.fillText('O2', this.x + this.width/2 + 5, this.y);
-        ctx.fillText('O3', this.x + this.width/2 + 5, this.y + Gate.twoInputSquareVeritcalOffset);
+        ctx.fillText('O4', this.x + this.width/2 + 5, this.y + Gate.twoInputSquareVeritcalOffset);
 
         // Draw clock label at top
         ctx.textAlign = 'center';
@@ -1026,11 +1026,11 @@ class ThreeBitAdder extends Gate {
             // A inputs (left side)
             { x: this.x - this.width/2, y: this.y - 25, name: 'A1', value: false, connected: false },
             { x: this.x - this.width/2, y: this.y, name: 'A2', value: false, connected: false },
-            { x: this.x - this.width/2, y: this.y + 25, name: 'A3', value: false, connected: false },
+            { x: this.x - this.width/2, y: this.y + 25, name: 'A4', value: false, connected: false },
             // B inputs (right side)
             { x: this.x + this.width/2, y: this.y - 25, name: 'B1', value: false, connected: false },
             { x: this.x + this.width/2, y: this.y, name: 'B2', value: false, connected: false },
-            { x: this.x + this.width/2, y: this.y + 25, name: 'B3', value: false, connected: false }
+            { x: this.x + this.width/2, y: this.y + 25, name: 'B4', value: false, connected: false }
         ];
         
         // Outputs at bottom and top
@@ -1078,12 +1078,12 @@ class ThreeBitAdder extends Gate {
         // A inputs (left)
         ctx.fillText('A1', this.x - this.width/2 - 7, this.y - 25);
         ctx.fillText('A2', this.x - this.width/2 - 7, this.y);
-        ctx.fillText('A3', this.x - this.width/2 - 7, this.y + 25);
+        ctx.fillText('A4', this.x - this.width/2 - 7, this.y + 25);
         
         // B inputs (right)
         ctx.fillText('B1', this.x + this.width/2 + 20, this.y - 25);
         ctx.fillText('B2', this.x + this.width/2 + 20, this.y);
-        ctx.fillText('B3', this.x + this.width/2 + 20, this.y + 25);
+        ctx.fillText('B4', this.x + this.width/2 + 20, this.y + 25);
 
         // Draw output labels
         ctx.textAlign = 'center';

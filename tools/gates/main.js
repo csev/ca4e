@@ -2096,16 +2096,16 @@ Examples:
             }
         } else if (component.type === 'THREE_BIT_ADDER') {
             if (type === 'input') {
-                if (index === 0) return 'A0';
-                if (index === 1) return 'A1';
-                if (index === 2) return 'A2';
-                if (index === 3) return 'B0';
-                if (index === 4) return 'B1';
-                if (index === 5) return 'B2';
+                if (index === 0) return 'A1';
+                if (index === 1) return 'A2';
+                if (index === 2) return 'A4';
+                if (index === 3) return 'B1';
+                if (index === 4) return 'B2';
+                if (index === 5) return 'B4';
             } else {
-                if (index === 0) return 'S0';
-                if (index === 1) return 'S1';
-                if (index === 2) return 'S2';
+                if (index === 0) return 'S1';
+                if (index === 1) return 'S2';
+                if (index === 2) return 'S4';
                 if (index === 3) return 'Cout';
             }
         } else if (component.type === 'CLOCK_PULSE') {
@@ -2143,11 +2143,11 @@ Examples:
                 if (index === 0) return 'CLK';
                 if (index === 1) return 'I1';
                 if (index === 2) return 'I2';
-                if (index === 3) return 'I3';
+                if (index === 3) return 'I4';
             } else {
                 if (index === 0) return 'O1';
                 if (index === 1) return 'O2';
-                if (index === 2) return 'O3';
+                if (index === 2) return 'O4';
             }
         }
         
@@ -2283,16 +2283,20 @@ Examples:
             if (connector === 'i2') return gate.inputNodes[1];
             if (connector === 'i4') return gate.inputNodes[2];
         } else if (gate.type === 'THREE_BIT_ADDER') {
-            // 3-bit Adder: A0, A1, A2, B0, B1, B2 inputs; S0, S1, S2, Cout outputs
-            if (connector === 'a0') return gate.inputNodes[0];
-            if (connector === 'a1') return gate.inputNodes[1];
-            if (connector === 'a2') return gate.inputNodes[2];
-            if (connector === 'b0') return gate.inputNodes[3];
-            if (connector === 'b1') return gate.inputNodes[4];
-            if (connector === 'b2') return gate.inputNodes[5];
-            if (connector === 's0') return gate.outputNodes[0];
-            if (connector === 's1') return gate.outputNodes[1];
-            if (connector === 's2') return gate.outputNodes[2];
+            // 3-bit Adder: A1, A2, A4, B1, B2, B4 inputs; S1, S2, S4, Cout outputs
+            // Support both old (a0/a1/a2) and new (a1/a2/a4) naming for backward compatibility
+            if (connector === 'a1') return gate.inputNodes[0];  // 1's place (new naming)
+            if (connector === 'a2') return gate.inputNodes[1];  // 2's place (new naming)
+            if (connector === 'a4') return gate.inputNodes[2];  // 4's place (new naming)
+            if (connector === 'a0') return gate.inputNodes[0];  // backward compatibility
+            if (connector === 'b1') return gate.inputNodes[3];  // 1's place (new naming)
+            if (connector === 'b2') return gate.inputNodes[4];  // 2's place (new naming)
+            if (connector === 'b4') return gate.inputNodes[5];  // 4's place (new naming)
+            if (connector === 'b0') return gate.inputNodes[3];  // backward compatibility
+            if (connector === 's1') return gate.outputNodes[0];  // 1's place (new naming)
+            if (connector === 's2') return gate.outputNodes[1];  // 2's place (new naming)
+            if (connector === 's4') return gate.outputNodes[2];  // 4's place (new naming)
+            if (connector === 's0') return gate.outputNodes[0];  // backward compatibility
             if (connector === 'cout') return gate.outputNodes[3];
         } else if (gate.type === 'SR_FLIP_FLOP') {
             // SR Flip-Flop: S, R, CLK inputs; Q, Q' outputs
@@ -2318,14 +2322,14 @@ Examples:
             if (connector === 'hi') return gate.outputNodes[0];
             if (connector === 'lo') return gate.outputNodes[1];
         } else if (gate.type === 'THREE_BIT_LATCH') {
-            // 3-bit Latch: CLK, I1, I2, I3 inputs; O1, O2, O3 outputs
+            // 3-bit Latch: CLK, I1, I2, I4 inputs; O1, O2, O4 outputs
             if (connector === 'clk') return gate.inputNodes[0];
             if (connector === 'i1') return gate.inputNodes[1];
             if (connector === 'i2') return gate.inputNodes[2];
-            if (connector === 'i3') return gate.inputNodes[3];
+            if (connector === 'i4') return gate.inputNodes[3];
             if (connector === 'o1') return gate.outputNodes[0];
             if (connector === 'o2') return gate.outputNodes[1];
-            if (connector === 'o3') return gate.outputNodes[2];
+            if (connector === 'o4') return gate.outputNodes[2];
         }
         
         return null;
@@ -2340,7 +2344,7 @@ Examples:
         } else if (gate.type === 'NIXIE_DISPLAY') {
             connectors.push('I1', 'I2', 'I4');
         } else if (gate.type === 'THREE_BIT_ADDER') {
-            connectors.push('A0', 'A1', 'A2', 'B0', 'B1', 'B2', 'S0', 'S1', 'S2', 'Cout');
+            connectors.push('A1', 'A2', 'A4', 'B1', 'B2', 'B4', 'S1', 'S2', 'S4', 'Cout');
         } else if (gate.type === 'SR_FLIP_FLOP') {
             connectors.push('S', 'R', 'CLK', 'Q', 'Q\'');
         } else if (gate.type === 'JK_FLIP_FLOP') {
@@ -2350,7 +2354,7 @@ Examples:
         } else if (gate.type === 'CLOCK_PULSE') {
             connectors.push('Hi', 'Lo');
         } else if (gate.type === 'THREE_BIT_LATCH') {
-            connectors.push('CLK', 'I1', 'I2', 'I3', 'O1', 'O2', 'O3');
+            connectors.push('CLK', 'I1', 'I2', 'I4', 'O1', 'O2', 'O4');
         } else {
             // For simple gates, use numbered connectors
             // Add input connectors

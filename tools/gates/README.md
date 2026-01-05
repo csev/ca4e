@@ -60,7 +60,7 @@ Connects two components using their input/output nodes.
 - **SR Flip-Flop**: `S`, `R`, `CLK` (inputs); `Q`, `Q'` (outputs)
 - **JK Flip-Flop**: `J`, `K`, `CLK` (inputs); `Q`, `Q'` (outputs)
 - **1-bit Latch**: `D`, `CLK` (inputs); `Q` (output)
-- **3-bit Latch**: `CLK`, `I1`, `I2`, `I3` (inputs); `O1`, `O2`, `O3` (outputs)
+- **3-bit Latch**: `CLK`, `I1`, `I2`, `I4` (inputs); `O1`, `O2`, `O4` (outputs)
 
 **Examples:**
 - `connect a output to gate1 input-1` - Connects output of "a" to input-1 of "gate1"
