@@ -25,10 +25,9 @@ class CDC6504Emulator {
         this.errorMessage = null; // Clear any error messages
         
         // Clear instruction and data memory
-        for (let i = 0; i < 256; i++) {
-            this.cpu.instructions[i] = 0;
-            this.cpu.memory[i] = 0;
-        }
+        // Create new array references to force Lit to re-render inputs
+        this.cpu.instructions = new Array(256).fill(0);
+        this.cpu.memory = new Array(256).fill(0);
         
         this.running = false;
         this.output = '';
@@ -46,8 +45,10 @@ class CDC6504Emulator {
     }
 
     // Load assembly program into instruction memory
+    // Note: reset() should be called before loadProgram() to clear memory and registers
     loadProgram(assembly) {
         console.log('Raw assembly input:', assembly);
+        
         // Split into lines, trim whitespace, and filter out empty lines and comment-only lines
         const lines = assembly.split('\n')
             .map(line => line.trim())

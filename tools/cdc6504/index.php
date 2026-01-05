@@ -801,6 +801,9 @@ BRK`;
                     }
                 }
                 
+                // Make updateOutput globally accessible for autograder
+                window.updateOutput = updateOutput;
+                
                 // Initial status update
                 updateStatus();
                 

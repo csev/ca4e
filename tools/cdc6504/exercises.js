@@ -143,6 +143,11 @@ class HelloWorldExercise extends CDC6504Exercise {
                     // Program has stopped (regardless of how it stopped)
                     const output = emulator.output.trim();
                     
+                    // Update the UI to show the output
+                    if (typeof window.updateOutput === 'function') {
+                        window.updateOutput();
+                    }
+                    
                     if (output.includes('Hello, World!') || output.includes('Hello World!')) {
                         return { passed: true, message: "✅ Program successfully outputs 'Hello, World!'!" };
                     } else {
@@ -229,14 +234,8 @@ class Print42Exercise extends CDC6504Exercise {
                 return { passed: false, message: "No program loaded. Please load or assemble a program first." };
             }
 
-            // Start the program by pressing the Start button programmatically
-            const startButton = document.getElementById('start');
-            if (!startButton) {
-                return { passed: false, message: "Start button not found." };
-            }
-
-            // Simulate clicking the start button
-            startButton.click();
+            // Start the program directly
+            emulator.start();
 
             // Wait for the program to complete (with timeout)
             const maxWaitTime = 5000; // 5 seconds
@@ -248,6 +247,11 @@ class Print42Exercise extends CDC6504Exercise {
                 if (!status.running) {
                     // Program has stopped (regardless of how it stopped)
                     const output = status.output ? status.output.trim() : '';
+                    
+                    // Update the UI to show the output
+                    if (typeof window.updateOutput === 'function') {
+                        window.updateOutput();
+                    }
                     
                     if (output.includes('42')) {
                         return { passed: true, message: "✅ Program executed successfully and output '42'!" };

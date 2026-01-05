@@ -673,6 +673,7 @@ export class CDC6504CPU extends LitElement {
                   <ul style="list-style-type: none; font-family: monospace;">
                     ${repeat(
                       this.memory,
+                      (word, index) => `${index}-${word}`, // Key includes value to force input recreation when value changes
                       (word, index) => this.isMobile ? 
                         (index>=0 && index<=31) ? html`
                         <li>0x${this.toHex(index)}: <input type="text" size="4" value="0x${this.toHex(word)}" @input=${this.changeMemory(index)} @blur=${this.blurMemory(index)}></li>
@@ -690,6 +691,7 @@ export class CDC6504CPU extends LitElement {
                   <ul style="list-style-type: none; font-family: monospace;">
                     ${repeat(
                       this.memory,
+                      (word, index) => `${index}-${word}`, // Key includes value to force input recreation when value changes
                       (word, index) =>                         (index>=16 && index<=31) ? html`
                         <li><span class="${this.highlightedMemory.includes(index) ? 'bg-memory-access' : ''}">0x${this.toHex(index)}:</span> <input type="text" size="4" value="0x${this.toHex(word)}" @input=${this.changeMemory(index)} @blur=${this.blurMemory(index)}></li>
                         ` : html``
