@@ -534,15 +534,15 @@
                 },
                 {
                     "type": "video",
-                    "title": "Half Adder Assignment Walkthrough",
-                    "youtube": "eJQlIlypCJo",
-                    "media": "ca4e-media/03-Digital/03-13-Digital-Gates-Half.mov"
-                },
-                {
-                    "type": "video",
                     "title": "Gates Layout Tool Walkthrough",
                     "youtube": "T2FnPn-JrB0",
                     "media": "ca4e-media/03-Digital/03-11-Digital-Gates-Tool.mov"
+                },
+                {
+                    "type": "video",
+                    "title": "Half Adder Assignment Walkthrough",
+                    "youtube": "eJQlIlypCJo",
+                    "media": "ca4e-media/03-Digital/03-13-Digital-Gates-Half.mov"
                 },
                 {
                     "type": "video",
