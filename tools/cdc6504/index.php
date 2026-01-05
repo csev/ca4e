@@ -1004,8 +1004,8 @@ BRK`;
                 currentExercise = new HelloWorldExercise();
             } else if ( '<?php echo $assn; ?>' == 'Print42Exercise') {
                 currentExercise = new Print42Exercise();
-            } else if ( '<?php echo $assn; ?>' == 'RandomPhraseExercise') {
-                currentExercise = new RandomPhraseExercise();
+            } else if ( '<?php echo $assn; ?>' == 'LowercaseConversionExercise') {
+                currentExercise = new LowercaseConversionExercise();
             }
             
             // Override the exercise's submitGradeToLMS method to use the global function

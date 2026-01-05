@@ -352,5 +352,196 @@ class Print42Exercise extends CDC6504Exercise {
     }
 }
 
+/**
+ * Lowercase Conversion Exercise
+ * 
+ * Students need to convert a mixed-case string to lowercase
+ * The original string must remain in the DATA pseudo-op
+ * The output must be lowercase
+ * Must be solved with a loop, not by modifying the DATA pseudo-op
+ */
+class LowercaseConversionExercise extends CDC6504Exercise {
+    constructor() {
+        // Use local variables before super()
+        const originalString = "Hello from WASM!";
+        const expectedOutput = "hello from wasm!";
+        
+        const steps = [
+            { name: "Original String Check", description: "Verify the original mixed-case string is still in your DATA pseudo-op" },
+            { name: "DATA Pseudo-op Check", description: "Verify that you have not modified the DATA pseudo-op to solve the problem" },
+            { name: "Program Execution", description: "Run program and check if it outputs the string in lowercase" }
+        ];
+
+        const instructions = `
+            <h3>Convert String to Lowercase</h3>
+            <p><strong>Your task:</strong> Adapt the upper case example code to convert its string to lower case.</p>
+            <p style="font-size: 16px; font-weight: bold; color: #007bff; padding: 10px; background: #f0f0f0; border-radius: 4px;">
+                Original string: "${originalString}"
+            </p>
+            <p style="font-size: 16px; font-weight: bold; color: #28a745; padding: 10px; background: #f0f0f0; border-radius: 4px;">
+                Expected output: "${expectedOutput}"
+            </p>
+            <p><strong>Important:</strong> You must keep the original string "${originalString}" in your DATA pseudo-op and write a loop to convert each character to lowercase. Do not modify the DATA pseudo-op to solve the problem - it must be solved with a loop like the uppercase sample code!</p>
+            <h4>Requirements:</h4>
+            <ul>
+                <li>Your code must contain the original string "${originalString}" in a DATA pseudo-op</li>
+                <li>You must not modify the DATA pseudo-op to solve the problem</li>
+                <li>You must use a loop to convert characters to lowercase</li>
+                <li>Your program output must contain "${expectedOutput}" (all lowercase)</li>
+            </ul>
+            <h4>Hint:</h4>
+            <p>You'll need to loop through each character and check if it's uppercase (ASCII 65-90). If so, add 32 to convert it to lowercase (ASCII 97-122).</p>
+        `;
+
+        super("Lowercase Conversion", "Convert string to lowercase using CDC6504", steps, instructions);
+        
+        // Now assign to this after super() has been called
+        this.originalString = originalString;
+        this.expectedOutput = expectedOutput;
+    }
+
+    checkStep(stepIndex) {
+        switch (stepIndex) {
+            case 0: // Original String Check
+                return this.checkOriginalString();
+            case 1: // DATA Pseudo-op Check
+                return this.checkDataPseudoOp();
+            case 2: // Program Execution and Output Check
+                return this.checkExecutionAndOutput();
+            default:
+                return { passed: false, message: "Unknown step" };
+        }
+    }
+
+    checkOriginalString() {
+        // Get the assembly code from the editor
+        const assemblyInput = document.getElementById('assembly-input');
+        if (!assemblyInput) {
+            return { passed: false, message: "Cannot find assembly editor. Please refresh the page." };
+        }
+
+        const assemblyCode = assemblyInput.value.trim();
+        
+        if (!assemblyCode) {
+            return { passed: false, message: "No assembly code found. Please enter your program in the assembly editor." };
+        }
+
+        // Check if the original string is present (case-sensitive check)
+        if (!assemblyCode.includes(this.originalString)) {
+            return { 
+                passed: false, 
+                message: `Your code must contain the original string "${this.originalString}" in a DATA pseudo-op. Do not change the input string - write code to convert it to lowercase!` 
+            };
+        }
+
+        return { passed: true, message: `✅ Original string "${this.originalString}" found in code.` };
+    }
+
+    checkDataPseudoOp() {
+        // Get the assembly code from the editor
+        const assemblyInput = document.getElementById('assembly-input');
+        if (!assemblyInput) {
+            return { passed: false, message: "Cannot find assembly editor. Please refresh the page." };
+        }
+
+        const assemblyCode = assemblyInput.value;
+        
+        // Check if DATA pseudo-op contains the original string (not the lowercase version)
+        // Look for DATA followed by the original string
+        const dataPattern = new RegExp(`DATA\\s+['"]${this.originalString.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}['"]`, 'i');
+        
+        if (!dataPattern.test(assemblyCode)) {
+            // Check if they changed the DATA to have lowercase
+            const lowercaseDataPattern = new RegExp(`DATA\\s+['"]${this.expectedOutput.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}['"]`, 'i');
+            if (lowercaseDataPattern.test(assemblyCode)) {
+                return {
+                    passed: false,
+                    message: "You have modified the DATA pseudo-op to contain the lowercase string. You must keep the original mixed-case string in DATA and use a loop to convert it to lowercase!"
+                };
+            }
+            return {
+                passed: false,
+                message: `Your DATA pseudo-op must contain the original string "${this.originalString}". Do not modify the DATA pseudo-op - solve the problem with a loop!`
+            };
+        }
+
+        return { passed: true, message: "✅ DATA pseudo-op contains the original string and has not been modified." };
+    }
+
+    async checkExecutionAndOutput() {
+        try {
+            // Get the emulator instance
+            const emulator = window.emulator;
+            if (!emulator) {
+                return { passed: false, message: "Emulator not found. Please refresh the page." };
+            }
+
+            // Clear any existing output
+            emulator.output = '';
+
+            // Reset CPU state but preserve the loaded program
+            emulator.cpu.pc = 0;
+            emulator.cpu.comparison = '=';
+            emulator.errorMessage = null;
+            emulator.cpu.a0 = 0;
+            emulator.cpu.a1 = 0;
+            emulator.cpu.a2 = 0;
+            emulator.cpu.a3 = 0;
+            emulator.cpu.x0 = 0;
+            emulator.cpu.x1 = 0;
+            emulator.cpu.x2 = 0;
+            emulator.cpu.x3 = 0;
+
+            // Start the program
+            emulator.start();
+
+            // Wait for program to complete (with timeout)
+            const timeout = 5000; // 5 seconds
+            const startTime = Date.now();
+            
+            while (Date.now() - startTime < timeout) {
+                const status = emulator.getStatus();
+                
+                if (!status.running) {
+                    // Program has stopped (regardless of how it stopped)
+                    const output = emulator.output.trim();
+                    
+                    // Update the UI to show the output
+                    if (typeof window.updateOutput === 'function') {
+                        window.updateOutput();
+                    }
+                    
+                    // Check if output contains the expected lowercase string
+                    if (output.includes(this.expectedOutput)) {
+                        return { passed: true, message: `✅ Program correctly outputs "${this.expectedOutput}"!` };
+                    } else {
+                        // Check if they have the original mixed-case string in output (which would be wrong)
+                        if (output.includes(this.originalString)) {
+                            return { 
+                                passed: false, 
+                                message: `Your output still contains the original mixed-case string "${this.originalString}". You need to convert it to lowercase "${this.expectedOutput}".` 
+                            };
+                        }
+                        return { 
+                            passed: false, 
+                            message: `Expected output to contain "${this.expectedOutput}", but got: "${output}"` 
+                        };
+                    }
+                }
+                
+                // Wait a bit before checking again
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+            
+            // Timeout reached
+            emulator.stop(); // Stop the program if it's still running
+            return { passed: false, message: "Program did not complete within 5 seconds. Check for infinite loops." };
+            
+        } catch (error) {
+            return { passed: false, message: `Error during execution: ${error.message}` };
+        }
+    }
+}
+
 // Global variable to hold the current exercise instance
 let currentExercise = null;
