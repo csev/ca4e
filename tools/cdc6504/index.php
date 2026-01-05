@@ -376,6 +376,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         <option value="hello">Load Hello</option>
                         <option value="hello-world">Load Hello World</option>
                         <option value="count-to-five">Load Count to Five</option>
+                        <option value="view-assembly">View Assembly</option>
                         <option value="toggle-assembler">Toggle Assembler</option>
                     </select>
                 </div>
@@ -549,6 +550,18 @@ BRK`;
                         updateStatus();
                         updateTrace();
                         updateOutput();
+                    } else if (value === 'view-assembly') {
+                        // Show the assembly code in read-only modal
+                        const assemblyInput = document.getElementById('assembly-input');
+                        const viewAssemblyContent = document.getElementById('viewAssemblyContent');
+                        
+                        if (assemblyInput && viewAssemblyContent) {
+                            const assemblyCode = assemblyInput.value.trim() || 'No assembly code loaded';
+                            viewAssemblyContent.textContent = assemblyCode;
+                            showViewAssemblyModal();
+                        }
+                        // Reset select box
+                        select.value = '';
                     } else if (value === 'toggle-assembler') {
                         const assemblerSection = document.getElementById('assembler-section');
                         if (assemblerSection.style.display === 'none') {
@@ -556,10 +569,9 @@ BRK`;
                         } else {
                             assemblerSection.style.display = 'none';
                         }
+                        // Reset select box
+                        select.value = '';
                     }
-                    
-                    // Reset select box
-                    select.value = '';
                 });
 
                 document.getElementById('assemble').addEventListener('click', () => {
@@ -856,6 +868,18 @@ BRK`;
     </div>
 <?php endif; ?>
 
+    <!-- View Assembly Modal -->
+    <div id="viewAssemblyModal" class="assignment-modal hidden">
+        <div id="viewAssemblyModalHeader" class="modal-header" title="Drag to move">
+            <span>📄 View Assembly</span>
+            <button class="close-btn" onclick="closeViewAssemblyModal()" title="Close">×</button>
+        </div>
+        <div class="modal-content">
+            <pre id="viewAssemblyContent" style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 12px; font-family: 'Courier New', monospace; font-size: 14px; white-space: pre; max-height: 60vh; overflow-x: auto; overflow-y: auto; margin: 0;">No assembly code loaded</pre>
+        </div>
+        <div id="viewAssemblyResizeHandle" style="position: absolute; bottom: 0; right: 0; width: 20px; height: 20px; cursor: nwse-resize; background: linear-gradient(135deg, transparent 0%, transparent 40%, #007bff 40%, #007bff 45%, transparent 45%, transparent 55%, #007bff 55%, #007bff 60%, transparent 60%);"></div>
+    </div>
+
     <!-- ASCII Chart Modal -->
     <div id="asciiChartModal" class="assignment-modal hidden">
         <div id="asciiChartModalHeader" class="modal-header" title="Drag to move">
@@ -1077,6 +1101,169 @@ BRK`;
             if (!asciiChartModal) return;
             asciiChartModal.classList.add('hidden');
         }
+
+        // View Assembly Modal functionality
+        const viewAssemblyModal = document.getElementById('viewAssemblyModal');
+        const viewAssemblyModalHeader = document.getElementById('viewAssemblyModalHeader');
+
+        function showViewAssemblyModal() {
+            if (!viewAssemblyModal) return;
+            // Set initial dimensions if not already set
+            if (!viewAssemblyModal.style.width) {
+                viewAssemblyModal.style.width = '500px';
+            }
+            if (!viewAssemblyModal.style.height) {
+                viewAssemblyModal.style.height = '400px';
+            }
+            viewAssemblyModal.classList.remove('hidden');
+            centerViewAssemblyModal();
+        }
+
+        function closeViewAssemblyModal() {
+            if (!viewAssemblyModal) return;
+            viewAssemblyModal.classList.add('hidden');
+        }
+
+        function centerViewAssemblyModal(force = false) {
+            if (!viewAssemblyModal) return;
+            if (force || (!viewAssemblyModal.style.left && !viewAssemblyModal.style.top)) {
+                requestAnimationFrame(() => {
+                    if (!viewAssemblyModal) return;
+                    const rect = viewAssemblyModal.getBoundingClientRect();
+                    const modalWidth = rect.width || viewAssemblyModal.offsetWidth || 500;
+                    const modalHeight = rect.height || viewAssemblyModal.offsetHeight || 400;
+                    
+                    const left = (window.innerWidth - modalWidth) / 2;
+                    const top = (window.innerHeight - modalHeight) / 2;
+                    viewAssemblyModal.style.left = Math.max(0, left) + 'px';
+                    viewAssemblyModal.style.top = Math.max(0, top) + 'px';
+                });
+            }
+        }
+
+        // Make View Assembly modal draggable
+        (function enableViewAssemblyDrag() {
+            if (!viewAssemblyModal || !viewAssemblyModalHeader) return;
+            let dragging = false;
+            let startClientX = 0, startClientY = 0;
+            let startLeft = 0, startTop = 0;
+
+            function onPointerDown(e) {
+                dragging = true;
+                startLeft = parseInt(viewAssemblyModal.style.left) || 0;
+                startTop = parseInt(viewAssemblyModal.style.top) || 0;
+                if (e.touches) {
+                    startClientX = e.touches[0].clientX;
+                    startClientY = e.touches[0].clientY;
+                } else {
+                    startClientX = e.clientX;
+                    startClientY = e.clientY;
+                }
+                viewAssemblyModalHeader.style.cursor = 'grabbing';
+                window.addEventListener('mousemove', onPointerMove, { passive: false });
+                window.addEventListener('mouseup', onPointerUp, { passive: false });
+                window.addEventListener('touchmove', onPointerMove, { passive: false });
+                window.addEventListener('touchend', onPointerUp, { passive: false });
+                e.preventDefault();
+            }
+
+            function onPointerMove(e) {
+                if (!dragging) return;
+                let currentClientX, currentClientY;
+                if (e.touches) {
+                    currentClientX = e.touches[0].clientX;
+                    currentClientY = e.touches[0].clientY;
+                } else {
+                    currentClientX = e.clientX;
+                    currentClientY = e.clientY;
+                }
+                const dx = currentClientX - startClientX;
+                const dy = currentClientY - startClientY;
+                const maxLeft = window.innerWidth - viewAssemblyModal.offsetWidth;
+                const maxTop = window.innerHeight - viewAssemblyModal.offsetHeight;
+                const newLeft = Math.max(0, Math.min(maxLeft, startLeft + dx));
+                const newTop = Math.max(0, Math.min(maxTop, startTop + dy));
+                viewAssemblyModal.style.left = newLeft + 'px';
+                viewAssemblyModal.style.top = newTop + 'px';
+            }
+
+            function onPointerUp(e) {
+                dragging = false;
+                viewAssemblyModalHeader.style.cursor = 'grab';
+                window.removeEventListener('mousemove', onPointerMove);
+                window.removeEventListener('mouseup', onPointerUp);
+                window.removeEventListener('touchmove', onPointerMove);
+                window.removeEventListener('touchend', onPointerUp);
+            }
+
+            viewAssemblyModalHeader.addEventListener('mousedown', onPointerDown);
+            viewAssemblyModalHeader.addEventListener('touchstart', onPointerDown, { passive: false });
+        })();
+
+        // Make View Assembly modal resizable
+        (function enableViewAssemblyResize() {
+            const resizeHandle = document.getElementById('viewAssemblyResizeHandle');
+            if (!viewAssemblyModal || !resizeHandle) return;
+            let resizing = false;
+            let startClientX = 0, startClientY = 0;
+            let startWidth = 0, startHeight = 0;
+
+            function onResizeDown(e) {
+                resizing = true;
+                startWidth = viewAssemblyModal.offsetWidth;
+                startHeight = viewAssemblyModal.offsetHeight;
+                if (e.touches) {
+                    startClientX = e.touches[0].clientX;
+                    startClientY = e.touches[0].clientY;
+                } else {
+                    startClientX = e.clientX;
+                    startClientY = e.clientY;
+                }
+                window.addEventListener('mousemove', onResizeMove, { passive: false });
+                window.addEventListener('mouseup', onResizeUp, { passive: false });
+                window.addEventListener('touchmove', onResizeMove, { passive: false });
+                window.addEventListener('touchend', onResizeUp, { passive: false });
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            function onResizeMove(e) {
+                if (!resizing) return;
+                let currentClientX, currentClientY;
+                if (e.touches) {
+                    currentClientX = e.touches[0].clientX;
+                    currentClientY = e.touches[0].clientY;
+                } else {
+                    currentClientX = e.clientX;
+                    currentClientY = e.clientY;
+                }
+                const dx = currentClientX - startClientX;
+                const dy = currentClientY - startClientY;
+                
+                // Calculate new dimensions (minimum 300x200)
+                const minWidth = 300;
+                const minHeight = 200;
+                const maxWidth = window.innerWidth - (parseInt(viewAssemblyModal.style.left) || 0);
+                const maxHeight = window.innerHeight - (parseInt(viewAssemblyModal.style.top) || 0);
+                
+                const newWidth = Math.max(minWidth, Math.min(maxWidth, startWidth + dx));
+                const newHeight = Math.max(minHeight, Math.min(maxHeight, startHeight + dy));
+                
+                viewAssemblyModal.style.width = newWidth + 'px';
+                viewAssemblyModal.style.height = newHeight + 'px';
+            }
+
+            function onResizeUp(e) {
+                resizing = false;
+                window.removeEventListener('mousemove', onResizeMove);
+                window.removeEventListener('mouseup', onResizeUp);
+                window.removeEventListener('touchmove', onResizeMove);
+                window.removeEventListener('touchend', onResizeUp);
+            }
+
+            resizeHandle.addEventListener('mousedown', onResizeDown);
+            resizeHandle.addEventListener('touchstart', onResizeDown, { passive: false });
+        })();
 
         function centerAsciiChartModal(force = false) {
             if (!asciiChartModal) return;
