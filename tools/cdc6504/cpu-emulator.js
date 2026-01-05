@@ -889,6 +889,7 @@ class CDC6504Emulator {
             await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.acc = immediate;
             this.updateStatusFlags(this.cpu.acc);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = `LDA #${immediate}`;
             pcIncrement = 2;
         }
@@ -899,6 +900,7 @@ class CDC6504Emulator {
             await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.x = immediate;
             this.updateStatusFlags(this.cpu.x);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = `LDX #${immediate}`;
             pcIncrement = 2;
         }
@@ -909,6 +911,7 @@ class CDC6504Emulator {
             await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.y = immediate;
             this.updateStatusFlags(this.cpu.y);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = `LDY #${immediate}`;
             pcIncrement = 2;
         }
@@ -921,6 +924,7 @@ class CDC6504Emulator {
             this.cpu.acc = this.cpu.memory[addr];
             this.cpu.highlightMemory(addr);
             this.updateStatusFlags(this.cpu.acc);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = `LDA $${addr.toString(16).padStart(2, '0')}`;
             pcIncrement = 2;
         }
@@ -934,6 +938,7 @@ class CDC6504Emulator {
             this.cpu.acc = this.cpu.memory[effAddr];
             this.cpu.highlightMemory(effAddr);
             this.updateStatusFlags(this.cpu.acc);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = `LDA $${baseAddr.toString(16).padStart(2, '0')},X`;
             pcIncrement = 2;
         }
@@ -947,6 +952,7 @@ class CDC6504Emulator {
             this.cpu.acc = this.cpu.memory[effAddr];
             this.cpu.highlightMemory(effAddr);
             this.updateStatusFlags(this.cpu.acc);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = `LDA $${baseAddr.toString(16).padStart(2, '0')},Y`;
             pcIncrement = 2;
         }
@@ -958,6 +964,7 @@ class CDC6504Emulator {
             this.cpu.x = this.cpu.memory[addr];
             this.cpu.highlightMemory(addr);
             this.updateStatusFlags(this.cpu.x);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = `LDX $${addr.toString(16).padStart(2, '0')}`;
             pcIncrement = 2;
         }
@@ -969,6 +976,7 @@ class CDC6504Emulator {
             this.cpu.y = this.cpu.memory[addr];
             this.cpu.highlightMemory(addr);
             this.updateStatusFlags(this.cpu.y);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = `LDY $${addr.toString(16).padStart(2, '0')}`;
             pcIncrement = 2;
         }
@@ -1097,6 +1105,7 @@ class CDC6504Emulator {
             const sum = this.cpu.acc + immediate;
             this.cpu.acc = sum & 0xFF;
             this.updateStatusFlags(this.cpu.acc);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = `ADC #${immediate}`;
             pcIncrement = 2;
         }
@@ -1108,6 +1117,7 @@ class CDC6504Emulator {
             const diff = this.cpu.acc - immediate;
             this.cpu.acc = diff & 0xFF;
             this.updateStatusFlags(this.cpu.acc);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = `SBC #${immediate}`;
             pcIncrement = 2;
         }
@@ -1122,6 +1132,7 @@ class CDC6504Emulator {
             const sum = this.cpu.acc + value;
             this.cpu.acc = sum & 0xFF;
             this.updateStatusFlags(this.cpu.acc);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = `ADC $${addr.toString(16).padStart(2, '0')}`;
             pcIncrement = 2;
         }
@@ -1135,6 +1146,7 @@ class CDC6504Emulator {
             const diff = this.cpu.acc - value;
             this.cpu.acc = diff & 0xFF;
             this.updateStatusFlags(this.cpu.acc);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = `SBC $${addr.toString(16).padStart(2, '0')}`;
             pcIncrement = 2;
         }
@@ -1145,6 +1157,7 @@ class CDC6504Emulator {
             await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.x = (this.cpu.x + 1) & 0xFF;
             this.updateStatusFlags(this.cpu.x);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = 'INX';
             pcIncrement = 1;
         }
@@ -1154,6 +1167,7 @@ class CDC6504Emulator {
             await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.y = (this.cpu.y + 1) & 0xFF;
             this.updateStatusFlags(this.cpu.y);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = 'INY';
             pcIncrement = 1;
         }
@@ -1163,6 +1177,7 @@ class CDC6504Emulator {
             await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.x = (this.cpu.x - 1) & 0xFF;
             this.updateStatusFlags(this.cpu.x);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = 'DEX';
             pcIncrement = 1;
         }
@@ -1172,6 +1187,7 @@ class CDC6504Emulator {
             await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.y = (this.cpu.y - 1) & 0xFF;
             this.updateStatusFlags(this.cpu.y);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = 'DEY';
             pcIncrement = 1;
         }
@@ -1182,6 +1198,7 @@ class CDC6504Emulator {
             await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.x = this.cpu.acc;
             this.updateStatusFlags(this.cpu.x);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = 'TAX';
             pcIncrement = 1;
         }
@@ -1191,6 +1208,7 @@ class CDC6504Emulator {
             await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.y = this.cpu.acc;
             this.updateStatusFlags(this.cpu.y);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = 'TAY';
             pcIncrement = 1;
         }
@@ -1200,6 +1218,7 @@ class CDC6504Emulator {
             await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.acc = this.cpu.x;
             this.updateStatusFlags(this.cpu.acc);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = 'TXA';
             pcIncrement = 1;
         }
@@ -1209,6 +1228,7 @@ class CDC6504Emulator {
             await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.acc = this.cpu.y;
             this.updateStatusFlags(this.cpu.acc);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = 'TYA';
             pcIncrement = 1;
         }
@@ -1219,6 +1239,7 @@ class CDC6504Emulator {
             await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.x = 0;
             this.updateStatusFlags(this.cpu.x);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = 'CLX';
             pcIncrement = 1;
         }
@@ -1228,6 +1249,7 @@ class CDC6504Emulator {
             await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.y = 0;
             this.updateStatusFlags(this.cpu.y);
+            this.cpu.requestUpdate(); // Update UI immediately
             result = 'CLY';
             pcIncrement = 1;
         }
