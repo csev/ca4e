@@ -518,6 +518,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 <option value="waypointsToggle">👁️ Toggle Waypoints</option>
                 <option value="commandInputToggle">⌨️ Toggle Commands</option>
                 <option value="clear">🧹 Clear All</option>
+                <option value="readCircuit">📖 Read Circuit</option>
                 <!-- Hidden: Voice over option - keeping supporting code intact -->
                 <!-- <option value="screenReaderToggle">🔊 Toggle Screen Reader</option> -->
             </select>

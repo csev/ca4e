@@ -1318,7 +1318,7 @@ class JKFlipFlop extends Gate {
         
         this.outputNodes = [
             { x: x + this.width/2, y: y - Gate.twoInputSquareVeritcalOffset, name: 'Q', value: false, hasOutput: false },    // Q output
-            { x: x + this.width/2, y: y + Gate.twoInputSquareVeritcalOffset, name: 'Q_BAR', value: true, hasOutput: false }  // Q̄ output
+            { x: x + this.width/2, y: y + Gate.twoInputSquareVeritcalOffset, name: 'Q_BAR', value: true, hasOutput: false }  // Qnot output
         ];
 
         this.lastClockState = false; // Track clock transitions
@@ -1350,7 +1350,7 @@ class JKFlipFlop extends Gate {
         // Draw output labels
         ctx.textAlign = 'right';
         ctx.fillText('Q', this.x + this.width/2 - Gate.squareLabelOffset, this.y - 10);
-        ctx.fillText('Q̄', this.x + this.width/2 - Gate.squareLabelOffset, this.y + 20);
+        ctx.fillText('Qnot', this.x + this.width/2 - Gate.squareLabelOffset, this.y + 20);
 
         // Draw nodes with colored outputs
         this.drawNodes(ctx);
@@ -1370,7 +1370,7 @@ class JKFlipFlop extends Gate {
         this.outputNodes.forEach((node, index) => {
             ctx.beginPath();
             ctx.arc(node.x, node.y, 5, 0, Math.PI * 2);
-            // Q output is colored based on state, Q̄ is opposite
+            // Q output is colored based on state, Qnot is opposite
             ctx.fillStyle = (index === 0 ? this.state : !this.state) ? '#4CAF50' : '#f44336';
             ctx.fill();
             ctx.stroke();
@@ -1399,7 +1399,7 @@ class JKFlipFlop extends Gate {
 
         // Update outputs
         this.outputNodes[0].sourceValue = this.state;      // Q
-        this.outputNodes[1].sourceValue = !this.state;     // Q̄
+        this.outputNodes[1].sourceValue = !this.state;     // Qnot
 
         return this.state;
     }
@@ -1416,7 +1416,7 @@ class JKFlipFlop extends Gate {
         // Update output positions
         this.outputNodes[0].x = this.x + this.width/2;   // Q
         this.outputNodes[0].y = this.y - 20;
-        this.outputNodes[1].x = this.x + this.width/2;   // Q̄
+        this.outputNodes[1].x = this.x + this.width/2;   // Qnot
         this.outputNodes[1].y = this.y + 20;
     }
 }
@@ -1527,7 +1527,7 @@ class SRFlipFlop extends Gate {
         this.state = false; // Q output state
         this.label = 'SR';
         
-        // Initialize with 2 inputs (S and R) and 2 outputs (Q and Q̄)
+        // Initialize with 2 inputs (S and R) and 2 outputs (Q and Qnot)
         this.inputNodes = [
             { x: 0, y: 0, sourceValue: undefined, connected: false }, // S input
             { x: 0, y: 0, sourceValue: undefined, connected: false }  // R input
@@ -1535,7 +1535,7 @@ class SRFlipFlop extends Gate {
         
         this.outputNodes = [
             { x: 0, y: 0, sourceValue: undefined, connected: false }, // Q output
-            { x: 0, y: 0, sourceValue: undefined, connected: false }  // Q̄ output
+            { x: 0, y: 0, sourceValue: undefined, connected: false }  // Qnot output
         ];
         
         this.updateConnectionPoints();
@@ -1557,7 +1557,7 @@ class SRFlipFlop extends Gate {
         
         ctx.textAlign = 'right';
         ctx.fillText('Q', this.x + this.width/2 - Gate.squareLabelOffset, this.y - 10);
-        ctx.fillText('Q̄', this.x + this.width/2 - Gate.squareLabelOffset, this.y + 20);
+        ctx.fillText('Qnot', this.x + this.width/2 - Gate.squareLabelOffset, this.y + 20);
         
         // Draw label in center
         ctx.textAlign = 'center';
@@ -1611,7 +1611,7 @@ class SRFlipFlop extends Gate {
         // Set output positions (right side)
         this.outputNodes[0].x = this.x + this.width/2; // Q output
         this.outputNodes[0].y = this.y - Gate.twoInputSquareVeritcalOffset;
-        this.outputNodes[1].x = this.x + this.width/2; // Q̄ output
+        this.outputNodes[1].x = this.x + this.width/2; // Qnot output
         this.outputNodes[1].y = this.y + Gate.twoInputSquareVeritcalOffset;
     }
 }

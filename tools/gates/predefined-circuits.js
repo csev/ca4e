@@ -72,13 +72,13 @@ Object.assign(window.predefinedCircuits, {
             { type: 'INPUT', label: 'R', x: 100, y: 167, state: false },
             { type: 'SR_FLIP_FLOP', label: 'FF1', x: 250, y: 117, state: false },
             { type: 'OUTPUT', label: 'Q', x: 400, y: 67, state: false },
-            { type: 'OUTPUT', label: 'Qbar', x: 400, y: 167, state: false }
+            { type: 'OUTPUT', label: 'Qnot', x: 400, y: 167, state: false }
         ],
         wires: [
             { startGateLabel: 'S', startNodeIndex: 0, endGateLabel: 'FF1', endNodeIndex: 0, waypoints: [] },
             { startGateLabel: 'R', startNodeIndex: 0, endGateLabel: 'FF1', endNodeIndex: 1, waypoints: [] },
             { startGateLabel: 'FF1', startNodeIndex: 0, endGateLabel: 'Q', endNodeIndex: 0, waypoints: [] },
-            { startGateLabel: 'FF1', startNodeIndex: 1, endGateLabel: 'Qbar', endNodeIndex: 0, waypoints: [] }
+            { startGateLabel: 'FF1', startNodeIndex: 1, endGateLabel: 'Qnot', endNodeIndex: 0, waypoints: [] }
         ]
     },
 

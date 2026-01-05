@@ -57,8 +57,8 @@ Connects two components using their input/output nodes.
 - **Nixie Display**: `I1`, `I2`, `I4` (inputs); `O1`, `O2`, `O4` (outptuts)
 - **3-bit Adder**: `A0`, `A1`, `A2`, `B0`, `B1`, `B2` (inputs); `S0`, `S1`, `S2`, `Cout` (outputs)
 - **Clock Pulse**: `Hi`, `Lo` (outputs)
-- **SR Flip-Flop**: `S`, `R`, `CLK` (inputs); `Q`, `Q'` (outputs)
-- **JK Flip-Flop**: `J`, `K`, `CLK` (inputs); `Q`, `Q'` (outputs)
+- **SR Flip-Flop**: `S`, `R`, `CLK` (inputs); `Q`, `Qnot` (outputs)
+- **JK Flip-Flop**: `J`, `K`, `CLK` (inputs); `Q`, `Qnot` (outputs)
 - **1-bit Latch**: `D`, `CLK` (inputs); `Q` (output)
 - **3-bit Latch**: `CLK`, `I1`, `I2`, `I4` (inputs); `O1`, `O2`, `O4` (outputs)
 

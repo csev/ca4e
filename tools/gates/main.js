@@ -90,6 +90,10 @@ class CircuitEditor {
         this.historyIndex = -1;
         this.currentCommand = '';
         
+        // Read circuit state
+        this.isReadingCircuit = false;
+        this.speakingTimeoutId = null;
+        
         // Initialize the circuit hash after all setup is complete
         this.lastCircuitHash = this.computeCircuitHash();
         
@@ -149,6 +153,10 @@ class CircuitEditor {
                     // Show confirmation modal for clear
                     const confirmModal = document.getElementById('confirmModal');
                     confirmModal.style.display = 'block';
+                    break;
+                    
+                case 'readCircuit':
+                    this.readCircuit();
                     break;
                     
                 case 'screenReaderToggle':
@@ -2120,7 +2128,7 @@ Examples:
                 if (index === 2) return 'CLK';
             } else {
                 if (index === 0) return 'Q';
-                if (index === 1) return 'Q\'';
+                if (index === 1) return 'Qnot';
             }
         } else if (component.type === 'JK_FLIP_FLOP') {
             if (type === 'input') {
@@ -2129,7 +2137,7 @@ Examples:
                 if (index === 2) return 'CLK';
             } else {
                 if (index === 0) return 'Q';
-                if (index === 1) return 'Q\'';
+                if (index === 1) return 'Qnot';
             }
         } else if (component.type === 'ONE_BIT_LATCH') {
             if (type === 'input') {
@@ -2162,6 +2170,202 @@ Examples:
                 return 'output'; // INPUT components only have one output
             }
             return component.outputNodes.length === 1 ? 'output' : `output-${index + 1}`;
+        }
+    }
+
+    // Read circuit function - generates commands to recreate the circuit
+    readCircuit() {
+        // Check if speech synthesis is available
+        if (!window.speechSynthesis) {
+            alert("Speech synthesis not available in this browser");
+            return;
+        }
+        
+        // Toggle behavior: if already reading, stop
+        if (this.isReadingCircuit) {
+            console.log("Stopping circuit reading...");
+            window.speechSynthesis.cancel();
+            if (this.speakingTimeoutId) {
+                clearTimeout(this.speakingTimeoutId);
+                this.speakingTimeoutId = null;
+            }
+            this.isReadingCircuit = false;
+            this.updateReadCircuitButton();
+            return;
+        }
+        
+        console.log("=== CIRCUIT ANALYSIS ===");
+        console.log("Reading current circuit...");
+        
+        // Stop any current speech (in case something else was speaking)
+        window.speechSynthesis.cancel();
+        if (this.speakingTimeoutId) {
+            clearTimeout(this.speakingTimeoutId);
+            this.speakingTimeoutId = null;
+        }
+        
+        // Set state to reading
+        this.isReadingCircuit = true;
+        this.updateReadCircuitButton();
+        
+        // Generate commands to recreate the circuit
+        const commands = [];
+        
+        // Map gate types to command component types
+        const componentTypeMap = {
+            'INPUT': 'input',
+            'OUTPUT': 'output',
+            'AND': 'and',
+            'OR': 'or',
+            'NOT': 'not',
+            'NAND': 'nand',
+            'NOR': 'nor',
+            'XOR': 'xor',
+            'FULL_ADDER': 'full-adder',
+            'NIXIE_DISPLAY': 'nixie',
+            'CLOCK_PULSE': 'clock',
+            'SR_FLIP_FLOP': 'sr-flip-flop',
+            'JK_FLIP_FLOP': 'jk-flip-flop',
+            'ONE_BIT_LATCH': '1-bit-latch',
+            'THREE_BIT_LATCH': '3-bit-latch',
+            'THREE_BIT_ADDER': '3-bit-adder'
+        };
+        
+        // Generate place commands for all gates (without locations)
+        this.gates.forEach(gate => {
+            const componentType = componentTypeMap[gate.type] || gate.type.toLowerCase();
+            const command = `place ${componentType} ${gate.label}`;
+            commands.push(command);
+        });
+        
+        // Generate connect commands for all wires
+        this.wires.forEach(wire => {
+            if (!wire.startGate || !wire.endGate) return;
+            
+            // Get connector names
+            const startNodeIndex = wire.startGate.outputNodes.indexOf(wire.start);
+            const endNodeIndex = wire.endGate.inputNodes.indexOf(wire.end);
+            
+            if (startNodeIndex === -1 || endNodeIndex === -1) return;
+            
+            // Get connector names using the correct function signature
+            // Function signature: getConnectorName(component, node, type, index)
+            let startConnector = wire.start && wire.start.label ? wire.start.label : 
+                                 this.getConnectorName(wire.startGate, wire.start, 'output', startNodeIndex);
+            let endConnector = wire.end && wire.end.label ? wire.end.label : 
+                              this.getConnectorName(wire.endGate, wire.end, 'input', endNodeIndex);
+            
+            // Fallback: if getConnectorName returns undefined or 'none', use the index-based name
+            if (!startConnector || startConnector === 'none') {
+                startConnector = wire.startGate.outputNodes.length === 1 ? 'output' : `output-${startNodeIndex + 1}`;
+            }
+            if (!endConnector || endConnector === 'none') {
+                endConnector = wire.endGate.inputNodes.length === 1 ? 'input' : `input-${endNodeIndex + 1}`;
+            }
+            
+            const command = `connect ${wire.startGate.label} ${startConnector} to ${wire.endGate.label} ${endConnector}`;
+            commands.push(command);
+        });
+        
+        // Output the commands in a clean format
+        console.log("=== DRAWING COMMANDS FOR ACCESSIBILITY ===");
+        console.log("Commands to recreate this circuit:");
+        commands.forEach(cmd => {
+            console.log(`  ${cmd}`);
+        });
+        console.log("=== END COMMANDS ===");
+        
+        // Also show a summary
+        console.log("=== CIRCUIT SUMMARY ===");
+        console.log(`Total components: ${this.gates.length}`);
+        console.log(`Total connections: ${this.wires.length}`);
+        
+        // Speak the commands with pauses
+        this.speakCommands(commands);
+    }
+    
+    // Update the read circuit button text
+    updateReadCircuitButton() {
+        const commandsSelector = document.getElementById('commandsSelector');
+        if (commandsSelector) {
+            const readCircuitOption = Array.from(commandsSelector.options).find(opt => opt.value === 'readCircuit');
+            if (readCircuitOption) {
+                readCircuitOption.textContent = this.isReadingCircuit ? '🛑 Stop Reading Circuit' : '📖 Read Circuit';
+            }
+        }
+        // Also update the status message
+        if (this.isReadingCircuit) {
+            this.showMessage('Reading circuit...');
+        }
+    }
+    
+    // Speak commands with pauses
+    speakCommands(commands) {
+        if (commands.length === 0) {
+            this.isReadingCircuit = false;
+            this.updateReadCircuitButton();
+            this.showMessage('No circuit to read');
+            return;
+        }
+        
+        // Create speech queue with pauses
+        const speechQueue = [];
+        commands.forEach(cmd => {
+            speechQueue.push(cmd);
+            speechQueue.push("pause"); // 0.5 second pause after each command
+        });
+        
+        // Speak the queue with pauses
+        let index = 0;
+        const speakNext = () => {
+            // Check if reading was stopped
+            if (!this.isReadingCircuit) {
+                return;
+            }
+            
+            if (index >= speechQueue.length) {
+                // Finished speaking all items, reset the state
+                this.isReadingCircuit = false;
+                this.updateReadCircuitButton();
+                this.speakingTimeoutId = null;
+                this.showMessage('Finished reading circuit');
+                return;
+            }
+            
+            const text = speechQueue[index];
+            index++;
+            if (text === "pause") {
+                // Wait 500ms then continue
+                this.speakingTimeoutId = setTimeout(() => {
+                    speakNext();
+                    this.speakingTimeoutId = null;
+                }, 500);
+            } else {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.8;
+                utterance.pitch = 1.0;
+                utterance.volume = 1.0;
+                
+                // Try to use a good voice
+                const voices = window.speechSynthesis.getVoices();
+                const preferredVoice = voices.find(voice => 
+                    voice.name.includes('Google') || 
+                    voice.name.includes('Samantha') || 
+                    voice.name.includes('Alex')
+                );
+                if (preferredVoice) {
+                    utterance.voice = preferredVoice;
+                }
+                
+                utterance.onend = speakNext;
+                window.speechSynthesis.speak(utterance);
+            }
+        };
+        
+        // Make sure we're still supposed to be reading before starting speech
+        if (this.isReadingCircuit) {
+            speakNext();
+            console.log("Speaking circuit commands with pauses...");
         }
     }
 
@@ -2299,19 +2503,19 @@ Examples:
             if (connector === 's0') return gate.outputNodes[0];  // backward compatibility
             if (connector === 'cout') return gate.outputNodes[3];
         } else if (gate.type === 'SR_FLIP_FLOP') {
-            // SR Flip-Flop: S, R, CLK inputs; Q, Q' outputs
+            // SR Flip-Flop: S, R, CLK inputs; Q, Qnot outputs
             if (connector === 's') return gate.inputNodes[0];
             if (connector === 'r') return gate.inputNodes[1];
             if (connector === 'clk') return gate.inputNodes[2];
             if (connector === 'q') return gate.outputNodes[0];
-            if (connector === 'q\'') return gate.outputNodes[1];
+            if (connector === 'qnot') return gate.outputNodes[1];
         } else if (gate.type === 'JK_FLIP_FLOP') {
-            // JK Flip-Flop: J, K, CLK inputs; Q, Q' outputs
+            // JK Flip-Flop: J, K, CLK inputs; Q, Qnot outputs
             if (connector === 'j') return gate.inputNodes[0];
             if (connector === 'k') return gate.inputNodes[1];
             if (connector === 'clk') return gate.inputNodes[2];
             if (connector === 'q') return gate.outputNodes[0];
-            if (connector === 'q\'') return gate.outputNodes[1];
+            if (connector === 'qnot') return gate.outputNodes[1];
         } else if (gate.type === 'ONE_BIT_LATCH') {
             // 1-bit Latch: D, CLK inputs; Q output
             if (connector === 'd') return gate.inputNodes[0];
@@ -2346,9 +2550,9 @@ Examples:
         } else if (gate.type === 'THREE_BIT_ADDER') {
             connectors.push('A1', 'A2', 'A4', 'B1', 'B2', 'B4', 'S1', 'S2', 'S4', 'Cout');
         } else if (gate.type === 'SR_FLIP_FLOP') {
-            connectors.push('S', 'R', 'CLK', 'Q', 'Q\'');
+            connectors.push('S', 'R', 'CLK', 'Q', 'Qnot');
         } else if (gate.type === 'JK_FLIP_FLOP') {
-            connectors.push('J', 'K', 'CLK', 'Q', 'Q\'');
+            connectors.push('J', 'K', 'CLK', 'Q', 'Qnot');
         } else if (gate.type === 'ONE_BIT_LATCH') {
             connectors.push('D', 'CLK', 'Q');
         } else if (gate.type === 'CLOCK_PULSE') {
