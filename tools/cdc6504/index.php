@@ -886,11 +886,12 @@ BRK`;
             <span>📊 ASCII Chart</span>
             <button class="close-btn" onclick="closeAsciiChartModal()" title="Close">×</button>
         </div>
-        <div class="modal-content">
+        <div id="asciiChartModalContent" class="modal-content" style="padding: 10px; display: flex; justify-content: center; overflow-y: auto; height: calc(100% - 50px);">
             <div id="asciiChartContent">
                 <!-- ASCII chart will be generated here -->
             </div>
         </div>
+        <div id="asciiChartResizeHandle" style="position: absolute; bottom: 0; right: 0; width: 20px; height: 20px; cursor: nwse-resize; background: linear-gradient(135deg, transparent 0%, transparent 40%, #007bff 40%, #007bff 45%, transparent 45%, transparent 55%, #007bff 55%, #007bff 60%, transparent 60%);"></div>
     </div>
 
     <script src="../common/exercise-base.js"></script>
@@ -1082,15 +1083,12 @@ BRK`;
         function showAsciiChartModal() {
             if (!asciiChartModal) return;
             
-            // Adjust modal width based on window size for better responsiveness
-            const windowWidth = window.innerWidth;
-            if (windowWidth < 600) {
-                asciiChartModal.style.width = '95vw';
-            } else if (windowWidth < 900) {
-                asciiChartModal.style.width = '85vw';
-            } else {
-                asciiChartModal.style.width = '700px'; // Wider for larger screens
-            }
+            // Set modal to narrow width to fit table content
+            asciiChartModal.style.width = '380px';
+            asciiChartModal.style.height = '450px';
+            asciiChartModal.style.minWidth = '300px';
+            asciiChartModal.style.minHeight = '300px';
+            asciiChartModal.style.overflow = 'hidden'; // Prevent modal from scrolling
             
             generateAsciiChart();
             asciiChartModal.classList.remove('hidden');
@@ -1307,40 +1305,34 @@ BRK`;
             const content = document.getElementById('asciiChartContent');
             if (!content) return;
             
-            // Calculate responsive number of columns based on window width
-            // Each character cell is approximately 80-100px wide (including gap)
-            const modalWidth = asciiChartModal ? (asciiChartModal.offsetWidth || 500) : window.innerWidth;
-            const availableWidth = Math.min(modalWidth - 40, window.innerWidth - 40); // Account for padding
-            const minCellWidth = 80; // Minimum width per cell
-            const maxColumns = Math.max(3, Math.floor(availableWidth / minCellWidth));
-            const columns = Math.min(maxColumns, 8); // Cap at 8 columns for readability
+            let html = '<table style="border-collapse: collapse; font-family: monospace; font-size: 13px; white-space: nowrap; border: 1px solid #ddd;">';
+            html += '<thead><tr style="background: #007bff; color: white;">';
+            html += '<th style="padding: 6px 8px; text-align: left; border: 1px solid #0056b3;">Char</th>';
+            html += '<th style="padding: 6px 8px; text-align: right; border: 1px solid #0056b3;">Dec</th>';
+            html += '<th style="padding: 6px 8px; text-align: right; border: 1px solid #0056b3;">Hex</th>';
+            html += '<th style="padding: 6px 8px; text-align: left; border: 1px solid #0056b3;">Binary</th>';
+            html += '</tr></thead>';
+            html += '<tbody>';
             
-            let html = '<h3>ASCII Character Chart</h3>';
-            
-            // Printable ASCII characters (32-126) with responsive grid
-            html += `<div style="display: grid; grid-template-columns: repeat(${columns}, 1fr); gap: 8px; font-family: monospace; font-size: 14px; margin: 10px 0;">`;
-            
+            // Printable ASCII characters (32-126)
             for (let i = 32; i <= 126; i++) {
                 const char = String.fromCharCode(i);
                 const hex = i.toString(16).toUpperCase().padStart(2, '0');
                 const binary = i.toString(2).padStart(8, '0');
                 
-                // Special handling for common characters
-                let displayChar = char;
-                if (char === ' ') displayChar = 'SP';
-                else if (char === '\t') displayChar = 'TAB';
-                else if (char === '\n') displayChar = 'LF';
-                else if (char === '\r') displayChar = 'CR';
+                // Special handling for space character
+                const displayChar = char === ' ' ? 'SP' : char;
+                const bgColor = i % 2 === 0 ? '#f9f9f9' : '#fff';
                 
-                html += `<div style="border: 1px solid #ccc; padding: 6px; text-align: center; background: ${i % 2 === 0 ? '#f9f9f9' : '#fff'};">
-                    <div style="font-weight: bold; font-size: 16px;">${displayChar}</div>
-                    <div style="color: #666; font-size: 12px;">${i}</div>
-                    <div style="color: #0066cc; font-size: 12px;">0x${hex}</div>
-                    <div style="color: #cc6600; font-size: 11px;">${binary}</div>
-                </div>`;
+                html += `<tr style="background: ${bgColor};">`;
+                html += `<td style="padding: 4px 8px; border: 1px solid #ddd; font-weight: bold;">${displayChar}</td>`;
+                html += `<td style="padding: 4px 8px; border: 1px solid #ddd; text-align: right;">${i}</td>`;
+                html += `<td style="padding: 4px 8px; border: 1px solid #ddd; text-align: right; color: #0066cc;">0x${hex}</td>`;
+                html += `<td style="padding: 4px 8px; border: 1px solid #ddd; color: #cc6600;">${binary}</td>`;
+                html += '</tr>';
             }
             
-            html += '</div>';
+            html += '</tbody></table>';
             
             content.innerHTML = html;
         }
@@ -1350,7 +1342,7 @@ BRK`;
             asciiChartBtn.addEventListener('click', showAsciiChartModal);
         }
 
-        // Handle window resize to keep ASCII chart modal responsive
+        // Handle window resize to keep ASCII chart modal positioned correctly
         let resizeTimeout;
         window.addEventListener('resize', () => {
             if (!asciiChartModal || asciiChartModal.classList.contains('hidden')) return;
@@ -1358,23 +1350,7 @@ BRK`;
             // Debounce resize events for better performance
             clearTimeout(resizeTimeout);
             resizeTimeout = setTimeout(() => {
-                // Adjust modal width based on new window size
-                const windowWidth = window.innerWidth;
-                if (windowWidth < 600) {
-                    asciiChartModal.style.width = '95vw';
-                } else if (windowWidth < 900) {
-                    asciiChartModal.style.width = '85vw';
-                } else {
-                    asciiChartModal.style.width = '700px';
-                }
-                
                 centerAsciiChartModal(false); // Reposition without forcing center
-                
-                // Regenerate chart with responsive grid based on new modal width
-                const content = document.getElementById('asciiChartContent');
-                if (content) {
-                    generateAsciiChart();
-                }
             }, 150);
         });
 
@@ -1435,6 +1411,71 @@ BRK`;
 
             asciiChartModalHeader.addEventListener('mousedown', onPointerDown);
             asciiChartModalHeader.addEventListener('touchstart', onPointerDown, { passive: false });
+        })();
+
+        // Make ASCII Chart modal resizable
+        (function enableAsciiChartResize() {
+            const resizeHandle = document.getElementById('asciiChartResizeHandle');
+            if (!asciiChartModal || !resizeHandle) return;
+            let resizing = false;
+            let startClientX = 0, startClientY = 0;
+            let startWidth = 0, startHeight = 0;
+
+            function onResizeDown(e) {
+                resizing = true;
+                startWidth = asciiChartModal.offsetWidth;
+                startHeight = asciiChartModal.offsetHeight;
+                if (e.touches) {
+                    startClientX = e.touches[0].clientX;
+                    startClientY = e.touches[0].clientY;
+                } else {
+                    startClientX = e.clientX;
+                    startClientY = e.clientY;
+                }
+                window.addEventListener('mousemove', onResizeMove, { passive: false });
+                window.addEventListener('mouseup', onResizeUp, { passive: false });
+                window.addEventListener('touchmove', onResizeMove, { passive: false });
+                window.addEventListener('touchend', onResizeUp, { passive: false });
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            function onResizeMove(e) {
+                if (!resizing) return;
+                let currentClientX, currentClientY;
+                if (e.touches) {
+                    currentClientX = e.touches[0].clientX;
+                    currentClientY = e.touches[0].clientY;
+                } else {
+                    currentClientX = e.clientX;
+                    currentClientY = e.clientY;
+                }
+                const dx = currentClientX - startClientX;
+                const dy = currentClientY - startClientY;
+                
+                // Calculate new dimensions (minimum 300x300)
+                const minWidth = 300;
+                const minHeight = 300;
+                const maxWidth = window.innerWidth - (parseInt(asciiChartModal.style.left) || 0);
+                const maxHeight = window.innerHeight - (parseInt(asciiChartModal.style.top) || 0);
+                
+                const newWidth = Math.max(minWidth, Math.min(maxWidth, startWidth + dx));
+                const newHeight = Math.max(minHeight, Math.min(maxHeight, startHeight + dy));
+                
+                asciiChartModal.style.width = newWidth + 'px';
+                asciiChartModal.style.height = newHeight + 'px';
+            }
+
+            function onResizeUp(e) {
+                resizing = false;
+                window.removeEventListener('mousemove', onResizeMove);
+                window.removeEventListener('mouseup', onResizeUp);
+                window.removeEventListener('touchmove', onResizeMove);
+                window.removeEventListener('touchend', onResizeUp);
+            }
+
+            resizeHandle.addEventListener('mousedown', onResizeDown);
+            resizeHandle.addEventListener('touchstart', onResizeDown, { passive: false });
         })();
     </script>
 
