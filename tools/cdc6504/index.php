@@ -398,6 +398,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 <div class="printed-output">
                     <span class="printed-label">Printed:</span> <span id="output-text" class="printed-text">No output yet</span>
                 </div>
+                <div style="margin-top: 8px;">
+                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                        <input type="checkbox" id="narrate-toggle" style="cursor: pointer;">
+                        <span style="font-size: 14px;">🔊 Narrate Execution</span>
+                    </label>
+                </div>
             </div>
         </div>
         
@@ -687,8 +693,8 @@ BRK`;
                     updateOutput();
                 });
                 
-                cpuComponent.addEventListener('cpu-step', () => {
-                    const result = emulator.step();
+                cpuComponent.addEventListener('cpu-step', async () => {
+                    const result = await emulator.step();
                     if (result) {
                         console.log('Step result:', result);
                     } else {
@@ -700,6 +706,18 @@ BRK`;
                     updateTrace();
                     updateOutput();
                 });
+                
+                // Set up narrate toggle
+                const narrateToggle = document.getElementById('narrate-toggle');
+                if (narrateToggle) {
+                    narrateToggle.addEventListener('change', (e) => {
+                        emulator.narrateEnabled = e.target.checked;
+                        // If disabling, stop any ongoing narration
+                        if (!e.target.checked) {
+                            emulator.stopNarration();
+                        }
+                    });
+                }
                 
                 cpuComponent.addEventListener('cpu-start', () => {
                     const startButton = getStartButton();

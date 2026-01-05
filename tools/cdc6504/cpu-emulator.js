@@ -12,6 +12,83 @@ class CDC6504Emulator {
         this.output = '';
         this.executionTrace = [];
         this.errorMessage = null; // Error message if CPU stopped due to error
+        this.narrateEnabled = false; // Enable/disable narration
+        this.executionPromise = null; // Promise for async execution loop
+    }
+
+    // Convert a hex number to speech-friendly format (e.g., 0x03 -> "zero-x-zero-three")
+    hexToSpeech(hexValue) {
+        const hexStr = hexValue.toString(16).padStart(2, '0');
+        const digits = hexStr.split('').map(digit => {
+            const digitMap = {
+                '0': 'zero',
+                '1': 'one',
+                '2': 'two',
+                '3': 'three',
+                '4': 'four',
+                '5': 'five',
+                '6': 'six',
+                '7': 'seven',
+                '8': 'eight',
+                '9': 'nine',
+                'a': 'A',
+                'b': 'B',
+                'c': 'C',
+                'd': 'D',
+                'e': 'E',
+                'f': 'F'
+            };
+            return digitMap[digit.toLowerCase()] || digit;
+        });
+        return `zero-x-${digits.join('-')}`;
+    }
+
+    // Narrate an instruction execution (returns Promise that resolves when speech completes)
+    narrateInstruction(pc, instructionText) {
+        if (!this.narrateEnabled) {
+            return Promise.resolve();
+        }
+
+        // Check if speech synthesis is available
+        if (!('speechSynthesis' in window)) {
+            return Promise.resolve();
+        }
+
+        // Create speech text with clearer pronunciation
+        // Format: "P C [hex], [instruction]"
+        const pcHex = this.hexToSpeech(pc);
+        const speechText = `P C ${pcHex}. ${instructionText}`;
+        
+        // Log what we're about to speak for debugging
+        console.log(`[NARRATION] Speaking: "${speechText}"`);
+        
+        return new Promise((resolve, reject) => {
+            const utterance = new SpeechSynthesisUtterance(speechText);
+            utterance.rate = 0.8; // Slower for clarity
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            
+            // Add event listeners to track speech events
+            utterance.onstart = () => {
+                // Speech started
+            };
+            utterance.onend = () => {
+                resolve();
+            };
+            utterance.onerror = (event) => {
+                console.error(`[NARRATION] Error speaking: "${speechText}"`, event);
+                resolve(); // Resolve even on error to continue execution
+            };
+            
+            window.speechSynthesis.speak(utterance);
+        });
+    }
+
+    // Stop any ongoing narration
+    stopNarration() {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
     }
 
     // Reset the CPU to initial state (6502)
@@ -773,7 +850,7 @@ class CDC6504Emulator {
     }
 
     // Execute a single instruction (6502)
-    executeStep() {
+    async executeStep() {
         if (this.running === false) return null;
         
         // Read instruction from instruction memory
@@ -785,8 +862,19 @@ class CDC6504Emulator {
         
         // Decode 6502 opcodes
         if (instruction === 0x00) { // BRK - Break/Halt
+            const instructionText = `Break`;
             console.log(`  Executing: BRK at PC=${this.cpu.pc}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.printString(); // Print automatically on BRK
+            
+            // Narrate the printed output
+            const printedOutput = this.getPrintedOutput();
+            if (printedOutput && printedOutput.trim()) {
+                await this.narrateText(`Printed output: ${printedOutput}`);
+            } else {
+                await this.narrateText(`No printed output`);
+            }
+            
             this.running = false;
             result = 'BRK';
             pcIncrement = 1;
@@ -795,7 +883,9 @@ class CDC6504Emulator {
         // Load instructions (immediate mode)
         else if (instruction === 0xA9) { // LDA # - Load accumulator immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Load Accumulator immediate ${this.hexToSpeech(immediate)}`;
             console.log(`  Executing: LDA #${immediate}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.acc = immediate;
             this.updateStatusFlags(this.cpu.acc);
             result = `LDA #${immediate}`;
@@ -803,7 +893,9 @@ class CDC6504Emulator {
         }
         else if (instruction === 0xA2) { // LDX # - Load X immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Load X register immediate ${this.hexToSpeech(immediate)}`;
             console.log(`  Executing: LDX #${immediate}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.x = immediate;
             this.updateStatusFlags(this.cpu.x);
             result = `LDX #${immediate}`;
@@ -811,7 +903,9 @@ class CDC6504Emulator {
         }
         else if (instruction === 0xA0) { // LDY # - Load Y immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Load Y register immediate ${this.hexToSpeech(immediate)}`;
             console.log(`  Executing: LDY #${immediate}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.y = immediate;
             this.updateStatusFlags(this.cpu.y);
             result = `LDY #${immediate}`;
@@ -820,7 +914,9 @@ class CDC6504Emulator {
         // Load instructions (zero-page addressing)
         else if (instruction === 0xA5) { // LDA $ - Load accumulator from zero-page address
             const addr = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Load Accumulator from address ${addr}`;
             console.log(`  Executing: LDA $${addr.toString(16).padStart(2, '0')}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.acc = this.cpu.memory[addr];
             this.cpu.highlightMemory(addr);
             this.updateStatusFlags(this.cpu.acc);
@@ -831,7 +927,9 @@ class CDC6504Emulator {
             const baseAddr = this.cpu.instructions[this.cpu.pc + 1];
             const xValue = Number(this.cpu.x); // Ensure X is treated as a number
             const effAddr = (baseAddr + xValue) & 0xFF; // Wrap within zero-page
+            const instructionText = `Load Accumulator from address ${baseAddr} indexed with X`;
             console.log(`  Executing: LDA $${baseAddr.toString(16).padStart(2, '0')},X (X=${xValue}, effective: $${effAddr.toString(16).padStart(2, '0')})`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.acc = this.cpu.memory[effAddr];
             this.cpu.highlightMemory(effAddr);
             this.updateStatusFlags(this.cpu.acc);
@@ -842,7 +940,9 @@ class CDC6504Emulator {
             const baseAddr = this.cpu.instructions[this.cpu.pc + 1];
             const yValue = Number(this.cpu.y); // Ensure Y is treated as a number
             const effAddr = (baseAddr + yValue) & 0xFF; // Wrap within zero-page
+            const instructionText = `Load Accumulator from address ${baseAddr} indexed with Y`;
             console.log(`  Executing: LDA $${baseAddr.toString(16).padStart(2, '0')},Y (Y=${yValue}, effective: $${effAddr.toString(16).padStart(2, '0')})`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.acc = this.cpu.memory[effAddr];
             this.cpu.highlightMemory(effAddr);
             this.updateStatusFlags(this.cpu.acc);
@@ -851,7 +951,9 @@ class CDC6504Emulator {
         }
         else if (instruction === 0xA6) { // LDX $ - Load X from zero-page address
             const addr = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Load X register from address ${addr}`;
             console.log(`  Executing: LDX $${addr.toString(16).padStart(2, '0')}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.x = this.cpu.memory[addr];
             this.cpu.highlightMemory(addr);
             this.updateStatusFlags(this.cpu.x);
@@ -860,7 +962,9 @@ class CDC6504Emulator {
         }
         else if (instruction === 0xA4) { // LDY $ - Load Y from zero-page address
             const addr = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Load Y register from address ${addr}`;
             console.log(`  Executing: LDY $${addr.toString(16).padStart(2, '0')}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.y = this.cpu.memory[addr];
             this.cpu.highlightMemory(addr);
             this.updateStatusFlags(this.cpu.y);
@@ -870,7 +974,9 @@ class CDC6504Emulator {
         // Store instructions (zero page)
         else if (instruction === 0x85) { // STA $ - Store accumulator zero page
             const addr = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Store Accumulator to address ${addr}`;
             console.log(`  Executing: STA $${addr.toString(16).padStart(2, '0')}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.memory[addr] = this.cpu.acc;
             this.cpu.highlightMemory(addr);
             result = `STA $${addr.toString(16).padStart(2, '0')}`;
@@ -880,7 +986,9 @@ class CDC6504Emulator {
             const baseAddr = this.cpu.instructions[this.cpu.pc + 1];
             const xValue = Number(this.cpu.x); // Ensure X is treated as a number
             const effAddr = (baseAddr + xValue) & 0xFF; // Wrap within zero-page
+            const instructionText = `Store Accumulator to address ${baseAddr} indexed with X`;
             console.log(`  Executing: STA $${baseAddr.toString(16).padStart(2, '0')},X (X=${xValue}, effective: $${effAddr.toString(16).padStart(2, '0')})`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.memory[effAddr] = this.cpu.acc;
             this.cpu.highlightMemory(effAddr);
             result = `STA $${baseAddr.toString(16).padStart(2, '0')},X`;
@@ -890,7 +998,9 @@ class CDC6504Emulator {
             const baseAddr = this.cpu.instructions[this.cpu.pc + 1];
             const yValue = Number(this.cpu.y); // Ensure Y is treated as a number
             const effAddr = (baseAddr + yValue) & 0xFF; // Wrap within zero-page
+            const instructionText = `Store Accumulator to address ${baseAddr} indexed with Y`;
             console.log(`  Executing: STA $${baseAddr.toString(16).padStart(2, '0')},Y (Y=${yValue}, effective: $${effAddr.toString(16).padStart(2, '0')})`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.memory[effAddr] = this.cpu.acc;
             this.cpu.highlightMemory(effAddr);
             result = `STA $${baseAddr.toString(16).padStart(2, '0')},Y`;
@@ -898,7 +1008,9 @@ class CDC6504Emulator {
         }
         else if (instruction === 0x86) { // STX $ - Store X zero page
             const addr = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Store X register to address ${addr}`;
             console.log(`  Executing: STX $${addr.toString(16).padStart(2, '0')}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.memory[addr] = this.cpu.x;
             this.cpu.highlightMemory(addr);
             result = `STX $${addr.toString(16).padStart(2, '0')}`;
@@ -906,7 +1018,9 @@ class CDC6504Emulator {
         }
         else if (instruction === 0x84) { // STY $ - Store Y zero page
             const addr = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Store Y register to address ${addr}`;
             console.log(`  Executing: STY $${addr.toString(16).padStart(2, '0')}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.memory[addr] = this.cpu.y;
             this.cpu.highlightMemory(addr);
             result = `STY $${addr.toString(16).padStart(2, '0')}`;
@@ -915,7 +1029,9 @@ class CDC6504Emulator {
         // Compare instructions
         else if (instruction === 0xC9) { // CMP # - Compare accumulator immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Compare Accumulator with immediate ${this.hexToSpeech(immediate)}`;
             console.log(`  Executing: CMP #${immediate}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.updateCompareFlags(this.cpu.acc, immediate);
             result = `CMP #${immediate}`;
             pcIncrement = 2;
@@ -923,7 +1039,9 @@ class CDC6504Emulator {
         else if (instruction === 0xC5) { // CMP $ - Compare accumulator with zero-page memory
             const addr = this.cpu.instructions[this.cpu.pc + 1];
             const memValue = this.cpu.memory[addr];
+            const instructionText = `Compare Accumulator with address ${addr}`;
             console.log(`  Executing: CMP $${addr.toString(16).padStart(2, '0')}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.updateCompareFlags(this.cpu.acc, memValue);
             this.cpu.highlightMemory(addr);
             result = `CMP $${addr.toString(16).padStart(2, '0')}`;
@@ -931,7 +1049,9 @@ class CDC6504Emulator {
         }
         else if (instruction === 0xE0) { // CPX # - Compare X register immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Compare X register with immediate ${this.hexToSpeech(immediate)}`;
             console.log(`  Executing: CPX #${immediate}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.updateCompareFlags(this.cpu.x, immediate);
             result = `CPX #${immediate}`;
             pcIncrement = 2;
@@ -939,7 +1059,9 @@ class CDC6504Emulator {
         else if (instruction === 0xE4) { // CPX $ - Compare X register with zero-page memory
             const addr = this.cpu.instructions[this.cpu.pc + 1];
             const memValue = this.cpu.memory[addr];
+            const instructionText = `Compare X register with address ${addr}`;
             console.log(`  Executing: CPX $${addr.toString(16).padStart(2, '0')}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.updateCompareFlags(this.cpu.x, memValue);
             this.cpu.highlightMemory(addr);
             result = `CPX $${addr.toString(16).padStart(2, '0')}`;
@@ -947,7 +1069,9 @@ class CDC6504Emulator {
         }
         else if (instruction === 0xC0) { // CPY # - Compare Y register immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Compare Y register with immediate ${this.hexToSpeech(immediate)}`;
             console.log(`  Executing: CPY #${immediate}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.updateCompareFlags(this.cpu.y, immediate);
             result = `CPY #${immediate}`;
             pcIncrement = 2;
@@ -955,7 +1079,9 @@ class CDC6504Emulator {
         else if (instruction === 0xC4) { // CPY $ - Compare Y register with zero-page memory
             const addr = this.cpu.instructions[this.cpu.pc + 1];
             const memValue = this.cpu.memory[addr];
+            const instructionText = `Compare Y register with address ${addr}`;
             console.log(`  Executing: CPY $${addr.toString(16).padStart(2, '0')}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.updateCompareFlags(this.cpu.y, memValue);
             this.cpu.highlightMemory(addr);
             result = `CPY $${addr.toString(16).padStart(2, '0')}`;
@@ -964,7 +1090,9 @@ class CDC6504Emulator {
         // Arithmetic instructions (immediate mode)
         else if (instruction === 0x69) { // ADC # - Add immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Add with Carry immediate ${this.hexToSpeech(immediate)}`;
             console.log(`  Executing: ADC #${immediate}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             const sum = this.cpu.acc + immediate;
             this.cpu.acc = sum & 0xFF;
             this.updateStatusFlags(this.cpu.acc);
@@ -973,7 +1101,9 @@ class CDC6504Emulator {
         }
         else if (instruction === 0xE9) { // SBC # - Subtract immediate
             const immediate = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Subtract with Carry immediate ${this.hexToSpeech(immediate)}`;
             console.log(`  Executing: SBC #${immediate}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             const diff = this.cpu.acc - immediate;
             this.cpu.acc = diff & 0xFF;
             this.updateStatusFlags(this.cpu.acc);
@@ -984,7 +1114,9 @@ class CDC6504Emulator {
         else if (instruction === 0x65) { // ADC $ - Add from zero-page address
             const addr = this.cpu.instructions[this.cpu.pc + 1];
             const value = this.cpu.memory[addr];
+            const instructionText = `Add with Carry from address ${addr}`;
             console.log(`  Executing: ADC $${addr.toString(16).padStart(2, '0')} (value=${value})`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.highlightMemory(addr);
             const sum = this.cpu.acc + value;
             this.cpu.acc = sum & 0xFF;
@@ -995,7 +1127,9 @@ class CDC6504Emulator {
         else if (instruction === 0xE5) { // SBC $ - Subtract from zero-page address
             const addr = this.cpu.instructions[this.cpu.pc + 1];
             const value = this.cpu.memory[addr];
+            const instructionText = `Subtract with Carry from address ${addr}`;
             console.log(`  Executing: SBC $${addr.toString(16).padStart(2, '0')} (value=${value})`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.highlightMemory(addr);
             const diff = this.cpu.acc - value;
             this.cpu.acc = diff & 0xFF;
@@ -1005,28 +1139,36 @@ class CDC6504Emulator {
         }
         // Increment/Decrement instructions
         else if (instruction === 0xE8) { // INX - Increment X
+            const instructionText = `Increment X register`;
             console.log(`  Executing: INX`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.x = (this.cpu.x + 1) & 0xFF;
             this.updateStatusFlags(this.cpu.x);
             result = 'INX';
             pcIncrement = 1;
         }
         else if (instruction === 0xC8) { // INY - Increment Y
+            const instructionText = `Increment Y register`;
             console.log(`  Executing: INY`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.y = (this.cpu.y + 1) & 0xFF;
             this.updateStatusFlags(this.cpu.y);
             result = 'INY';
             pcIncrement = 1;
         }
         else if (instruction === 0xCA) { // DEX - Decrement X
+            const instructionText = `Decrement X register`;
             console.log(`  Executing: DEX`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.x = (this.cpu.x - 1) & 0xFF;
             this.updateStatusFlags(this.cpu.x);
             result = 'DEX';
             pcIncrement = 1;
         }
         else if (instruction === 0x88) { // DEY - Decrement Y
+            const instructionText = `Decrement Y register`;
             console.log(`  Executing: DEY`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.y = (this.cpu.y - 1) & 0xFF;
             this.updateStatusFlags(this.cpu.y);
             result = 'DEY';
@@ -1034,28 +1176,36 @@ class CDC6504Emulator {
         }
         // Transfer instructions
         else if (instruction === 0xAA) { // TAX - Transfer accumulator to X
+            const instructionText = `Transfer Accumulator to X register`;
             console.log(`  Executing: TAX`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.x = this.cpu.acc;
             this.updateStatusFlags(this.cpu.x);
             result = 'TAX';
             pcIncrement = 1;
         }
         else if (instruction === 0xA8) { // TAY - Transfer accumulator to Y
+            const instructionText = `Transfer Accumulator to Y register`;
             console.log(`  Executing: TAY`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.y = this.cpu.acc;
             this.updateStatusFlags(this.cpu.y);
             result = 'TAY';
             pcIncrement = 1;
         }
         else if (instruction === 0x8A) { // TXA - Transfer X to accumulator
+            const instructionText = `Transfer X register to Accumulator`;
             console.log(`  Executing: TXA`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.acc = this.cpu.x;
             this.updateStatusFlags(this.cpu.acc);
             result = 'TXA';
             pcIncrement = 1;
         }
         else if (instruction === 0x98) { // TYA - Transfer Y to accumulator
+            const instructionText = `Transfer Y register to Accumulator`;
             console.log(`  Executing: TYA`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.acc = this.cpu.y;
             this.updateStatusFlags(this.cpu.acc);
             result = 'TYA';
@@ -1063,14 +1213,18 @@ class CDC6504Emulator {
         }
         // Clear instructions (zero out registers)
         else if (instruction === 0xE2) { // CLX - Clear X register (close to INX 0xE8)
+            const instructionText = `Clear X register`;
             console.log(`  Executing: CLX`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.x = 0;
             this.updateStatusFlags(this.cpu.x);
             result = 'CLX';
             pcIncrement = 1;
         }
         else if (instruction === 0xC2) { // CLY - Clear Y register (close to INY 0xC8)
+            const instructionText = `Clear Y register`;
             console.log(`  Executing: CLY`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.y = 0;
             this.updateStatusFlags(this.cpu.y);
             result = 'CLY';
@@ -1080,9 +1234,13 @@ class CDC6504Emulator {
         else if (instruction === 0xF0) { // BEQ - Branch if equal (zero flag set)
             const offset = this.cpu.instructions[this.cpu.pc + 1];
             const signedOffset = (offset & 0x80) ? (offset - 256) : offset; // Sign extend
+            // Calculate destination address: PC + 2 (after branch instruction) + offset
+            const destAddr = (this.cpu.pc + 2 + signedOffset) & 0xFF;
+            const instructionText = `Branch if Equal address ${this.hexToSpeech(destAddr)}`;
             console.log(`  Executing: BEQ ${signedOffset > 0 ? '+' : ''}${signedOffset}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             if (this.cpu.z) {
-                const newPC = (this.cpu.pc + 2 + signedOffset) & 0xFF;
+                const newPC = destAddr;
                 this.cpu.pc = newPC;
                 pcIncrement = 0; // PC already updated
                 result = `BEQ +${signedOffset} (taken -> PC=${newPC})`;
@@ -1094,9 +1252,13 @@ class CDC6504Emulator {
         else if (instruction === 0x30) { // BMI - Branch if minus (negative flag set)
             const offset = this.cpu.instructions[this.cpu.pc + 1];
             const signedOffset = (offset & 0x80) ? (offset - 256) : offset;
+            // Calculate destination address: PC + 2 (after branch instruction) + offset
+            const destAddr = (this.cpu.pc + 2 + signedOffset) & 0xFF;
+            const instructionText = `Branch if Minus address ${this.hexToSpeech(destAddr)}`;
             console.log(`  Executing: BMI ${signedOffset > 0 ? '+' : ''}${signedOffset}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             if (this.cpu.n) {
-                const newPC = (this.cpu.pc + 2 + signedOffset) & 0xFF;
+                const newPC = destAddr;
                 this.cpu.pc = newPC;
                 pcIncrement = 0;
                 result = `BMI +${signedOffset} (taken -> PC=${newPC})`;
@@ -1108,9 +1270,13 @@ class CDC6504Emulator {
         else if (instruction === 0x10) { // BPL - Branch if plus (negative flag clear)
             const offset = this.cpu.instructions[this.cpu.pc + 1];
             const signedOffset = (offset & 0x80) ? (offset - 256) : offset;
+            // Calculate destination address: PC + 2 (after branch instruction) + offset
+            const destAddr = (this.cpu.pc + 2 + signedOffset) & 0xFF;
+            const instructionText = `Branch if Plus address ${this.hexToSpeech(destAddr)}`;
             console.log(`  Executing: BPL ${signedOffset > 0 ? '+' : ''}${signedOffset}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             if (!this.cpu.n) {
-                const newPC = (this.cpu.pc + 2 + signedOffset) & 0xFF;
+                const newPC = destAddr;
                 this.cpu.pc = newPC;
                 pcIncrement = 0;
                 result = `BPL +${signedOffset} (taken -> PC=${newPC})`;
@@ -1122,7 +1288,9 @@ class CDC6504Emulator {
         // Jump instruction
         else if (instruction === 0x4C) { // JMP - Jump absolute (zero-page for our 256-byte memory)
             const addr = this.cpu.instructions[this.cpu.pc + 1];
+            const instructionText = `Jump to address ${addr}`;
             console.log(`  Executing: JMP $${addr.toString(16).padStart(2, '0')}`);
+            await this.narrateInstruction(this.cpu.pc, instructionText);
             this.cpu.pc = addr;
             pcIncrement = 0; // PC already updated
             result = `JMP $${addr.toString(16).padStart(2, '0')}`;
@@ -1177,6 +1345,46 @@ class CDC6504Emulator {
         console.log('PS Output:', output);
     }
 
+    // Get the most recently printed output (last line added to output)
+    getPrintedOutput() {
+        const lines = this.output.trim().split('\n');
+        return lines.length > 0 ? lines[lines.length - 1] : '';
+    }
+
+    // Narrate arbitrary text (helper method)
+    async narrateText(text) {
+        if (!this.narrateEnabled) {
+            return Promise.resolve();
+        }
+
+        // Check if speech synthesis is available
+        if (!('speechSynthesis' in window)) {
+            return Promise.resolve();
+        }
+
+        console.log(`[NARRATION] Speaking: "${text}"`);
+        
+        return new Promise((resolve, reject) => {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.8; // Slower for clarity
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+            
+            utterance.onstart = () => {
+                // Speech started
+            };
+            utterance.onend = () => {
+                resolve();
+            };
+            utterance.onerror = (event) => {
+                console.error(`[NARRATION] Error speaking: "${text}"`, event);
+                resolve(); // Resolve even on error to continue execution
+            };
+            
+            window.speechSynthesis.speak(utterance);
+        });
+    }
+
 
 
     // Start continuous execution
@@ -1184,18 +1392,39 @@ class CDC6504Emulator {
         if (this.running) return;
         
         this.running = true;
-        this.clockInterval = setInterval(() => {
-            if (!this.running) {
-                this.stop();
-                return;
-            }
-            const result = this.executeStep();
+        
+        // If narration is enabled, use async execution that waits for speech
+        if (this.narrateEnabled) {
+            this.runWithNarration();
+        } else {
+            // Normal clock-based execution when narration is disabled
+            this.clockInterval = setInterval(async () => {
+                if (!this.running) {
+                    this.stop();
+                    return;
+                }
+                const result = await this.executeStep();
+                // If executeStep returns null (halted) or the program has halted, stop execution
+                if (result === null || !this.running) {
+                    this.stop();
+                    return;
+                }
+            }, this.clockSpeed);
+        }
+    }
+
+    // Run execution with narration - waits for each instruction's speech to complete
+    async runWithNarration() {
+        while (this.running) {
+            const result = await this.executeStep();
             // If executeStep returns null (halted) or the program has halted, stop execution
             if (result === null || !this.running) {
                 this.stop();
                 return;
             }
-        }, this.clockSpeed);
+            // Small delay between instructions for visual clarity (even when narrating)
+            await new Promise(resolve => setTimeout(resolve, 100));
+        }
     }
 
     // Stop execution
@@ -1205,14 +1434,16 @@ class CDC6504Emulator {
             clearInterval(this.clockInterval);
             this.clockInterval = null;
         }
+        // Stop any ongoing narration
+        this.stopNarration();
     }
 
     // Execute one step
-    step() {
+    async step() {
         if (!this.running) {
             this.running = true;
         }
-        return this.executeStep();
+        return await this.executeStep();
     }
 
     // Load the Hello program (6502)
