@@ -245,6 +245,15 @@ export class CDC6504CPU extends LitElement {
     this.dispatchEvent(new CustomEvent('cpu-start', { bubbles: true, composed: true }));
   }
 
+  handleNarrateToggle(e) {
+    e.preventDefault();
+    this.dispatchEvent(new CustomEvent('cpu-narrate-toggle', { 
+      bubbles: true, 
+      composed: true,
+      detail: { checked: e.target.checked }
+    }));
+  }
+
   // Update status flags based on value (6502 style)
   updateStatusFlags(value) {
     this.z = (value === 0);
@@ -599,6 +608,12 @@ export class CDC6504CPU extends LitElement {
                         <button id="reset-btn" style="background-color: #007bff; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 13px;" @click=${this.handleReset}>Reset</button>
                         <button id="step-btn" style="background-color: #007bff; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 13px;" @click=${this.handleStep}>Step</button>
                         <button id="start-btn" style="background-color: #007bff; color: white; border: none; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 13px;" @click=${this.handleStart}>Start</button>
+                      </div>
+                      <div style="margin-top: 8px;">
+                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                          <input type="checkbox" id="narrate-toggle" style="cursor: pointer;" @change=${this.handleNarrateToggle}>
+                          <span style="font-size: 14px;">🔊 Narrate Execution</span>
+                        </label>
                       </div>
                     </div>
                   </div>

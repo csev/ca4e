@@ -399,12 +399,6 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 <div class="printed-output">
                     <span class="printed-label">Printed:</span> <span id="output-text" class="printed-text">No output yet</span>
                 </div>
-                <div style="margin-top: 8px;">
-                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                        <input type="checkbox" id="narrate-toggle" style="cursor: pointer;">
-                        <span style="font-size: 14px;">🔊 Narrate Execution</span>
-                    </label>
-                </div>
             </div>
         </div>
         
@@ -728,20 +722,17 @@ BRK`;
                     updateOutput();
                 });
                 
-                // Set up narrate toggle
-                const narrateToggle = document.getElementById('narrate-toggle');
-                if (narrateToggle) {
-                    narrateToggle.addEventListener('change', (e) => {
-                        const wasEnabled = emulator.narrateEnabled;
-                        emulator.narrateEnabled = e.target.checked;
-                        
-                        // If disabling narration mid-execution, switch to clock mode
-                        if (!e.target.checked && wasEnabled && emulator.running) {
-                            emulator.stopNarration();
-                            // The runWithNarration loop will detect the change and switch to clock mode
-                        }
-                    });
-                }
+                // Set up narrate toggle (now handled via web component event)
+                cpuComponent.addEventListener('cpu-narrate-toggle', (e) => {
+                    const wasEnabled = emulator.narrateEnabled;
+                    emulator.narrateEnabled = e.detail.checked;
+                    
+                    // If disabling narration mid-execution, switch to clock mode
+                    if (!e.detail.checked && wasEnabled && emulator.running) {
+                        emulator.stopNarration();
+                        // The runWithNarration loop will detect the change and switch to clock mode
+                    }
+                });
                 
                 cpuComponent.addEventListener('cpu-start', () => {
                     const startButton = getStartButton();
