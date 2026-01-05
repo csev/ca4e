@@ -534,31 +534,31 @@
                 },
                 {
                     "type": "video",
-                    "title": "Gates Layout Tool Walkthrough",
+                    "title": "Gates Layout Tool Walkthrough (6:31)",
                     "youtube": "T2FnPn-JrB0",
                     "media": "ca4e-media/03-Digital/03-11-Digital-Gates-Tool.mov"
                 },
                 {
                     "type": "video",
-                    "title": "Half Adder Assignment Walkthrough",
+                    "title": "Half Adder Assignment Walkthrough (3:30)",
                     "youtube": "eJQlIlypCJo",
                     "media": "ca4e-media/03-Digital/03-13-Digital-Gates-Half.mov"
                 },
                 {
                     "type": "video",
-                    "title": "Autograded AND Gate Assignment Walkthrough",
+                    "title": "Autograded AND Gate Assignment Walkthrough (2:45)",
                     "youtube": "p-kLkObk-18",
                     "media": "ca4e-media/03-Digital/03-12-Digital-Gates-And.mov"
                 },
                 {
                     "type": "video",
-                    "title": "Building a Clocked Counter with Adders and Latches",
+                    "title": "Building a Clocked Counter with Adders and Latches (10:25)",
                     "youtube": "jh5WK3HF3o8",
                     "media": "ca4e-media/03-Digital/03-14-Digital-Gates-Counter.mov"
                 },
                 {
                     "type": "video",
-                    "title": "Building a Tiny CPU: A Two-Instruction Computer Walkthrough",
+                    "title": "Building a Tiny CPU: A Two-Instruction Computer Walkthrough (6:10)",
                     "youtube": "5sF_GXJgjCE",
                     "media": "ca4e-media/03-Digital/03-15-Digital-Gates-Instruction.mov"
                 },
@@ -761,6 +761,36 @@
                     "reference": "CA4E-Lectures/04-CPU/04-08-CPU-History.m4v",
                     "media": "ca4e-media/04-Digital/04-08-CPU-History",
                     "youtube": "bsUKo48cMrA"
+                },
+                {
+                    "type": "header",
+                    "text": "Demonstrations",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Learning CPU Emulation with the CDC6504: Registers, Memory, and Instructions (6:45)",
+                    "youtube": "DZcvrHLaPRU"
+                },
+                {
+                    "type": "video",
+                    "title": "Stepping Through a CPU Emulator: CDC6504 Instructions, Memory, and State (5:16)",
+                    "youtube": "H8M0vBEUDc4"
+                },
+                {
+                    "type": "video",
+                    "title": "Loops in Machine Language: Branching in the CDC6504 Emulator (10:07)",
+                    "youtube": "0aztFBPTEC0"
+                },
+                {
+                    "type": "video",
+                    "title": "Understanding Conditional Branches in a CDC6504 (5:29)",
+                    "youtube": "kj8pox7YWKc"
+                },
+                {
+                    "type": "video",
+                    "title": "String Processing in Machine Language: CDC6504 Uppercase Example (13:15)",
+                    "youtube": "GjQ7bKe5Ln4"
                 },
                 {
                     "type": "header",
