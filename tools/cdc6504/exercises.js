@@ -50,6 +50,23 @@ class CDC6504Exercise extends Exercise {
         if (!result.passed) {
             this.isGrading = false;
             this.hideGradeButton();
+        } else if (stepIndex < this.steps.length - 1) {
+            // Show Next button for intermediate steps
+            this.showNextButton();
+        }
+    }
+
+    /**
+     * Continue to the next step (called by Next button)
+     */
+    async continueGrading() {
+        if (this.currentStep < this.steps.length) {
+            await this.executeStep(this.currentStep);
+            this.currentStep++;
+        }
+        
+        if (this.currentStep >= this.steps.length) {
+            this.completeGrading();
         }
     }
 
