@@ -174,13 +174,82 @@
         </p>
         
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('registers')">Registers</button>
+            <button class="nav-tab active" onclick="showTab('usage')">Usage</button>
+            <button class="nav-tab" onclick="showTab('registers')">Registers</button>
             <button class="nav-tab" onclick="showTab('instructions')">Instructions</button>
             <button class="nav-tab" onclick="showTab('examples')">Examples</button>
             <button class="nav-tab" onclick="showTab('errors')">Error Handling</button>
             <button class="nav-tab" onclick="showTab('labels')">Labels</button>
             <button class="nav-tab" onclick="showTab('references')">References</button>
         </div>
+        
+        <div id="usage" class="tab-content active">
+            <h2>Using the CDC6504 Emulator</h2>
+            
+            <h3>Load Program Dropdown</h3>
+            <p>The "Load Program" dropdown provides quick access to example programs and tools:</p>
+            <ul>
+                <li><strong>Example Programs</strong>: Pre-loaded sample programs demonstrating various instructions and techniques</li>
+                <li><strong>View Assembly</strong>: Opens a read-only modal displaying the current assembly code</li>
+                <li><strong>Toggle Assembler</strong>: Shows/hides the assembly editor for writing and assembling your own programs</li>
+            </ul>
+            
+            <h3>Assembly Editor</h3>
+            <p>To write and assemble your own programs:</p>
+            <ol>
+                <li>Select "Toggle Assembler" from the Load Program dropdown</li>
+                <li>The assembly editor will appear with a textarea for your code</li>
+                <li>Type or paste your assembly code</li>
+                <li>Click the "Assemble" button to compile your program</li>
+                <li>If successful, the program will be loaded into instruction memory and ready to run</li>
+            </ol>
+            
+            <div class="tip">
+                <h4>💡 Assembly Editor Features</h4>
+                <ul>
+                    <li><strong>Save/Load</strong>: Use the Storage dropdown to save your programs for later use</li>
+                    <li><strong>Clear</strong>: Clears the editor to start fresh</li>
+                    <li><strong>Error Messages</strong>: If assembly fails, error messages will help you fix the code</li>
+                </ul>
+            </div>
+            
+            <h3>View Assembly Modal</h3>
+            <p>The "View Assembly" option opens a read-only modal that displays the current assembly code:</p>
+            <ul>
+                <li>Shows the assembly code currently loaded in the textarea</li>
+                <li>Useful for viewing code without editing</li>
+                <li>The modal is draggable and resizable for your convenience</li>
+                <li>Displays "No assembly code loaded" if the editor is empty</li>
+            </ul>
+            
+            <div class="tip">
+                <h4>💡 View Assembly vs. Toggle Assembler</h4>
+                <ul>
+                    <li><strong>View Assembly</strong>: Read-only view in a modal window</li>
+                    <li><strong>Toggle Assembler</strong>: Full editor with assemble, save, and load capabilities</li>
+                </ul>
+            </div>
+            
+            <h3>Running Programs</h3>
+            <p>Once a program is loaded:</p>
+            <ul>
+                <li><strong>Step</strong>: Execute one instruction at a time</li>
+                <li><strong>Start</strong>: Run the program continuously at the configured clock speed</li>
+                <li><strong>Reset</strong>: Reset the CPU to initial state (PC=0, registers cleared)</li>
+            </ul>
+            
+            <h3>Narrate Execution</h3>
+            <p>The emulator includes a "Narrate Execution" feature that speaks each instruction as it executes:</p>
+            <ul>
+                <li>Check the "🔊 Narrate Execution" checkbox to enable</li>
+                <li>When enabled, execution waits for each instruction's narration to complete before continuing</li>
+                <li>Narrates the Program Counter (in hex) and the instruction being executed</li>
+                <li>Can be toggled on/off during execution - seamlessly switches between narration mode and clock-based execution</li>
+                <li>When disabled mid-execution, automatically switches to 1Hz clock rate</li>
+            </ul>
+        </div>
+        
+        <div id="registers" class="tab-content">
         
         <div id="registers" class="tab-content active">
             <h2>Register Reference</h2>

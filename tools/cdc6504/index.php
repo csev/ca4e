@@ -370,12 +370,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         <option value="">-- Load Program --</option>
                         <option value="simple-sample">Load Simple Sample</option>
                         <option value="add-sample">Load Add Sample</option>
-                        <option value="uppercase-sample">Load Uppercase Sample</option>
-                        <option value="uppercase-string-sample">Load Uppercase String Sample</option>
                         <option value="hi">Load Hi</option>
                         <option value="hello">Load Hello</option>
                         <option value="hello-world">Load Hello World</option>
                         <option value="count-to-five">Load Count to Five</option>
+                        <option value="uppercase-sample">Load Uppercase Sample</option>
+                        <option value="uppercase-string-sample">Load Uppercase String Sample</option>
                         <option value="view-assembly">View Assembly</option>
                         <option value="toggle-assembler">Toggle Assembler</option>
                     </select>
