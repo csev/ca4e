@@ -443,14 +443,14 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         emulator.loadHelloProgram();
                         enableStepButton(); // Re-enable step button after loading program
                         // Load assembly code into textarea
-                        document.getElementById('assembly-input').value = `LDA #72        ; 'H'
+                        document.getElementById('assembly-input').value = `LDA #0x48      ; 'H'
 STA $00
-LDA #101       ; 'e'
+LDA #0x65      ; 'e'
 STA $01
-LDA #108       ; 'l'
+LDA #0x6C      ; 'l'
 STA $02
 STA $03        ; 'l' again
-LDA #111       ; 'o'
+LDA #0x6F      ; 'o'
 STA $04
 BRK`;
                         updateViewAssemblyModal();
