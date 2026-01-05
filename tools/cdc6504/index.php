@@ -453,6 +453,7 @@ STA $03        ; 'l' again
 LDA #111       ; 'o'
 STA $04
 BRK`;
+                        updateViewAssemblyModal();
                         updateStatus();
                         updateTrace();
                     } else if (value === 'hello-world') {
@@ -461,6 +462,7 @@ BRK`;
                         // Load assembly code into textarea
                         document.getElementById('assembly-input').value = `BRK
 DATA 'Hello World!'`;
+                        updateViewAssemblyModal();
                         updateStatus();
                         updateTrace();
                         updateOutput();
@@ -479,6 +481,7 @@ BRK            ; Halt`;
                         emulator.loadProgram(countToFive);
                         enableStepButton(); // Re-enable step button after loading program
                         document.getElementById('assembly-input').value = countToFive;
+                        updateViewAssemblyModal();
                         updateStatus();
                         updateTrace();
                         updateOutput();
@@ -490,6 +493,7 @@ BRK            ; Halt`;
 ADC #15        ; Add 15 (result = 42)
 STA $00        ; Store result to memory[0] (42 = '*')
 BRK`;
+                        updateViewAssemblyModal();
                         updateStatus();
                         updateTrace();
                         updateOutput();
@@ -501,6 +505,7 @@ BRK`;
 INX             ; Increment X
 INX             ; Increment X again
 BRK`;
+                        updateViewAssemblyModal();
                         updateStatus();
                         updateTrace();
                         updateOutput();
@@ -514,6 +519,7 @@ BMI skip     ; Branch if minus (less than)
 SBC #0x20    ; Subtract 0x20 to convert to uppercase
 skip:
 BRK`;
+                        updateViewAssemblyModal();
                         updateStatus();
                         updateTrace();
                         updateOutput();
@@ -535,6 +541,7 @@ JMP loop       ; Jump back to loop
 done:
 BRK            ; Stop and print converted string
 DATA 'Hello'`;
+                        updateViewAssemblyModal();
                         updateStatus();
                         updateTrace();
                         updateOutput();
@@ -547,6 +554,7 @@ STA $00
 LDA #'i'
 STA $01
 BRK`;
+                        updateViewAssemblyModal();
                         updateStatus();
                         updateTrace();
                         updateOutput();
@@ -581,6 +589,7 @@ BRK`;
                             emulator.reset();
                             emulator.loadProgram(assemblyCode);
                             enableStepButton(); // Re-enable step button after assembly
+                            updateViewAssemblyModal();
                             updateStatus();
                             updateTrace();
                             updateOutput();
@@ -1104,6 +1113,20 @@ BRK`;
         const viewAssemblyModal = document.getElementById('viewAssemblyModal');
         const viewAssemblyModalHeader = document.getElementById('viewAssemblyModalHeader');
 
+        function updateViewAssemblyModal() {
+            if (!viewAssemblyModal) return;
+            // Only update if modal is currently visible
+            if (viewAssemblyModal.classList.contains('hidden')) return;
+            
+            const assemblyInput = document.getElementById('assembly-input');
+            const viewAssemblyContent = document.getElementById('viewAssemblyContent');
+            
+            if (assemblyInput && viewAssemblyContent) {
+                const assemblyCode = assemblyInput.value.trim() || 'No assembly code loaded';
+                viewAssemblyContent.textContent = assemblyCode;
+            }
+        }
+
         function showViewAssemblyModal() {
             if (!viewAssemblyModal) return;
             // Set initial dimensions if not already set
@@ -1113,6 +1136,8 @@ BRK`;
             if (!viewAssemblyModal.style.height) {
                 viewAssemblyModal.style.height = '400px';
             }
+            // Update content before showing
+            updateViewAssemblyModal();
             viewAssemblyModal.classList.remove('hidden');
             centerViewAssemblyModal();
         }
