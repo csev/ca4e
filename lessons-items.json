@@ -616,27 +616,6 @@
                     "youtube": "a_EjfUA0Fpc"
                 },
                 {
-                    "type": "video",
-                    "title": "Digital Logic: Clocked Circuits and Clock Rates - Part 4 (7:34)",
-                    "reference": "CA4E-Lectures/03-Digital/03-04-Digital-Clock.m4v",
-                    "media": "ca4e-media/03-Digital/03-04-Digital-Clock",
-                    "youtube": "7HeXWTR6kxc"
-                },
-                {
-                    "type": "video",
-                    "title": "Digital: Building a Two Instruction CPU with Gates - Part 5 (9:49)",
-                    "reference": "CA4E-Lectures/03-Digital/03-05-Digital-CPU.m4v",
-                    "media": "ca4e-media/03-Digital/03-05-Digital-CPU",
-                    "youtube": "MmIEGsTQp-Q"
-                },
-                {
-                    "type": "video",
-                    "title": "Digital: CPU Architecture - Storing Code in Memory - Part 6 (4:18)",
-                    "reference": "CA4E-Lectures/03-Digital/03-06-Digital-Code.m4v",
-                    "media": "ca4e-media/03-Digital/03-06-Digital-Code",
-                    "youtube": "fM0-1Hc8vKM"
-                },
-                {
                     "type": "header",
                     "text": "Demonstrations",
                     "level": 2
@@ -658,18 +637,6 @@
                     "title": "Autograded AND Gate Assignment Walkthrough (2:45)",
                     "youtube": "p-kLkObk-18",
                     "media": "ca4e-media/03-Digital/03-12-Digital-Gates-And.mov"
-                },
-                {
-                    "type": "video",
-                    "title": "Building a Clocked Counter with Adders and Latches (10:25)",
-                    "youtube": "jh5WK3HF3o8",
-                    "media": "ca4e-media/03-Digital/03-14-Digital-Gates-Counter.mov"
-                },
-                {
-                    "type": "video",
-                    "title": "Building a Tiny CPU: A Two-Instruction Computer Walkthrough (6:10)",
-                    "youtube": "5sF_GXJgjCE",
-                    "media": "ca4e-media/03-Digital/03-15-Digital-Gates-Instruction.mov"
                 },
                 {
                     "type": "header",
@@ -785,13 +752,121 @@
                 },
                 {
                     "type": "video",
-                    "title": "Office Hours: Mountain View CA",
-                    "youtube": "7UV9GWofRAk"
+                    "title": "Office Hours: New York, NY 25-May-2016",
+                    "youtube": "1SQ4eAeVV4Y"
+                }
+            ]
+        },
+        {
+            "title": "Clocked Circuits",
+            "anchor": "clock",
+            "icon": "fa-clock",
+            "description": "We examine circuits where operations happen under control of a clock that orchestrates the various aspects of a central processing unit.",
+            "items": [
+                {
+                    "type": "header",
+                    "text": "Slides",
+                    "level": 2
+                },
+                {
+                    "type": "slide",
+                    "title": "03-DigitalLogic.pptx",
+                    "href": "{apphome}/{apphome}/lectures/03-DigitalLogic.pptx"
+                },
+                {
+                    "type": "header",
+                    "text": "Videos",
+                    "level": 2
                 },
                 {
                     "type": "video",
-                    "title": "Office Hours: New York, NY 25-May-2016",
-                    "youtube": "1SQ4eAeVV4Y"
+                    "title": "Digital Logic: Clocked Circuits and Clock Rates - Part 4 (7:34)",
+                    "reference": "CA4E-Lectures/03-Digital/03-04-Digital-Clock.m4v",
+                    "media": "ca4e-media/03-Digital/03-04-Digital-Clock",
+                    "youtube": "7HeXWTR6kxc"
+                },
+                {
+                    "type": "video",
+                    "title": "Digital: Building a Two Instruction CPU with Gates - Part 5 (9:49)",
+                    "reference": "CA4E-Lectures/03-Digital/03-05-Digital-CPU.m4v",
+                    "media": "ca4e-media/03-Digital/03-05-Digital-CPU",
+                    "youtube": "MmIEGsTQp-Q"
+                },
+                {
+                    "type": "video",
+                    "title": "Digital: CPU Architecture - Storing Code in Memory - Part 6 (4:18)",
+                    "reference": "CA4E-Lectures/03-Digital/03-06-Digital-Code.m4v",
+                    "media": "ca4e-media/03-Digital/03-06-Digital-Code",
+                    "youtube": "fM0-1Hc8vKM"
+                },
+                {
+                    "type": "header",
+                    "text": "Demonstrations",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Building a Clocked Counter with Adders and Latches (10:25)",
+                    "youtube": "jh5WK3HF3o8",
+                    "media": "ca4e-media/03-Digital/03-14-Digital-Gates-Counter.mov"
+                },
+                {
+                    "type": "video",
+                    "title": "Building a Tiny CPU: A Two-Instruction Computer Walkthrough (6:10)",
+                    "youtube": "5sF_GXJgjCE",
+                    "media": "ca4e-media/03-Digital/03-15-Digital-Gates-Instruction.mov"
+                },
+                {
+                    "type": "header",
+                    "text": "Discussions",
+                    "level": 2
+                },
+                {
+                    "type": "discussion",
+                    "title": "CLocked Circuits",
+                    "launch": "{apphome}/mod/tdiscus/",
+                    "resource_link_id": "discuss_03_clocked"
+                },
+                {
+                    "type": "header",
+                    "text": "Assessments",
+                    "level": 2
+                },
+                {
+                    "type": "lti",
+                    "title": "Quiz: Gates and Digital Logic",
+                    "launch": "{apphome}/mod/gift/?quiz=03-DigitalLogic.txt",
+                    "resource_link_id": "ca4e_03_clock_quiz",
+                    "custom": [
+                        {
+                            "key": "tries",
+                            "value": "3"
+                        },
+                        {
+                            "key": "delay",
+                            "value": "601"
+                        }
+                    ]
+                },
+                {
+                    "type": "header",
+                    "text": "Bonus",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": " IEEE Computing Conversations: Massimo Banzi: Building Arduino ",
+                    "youtube": "0VAbvQ2Ti50"
+                },
+                {
+                    "type": "video",
+                    "title": "IEEE Computing Conversations:  Andrew S. Tanenbaum: The Impact of MINIX ",
+                    "youtube": "86_BkFsb4e"
+                },
+                {
+                    "type": "video",
+                    "title": "Office Hours: Mountain View CA",
+                    "youtube": "7UV9GWofRAk"
                 }
             ]
         },
