@@ -599,6 +599,7 @@
                     "title": "Building an And Gate",
                     "launch": "{apphome}/tools/gates/",
                     "resource_link_id": "ca4e_03_and",
+                    "target": "_blank",
                     "custom": [
                         {
                             "key": "exercise",
@@ -862,6 +863,7 @@
                     "title": "CDC6504: Print out '42'",
                     "launch": "{apphome}/tools/cdc6504/",
                     "resource_link_id": "ca4e_04_cdc_42",
+                    "target": "_blank",
                     "custom": [
                         {
                             "key": "exercise",
@@ -874,6 +876,7 @@
                     "title": "CDC 6504: Print a Random Phrase",
                     "launch": "{apphome}/tools/cdc6504/",
                     "resource_link_id": "ca4e_04_cdc_phrase",
+                    "target": "_blank",
                     "custom": [
                         {
                             "key": "exercise",
@@ -886,6 +889,7 @@
                     "title": "WASM: Print Out 42",
                     "launch": "{apphome}/tools/wasm/",
                     "resource_link_id": "ca4e_04_wasm_42",
+                    "target": "_blank",
                     "custom": [
                         {
                             "key": "exercise",
@@ -898,6 +902,7 @@
                     "title": "WASM: Print Random Phrase",
                     "launch": "{apphome}/tools/wasm/",
                     "resource_link_id": "ca4e_04_wasm_phrase",
+                    "target": "_blank",
                     "custom": [
                         {
                             "key": "exercise",
@@ -910,6 +915,7 @@
                     "title": "WASM: Lower Case a String",
                     "launch": "{apphome}/tools/wasm/",
                     "resource_link_id": "ca4e_04_wasm_lower",
+                    "target": "_blank",
                     "custom": [
                         {
                             "key": "exercise",
