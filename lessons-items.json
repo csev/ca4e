@@ -84,21 +84,6 @@
                 },
                 {
                     "type": "header",
-                    "text": "References",
-                    "level": 2
-                },
-                {
-                    "type": "reference",
-                    "title": "Film: Popular Mechanics - How Mechanical Computers Work",
-                    "href": "https://www.popularmechanics.com/technology/a19668/1953-video-how-mechanical-computers-work/"
-                },
-                {
-                    "type": "reference",
-                    "title": "Mark I Fire Control Computer - Electromechanical Analog Computer",
-                    "href": "https://en.wikipedia.org/wiki/Mark_I_Fire_Control_Computer"
-                },
-                {
-                    "type": "header",
                     "text": "Assessments",
                     "level": 2
                 },
@@ -175,6 +160,21 @@
                             "value": 172800
                         }
                     ]
+                },
+                {
+                    "type": "header",
+                    "text": "References",
+                    "level": 2
+                },
+                {
+                    "type": "reference",
+                    "title": "Film: Popular Mechanics - How Mechanical Computers Work",
+                    "href": "https://www.popularmechanics.com/technology/a19668/1953-video-how-mechanical-computers-work/"
+                },
+                {
+                    "type": "reference",
+                    "title": "Mark I Fire Control Computer - Electromechanical Analog Computer",
+                    "href": "https://en.wikipedia.org/wiki/Mark_I_Fire_Control_Computer"
                 },
                 {
                     "type": "header",
@@ -274,41 +274,6 @@
                 },
                 {
                     "type": "header",
-                    "text": "References",
-                    "level": 2
-                },
-                {
-                    "type": "video",
-                    "title": " AT&T Archives: A Modern Aladdin's Lamp, about vacuum tubes,1940 ",
-                    "youtube": "_-JzxX75oYc"
-                },
-                {
-                    "type": "video",
-                    "title": "AT&T Archives: Genesis of the Transistor",
-                    "youtube": "WiQvGRjrLnU"
-                },
-                {
-                    "type": "reference",
-                    "title": "IEEE Spectrum: The Silicon Dioxide Solution",
-                    "href": "https://spectrum.ieee.org/the-silicon-dioxide-solution"
-                },
-                {
-                    "type": "video",
-                    "title": " The Transistor: a 1953 documentary, anticipating its coming impact on technology ",
-                    "youtube": "V9xUQWo4vN0"
-                },
-                {
-                    "type": "video",
-                    "title": "AT&T Archives: Microworld",
-                    "youtube": "q2kd1B0Ybto"
-                },
-                {
-                    "type": "video",
-                    "title": "YouTube: I Built A Dice Without Writing a Single Line of Code",
-                    "youtube": "cZxBj7fzkkk"
-                },
-                {
-                    "type": "header",
                     "text": "Assessments",
                     "level": 2
                 },
@@ -366,6 +331,41 @@
                             "value": "CmosNorGateExercise"
                         }
                     ]
+                },
+                {
+                    "type": "header",
+                    "text": "References",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": " AT&T Archives: A Modern Aladdin's Lamp, about vacuum tubes,1940 ",
+                    "youtube": "_-JzxX75oYc"
+                },
+                {
+                    "type": "video",
+                    "title": "AT&T Archives: Genesis of the Transistor",
+                    "youtube": "WiQvGRjrLnU"
+                },
+                {
+                    "type": "reference",
+                    "title": "IEEE Spectrum: The Silicon Dioxide Solution",
+                    "href": "https://spectrum.ieee.org/the-silicon-dioxide-solution"
+                },
+                {
+                    "type": "video",
+                    "title": " The Transistor: a 1953 documentary, anticipating its coming impact on technology ",
+                    "youtube": "V9xUQWo4vN0"
+                },
+                {
+                    "type": "video",
+                    "title": "AT&T Archives: Microworld",
+                    "youtube": "q2kd1B0Ybto"
+                },
+                {
+                    "type": "video",
+                    "title": "YouTube: I Built A Dice Without Writing a Single Line of Code",
+                    "youtube": "cZxBj7fzkkk"
                 },
                 {
                     "type": "header",
@@ -464,41 +464,6 @@
                 },
                 {
                     "type": "header",
-                    "text": "References",
-                    "level": 2
-                },
-                {
-                    "type": "video",
-                    "title": " AT&T Archives: A Modern Aladdin's Lamp, about vacuum tubes,1940 ",
-                    "youtube": "_-JzxX75oYc"
-                },
-                {
-                    "type": "video",
-                    "title": "AT&T Archives: Genesis of the Transistor",
-                    "youtube": "WiQvGRjrLnU"
-                },
-                {
-                    "type": "reference",
-                    "title": "IEEE Spectrum: The Silicon Dioxide Solution",
-                    "href": "https://spectrum.ieee.org/the-silicon-dioxide-solution"
-                },
-                {
-                    "type": "video",
-                    "title": " The Transistor: a 1953 documentary, anticipating its coming impact on technology ",
-                    "youtube": "V9xUQWo4vN0"
-                },
-                {
-                    "type": "video",
-                    "title": "AT&T Archives: Microworld",
-                    "youtube": "q2kd1B0Ybto"
-                },
-                {
-                    "type": "video",
-                    "title": "YouTube: I Built A Dice Without Writing a Single Line of Code",
-                    "youtube": "cZxBj7fzkkk"
-                },
-                {
-                    "type": "header",
                     "text": "Assessments",
                     "level": 2
                 },
@@ -540,6 +505,41 @@
                             "value": "NorGateExercise"
                         }
                     ]
+                },
+                {
+                    "type": "header",
+                    "text": "References",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": " AT&T Archives: A Modern Aladdin's Lamp, about vacuum tubes,1940 ",
+                    "youtube": "_-JzxX75oYc"
+                },
+                {
+                    "type": "video",
+                    "title": "AT&T Archives: Genesis of the Transistor",
+                    "youtube": "WiQvGRjrLnU"
+                },
+                {
+                    "type": "reference",
+                    "title": "IEEE Spectrum: The Silicon Dioxide Solution",
+                    "href": "https://spectrum.ieee.org/the-silicon-dioxide-solution"
+                },
+                {
+                    "type": "video",
+                    "title": " The Transistor: a 1953 documentary, anticipating its coming impact on technology ",
+                    "youtube": "V9xUQWo4vN0"
+                },
+                {
+                    "type": "video",
+                    "title": "AT&T Archives: Microworld",
+                    "youtube": "q2kd1B0Ybto"
+                },
+                {
+                    "type": "video",
+                    "title": "YouTube: I Built A Dice Without Writing a Single Line of Code",
+                    "youtube": "cZxBj7fzkkk"
                 },
                 {
                     "type": "header",
@@ -976,26 +976,6 @@
                 },
                 {
                     "type": "header",
-                    "text": "References",
-                    "level": 2
-                },
-                {
-                    "type": "video",
-                    "title": "ARM Instruction Set design history with Sophie Wilson)",
-                    "youtube": "QqxThgLTLyk"
-                },
-                {
-                    "type": "video",
-                    "title": " The potted history of ARM",
-                    "youtube": "t59EtDxpYmM"
-                },
-                {
-                    "type": "video",
-                    "title": "Fun: The 6502 Rotate Right Myth",
-                    "youtube": "Uk_QC1eU0Fg"
-                },
-                {
-                    "type": "header",
                     "text": "Assessments",
                     "level": 2
                 },
@@ -1066,6 +1046,26 @@
                             "value": "LowercaseConversionExercise"
                         }
                     ]
+                },
+                {
+                    "type": "header",
+                    "text": "References",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "ARM Instruction Set design history with Sophie Wilson)",
+                    "youtube": "QqxThgLTLyk"
+                },
+                {
+                    "type": "video",
+                    "title": " The potted history of ARM",
+                    "youtube": "t59EtDxpYmM"
+                },
+                {
+                    "type": "video",
+                    "title": "Fun: The 6502 Rotate Right Myth",
+                    "youtube": "Uk_QC1eU0Fg"
                 },
                 {
                     "type": "header",
@@ -1142,26 +1142,6 @@
                 },
                 {
                     "type": "header",
-                    "text": "References",
-                    "level": 2
-                },
-                {
-                    "type": "video",
-                    "title": "ARM Instruction Set design history with Sophie Wilson)",
-                    "youtube": "QqxThgLTLyk"
-                },
-                {
-                    "type": "video",
-                    "title": " The potted history of ARM",
-                    "youtube": "t59EtDxpYmM"
-                },
-                {
-                    "type": "video",
-                    "title": "Fun: The 6502 Rotate Right Myth",
-                    "youtube": "Uk_QC1eU0Fg"
-                },
-                {
-                    "type": "header",
                     "text": "Assessments",
                     "level": 2
                 },
@@ -1219,6 +1199,26 @@
                             "value": "LowercaseConversionExercise"
                         }
                     ]
+                },
+                {
+                    "type": "header",
+                    "text": "References",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "ARM Instruction Set design history with Sophie Wilson)",
+                    "youtube": "QqxThgLTLyk"
+                },
+                {
+                    "type": "video",
+                    "title": " The potted history of ARM",
+                    "youtube": "t59EtDxpYmM"
+                },
+                {
+                    "type": "video",
+                    "title": "Fun: The 6502 Rotate Right Myth",
+                    "youtube": "Uk_QC1eU0Fg"
                 },
                 {
                     "type": "header",
