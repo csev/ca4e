@@ -209,8 +209,8 @@
             ]
         },
         {
-            "title": "Solid State Computing",
-            "anchor": "solid",
+            "title": "Innovating with Transistors",
+            "anchor": "transistors",
             "icon": "fa-flask",
             "description": "We look how the invention of the transistor changed everything.",
             "items": [
@@ -251,20 +251,6 @@
                     "youtube": "-qNm_MewmzM"
                 },
                 {
-                    "type": "video",
-                    "title": "Solid State: From Transistors to Wafers - Part 4 (9:18)",
-                    "reference": "CA4E-Lectures/02-SolidState/02-04-SolidState-Gates.m4v",
-                    "media": "ca4e-media/02-SolidState/02-04-SolidState-Gates",
-                    "youtube": "z4U3el4fgXo"
-                },
-                {
-                    "type": "video",
-                    "title": "Solid State: VLSI Design Layout - Part 5 (10:46)",
-                    "reference": "CA4E-Lectures/02-SolidState/02-05-SolidState-VLSI.m4v",
-                    "media": "ca4e-media/02-SolidState/02-05-SolidState-VLSI",
-                    "youtube": "9IoC-xn2bro"
-                },
-                {
                     "type": "header",
                     "text": "Demonstrations",
                     "level": 2
@@ -276,18 +262,6 @@
                     "media": "ca4e-media/02-SolidStat/02-10-SolidState-CMOS-Nor.mov"
                 },
                 {
-                    "type": "video",
-                    "title": "VLSI Not Gate Layout (9:37)",
-                    "youtube": "ryVUYyCXsaM",
-                    "media": "ca4e-media/02-Solid-State/02-11-SolidState-VLSI-Not.mov"
-                },
-                {
-                    "type": "video",
-                    "title": "VLSI NAND Gate Layout | Computer Architecture for Everybody (9:02)",
-                    "youtube": "IYf7Wtrf8Ig",
-                    "media": "ca4e-media/02-SolidState/02-12-SolidState-VLSI-Nand.mov"
-                },
-                {
                     "type": "header",
                     "text": "Discussions",
                     "level": 2
@@ -296,7 +270,7 @@
                     "type": "discussion",
                     "title": "Transistors and Solid State Computing",
                     "launch": "{apphome}/mod/tdiscus/",
-                    "resource_link_id": "discuss_02_solid"
+                    "resource_link_id": "discuss_02_transistors"
                 },
                 {
                     "type": "header",
@@ -392,6 +366,141 @@
                             "value": "CmosNorGateExercise"
                         }
                     ]
+                },
+                {
+                    "type": "header",
+                    "text": "Bonus",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": " IEEE Computing Conversations: Gordon Bell on the Building Blocks of Computing",
+                    "youtube": "8skBtQS-VVE"
+                },
+                {
+                    "type": "video",
+                    "title": "IEEE Computing Conversations: The Living Computer Museum ",
+                    "youtube": "ZHU4nzIsaIM"
+                },
+                {
+                    "type": "video",
+                    "title": " IEEE Computing Conversations: Resurrecting the CDC 6500 Supercomputer video ",
+                    "youtube": "wDc1630krls"
+                },
+                {
+                    "type": "video",
+                    "title": "Office Hours: Melbourne Australia",
+                    "youtube": "GD9RSoVDKkw"
+                },
+                {
+                    "type": "video",
+                    "title": "Office Hours: Pittsburgh, PA, 15-May-2024",
+                    "youtube": "YZjb5kZUClQ"
+                }
+            ]
+        },
+        {
+            "title": "Very Large Scale Integration (VLSI)",
+            "anchor": "vlsi",
+            "icon": "fa-flask",
+            "description": "We learn how dramatic improvements in manufacture and miniturization of tansistors through very large scale integration (VLSI) created the high densite chips we still use today.",
+            "items": [
+                {
+                    "type": "header",
+                    "text": "Slides",
+                    "level": 2
+                },
+                {
+                    "type": "slide",
+                    "title": "02-SolidState.pptx",
+                    "href": "{apphome}/{apphome}/lectures/02-SolidState.pptx"
+                },
+                {
+                    "type": "header",
+                    "text": "Videos",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Solid State: From Transistors to Wafers - Part 4 (9:18)",
+                    "reference": "CA4E-Lectures/02-SolidState/02-04-SolidState-Gates.m4v",
+                    "media": "ca4e-media/02-SolidState/02-04-SolidState-Gates",
+                    "youtube": "z4U3el4fgXo"
+                },
+                {
+                    "type": "video",
+                    "title": "Solid State: VLSI Design Layout - Part 5 (10:46)",
+                    "reference": "CA4E-Lectures/02-SolidState/02-05-SolidState-VLSI.m4v",
+                    "media": "ca4e-media/02-SolidState/02-05-SolidState-VLSI",
+                    "youtube": "9IoC-xn2bro"
+                },
+                {
+                    "type": "header",
+                    "text": "Demonstrations",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "VLSI Not Gate Layout (9:37)",
+                    "youtube": "ryVUYyCXsaM",
+                    "media": "ca4e-media/02-Solid-State/02-11-SolidState-VLSI-Not.mov"
+                },
+                {
+                    "type": "video",
+                    "title": "VLSI NAND Gate Layout | Computer Architecture for Everybody (9:02)",
+                    "youtube": "IYf7Wtrf8Ig",
+                    "media": "ca4e-media/02-SolidState/02-12-SolidState-VLSI-Nand.mov"
+                },
+                {
+                    "type": "header",
+                    "text": "Discussions",
+                    "level": 2
+                },
+                {
+                    "type": "discussion",
+                    "title": "VLSI Design",
+                    "launch": "{apphome}/mod/tdiscus/",
+                    "resource_link_id": "discuss_02_vlsi"
+                },
+                {
+                    "type": "header",
+                    "text": "References",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": " AT&T Archives: A Modern Aladdin's Lamp, about vacuum tubes,1940 ",
+                    "youtube": "_-JzxX75oYc"
+                },
+                {
+                    "type": "video",
+                    "title": "AT&T Archives: Genesis of the Transistor",
+                    "youtube": "WiQvGRjrLnU"
+                },
+                {
+                    "type": "reference",
+                    "title": "IEEE Spectrum: The Silicon Dioxide Solution",
+                    "href": "https://spectrum.ieee.org/the-silicon-dioxide-solution"
+                },
+                {
+                    "type": "video",
+                    "title": " The Transistor: a 1953 documentary, anticipating its coming impact on technology ",
+                    "youtube": "V9xUQWo4vN0"
+                },
+                {
+                    "type": "video",
+                    "title": "AT&T Archives: Microworld",
+                    "youtube": "q2kd1B0Ybto"
+                },
+                {
+                    "type": "video",
+                    "title": "YouTube: I Built A Dice Without Writing a Single Line of Code",
+                    "youtube": "cZxBj7fzkkk"
+                },
+                {
+                    "type": "header",
+                    "text": "Assessments",
+                    "level": 2
                 },
                 {
                     "type": "lti",
@@ -860,7 +969,7 @@
                 },
                 {
                     "type": "lti",
-                    "title": "CDC6504: Print out '42'",
+                    "title": "CDC 6504: Print out '42'",
                     "launch": "{apphome}/tools/cdc6504/",
                     "resource_link_id": "ca4e_04_cdc_42",
                     "target": "_blank",
@@ -881,6 +990,19 @@
                         {
                             "key": "exercise",
                             "value": "HelloWorldExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "CDC 6504: Lower Case a String",
+                    "launch": "{apphome}/tools/cdc6504/",
+                    "resource_link_id": "ca4e_04_cdc_lower",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "LowercaseConversionExercise"
                         }
                     ]
                 },
