@@ -859,20 +859,6 @@
                     "youtube": "BGIr2P2bpUY"
                 },
                 {
-                    "type": "video",
-                    "title": "From 6502 to Web Assembly: Modern Day Emulators - Part 7 (10:56)",
-                    "reference": "CA4E-Lectures/04-CPU/04-07-CPU-Emulators.m4v",
-                    "media": "ca4e-media/04-Digital/04-07-CPU-Emulators",
-                    "youtube": "1rtZKNme9HE"
-                },
-                {
-                    "type": "video",
-                    "title": "From 6502 to ARM: The 50-Year Journey of CPU Evolution & Apple’s CPU Strategy- Part 8 (7:31)",
-                    "reference": "CA4E-Lectures/04-CPU/04-08-CPU-History.m4v",
-                    "media": "ca4e-media/04-Digital/04-08-CPU-History",
-                    "youtube": "bsUKo48cMrA"
-                },
-                {
                     "type": "header",
                     "text": "Demonstrations",
                     "level": 2
@@ -1003,6 +989,120 @@
                         {
                             "key": "exercise",
                             "value": "LowercaseConversionExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "header",
+                    "text": "Bonus",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "IEEE  Computing Conversations: Eben Upton on the Raspberry Pi ",
+                    "youtube": "P5KEiuTT_E8"
+                },
+                {
+                    "type": "video",
+                    "title": "Office Hours: Seoul Korea 22-September-2016 ",
+                    "youtube": "2f9YNAIpjjQ"
+                },
+                {
+                    "type": "video",
+                    "title": "Office Hours: Puebla, Mexico",
+                    "youtube": "O7jookwwf20"
+                }
+            ]
+        },
+        {
+            "title": "Web Assembly",
+            "anchor": "wasm",
+            "icon": "fa-calculator",
+            "description": "In the future, browser support for WEB Assembly means that for a lot of in browser applications, hardware is an emulator.",
+            "items": [
+                {
+                    "type": "header",
+                    "text": "Slides",
+                    "level": 2
+                },
+                {
+                    "type": "slide",
+                    "title": "04-CPU-Machine-Code.pptx",
+                    "href": "{apphome}/{apphome}/lectures/04-CPU-Machine-Code.pptx"
+                },
+                {
+                    "type": "header",
+                    "text": "Videos",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "From 6502 to Web Assembly: Modern Day Emulators - Part 7 (10:56)",
+                    "reference": "CA4E-Lectures/04-CPU/04-07-CPU-Emulators.m4v",
+                    "media": "ca4e-media/04-Digital/04-07-CPU-Emulators",
+                    "youtube": "1rtZKNme9HE"
+                },
+                {
+                    "type": "video",
+                    "title": "From 6502 to ARM: The 50-Year Journey of CPU Evolution & Apple’s CPU Strategy- Part 8 (7:31)",
+                    "reference": "CA4E-Lectures/04-CPU/04-08-CPU-History.m4v",
+                    "media": "ca4e-media/04-Digital/04-08-CPU-History",
+                    "youtube": "bsUKo48cMrA"
+                },
+                {
+                    "type": "header",
+                    "text": "Demonstrations",
+                    "level": 2
+                },
+                {
+                    "type": "header",
+                    "text": "Discussions",
+                    "level": 2
+                },
+                {
+                    "type": "discussion",
+                    "title": "Web Assembly",
+                    "launch": "{apphome}/mod/tdiscus/",
+                    "resource_link_id": "discuss_04_wasm"
+                },
+                {
+                    "type": "header",
+                    "text": "References",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "ARM Instruction Set design history with Sophie Wilson)",
+                    "youtube": "QqxThgLTLyk"
+                },
+                {
+                    "type": "video",
+                    "title": " The potted history of ARM",
+                    "youtube": "t59EtDxpYmM"
+                },
+                {
+                    "type": "video",
+                    "title": "Fun: The 6502 Rotate Right Myth",
+                    "youtube": "Uk_QC1eU0Fg"
+                },
+                {
+                    "type": "header",
+                    "text": "Assessments",
+                    "level": 2
+                },
+                {
+                    "type": "lti",
+                    "title": "Quiz: CPU Design and Machine Code",
+                    "launch": "{apphome}/mod/gift/?quiz=04-MachineCode.txt",
+                    "resource_link_id": "ca4e_04_cpu_wasm",
+                    "custom": [
+                        {
+                            "key": "tries",
+                            "value": "3"
+                        },
+                        {
+                            "key": "delay",
+                            "value": "601"
                         }
                     ]
                 },
