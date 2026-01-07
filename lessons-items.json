@@ -221,8 +221,8 @@
                 },
                 {
                     "type": "slide",
-                    "title": "02-Transistors.pptx",
-                    "href": "{apphome}/lectures/02-Transistors.pptx"
+                    "title": "02-SolidState.pptx",
+                    "href": "{apphome}/lectures/02-SolidState.pptx"
                 },
                 {
                     "type": "header",
@@ -1118,8 +1118,8 @@
                 },
                 {
                     "type": "slide",
-                    "title": "07-Emulators.pptx",
-                    "href": "{apphome}/lectures/07-Emulators.pptx"
+                    "title": "07-Emulator.pptx",
+                    "href": "{apphome}/lectures/07-Emulator.pptx"
                 },
                 {
                     "type": "header",
