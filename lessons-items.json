@@ -1146,6 +1146,21 @@
                     "level": 2
                 },
                 {
+                    "type": "video",
+                    "title": "Introducing WebAssembly (WASM): From Hello World Source Code to Execution (4:28)",
+                    "youtube": "SI-uPfnn6qk"
+                },
+                {
+                    "type": "video",
+                    "title": "Compiling C to WebAssembly (WASM) and Running It in the Browser (7:01)",
+                    "youtube": "TY1OeBhJKE4"
+                },
+                {
+                    "type": "video",
+                    "title": "Loops and the Stack: A String-to-Uppercase Example in WASM (11:35)",
+                    "youtube": "7im5IhwpX84"
+                },
+                {
                     "type": "header",
                     "text": "Discussions",
                     "level": 2
