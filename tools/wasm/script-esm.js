@@ -20,7 +20,7 @@ export class WasmEditor {
         
         this.examples = {
             'hello-world': this.getHelloWorldExample(),
-            'string-copy': this.getStringCopyExample(),
+            // 'string-copy': this.getStringCopyExample(),  // Hidden but not removed
             'uppercase': this.getUppercaseExample()
         };
         
@@ -136,7 +136,7 @@ export class WasmEditor {
         selector.innerHTML = `
             <option value="">Load sample code</option>
             <option value="hello-world">Hello World</option>
-            <option value="string-copy">String Copy</option>
+            <!-- String Copy option hidden but not removed -->
             <option value="uppercase">Uppercase Converter</option>
         `;
         
@@ -305,6 +305,8 @@ export class WasmEditor {
 )`;
     }
     
+    // Hidden but not removed
+    /*
     getStringCopyExample() {
         return `;; String Copy WASM Example
 (module
@@ -392,6 +394,7 @@ export class WasmEditor {
   (export "main" (func $main))
 )`;
     }
+    */
     
     getUppercaseExample() {
         return `;; Uppercase Converter WASM Example

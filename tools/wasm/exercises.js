@@ -178,7 +178,9 @@ Hello, World!</pre>
  * Print Out 42 Exercise
  * 
  * Students need to write a WebAssembly program that outputs the number 42
+ * HIDDEN: Commented out but not removed
  */
+/*
 class PrintOut42Exercise extends WASMExercise {
     constructor() {
         const steps = [
@@ -307,6 +309,7 @@ class PrintOut42Exercise extends WASMExercise {
         }
     }
 }
+*/
 
 /**
  * Random Phrase Exercise

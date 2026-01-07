@@ -230,8 +230,8 @@ $_SESSION['GSRF'] = 10;
             // Create the appropriate exercise instance based on assignment
             if (assignmentType == 'HelloWorldExercise') {
                 currentExercise = new HelloWorldExercise();
-            } else if (assignmentType == 'PrintOut42Exercise') {
-                currentExercise = new PrintOut42Exercise();
+            // } else if (assignmentType == 'PrintOut42Exercise') {  // Hidden but not removed
+            //     currentExercise = new PrintOut42Exercise();
             } else if (assignmentType == 'RandomPhraseExercise') {
                 currentExercise = new RandomPhraseExercise();
             } else if (assignmentType == 'LowercaseConversionExercise') {
