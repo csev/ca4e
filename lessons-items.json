@@ -423,14 +423,14 @@
                 {
                     "type": "video",
                     "title": "Solid State: From Transistors to Wafers - Part 4 (9:18)",
-                    "reference": "CA4E-Lectures/02-SolidState/02-04-SolidState-Gates.m4v",
-                    "media": "ca4e-media/03-SolidState/03-03-SolidState-Gates.m4v",
+                    "reference": "CA4E-Lectures/03-VLSI/03-04-SolidState-Gates.m4v",
+                    "media": "ca4e-media/03-VLSI/03-03-SolidState-Gates.m4v",
                     "youtube": "z4U3el4fgXo"
                 },
                 {
                     "type": "video",
                     "title": "Solid State: VLSI Design Layout - Part 5 (10:46)",
-                    "reference": "CA4E-Lectures/02-SolidState/02-05-SolidState-VLSI.m4v",
+                    "reference": "CA4E-Lectures/03-VLSI/03-05-SolidState-VLSI.m4v",
                     "media": "ca4e-media/03-VLSI/03-05-SolidState-VLSI.m4v",
                     "youtube": "9IoC-xn2bro"
                 },
@@ -613,21 +613,21 @@
                 {
                     "type": "video",
                     "title": "Digital Logic: Computer Architecture - Part 1 (7:23)",
-                    "reference": "CA4E-Lectures/03-Digital/03-01-Digital-Arch.m4v",
+                    "reference": "CA4E-Lectures/04-DigitalLogic/04-01-Digital-Arch.m4v",
                     "media": "ca4e-media/04-DigitalLogic/04-01-Digital-Arch.m4v",
                     "youtube": "nZlKs4_ic14"
                 },
                 {
                     "type": "video",
                     "title": "Digital Logic: Adding Numbers with Gates - Part 2 (14:04)",
-                    "reference": "CA4E-Lectures/03-Digital/03-02-Digital-Gates.m4v",
+                    "reference": "CA4E-Lectures/04-DigitalLogic/04-02-Digital-Gates.m4v",
                     "media": "ca4e-media/04-DigitalLogic/04-02-Digital-Gates.m4v",
                     "youtube": "hkeYhDXvc2k"
                 },
                 {
                     "type": "video",
                     "title": "Digital Logic: Storing Data with Gates - Part 3 (11:08)",
-                    "reference": "CA4E-Lectures/03-Digital/03-03-Digital-Latch.m4v",
+                    "reference": "CA4E-Lectures/04-DigitalLogic/04-03-Digital-Latch.m4v",
                     "media": "ca4e-media/04-DigitalLogic/04-03-Digital-Latch.m4v",
                     "youtube": "a_EjfUA0Fpc"
                 },
@@ -797,21 +797,21 @@
                 {
                     "type": "video",
                     "title": "Digital Logic: Clocked Circuits and Clock Rates - Part 4 (7:34)",
-                    "reference": "CA4E-Lectures/03-Digital/03-04-Digital-Clock.m4v",
+                    "reference": "CA4E-Lectures/05-Clock/05-04-Digital-Clock.m4v",
                     "media": "ca4e-media/05-Clock/05-04-Digital-Clock.m4v",
                     "youtube": "7HeXWTR6kxc"
                 },
                 {
                     "type": "video",
                     "title": "Digital: Building a Two Instruction CPU with Gates - Part 5 (9:49)",
-                    "reference": "CA4E-Lectures/03-Digital/03-05-Digital-CPU.m4v",
+                    "reference": "CA4E-Lectures/05-Clock/05-05-Digital-CPU.m4v",
                     "media": "ca4e-media/05-Clock/05-05-Digital-CPU.m4v",
                     "youtube": "MmIEGsTQp-Q"
                 },
                 {
                     "type": "video",
                     "title": "Digital: CPU Architecture - Storing Code in Memory - Part 6 (4:18)",
-                    "reference": "CA4E-Lectures/03-Digital/03-06-Digital-Code.m4v",
+                    "reference": "CA4E-Lectures/05-Clock/05-06-Digital-Code.m4v",
                     "media": "ca4e-media/05-Clock/05-06-Digital-Code.m4v",
                     "youtube": "fM0-1Hc8vKM"
                 },
@@ -910,43 +910,43 @@
                 {
                     "type": "video",
                     "title": "Exploring Microprocessors: From Python to Machine Language & the 6502 CPU - Part 1 (5:38)",
-                    "reference": "CA4E-Lectures/04-CPU/04-01-CPU-Intro.m4v",
-                    "media": "ca4e-media/06A-MachineCode/06A-01-CPU-Intro.m4v",
+                    "reference": "CA4E-Lectures/06-CPU/06-01-CPU-Intro.m4v",
+                    "media": "ca4e-media/06-CPU/06-01-CPU-Intro.m4v",
                     "youtube": "IF0ZopcXRl8"
                 },
                 {
                     "type": "video",
                     "title": "Understanding Hexadecimal (Base 16) — Why Computers Use It & How to Think in It - Part 2 (12:24)",
-                    "reference": "CA4E-Lectures/04-CPU/04-02-CPU-Hex.m4v",
-                    "media": "ca4e-media/06A-MachineCode/06A-02-CPU-Hex.m4v",
+                    "reference": "CA4E-Lectures/06-CPU/06-02-CPU-Hex.m4v",
+                    "media": "ca4e-media/06-CPU/06-02-CPU-Hex.m4v",
                     "youtube": "V_4Ord6x9H4"
                 },
                 {
                     "type": "video",
                     "title": "What Is Programming? From Python to Machine Language & Into the CPU - Part 3 (11:10)",
-                    "reference": "CA4E-Lectures/04-CPU/04-03-CPU-Coding.m4v",
-                    "media": "ca4e-media/06A-MachineCode/06A-03-CPU-Coding.m4v",
+                    "reference": "CA4E-Lectures/06-CPU/04-03-CPU-Coding.m4v",
+                    "media": "ca4e-media/06-CPU/06-03-CPU-Coding.m4v",
                     "youtube": "dh6pI8Xjysc"
                 },
                 {
                     "type": "video",
                     "title": "Exploring the 6502 Architecture in the CDC6504 Emulator - Part 4 (9:49)",
-                    "reference": "CA4E-Lectures/04-CPU/04-04-CPU-Arch.m4v",
-                    "media": "ca4e-media/06A-MachineCode/06A-04-CPU-Arch.m4v",
+                    "reference": "CA4E-Lectures/06-CPU/06-04-CPU-Arch.m4v",
+                    "media": "ca4e-media/06-CPU/06-04-CPU-Arch.m4v",
                     "youtube": "L2fzgapBoOg"
                 },
                 {
                     "type": "video",
                     "title": "Machine Language — Loops, Branching & Assembly vs. Machine Code - Part 5 (18:43)",
-                    "reference": "CA4E-Lectures/04-CPU/04-05-CPU-Machine.m4v",
-                    "media": "ca4e-media/06A-MachineCode/06A-05-CPU-Machine.m4v",
+                    "reference": "CA4E-Lectures/06-CPU/06-05-CPU-Machine.m4v",
+                    "media": "ca4e-media/06-CPU/06-05-CPU-Machine.m4v",
                     "youtube": "h92PhKl2elU"
                 },
                 {
                     "type": "video",
                     "title": "CDC 6504 Assembly Language: Hello World, Math, and Upper Casing Strings - Part 6 (13:05)",
-                    "reference": "CA4E-Lectures/04-CPU/04-06-CPU-Assembly.m4v",
-                    "media": "ca4e-media/06A-MachineCode/06A-06-CPU-Assembly.m4v",
+                    "reference": "CA4E-Lectures/06-CPU/06-06-CPU-Assembly.m4v",
+                    "media": "ca4e-media/06-CPU/06-06-CPU-Assembly.m4v",
                     "youtube": "BGIr2P2bpUY"
                 },
                 {
@@ -1129,14 +1129,14 @@
                 {
                     "type": "video",
                     "title": "From 6502 to Web Assembly: Modern Day Emulators - Part 7 (10:56)",
-                    "reference": "CA4E-Lectures/04-CPU/04-07-CPU-Emulators.m4v",
+                    "reference": "CA4E-Lectures/07-Emulator/07-07-CPU-Emulators.m4v",
                     "media": "ca4e-media/07-Emulator/07-07-CPU-Emulator.m4v",
                     "youtube": "1rtZKNme9HE"
                 },
                 {
                     "type": "video",
                     "title": "From 6502 to ARM: The 50-Year Journey of CPU Evolution & Apple’s CPU Strategy- Part 8 (7:31)",
-                    "reference": "CA4E-Lectures/04-CPU/04-08-CPU-History.m4v",
+                    "reference": "CA4E-Lectures/07-Emulator/07-08-CPU-History.m4v",
                     "media": "ca4e-media/07-Emulator/07-08-CPU-History.m4v",
                     "youtube": "bsUKo48cMrA"
                 },
