@@ -1,0 +1,100 @@
+*{ margin: 0; padding: 0; }
+
+body{ background-color: #a7a7a7; color: #ffffff; }
+
+a { color: brown; text-decoration: none;}
+a:hover{ color: red; text-decoration: underline; }
+
+#main{ width: 950px; margin: 10px auto; font-family: monospace; font-size:12px; }
+
+#left { width: 400px; float: left;}
+#right { width: 520px; float: right;}
+
+#main>h2{ color: #000000; }
+.box{ background-color: #333; color:#ddd; border: 1px solid black; border-color: #ddd #fff #fff #ddd; }
+.ram, #cpu{ height: 200px; }
+.ram .memory, .ram h3, .ram .outputs{ float: left; margin: 15px 0 5px 20px; }
+.ram .status{ float: right; margin: 15px 20px 5px 0;}
+.ram .reset{ float: right; margin: 45px 5px;}
+.ram .outputs{ width: 170px;}
+.box th, span>b{ color: yellow; }
+.ram h3{ width: 82px; color: yellow; }
+.ram td:hover, .ram .outputs th:hover, #cpu th:hover, #accu b:hover, #carry b:hover, #test b:hover{ color: red; cursor: pointer;  text-decoration: underline; }
+
+#io{ height: 200px; }
+#io .port{ width: 170px; margin: 5px 0 5px 20px; }
+
+#cpu table{ float: left; margin: 20px 10px; }
+#cpu #registers tr>*{ width: 12px; text-align: center; }
+#cpu td>span{ color: yellow; font-weight: bold; }
+
+#cpu #registers { margin-left: 35px; float: right; }
+#cpu #registers tr *:nth-child(5){ padding-left: 15px; }
+
+#cpu div>input{ height: 26px; width: 100px; margin: 7px 0; }
+#cpu div>span{ display: inline; width: 150px; margin-left: 12px;}
+#cpu #accu { margin-left: 12px; }
+#cpu #test { margin-left: 12px; }
+#cpu #disasm{ text-align: left; display: block; width: 160px; float: left; margin-left: 13px; clear: left; }
+#cpu #cycles{ display: block; width: 130px; float: right; margin-left: 0; margin-right: 15px; text-align: right; }
+#cpu #disasm span{ display: block; width: 80px; float: left;  margin: 0; }
+
+#conf{ height: 100px; }
+#conf .leftDiv input{ margin-top: 10px; }
+#conf .rightDiv input{ height: 26px; width: 100px; margin: 11px 0; }
+
+#rom{ height: 300px; }
+#rom #data{ width: 100%; height: 230px; margin-top: 15px; background-color: #000; color: #fff; overflow-y: scroll; }
+#rom .rightDiv input{ height: 26px; width: 100px; margin: 11px 0; }
+#rom #address{ background-color: #000; color: #fff; width: 75px; }
+#rom #ascii{ margin-left: 85px; }
+#rom>b{ display: block; margin: 5px 20px; }
+#rom b{ color: yellow; }
+
+#right>h3, #left>h3{ height: 30px; margin: 15px 5px -5px 5px; }
+
+select{ width: 80px; }
+.left{ text-align: left; }
+
+.leftDiv{ width: 350px; float: left; margin: 0 10px;}
+.rightDiv{ width: 120px; float: right; margin: 0 10px;}
+
+.window{background-color: white; position: absolute; border: 1px solid black; }
+.handle{background-color: blue; width: 100%; height: 21px; cursor: pointer; border-bottom: 1px solid black; }
+
+#description { width: 900px; margin: 20px auto;  font-size:10pt; font-family: Arial, Helvetica, sans-serif; font-weight:bold; color: #333333; }
+#description b{
+	padding: 2px;
+	border-style:outset; border-width:medium; border-color: #777777;
+	font-size: 18px; font-family: Arial, Helvetica, sans-serif;
+	color: #555555; background: #DDDDDD;
+}
+#description .title {
+	font-size: 18px; font-family: Arial, Helvetica, sans-serif;
+	font-weight:bold; color: #666666;
+	line-height: 30px;
+	margin-top: 20px; margin-bottom: 10px;
+}
+#description .frame {
+	display: block;
+	border-style:outset; border-width:medium; border-color: #333333;
+	width: 650px;  margin: 0 auto;
+	font-size: 10pt; font-family: monospace; font-weight:bold;
+	color: #333333; background: #959595;
+}
+#description .code {
+	width: 95%;  margin: 0 auto;
+	white-space: pre;
+}
+#description>ul { margin-left: 20px; padding : 0px }
+#description>li {
+	font-size: 10pt; font-family: Arial, Helvetica, sans-serif;
+	font-weight:bold; color: #333333;
+	margin-left: 25px; margin-right: 20px;
+	text-align: justify; display: list-item; list-style-position : outside;
+}
+#description p{ text-indent: 10px; }
+
+#break table{ color: black; display: block; height: 350px; overflow-y: scroll; border: 1px solid black; }
+#break table td{ border: 1px solid black; padding: 2px; }
+#break input { width: 50%; height: 30px;}

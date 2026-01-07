@@ -221,8 +221,8 @@
                 },
                 {
                     "type": "slide",
-                    "title": "02-SolidState.pptx",
-                    "href": "{apphome}/lectures/02-SolidState.pptx"
+                    "title": "02-Transistors.pptx",
+                    "href": "{apphome}/lectures/02-Transistors.pptx"
                 },
                 {
                     "type": "header",
@@ -412,8 +412,8 @@
                 },
                 {
                     "type": "slide",
-                    "title": "02-SolidState.pptx",
-                    "href": "{apphome}/lectures/02-SolidState.pptx"
+                    "title": "03-VLSI.pptx",
+                    "href": "{apphome}/lectures/03-VLSI.pptx"
                 },
                 {
                     "type": "header",
@@ -602,8 +602,8 @@
                 },
                 {
                     "type": "slide",
-                    "title": "03-DigitalLogic.pptx",
-                    "href": "{apphome}/lectures/03-DigitalLogic.pptx"
+                    "title": "04-DigitalLogic.pptx",
+                    "href": "{apphome}/lectures/04-DigitalLogic.pptx"
                 },
                 {
                     "type": "header",
@@ -786,8 +786,8 @@
                 },
                 {
                     "type": "slide",
-                    "title": "03-DigitalLogic.pptx",
-                    "href": "{apphome}/lectures/03-DigitalLogic.pptx"
+                    "title": "05-Clock.pptx",
+                    "href": "{apphome}/lectures/05-Clock.pptx"
                 },
                 {
                     "type": "header",
@@ -899,8 +899,8 @@
                 },
                 {
                     "type": "slide",
-                    "title": "04-CPU-Machine-Code.pptx",
-                    "href": "{apphome}/lectures/04-CPU-Machine-Code.pptx"
+                    "title": "06-CPU-Machine-Code.pptx",
+                    "href": "{apphome}/lectures/06-CPU-Machine-Code.pptx"
                 },
                 {
                     "type": "header",
@@ -1118,8 +1118,8 @@
                 },
                 {
                     "type": "slide",
-                    "title": "04-CPU-Machine-Code.pptx",
-                    "href": "{apphome}/lectures/04-CPU-Machine-Code.pptx"
+                    "title": "07-Emulators.pptx",
+                    "href": "{apphome}/lectures/07-Emulators.pptx"
                 },
                 {
                     "type": "header",
