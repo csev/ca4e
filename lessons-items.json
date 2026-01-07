@@ -1214,6 +1214,11 @@
                     "href": "{apphome}/lectures/07-Emulator/hello.wat"
                 },
                 {
+                    "type": "reference",
+                    "title": "Hex dump of WASM 'Hello World!' in C",
+                    "href": "{apphome}/lectures/07-Emulator/hello_wasm.txt"
+                },
+                {
                     "type": "video",
                     "title": "ARM Instruction Set design history with Sophie Wilson)",
                     "youtube": "QqxThgLTLyk"
