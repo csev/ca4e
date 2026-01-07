@@ -1210,7 +1210,7 @@
                 },
                 {
                     "type": "reference",
-                    "title": "WAT from a C Program",
+                    "title": "WAT Generated from 'Hello World!' in C",
                     "href": "{apphome}/lectures/07-Emulator/hello.wat"
                 },
                 {
