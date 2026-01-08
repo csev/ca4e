@@ -1070,16 +1070,6 @@
                 },
                 {
                     "type": "video",
-                    "title": "ARM Instruction Set design history with Sophie Wilson)",
-                    "youtube": "QqxThgLTLyk"
-                },
-                {
-                    "type": "video",
-                    "title": " The potted history of ARM",
-                    "youtube": "t59EtDxpYmM"
-                },
-                {
-                    "type": "video",
                     "title": "Fun: The 6502 Rotate Right Myth",
                     "youtube": "Uk_QC1eU0Fg"
                 },
@@ -1239,11 +1229,6 @@
                     "youtube": "t59EtDxpYmM"
                 },
                 {
-                    "type": "reference",
-                    "title": "Humor: The original “WAT” talk by Gary Bernhardt about Ruby and JavaScript quirks (2012)",
-                    "href": "https://www.destroyallsoftware.com/talks/wat"
-                },
-                {
                     "type": "header",
                     "text": "Bonus",
                     "level": 2
@@ -1252,6 +1237,11 @@
                     "type": "video",
                     "title": "Office Hours: Puebla, Mexico",
                     "youtube": "O7jookwwf20"
+                },
+                {
+                    "type": "reference",
+                    "title": "Humor: The original “WAT” talk by Gary Bernhardt about Ruby and JavaScript quirks (2012)",
+                    "href": "https://www.destroyallsoftware.com/talks/wat"
                 }
             ]
         }
