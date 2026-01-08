@@ -1097,11 +1097,6 @@
                     "type": "video",
                     "title": "Office Hours: Seoul Korea 22-September-2016 ",
                     "youtube": "2f9YNAIpjjQ"
-                },
-                {
-                    "type": "video",
-                    "title": "Office Hours: Puebla, Mexico",
-                    "youtube": "O7jookwwf20"
                 }
             ]
         },
@@ -1244,11 +1239,6 @@
                     "youtube": "t59EtDxpYmM"
                 },
                 {
-                    "type": "video",
-                    "title": "Fun: The 6502 Rotate Right Myth",
-                    "youtube": "Uk_QC1eU0Fg"
-                },
-                {
                     "type": "reference",
                     "title": "Humor: The original “WAT” talk by Gary Bernhardt about Ruby and JavaScript quirks (2012)",
                     "href": "https://www.destroyallsoftware.com/talks/wat"
@@ -1257,16 +1247,6 @@
                     "type": "header",
                     "text": "Bonus",
                     "level": 2
-                },
-                {
-                    "type": "video",
-                    "title": "IEEE  Computing Conversations: Eben Upton on the Raspberry Pi ",
-                    "youtube": "P5KEiuTT_E8"
-                },
-                {
-                    "type": "video",
-                    "title": "Office Hours: Seoul Korea 22-September-2016 ",
-                    "youtube": "2f9YNAIpjjQ"
                 },
                 {
                     "type": "video",
