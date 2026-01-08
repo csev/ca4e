@@ -579,13 +579,13 @@
                 },
                 {
                     "type": "video",
-                    "title": "Office Hours: Melbourne Australia",
-                    "youtube": "GD9RSoVDKkw"
+                    "title": "Face to Face Office Hours Ann Arbor, MI 8-Oct-2025 At Tijos",
+                    "youtube": "hPseLDCRwkk"
                 },
                 {
                     "type": "video",
-                    "title": "Office Hours: Pittsburgh, PA, 15-May-2024",
-                    "youtube": "YZjb5kZUClQ"
+                    "title": "Dr. Chuck Face-to-Face Office Hours - Amsterdam (2012-11-12)",
+                    "youtube": "lWxUFvYmeq0"
                 }
             ]
         },
@@ -881,6 +881,11 @@
                 },
                 {
                     "type": "video",
+                    "title": "Face to Face Office Hours Kyoto, Japan, 11-Dec-2019",
+                    "youtube": "cl_-OhsbEEg"
+                },
+                {
+                    "type": "video",
                     "title": "Office Hours: Mountain View CA",
                     "youtube": "7UV9GWofRAk"
                 }
@@ -1085,6 +1090,11 @@
                 },
                 {
                     "type": "video",
+                    "title": "Dr. Chuck Face-to-Face Office Hours - Manila, Philippines (2012-11-26)",
+                    "youtube": "R6zlQZcM72o"
+                },
+                {
+                    "type": "video",
                     "title": "Office Hours: Seoul Korea 22-September-2016 ",
                     "youtube": "2f9YNAIpjjQ"
                 }
@@ -1232,6 +1242,11 @@
                     "type": "header",
                     "text": "Bonus",
                     "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": " Office Hours IIT TechFest, Mumbai, India 12-Dec-2018",
+                    "youtube": "GITuGFeG7J8"
                 },
                 {
                     "type": "video",
