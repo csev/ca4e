@@ -1,0 +1,295 @@
+0:00:00.960,0:00:09.280
+Hello and welcome to a hardware layout walk 
+through for computer architecture for everybody.
+
+0:00:09.280,0:00:15.280
+This walk through is going to design a CMOS 
+NOR gate circuit which is actually one of the
+
+0:00:15.280,0:00:20.560
+assignments but I'm going to use this as uh to 
+show you how the tool works. So let's go across
+
+0:00:20.560,0:00:27.360
+the top. We have a button to add a switch. So 
+that's how we give inputs. We have a button
+
+0:00:27.360,0:00:32.400
+to add a probe. That's how we measure outputs. 
+So, you click the probe button and then you go
+
+0:00:32.400,0:00:37.040
+into the and you click where the probe is at. And 
+you'll notice that the switch has a little output
+
+0:00:37.040,0:00:43.840
+dot and the probe has an input and an output dot. 
+Then you can put some transistors down. You can
+
+0:00:43.840,0:00:50.320
+put NMOS transistors down. And I always the way I 
+remember NMOS transistors is NMOS transistors are
+
+0:00:50.320,0:00:57.440
+like the original ones that uh that basically 
+when their input is one they're conducting and
+
+0:00:57.440,0:01:03.440
+when their input is zero they're not conducting. 
+And then you have a PMOS transistor where it's
+
+0:01:03.440,0:01:09.920
+the opposite. So let me just connect this little 
+input 5V input to the inputs of the NMOS that I
+
+0:01:09.920,0:01:15.920
+put at the the bottom and the PMOS that I put at 
+the top. And so you'll see that when I'm pointing
+
+0:01:15.920,0:01:23.120
+five volts to the the NMOS, it's on and the PMOS 
+is off. And then when I flip it to zero volts,
+
+0:01:23.120,0:01:30.800
+the PMOS is on and the NMOS is off. Okay. So, 
+so you can place all three of these components
+
+0:01:30.800,0:01:39.040
+and you can draw wires by basically dragging 
+them to the uh the inputs. And then you have
+
+0:01:39.040,0:01:44.080
+uh the ability to move things around, right? You 
+can move them around by pressing the little hand
+
+0:01:44.080,0:01:48.800
+and then dragging and moving them around. You 
+have a little trash can icon that allows you to
+
+0:01:48.800,0:01:55.760
+get rid of something. You can clear it all. You 
+can actually load and store circuits. So I can
+
+0:01:55.760,0:02:05.280
+save this one as test one and then you can load it 
+back up. And so that way you can work on a circuit
+
+0:02:05.280,0:02:10.320
+and then reload it. Now this is the same circuit 
+but this way you can walk away from your computer.
+
+0:02:10.320,0:02:15.120
+Now, this actually stores the circuits in local 
+storage on your browser, not in the server. So,
+
+0:02:15.120,0:02:21.520
+the same browser will have your circuits. Um, 
+and let's just go ahead and delete that circuit.
+
+0:02:21.520,0:02:30.400
+Delete test one. Okay. Um, and you won't see this 
+instructor button, but then here's the assignment
+
+0:02:30.400,0:02:34.640
+button. So, if you click on the assignment 
+button, it tells you what your assignment is.
+
+0:02:34.640,0:02:39.680
+And it also lets you see the in this case because 
+it's an OR gate, you can see the truth table. And
+
+0:02:39.680,0:02:47.920
+again remember nor is not or. So you take as you 
+know if either of them are true then or would be
+
+0:02:47.920,0:02:52.480
+true but really it's not or so they're false. So 
+the only time that this output is supposed to be
+
+0:02:52.480,0:02:59.920
+high is when both A and B are low. So let's also 
+take a look at the reference image and this is
+
+0:02:59.920,0:03:06.720
+straight from the lecture. So we have our voltage 
+at the top and then we have two PMOS transistors
+
+0:03:06.720,0:03:15.120
+in series to the common output and then we have 
+two NMOS's in parallel. And part of this is is
+
+0:03:15.120,0:03:21.040
+remember that NMOS's conduct when they're a one. 
+So if A is a one or B is a one, ground is going to
+
+0:03:21.040,0:03:27.680
+conduct out. And the only way a one or a positive 
+is going to conduct out is if A and B are both
+
+0:03:27.680,0:03:34.480
+zero. Okay. So that is the definition of NAND. And 
+so I tend to to draw these and most people tend to
+
+0:03:34.480,0:03:40.080
+draw these with the POMS's near the top and the 
+NMOS's near the bottom. In the real world they
+
+0:03:40.080,0:03:44.560
+get laid out much more intricately, but that's 
+okay. Right now we're kind of pretending that
+
+0:03:44.560,0:03:50.560
+we have NMOS transistors and PMOS transistors. So 
+let's go ahead and start putting this together.
+
+0:03:50.560,0:03:54.720
+So one of the things we need to do is we need 
+to put in two switches. So I'm going to put a
+
+0:03:54.720,0:03:58.400
+second switch in. I'm going to and then I'm 
+going to put labels on those switches. So,
+
+0:03:58.400,0:04:04.560
+I'm going to say this switch is A. So, the top 
+switch is A. And then I press the label button
+
+0:04:04.560,0:04:12.720
+again. And then I say the bottom I select the 
+bottom switch. And that is B. And uh let's see
+
+0:04:12.720,0:04:20.320
+here. I'm going to I'm going to start over fresh. 
+Let me just delete let me delete the transistors
+
+0:04:20.320,0:04:24.800
+so we can sort of follow the diagram. So, we've 
+got an A and a B input. And then we're going to
+
+0:04:24.800,0:04:32.000
+to put two PMOS transistors at the top kind of 
+in parallel in series. So we just kind of connect
+
+0:04:32.000,0:04:40.080
+them end to end. And we'll just connect from the 
+in between them. We take the the S and the D and
+
+0:04:40.080,0:04:46.000
+we connect them in between. And so that's sort of 
+the top part of the circuit. So I might as well
+
+0:04:46.000,0:04:53.840
+connect the A input and the B input to these guys. 
+Okay. And then we have to put a couple of NMOS's.
+
+0:04:53.840,0:04:59.520
+Well, okay. We'll put a couple of end NMOS's here 
+and we'll put them sort of next to each other just
+
+0:04:59.520,0:05:09.120
+like in the diagram. Uh I I guess I should conduct 
+connect the the the positive voltage to the top
+
+0:05:09.760,0:05:17.920
+PMOS transistor. And then I am going to connect 
+just like in the picture. I'm going to connect the
+
+0:05:17.920,0:05:24.960
+bottom of the second PMOS transistor to the top 
+of the NOS transistors. But the output of these
+
+0:05:24.960,0:05:29.840
+NMOS transistors is supposed to be connected 
+together. And so we're going to have a common
+
+0:05:29.840,0:05:39.040
+output. And it and it turns out that when we put 
+our probe here, we can connect it to any any of
+
+0:05:39.040,0:05:43.200
+these connections because they're just one wire 
+basically. So they're all connected together.
+
+0:05:43.200,0:05:51.520
+And so that's our output. And then the next thing 
+we need to do is connect our input to both of the
+
+0:05:51.520,0:05:57.280
+NMOS transistors at the bottom. And you see it's 
+kind of toggling on and off. And then the last
+
+0:05:57.280,0:06:03.280
+thing we've got to do is we got to connect the 
+ground to the bottom of the NMOS transistors. So
+
+0:06:03.280,0:06:10.560
+at this point I think that I have replicated this 
+circuit on the right hand side. So let's take a
+
+0:06:10.560,0:06:16.000
+look at the specifications. We're supposed to add 
+a probe component and label it Q. So, we need to
+
+0:06:16.000,0:06:23.760
+go to the label button and put Q on as our label. 
+So, it that way the grader can grade it. Um,
+
+0:06:23.760,0:06:30.240
+connect the inputs. The A and B are the inputs. 
+Um, let's let's look at the truth table. And so,
+
+0:06:30.240,0:06:34.960
+right now we have A as zero and B is 
+zero. So, if we make them both zero,
+
+0:06:34.960,0:06:41.360
+then we should get a one as the output. So, A and 
+B are now both zero and Q is output of one. So now
+
+0:06:41.360,0:06:47.520
+if we turn any of these to one the output would 
+be zero. So A of one and B of zero is the output
+
+0:06:47.520,0:06:56.320
+of zero. A of one and B of one output is zero. And 
+uh let's see which one B of one outputB of one and
+
+0:06:56.320,0:07:04.080
+A of zero output of one. And so the only time the 
+output turns to one is when both A and B. And so
+
+0:07:04.080,0:07:16.000
+we have correctly built replicated the image that 
+we had from class and we have tested it. So now
+
+0:07:16.000,0:07:21.200
+let's see if the auto grader likes it. So let's 
+see what it does. So it first it looks to see if
+
+0:07:21.200,0:07:26.880
+we have A and B and Q labeled correctly. And then 
+it says we're going to go through. It looks like
+
+0:07:26.880,0:07:32.400
+it's going to go through all the truth tables. 
+Truth table. Truth table. Truth table. And we
+
+0:07:32.400,0:07:42.080
+have been successful. And let's save this before 
+we're done. This is a NOR. And so if we come back,
+
+0:07:42.080,0:07:46.720
+we could load this back up. So if you're fooling 
+around and you're building your own circuits,
+
+0:07:46.720,0:07:51.120
+um, and so you you can save things or if you're 
+working on it and you're not sure you got it right
+
+0:07:51.120,0:07:56.480
+and you want to go back and watch the lecture. 
+So, uh, I think that pretty much covers all
+
+0:07:56.480,0:08:03.840
+of the feature of our CMOS layout editor for 
+computer architecture for everybody. Cheers.

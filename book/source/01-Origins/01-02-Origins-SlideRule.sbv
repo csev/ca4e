@@ -1,0 +1,515 @@
+0:00:00.080,0:00:06.320
+Hello and welcome to our lecture on continuous 
+analog computing. So there's a lot of things
+
+0:00:06.320,0:00:11.680
+I want to show you. They don't matter too much 
+because the real overall theme here is continuous
+
+0:00:11.680,0:00:18.000
+means that these are devices that have sort 
+of knobs or gears or sliders that use physical
+
+0:00:18.000,0:00:23.920
+movement to approximate a computation. The key to 
+these devices like this device we'll play with in
+
+0:00:23.920,0:00:30.800
+a little bit is the carefully printed scales that 
+are on these devices. Because as you move them,
+
+0:00:30.800,0:00:36.160
+you are reading from the scales. You're inputting 
+data into them using the scales and you're taking
+
+0:00:36.160,0:00:43.760
+data out of them using the scales. And so that's 
+a critical element of these is that the scales are
+
+0:00:43.760,0:00:49.920
+very very carefully calibrated and built. But then 
+once you've got those scales, the device is pretty
+
+0:00:49.920,0:00:56.240
+simple to operate. That's the basic idea. Now, 
+the oldest known continuous analog computer is
+
+0:00:56.240,0:01:02.880
+the Antikythera mechanism, and it was found in 
+a shipwreck in uh around Greece near an island
+
+0:01:02.880,0:01:09.280
+called Antikythera. And it uses gears to model the 
+known solar system. It can model the sun and the
+
+0:01:09.280,0:01:14.640
+moon and the earth, Mercury, Venus, Mars, Jupiter, 
+and Saturn. And it doesn't just think of it as
+
+0:01:14.640,0:01:20.080
+uh 24 hours a day, 365 days a year. That actually 
+is a just a simplification. And that's why we have
+
+0:01:20.080,0:01:26.080
+leap years that it can model the more complex 
+cycles like 19 year cycles and a 76 year cycle
+
+0:01:26.080,0:01:31.840
+and a 223 cycle when this is a lot of people want 
+to think of this thing as quite mystical like
+
+0:01:31.840,0:01:38.000
+like holy mackerel people built a computer this 
+long ago and they it turns out it's not that all
+
+0:01:38.000,0:01:48.960
+complex but it's it had this idea of such an early 
+such a precise device so much data from solar star
+
+0:01:48.960,0:01:55.040
+and planet observation that went into this that 
+it really has this air of mystery and mysticism
+
+0:01:55.040,0:02:00.320
+about it. And this led to a movie called Indiana 
+Jones and the Dial of Destiny. And the basic idea
+
+0:02:00.320,0:02:08.240
+was is that in addition to the 247 year cycle, 
+there's an even longer cycle. And at some point,
+
+0:02:08.240,0:02:14.960
+this dial of destiny, which is an anti mechanism, 
+will predict when a time portal will open and
+
+0:02:14.960,0:02:23.840
+close. So, you can go back in time sort of for one 
+24-hour period, and that's pretty fun. And I love
+
+0:02:23.840,0:02:29.760
+the movie, and I I love the anti mechanism. 
+They've made replicas of the anti museum
+
+0:02:29.760,0:02:36.560
+uh mechanism in various um museums. But here's the 
+interesting thing. They're not very mystical at
+
+0:02:36.560,0:02:47.200
+all because you can buy one on Amazon. And I did. 
+So here is a cheap imitation anti-ra mechanism and
+
+0:02:47.200,0:02:54.000
+you can see here that it has gears and it has 
+very careful scales right it's got these scales
+
+0:02:54.000,0:02:59.040
+for both the sun scale and the moon scale so 
+that the phases of the moon you know whether
+
+0:02:59.040,0:03:06.560
+it's a full moon a new moon etc and so the idea is 
+is and these the sizes of these gears is carefully
+
+0:03:06.560,0:03:15.920
+calculated by the data in the solar system and 
+when you spin it around. There we go. You can see
+
+0:03:15.920,0:03:22.480
+that the gears are keeping everything in control 
+and you can then stop and then read. So, we're
+
+0:03:22.480,0:03:28.640
+now in the middle of summer and it's a particular 
+day and the moon is in a particular spot. And so,
+
+0:03:28.640,0:03:38.320
+that is a very simple anti mechanism. Now, 
+ironically, the way I'm holding this, um, we have
+
+0:03:38.320,0:03:45.280
+this simple notion that we were taught in school 
+about the solar system that it's just flat plane
+
+0:03:45.280,0:03:51.360
+like this and all of the um, all the planets are 
+kind of in a one plane. But it's not true because
+
+0:03:51.360,0:03:58.160
+it just turns out that the whole sun is moving. 
+So, it's like the sun is moving through the the
+
+0:03:58.160,0:04:05.200
+the Milky Way and all. I don't know if I got that 
+very well, but there you go. The sun is moving
+
+0:04:05.200,0:04:10.000
+through the Milky Way. So, you can I couldn't 
+get licensing for a really good video of this,
+
+0:04:10.000,0:04:16.000
+but there are some really pretty videos called you 
+can go search or look for AI like tell me about
+
+0:04:16.000,0:04:22.240
+the actual motion of the Earth through the Milky 
+Way galaxy. Oh, and by the way, the notion that
+
+0:04:22.240,0:04:27.200
+the sun was the thing around which everything 
+was rotating, the helioentrism got Nicholas
+
+0:04:27.200,0:04:35.440
+Copernicus in trouble in 1543. and you can Google 
+that as well. Now, I want to talk a little bit
+
+0:04:35.440,0:04:41.520
+about modern continuous analog devices. One's not 
+quite so modern. It's been replaced by the Hen
+
+0:04:41.520,0:04:47.280
+calculator, which is the slide rule. And the other 
+is an a wind calculator for airplane pilots that
+
+0:04:47.280,0:04:53.520
+uses a circular calculator to do trigonometry and 
+Pythagorean theorem, mostly to compensate for wind
+
+0:04:53.520,0:04:58.560
+direction on an airplane. We'll talk about both of 
+them. So, let's start talking about a slide rule.
+
+0:04:58.560,0:05:05.120
+So a slide rule is a device. Again, all analog 
+continuous devices have a scale on them. And
+
+0:05:05.120,0:05:10.960
+this is a really tiny, very fine, highly accurate 
+scale that maps numbers to their corresponding
+
+0:05:10.960,0:05:17.760
+logarithm. So you could think of this entire 
+device as a function mapping x to log x. And
+
+0:05:17.760,0:05:24.880
+then what you do is you move this back and forth 
+and you can effect doing addition and subtraction.
+
+0:05:24.880,0:05:31.440
+And then you can add logarithms. And that's the 
+same as multiplying and subtracting logarithms is
+
+0:05:31.440,0:05:37.040
+the same as dividing as long as you can keep track 
+of the exponent. And so if you go back in the 50s
+
+0:05:37.040,0:05:42.960
+and the 60s or if you watch the movie Hidden 
+Figures, you will see that everyone is carrying
+
+0:05:42.960,0:05:47.280
+around a slide rule. And when I watched that movie 
+Hidden Figures, I absolutely love that detail of
+
+0:05:47.280,0:05:51.520
+everyone having a slide rule because that's really 
+what it was like to be an engineer back in those
+
+0:05:51.520,0:05:57.520
+times because we didn't have hand calculators. All 
+we had was a slide rule to do our multiplication
+
+0:05:57.520,0:06:04.160
+for you. And I built an online slide rule that 
+you can play with. So the next thing I want to
+
+0:06:04.160,0:06:10.480
+talk about is computing wind correction in 
+an airplane. So if you take an airplane,
+
+0:06:10.480,0:06:16.720
+it spins a propeller and it it goes through the 
+sky at a certain speed and you can point it in any
+
+0:06:16.720,0:06:20.960
+direction you want and then you go up and you fly 
+for a while, point it wherever you want and then
+
+0:06:20.960,0:06:25.120
+you come back down. And if you know the distance 
+and you know the speed, you can figure out about
+
+0:06:25.120,0:06:30.800
+how long it's going to take an hour and 15 minutes 
+to get there. But there's a problem. There's wind.
+
+0:06:30.800,0:06:35.760
+So let's just say I want to fly this little 
+airplane from me to you. Let me grab it better.
+
+0:06:35.760,0:06:41.600
+I want to fly this airplane from me to you. So I 
+and and you're 100 miles awayish and it's going to
+
+0:06:41.600,0:06:49.120
+take me an hour to get to you. But what if there 
+is a wind that's coming from this direction? Okay.
+
+0:06:49.120,0:06:54.640
+So the problem is if I fly aim at you, the wind is 
+just going to push me and I'm not going to get to
+
+0:06:54.640,0:06:59.040
+you. And not only it'll take me more than an hour 
+because the wind is actually not just moving me
+
+0:06:59.040,0:07:08.480
+but slowing me down. So when that hour is done, 
+I will not be where you're at. I'll be lost.
+
+0:07:08.480,0:07:17.120
+And so a big part of teaching us pilots is to know 
+how to adjust what we call the crab angle, which
+
+0:07:17.120,0:07:21.920
+is to move to aim the airplane in a different 
+direction than we want to go to compensate for
+
+0:07:21.920,0:07:26.880
+the wind that's pushing us. If our airplane goes 
+100 knots, which is like roughly miles per hour,
+
+0:07:26.880,0:07:35.520
+and we want to go west 270° and the wind is 
+out of 300° at 15 knots, if we if we fly west,
+
+0:07:35.520,0:07:40.640
+the the wind will both slow us down. So, where 
+should we actually point the plane to actually
+
+0:07:40.640,0:07:46.400
+have a ground track that is west? And what is our 
+effective speed so we can calculate how long it's
+
+0:07:46.400,0:07:54.240
+going to take us to get there? Okay, so one way 
+to do this is the law of sines. Everybody knows
+
+0:07:54.240,0:08:03.440
+the law of sines. The law of sines says that 
+the ratio of the sign of an angle to the sign,
+
+0:08:03.440,0:08:09.040
+the length of the side opposite that angle 
+is the same for triangles, most triangles.
+
+0:08:09.040,0:08:14.080
+Turns out if the angles get too big or too small, 
+you've got to kind of transform a little bit. So,
+
+0:08:14.080,0:08:21.600
+it's not too easy. But you know there is math that 
+tells you how to calculate this effect of wind on
+
+0:08:21.600,0:08:27.680
+an airplane both in terms of changing ground speed 
+and a direction you have to go. And so you'll see
+
+0:08:27.680,0:08:33.520
+we have a headwind is the first one where the wind 
+is coming from our right and in front of us. Then
+
+0:08:33.520,0:08:38.240
+we have a side wind where it's just coming from 
+our right. And then we have a tailwind which is
+
+0:08:38.240,0:08:43.360
+coming from our right and behind us. And you have 
+to calculate all those things because your plane
+
+0:08:43.360,0:08:49.440
+may speed up or slow down and it might affect 
+where you have to point the plane. And I provide
+
+0:08:49.440,0:08:55.920
+there some simple beautiful mathematics in Python. 
+And it's actually more complex than that because
+
+0:08:55.920,0:09:00.560
+not every triangle works this way. And so you 
+have to adjust your triangle sometimes. So our
+
+0:09:00.560,0:09:07.040
+airplane goes west and we want to go 270°. The 
+wind is out of the northwest at 300° and 15 knots.
+
+0:09:07.040,0:09:13.920
+The answer is we're going to fly a heading of 
+274 degrees and calculate our distance based on
+
+0:09:13.920,0:09:21.280
+a westward ground speed of 87 knots. That's the 
+answer, which we could get through trigonometry.
+
+0:09:21.280,0:09:27.840
+But we really don't want to have pilots running 
+trigonometry in a plane. Maybe at night they
+
+0:09:27.840,0:09:36.720
+get a call on a radio and it says the wind is no 
+longer out of 300 at 15 knots. it's out of 243 at
+
+0:09:36.720,0:09:40.880
+80 knots or whatever. And you got to recalculate 
+where you're at because you're like you're, you
+
+0:09:40.880,0:09:45.200
+know, you've gone a certain distance. You got to 
+recalculate where you're going to point the plane,
+
+0:09:45.200,0:09:52.000
+all those things. And as as interesting as as 
+complex as the trigonometry is, we really don't
+
+0:09:52.000,0:09:59.600
+want uh pilots to be doing sign computations 
+in the in the darkness. And they won't and
+
+0:09:59.600,0:10:06.160
+they didn't have hand calculators. And so part of 
+the part of the reason that pilots still train on
+
+0:10:06.160,0:10:13.360
+this stuff is that we don't want to depend too 
+much on technology. I literally have on my cell
+
+0:10:13.360,0:10:21.040
+phone a a an application that can tell me where 
+the weather is, where I'm at, how high I am, how
+
+0:10:21.040,0:10:26.960
+fast I'm going, all the other planes in the sky, 
+etc. And and that's great, but part of piloting
+
+0:10:26.960,0:10:32.320
+is not depending on technology too much. you need 
+to be able to just fly the plane if somehow the
+
+0:10:32.320,0:10:39.360
+technology fails you. So, this is still taught in 
+pilot training. It's still tested in your pilot
+
+0:10:39.360,0:10:45.600
+exam. And it it it's an interesting thing and 
+the notion that this is something that came from
+
+0:10:45.600,0:10:54.400
+probably the 30s or the 40s. Um it's a really cool 
+analog computer that we learn today as pilots. So,
+
+0:10:54.400,0:11:00.080
+let me show you how this works. We're going to do 
+a simple calculation for airspeed correction and
+
+0:11:00.080,0:11:09.520
+heading correction on an E6B. Our problem is a 15 
+knot headwind. So, we put our little hole at 100
+
+0:11:09.520,0:11:17.440
+and then we go up 15 knots, 110, 115, and put a 
+mark right at the 15 knot mark. And the direction
+
+0:11:17.440,0:11:26.160
+the wind is coming from is 300°. We're flying 
+300°. we would have a headwind of of 15 knots
+
+0:11:26.160,0:11:32.320
+which would slow us down. Now our plane goes 
+100 knots so it' be going 85 on the ground but
+
+0:11:32.320,0:11:38.880
+that's not where we want to go. We don't want to 
+fly to 300. We want to fly to 270. Now as we're
+
+0:11:38.880,0:11:45.760
+moving this in a sense this analog calculator is 
+doing a bunch of sines and cosines and Pythagorean
+
+0:11:45.760,0:11:52.240
+theorem but we don't care we're just moving it. 
+It is a physical thing and it is recalculated.
+
+0:11:52.240,0:11:59.280
+So the first thing we do is we put the heading 
+that we intend to fly up there at the true index.
+
+0:11:59.280,0:12:07.360
+So we're going to fly 270 or westerly. Then what 
+we've got to do is we've got to take the point,
+
+0:12:07.360,0:12:14.000
+this point here. We got to move it down to 100 
+knots because that's how fast our plane is. And
+
+0:12:14.000,0:12:20.640
+you can see that the headwind is slowing us down. 
+So now we've compensated for the headwind. And so
+
+0:12:20.640,0:12:27.120
+if you look, our plane normally goes 100 knots, 
+but with this particular wind, this 15 knot wind,
+
+0:12:27.120,0:12:33.920
+it's going to do 86 87 knots. And we also have 
+to figure out what we call the crab angle,
+
+0:12:33.920,0:12:41.120
+which is the way we have to fly to go to the west 
+to compensate for the wind. So we have to add four
+
+0:12:41.120,0:12:50.880
+degrees. And that is 1 2 3 4. So now we have 
+with without doing any mathematics nothing but
+
+0:12:50.880,0:12:58.080
+manipulating a physical device. We have calculated 
+the actual air speed and the compensation that we
+
+0:12:58.080,0:13:06.000
+need to do for a wind of 15 knots out of a heading 
+of 300 in order to maintain a heading of 270. The
+
+0:13:06.000,0:13:13.360
+point of this is not to teach flying. It is to 
+the fact that a carefully engineered, carefully
+
+0:13:13.360,0:13:19.200
+calibrated physical analog device can do beautiful 
+calculations that are graphical in nature and
+
+0:13:19.200,0:13:24.560
+frankly very easy to use. Don't need a lot of 
+training. You just have to know how to rotate and
+
+0:13:24.560,0:13:30.880
+move and read using things like sliding, rotating 
+scales, gears. You can even do crazy calculations
+
+0:13:30.880,0:13:37.920
+with things like water and pulleys. So, this 
+kind of concludes our brief look at analog
+
+0:13:37.920,0:13:42.960
+computing devices. is up next. We're going to 
+talk about digital computing devices. And digital
+
+0:13:42.960,0:13:50.160
+computing devices are things that make clicking 
+noises. They're still physical devices. They're
+
+0:13:50.160,0:13:56.640
+by definition analog, but they have two states 
+and they are stable when in each of the states
+
+0:13:56.640,0:14:06.240
+and we can have input to change their state. So a 
+pen is kind of a classic physical digital device.

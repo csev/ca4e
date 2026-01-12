@@ -1,0 +1,395 @@
+0:00:00.560,0:00:04.400
+Hello and welcome to our lecture on 
+semiconductors. In this lecture, we
+
+0:00:04.400,0:00:11.280
+go from tubes to transistors and semiconductors. 
+So transistors were something that was discovered
+
+0:00:11.280,0:00:15.520
+at Bell Labs in the quest to build a better 
+triode. They were trying to build a better
+
+0:00:15.520,0:00:22.320
+tube. And there are three basic kinds of materials 
+with respect to electricity. There are conductors
+
+0:00:22.320,0:00:29.440
+like metal. This is a wire. Inside the wire is 
+metal. Then there are insulators like plastic.
+
+0:00:29.440,0:00:33.360
+The outside of this wire is plastic. That's 
+why if there's electricity inside the wire,
+
+0:00:33.360,0:00:39.680
+you can grab it by the plastic because the 
+plastic insulates you. But for transistors,
+
+0:00:39.680,0:00:43.440
+there's this thing called a semiconductor 
+and it's certain crystallin materials like
+
+0:00:43.440,0:00:49.040
+silicon that can be modified by adding certain 
+impurities. They call that doping. So these
+
+0:00:49.040,0:00:54.880
+conduct electricity under certain conditions 
+and hence they call them semiconductors,
+
+0:00:54.880,0:01:03.600
+sometimes conductors. Here's the basic picture. 
+of a Nobel prize. You can create a transistor
+
+0:01:03.600,0:01:08.080
+by taking some silicon with a particular kind of 
+doping and a silicon with different and touching
+
+0:01:08.080,0:01:13.600
+them. And so when when voltages are applied to 
+these crystals, subatomic stuff happens at the
+
+0:01:13.600,0:01:20.240
+boundary that allows electricity to flow from one 
+to the other. So it's actually at the boundaries,
+
+0:01:20.240,0:01:26.320
+right? So when these two kinds of material touch, 
+that's what creates the transistor. And in the
+
+0:01:26.320,0:01:32.560
+early days, it was a kind of it was a quest to 
+take an input and a voltage and make an amplified
+
+0:01:32.560,0:01:40.080
+output. And and so it turned out that transistors 
+kind of did that, but you can't couldn't do what
+
+0:01:40.080,0:01:46.880
+one tube did in a single transistor. And turns out 
+that the single transistor can be used to amplify,
+
+0:01:46.880,0:01:51.200
+but it then flips the signal and you got to 
+unflip the signal back up. And if you look at it,
+
+0:01:51.200,0:01:55.840
+it's not quite as high quality as a tube. So you 
+add a couple more transistors and a diode here and
+
+0:01:55.840,0:02:02.880
+there and a capacitor to affect the them to make 
+sure that any large DC voltages don't go through
+
+0:02:02.880,0:02:07.920
+etc etc and some resistors and you add all 
+that stuff up and you can make a pretty decent
+
+0:02:07.920,0:02:13.760
+amplifier at that point out of transistors that 
+you would have done originally with one tube. And
+
+0:02:13.760,0:02:19.920
+so one of the first things that I saw coming out 
+were transistor radios. And so what was a radio?
+
+0:02:19.920,0:02:25.040
+well, used to be something that sat in your house 
+and you turned and knobs and and whatever and
+
+0:02:25.040,0:02:29.920
+you went to the store and bought tubes when 
+the tubes broke down. But a portable radio,
+
+0:02:29.920,0:02:34.720
+if you could use transistors, they were much 
+smaller and you could have a portable battery
+
+0:02:34.720,0:02:40.640
+powered transistor radio. Transistors were 
+so exotic that in the early marketing of
+
+0:02:40.640,0:02:46.480
+some of these radios, they told you how 
+many transistors was in the radio. So,
+
+0:02:46.480,0:02:52.480
+here is a Sony eight transistor 
+radio. And if you look closely,
+
+0:02:52.480,0:03:04.320
+you can see it says eight transistors. Now, 
+let's turn this on. See what we're going to get.
+
+0:03:04.320,0:03:10.560
+This is the only radio station that I could get 
+inside this room, etc. But that is real AM live
+
+0:03:10.560,0:03:19.040
+radio that is coming to this this radio and being 
+amplified by transistors. So let's take a look at
+
+0:03:19.040,0:03:25.760
+what's inside this. So now we have the back off 
+of it. And you can see here some transistors, some
+
+0:03:25.760,0:03:32.160
+capacitors, and some resistors just like what was 
+on that circuit. So um you can see these ones that
+
+0:03:32.160,0:03:37.520
+have kind of the they're round and they have a 
+little outline on top. Those are capacitors. So it
+
+0:03:37.520,0:03:43.680
+has, you know, three, four, five, six capacitors. 
+They're used to filter out sort of high transient
+
+0:03:43.680,0:03:51.200
+voltages. Um, and then there's the the transistors 
+are these little there's the little things that
+
+0:03:51.200,0:03:55.520
+don't have a circle on the top. They're little 
+metal. You can take a look at the side of them
+
+0:03:55.520,0:04:00.480
+to see how the transistors are built. Right 
+there is a transistor. And it and then there's
+
+0:04:00.480,0:04:05.280
+some resistors. You can kind of hard to see 
+them. They're kind of tucked in between things.
+
+0:04:05.280,0:04:10.240
+And so we have I don't know I can count like 
+one two well there's eight transistors because
+
+0:04:10.240,0:04:16.160
+that's what it said it did. And so this is what's 
+inside of it. It used explicit transistors and it
+
+0:04:16.160,0:04:21.920
+was able to create a radio. The top this top bit 
+right here that is the antenna for the radio.
+
+0:04:21.920,0:04:29.600
+And so there you go an eight transistor radio 
+probably from the 1960s that still works today.
+
+0:04:30.800,0:04:35.040
+So for a while it seemed like transistors 
+were magic and everything that used to
+
+0:04:35.040,0:04:39.680
+be done by tubes was just slowly but surely 
+replaced by transistors. The power was lower,
+
+0:04:39.680,0:04:43.840
+everything lasted longer. You didn't have to 
+worry about replacing the tubes. But but then
+
+0:04:43.840,0:04:49.680
+what happened is if you look at the complexity of 
+that circuit you find that there's too many things
+
+0:04:49.680,0:04:56.240
+in that circuit and purists who want perfect 
+audio replication feel like so many transistors
+
+0:04:56.240,0:05:02.400
+and resistors and capacitors introduce noise and 
+so there in recent years there has been sort of
+
+0:05:02.400,0:05:08.720
+a throwback to tube-based amplifiers and so you 
+can buy these things a brand new one can be over
+
+0:05:08.720,0:05:14.960
+50,000 and some of them are much higher than that 
+um And so part of the reason is is that if you
+
+0:05:14.960,0:05:22.080
+compare and contrast a single tube with a bunch 
+of circuitry, you can see how it might have some
+
+0:05:22.080,0:05:28.560
+advantages. So I'll leave it up to the audio files 
+to decide which is better. Um, also, um, high-end
+
+0:05:28.560,0:05:34.240
+musicians tend to like amps that have tubes in 
+them because they feel that they give a more,
+
+0:05:34.240,0:05:41.040
+uh, a more pure sound. Before we completely leave 
+tubes and say goodbye and moved on to transistors
+
+0:05:41.040,0:05:46.720
+for the rest of the class, I want to show you 
+one last tube. It's called a Nixie tube. And um
+
+0:05:46.720,0:05:52.880
+it's going to appear later in the class when we do 
+some digital circuit design. This Nixie tube is a
+
+0:05:52.880,0:06:00.400
+tube that has glowing numbers. And you can see in 
+the back I have a working what we call Nixie Tube
+
+0:06:00.400,0:06:06.000
+clock. And I just want to show it to you to show 
+how these numbers have sort of a dimensionality
+
+0:06:06.000,0:06:11.600
+when they're moving forwards and backwards. 
+Um, but what I like about the the whole thing
+
+0:06:11.600,0:06:17.920
+is I want to just show you the glow, right? That 
+there's a certain glow and prettiness about tubes
+
+0:06:17.920,0:06:25.040
+and those are electrons that are making the the 
+shapes that glow. Um, and I can kind of understand
+
+0:06:25.040,0:06:31.840
+why it is that uh people who love audio love tubes 
+because not only can you listen to the audio,
+
+0:06:31.840,0:06:40.080
+but you can also watch the tubes as a almost 
+living analog creature doing your amplification.
+
+0:06:40.080,0:06:45.200
+This is not a high-end audio class, but this 
+is kind of where we're going to take our leave
+
+0:06:45.200,0:06:53.040
+of tubes and move forward into a transistor only 
+world. So the first thing and this is a graph that
+
+0:06:53.040,0:06:58.320
+shows input voltage versus output voltage. And so 
+you could think of the input voltage as something
+
+0:06:58.320,0:07:04.000
+we're driving on the horizontal axis. And much 
+like when we talked about making digital tubes,
+
+0:07:04.000,0:07:10.720
+the earliest kind of transistor was very an 
+amplifier style transistor and it had a very
+
+0:07:10.720,0:07:16.640
+much like a tube response and that it had a 
+nice gradual uh slope because you know you
+
+0:07:16.640,0:07:22.800
+wanted the amplification of all the different 
+frequencies and intensities of music to kind of
+
+0:07:22.800,0:07:30.160
+be consistent as you turn the volume up and down. 
+But digital transistors like digital tubes wanted
+
+0:07:30.160,0:07:36.480
+to have a shorter transition. So again, you see 
+this. Now I'll point out that this is flipped
+
+0:07:36.480,0:07:42.480
+from the tube one because when a transistor 
+is doing amplification, it kind of inverts it
+
+0:07:42.480,0:07:48.320
+first and that's why we had to put extra trans 
+transistors in to make a real amplifier. But
+
+0:07:48.320,0:07:53.680
+the picture is kind of the same. You want for a 
+digital transistor, you want it to have a quick
+
+0:07:53.680,0:07:59.920
+transition from high to low in terms of the 
+output. So as the input voltage is increased,
+
+0:07:59.920,0:08:05.440
+you want it, you know, high high, then snap low 
+as fast as possible. The other thing you want
+
+0:08:05.440,0:08:13.200
+is a regeneration thing. So you want it to kind of 
+come down about onethird of the input voltage. Um,
+
+0:08:13.200,0:08:18.960
+and so that way that you have if you put these in 
+a sequence from one to the other, you're kind of
+
+0:08:18.960,0:08:25.600
+regenerating the one and dealing with that sort 
+of indeterminate state between zero and one. And
+
+0:08:25.600,0:08:30.800
+so these are just designed slightly differently 
+with different impurities and different silicon
+
+0:08:30.800,0:08:36.720
+and different manufacturing techniques. So over 
+time there was a couple of different uh kinds of
+
+0:08:36.720,0:08:45.200
+transistors. uh one was the uh transistor called 
+NMOS which conducts with the input gate is high
+
+0:08:45.200,0:08:52.000
+and the POS that conducts with the input is low 
+and the most modern chips use a combination of
+
+0:08:52.000,0:09:00.000
+NMOS and POS transistors. As a matter of fact, 
+there are four general areas of transistor
+
+0:09:00.000,0:09:06.720
+manufacturing and usage. So the earliest was the 
+bipolar junction transistor which is more like a
+
+0:09:06.720,0:09:12.720
+tube with that kind of linear response. They were 
+fast and they knew how to make them ear in the
+
+0:09:12.720,0:09:18.960
+early days but they were power hungry and hard to 
+integrate. And then what we did is we made a POS
+
+0:09:18.960,0:09:25.440
+transistors which were kind of large and clunky 
+but they were easier to put together with early u
+
+0:09:25.440,0:09:34.080
+manufacturing imperfections and they were slow and 
+then we switched to NMOS faster and simpler um but
+
+0:09:34.080,0:09:42.320
+both POS and NMOS by themselves wasted power and 
+about 1983 and like the Intel 486 we switched to
+
+0:09:42.320,0:09:48.640
+what's called CMOS complimentary metal on silicon 
+and it was very low power and it was very scalable
+
+0:09:48.640,0:09:56.000
+and it really from 1983 till now we can we have 
+pretty much used CMOS and it really has to do with
+
+0:09:56.000,0:10:02.800
+improving manufacturing over time. So there's a 
+whole bunch of different eras of manufacturing for
+
+0:10:02.800,0:10:10.080
+transistors and we built computers throughout 
+that whole era and uh but today we do CMOS
+
+0:10:10.080,0:10:16.248
+transistor technology. We'll talk about that 
+in the next section. [Music] [Applause] [Music]

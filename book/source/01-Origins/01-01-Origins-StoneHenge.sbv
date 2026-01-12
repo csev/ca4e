@@ -1,0 +1,407 @@
+0:00:00.080,0:00:05.200
+Hello and welcome to the first lecture of computer 
+architecture for everybody. In this lecture,
+
+0:00:05.200,0:00:12.080
+we're going to talk about the origins of data 
+computing lines, straight lines and curves and
+
+0:00:12.080,0:00:19.840
+numbers and how our obsession with measuring our 
+real world uh led to eventually computing. So,
+
+0:00:19.840,0:00:24.080
+we're going to cover a number of different 
+topics. We're going to talk about measuring
+
+0:00:24.080,0:00:29.520
+the solar system and how looking up at the night 
+sky and trying to understand how the night sky
+
+0:00:29.520,0:00:38.320
+works. Uh continuous physical analog computing 
+using things like uh slide rules and how we did
+
+0:00:38.320,0:00:44.720
+multiplication using slide rules back in the day. 
+talk about digital physical devices such as like
+
+0:00:44.720,0:00:52.160
+even a a clicky pen is kind of a digital physical 
+device and that it's it's it's not digital but
+
+0:00:52.160,0:00:59.680
+it has two distinct states and it's stable in 
+both states and that's digital. So pen clocks
+
+0:00:59.680,0:01:06.000
+uh another digital physical device is one of these 
+little clicky things that people used to calculate
+
+0:01:06.000,0:01:11.920
+their grocery bill as they were shopping before we 
+had hand calculators. The other thing that people
+
+0:01:11.920,0:01:17.600
+did is before we had hand calculators that could 
+conveniently calculate sin and cosine, we had
+
+0:01:17.600,0:01:24.160
+these really big books that had tables of numbers 
+so that you could look up sin and cosine in those
+
+0:01:24.160,0:01:31.040
+books. And so we'll eventually move from there on 
+to human computers which is iteration by lot rooms
+
+0:01:31.040,0:01:36.400
+full of people doing calculations or the Babbage 
+difference engine which was steam powered that
+
+0:01:36.400,0:01:42.240
+could calculate polynomials. Then we move into 
+electro-mechanical computers like the Bomba or
+
+0:01:42.240,0:01:47.520
+pinball machines. And then eventually we end up on 
+the first electronic computer using tubes called
+
+0:01:47.520,0:01:54.240
+Colossus at Bletchley Park. And so that is leads 
+us to the beginning of the electronic computer
+
+0:01:54.240,0:01:59.920
+age. Now I really want to tell you that this is 
+not a class about mathematics. Numbers are kind of
+
+0:01:59.920,0:02:05.520
+the obsession in the beginning because computation 
+and numbers were a big deal. But if you take my C
+
+0:02:05.520,0:02:12.160
+class, C programming for everybody, I talk a lot 
+about how everything in computing changed in 1978.
+
+0:02:12.160,0:02:18.640
+There's other important moments where things 
+changed in a dramatic way. But before 1978,
+
+0:02:18.640,0:02:23.920
+a lot of computing had to do with numbers. Numbers 
+were the focus. There was no internet. There was
+
+0:02:23.920,0:02:29.120
+no email. Computers were large, filled a room. 
+They were very expensive. Millions and millions
+
+0:02:29.120,0:02:35.120
+of dollars. Then you use them to do numeric 
+calculations that were otherwise impractical. But
+
+0:02:35.120,0:02:42.560
+after 1978, computers got smaller and faster and 
+the internet kind of came along and people stopped
+
+0:02:42.560,0:02:47.760
+doing numbers as the main thing the computers did. 
+Of course, computers are still good at numbers,
+
+0:02:47.760,0:02:52.720
+but they're no longer the main thing that we 
+do. We do it mostly for communication and data,
+
+0:02:52.720,0:02:56.240
+artificial intelligence, and those kinds of 
+things. Although numbers are important part
+
+0:02:56.240,0:03:02.160
+of artificial intelligence but in general the 
+arc of computers and computing sort of starts
+
+0:03:02.160,0:03:07.760
+and for its early early phases it's all about the 
+numbers and so there's a few math examples but
+
+0:03:07.760,0:03:17.280
+I'll explain all the math where it needs to be. 
+So the big problem that we humans are trying to
+
+0:03:17.280,0:03:24.640
+solve with numeric calculations and formulas etc 
+is the notion of the fact that light travels in
+
+0:03:24.640,0:03:32.080
+straight lines. And so when we see things with our 
+eyes we see a world that seems to be straight line
+
+0:03:32.080,0:03:39.040
+but everything else in that world is moving in a 
+curved path. So for example, if I were to throw
+
+0:03:39.040,0:03:49.360
+a softball to you, that softball would follow a 
+parabola. And so through millennia of evolution,
+
+0:03:49.360,0:03:56.000
+our eyes have learned to calculate parabas. 
+Otherwise, we would not be able to throw and
+
+0:03:56.000,0:04:04.880
+catch a ball. And yes, I'm using a sports analogy 
+right now. Meaning that how does one see a ball
+
+0:04:04.880,0:04:12.800
+and hit it with a bat in a game of wheelchair 
+softball? How does that happen? But really, a lot
+
+0:04:12.800,0:04:18.800
+of what we do in sports today is something that 
+used to have to do with survival, gathering food,
+
+0:04:18.800,0:04:25.360
+uh fighting, other kinds of things that were 
+part of our survival. So this notion that we
+
+0:04:25.360,0:04:35.360
+are people with eyes that see things in 
+lines perceiving a world of curves. So
+
+0:04:35.360,0:04:46.280
+one of the first fascinations with the world 
+of curves has to do with stargazing. [Music]
+
+0:04:49.680,0:04:57.440
+Everybody who sits outside at night and looks 
+up into a clear night sky with various patterns
+
+0:04:57.440,0:05:05.440
+of stars slowly moving around. It's natural 
+to wonder exactly what's up there. And humans
+
+0:05:05.440,0:05:12.480
+throughout all of our history have, you know, come 
+up with explanations for why the stars were doing
+
+0:05:12.480,0:05:19.040
+what they were doing. One of the things that we 
+could look at and measure a little more easily
+
+0:05:19.040,0:05:27.440
+than other things in terms of the motion of the 
+skies is the sunrise and the sunset of the well
+
+0:05:27.440,0:05:33.920
+the rise and the set of the moon and the stars 
+and the sun because they changed but then after
+
+0:05:33.920,0:05:39.280
+a while if you watch them and measure them they 
+change in a very very specific pattern. And so
+
+0:05:39.280,0:05:46.000
+here I'm showing you a picture of the a series 
+of sunsets that I constructed underneath the Meno
+
+0:05:46.000,0:05:51.280
+Bridge in northern Michigan. I took this picture 
+in August and there one of those suns is real.
+
+0:05:51.280,0:05:58.160
+The rest of them are sort of made up suns, but you 
+could at this point use the motion of the sunset
+
+0:05:58.160,0:06:04.880
+against the horizon as something that would tell 
+you about the season of the year. And it turns
+
+0:06:04.880,0:06:12.560
+out that tracking these seasons has been important 
+for all of our cultures for 10,000 years. And the
+
+0:06:12.560,0:06:17.920
+reason is is the location of the sunset tells 
+us about the weather. When are the rains going
+
+0:06:17.920,0:06:25.680
+to happen? When should we plant crops? When is it 
+dangerous? And there's a song that we in the state
+
+0:06:25.680,0:06:31.680
+of Michigan of a certain age called the wreck of 
+the Edmund Fitzgerald that talks about how when
+
+0:06:31.680,0:06:38.560
+you are in Lake Superior, no matter how large 
+of a boat you have, the gales of November will
+
+0:06:38.560,0:06:45.360
+come after you. And this was a gigantic boat, 
+modern boat. And there was enough wind in the
+
+0:06:45.360,0:06:51.200
+November storm that sunk the Edmund Fitzgerald. 
+And it was quite shocking because in the 1970s we
+
+0:06:51.200,0:06:56.000
+thought technology would solve everything. 
+And so, but this is a good example of how
+
+0:06:56.000,0:07:01.680
+not knowing what time of year you're going to do 
+something, set out on a long journey or whatever,
+
+0:07:01.680,0:07:09.680
+could have some significant consequences. And if 
+we look back in history, there are many artifacts
+
+0:07:09.680,0:07:16.320
+across many cultures that are based on tracking 
+the sun. Calendars of various kinds. Some are
+
+0:07:16.320,0:07:22.240
+tracking the sun. some of the sun and the moon and 
+they are solar calendars of one form or another
+
+0:07:22.240,0:07:30.320
+that look at the the sunrise and sun sunset 
+angles from various places. One of the older
+
+0:07:30.320,0:07:38.000
+and most sophisticated ones is Stonehenge. Now 
+these were all over the world right um just in
+
+0:07:38.000,0:07:44.720
+all cultures of various sizes and forms etc. And 
+so I've listed on this slide some of the various
+
+0:07:44.720,0:07:49.600
+times that different cultures invented various 
+things having to do with the sun. And if you
+
+0:07:49.600,0:07:54.480
+look at some of those dates, you're like, whoa, 
+Stonehenge was pretty far uh pretty long time
+
+0:07:54.480,0:08:01.120
+ago compared to some of these other things. And 
+so we in the modern world, we have our fun time
+
+0:08:01.120,0:08:08.640
+with modern hinges. If you go to a certain street 
+in Manhattan on a certain day at a certain time,
+
+0:08:08.640,0:08:14.480
+you see this beam of light. And I'm sure that's 
+what fascinated early people as they built these
+
+0:08:14.480,0:08:20.480
+things was that you know the light seems random 
+and then all of a sudden like like a laser beam
+
+0:08:20.480,0:08:27.120
+whoosh the light comes down this long corridor and 
+in the case of Manhattan it's like a mile or so
+
+0:08:27.120,0:08:31.600
+and the light just bursts through and there's one 
+in Chicago where again you stand at a particular
+
+0:08:31.600,0:08:38.720
+location and the sun the these are sunrises uh 
+comes right to you in an otherwise dark thing
+
+0:08:38.720,0:08:45.920
+and it again you could imagine Imagine that early 
+people would see this this burst of the sun into a
+
+0:08:45.920,0:08:52.480
+dark location is somehow a very mystical moment 
+and a very mystical event. And and Stonehenge,
+
+0:08:52.480,0:08:57.040
+a lot of folks think that Stonehenge was there 
+to decide when to have certain celebrations,
+
+0:08:57.040,0:09:02.880
+right? So, a spring celebration, a summer 
+solstice celebration, etc. And so, at the bottom,
+
+0:09:02.880,0:09:08.400
+you can see a what I'll call a Dr. Chuck's commute 
+henge where I just happened to be driving in a
+
+0:09:08.400,0:09:15.600
+while ago. And the sun was at a perfect angle that 
+it c came up underneath uh it was just rising and
+
+0:09:15.600,0:09:20.640
+it came up underneath a overpass. And I just 
+kind of clicked the button on my cell phone so
+
+0:09:20.640,0:09:26.240
+that I could capture this moment. Again, that's 
+a that's a moment that has to be location, time,
+
+0:09:26.240,0:09:31.040
+time, day of year, and then you could see that 
+if you stood there. And again, I don't really
+
+0:09:31.040,0:09:36.400
+particularly celebrate or go I don't go down every 
+fall to try to catch this sunrise underneath this
+
+0:09:36.400,0:09:42.400
+bridge, but you get the idea that you're like, 
+"Whoa, this this object in this in the sky was
+
+0:09:42.400,0:09:46.800
+moving randomly." And now all of a sudden today, 
+it's shooting right at me through a little tiny
+
+0:09:46.800,0:09:52.400
+hole. And you can you can kind of imagine that the 
+builders of Stonehenge were quite interested in
+
+0:09:52.400,0:09:58.160
+the moment that the sun would appear and burst 
+onto them. And if you were standing somewhere,
+
+0:09:58.160,0:10:03.200
+it'd be dark and then you would be like a beam of 
+direct light would be on you. And so it's pretty
+
+0:10:03.200,0:10:08.960
+exciting. Now, there was a lot of iteration 
+in several kind of concentric structures at
+
+0:10:08.960,0:10:14.960
+Stonehenge that were built between 5,100 years 
+ago and 3,600 years ago. And so to some degree,
+
+0:10:14.960,0:10:18.400
+you could imagine that by the time they were 
+done with this, they had a pretty good sense
+
+0:10:18.400,0:10:25.440
+of where the sun rose and sun set as it moved 
+across the horizon around Stonehenge. And you
+
+0:10:25.440,0:10:30.480
+can think of it as like it's a data table that 
+has been tracking the sun. Had been tracking the
+
+0:10:30.480,0:10:36.960
+sun for 2500 years. So up next we're going to 
+talk about moving things. Everything up to now
+
+0:10:36.960,0:10:42.800
+I've talked about is just like measuring the 
+sun, a sun dial. But up next we'll talk about
+
+0:10:42.800,0:10:49.200
+uh analog devices with gears and pulleys etc that 
+attempt to do some computations. And we'll stick
+
+0:10:49.200,0:10:55.639
+with in the beginning the obsession with the 
+location of the sun. [Music] [Applause] [Music]
