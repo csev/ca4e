@@ -33,6 +33,13 @@
 \usepackage{caption}
 \captionsetup{font=small,labelfont=bf}
 
+% --- Global image sizing ---
+% Never let figures take over the page during drafting
+\setkeys{Gin}{width=\linewidth,height=0.55\textheight,keepaspectratio}
+
+% Pandoc helper (newer pandoc wraps images with \pandocbounded)
+\providecommand{\pandocbounded}[1]{#1}
+
 % --- Colors/links (print-friendly) ---
 \usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}

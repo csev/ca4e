@@ -14,17 +14,35 @@ if ! command -v pandoc >/dev/null 2>&1; then
   exit 1
 fi
 
-echo "Building PDF (XeLaTeX) ..."
+echo "Building PDF (XeLaTeX + makeindex) ..."
+
+# 1) Generate LaTeX from Pandoc
 pandoc \
   metadata.yaml \
   "${CHAPTERS[@]}" \
   --from markdown \
   --template=templates/kdp-6x9.tex \
-  --pdf-engine=xelatex \
   --toc \
   --no-highlight \
   --resource-path=".:images:chapters" \
-  -o build/ca4e.pdf
+  -o build/ca4e.tex
+
+# 2) First LaTeX pass (creates .idx)
+xelatex -interaction=nonstopmode -halt-on-error -output-directory=build build/ca4e.tex
+
+# 3) Build the index only if .idx exists
+if [[ -f build/ca4e.idx ]]; then
+  makeindex build/ca4e.idx
+else
+  echo "No index entries yet (build/ca4e.idx not created); skipping makeindex."
+fi
+
+# 4) Second LaTeX pass (pulls in .ind)
+xelatex -interaction=nonstopmode -halt-on-error -output-directory=build build/ca4e.tex
+
+# Optional 3rd pass to settle TOC/page refs (sometimes helpful)
+xelatex -interaction=nonstopmode -halt-on-error -output-directory=build build/ca4e.tex
+
 
 echo "Building standalone HTML ..."
 pandoc \
