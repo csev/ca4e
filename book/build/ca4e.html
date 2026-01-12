@@ -147,6 +147,44 @@ Manufacturing Enables Abstraction</a></li>
 <li><a href="#what-comes-next-2" id="toc-what-comes-next-2">What Comes
 Next</a></li>
 </ul></li>
+<li><a href="#digital-logic-building-computation-from-gates"
+id="toc-digital-logic-building-computation-from-gates">Digital Logic:
+Building Computation from Gates</a>
+<ul>
+<li><a href="#computers-as-interconnected-components"
+id="toc-computers-as-interconnected-components">Computers as
+Interconnected Components</a></li>
+<li><a href="#what-the-cpu-does" id="toc-what-the-cpu-does">What the CPU
+Does</a></li>
+<li><a href="#logic-gates-as-building-blocks"
+id="toc-logic-gates-as-building-blocks">Logic Gates as Building
+Blocks</a></li>
+<li><a href="#representing-numbers-in-binary"
+id="toc-representing-numbers-in-binary">Representing Numbers in
+Binary</a></li>
+<li><a href="#adding-numbers-with-gates-half-adders"
+id="toc-adding-numbers-with-gates-half-adders">Adding Numbers with
+Gates: Half Adders</a></li>
+<li><a href="#full-adders-and-multi-bit-addition"
+id="toc-full-adders-and-multi-bit-addition">Full Adders and Multi-Bit
+Addition</a></li>
+<li><a href="#storing-data-with-feedback"
+id="toc-storing-data-with-feedback">Storing Data with Feedback</a></li>
+<li><a href="#clocked-storage-gated-d-latches"
+id="toc-clocked-storage-gated-d-latches">Clocked Storage: Gated D
+Latches</a></li>
+<li><a href="#registers-from-multiple-latches"
+id="toc-registers-from-multiple-latches">Registers from Multiple
+Latches</a></li>
+<li><a href="#tools-for-exploring-digital-logic"
+id="toc-tools-for-exploring-digital-logic">Tools for Exploring Digital
+Logic</a></li>
+<li><a href="#summary-from-gates-to-computation"
+id="toc-summary-from-gates-to-computation">Summary: From Gates to
+Computation</a></li>
+<li><a href="#what-comes-next-3" id="toc-what-comes-next-3">What Comes
+Next</a></li>
+</ul></li>
 <li><a href="#clocked-circuits-coordinating-computation-over-time"
 id="toc-clocked-circuits-coordinating-computation-over-time">Clocked
 Circuits: Coordinating Computation Over Time</a>
@@ -184,7 +222,7 @@ Repetition</a></li>
 <li><a href="#summary-time-makes-programs-possible"
 id="toc-summary-time-makes-programs-possible">Summary: Time Makes
 Programs Possible</a></li>
-<li><a href="#what-comes-next-3" id="toc-what-comes-next-3">What Comes
+<li><a href="#what-comes-next-4" id="toc-what-comes-next-4">What Comes
 Next</a></li>
 </ul></li>
 <li><a
@@ -234,7 +272,7 @@ Matters</a></li>
 <li><a href="#summary-programs-are-physical-processes"
 id="toc-summary-programs-are-physical-processes">Summary: Programs Are
 Physical Processes</a></li>
-<li><a href="#what-comes-next-4" id="toc-what-comes-next-4">What Comes
+<li><a href="#what-comes-next-5" id="toc-what-comes-next-5">What Comes
 Next</a></li>
 </ul></li>
 <li><a
@@ -978,6 +1016,248 @@ is to examine how arithmetic operations and memory storage are
 implemented using combinations of gates. The following chapter explores
 how numbers are added, stored, and manipulated using purely digital
 logic structures.</p>
+<h1 id="digital-logic-building-computation-from-gates">Digital Logic:
+Building Computation from Gates</h1>
+<p>With reliable transistors and scalable manufacturing in place,
+attention can shift from how devices are built to how computation itself
+is organized. Digital logic provides the abstraction that allows
+electrical behavior to be treated as mathematical structure. Voltages
+become symbols, wires become signals, and circuits become logical
+systems that can be reasoned about using rules rather than physical
+measurements.</p>
+<p>This chapter introduces the logical building blocks of computers:
+gates, adders, and storage elements. These components form the
+foundation of processors and memory systems.</p>
+<hr />
+<h2 id="computers-as-interconnected-components">Computers as
+Interconnected Components</h2>
+<p>Inside a computer, information moves along wires that carry
+electrical signals. Each signal is interpreted as either a logical zero
+or one. Groups of wires connect major subsystems such as the central
+processing unit, memory, and input/output devices.</p>
+<figure>
+<img src="images/ch04-generic-computer.png"
+alt="Generic computer system showing CPU, memory, and I/O" />
+<figcaption aria-hidden="true">Generic computer system showing CPU,
+memory, and I/O</figcaption>
+</figure>
+<p>Although software describes computation in abstract terms, every
+operation ultimately becomes patterns of electrical signals traveling
+between physical components. Digital logic provides the framework that
+connects these physical movements to symbolic meaning.</p>
+<hr />
+<h2 id="what-the-cpu-does">What the CPU Does</h2>
+<p>The central processing unit (CPU) executes programs by repeatedly
+performing a simple cycle: fetch an instruction, interpret it, and
+perform the required operation. The CPU is not intelligent in the human
+sense. It does not understand goals or meaning. Instead, it follows
+mechanical rules at very high speed, executing billions of operations
+per second in modern systems.</p>
+<p>Programs written in high-level languages are translated into machine
+instructions that the CPU can execute directly. Each instruction
+specifies small operations such as moving data, performing arithmetic,
+or testing conditions.</p>
+<p>At the hardware level, these operations are implemented entirely
+using combinations of logic gates and storage elements.</p>
+<hr />
+<h2 id="logic-gates-as-building-blocks">Logic Gates as Building
+Blocks</h2>
+<p>Logic gates accept one or more binary inputs and produce a binary
+output. Each gate implements a simple logical rule.</p>
+<p>The most common gates include:</p>
+<ul>
+<li><strong>NOT</strong>, which inverts a signal<br />
+</li>
+<li><strong>AND</strong>, which produces one only if all inputs are
+one<br />
+</li>
+<li><strong>OR</strong>, which produces one if any input is one<br />
+</li>
+<li><strong>XOR</strong>, which produces one if inputs differ</li>
+</ul>
+<figure>
+<img src="images/ch04-basic-gates.png"
+alt="Truth tables and symbols for basic logic gates" />
+<figcaption aria-hidden="true">Truth tables and symbols for basic logic
+gates</figcaption>
+</figure>
+<p>Although these operations are simple, they are sufficient to
+construct any digital computation when combined appropriately.</p>
+<hr />
+<h2 id="representing-numbers-in-binary">Representing Numbers in
+Binary</h2>
+<p>To perform arithmetic using logic gates, numbers must be represented
+using electrical signals. Humans normally use base‑10 representation,
+where each digit represents a power of ten. Digital systems instead use
+base‑2 representation, where each digit represents a power of two.</p>
+<p>For example:</p>
+<ul>
+<li>The base‑10 number 6 is written as <strong>110₂</strong> in
+binary.<br />
+</li>
+<li>The base‑10 number 7 is written as <strong>111₂</strong>.</li>
+</ul>
+<p>Each bit position corresponds to a weight:</p>
+<ul>
+<li>leftmost bit → 4<br />
+</li>
+<li>middle bit → 2<br />
+</li>
+<li>rightmost bit → 1</li>
+</ul>
+<p>Binary representation allows numerical values to be manipulated using
+simple logical operations on individual bits.</p>
+<figure>
+<img src="images/ch04-binary-place-values.png"
+alt="Binary place values for three-bit numbers" />
+<figcaption aria-hidden="true">Binary place values for three-bit
+numbers</figcaption>
+</figure>
+<hr />
+<h2 id="adding-numbers-with-gates-half-adders">Adding Numbers with
+Gates: Half Adders</h2>
+<p>The simplest arithmetic operation is addition. When adding two single
+bits, there are four possible input combinations. The result must
+produce both a sum bit and a carry bit.</p>
+<p>A <strong>half adder</strong> is a circuit that adds two bits and
+produces:</p>
+<ul>
+<li>a <strong>sum</strong> output<br />
+</li>
+<li>a <strong>carry</strong> output</li>
+</ul>
+<p>The sum output is produced by an XOR gate, while the carry output is
+produced by an AND gate.</p>
+<figure>
+<img src="images/ch04-half-adder.png"
+alt="Half adder logic diagram and truth table" />
+<figcaption aria-hidden="true">Half adder logic diagram and truth
+table</figcaption>
+</figure>
+<p>This circuit performs correct binary addition for single-bit
+values.</p>
+<hr />
+<h2 id="full-adders-and-multi-bit-addition">Full Adders and Multi-Bit
+Addition</h2>
+<p>When adding multi-bit numbers, each bit position must also consider a
+carry value from the previous position. A <strong>full adder</strong>
+extends the half adder by adding three inputs:</p>
+<ul>
+<li>bit A<br />
+</li>
+<li>bit B<br />
+</li>
+<li>carry‑in</li>
+</ul>
+<p>It produces:</p>
+<ul>
+<li>a sum bit<br />
+</li>
+<li>a carry‑out bit</li>
+</ul>
+<p>By chaining full adders together, multi-bit addition can be
+performed. Each stage passes its carry output to the next stage,
+allowing numbers of arbitrary length to be added.</p>
+<figure>
+<img src="images/ch04-full-adder-chain.png"
+alt="Chained full adders forming a multi-bit adder" />
+<figcaption aria-hidden="true">Chained full adders forming a multi-bit
+adder</figcaption>
+</figure>
+<p>In practice, processors use more sophisticated adder designs to
+improve speed, but the fundamental principle remains the same.</p>
+<hr />
+<h2 id="storing-data-with-feedback">Storing Data with Feedback</h2>
+<p>Computation requires not only processing data but also remembering
+it. Storage is implemented using circuits that maintain state over
+time.</p>
+<p>The simplest storage element uses <strong>feedback</strong>, where
+part of the output is fed back into the input of the circuit. This
+allows a value to persist even when the original input signal is
+removed.</p>
+<p>An example is the <strong>set-reset (SR) latch</strong>, built from
+two cross‑connected NOR gates. Depending on the control inputs, the
+latch can store either a zero or a one.</p>
+<figure>
+<img src="images/ch04-sr-latch.png"
+alt="SR latch built from cross-coupled NOR gates" />
+<figcaption aria-hidden="true">SR latch built from cross-coupled NOR
+gates</figcaption>
+</figure>
+<p>Feedback loops introduce a new behavior: the circuit’s output depends
+not only on current inputs, but also on past states.</p>
+<hr />
+<h2 id="clocked-storage-gated-d-latches">Clocked Storage: Gated D
+Latches</h2>
+<p>While simple latches can store data, processors require more
+controlled storage that changes only at specific times. This is achieved
+by introducing a clock signal.</p>
+<p>A <strong>gated D latch</strong> has:</p>
+<ul>
+<li>a data input (D)<br />
+</li>
+<li>a clock or control input (C)</li>
+</ul>
+<p>When the clock is active, the latch copies the data input into its
+internal state. When the clock is inactive, the stored value is held
+constant regardless of changes to the input.</p>
+<figure>
+<img src="images/ch04-gated-d-latch.png"
+alt="Gated D latch timing and structure" />
+<figcaption aria-hidden="true">Gated D latch timing and
+structure</figcaption>
+</figure>
+<p>This behavior allows many storage elements to update in synchronized
+steps, forming the basis of registers and memory systems.</p>
+<hr />
+<h2 id="registers-from-multiple-latches">Registers from Multiple
+Latches</h2>
+<p>By grouping multiple gated D latches together, multi-bit storage
+units can be created. For example, three latches can store a three-bit
+number. Larger registers store entire machine words, allowing processors
+to hold intermediate values during computation.</p>
+<p>Registers provide fast, temporary storage that supports arithmetic
+operations, branching decisions, and data movement within the CPU.</p>
+<figure>
+<img src="images/ch04-register.png"
+alt="Three-bit register built from gated D latches" />
+<figcaption aria-hidden="true">Three-bit register built from gated D
+latches</figcaption>
+</figure>
+<p>These structures form the immediate working memory of the
+processor.</p>
+<hr />
+<h2 id="tools-for-exploring-digital-logic">Tools for Exploring Digital
+Logic</h2>
+<p>Modern educational tools allow digital circuits to be built and
+tested interactively. Gate-level simulators can display signal flow,
+timing, and logical behavior, making it easier to understand how complex
+systems emerge from simple components.</p>
+<p>Some tools support layout-level construction, while others focus on
+abstract gate connectivity. Both approaches reinforce the relationship
+between physical hardware and logical structure.</p>
+<p>By experimenting with gates, adders, and latches, it becomes clear
+that computation arises not from individual devices but from organized
+patterns of interaction.</p>
+<hr />
+<h2 id="summary-from-gates-to-computation">Summary: From Gates to
+Computation</h2>
+<p>Digital logic transforms electrical behavior into mathematical
+structure. Logic gates implement simple rules, adders perform
+arithmetic, and latches store information over time.</p>
+<p>By combining these components, complex machines can be built that
+execute programs, manipulate data, and respond to inputs. The physical
+realities of electronics remain present, but abstraction allows
+designers to reason about systems in logical terms.</p>
+<p>With digital logic in place, the final step toward building a
+processor is introducing coordinated timing and instruction
+sequencing.</p>
+<hr />
+<h2 id="what-comes-next-3">What Comes Next</h2>
+<p>The next chapter introduces clocked circuits and control logic. These
+mechanisms coordinate when data moves and when operations occur,
+allowing entire programs to be executed step by step inside the
+processor.</p>
 <h1 id="clocked-circuits-coordinating-computation-over-time">Clocked
 Circuits: Coordinating Computation Over Time</h1>
 <p>Combinational logic circuits, such as adders and logic gates, produce
@@ -1243,7 +1523,7 @@ execute instruction sequences automatically.</p>
 <p>With clocked execution in place, computers can now run programs
 rather than merely perform fixed calculations.</p>
 <hr />
-<h2 id="what-comes-next-3">What Comes Next</h2>
+<h2 id="what-comes-next-4">What Comes Next</h2>
 <p>The next chapter examines machine language and processor architecture
 in more detail, using a small but complete instruction set inspired by
 early microprocessors. Programs will be written directly in machine code
@@ -1560,7 +1840,7 @@ abstraction on top.</p>
 relationship between hardware and software becomes concrete and
 observable.</p>
 <hr />
-<h2 id="what-comes-next-4">What Comes Next</h2>
+<h2 id="what-comes-next-5">What Comes Next</h2>
 <p>With a complete CPU model in place, attention can now turn to how
 real-world processors improve performance through techniques such as
 pipelining, caching, and parallel execution. The next chapter explores
