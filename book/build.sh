@@ -21,6 +21,7 @@ pandoc \
   metadata.yaml \
   "${CHAPTERS[@]}" \
   --from markdown \
+  --top-level-division=chapter \
   --template=templates/kdp-6x9.tex \
   --toc \
   --no-highlight \
