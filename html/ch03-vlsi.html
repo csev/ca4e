@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Computer Architecture for Everybody — Very Large Scale
+Integration: From Individual Devices to Entire Chips</title>
+  <link rel="stylesheet" href="styles/book.css" />
+  <style>
+    body { max-width: 50em; margin: 2rem auto; padding: 0 1rem; line-height: 1.55; }
+    .ca4e-nav { display:flex; gap:1rem; align-items:center; margin: 1.25rem 0; padding:.75rem 0; border-top:1px solid #ddd; border-bottom:1px solid #ddd; }
+    .ca4e-spacer { flex: 1; }
+    .ca4e-nav a { text-decoration:none; }
+  </style>
+</head>
+<body>
+<nav class="ca4e-nav" aria-label="Chapter navigation">
+<a class="ca4e-home" href="index.html">Contents</a> <span
+class="ca4e-spacer"></span>
+<a class="ca4e-prev" href="ch02-solid-state.html">← Previous</a>
+<a class="ca4e-next" href="ch04-digital-logic.html">Next →</a>
+</nav>
+<h1
+id="very-large-scale-integration-from-individual-devices-to-entire-chips">Very
+Large Scale Integration: From Individual Devices to Entire Chips</h1>
+<p>The invention of the transistor made electronic switching reliable
+and efficient, but early circuits still consisted of individual
+components wired together on circuit boards. Each transistor, resistor,
+and capacitor had to be manufactured separately and then connected by
+hand or by automated assembly. While this approach worked for small
+systems, it quickly became impractical as circuits grew more
+complex.</p>
+<p>Very Large Scale Integration (VLSI) describes the set of technologies
+that made it possible to place enormous numbers of transistors onto a
+single piece of silicon. Instead of assembling computers from individual
+components, entire processors could be manufactured as unified physical
+systems. This shift did not merely improve performance; it fundamentally
+changed how computers were designed, built, and scaled.</p>
+<hr />
+<h2 id="from-discrete-components-to-integrated-circuits">From Discrete
+Components to Integrated Circuits</h2>
+<p>Early transistor-based electronics were constructed much like
+mechanical systems: individual parts were mounted on boards and
+connected with wires or metal traces. Even when integrated circuits
+first appeared, they typically contained only a handful of transistors
+or logic gates.</p>
+<p>These early chips reduced size and improved reliability, but they did
+not yet enable full processors to be placed on a single device. Complex
+systems still required many chips working together, with signals
+traveling across boards and connectors. Speed was limited by how fast
+electrical signals could move between packages, and cost increased with
+every additional component.</p>
+<p>The next major leap required changing not just circuit design, but
+manufacturing itself.</p>
+<hr />
+<h2 id="planar-transistors-and-two-dimensional-manufacturing">Planar
+Transistors and Two-Dimensional Manufacturing</h2>
+<figure>
+<img src="images/ch03-planar-transistor.png"
+alt="Planar transistor cross-section and surface fabrication" />
+<figcaption aria-hidden="true">Planar transistor cross-section and
+surface fabrication</figcaption>
+</figure>
+<p>Before the 1960s, transistors were often built as small
+three-dimensional structures that had to be individually assembled and
+wired. This made large-scale manufacturing slow, expensive, and
+difficult to automate.</p>
+<p>The planar transistor process, developed at Fairchild Semiconductor,
+transformed transistor fabrication into a two-dimensional surface
+process. Instead of assembling parts, chemical and photographic
+techniques were used to shape transistor structures directly on the
+surface of silicon wafers.</p>
+<p>By depositing materials in layers and selectively removing regions
+using masks, entire arrays of transistors could be created
+simultaneously. This approach allowed thousands, and eventually
+billions, of devices to be produced in a single manufacturing run.</p>
+<p>Planar fabrication made integration scalable.</p>
+<hr />
+<h2 id="wafers-masks-and-photolithography">Wafers, Masks, and
+Photolithography</h2>
+<figure>
+<img src="images/ch03-silicon-wafer-dies.png"
+alt="Silicon wafer with multiple die patterns" />
+<figcaption aria-hidden="true">Silicon wafer with multiple die
+patterns</figcaption>
+</figure>
+<p>Modern chip manufacturing begins with thin circular slices of silicon
+called wafers. Each wafer contains many identical copies of a chip
+design, arranged in a grid pattern. After fabrication, the wafer is cut
+into individual chips, each of which becomes a processor, memory device,
+or controller.</p>
+<p>Patterns are transferred onto wafers using photolithography. In this
+process, light-sensitive chemicals are exposed through precisely
+designed masks. Each mask defines where material will be added, removed,
+or altered during that step of fabrication.</p>
+<p>Multiple masks are used in sequence to build up complex
+three-dimensional structures from stacked layers. Although the
+manufacturing process is layered, the design itself is typically
+described as a two-dimensional layout, where different materials occupy
+specific regions and intersections.</p>
+<p>This manufacturing model is what allows enormous numbers of
+transistors to be created with extremely high consistency.</p>
+<hr />
+<h2 id="growth-of-transistor-density-over-time">Growth of Transistor
+Density Over Time</h2>
+<figure>
+<img src="images/ch03-transistor-growth.png"
+alt="Historical growth of transistor counts on processors" />
+<figcaption aria-hidden="true">Historical growth of transistor counts on
+processors</figcaption>
+</figure>
+<p>Once planar manufacturing was established, transistor counts began to
+grow rapidly. The Intel 4004 microprocessor, released in 1971, contained
+approximately 2,300 transistors and was the first commercially available
+single-chip general-purpose processor.</p>
+<p>Over the following decades, transistor counts increased by orders of
+magnitude. By the early 2000s, chips contained billions of transistors.
+Modern graphics processors and specialized accelerators now contain tens
+or even hundreds of billions of devices, and experimental wafer-scale
+systems integrate trillions of transistors across entire wafers.</p>
+<p>This steady growth is often associated with Moore’s Law, an
+observation that transistor density tends to double over fixed time
+intervals. While physical limits now constrain how small transistors can
+become, integration remains the defining feature of modern computing
+hardware.</p>
+<hr />
+<h2 id="designing-with-layout-not-wires">Designing with Layout, Not
+Wires</h2>
+<p>As transistor counts increased, manual wiring became impossible.
+Instead, designers describe circuits using layout patterns that specify
+where materials will be placed on the wafer.</p>
+<p>VLSI layout tools allow engineers to design using layers that
+represent different physical materials:</p>
+<ul>
+<li>metal for conductors<br />
+</li>
+<li>doped silicon regions for transistor channels<br />
+</li>
+<li>polysilicon for control gates</li>
+</ul>
+<p>When certain layers cross, transistors are formed automatically by
+the manufacturing process. Vertical connections between layers are
+created using structures called vias, which allow signals to move
+between wiring layers.</p>
+<figure>
+<img src="images/ch03-vlsi-layers.png"
+alt="Layered VLSI layout showing metal, diffusion, and polysilicon" />
+<figcaption aria-hidden="true">Layered VLSI layout showing metal,
+diffusion, and polysilicon</figcaption>
+</figure>
+<p>Rather than drawing individual transistors explicitly, designers
+arrange geometric regions whose interactions produce the desired
+electrical behavior. Logical structure emerges from physical
+geometry.</p>
+<hr />
+<h2 id="from-layout-to-logic-gates">From Layout to Logic Gates</h2>
+<p>Just as transistors are grouped into logic gates in circuit design,
+layout patterns are arranged to produce gate behavior at the physical
+level.</p>
+<p>A CMOS inverter, for example, is created by arranging one PMOS and
+one NMOS transistor so that exactly one conducts for any input value.
+When input voltage is low, the PMOS pulls the output high. When input
+voltage is high, the NMOS pulls the output low.</p>
+<figure>
+<img src="images/ch03-vlsi-not-layout.png"
+alt="CMOS inverter layout in VLSI form" />
+<figcaption aria-hidden="true">CMOS inverter layout in VLSI
+form</figcaption>
+</figure>
+<p>More complex gates such as NAND and NOR are built by combining
+multiple transistors in series and parallel arrangements. The same
+logical relationships studied in gate diagrams appear again in physical
+form as geometric structures on silicon.</p>
+<figure>
+<img src="images/ch03-vlsi-nand-layout.png"
+alt="CMOS NAND gate VLSI layout" />
+<figcaption aria-hidden="true">CMOS NAND gate VLSI layout</figcaption>
+</figure>
+<p>This repetition of structure across abstraction levels is one of the
+defining characteristics of computer architecture: logical design
+mirrors physical implementation.</p>
+<hr />
+<h2 id="design-tools-and-educational-models">Design Tools and
+Educational Models</h2>
+<p>Professional VLSI design requires sophisticated tools that model
+electrical behavior, timing, power consumption, and manufacturing
+constraints. One of the most widely used educational tools for learning
+layout is the open-source Magic VLSI system, originally developed at
+Berkeley in the early 1980s and still widely used in academic
+instruction.</p>
+<p>Educational layout environments simplify many aspects of real
+fabrication. They may allow layer overlaps or ignore detailed spacing
+rules that would be impossible to manufacture reliably. These
+simplifications make it easier to understand core ideas, even if the
+resulting layouts would not be suitable for commercial fabrication.</p>
+<p>Simplified emulators and browser-based tools used for instruction
+focus on conceptual correctness rather than full physical accuracy. They
+illustrate how geometry produces logical behavior without modeling every
+manufacturing constraint.</p>
+<hr />
+<h2 id="why-integration-changes-architecture">Why Integration Changes
+Architecture</h2>
+<p>When entire systems fit onto single chips, communication between
+components becomes far faster and more reliable. Signals no longer need
+to traverse long board traces or pass through connectors between
+packages. Memory, arithmetic units, and control logic can be tightly
+integrated and optimized together.</p>
+<p>This physical proximity enables architectural features that would be
+impractical in discrete-component systems, such as deep pipelines, large
+on-chip caches, and complex parallel execution units.</p>
+<p>Integration also shifts economic considerations. Instead of
+assembling systems from parts, the primary cost becomes chip design and
+fabrication, while replication becomes inexpensive once manufacturing is
+established.</p>
+<p>As a result, architectural decisions increasingly reflect trade-offs
+between silicon area, power consumption, and performance rather than
+assembly complexity.</p>
+<hr />
+<h2 id="summary-manufacturing-enables-abstraction">Summary:
+Manufacturing Enables Abstraction</h2>
+<p>Very Large Scale Integration made it possible to place entire
+computing systems onto single pieces of silicon. Planar fabrication,
+photolithography, and layered manufacturing transformed transistor
+construction into a massively parallel industrial process.</p>
+<p>Layout-based design replaced manual wiring, and logical structures
+emerged from physical geometry. Transistors became gates, gates became
+arithmetic units, and complete processors became manufacturable as
+single devices.</p>
+<p>With integration established, the focus of computer architecture can
+now shift away from manufacturing techniques and toward how logic itself
+is organized to perform computation.</p>
+<hr />
+<h2 id="what-comes-next">What Comes Next</h2>
+<p>With logic gates available as reliable building blocks, the next step
+is to examine how arithmetic operations and memory storage are
+implemented using combinations of gates. The following chapter explores
+how numbers are added, stored, and manipulated using purely digital
+logic structures.</p>
+<nav class="ca4e-nav" aria-label="Chapter navigation">
+<a class="ca4e-home" href="index.html">Contents</a> <span
+class="ca4e-spacer"></span>
+<a class="ca4e-prev" href="ch02-solid-state.html">← Previous</a>
+<a class="ca4e-next" href="ch04-digital-logic.html">Next →</a>
+</nav>
+</body>
+</html>

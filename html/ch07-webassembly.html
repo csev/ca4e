@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Computer Architecture for Everybody — WebAssembly and
+Emulation: Running Real Programs in the Browser</title>
+  <link rel="stylesheet" href="styles/book.css" />
+  <style>
+    body { max-width: 50em; margin: 2rem auto; padding: 0 1rem; line-height: 1.55; }
+    .ca4e-nav { display:flex; gap:1rem; align-items:center; margin: 1.25rem 0; padding:.75rem 0; border-top:1px solid #ddd; border-bottom:1px solid #ddd; }
+    .ca4e-spacer { flex: 1; }
+    .ca4e-nav a { text-decoration:none; }
+  </style>
+</head>
+<body>
+<nav class="ca4e-nav" aria-label="Chapter navigation">
+<a class="ca4e-home" href="index.html">Contents</a> <span
+class="ca4e-spacer"></span>
+<a class="ca4e-prev" href="ch06-cpu-machine-code.html">← Previous</a>
+</nav>
+<h1
+id="webassembly-and-emulation-running-real-programs-in-the-browser">WebAssembly
+and Emulation: Running Real Programs in the Browser</h1>
+<p>After building a complete mental model of how a CPU executes machine
+instructions, it becomes possible to recognize the same ideas appearing
+in unexpected places. One of the most surprising is the modern web
+browser. Today, browsers include built‑in virtual machines capable of
+executing low‑level binary code safely and efficiently.</p>
+<p>This chapter explores how emulation and WebAssembly connect
+historical machine architectures to modern execution environments, and
+why the browser can now act as a practical platform for systems
+programming.</p>
+<hr />
+<h2 id="from-hardware-to-emulators">From Hardware to Emulators</h2>
+<p>An emulator is a program that imitates the behavior of a hardware
+processor. Instead of electrical signals moving through gates, software
+interprets instruction bytes and updates simulated registers and
+memory.</p>
+<p>At a high level, an emulator performs the same steps as real
+hardware:</p>
+<ol type="1">
+<li>read the next instruction<br />
+</li>
+<li>decode the opcode<br />
+</li>
+<li>perform the operation<br />
+</li>
+<li>update registers and memory<br />
+</li>
+<li>advance the program counter</li>
+</ol>
+<p>This is the same fetch–decode–execute cycle implemented in
+software.</p>
+<figure>
+<img src="images/ch07-emulator-loop.png"
+alt="Emulator executing instructions in software" />
+<figcaption aria-hidden="true">Emulator executing instructions in
+software</figcaption>
+</figure>
+<p>Because modern computers are extraordinarily fast, they can often
+emulate older machines faster than the original hardware ever ran.</p>
+<hr />
+<h2 id="why-emulation-is-practical-today">Why Emulation Is Practical
+Today</h2>
+<p>Early microprocessors such as the MOS 6502 contained only a few
+thousand transistors and ran at clock speeds measured in megahertz.
+Modern processors contain billions of transistors and operate at several
+gigahertz.</p>
+<p>This enormous performance gap means that:</p>
+<ul>
+<li>JavaScript running in a browser can emulate historical CPUs in real
+time<br />
+</li>
+<li>graphics and sound can be simulated accurately<br />
+</li>
+<li>entire vintage game systems can be recreated in software</li>
+</ul>
+<p>Web sites such as the Internet Archive host playable emulations of
+classic arcade machines that run entirely in the browser.</p>
+<figure>
+<img src="images/ch07-arcade-emulator.png"
+alt="Classic game running in a browser-based emulator" />
+<figcaption aria-hidden="true">Classic game running in a browser-based
+emulator</figcaption>
+</figure>
+<hr />
+<h2 id="the-cdc6504-emulator">The CDC6504 Emulator</h2>
+<p>The CDC6504 emulator used in this course models a processor inspired
+by the MOS 6502 instruction set with a simplified architecture. It
+includes:</p>
+<ul>
+<li>registers (A, X, Y, status flags)<br />
+</li>
+<li>instruction memory<br />
+</li>
+<li>data memory<br />
+</li>
+<li>branching and arithmetic instructions</li>
+</ul>
+<p>Each instruction is implemented as a small block of JavaScript that
+updates simulated hardware state.</p>
+<p>Conceptually, each opcode becomes a function that performs the same
+register and memory updates that real circuitry would perform in
+silicon.</p>
+<figure>
+<img src="images/ch07-cdc6504-ui.png"
+alt="Emulator showing registers, memory, and instruction pointer" />
+<figcaption aria-hidden="true">Emulator showing registers, memory, and
+instruction pointer</figcaption>
+</figure>
+<hr />
+<h2 id="machine-code-inside-software">Machine Code Inside Software</h2>
+<p>When an emulator runs, machine code is not special. It is simply a
+sequence of numbers stored in an array. The emulator reads these numbers
+and interprets them as instructions.</p>
+<p>For example:</p>
+<ul>
+<li>a value may represent “load accumulator”<br />
+</li>
+<li>the next value may represent an address or constant<br />
+</li>
+<li>branching instructions modify the program counter</li>
+</ul>
+<p>The meaning comes entirely from how the emulator interprets the
+bits.</p>
+<p>This mirrors exactly what real hardware does, except that software
+replaces physical wiring.</p>
+<hr />
+<h2 id="from-native-cpus-to-virtual-machines">From Native CPUs to
+Virtual Machines</h2>
+<p>Historically, assembly language targeted specific processors:</p>
+<ul>
+<li>MOS 6502<br />
+</li>
+<li>Intel x86<br />
+</li>
+<li>ARM</li>
+</ul>
+<p>Programs compiled for one architecture could not run on another
+without translation or emulation.</p>
+<p>WebAssembly changes this model by defining a portable virtual
+instruction set that runs on top of browsers and other runtimes.</p>
+<p>Instead of targeting physical hardware, compilers target a
+standardized virtual machine.</p>
+<hr />
+<h2 id="what-is-webassembly">What Is WebAssembly?</h2>
+<p>WebAssembly (WASM) is a low‑level, binary instruction format designed
+for safe and efficient execution in browsers and other environments. It
+is not tied to any specific physical CPU.</p>
+<p>Key characteristics include:</p>
+<ul>
+<li>structured control flow<br />
+</li>
+<li>validated instruction sequences<br />
+</li>
+<li>sandboxed memory access<br />
+</li>
+<li>deterministic execution</li>
+</ul>
+<p>WASM programs cannot access files, devices, or the operating system
+directly. All interaction with the outside world occurs through
+carefully controlled interfaces provided by the host environment.</p>
+<figure>
+<img src="images/ch07-wasm-sandbox.png"
+alt="WebAssembly execution sandbox inside the browser" />
+<figcaption aria-hidden="true">WebAssembly execution sandbox inside the
+browser</figcaption>
+</figure>
+<hr />
+<h2 id="from-c-to-wasm">From C to WASM</h2>
+<p>Languages such as C and C++ can be compiled to WebAssembly using
+modern toolchains. The compilation process is:</p>
+<ol type="1">
+<li>source code is compiled to WASM bytecode<br />
+</li>
+<li>the browser loads and validates the module<br />
+</li>
+<li>the runtime translates WASM to native machine code<br />
+</li>
+<li>the program executes at near‑native speed</li>
+</ol>
+<p>From the browser’s perspective, WebAssembly is just another kind of
+executable content, similar to JavaScript but closer to machine
+operations.</p>
+<hr />
+<h2 id="a-wasm-hello-world">A WASM “Hello, World”</h2>
+<p>A minimal WebAssembly program may look like this in textual form
+(WAT):</p>
+<pre class="wat"><code>(module
+  (import &quot;console&quot; &quot;log&quot; (func $log (param i32 i32)))
+  (memory 1)
+  (data (i32.const 0) &quot;Hello, World!&quot;)
+  (func $main (result i32)
+    (call $log (i32.const 0) (i32.const 13))
+    (i32.const 42)
+  )
+  (export &quot;main&quot; (func $main))
+)</code></pre>
+<p>This code:</p>
+<ul>
+<li>allocates memory<br />
+</li>
+<li>stores a string<br />
+</li>
+<li>calls a logging function<br />
+</li>
+<li>returns a numeric value</li>
+</ul>
+<p>When compiled, it becomes a compact binary format that the browser
+can execute efficiently.</p>
+<figure>
+<img src="images/ch07-wasm-hex.png"
+alt="Hex dump of compiled WebAssembly module" />
+<figcaption aria-hidden="true">Hex dump of compiled WebAssembly
+module</figcaption>
+</figure>
+<hr />
+<h2 id="wasm-compared-to-traditional-assembly">WASM Compared to
+Traditional Assembly</h2>
+<p>Although WebAssembly resembles assembly language, it differs in
+important ways:</p>
+<ul>
+<li><strong>Sandboxed by design</strong> — no direct memory or OS
+access<br />
+</li>
+<li><strong>Safe execution model</strong> — code is validated before
+running<br />
+</li>
+<li><strong>Portable bytecode</strong> — same program runs on any
+platform<br />
+</li>
+<li><strong>Abstract machine</strong> — targets a virtual stack
+machine<br />
+</li>
+<li><strong>Host optimization</strong> — browsers compile and optimize
+at runtime</li>
+</ul>
+<p>Traditional assembly runs with full process privileges and depends
+entirely on the operating system for protection. WASM embeds safety into
+the execution model itself.</p>
+<hr />
+<h2 id="loops-functions-and-the-stack">Loops, Functions, and the
+Stack</h2>
+<p>Like physical CPUs, WebAssembly supports:</p>
+<ul>
+<li>local variables<br />
+</li>
+<li>function calls<br />
+</li>
+<li>loops and branches<br />
+</li>
+<li>a call stack</li>
+</ul>
+<p>When a function is called, parameters and return addresses are
+managed using stack structures maintained by the runtime.</p>
+<p>Even though the environment is virtual, the same concepts of control
+flow and memory organization still apply.</p>
+<hr />
+<h2 id="from-historical-cpus-to-modern-devices">From Historical CPUs to
+Modern Devices</h2>
+<p>Over the last fifty years, many processor families have been
+developed, but two now dominate consumer computing:</p>
+<ul>
+<li><strong>ARM</strong> processors, used in phones, tablets, and most
+laptops<br />
+</li>
+<li><strong>x86</strong> processors, used in many desktop and server
+systems</li>
+</ul>
+<p>These architectures differ internally, but they all implement the
+same fundamental ideas explored in this book: registers, memory,
+instructions, and controlled execution.</p>
+<hr />
+<h2 id="case-study-apples-cpu-transitions">Case Study: Apple’s CPU
+Transitions</h2>
+<p>Apple has moved across several processor families:</p>
+<ul>
+<li>MOS 6502 — early Apple computers<br />
+</li>
+<li>Motorola 68000 — early Macintosh systems<br />
+</li>
+<li>PowerPC — mid‑1990s through mid‑2000s<br />
+</li>
+<li>Intel x86 — 2006 through 2020<br />
+</li>
+<li>Apple‑designed ARM — 2020 to present</li>
+</ul>
+<p>To ease transitions, Apple built machine‑code translation systems
+that converted programs from one architecture to another at launch time.
+This allowed users to run older software while new native versions were
+developed.</p>
+<p>These transitions demonstrate that software compatibility can be
+preserved even as hardware changes dramatically.</p>
+<hr />
+<h2 id="why-the-6502-still-matters">Why the 6502 Still Matters</h2>
+<p>The design philosophy of early microprocessors influenced later
+architectures. Engineers who designed early ARM processors had deep
+experience with the 6502, and many principles carried forward into
+modern instruction set design.</p>
+<p>Although modern processors are vastly more complex, the core ideas
+remain recognizable.</p>
+<p>Understanding a small historical CPU therefore provides insight into
+the design of modern systems.</p>
+<hr />
+<h2 id="emulation-as-a-learning-tool">Emulation as a Learning Tool</h2>
+<p>Emulators allow direct observation of how instructions change machine
+state:</p>
+<ul>
+<li>registers update<br />
+</li>
+<li>memory changes<br />
+</li>
+<li>branches alter execution flow</li>
+</ul>
+<p>This visibility is rarely available on modern hardware, where
+pipelines and caches obscure internal behavior.</p>
+<p>For learning computer architecture, emulation provides clarity that
+real machines no longer expose.</p>
+<hr />
+<h2 id="summary-abstraction-without-losing-reality">Summary: Abstraction
+Without Losing Reality</h2>
+<p>WebAssembly and emulation demonstrate that low‑level computation
+remains relevant even in modern software systems. Programs still execute
+as sequences of instructions that manipulate memory and registers,
+whether those instructions are interpreted, emulated, or executed
+directly in silicon.</p>
+<p>The same architectural principles govern both historical processors
+and modern virtual machines. Only the layers of abstraction have
+changed.</p>
+<p>By tracing the path from physical circuits to browser‑based
+execution, the continuity of computer architecture becomes clear.</p>
+<hr />
+<h2 id="closing-thoughts">Closing Thoughts</h2>
+<p>Computers have evolved enormously in speed and scale, but not in
+fundamental design. Logic gates became processors, processors became
+systems, and systems became virtual machines running inside
+browsers.</p>
+<p>Understanding how computation works at the lowest level makes it
+possible to see through layers of abstraction and recognize the same
+mechanisms at work everywhere—from embedded devices to cloud servers to
+web pages running in a browser.</p>
+<p>This perspective provides both practical insight and a deeper
+appreciation for the remarkable continuity of computing technology.</p>
+<nav class="ca4e-nav" aria-label="Chapter navigation">
+<a class="ca4e-home" href="index.html">Contents</a> <span
+class="ca4e-spacer"></span>
+<a class="ca4e-prev" href="ch06-cpu-machine-code.html">← Previous</a>
+</nav>
+</body>
+</html>

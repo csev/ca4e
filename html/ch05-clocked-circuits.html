@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Computer Architecture for Everybody — Clocked Circuits:
+Coordinating Computation Over Time</title>
+  <link rel="stylesheet" href="styles/book.css" />
+  <style>
+    body { max-width: 50em; margin: 2rem auto; padding: 0 1rem; line-height: 1.55; }
+    .ca4e-nav { display:flex; gap:1rem; align-items:center; margin: 1.25rem 0; padding:.75rem 0; border-top:1px solid #ddd; border-bottom:1px solid #ddd; }
+    .ca4e-spacer { flex: 1; }
+    .ca4e-nav a { text-decoration:none; }
+  </style>
+</head>
+<body>
+<nav class="ca4e-nav" aria-label="Chapter navigation">
+<a class="ca4e-home" href="index.html">Contents</a> <span
+class="ca4e-spacer"></span>
+<a class="ca4e-prev" href="ch04-digital-logic.html">← Previous</a>
+<a class="ca4e-next" href="ch06-cpu-machine-code.html">Next →</a>
+</nav>
+<h1 id="clocked-circuits-coordinating-computation-over-time">Clocked
+Circuits: Coordinating Computation Over Time</h1>
+<p>Combinational logic circuits, such as adders and logic gates, produce
+outputs that depend only on their current inputs. However, physical
+circuits do not update instantaneously. Signals require time to
+propagate through transistors and wires before stabilizing at their
+final values. As circuits grow larger and more complex, this delay
+becomes increasingly important.</p>
+<p>To build reliable systems, digital computers introduce a coordinating
+signal called a <strong>clock</strong>. The clock defines discrete
+moments when values are allowed to change, allowing computation to
+proceed in synchronized steps rather than continuously drifting through
+intermediate states.</p>
+<hr />
+<h2 id="propagation-delay-and-circuit-length">Propagation Delay and
+Circuit Length</h2>
+<p>When an input changes, it takes time for the effects of that change
+to travel through the circuit. Each transistor introduces a small delay,
+and long paths through many devices accumulate larger delays.</p>
+<p>For example:</p>
+<ul>
+<li>a simple gate settles quickly<br />
+</li>
+<li>a multi-bit adder takes longer<br />
+</li>
+<li>a multiplier or complex control path may take much longer</li>
+</ul>
+<p>If outputs are observed before signals have fully settled, incorrect
+values may be captured. Circuit designers therefore identify the
+<strong>slowest path</strong> through a system, known as the critical
+path, and ensure that enough time passes before results are used.</p>
+<figure>
+<img src="images/ch05-propagation-delay.png"
+alt="Signal propagation through chained logic elements" />
+<figcaption aria-hidden="true">Signal propagation through chained logic
+elements</figcaption>
+</figure>
+<hr />
+<h2 id="clock-rate-and-system-timing">Clock Rate and System Timing</h2>
+<p>The clock rate of a processor specifies how often values are allowed
+to be updated. Each clock cycle provides time for signals to propagate
+and stabilize before being stored.</p>
+<p>The maximum clock frequency is limited by:</p>
+<ul>
+<li>the physical length of signal paths<br />
+</li>
+<li>the number of transistors in the longest logical path<br />
+</li>
+<li>the switching speed of the transistors<br />
+</li>
+<li>the size of the chip itself</li>
+</ul>
+<p>Once the slowest element of the arithmetic and logic unit (ALU) is
+identified, the clock must be slow enough to accommodate that delay.
+Faster clocks allow more operations per second, but only if circuits can
+reliably settle within each cycle.</p>
+<figure>
+<img src="images/ch05-clock-waveform.png"
+alt="Clock waveform showing discrete sampling points" />
+<figcaption aria-hidden="true">Clock waveform showing discrete sampling
+points</figcaption>
+</figure>
+<hr />
+<h2 id="separating-computation-from-storage">Separating Computation from
+Storage</h2>
+<p>To coordinate circuits, designers separate systems into two major
+categories:</p>
+<ul>
+<li><strong>combinational circuits</strong>, which compute
+continuously<br />
+</li>
+<li><strong>clocked storage elements</strong>, which update only on
+clock events</li>
+</ul>
+<p>Adders and logic gates belong to the first category. Latches and
+registers belong to the second.</p>
+<p>During most of the clock cycle, combinational circuits compute based
+on stable stored inputs. At the clock edge, new values are captured into
+storage elements, and the next cycle of computation begins.</p>
+<p>This separation prevents unstable intermediate values from
+propagating into stored state.</p>
+<hr />
+<h2 id="combining-adders-registers-and-clocks">Combining Adders,
+Registers, and Clocks</h2>
+<p>Consider a simple system that adds two numbers and stores the
+result:</p>
+<ul>
+<li>a register holds the current value<br />
+</li>
+<li>an adder computes a new value<br />
+</li>
+<li>a clock controls when the register updates</li>
+</ul>
+<p>While the clock is low, the register holds its value and the adder
+continuously computes the sum based on that value. When the clock goes
+high, the computed sum is captured into the register. The next cycle
+begins with a new stable value.</p>
+<figure>
+<img src="images/ch05-adder-register.png"
+alt="Adder feeding a register under clock control" />
+<figcaption aria-hidden="true">Adder feeding a register under clock
+control</figcaption>
+</figure>
+<p>This structure is repeated throughout processors to create
+step-by-step execution.</p>
+<hr />
+<h2 id="building-a-counter">Building a Counter</h2>
+<p>By feeding the output of a register back into one input of an adder
+and fixing the other input to the value one, a counting circuit can be
+created.</p>
+<p>Each clock cycle:</p>
+<ol type="1">
+<li>the adder computes current value plus one<br />
+</li>
+<li>the register stores the new value<br />
+</li>
+<li>the process repeats</li>
+</ol>
+<p>After reaching the maximum representable value, the counter overflows
+and wraps back to zero.</p>
+<figure>
+<img src="images/ch05-counter.png"
+alt="Counter built from adder and register" />
+<figcaption aria-hidden="true">Counter built from adder and
+register</figcaption>
+</figure>
+<p>This simple structure forms the basis of timers, program counters,
+and many sequencing mechanisms inside computers.</p>
+<hr />
+<h2 id="from-hardware-to-instructions">From Hardware to
+Instructions</h2>
+<p>So far, all behavior has been determined by fixed wiring. To build
+programmable machines, behavior must be controlled by
+<strong>instructions</strong> rather than physical switches.</p>
+<p>An instruction is a pattern of bits that specifies which operations
+should occur during a clock cycle. Instead of permanently connecting
+wires to force an action, instruction bits enable or disable parts of
+the circuit dynamically.</p>
+<p>This is achieved through <strong>control logic</strong> that
+interprets instruction bits and routes signals accordingly.</p>
+<hr />
+<h2 id="a-two-instruction-cpu">A Two-Instruction CPU</h2>
+<p>A minimal processor can be built using:</p>
+<ul>
+<li>a small register<br />
+</li>
+<li>an adder<br />
+</li>
+<li>control gates<br />
+</li>
+<li>a clock</li>
+</ul>
+<p>Suppose the machine supports two instructions:</p>
+<ul>
+<li><strong>0</strong> — clear the register<br />
+</li>
+<li><strong>1</strong> — add one to the register</li>
+</ul>
+<p>Instruction bits are connected to control gates that determine
+whether the adder output or zero is fed into the register. On each clock
+cycle, the selected value is stored.</p>
+<figure>
+<img src="images/ch05-tiny-cpu.png"
+alt="Tiny CPU datapath with instruction-controlled inputs" />
+<figcaption aria-hidden="true">Tiny CPU datapath with
+instruction-controlled inputs</figcaption>
+</figure>
+<p>Although extremely simple, this system demonstrates the core idea of
+programmable behavior: control signals modify data paths on each
+cycle.</p>
+<hr />
+<h2 id="why-memory-is-required">Why Memory Is Required</h2>
+<p>Manual instruction selection is not sufficient for general
+computation. Real programs require sequences of many instructions
+executed automatically.</p>
+<p>To support this, computers store instructions in memory and retrieve
+them one by one during execution. This leads to the
+<strong>fetch–decode–execute cycle</strong>:</p>
+<ol type="1">
+<li>fetch instruction from memory<br />
+</li>
+<li>decode instruction bits into control signals<br />
+</li>
+<li>execute operation<br />
+</li>
+<li>repeat</li>
+</ol>
+<p>This loop continues as long as the program runs.</p>
+<figure>
+<img src="images/ch05-fde-cycle.png"
+alt="Fetch-decode-execute cycle diagram" />
+<figcaption aria-hidden="true">Fetch-decode-execute cycle
+diagram</figcaption>
+</figure>
+<hr />
+<h2 id="program-counter-and-instruction-register">Program Counter and
+Instruction Register</h2>
+<p>Two special registers manage instruction sequencing:</p>
+<ul>
+<li>the <strong>Program Counter (PC)</strong> stores the address of the
+next instruction<br />
+</li>
+<li>the <strong>Current Instruction Register (CIR)</strong> holds the
+instruction being executed</li>
+</ul>
+<p>On each cycle, the PC advances, memory is accessed, and the CIR loads
+the next instruction. Decoder circuits then examine the instruction bits
+and activate the appropriate control signals for the ALU and
+registers.</p>
+<figure>
+<img src="images/ch05-pc-cir.png"
+alt="PC and CIR interaction with memory and control logic" />
+<figcaption aria-hidden="true">PC and CIR interaction with memory and
+control logic</figcaption>
+</figure>
+<hr />
+<h2 id="decoding-instructions-with-gates">Decoding Instructions with
+Gates</h2>
+<p>Instruction decoding is performed using combinations of logic gates
+called <strong>decoders</strong>. A decoder converts bit patterns into
+individual control lines.</p>
+<p>For example, if an instruction has three bits, a decoder can generate
+eight distinct control signals, one for each possible instruction value.
+These signals activate specific parts of the circuit for each
+instruction type.</p>
+<figure>
+<img src="images/ch05-decoder.png"
+alt="Binary decoder activating control lines" />
+<figcaption aria-hidden="true">Binary decoder activating control
+lines</figcaption>
+</figure>
+<p>This mechanism allows compact binary instructions to control large
+physical systems.</p>
+<hr />
+<h2 id="abstraction-through-repetition">Abstraction Through
+Repetition</h2>
+<p>Although real processors contain billions of transistors, they are
+composed of repeated versions of the same fundamental structures:</p>
+<ul>
+<li>adders<br />
+</li>
+<li>registers<br />
+</li>
+<li>multiplexers<br />
+</li>
+<li>decoders</li>
+</ul>
+<p>Complex behavior emerges from organized combinations of simple
+components operating under synchronized timing.</p>
+<p>This layered abstraction allows designers to reason about machines in
+terms of data paths and control flows rather than individual
+transistors.</p>
+<hr />
+<h2 id="summary-time-makes-programs-possible">Summary: Time Makes
+Programs Possible</h2>
+<p>Clocked circuits introduce controlled timing into digital systems,
+allowing stable computation to occur in discrete steps. By separating
+combinational logic from storage and coordinating updates with a clock,
+reliable large-scale systems become possible.</p>
+<p>Control logic and instruction decoding transform fixed circuits into
+programmable machines. Registers, adders, and decoders cooperate to
+execute instruction sequences automatically.</p>
+<p>With clocked execution in place, computers can now run programs
+rather than merely perform fixed calculations.</p>
+<hr />
+<h2 id="what-comes-next">What Comes Next</h2>
+<p>The next chapter examines machine language and processor architecture
+in more detail, using a small but complete instruction set inspired by
+early microprocessors. Programs will be written directly in machine code
+and executed in an emulator to reveal how software and hardware meet at
+the lowest level.</p>
+<nav class="ca4e-nav" aria-label="Chapter navigation">
+<a class="ca4e-home" href="index.html">Contents</a> <span
+class="ca4e-spacer"></span>
+<a class="ca4e-prev" href="ch04-digital-logic.html">← Previous</a>
+<a class="ca4e-next" href="ch06-cpu-machine-code.html">Next →</a>
+</nav>
+</body>
+</html>
