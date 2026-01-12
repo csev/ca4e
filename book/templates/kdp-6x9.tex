@@ -94,6 +94,9 @@ $if(subtitle)$
 \postdate{\par\end{center}\vskip 1.0em}
 $endif$
 
+\usepackage{makeidx}
+\makeindex
+
 \begin{document}
 
 % --- Title page ---
@@ -136,5 +139,7 @@ $body$
 
 % --- Back matter (optional) ---
 % \backmatter
+
+\printindex
 
 \end{document}
