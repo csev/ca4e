@@ -1,0 +1,318 @@
+0:00:00.320,0:00:05.920
+Hello and welcome through another walkthrough 
+for computer architecture for everybody.
+
+0:00:05.920,0:00:10.000
+In this walkthrough I am going to walk 
+through the building of a slightly more
+
+0:00:10.000,0:00:17.680
+complex circuit. In this case we are going 
+to build a NAND gate. So NAND of course is
+
+0:00:17.680,0:00:24.080
+um the opposite of and so if both things are 
+one inputs are one the output is zero. And if
+
+0:00:24.080,0:00:30.320
+either any of the outputs are zero they're the 
+output is one. It's the opposite of of and. Um,
+
+0:00:30.320,0:00:37.680
+and so let's take a look at the picture. So the 
+way this works is there are two inputs and there
+
+0:00:37.680,0:00:43.440
+is a set of POS transistors at the top kind of 
+in parallel going from the positive voltage to
+
+0:00:43.440,0:00:50.240
+a common wire in the middle to out. And then there 
+is a set of NOS transistors in series between the
+
+0:00:50.240,0:00:56.880
+out and the ground. So the the just because this 
+is CMOS circuitry, the goal is to either have VDD
+
+0:00:56.880,0:01:03.600
+come out or ground to come out depending on A and 
+B in the combination based on the truth table. So
+
+0:01:03.600,0:01:08.160
+let's go ahead and draw this. So I'm going to 
+draw this in a little more traditional way than
+
+0:01:08.160,0:01:14.240
+I did on my previous demonstration. It's pretty 
+common to just draw a line across the top and
+
+0:01:14.240,0:01:20.160
+put the VCC across the top. So you see that 
+we're sort of emulating a lot of what these
+
+0:01:20.160,0:01:26.640
+uh diagrams look like. And then what I want to 
+do is I want to create some two P transistors.
+
+0:01:26.640,0:01:33.040
+So the A and the B. And so I'm going to drop 
+a little bit of of of P dope silicon down. I'm
+
+0:01:33.040,0:01:39.760
+going to give myself plenty of space and make 
+these plenty long. Okay. And then I'm going to
+
+0:01:39.760,0:01:45.040
+make some transistors there by putting some poly 
+across. I'm going to put it like I'm going to keep
+
+0:01:45.040,0:01:49.600
+this really tiny for now. Okay. So, there's 
+some poly. So, there's two transistors. So,
+
+0:01:49.600,0:01:56.880
+we just made by crossing the pdope silicon and the 
+polysilicon twice, we now have transistors that we
+
+0:01:56.880,0:02:03.520
+can hook A and B up to. We'll wire them up later. 
+Um, and then what we're going to do is we're going
+
+0:02:03.520,0:02:09.760
+to take the makes the output. I'll just make 
+the output be a horizontal piece of metal wire.
+
+0:02:09.760,0:02:17.360
+Now I've got to put some VAS in here so I can 
+connect the poly the pope silicon to the metal
+
+0:02:17.360,0:02:24.800
+where I need to. So let's put a punch a couple of 
+VAS in. Via via via via. So now the orange pope
+
+0:02:24.800,0:02:34.480
+silicon and the metals are connected. Okay. So the 
+next thing we need to do is we need to make some
+
+0:02:34.480,0:02:45.600
+NOS transistors down at the bottom. So, let's 
+grab some endope silicon and hook this up here.
+
+0:02:45.600,0:02:48.800
+And then,
+
+0:02:48.800,0:02:56.320
+oops, I need to fix that. I need to erase that. 
+I need to give myself a little space here. So,
+
+0:02:56.320,0:03:01.040
+I want to make some endope silicon that kind of 
+comes down from the center wire a little bit.
+
+0:03:01.040,0:03:08.640
+Um, and then I am going to make some more endope 
+silicon. Actually, I don't know if I need to do
+
+0:03:08.640,0:03:14.960
+that. Let's try to make it in one big piece of 
+endope silicon. Let me make my end dope silicon
+
+0:03:14.960,0:03:21.520
+longer. And now let's put some piece polysilicon 
+in to make two more transistors. So, we're going
+
+0:03:21.520,0:03:28.720
+to put transistor here and then another transistor 
+here. So, that's two transistors. There is a two
+
+0:03:28.720,0:03:34.960
+NOS transistors that are right there. And um 
+I think I might as well put my ground in now.
+
+0:03:34.960,0:03:43.120
+The ground down here. Traditionally, you sort of 
+draw that as a long horizontal line. I will place
+
+0:03:43.120,0:03:50.160
+some zero or ground voltage and then I'll place 
+a couple of VAS to make sure to connect the green
+
+0:03:50.160,0:03:57.200
+endop endop silicon to the metal in both of the 
+places. So, I think we mostly have this except
+
+0:03:57.200,0:04:04.560
+now we've got to take our inputs and connect them 
+to those transistors. So, let's make an A input
+
+0:04:04.560,0:04:08.960
+for now. Let's make a little bit of metal. This 
+shouldn't be too hard. So, let's just say this is
+
+0:04:08.960,0:04:15.920
+our A input. And then we're going to hook that to 
+here. Uh, I want to make that a little longer. So,
+
+0:04:15.920,0:04:20.640
+I'm going to make my pink a little bit longer. I'm 
+going to put a on this one, which is a little bit
+
+0:04:20.640,0:04:28.080
+different. Yeah. So, I'm going to bring the pink. 
+So, here's the thing. I can paint this pink. So,
+
+0:04:28.080,0:04:32.960
+now I have an overlap. See how I painted that 
+pink? So, it overlaps with a metal now. So,
+
+0:04:32.960,0:04:42.880
+I can pop a pop a via in there. Punch. Punch. So, 
+that is um my A. Uh let's go ahead and mark that
+
+0:04:42.880,0:04:52.080
+with a probe. Let's mark that as a. Okay. And now 
+we've got to have B. B is a little bit trickier.
+
+0:04:52.080,0:05:00.000
+Um, where am I gonna Well, let's start with B E. 
+Let's put B an easy. Let's make B Let's make B be
+
+0:05:00.000,0:05:09.440
+here. Okay. So, then let's put the contact of B, 
+the probe B right there. So, now I have B. Now,
+
+0:05:09.440,0:05:20.720
+the key thing is I've got to get this this B 
+up to this second um POS gate. So, I could do
+
+0:05:20.720,0:05:26.960
+a lot of things here. I could route it up here and 
+route it over there. Or I could route it over here
+
+0:05:26.960,0:05:32.800
+and then route it down to here. So, I think I'm 
+going to come through here. So, you're going to
+
+0:05:32.800,0:05:38.320
+see something. I'm going to take this polysilicon. 
+And in a real circuit, you might find that this is
+
+0:05:38.320,0:05:44.080
+kind of Oh, look what I can do because when I make 
+this polyilicon come across the metal right there,
+
+0:05:44.080,0:05:49.200
+it's not actually connected. And then look no 
+yikes. I got to erase it because I made a kind of
+
+0:05:49.200,0:05:57.120
+a blob. I spilled some I spilled some polysilicon. 
+So now I can actually connect this together. Wow.
+
+0:05:57.120,0:06:04.720
+I think that looks pretty easy at this point. Did 
+it work? So I have my I have my A connected to one
+
+0:06:04.720,0:06:11.840
+of the P pos transistors and one of the NMOS 
+transistors and then I have my B connected to
+
+0:06:11.840,0:06:18.320
+one of the NMOS transistors and one of the POS 
+transistors. I have a feeling that it is right
+
+0:06:18.320,0:06:24.000
+and I think if we look at our assignment we're 
+supposed to make a Q as the output. So let's put
+
+0:06:24.000,0:06:31.760
+another probe here on the output Q. So I could run 
+the autograder. I think I got it. I think I made
+
+0:06:31.760,0:06:40.080
+one that's pretty good here. But one of the things 
+I do to test these things is um Oh, I didn't mean
+
+0:06:40.080,0:06:47.600
+to put that via there. Put a VCC there. So now 
+I can see that I put a plus in the A area and it
+
+0:06:47.600,0:06:55.520
+stops the POS, but it does transmit. But then I 
+have to put like let's put a VCC where the B is
+
+0:06:55.520,0:07:02.720
+now. Oh, I'm missing a V. See how the the voltage 
+comes here in the one and it hits this overlap. I
+
+0:07:02.720,0:07:10.400
+got to put a via there because it doesn't really 
+touch. Boop. So now I think we got it. So we got
+
+0:07:10.400,0:07:19.040
+um A is one and B is one and the output is zero 
+which is good. So we can keep testing it. I just
+
+0:07:19.040,0:07:26.960
+test it by popping a ground in here. So now we 
+have a is zero and b is one and the output is one
+
+0:07:26.960,0:07:32.160
+which is what it's supposed to be because it's 
+a gate. So I'm going to go back to putting the
+
+0:07:32.160,0:07:39.680
+probes in. So you notice how I can just kind of 
+overwrite this stuff. So there's a and I got the
+
+0:07:39.680,0:07:44.960
+probe b now. Now I can actually start the grater. 
+I think it'll go through all the combinations in
+
+0:07:44.960,0:07:51.440
+the truth table and it will tell us if it likes 
+the circuit that we built. So let's go ahead
+
+0:07:51.440,0:07:58.240
+check for the A, B, and Q probes. They seem to be 
+there. Test. Let's set A to zero and B to zero.
+
+0:07:58.240,0:08:05.760
+And is the output one? A is zero. B is zero. 
+Outputs one. Yes, it is. Set A to zero and B to
+
+0:08:05.760,0:08:14.960
+one. Is the output zero? A. Oh, no. The output is 
+supposed to be one in that case. Yep. So this is a
+
+0:08:14.960,0:08:19.680
+And then if we do a to one and 
+B to zero, the output is one.
+
+0:08:19.680,0:08:25.200
+And then if we set them both to to one, the 
+output is zero, which it's a NAND gate. And
+
+0:08:25.200,0:08:33.760
+so we finished and away we go. So there we did. 
+We took and viewed this image and made ourselves
+
+0:08:33.760,0:08:38.560
+the gate by laying it out. And again, I 
+tend to start by laying transistors out,
+
+0:08:38.560,0:08:44.480
+but you got to give yourself a little space as you 
+lay these things out and put them together. Now,
+
+0:08:44.480,0:08:48.560
+I've built them a few times. The first few 
+that you're going to build are going to be a
+
+0:08:48.560,0:08:54.560
+little tricky, but it's very satisfying when you 
+get them finished. So, I hope you enjoyed this
+
+0:08:54.560,0:09:00.080
+walkthrough for computer architecture on the 
+building of a gate using a VLSI design tool.

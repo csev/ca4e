@@ -1,0 +1,667 @@
+0:00:00.320,0:00:06.720
+So now we're going to do a bit of a deep dive into 
+the machine language of our CDC 6504 emulator. I
+
+0:00:06.720,0:00:12.960
+would suggest that if you're doing extensive work 
+or or even if you have some uh visual limitations
+
+0:00:12.960,0:00:17.840
+that you look at the online documentation. 
+It's complete and it's simple and to some
+
+0:00:17.840,0:00:25.840
+degree this lecture is really derived from the 
+online documentation of the CDC 6504. And so we
+
+0:00:25.840,0:00:29.760
+always are going to start and talk about the 
+register and just review it. Hopefully after
+
+0:00:29.760,0:00:35.200
+a couple of lectures it'll be sort of natural 
+to you. The program counter is the what next
+
+0:00:35.200,0:00:43.440
+instruction memory starts at zero. The accumulator 
+is the the best register. So it it's an the CDC
+
+0:00:43.440,0:00:50.000
+6504 is an accumulator based computer which means 
+that you can do more things with the accumulator
+
+0:00:50.000,0:00:55.360
+than other registers. There are flags the Z and 
+the N. And there's actually more in the 6502,
+
+0:00:55.360,0:01:01.040
+but Z in the N is all I've put in here. Z says, 
+when you're fiddling with registers, was the last
+
+0:01:01.040,0:01:07.760
+result zero or was the last result negative? And 
+these are used to control ifs and jumps and loops,
+
+0:01:07.760,0:01:12.960
+the Z and the N. The X and the Y are index 
+registers. They're just a little less capable
+
+0:01:12.960,0:01:18.800
+of the accumulator register, and they're actually 
+used in uh index loads, as we'll see. Instruction
+
+0:01:18.800,0:01:24.400
+memory is shown in base 2 for easy decoding. 
+Now the data memory I show that in hex because
+
+0:01:24.400,0:01:32.800
+mostly what we're putting in the data memory is 
+strings and asky characters. Okay. So the index
+
+0:01:32.800,0:01:38.480
+instructions are good for loops. And the x and y 
+registers are often used to control counted loops
+
+0:01:38.480,0:01:45.280
+or actually look things up within an array. And 
+so we have a an op code to clear the X register,
+
+0:01:45.280,0:01:51.680
+clear the Y register, add one to it, add one to 
+X and Y, and then subtract one from X and Y. Now,
+
+0:01:51.680,0:01:59.840
+if you think about it, the the CPU that we built 
+clears and increments with two instructions. So
+
+0:01:59.840,0:02:06.480
+we had an instruction of one which increments 
+and zero which clears. So in addition to 8bit
+
+0:02:06.480,0:02:12.560
+instructions, there are 16- bit instructions. And 
+so in 16- bit instructions, there is usually a
+
+0:02:12.560,0:02:18.080
+numeric value or a constant or an address that 
+is in the immediately following. So that means
+
+0:02:18.080,0:02:25.680
+that the program counter in this case goes up 
+by two. And so this the load a instruction can
+
+0:02:25.680,0:02:32.000
+take a constant value. So you can load a the 
+character asterisk which is a 42. And so you
+
+0:02:32.000,0:02:38.240
+see the load a instruction at memory location 
+zero and then the actual 42 value in this case
+
+0:02:38.240,0:02:45.920
+base 2 is at instruction one or you can basically 
+say we're going to do a load but the address that
+
+0:02:45.920,0:02:51.760
+we want to load from is taken from the following 
+eight bits. In this case we're going to load from
+
+0:02:51.760,0:02:57.680
+memory location two and the two is stored in 
+instruction memory location three. So these we
+
+0:02:57.680,0:03:02.320
+call these immediate and the reason we kind of 
+call these things immediate is the the the the
+
+0:03:02.320,0:03:07.040
+constant or the address is immediately following 
+the instruction in case and so these turn into
+
+0:03:07.040,0:03:12.160
+16- bit instructions. You could see it as you 
+load one instruction in and there would probably
+
+0:03:12.160,0:03:17.280
+be both a current instruction register and an 
+immediate register. And you would notice that this
+
+0:03:17.280,0:03:23.360
+instruction that we just loaded has an immediate 
+and so we'd load both of those things and then
+
+0:03:23.360,0:03:32.080
+have them in the CPU to to work. So loading and 
+storing operations are important. So you can
+
+0:03:32.080,0:03:38.080
+load into the A register, the X register and the 
+Y register. And you can store into the A register,
+
+0:03:38.080,0:03:46.480
+X register and Y register. And you can either load 
+a constant like set a to zero load a hashtag zero
+
+0:03:46.480,0:03:54.800
+or you can say go get memory location you know 
+F3 and load that in. Okay. And so those are the
+
+0:03:54.800,0:04:00.320
+instructions that do loading and storing. Now when 
+we start dealing with arrays we have the we can
+
+0:04:00.320,0:04:06.000
+use the X and the Y. So we can say this address is 
+kind of the beginning of the array and then X and
+
+0:04:06.000,0:04:12.720
+Y are the offset in the array. So you you start 
+seeing that you can set x to zero. You can load
+
+0:04:12.720,0:04:17.920
+something from a starting point in memory plus 
+x and then you can add one to zero and then load
+
+0:04:17.920,0:04:24.400
+something again from that same place in memory 
+plus x and then x become and y are really well
+
+0:04:24.400,0:04:32.560
+designed to use as iteration variables. And then 
+this is where the accumulator is important where
+
+0:04:32.560,0:04:38.240
+the accumulator is the register that can do the 
+most things. So we can't add arbitrary values. So
+
+0:04:38.240,0:04:47.360
+we can't add we can add one to X and Y registers 
+but we can't add five. So ADC hashtag five adds
+
+0:04:47.360,0:04:53.200
+five to it. So the same for subtraction. And 
+that you can either add an immediate value like
+
+0:04:53.200,0:04:58.000
+a constant or you can go into some memory and 
+grab that memory and add it to the accumulator.
+
+0:04:58.000,0:05:05.040
+So you can see it says ACC equals ACC plus memory 
+bracket address. That means that we're adding in
+
+0:05:05.040,0:05:10.000
+the data memory at the position that's addressed. 
+But the address it's an immediate instruction and
+
+0:05:10.000,0:05:16.240
+the next one is the address that we're going to 
+add. So adding and subtracting is the accumulator.
+
+0:05:16.240,0:05:22.400
+Now the everything that is adding, subtracting, 
+loading, storing, whatever it's doing to whatever
+
+0:05:22.400,0:05:30.320
+register sets the Z and the N flags. And 
+so it just as part of the final putting
+
+0:05:30.320,0:05:37.200
+the value into the register, it sets Z and N. So 
+if the value we put in to the register was zero,
+
+0:05:37.200,0:05:44.000
+the Z flag will be a one. It'll be set. If the 
+value we put in was 42, the Z flag will be zero.
+
+0:05:44.000,0:05:48.800
+And the same with positive and negative. Negative 
+numbers are numbers that have the first bit,
+
+0:05:48.800,0:05:53.600
+the tie bit one. We we're not doing too much, 
+we won't be doing too much with negative in
+
+0:05:53.600,0:05:58.320
+this class. will mostly be setting the zero 
+but you can do like less than or equal with
+
+0:05:58.320,0:06:06.480
+the negative. So combinations of uh Z and N can do 
+greater than or equal, less than or equal, etc.,
+
+0:06:06.480,0:06:13.920
+etc. And so there is a uh special instruction 
+called the compare instruction that says, hey,
+
+0:06:13.920,0:06:20.000
+let's check to see if the accumulator equals five. 
+But you're really saying five accumulator check
+
+0:06:20.000,0:06:24.720
+them. It's kind of like a subtraction without 
+actually doing the subtraction. And then set
+
+0:06:24.720,0:06:30.800
+subtract set the Z and N flags from the result of 
+the subtraction and then throw away the result of
+
+0:06:30.800,0:06:36.720
+the subtraction. So that's what the comparison 
+operators are. Okay? And so you can compare
+
+0:06:36.720,0:06:45.040
+um the accumulator, the X, and the Y. So there's 
+no if statement in machine code. All there are are
+
+0:06:45.040,0:06:50.880
+conditional jumps. And so that you'll have to get 
+used to it. When I started in Forran, everything
+
+0:06:50.880,0:06:57.040
+was a go-to before we had structure ifs, if then 
+else. That that's not in machine code. There is a
+
+0:06:57.040,0:07:02.640
+conditional jump, which we'll talk about. And the 
+way you get the conditional jumps to activate is
+
+0:07:02.640,0:07:07.440
+every instruction that changes a register and the 
+compare instructions with don't change registers
+
+0:07:07.440,0:07:14.000
+set the result flags. There's a Z, which is was 
+the result zero or not? And then the N is was
+
+0:07:14.000,0:07:19.600
+the result negative or not. And so if the result 
+is zero, the Z is one and the N is zero because
+
+0:07:19.600,0:07:24.400
+Z is not negative. If the result is positive, 
+Z is zero because it's not zero and N is zero
+
+0:07:24.400,0:07:31.680
+because it's not negative. And if the result is 
+negative, Z is zero and one is negative. And yes,
+
+0:07:31.680,0:07:36.640
+you can use these together to create greater than, 
+greater than or equal to, equal, less than, less
+
+0:07:36.640,0:07:42.480
+than or equal to. So that's kind of what you're 
+thinking about, right? is uh how to implement what
+
+0:07:42.480,0:07:50.640
+we think of as the traditional logical operators 
+in a highle language. So the closest we have to an
+
+0:07:50.640,0:08:00.160
+if statement is a compare and then a conditional 
+jump. And so there are four instructions,
+
+0:08:00.160,0:08:05.520
+right? There's more of them, but these are 
+the four that matter. The BEQ branch if equal,
+
+0:08:05.520,0:08:12.000
+that means the Z flag is set. B ne branch if 
+not equal mean means the Z flag is clear and
+
+0:08:12.000,0:08:19.600
+then branch minus BMI and then BPL means branch 
+plus. So for example here's a little tiny bit of
+
+0:08:19.600,0:08:25.440
+code that we can do an uppercase. We're going 
+to convert a lowercase to uppercase and leave
+
+0:08:25.440,0:08:36.320
+uppercase alone. Okay. So we do hashtag quote 
+p quote which is the ASCII value for 'p'. Now,
+
+0:08:36.320,0:08:40.640
+normally we'd read this from input, but we're not 
+going to. We're just going to hard-code the the v
+
+0:08:40.640,0:08:47.920
+the value we're going to convert. Then we're going 
+to compare that to the ASCII value for a. So that
+
+0:08:47.920,0:08:56.880
+comparison then sets the z and the n. And then 
+we're going to say BMI to location 08, which we'll
+
+0:08:56.880,0:09:03.600
+talk about this in a second, how that works, how 
+you know that that's 08. That's kind of tricky.
+
+0:09:03.600,0:09:12.240
+But that's an address in instruction memory, the 
+08. And then if it's minus, we will skip the next
+
+0:09:12.240,0:09:18.640
+instruction. But if it's not minus, we're going 
+to subtract hex 20 because that's converting to
+
+0:09:18.640,0:09:23.680
+lower case. If you look at the ASCII table, you 
+see that the the difference between an uppercase
+
+0:09:23.680,0:09:32.880
+A and a lowercase A um is 20. The lowercase A is 
+20 hex higher than an uppercase A. And then that
+
+0:09:32.880,0:09:39.680
+BMI is 08. If it's already uppercase, meaning 
+it's a lower number, that jumps to the BRK and
+
+0:09:39.680,0:09:47.600
+the program stops. You can think of this as if 
+the accumulator is less than the letter A, we're
+
+0:09:47.600,0:09:55.040
+going to skip the next instruction. And if the 
+if we don't skip, we're going to subtract 20 hex.
+
+0:09:55.040,0:09:59.840
+And if we do skip, we're done. And then in the 
+accumulator will be the uppercase letter whether
+
+0:09:59.840,0:10:08.000
+or not the original letter that was loaded into 
+the accumulator was uppercase or lowercase. And
+
+0:10:08.000,0:10:15.040
+so this is where flowcharts come back. Remember I 
+said flowcharts are not cool. Although if you ask
+
+0:10:15.040,0:10:21.360
+AI often flowcharts are cool. They're very retro. 
+Well the key to flowcharts is that they work
+
+0:10:21.360,0:10:30.160
+exactly like assembly and machine language. So if 
+we look at the first instruction which is loading
+
+0:10:30.160,0:10:35.680
+the accumulator with the letter the lowercase P 
+then we're doing a compare instruction. So the
+
+0:10:35.680,0:10:40.640
+compare instruction is not something we think of 
+in a high level language. We're asking a question.
+
+0:10:40.640,0:10:47.040
+We're like compare the accumulator to a and set 
+the flags. That's what the compare instruction
+
+0:10:47.040,0:10:57.280
+is doing. Is accumulator equal to less than or 
+greater than a? And so then we say was the result
+
+0:10:57.280,0:11:06.720
+of that particular compare a BMI negative because 
+BMI means is the N flag set and if the N flag is
+
+0:11:06.720,0:11:15.280
+set we're going to jump to to instruction memory 
+location08. If not we're going to fall through.
+
+0:11:15.280,0:11:24.400
+And by the way, the actual dollar 08 is in the 
+immediately following uh instruction memory.
+
+0:11:24.400,0:11:33.840
+And so where to jump is the 08. Then if we don't 
+jump, we're going to subtract 20 hex. And the 20
+
+0:11:33.840,0:11:43.200
+is also in immediate memory. And then the place 
+the program stops is at instruction memory 0x08.
+
+0:11:44.240,0:11:52.960
+So the way if you're doing this by hand, you'd 
+actually kind of leave instruction memory 05
+
+0:11:52.960,0:11:59.680
+blank, lay everything else out, and then you 
+see where 0x08, the halt ends up, and then you
+
+0:11:59.680,0:12:10.160
+would go copy that back in to the 0x05 memory 
+location. That seems painful. Painful even for
+
+0:12:10.160,0:12:16.240
+eight instructions. Thankfully, we have this 
+thing called assembly language. So there's no
+
+0:12:16.240,0:12:22.400
+need to compute these instructions by hand. And 
+so if you look at the BMI in this code, you say
+
+0:12:22.400,0:12:27.600
+BMI skip and then right before the instruction 
+that you want to skip to, you put a little label
+
+0:12:27.600,0:12:33.760
+with a colon. So skip colon. Now, it turns out 
+that just like I told you on the last slide,
+
+0:12:33.760,0:12:40.960
+the assembler is making two passes. It literally 
+is assembling all the code and remembering where
+
+0:12:40.960,0:12:46.240
+it needs to change addresses. So it kind of keeps 
+track of that's going to wherever skip turns out
+
+0:12:46.240,0:12:51.360
+to be because skip could be later. So it has to do 
+it all. Has to lay it all out. Has to figure out
+
+0:12:51.360,0:12:57.200
+where it's going to go in the memory and then it 
+has to go back and replace the skip with the eight
+
+0:12:57.200,0:13:02.480
+hex so that it knows what it's doing. But for us, 
+we don't care. We write assembly language. We use
+
+0:13:02.480,0:13:10.000
+labels. and the whole notion that you've got to 
+do two passes by hand, we just write assembly
+
+0:13:10.000,0:13:20.240
+language. And so our larger example codes will be 
+assembly language. And so the jumps, like I said,
+
+0:13:20.240,0:13:27.840
+are far simpler than if logic. So in addition to 
+the BEQ, the B branch equal, branch not equal,
+
+0:13:27.840,0:13:35.760
+branch minus, and branch plus, we also have an 
+unconditional jump. That's ignoring, you know,
+
+0:13:35.760,0:13:42.320
+jump to an address that just says don't look at 
+the flags, just unconditionally jump. But just
+
+0:13:42.320,0:13:51.360
+think about this for a second. The PC, the program 
+counter is itself a register. So even though we
+
+0:13:51.360,0:13:59.600
+have these op codes that say branch, sure, or 
+jump, in a sense, you could think of these as
+
+0:13:59.600,0:14:07.440
+just a set of the PC. If the in if if we had a 
+assembly language that said set PC to this address
+
+0:14:07.440,0:14:13.680
+then that would mean that the PC the next time it 
+would retrieve an instruction would go to where
+
+0:14:13.680,0:14:22.480
+it's at. So you can think of a jump as set the PC 
+to this address or a jump conditional says if this
+
+0:14:22.480,0:14:29.840
+condition is true set the PC to this address and 
+of course these are all 16 bit instructions and
+
+0:14:29.840,0:14:39.600
+so that address is in the immediately following uh 
+memory uh memory location. Okay. So there are also
+
+0:14:39.600,0:14:47.760
+no for and while loops in machine language and so 
+we have to construct them with these comparisons
+
+0:14:47.760,0:14:54.160
+and conditional branching. So I'm not going to 
+bother showing you the machine language for this.
+
+0:14:54.160,0:14:58.720
+The emulator will allow you to see that. Um I'm 
+just going to show you the assembly. So the in
+
+0:14:58.720,0:15:06.240
+the on the left is assembly language and assembly 
+language is a textual language that is not zeros
+
+0:15:06.240,0:15:13.040
+and ones but there is a one-to-one correspondence 
+that every single assembly language statement
+
+0:15:13.040,0:15:18.400
+turns into directly into machine language. Now 
+it might be a 8-bit machine language or a 16-
+
+0:15:18.400,0:15:24.000
+bit machine language and the assembler which 
+is a program that converts this text to machine
+
+0:15:24.000,0:15:31.840
+language. The assembler knows all the rules, the 
+syntax of the pound sign five. So really while
+
+0:15:31.840,0:15:36.080
+we have been talking about machine language, we 
+mostly been talking about assembly language. So
+
+0:15:36.080,0:15:40.800
+let's take a look at a really simple for loop. 
+Now this for loop doesn't do anything. It's just
+
+0:15:40.800,0:15:47.040
+constructing this for loop or a while loop. It's 
+a top- tested loop. So if we go through this,
+
+0:15:47.040,0:15:51.920
+the first thing we do and and I mentioned that 
+X registers are good for loops and arrays.
+
+0:15:51.920,0:15:56.640
+First thing we're going to do is we're going to 
+clear the X register. Then we're going to have
+
+0:15:56.640,0:16:01.920
+a label that says here's a place we're going 
+to come back to. But that doesn't take up any
+
+0:16:01.920,0:16:06.640
+memory. That just is something that the assembler 
+is going to remember that location, wherever that
+
+0:16:06.640,0:16:13.120
+location is. Then we're going to compare the X 
+register to five. Like that's saying, huh, hey,
+
+0:16:13.120,0:16:20.480
+let's just look at X. Let's look at five. And 
+then set the Z and the N flags. And BEQ to end.
+
+0:16:20.480,0:16:29.120
+end is a label in this case. So if x equals 5, 
+we're going to jump to the end label. If we're
+
+0:16:29.120,0:16:34.880
+not jumping, we're coming through. We're going 
+to add one to x, which is the inx instruction
+
+0:16:34.880,0:16:42.720
+or x= x + one. Now in this right hand side, 
+these x's are not really just any old variable.
+
+0:16:42.720,0:16:49.200
+That means the x register. So there's only like 
+the accumulator and the X and the Y and program
+
+0:16:49.200,0:16:54.400
+counter and instruction register, but they're just 
+these are not variables. These are just plain old
+
+0:16:54.400,0:17:01.520
+registers. So after the INX instruction, we do 
+an unconditional jump and you can see that on
+
+0:17:01.520,0:17:08.080
+the flowchart on the right hand side perfectly 
+represented to jump back to loop. Now where is
+
+0:17:08.080,0:17:13.360
+loop? What number is loop? We don't know and 
+we don't care. But the assembler is going to
+
+0:17:13.360,0:17:18.240
+turn that before it gets loaded into the memory 
+as machine language. Loop becomes a number just
+
+0:17:18.240,0:17:24.480
+like end becomes a number. So we jump to the top 
+of the loop and you can see that we added one to
+
+0:17:24.480,0:17:29.760
+X and then we compare it to X. We we check the 
+branch which does in the second time around it
+
+0:17:29.760,0:17:34.240
+goes straight down and adds one again. So you 
+can see this is a for loop that's going to go
+
+0:17:34.240,0:17:43.680
+round and round and round until X is equal to five 
+and then it's going to jump to end and at end the
+
+0:17:43.680,0:17:49.840
+program is going to halt. In the next section 
+we're going to go into we're not going to worry
+
+0:17:49.840,0:17:55.040
+quite so much about the machine language. We're 
+going to worry more about the assembly language.
+
+0:17:55.040,0:18:01.920
+So we can talk about building simple algorithms 
+in machine language but writing them in assembly
+
+0:18:01.920,0:18:06.720
+language. And so if you look at the summary 
+of the machine language we've talked about so
+
+0:18:06.720,0:18:17.600
+far. This is not all of them but they're kind of 
+simple. You load, you compare, you jump, etc. And
+
+0:18:17.600,0:18:24.720
+you can branch and jump and clear and increment 
+and stop. And it's a real really simple thing.
+
+0:18:24.720,0:18:37.120
+And it is both simple and powerful, but it's 
+actually super verbose because of its simplicity.

@@ -1,0 +1,403 @@
+0:00:00.080,0:00:05.760
+Welcome to our lecture on VLSI very large scale 
+integration. We're going to lay out some circuits
+
+0:00:05.760,0:00:12.640
+using basically a paint program to build millions 
+of transistors and use photo lithography. So when
+
+0:00:12.640,0:00:19.760
+I was in master's degree long time ago, I used a 
+tool called magic. This was an open-source VLSI
+
+0:00:19.760,0:00:25.920
+layout tool that was created at Berkeley in 1983 
+and it's very very popular because it's free. And
+
+0:00:25.920,0:00:33.360
+if you Google things like how to build a VLSI 
+NANDgate, you will see lots and lots of magic
+
+0:00:33.360,0:00:39.840
+demonstrations on YouTube. I decided not to have 
+you use magic. That's just a little too much.
+
+0:00:39.840,0:00:45.840
+It's really a powerful and sophisticated tool. 
+So, what I did was build little simple circuit
+
+0:00:45.840,0:00:52.320
+layout tools. So, all my tools are built for this 
+course. They're not real layout tools. You can't
+
+0:00:52.320,0:00:56.400
+really do layout with them. All I care about is 
+the learning objectives in this course. They run
+
+0:00:56.400,0:01:02.480
+in the browser, don't require any installation, 
+but don't push them too hard. If you build super
+
+0:01:02.480,0:01:08.720
+complex circuits that might be valid circuits, my 
+emulators will fall apart. Just do the homework in
+
+0:01:08.720,0:01:13.520
+them, play in them, have a good time, but don't 
+try to get too sophisticated. If you really
+
+0:01:13.520,0:01:18.320
+want to install more sophisticated emulators, 
+either, you know, on your computer or online,
+
+0:01:18.320,0:01:24.240
+well, you have fun with that. This is just to get 
+you started. So the first thing we're going to
+
+0:01:24.240,0:01:33.120
+talk about is how to map the VLSI COS knot. So we 
+have a KN gate, the abstraction zero goes to one,
+
+0:01:33.120,0:01:39.680
+one goes to zero. And we have a CMOS layout where 
+we have an a POS transistor at the top and a NOS
+
+0:01:39.680,0:01:45.440
+transistor at the bottom. We've gone through 
+that in some detail. And on the right is the
+
+0:01:45.440,0:01:52.560
+VLSI layout for that. So, let's talk a little 
+bit about what it takes to do VLSI layout. So,
+
+0:01:52.560,0:02:00.560
+the Mystic program that I wrote for you does 
+painting on a grid and you can paint various
+
+0:02:00.560,0:02:06.320
+things. You can paint multiple things in one 
+little grid cell. Like the blue, light blue
+
+0:02:06.320,0:02:16.640
+in this case going across the top is metal and the 
+pink is polyilicon and the green is endop silicon.
+
+0:02:16.640,0:02:21.760
+and the orange is p- dope silicon. And you lay 
+these out by simply drawing them. And you'll see
+
+0:02:21.760,0:02:29.360
+that there's also a voltage source on the metal 
+in the top example. Now, these are not necessarily
+
+0:02:29.360,0:02:34.400
+connected. They can pass by each other. And in 
+particular, metal passes by everything unless
+
+0:02:34.400,0:02:39.440
+you connect it. And you connect it by punching 
+a little hole in it using what's called a via.
+
+0:02:39.440,0:02:44.800
+And it's a vertical ne connector between the 
+layers. So you can see in the top diagram that
+
+0:02:44.800,0:02:50.240
+the polysilicon endop silicon and pope silicon 
+does not have any positive charge. That's because
+
+0:02:50.240,0:02:55.120
+they're not really connected to the metal. But if 
+you put vas at each of the connections then the
+
+0:02:55.120,0:03:03.680
+positive charge moves from the metal to the poly 
+polysilicon endop silicon and pdop silicon. Now to
+
+0:03:03.680,0:03:11.440
+make a transistor it takes polysilicon plus Ndoped 
+or P do silicon and you create the transistor
+
+0:03:11.440,0:03:19.600
+whether it's an NOS transistor or POS transistor. 
+When you cross polysilicon crosses Ndoped it makes
+
+0:03:19.600,0:03:27.200
+an NOS transistor and when a polysilicon crosses 
+posed it produces a POS transistor. So if we look
+
+0:03:27.200,0:03:33.200
+we see metal across the top. We see a vertical 
+ndoped and a vertical p-doped coming down with
+
+0:03:33.200,0:03:41.840
+a via. And then we have a horizontal polysilicon 
+with a plus charge on it. And at the moment that
+
+0:03:41.840,0:03:50.640
+it's crossing the green or the endoped, it causes 
+a transistor. And given that that is an NOS
+
+0:03:50.640,0:03:58.800
+transistor when positive voltage is transmitted to 
+through it then it copies the voltage through it.
+
+0:03:58.800,0:04:04.480
+The POS on the other hand when it's presented with 
+a one basically it blocks and so you can see the
+
+0:04:04.480,0:04:12.080
+positive voltage flowing down the POS but stopping 
+at the transistor. And so these overlaps between
+
+0:04:12.080,0:04:17.680
+the ndoped and p-oped and the polysilicon are the 
+transistors. And if you look at the bottom one,
+
+0:04:17.680,0:04:22.080
+you see the exact same circuit that has 
+a zero or negative on it. And you see
+
+0:04:22.080,0:04:29.360
+that the NOS transistor is blocking and the POS 
+transistor is conducting. Now the layout here,
+
+0:04:29.360,0:04:34.640
+my little layout is greatly simplified and my 
+circuit emulation is greatly simplified. It's
+
+0:04:34.640,0:04:40.320
+good enough to do not gates and nan gates and 
+NOR gates. And if you're really interested, you
+
+0:04:40.320,0:04:46.960
+can ask AI to explain the differences between VLSI 
+layout and uh actual manufacturing layout because
+
+0:04:46.960,0:04:51.920
+there's actual differences in the construction. 
+For example, you're you can draw it on my system,
+
+0:04:51.920,0:04:57.280
+but you you're not supposed to overlap N 
+and P uh dope silicon due to manufacturing,
+
+0:04:57.280,0:05:01.280
+limitation. But if you want to connect them, you 
+throw a little piece of metal in a couple levas
+
+0:05:01.280,0:05:08.400
+and then you can connect them. So, if you're using 
+the circuit simulation software, you can turn on
+
+0:05:08.400,0:05:14.320
+this layer mode where you point at a layer and it 
+shows the layers from top to bottom. And again,
+
+0:05:14.320,0:05:20.480
+this isn't perfectly right, but you can see 
+like on the left you can see a polysilicon
+
+0:05:20.480,0:05:28.640
+and a p-doped silicon and you see them connect and 
+that makes a poss transistor. You can see that on
+
+0:05:28.640,0:05:33.440
+the on the layer chart where the P and the poly 
+are touching and that's where the transistor is
+
+0:05:33.440,0:05:39.360
+being created. And then if you look on the right 
+where you have the metal and the pdoped silicon,
+
+0:05:39.360,0:05:44.160
+they are connected via a via. And you can think 
+of the via as a little hole that's drilled through
+
+0:05:44.160,0:05:49.120
+all the layers with a little kind of bit of metal 
+poured in. So they're all actually connected.
+
+0:05:49.120,0:05:55.120
+And so that via is how the metal the positive 
+charge goes from the metal at the top to the
+
+0:05:55.120,0:06:02.480
+pdoped silicon uh vertic going down vertically. 
+So here is a cos knot and you you can see that
+
+0:06:02.480,0:06:09.440
+it creates a pos transistor at the top and an 
+MOS transistor at the bottom. It uses metal to
+
+0:06:09.440,0:06:16.560
+move the the voltages around and V is to connect 
+the various silicon layers at the right point. And
+
+0:06:16.560,0:06:22.800
+so you see the input on the right on the left side 
+is a zero and then goes to the two transistors the
+
+0:06:22.800,0:06:28.640
+POS at the top and the N MOS at the bottom. And 
+you can see one of them in the case of the input
+
+0:06:28.640,0:06:37.600
+zero the NOS at the bottom is non-conducting and 
+so the ground is not going to output but the top
+
+0:06:37.600,0:06:42.720
+POS transistor is conducting. So the positive 
+is is then copied to the output just like in
+
+0:06:42.720,0:06:48.160
+the circuits we were looking at before. And if you 
+switch the input to one, then the POS transistor
+
+0:06:48.160,0:06:54.320
+at the top stops conducting and the NOS transistor 
+at the bottom starts conducting. And so the the
+
+0:06:54.320,0:06:59.840
+negative the ground that's coming up from the 
+bottom is conducted through the NMOS transistor
+
+0:06:59.840,0:07:06.720
+to the output. And so now we have a knot. And I 
+won't go through everything about this, but you
+
+0:07:06.720,0:07:12.320
+can then extend this to make things more complex 
+than not. And so we we talked a little bit about
+
+0:07:12.320,0:07:21.520
+nan gates. NAND gates have two POS transistors 
+at the top and two NOS transistors at the bottom.
+
+0:07:21.520,0:07:29.440
+It's kind of like a kind of half parallel half in 
+series not gate and and if you trace the little
+
+0:07:29.440,0:07:34.800
+picture you can see that I've I've created that 
+you can see there's four transistors and I will
+
+0:07:34.800,0:07:39.280
+do a demonstration where it actually reads the 
+whole circuit so you can watch it in slow motion.
+
+0:07:39.280,0:07:44.640
+But you can see the voltage at the top. That's the 
+voltage in the ground at the bottom. And you can
+
+0:07:44.640,0:07:52.880
+see the voltage coming down through some VAS to 
+some pdope silicon. You can see the two inputs.
+
+0:07:52.880,0:07:58.880
+And you can see them in this case they're both 
+one and they are in effect being transported.
+
+0:07:58.880,0:08:05.360
+You see a place where the the second input is 
+being connected to polysilicon. Then it's going
+
+0:08:05.360,0:08:12.720
+over top of a different polysilicon. Then it is 
+going on top of a p-doped silicon and then it is
+
+0:08:12.720,0:08:20.400
+connecting to a horizontal polysilicon so that it 
+can be make a transistor for the other of the POS
+
+0:08:20.400,0:08:24.960
+transistors that make the nan gate up. Now if we 
+look at the bottom the bottom is thing where we're
+
+0:08:24.960,0:08:29.520
+deciding whether negative is going out or not. 
+And in this case because they're both positive and
+
+0:08:29.520,0:08:36.480
+there's two NOS transistors you can see the the 
+green endope silicon going up. And because both
+
+0:08:36.480,0:08:42.800
+inputs are positive, both of those transistors 
+are transmitting. And so what's being copied
+
+0:08:42.800,0:08:48.400
+to output is the negative from ground. So if we 
+switch to a different row in the truth table, A
+
+0:08:48.400,0:08:56.400
+of zero and B of one, we can see how the nan gate 
+changes a little bit, right? So the zero goes and
+
+0:08:56.400,0:09:03.360
+makes it so that the P+ is conducting at the top. 
+That's conducting a plus down. Then that is going
+
+0:09:03.360,0:09:10.160
+to make the output be plus. And then you watch 
+that same ground, that same zero go down to the
+
+0:09:10.160,0:09:18.160
+top NOS transistor. And then that blocks that NOS 
+transistor that keeps ground from flowing out. And
+
+0:09:18.160,0:09:24.240
+so it's you can trace all of the traces and all 
+the connections and all the VAS and see there's
+
+0:09:24.240,0:09:31.200
+transistors and connections and they basically 
+implement the circuit diagram of the NAND.
+
+0:09:31.200,0:09:36.800
+This has been a long series of lectures talking 
+about semiconductors. We started about tubes
+
+0:09:36.800,0:09:41.600
+and how do tubes and transistors need to be 
+tuned for digital applications where they
+
+0:09:41.600,0:09:47.120
+have sort of the the the quick transition at 
+the 1/3 point for digital applications. Again,
+
+0:09:47.120,0:09:51.440
+these are analog devices although we want 
+to treat them and think of them as digital.
+
+0:09:51.440,0:09:57.520
+Then we go from transistors to gates which 
+makes it so that we can think digital even
+
+0:09:57.520,0:10:03.280
+though the underlying thing is uh an analog 
+transistor. Then we've watched the evolution
+
+0:10:03.280,0:10:10.640
+of transistor technology from POS to NOS and then 
+currently CMOS and how photoiththography makes it
+
+0:10:10.640,0:10:14.640
+so we can put more and more transistors 
+on the chip over time and manufacturing
+
+0:10:14.640,0:10:19.760
+has gotten better over time. And we did a 
+really brief introduction to how to design
+
+0:10:19.760,0:10:26.000
+VLSI design chips using VLSI layout tools. So 
+I hope you found that interesting. Up next,
+
+0:10:26.000,0:10:31.840
+we're going to switch from transistors to pure 
+digital logic and design much more sophisticated
+
+0:10:31.840,0:10:42.193
+circuits using exclusively digital logic 
+and gates. [Music] [Applause] [Music]

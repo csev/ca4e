@@ -1,0 +1,192 @@
+0:00:01.600,0:00:07.280
+Hello and welcome to another computer
+architecture CPU emulator walkthrough.
+
+0:00:07.280,0:00:12.000
+And so in this one we are going to go
+through a number of simple samples. And
+
+0:00:12.000,0:00:17.360
+I will turn on the viewing of the assembly
+language down here so we can see that. And
+
+0:00:17.360,0:00:24.560
+and so this this one here is really simple.
+It is going to load a constant into the A
+register
+
+0:00:24.560,0:00:30.800
+27. That's a decimal 27. And then we're
+going to add 15. So this is going to be 27 +
+15 and then
+
+0:00:30.800,0:00:35.520
+we're going to store it into memory location
+0 0 and then we're going to stop. So this is
+
+0:00:35.520,0:00:41.520
+going to cause a little bit of output. So
+let's go ahead and narrate the execution and
+then start
+
+0:00:41.520,0:00:46.880
+it running. Let's put this in a place. Well,
+we don't want to hide the memory because the
+action
+
+0:00:46.880,0:00:55.120
+is going to happen here in the memory. So
+here we go. PC0x 0. Load accumulator.
+Immediate 0x1
+
+0:00:55.120,0:01:09.040
+B. PC0X02. Add with carry. Immediate 0x0F PC
+0x04. Store accumulator to address 0 PC0X06.
+
+0:01:09.040,0:01:15.360
+Great printed output asterisk. So this time
+we stored something in the memory. So the
+the the
+
+0:01:15.360,0:01:21.920
+the program will dump the memory up to a
+zero byte. like C, right? It'll dump the
+
+0:01:21.920,0:01:31.520
+memory up to a zero byte. And 0x2A, let's go
+look at our ASCII chart. 0x2A 0x2A 0x2A,
+
+0:01:31.520,0:01:37.200
+there we go, is a 42 decimal. Interesting
+choice of number. And it's an asterisk. And
+
+0:01:37.200,0:01:44.160
+so it's a 0x2A. You can see it in the
+memory. And when the program stops, it
+prints it out.
+
+0:01:44.160,0:01:51.680
+Okay. So then let's take a look at another
+simple example. Let's take a look at the
+assembly
+
+0:01:51.680,0:02:00.240
+language for it. So this is going to
+basically stick that letter H into the into
+the accumulator
+
+0:02:00.240,0:02:05.360
+then store it into lo memory location zero
+and then put a I in the accumulator and
+store that in
+
+0:02:05.360,0:02:18.080
+memory location one. So let's let's go ahead
+and step that. PC0x 0 load accumulator
+immediate 0x48.
+
+0:02:18.080,0:02:30.720
+I'll go to the next instruction which is
+going to store that one.
+
+0:02:30.720,0:02:39.840
+And now we're going to load the I load
+accumulator.
+
+0:02:39.840,0:02:47.760
+So 0x69 is the letter I. And now we're going
+to store it. PC0x06. Store accumulator to
+address
+
+0:02:47.760,0:02:52.880
+one. So this that we just put some some data
+into memory location one. We're going
+
+0:02:52.880,0:03:03.520
+to step one more. It's going to stop and
+it's going to print out what is here in ASI
+PC08.
+
+0:03:03.520,0:03:12.240
+So it said hi. Okay. And so let's do one
+more simple one. And this one's weird. So I
+
+0:03:12.240,0:03:15.920
+have a single instruction which is break
+which is stop. And you'll notice it says
+
+0:03:15.920,0:03:25.280
+0000 right away. But I use the assembly
+language data pseudo. We call these pseudo
+ops. And it
+
+0:03:25.280,0:03:30.480
+preloads the data. And it says, and this is
+hello world. So you can see it's hello world
+
+0:03:30.480,0:03:38.640
+in ASKI. 0x20 is the space. So we're just
+going to run this, but it's going to
+immediately stop,
+
+0:03:38.640,0:03:42.720
+but it's going to dump the memory because we
+preloaded data into memory. And so this is
+
+0:03:42.720,0:03:50.000
+really showing you more about how this data
+pseudo operation works. PC0X00 great printed
+
+0:03:50.000,0:03:58.400
+output. Hello world. Okay. And so let me
+then show you one more thing in this. I want
+to you
+
+0:03:58.400,0:04:07.360
+you can write code in the assembler. Okay.
+So you this is a little text editor and is
+you read the
+
+0:04:07.360,0:04:11.440
+assembly language. You go into the
+documentation, read the assembly language
+and then you can say
+
+0:04:11.440,0:04:20.880
+take this code and assemble it. So it
+assembled it and so now it says hello CA for
+E. So there's
+
+0:04:20.880,0:04:28.480
+the So in location five is the space and
+then C is the 43. Let's go ahead and bring
+up a ASKI
+
+0:04:28.480,0:04:37.520
+chart so we can figure out what this memory
+location six is. It's a 0x43 and that's C.
+
+0:04:37.520,0:04:43.440
+And then 41 is the A. Right? So you can see
+this. And now we're going to run it.
+
+0:04:43.440,0:04:51.280
+It's only got one instruction which is a
+stop instruction but then it's going to
+print out its
+
+0:04:51.280,0:04:59.040
+output hello. So so that was that's just
+really showing you the the
+
+0:04:59.040,0:05:03.680
+data the data thing. So and we later we will
+use this to preload data and
+
+0:05:03.680,0:05:09.120
+then write code that reads from memory and
+does something to that memory. But for now,
+
+0:05:09.120,0:05:14.320
+I hope you found this walk through with a
+couple of simple examples useful.

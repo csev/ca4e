@@ -1,0 +1,77 @@
+0:00:00.000,0:00:07.600
+Hello and welcome to another walkthrough for  computer architecture for everybody. In this
+
+0:00:07.600,0:00:14.000
+I want to do an assignment and so sometimes when  you launch this you will have an assignment and
+
+0:00:14.000,0:00:18.640
+that assignment will be autograded. So we're  going to build a simple AND gate circuit with
+
+0:00:18.640,0:00:25.520
+two inputs and one output. So let's go ahead  and do that. Let's place an AND gate. Now
+
+0:00:25.520,0:00:38.720
+let's let's turn on the command and let's use  let's say place and and then say place input.
+
+0:00:38.720,0:00:44.640
+Place input. So, we got some inputs. I don't  remember the syntax to connect them. So,
+
+0:00:44.640,0:00:48.640
+we got I'm going to move them around and  make them line up a little bit. I'm going to
+
+0:00:48.640,0:00:56.800
+connect the inputs to the the two inputs to the  ANDgate. And then I'm going to place an output.
+
+0:00:56.800,0:01:04.560
+put the output here. And then we'll test to see.
+
+0:01:04.560,0:01:08.400
+Oh, come on. Connect.
+
+0:01:08.400,0:01:17.440
+There we go. Now it's connected. Okay. So, we've  got our ANDgate working. 01 1 011. And it's a one.
+
+0:01:17.440,0:01:24.240
+Okay. So, let's go ahead and do the autograder.  So, we haven't done everything yet. It gives you a
+
+0:01:24.240,0:01:29.760
+truth table. So we can say start grading and it's  going to say ooh it's looking for input labeled A.
+
+0:01:29.760,0:01:36.960
+I found inputs one and input two. Please use the  tag tool to label your inputs. Okay. And so we are
+
+0:01:36.960,0:01:43.840
+going to do that. We're going to use the tag tool  to call this one input A. Okay. And we're going to
+
+0:01:43.840,0:01:49.360
+use tag tool to mention this one as B. This is a  pretty simple assignment. Uh and let's still make
+
+0:01:49.360,0:01:54.880
+a mistake. We got to connect the output to Q.  But let's just let's start the grading. Missing
+
+0:01:54.880,0:02:03.120
+output label Q. Fix it. Fix it with the tag tool.  So we'll go ahead and call this Q. And then you
+
+0:02:03.120,0:02:08.320
+can see it's going to autograde. And this time  it's going to hopefully work. So it says, okay,
+
+0:02:08.320,0:02:13.120
+we found all the required components. All the  required components are properly labeled A, B,
+
+0:02:13.120,0:02:17.440
+and Q. Then it says it's got it.  We got an ANDgate. That's cool.
+
+0:02:17.440,0:02:23.920
+So let's just see if zero a of 0 b of zero  results in an output of zero. And it does.
+
+0:02:23.920,0:02:29.040
+Let's try an a of zero and b of one. Does it and  output does it produce an output of zero? Yes,
+
+0:02:29.040,0:02:33.840
+it does. And does it an a of one  and b of zero produce a zero? Yes,
+
+0:02:33.840,0:02:40.000
+it does. And the last test is the one and  the one and it gives us an and and sends
+
+0:02:40.000,0:02:45.440
+great back to the learning management system.  So I hope you found this useful. Uh, cheers.

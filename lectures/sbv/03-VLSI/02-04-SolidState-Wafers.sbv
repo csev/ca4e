@@ -1,0 +1,311 @@
+0:00:00.160,0:00:05.280
+So now I want to talk to you about how 
+manufacturing transistors evolved go from
+
+0:00:05.280,0:00:11.040
+sort of the earliest manufactured transistors 
+to sort of the modern day and how we manufacture
+
+0:00:11.040,0:00:16.800
+transistors. So the key thing that has made the 
+difference is transistors started with a certain
+
+0:00:16.800,0:00:22.960
+size and the goal was to make them smaller 
+and smaller and package them in different ways
+
+0:00:22.960,0:00:29.920
+over time. So originally there were individual 
+transistors connected on a on a circuit board to
+
+0:00:29.920,0:00:36.000
+other transistors and resistors etc. Then after a 
+while, we would buy these things called integrated
+
+0:00:36.000,0:00:42.080
+circuits, IC's, little black things with the legs 
+on them. And they would have some gates inside
+
+0:00:42.080,0:00:48.720
+of them, you know, maybe a couple of gates or a 
+couple of knot gates or a norate or something. And
+
+0:00:48.720,0:00:55.280
+and the little we could connect up and make use of 
+these gates by connecting to the little legs. And
+
+0:00:55.280,0:01:01.280
+then we'd have traces on the underlying medium to 
+make sure that we connected the right signals to
+
+0:01:01.280,0:01:10.160
+the right gates. much like we've been doing. Now, 
+at some point, things changed. So, prior to 1960s,
+
+0:01:10.160,0:01:16.000
+the transistors were assembled sort of, I'll 
+show you in a sec, kind of like Lego blocks,
+
+0:01:16.000,0:01:21.360
+and they were three-dimensional objects. You 
+would manufacture different materials and then you
+
+0:01:21.360,0:01:29.280
+would kind of put those materials together like 
+Lego blocks. In 1960, Fairchild introduced the
+
+0:01:29.280,0:01:36.880
+2N1613 transistor. And this was manufactured by a 
+two-dimensional process, meaning that there was a
+
+0:01:36.880,0:01:43.360
+a a substrate underneath of it. And then they did 
+stuff on that substrate with manufacturing and
+
+0:01:43.360,0:01:49.520
+out came a transistor. Instead of like assembling 
+transistors, they would like lay down transistors
+
+0:01:49.520,0:01:56.880
+almost like painting transistors versus building 
+transistors. And this led eventually to very large
+
+0:01:56.880,0:02:04.960
+scale integration where you could uh in a 3mm x 
+4mm chunk put 2,300 transistors plus associated
+
+0:02:04.960,0:02:12.320
+resistors etc. And so that's what led to the the 
+Intel 404 and which was the first commercially
+
+0:02:12.320,0:02:18.080
+available single chip microprocessor. The thing 
+that eventually made this all possible was a thing
+
+0:02:18.080,0:02:24.400
+called photoiththography. I mentioned that planer 
+transistors are in effect manufactured almost like
+
+0:02:24.400,0:02:28.880
+with a paint roller on them, but they weren't 
+exactly a paint roller. They had these masks so
+
+0:02:28.880,0:02:33.920
+the paint didn't roll on everywhere. So the paint 
+rolled on where there were no where there were no
+
+0:02:33.920,0:02:41.200
+lines. And so we would produce these VLSI layouts 
+and then we would make in a sense transparencies
+
+0:02:41.200,0:02:46.720
+with clear areas and then dark areas and then we 
+would project light through and then with lenses
+
+0:02:46.720,0:02:54.080
+make it small and then pl and then project this 
+onto a substrate and then expose that substrate
+
+0:02:54.080,0:03:01.600
+to various chemicals with various processes and 
+the net result was flat transistors. Okay. And
+
+0:03:01.600,0:03:09.520
+that that really made it a lot easier than sort 
+of assembling tiny little precise pieces and
+
+0:03:09.520,0:03:17.280
+that led us to ultimately VLSI design. So let me 
+show you uh a few artifacts and explain them to
+
+0:03:17.280,0:03:27.600
+you. So let's start here. This is the Fairchild 
+2N1613. Let's see if you can see it. Looks kind
+
+0:03:27.600,0:03:32.480
+of like a spacecraft. It also looks like War 
+of the Worlds. They used to come through and
+
+0:03:32.480,0:03:40.640
+scare us. So that is an actual transistor from 
+1960 which was the first widely available planer
+
+0:03:40.640,0:03:48.480
+transistor. Before that I've shown you things 
+like so this Sony radio that I showed you earlier,
+
+0:03:48.480,0:03:54.400
+this has BJT transistors. Now they don't look all 
+that different on the outside, but inside they are
+
+0:03:54.400,0:04:02.560
+constructed very differently. And so let me grab 
+these Legos here and show you how the BJTs were
+
+0:04:02.560,0:04:07.600
+constructed. You would get various materials, 
+right? And then you would you would basically
+
+0:04:07.600,0:04:12.240
+have to kind of con construct them together 
+and make like a sandwich. And then you would
+
+0:04:12.240,0:04:16.800
+con contact wires to make this little sandwich. 
+And you would connect a wire to the middle part,
+
+0:04:16.800,0:04:23.920
+the top part, and the bottom part. And that's how 
+you would make a a BJ a BJT transistor. Okay? So
+
+0:04:23.920,0:04:29.440
+it's like a Lego block. It's like a stack with 
+different materials that are in a sense combined
+
+0:04:29.440,0:04:36.240
+together to make a transistor. Now what they did 
+instead and I don't really have anything to show
+
+0:04:36.240,0:04:45.920
+you though to the planer transistor started with 
+a flat substrate. Okay? And so the flat substrate
+
+0:04:45.920,0:04:50.960
+would look somewhat like this. This is a piece of 
+silicon. And then what they would do is they would
+
+0:04:50.960,0:04:56.640
+sort of paint the lines on it. Then they would 
+expose it through photoiththography. And then they
+
+0:04:56.640,0:05:02.400
+would put get circuits and they would cut them 
+up and they would put each little one inside one
+
+0:05:02.400,0:05:08.880
+of these transistors. Again, the manufacturing 
+is not Legoike. It's more painting like spray
+
+0:05:08.880,0:05:16.800
+painting with masking. Okay. And then that what 
+that did was that led to making the chips or the
+
+0:05:16.800,0:05:23.040
+transistors smaller and smaller and smaller and 
+more VLSI design again that you're going to play
+
+0:05:23.040,0:05:31.840
+with in this course. This is a 1986 Rockwell 
+silicon wafer. And on this you can see there's
+
+0:05:31.840,0:05:39.280
+just about 120 chips. They're about a quarter inch 
+on each side. Let's zoom in as much as we can.
+
+0:06:01.440,0:06:06.720
+These transistors are very small, but this is a 
+100 chips. And then what they would do is they
+
+0:06:06.720,0:06:11.360
+would come through and they would cut along these 
+lines and they would solder little tiny wires at
+
+0:06:11.360,0:06:17.120
+the edge of each of these chips. And then they 
+would put the chips inside of the package with the
+
+0:06:17.120,0:06:28.640
+little legs. So, I'm I'm mixing my technologies 
+here, but here is a Intel 404. And inside this
+
+0:06:28.640,0:06:35.440
+little tiny package, come on. Little tiny package. 
+So, you can see this little tiny package. And you
+
+0:06:35.440,0:06:41.680
+can see the little legs on the tiny package. So, 
+there were tiny little wires that would It's all
+
+0:06:41.680,0:06:46.240
+very small. The little chip is inside here. And 
+then the wires would go from the outside and be
+
+0:06:46.240,0:06:50.320
+soldered onto the chip and then the chip would 
+be covered. And that's kind of what this looks
+
+0:06:50.320,0:06:56.240
+like. And so I can show you a much more modern 
+chip. And so you can kind of see it. So the the
+
+0:06:56.240,0:07:02.720
+piece that gets cut out of the silicon wafer on 
+this AMD processor is here. And then all these
+
+0:07:02.720,0:07:10.160
+wires and pins eventually find their way to the 
+inputs and outputs of the actual chip. But these
+
+0:07:10.160,0:07:19.440
+trans each one of these little quarterinch chips. 
+Now that was a 2008 processor, but this is a 1986
+
+0:07:19.440,0:07:25.760
+processor. So that is an example of how photo 
+lithography can build a lot of chips quickly
+
+0:07:25.760,0:07:32.160
+with a two-dimensional process. sort of painting 
+with masks, painting with chemicals and masks that
+
+0:07:32.160,0:07:40.960
+create these chips that we then cut out and put 
+into little tiny packages or medium-sized packages
+
+0:07:40.960,0:07:46.720
+so that we can install them into motherboards 
+into computers and connect them up to the outside
+
+0:07:46.720,0:07:54.480
+world. With all of these technologies, transistor 
+count went crazy. So if you think about 1971,
+
+0:07:54.480,0:08:01.680
+the Intel 404 had 2,300 transistors. The first 
+billion transistor chip was the Intel Itanium.
+
+0:08:01.680,0:08:07.040
+And there's some of these deep learning are are 
+basically wafer style integration. So you build a
+
+0:08:07.040,0:08:11.920
+wafer like this and you have these wafers not just 
+connected. These this wafer was designed to be cut
+
+0:08:11.920,0:08:18.880
+into pieces, but imagine building a chip that's 
+the size of a wafer. A deep learning wafer scale
+
+0:08:18.880,0:08:28.320
+engine by Cababus has 2.6 6 trillion transistors 
+in 2020. The two terabyte flash memory with 5.3
+
+0:08:28.320,0:08:39.520
+trillion gates and the Blackwell B1000 B100 CPU 
+with 208 billion transistors in 2024. So, we've
+
+0:08:39.520,0:08:45.600
+got a lot and we're starting to create things 
+that make use of the entire wafer. There's a
+
+0:08:45.600,0:08:51.120
+lot of complexity and a lot of reliability because 
+a lot of these chips turn out wrong in the wafer
+
+0:08:51.120,0:09:00.160
+scale. And so up next, you're going to learn about 
+VLSI design and how you draw the pictures that
+
+0:09:00.160,0:09:11.040
+become the patterns that create the gates and the 
+traces in a chip on one of these silicon wafers.

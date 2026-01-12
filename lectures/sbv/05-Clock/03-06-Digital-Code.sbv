@@ -1,0 +1,159 @@
+0:00:00.000,0:00:06.160
+So, we're going to wrap up this section talking 
+a little bit more about what we would do in order
+
+0:00:06.160,0:00:10.640
+to get the instructions, the machine language 
+instructions, instead of coming from a little
+
+0:00:10.640,0:00:15.920
+switch, which is completely fake, but instead 
+coming from the memory. And so to do that,
+
+0:00:15.920,0:00:22.480
+we look a little bit more into computer 
+architecture. We talked before about the ALU,
+
+0:00:22.480,0:00:28.400
+the arithmetic and logic unit, as well as the 
+registers. So the ALU has like an adder in it,
+
+0:00:28.400,0:00:34.800
+maybe a multiplier or a comparison module all in 
+hardware. Then we have registers which have you
+
+0:00:34.800,0:00:40.720
+know bits in them like numbers and their temporary 
+storage. And in addition, we're going to talk a
+
+0:00:40.720,0:00:45.760
+little more now about the logic. Now the load 
+and store the way we're going to do it goes to
+
+0:00:45.760,0:00:51.760
+and from registers for like data memory. But for 
+program memory, there's a couple of things that
+
+0:00:51.760,0:01:00.080
+the CPU uses to control program memory. So one 
+is the PC or program counter register. So this
+
+0:01:00.080,0:01:07.600
+is a register that points to the next instruction 
+we're supposed to execute. So you the CPU when
+
+0:01:07.600,0:01:12.800
+it's ready to execute an instruction that says oh 
+the PC tells me where to load it. So I'm going to
+
+0:01:12.800,0:01:18.960
+load that instruction from the memory into CIR 
+current instruction register. And that's just
+
+0:01:18.960,0:01:24.960
+some bits zeros and one. And then I mentioned the 
+idea of a decoder. And in the previous example,
+
+0:01:24.960,0:01:31.360
+we had some ANDgates that were in a sense our 
+decoder. So when you have a real CPU, it has a
+
+0:01:31.360,0:01:37.440
+lot more than two instructions. And the decoder is 
+looking at the pattern of bits in the instruction,
+
+0:01:37.440,0:01:44.800
+decoding it, and then sending logic to the ALU 
+in the registers to activate the right thing to
+
+0:01:44.800,0:01:48.960
+get the right thing to happen. So maybe we're 
+going to add two registers together and store
+
+0:01:48.960,0:01:56.160
+the result in a different register. Okay? And the 
+decoder sees that instruction that's that that is
+
+0:01:56.160,0:02:01.360
+the add two registers and store in another 
+register instruction. And then the decoder
+
+0:02:01.360,0:02:06.640
+sees the pattern of that and then it activates 
+the right registers, the right arithmetic logic
+
+0:02:06.640,0:02:13.280
+unit and then causes the instruction to happen in 
+one or a couple of clock cycles depending on how
+
+0:02:13.280,0:02:19.440
+difficult it is. In the previous example, we had 
+like a zero to reset and a one to add one every
+
+0:02:19.440,0:02:25.360
+clock cycle. So it incremented or it stopped went 
+to back to zero. But in reality you need a series
+
+0:02:25.360,0:02:35.120
+of machine language instructions like uh set 
+register 4 to zero, compare register 4 to zero,
+
+0:02:35.120,0:02:41.280
+increment register 4, decrement register 4. And 
+so there are binary patterns which are part of
+
+0:02:41.280,0:02:49.200
+the documentation of a microprocessor. So if the 
+decode unit looks at 0 1 0 0 for the instruction,
+
+0:02:49.200,0:02:54.720
+it says, "Oh, that's a zero instruction." And then 
+RR is three bits for a register from 0 through
+
+0:02:54.720,0:03:02.720
+7. So you're setting register three to zero. 
+And so these are just simple patterns and they
+
+0:03:02.720,0:03:07.760
+might seem really complex to you, but in some 
+ways they're actually really easy. The number
+
+0:03:07.760,0:03:15.120
+of things you can do in this machine language is 
+really limited. Now it makes programs a lot more
+
+0:03:15.120,0:03:20.480
+verbose and usually we have we don't even write 
+the zeros and ones. We write this stuff called
+
+0:03:20.480,0:03:25.440
+assembly which we'll talk about coming up or or 
+we write C which is a higher level language that
+
+0:03:25.440,0:03:30.320
+then generates assembly which generates machine 
+language or take a language like Python which
+
+0:03:30.320,0:03:35.200
+sort of almost completely separates us from 
+the machine language but then Python itself is
+
+0:03:35.200,0:03:40.560
+written in machine language so that it's really 
+fast. So, coming up next, we're going to design
+
+0:03:40.560,0:03:48.160
+a very simple central processing unit. I call 
+it the CDC 8512. Inspired by my first computer,
+
+0:03:48.160,0:03:54.320
+the Control Data Corporation CDC 6500. It'll 
+have a complete architecture. It'll be completely
+
+0:03:54.320,0:03:59.680
+defined. It'll have a program counter. It'll have 
+an instruction register. And we will write real,
+
+0:03:59.680,0:04:07.520
+very small programs in CDC 8512 machine 
+code and then run them on an emulator.

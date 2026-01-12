@@ -1,0 +1,487 @@
+0:00:00.080,0:00:04.960
+So, now we're going to start building things 
+with gates. Gates are our new low-level building
+
+0:00:04.960,0:00:10.560
+blocks. So, the first thing we're going to do is 
+add some numbers with gates. And we're going to
+
+0:00:10.560,0:00:16.960
+basically use a pattern much like this, except 
+that this little adding hand calculator does
+
+0:00:16.960,0:00:22.000
+numbers from 0 through 9. We're going to do the 
+same thing with just zero and one. So, they're
+
+0:00:22.000,0:00:27.040
+going to do base two addition, but we're still 
+going to do things like carry. So when we click
+
+0:00:27.040,0:00:32.720
+over to the next one, it carries and goes on to 
+the next number. And so we're going to solve the
+
+0:00:32.720,0:00:40.480
+carry problem. At this point, you should know the 
+truth tables for not and and or exclusive or. Now,
+
+0:00:40.480,0:00:46.160
+not and and or are kind of like what you've done 
+in programming for a long time now. Exclusive or
+
+0:00:46.160,0:00:51.280
+is just kind of weird, meaning that it's a more of 
+a counter than an than a simple or, which means if
+
+0:00:51.280,0:00:56.800
+one of them is true, the output is true. And if 
+one both are zero or both are one, the output is
+
+0:00:56.800,0:01:02.800
+zero. And of course, NAND and NOR are just kind of 
+inverted versions of and and or. So at this point,
+
+0:01:02.800,0:01:08.400
+I think you should be able to fill these in. And 
+I probably won't need to explain these to you much
+
+0:01:08.400,0:01:15.040
+more, but we do want to represent numbers larger 
+than zero and one. That would that would be kind
+
+0:01:15.040,0:01:21.760
+of a limited range. So what we use is we use base 
+two numbers and we take different wires and give
+
+0:01:21.760,0:01:27.920
+them different values. And so in base two, there's 
+a one's position, a two's position, a four's, and
+
+0:01:27.920,0:01:36.240
+an eight's position. And so you can think of three 
+wires can represent a number from 0 through 7.
+
+0:01:36.240,0:01:47.280
+So in base 10, 123 is 1 * 100, 2 * 10, and 3 * 1, 
+which adds up to 123, which is kind of redundant.
+
+0:01:47.280,0:01:57.840
+But if you look at base 2, 1 1 0, that's 1 * 
+4, which is 4 plus 1 * 2, which is 2 + 0 * 1,
+
+0:01:57.840,0:02:06.320
+which is 0. 4 + 2 = 6. So to convert 1 1 0 b 2 
+into base 10, it's 6 b 10. We're going to make
+
+0:02:06.320,0:02:11.760
+things simple for now. We're not going to make you 
+generally be able to convert any base 10 number.
+
+0:02:11.760,0:02:17.280
+As a matter of fact, for most of the rest of this 
+section of the class, we will never encounter a
+
+0:02:17.280,0:02:23.760
+number higher than 0 through 8. Mostly, it'll 
+be 0 through 7. And then once in a while,
+
+0:02:23.760,0:02:29.280
+we'll carry and into the eight's position. So, we 
+represent the four's position, the two's position,
+
+0:02:29.280,0:02:35.200
+and the one's position. So, 1 1 0 equals 6. 
+But you can quickly say, oh, that's a four,
+
+0:02:35.200,0:02:42.480
+that's a two, and no one, which is 4 plus two 
+equals six. So you can quickly convert from that.
+
+0:02:42.480,0:02:49.600
+So the idea of having one wire represent the the 
+ones of a number, another wire representing the
+
+0:02:49.600,0:02:55.040
+twos of the number and another wire representing 
+the fours of the number is how we can represent a
+
+0:02:55.040,0:03:01.520
+number from 0 through 7. So in this example that 
+I've given you, the tw's wire is a one and the
+
+0:03:01.520,0:03:11.200
+four's wire is a one and we hook that to a Nixie 
+tube. Remember Nixie tubes? The Nixie tube shows
+
+0:03:11.200,0:03:18.160
+decodes the ones, twos, and fours and converts it 
+to base 10. So if we're putting in two zero 1's,
+
+0:03:18.160,0:03:23.520
+one twos, and one fours, well that's 2 plus 4 
+equals six. And the Nixie tube has the logic to
+
+0:03:23.520,0:03:30.480
+simply display that. So if we can send it a set of 
+wires, three wires, it will show us the base 10.
+
+0:03:30.480,0:03:36.960
+And in order to help you have a good understanding 
+of quick conversion from base 2 to base 10,
+
+0:03:36.960,0:03:42.480
+at least for numbers between zero and seven, I've 
+got a little game called the Nixie challenge that
+
+0:03:42.480,0:03:48.720
+both converts base 2 to base 10, base 10 to 
+base 2, and adding of base two numbers. Now,
+
+0:03:48.720,0:03:55.920
+speaking of adding base two numbers, let's 
+start at the very beginning. 1 + 1 equals 2.
+
+0:03:55.920,0:04:00.640
+That's true in base 10, but it's not true 
+in base two because you don't have the digit
+
+0:04:00.640,0:04:10.880
+two in base two. So 1 + 1 is zero, carry the 
+one. Just be like 5 + 5 is in base 10 is zero,
+
+0:04:10.880,0:04:17.600
+carry the one or 10. So 1 0 base 2 is two because 
+that's a one in the two's position and a zero in
+
+0:04:17.600,0:04:25.600
+the one's position. So remember 1 + 1 equals 0, 
+carry the one. You see the same pattern when you
+
+0:04:25.600,0:04:32.720
+do 2 plus 2 = 4. 0 plus 0 equ= 0. 1 plus 1 equals 
+0. Carry the 1. And again, the same thing happens
+
+0:04:32.720,0:04:39.120
+when you do 4 plus 4 equals 8. And so now we've 
+seen our first number greater than seven. 4 + 4=
+
+0:04:39.120,0:04:47.840
+8. Now you got to carry. You got to ripple carry. 
+In the 3 + 1= 4 example, 1 + 1 equals 0. Carry the
+
+0:04:47.840,0:04:54.160
+one. Now in the second column, you got to add that 
+carry. the carry one plus the top one equals Z,
+
+0:04:54.160,0:05:01.200
+carry the one. So now we end up with 1 0 0 or 
+four. And so these carries can cruise along.
+
+0:05:01.200,0:05:08.160
+Um 3 + 2 equals 5. You can see there's a 1 
+plus 0 = 1. 1 plus 1 equals 0. Carry the 1,
+
+0:05:08.160,0:05:14.320
+which gives us 1 0 1, which is a 4 and a 1, which 
+is five. And then the last one, which is seven.
+
+0:05:14.320,0:05:21.440
+All ones, which is a four plus a two plus a one, 
+which is seven. Seven plus one. You start with 1
+
+0:05:21.440,0:05:28.000
+plus 1 equals zero. Carry the one, but then 
+the carry plus the other one is zero again.
+
+0:05:28.000,0:05:34.000
+Carry the one again. And then the carry plus the 
+one is a zero. Carry the one again, and then you
+
+0:05:34.000,0:05:43.920
+end up with the one. So 7 + 1 equals 8. So the 
+logic that we do here to do one of these columns,
+
+0:05:43.920,0:05:52.480
+so just the the the columns is a thing we call the 
+half adder. And half adder is a logic circuit that
+
+0:05:52.480,0:06:00.000
+takes as its inputs the A and the B and as output 
+comes up with the sum and the carry. Now for now
+
+0:06:00.000,0:06:07.920
+we're only thinking about one column of addition. 
+0 plus 0 is 0 carry the zero. 0 + 1 is 1 carry the
+
+0:06:07.920,0:06:16.000
+zero. 1 plus 0 = 1 carry the zero. 1 plus 1 equals 
+0 carry the one. So if we look at the circuit,
+
+0:06:16.000,0:06:22.720
+the circuit is a combination of the and and an 
+exclusive or. And if you look at the two columns,
+
+0:06:22.720,0:06:30.080
+you look at the sum column. The sum column 0 1 1 
+0 is just the same as exclusive or and the carry
+
+0:06:30.080,0:06:35.360
+column is just the same as the and. So we simply 
+take the A and the B both to an exclusive orgate
+
+0:06:35.360,0:06:43.360
+and both to an ANDgate and out comes a sum and a 
+carry. So two gates gives us a half adder. So if
+
+0:06:43.360,0:06:56.080
+we look at the different values 0 + 0 equ= 0 carry 
+the 0 1 + 0 = 1 carry the 0 and 1 + 1 = 0 carry
+
+0:06:56.080,0:07:02.160
+the 1. So this solves one column of addition. But 
+if you think about one column of addition other
+
+0:07:02.160,0:07:09.200
+than the first column there's also a carryin and 
+that's how we solve it with the full adder. So the
+
+0:07:09.200,0:07:17.440
+full adder its truth table has a carry in a sum 
+a sum b and then a car sum total and a carry out.
+
+0:07:17.440,0:07:25.360
+So operands a and b a carry in sum and carry out. 
+So the if you get a carry in that's a one. If you
+
+0:07:25.360,0:07:32.320
+get a a of one and a b of one well that is three 
+which is the sum is one carry the one. So that's
+
+0:07:32.320,0:07:37.920
+a little different right? So now we have up to 
+three numbers. It's kind of like a counter of
+
+0:07:37.920,0:07:44.960
+three bits, right? And it's showing us that. But 
+we have a carry-in, A and B, and then a sum and a
+
+0:07:44.960,0:07:50.720
+carry out. Okay? And so it's pretty much what you 
+would expect. Um, you can think of the sum and the
+
+0:07:50.720,0:07:56.560
+carry out is like the carry out is kind of like a 
+two when you're carrying to the next column. Okay?
+
+0:07:56.560,0:08:03.520
+So let's take a look at the circuit that needs to 
+solve this problem. A full adder compensates for
+
+0:08:03.520,0:08:11.040
+a carryin. So we call a full adder a full adder 
+because it really is two half adders plus a little
+
+0:08:11.040,0:08:17.200
+bit. So if you look at the section that's the A 
+and the B that's just a half adder. It's got an
+
+0:08:17.200,0:08:24.640
+exclusive ore and an and. And then what we have is 
+a another half adder at the top. Exclusive or two
+
+0:08:24.640,0:08:33.600
+and and two. And the input to that half adder is 
+the carry in plus the output of exclusive or one.
+
+0:08:33.600,0:08:39.760
+Exclusive or two produces the overall sum of the 
+three numbers. And then we have to add an orgate
+
+0:08:39.760,0:08:46.320
+that takes the output of the A and B and as well 
+as the and and we or it all together and get a
+
+0:08:46.320,0:08:53.280
+carry out. And you can look at that or as did we 
+generate a carry out by A and B or did we generate
+
+0:08:53.280,0:09:00.240
+a carry out because A or B was one and the carryin 
+was one and that's what that or is doing. So it's
+
+0:09:00.240,0:09:06.080
+probably best to take a quick look at how this 
+works with a working circuit. So here is a full
+
+0:09:06.080,0:09:14.000
+adder circuit. And so we're going to start and 
+work through carry in A and B and then the sum
+
+0:09:14.000,0:09:20.000
+and the carry out. So we're set them all to zero. 
+So the sum is zero. So let's just exercise this
+
+0:09:20.000,0:09:27.040
+as a half adder for example. So if we make AB one 
+then we get a sum of one and a carry out of zero.
+
+0:09:27.040,0:09:33.840
+And if we make BB be one then we get a sum of zero 
+and a carry out of one. And so the carry-in is
+
+0:09:33.840,0:09:41.200
+not participating in any way. This is just a half 
+adder that's working. So now if we add the carry
+
+0:09:41.200,0:09:51.040
+in. So now we have carryin of one, a of one, b of 
+one, and sum is one and carry out is one. And now
+
+0:09:51.040,0:09:56.240
+you can pretty much put any combination of ones 
+and zeros. And this is kind of a counter where
+
+0:09:56.240,0:10:02.800
+the carry out plus the sum is like how many carry 
+in is one and a is zero and b is one. we kind of
+
+0:10:02.800,0:10:08.960
+have two ones and so we get a carry out of one and 
+a sum of zero. That's kind of one zero which is a
+
+0:10:08.960,0:10:18.080
+two. Okay, so that's a full adder. It's basically 
+two half adders plus an orgate. Now that we built
+
+0:10:18.080,0:10:25.440
+this full adder and we won't go into too much 
+detail here, but this carry out was designed to
+
+0:10:25.440,0:10:33.520
+become the carry-in for the next digit. So if we 
+look at 2 + 5 = 7, we can see the the full adder
+
+0:10:33.520,0:10:39.520
+has the a a for the ones column and the b for the 
+ones column. A for the tw's column and b for the
+
+0:10:39.520,0:10:47.520
+tw's column and a for the four's column and b 
+for the four's column. And so because a is two,
+
+0:10:47.520,0:10:57.360
+a1 is zero, a2 is one, and a4 is zero. So 0 1 
+0. B is five and so it's 1 0 1. So B1 is one. B2
+
+0:10:57.360,0:11:03.120
+the two's uh two's column of B is zero. And the 
+four's column of B is one. And so they just go
+
+0:11:03.120,0:11:08.480
+into these full adders. And when we say full one 
+in here, that is those gates that we just got done
+
+0:11:08.480,0:11:15.360
+describing. And they have a sum out and that goes 
+to our ultimate sum. But the carry out of each
+
+0:11:15.360,0:11:21.520
+column goes to the carry in of the next column. 
+That's what's clever about the full adder. So this
+
+0:11:21.520,0:11:28.160
+is a ripple carry. the carry is rippling from one 
+column to the next on the screen. It's the top to
+
+0:11:28.160,0:11:33.520
+the bottom. So you just copy the you connect the 
+carry outs to the carry into the next full adder
+
+0:11:33.520,0:11:38.480
+and then that full adder has a carry out and 
+away it goes. Now if you look at the third one
+
+0:11:38.480,0:11:43.760
+you have the carry out that indicates an overflow 
+indicator and that is this can only handle numbers
+
+0:11:43.760,0:11:51.200
+from 0 through 7. But if you add 5 + 5, that's 
+bigger than seven. And the overflow indicator,
+
+0:11:51.200,0:11:58.000
+we're like, "Oh, now we just figured out how to 
+take three full adders and make a threebit adder."
+
+0:11:58.000,0:12:04.960
+So this is a three-bit adder with the A's on the 
+left hand side, 0 1 0 or two, and the B's on the
+
+0:12:04.960,0:12:11.280
+right hand side, one 0, one or five. And you can 
+see the adder has a seven. We put a little little
+
+0:12:11.280,0:12:16.480
+display in there so you can see the number seven. 
+and it has sums coming out the bottom and it has
+
+0:12:16.480,0:12:23.200
+overflows coming out the top. And so this is 
+part of how digital logic works is that we
+
+0:12:23.200,0:12:32.000
+build something cool like a threebit adder that's 
+made up of three full adders which each full adder
+
+0:12:32.000,0:12:36.880
+is made up of two half adders plus an orgate. But 
+we don't have to draw that. We just say give me a
+
+0:12:36.880,0:12:43.280
+three-bit adder and away you go. And so we can 
+quickly build abstractions that are all really
+
+0:12:43.280,0:12:52.240
+cool reusable componentry. And so we only build a 
+full adder long enough to build a three-bit adder
+
+0:12:52.240,0:12:57.920
+to build then a three-bit adder component. And so 
+we can build these things pretty rapidly. And now
+
+0:12:57.920,0:13:04.800
+you can start to see how we might eventually build 
+a microprocessor. At least now we have a three-bit
+
+0:13:04.800,0:13:10.960
+adder. And if you listen carefully, maybe go back 
+and watch this again. If you look at it carefully,
+
+0:13:10.960,0:13:16.720
+you'll see you know if you go all the way back, 
+you know how many transistors that you could make
+
+0:13:16.720,0:13:21.360
+a three-bit adder. But it would be a bunch 
+of them. It would be a bunch of them because
+
+0:13:21.360,0:13:30.080
+remember an and an ANDgate is four transistors 
+plus the knot which is two transistors. So an
+
+0:13:30.080,0:13:35.920
+ANDgate is six transistors and that's just 
+an ANDgate. So you you figure out after a
+
+0:13:35.920,0:13:41.760
+while that building gates and then building 
+reusable components, you know how to build them,
+
+0:13:41.760,0:13:47.840
+but you don't have to know how to build them 
+to use a component like a three-bit adder in
+
+0:13:47.840,0:13:58.240
+a circuit. And that's the fun of it all. And 
+we're going to keep doing this as we go forward.

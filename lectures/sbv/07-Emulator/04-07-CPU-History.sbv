@@ -1,0 +1,262 @@
+0:00:00.080,0:00:05.360
+So, now that you've learned to program a 
+microprocessor from the 1970s, I'd like to take a
+
+0:00:05.360,0:00:13.040
+quick fast forward from the 1970s to the present. 
+A lot's changed since the 6502 was available as a
+
+0:00:13.040,0:00:21.200
+$25 microprocessor. Since the 1970s, there have 
+been about 50 distinct CPU families. I've been
+
+0:00:21.200,0:00:27.680
+part of this my whole career. Lots of research 
+and innovation adoption switching computer vendors
+
+0:00:27.680,0:00:33.040
+picking one CPU and then switching to another 
+CPU. Generational turnover and overall approach
+
+0:00:33.040,0:00:40.240
+from complex instruction sets to simpler risk 
+instruction sets from large refrigerator size
+
+0:00:40.240,0:00:47.840
+mainframes to to micro small microprocessors then 
+larger microprocessors faster microprocessors.
+
+0:00:47.840,0:00:52.560
+Interestingly, after all that, things have 
+settled down in the modern era. There are
+
+0:00:52.560,0:00:59.600
+two major CPU families in use. If you think 
+about consumer uh and server and desktop,
+
+0:00:59.600,0:01:04.480
+if you take computers and phones and bring 
+them together, about 90% of the marketplace
+
+0:01:04.480,0:01:11.360
+is ARMbased processors and the remaining 10% is 
+Intel processors. ARM is very successful because
+
+0:01:11.360,0:01:17.680
+it was focused on low power. And as computers have 
+gotten faster and faster, uh we really care more
+
+0:01:17.680,0:01:26.720
+and more about saving power u both for uh small 
+handheld devices and for uh desktops and then even
+
+0:01:26.720,0:01:32.800
+laptops. And so power savings is really important 
+and the ARM was designed to save power. So let's
+
+0:01:32.800,0:01:39.840
+take a quick case study and look at uh Apple over 
+the over the years. Uh Apple the Apple 1 was one
+
+0:01:39.840,0:01:49.040
+of the early adopters of the 6502. um in 1997 and 
+the and the Apple 2 and the Apple 2 and its sort
+
+0:01:49.040,0:01:55.040
+of whole family were a very successful set of 
+microprocessors for a long time. Apple switched
+
+0:01:55.040,0:02:03.200
+to a different processor, the Motorola 68000 
+from 1984 to 1994. During that time, they were
+
+0:02:03.200,0:02:09.200
+playing with a project called the Newton, which 
+was a handheld device. Wasn't extremely popular,
+
+0:02:09.200,0:02:16.640
+but it was a handheld device. um battery powered 
+handheld sort of pocket but that was using an ARM
+
+0:02:16.640,0:02:22.160
+processor an ARM processor. Then I then they 
+switched from the Motorola to the Power PC
+
+0:02:22.160,0:02:31.040
+in 1994 and again 12 more years they use the 
+Power PC and then the Intel x86 in 2006. They
+
+0:02:31.040,0:02:37.440
+switched their Macintosh line from using Power PC 
+to Intel x86. I was actually in the audience when
+
+0:02:37.440,0:02:44.960
+Steve Jobs announced the switch from Power PC to 
+Intel 8 x86. I was I was amazed. I I was sitting
+
+0:02:44.960,0:02:50.400
+I was working on my laptop which had a Power PC 
+in it. I've been using it for years and at the
+
+0:02:50.400,0:02:56.000
+end he threw the doors open and we ran into some 
+rooms and there were some prototype uh Intel x86.
+
+0:02:56.000,0:03:02.960
+Macintosh is running Mac OS and it was amazing to 
+me that they could switch from Power PC to Intel
+
+0:03:02.960,0:03:09.760
+x86. Then the iPhone came out in 2007 and I was 
+also in the audience when Steve Jobs announced the
+
+0:03:09.760,0:03:15.280
+first iPhone, this iPhone 1. And I was carrying 
+around at that point in time, I was carrying
+
+0:03:15.280,0:03:22.400
+around a a trio as my main computer. And the trio 
+was one of the things he put up on the screen when
+
+0:03:22.400,0:03:29.600
+uh he was talking about the iPhone, but the iPhone 
+had an ARM, a Samsung ARM in it. And so this is an
+
+0:03:29.600,0:03:39.600
+ARM processor. And then 20 in 2020 the ARM came 
+not just to the iPhone but from the Macintosh.
+
+0:03:39.600,0:03:46.560
+ARM is not manufactured by one organization. The 
+ARM is licensed to many folks to build them and
+
+0:03:46.560,0:03:51.680
+Apple builds its own hardware in the Macintosh 
+from 2020 to present. And what's interesting
+
+0:03:51.680,0:03:57.200
+about that is Apple is currently redesigning 
+their CPUs continuously. Every year they have a
+
+0:03:57.200,0:04:03.440
+new release. They call it the M1, the M2, the M2 
+Max, M23 Pro or whatever. And what they're doing
+
+0:04:03.440,0:04:10.080
+is they're actually studying what needs to be in 
+their microprocessor. And they add instructions
+
+0:04:10.080,0:04:16.560
+to their to their ARM systems based on what they 
+think we need we use these for, whether it's image
+
+0:04:16.560,0:04:22.000
+processing or audio or video or gaming or now 
+increasingly artificial intelligence. And one of
+
+0:04:22.000,0:04:28.320
+Apple's advantages is because they use the ARM and 
+they they license the core instruction set of the
+
+0:04:28.320,0:04:33.840
+ARM, but then they add their own instructions and 
+then manufacture them. Another thing about Apple
+
+0:04:33.840,0:04:41.120
+that's kind of interesting is you've been using an 
+emulator, a code that's written in JavaScript that
+
+0:04:41.120,0:04:48.640
+makes it look like you can run 6502 processors. 
+Well, in 2005, as Apple was moving from Power PC
+
+0:04:48.640,0:04:54.880
+to Intel processors, they included a technology 
+called Rosetta 1. And then when they were moving
+
+0:04:54.880,0:05:00.080
+from Intel to ARM processors in 2020, they 
+included a technology they called Rosetta 2.
+
+0:05:00.080,0:05:05.680
+And of course, that's a reference to the Rosetta 
+Stone, a famous stone with that connected multiple
+
+0:05:05.680,0:05:12.880
+languages from sort of antiquity to uh Latinbased 
+languages. And so what Rosetta did in both cases,
+
+0:05:12.880,0:05:19.280
+it translated the machine code from a 
+previous computer to the modern one. And
+
+0:05:19.280,0:05:24.640
+the the interesting thing was is it would often 
+run because the modern processors they were they
+
+0:05:24.640,0:05:30.080
+were choosing whether it be the Intel initially 
+or ARM later, they were so fast that they could
+
+0:05:30.080,0:05:35.280
+emulate the previous generation processors 
+almost at the same speed as the hardware of
+
+0:05:35.280,0:05:40.880
+the previous generation. And so this really made 
+it a lot easier for those of us who were Apple
+
+0:05:40.880,0:05:47.360
+customers making a transition from architectures 
+which otherwise would have almost been impossible
+
+0:05:47.360,0:05:57.200
+um to go from from a major one major CPU 
+architecture to another architecture. So fun
+
+0:05:57.200,0:06:06.640
+aside, there is sort of this indirect connection 
+between the 6502 and the ARM. And ARM stands for
+
+0:06:06.640,0:06:17.600
+Acorn Risk Microprocessor. And it it was built in 
+Cambridge, England by Acorn. Um, and if you Acorn
+
+0:06:17.600,0:06:23.840
+originally built a thing called the BBC Micro, 
+which was a 6502based micro computer, more popular
+
+0:06:23.840,0:06:30.720
+in the UK. And so they decided they were going 
+to create a new microprocessor. So they knew a
+
+0:06:30.720,0:06:39.360
+lot about 6502. The goal was not to make a better 
+6502, but there was a lot of homage to the 6502
+
+0:06:39.360,0:06:47.120
+in the ARM. And so they used BBC micros to build 
+and simulate the ARM design. ARM one had 25,000
+
+0:06:47.120,0:06:53.760
+transistors. The 6502 had 4,500 transistors. 
+And the ARM one through whatever there's many
+
+0:06:53.760,0:06:59.840
+generations of ARMs. And they are the most widely 
+used processors in the world. And for a good time,
+
+0:06:59.840,0:07:06.880
+you can ask AI to make this historical leap 
+connection between the 6502 ARM and the Raspberry
+
+0:07:06.880,0:07:12.640
+Pi. And I have a picture of Sophie Wilson, one 
+of the architecture designers of the initial
+
+0:07:12.640,0:07:25.200
+ARM working at um Acorn, working on both the BBC 
+Micro and the building of the AR microprocessor.
+
+0:07:25.200,0:07:27.040
+[Music] [Applause] [Music]

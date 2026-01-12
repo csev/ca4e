@@ -1,0 +1,178 @@
+0:00:00.400,0:00:05.360
+Hello and welcome to another walkthrough for 
+computer architecture for everybody. We're
+
+0:00:05.360,0:00:11.280
+playing with our 6504 emulator programming and 
+kind of working through some increasingly complex
+
+0:00:11.280,0:00:17.360
+samples as we go. So we're going to go into 
+the uppercase sample. Now the previous thing
+
+0:00:17.360,0:00:22.480
+we did was a loop and this is really more of 
+an if test. We're not this. We're not going
+
+0:00:22.480,0:00:30.320
+to do a loop in the next thing. We're going 
+to have an if test um and a uh a loop. So,
+
+0:00:30.320,0:00:35.280
+we're going to we're not going to store any data 
+here. We're going to just it's really simple.
+
+0:00:35.280,0:00:39.680
+We're just doing an if statement. We're going 
+to check in this one hard-coded variables. We're
+
+0:00:39.680,0:00:47.120
+going to check to see if P is greater than or 
+less than A. So, we're going to load accum into A,
+
+0:00:47.120,0:00:53.680
+the P letter, the constant P. We're going to 
+compare the constant A with the accumulator.
+
+0:00:53.680,0:01:00.080
+And if it is, and we're doing a a convert to 
+uppercase here. If it's already uppercase,
+
+0:01:00.080,0:01:04.080
+we're going to skip down. And if it's not 
+uppercase, we're going to convert it to
+
+0:01:04.080,0:01:10.880
+uppercase. And this will only work for lowercase 
+A through Z, but you get the idea. Okay? And so,
+
+0:01:10.880,0:01:17.280
+uh, so let's let's take a look here. Um, convert 
+to uppercase. So let's go ahead and so if we look
+
+0:01:17.280,0:01:23.680
+at these things, we got a load, we got our comp, 
+we got our immediate, so that's the letter P,
+
+0:01:23.680,0:01:28.400
+we got our compare, and then we have our 
+immediate, which is the letter A. And then we
+
+0:01:28.400,0:01:37.840
+have the branch if minus down to. And the branch 
+of minus is really skipping this subtraction and
+
+0:01:37.840,0:01:45.200
+going all the way to eight. So the if then else 
+that we've kind of got here is if it's minus,
+
+0:01:45.200,0:01:51.760
+we're going to skip down two instructions 
+to eight. If it is not minus, we're going
+
+0:01:51.760,0:01:58.800
+to run six and then that's going to be a subtract 
+immediate of 0x20. Hopefully you kind of see that
+
+0:01:58.800,0:02:06.160
+that's a two and that's a zero because the 0x20. 
+You can see those you at some point you should
+
+0:02:06.160,0:02:13.280
+start seeing the hex. Okay, let's go ahead and 
+just run this at full speed and maybe I'll talk a
+
+0:02:13.280,0:02:20.960
+little bit about it afterwards. I'm just going to 
+turn on narration and fire. Uh oh, no. I'm going
+
+0:02:20.960,0:02:30.560
+to step. I'm going to step. So, let's do the first 
+one. Let's load the letter P into the accumulator.
+
+0:02:30.560,0:02:34.240
+Load accumulator.
+
+0:02:34.240,0:02:40.480
+So that's a 0x70 which is lowercase P and ASKI. 
+Oh, hang on. Let me bring up the ASKI chart,
+
+0:02:40.480,0:02:44.880
+right? So now we can bring up the ASKI chart. 
+So that's kind of fun. So I got this little
+
+0:02:44.880,0:02:53.280
+ASKI chart for you. Quick computation. So 0x70 
+is a hopefully a lowercase P. Look at that. So
+
+0:02:53.280,0:03:00.720
+0x70 is a lowercase P. The assembler converted 
+this from a quote p quote which is one of its
+
+0:03:00.720,0:03:09.600
+many load accumulator uh syntaxes and it 
+chened it into 011 uh 011 0 0 and which
+
+0:03:09.600,0:03:17.680
+is the letter P. Now we're going to compare 
+this with the letter A. So where is that?
+
+0:03:17.680,0:03:24.000
+This is the we're instruction two now and we're 
+going to compare it with the A. And A is just
+
+0:03:27.680,0:03:44.640
+61 hex. And there it is. 61 hex. And so 
+let's just compare it. Run one instruction.
+
+0:03:44.640,0:03:53.600
+basically have it set so that P which was 
+in the accumulator is greater than A. So
+
+0:03:53.600,0:04:01.520
+we we're not we didn't set the zero flag and we 
+didn't set the negative flag. Okay? And if this
+
+0:04:01.520,0:04:09.440
+character that we just compared is less than 
+a then we're going to skip. If it's not we're
+
+0:04:09.440,0:04:14.560
+going to subtract 20 from it. So it's not going 
+to be very exciting. This is going to become
+
+0:04:14.560,0:04:27.280
+0x50 because we're going to subtract 0x20. So 
+let's go ahead and run that step. PC4 branch.
+
+0:04:27.280,0:04:33.920
+So the branch didn't get taken. It fell right 
+through into position 0x06. And now we're
+
+0:04:33.920,0:04:43.600
+going to do a subtract PC. Subtract with carry 
+immediate 0x20. So now the next instruction is
+
+0:04:43.600,0:04:50.240
+to stop. But you'll notice that we did subtract 
+that 70 from the the accumulator was 70 which
+
+0:04:50.240,0:04:58.480
+is the letter where were we the letter P and we 
+subtracted 20 hex to it which just happens to be
+
+0:04:58.480,0:05:10.000
+uppercase P. So this was a convert to uppercase 
+operation and the last step is just to stop PC08.
+
+0:05:10.000,0:05:15.200
+So we didn't store anything. We just are 
+showing a simple if then else which turns
+
+0:05:15.200,0:05:22.480
+into a sort of compare and skip based 
+on flag values. Okay. So, I hope you
+
+0:05:22.480,0:05:28.240
+found this particular useful uh in the in the 
+walkthrough and uh cheers and see you on the

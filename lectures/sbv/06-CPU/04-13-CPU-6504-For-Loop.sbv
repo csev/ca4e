@@ -1,0 +1,591 @@
+0:00:00.160,0:00:04.800
+Hello and welcome to another walkthrough for
+computer architecture for everybody. In this
+
+0:00:04.800,0:00:10.800
+walkthrough, we are going to do some more
+work with our CDC 6504 emulator. We're
+
+0:00:10.800,0:00:11.440
+going
+to build
+
+0:00:11.440,0:00:17.680
+our first loop. So, let me go ahead and load
+that loop up and then turn on the
+
+0:00:17.680,0:00:18.240
+assembler
+so
+
+0:00:18.240,0:00:21.760
+we can see it. Oh, not that one. We're not
+going to change it. That would
+
+0:00:21.760,0:00:22.800
+be where we
+would change
+
+0:00:22.800,0:00:28.400
+it. , let's view the assembly. We just want
+to be able to look at it when we're near it.
+
+0:00:28.400,0:00:29.280
+Okay.
+
+0:00:29.280,0:00:33.360
+, and so this is not going to use any
+memory. So I can just leave
+
+0:00:33.360,0:00:34.240
+the view
+assembly
+
+0:00:34.240,0:00:37.680
+over here. Actually can bring it all the way
+over here because we're not going
+
+0:00:37.680,0:00:38.240
+to get
+into
+
+0:00:38.240,0:00:43.120
+the second second half of the instruction
+memory because we're done here. So let's get
+
+0:00:43.120,0:00:43.920
+a review of
+
+0:00:43.920,0:00:52.960
+what we're going to do. So this is a Python
+for the X register in range five because
+
+0:00:52.960,0:00:58.000
+this is going to go this is going to be a
+loop that goes 0 1 2 3 4 and then when it
+
+0:00:58.000,0:00:58.560
+hits five
+
+0:00:58.560,0:01:02.320
+it's going to jump out. It's not going to
+execute the body of the loop for the value
+
+0:01:02.320,0:01:02.960
+five. As soon
+
+0:01:02.960,0:01:07.520
+as it hits five, as soon as it's equal to
+five, we're going to jump out of the loop.
+
+0:01:07.520,0:01:08.080
+So the first
+
+0:01:08.080,0:01:14.160
+thing to note is this syntax of a label.
+labels are not actually in the machine
+
+0:01:14.160,0:01:15.600
+language. They're
+
+0:01:15.600,0:01:21.280
+making it so that we don't have to put
+numbers in this jump instruction or the
+
+0:01:21.280,0:01:22.000
+branch if
+
+0:01:22.000,0:01:24.800
+equal instruction. So, we can basically say,
+
+0:01:24.800,0:01:27.120
+"Hey, assembler, you're pretty good at
+keeping track of
+
+0:01:27.120,0:01:32.400
+stuff." This loop is going to turn into an
+address and we're going to jump to an
+
+0:01:32.400,0:01:33.520
+address, which is a
+
+0:01:33.520,0:01:39.120
+number, or we're going to jump to an offset.
+And please calculate the offset. do all that
+
+0:01:39.120,0:01:43.280
+calculation for me so I don't have to put
+numbers in here. So these aren't really
+
+0:01:43.280,0:01:43.920
+instructions,
+
+0:01:43.920,0:01:49.920
+they're pseudo instructions much the data
+pseudo instruction. So let's take a look at
+
+0:01:49.920,0:01:54.400
+how these things end up in the machine
+language. So let's take a look at the jump
+
+0:01:54.400,0:01:55.520
+to loop. That
+
+0:01:55.520,0:02:01.680
+jump to loop is the jump back up to the top.
+And so we're sitting here at location
+
+0:02:01.680,0:02:03.200
+0x06
+and
+
+0:02:03.200,0:02:08.320
+that's a jump instruction. And the the loop
+is the address which is what the
+
+0:02:08.320,0:02:09.120
+program
+counter is
+
+0:02:09.120,0:02:13.200
+going to get set to and that's going to set
+the program counter to one which
+
+0:02:13.200,0:02:13.760
+means it's
+going to
+
+0:02:13.760,0:02:18.560
+jump to instruction one and that is the
+compare instruction. So the calculation of
+
+0:02:18.560,0:02:19.280
+this number
+
+0:02:19.280,0:02:26.880
+one is done by the assembler as it looks at
+this loop symbol and it re keeps track of
+
+0:02:26.880,0:02:27.440
+it. Right?
+
+0:02:27.440,0:02:33.360
+So it took two to two passes. You can
+calculate it backwards jumps but forward
+
+0:02:33.360,0:02:34.080
+jumps are a little bit
+
+0:02:34.080,0:02:40.720
+harder. Now the BEQ is even a little bit
+trickier. Okay? Because of course the BEQ
+
+0:02:40.720,0:02:42.560
+checks the Z flag.
+
+0:02:42.560,0:02:46.880
+If the two last comparison was equal then
+the result of that subtraction would be
+
+0:02:46.880,0:02:50.640
+zero. And so
+
+0:02:50.640,0:02:57.360
+and so we're going to be EEQ. So here's the
+BEQ at at PC location 0x03. And
+
+0:02:57.360,0:02:58.000
+then we take
+a look
+
+0:02:58.000,0:03:02.320
+at the immediate. So this immediate you
+would it's going to jump to location
+
+0:03:02.320,0:03:03.280
+8 which
+is the
+
+0:03:03.280,0:03:07.520
+end of the program which is a break
+instruction but you look at this offset and
+
+0:03:07.520,0:03:09.600
+that's a three
+
+0:03:09.600,0:03:16.480
+011 is a three and so what this is is this
+is a relative offset again computed by the
+
+0:03:16.480,0:03:17.280
+assembler on
+
+0:03:17.280,0:03:22.320
+our behalf. Now, it turns out that this
+three is going to be added to the current
+
+0:03:22.320,0:03:23.520
+program counter,
+
+0:03:23.520,0:03:27.200
+but it's not added to four. It's actually
+added to five. And that's because the
+
+0:03:27.200,0:03:28.000
+program counter
+
+0:03:28.000,0:03:32.960
+retrieved the BEQ instruction. Then it
+retrieved the immediate instruction. And as
+
+0:03:32.960,0:03:34.080
+a side effect,
+
+0:03:34.080,0:03:41.520
+it incremented the PC. And so the PC once
+this BEQ is executing is five. So 5 + 3 is
+
+0:03:41.520,0:03:46.320
+8. And you listen as you read it. It'll
+it'll have computed the 5 + 3.
+
+0:03:46.320,0:03:46.960
+it'll know
+that this
+
+0:03:46.960,0:03:51.200
+is five and it'll add three to it and it'll
+know eight. And so when we're narrating this
+
+0:03:51.200,0:03:52.160
+execution,
+
+0:03:52.160,0:03:57.040
+you'll hear it talking about branching to
+eight when 8 is not really sitting here in
+
+0:03:57.040,0:04:00.720
+the base 2. Okay. So let's go ahead and do
+
+0:04:00.720,0:04:02.880
+some steps. I'll take it slow at the
+beginning
+
+0:04:02.880,0:04:10.960
+and then we'll speed it up. PC0 clear X
+register. So we cleared the X register but
+
+0:04:10.960,0:04:12.000
+again it already
+
+0:04:12.000,0:04:16.080
+was zero because the program was just
+starting but the PCs moved up to one. The
+
+0:04:16.080,0:04:16.960
+zero is set
+
+0:04:16.960,0:04:20.240
+because we cleared the X register. We
+touched the X register. We did a
+
+0:04:20.240,0:04:21.200
+calculation
+which
+
+0:04:21.200,0:04:26.720
+means we set it to zero. Okay. And that sets
+the Z flag. The next instruction is going to
+
+0:04:26.720,0:04:37.200
+be compare to five. PC0x01. Compare X
+register with immediate 0x0. Okay.
+
+0:04:37.200,0:04:38.080
+Now the
+interesting
+
+0:04:38.080,0:04:43.200
+thing is that is not Z because it's not
+equal. It does a subtraction. So it takes 0
+
+0:04:43.200,0:04:44.640
+minus five,
+
+0:04:44.640,0:04:48.960
+but it didn't store the result of that. It
+just set the flags. And so that compare
+
+0:04:48.960,0:04:49.760
+instruction
+
+0:04:49.760,0:04:55.600
+doesn't change registers. It just changes
+flags. So now we're at the point where Z is
+
+0:04:55.600,0:04:56.480
+not set and
+
+0:04:56.480,0:05:01.600
+N is set. And so the fix we're going to do
+is we're going to run this BEQ instruction.
+
+0:05:01.600,0:05:07.360
+That means if the Z is set, we're going to
+jump to end. And end is three characters,
+
+0:05:07.360,0:05:14.000
+three bytes beyond location five. But in
+this first time, we're not going to jump
+
+0:05:14.000,0:05:15.040
+because the
+
+0:05:15.040,0:05:19.040
+Z flag is not set. So let's do a step.
+You'll see it's going to just jump over it
+
+0:05:19.040,0:05:23.920
+to location 5 PC3
+
+0:05:23.920,0:05:32.640
+address. So you'll notice it calculated the
+5 + 3 equals 8. But because the Z flag is
+
+0:05:32.640,0:05:33.200
+not set,
+
+0:05:33.200,0:05:38.320
+it just went to PC5 and didn't touch the PC.
+So you can always think of a
+
+0:05:38.320,0:05:42.800
+branch or a jump as a setting of the PC
+value. But in this case,
+
+0:05:42.800,0:05:48.400
+it computed a relative offset of the current
+PC, which was five plus three.
+
+0:05:48.400,0:05:49.040
+And that
+would have
+
+0:05:49.040,0:05:52.800
+been where we jumped. So the next thing
+we're going to do after we didn't
+
+0:05:52.800,0:05:53.600
+jump is
+we're going
+
+0:05:53.600,0:06:03.440
+to increment X PC increment X register. So
+now X is one. It's not negative and it's not
+
+0:06:03.440,0:06:04.320
+zero.
+
+0:06:04.320,0:06:08.000
+And the next thing we're going to do is
+we're going to jump back up to location
+
+0:06:08.000,0:06:08.800
+one.
+So this
+
+0:06:08.800,0:06:17.440
+is an absolute jump to location one. Whereas
+the branch EQ was a positive offset jump.
+
+0:06:17.440,0:06:25.040
+PC06 jump to address one. So we're back at
+one. You see the PC is one. And
+
+0:06:25.040,0:06:25.680
+now the next
+thing
+
+0:06:25.680,0:06:32.160
+we're doing is going to do the comparison.
+PC01. Compare X register with immediate
+
+0:06:32.160,0:06:35.520
+0x05. Now one is
+
+0:06:35.520,0:06:41.600
+less than five. So we get the N flag. So
+we're not going to file this branch. PC0x03
+
+0:06:41.600,0:06:42.640
+branch if equal
+
+0:06:42.640,0:06:51.920
+address 0x08 didn't branch. Now we're going
+to increment PC05 increment X register.
+
+0:06:51.920,0:06:52.480
+And
+now we're
+
+0:06:52.480,0:07:01.760
+going to do an absolute jump a goto. PC0x06
+jump to address one. So you let's
+
+0:07:01.760,0:07:02.400
+let's go
+ahead
+
+0:07:02.400,0:07:07.760
+and just run it for a while. We'll wait.
+Maybe I'll try to stop it when X is three
+
+0:07:07.760,0:07:08.320
+and then
+
+0:07:08.320,0:07:17.360
+see what's going on. So let's just run it.
+PC0x01. Compare X register with immediate
+
+0:07:17.360,0:07:21.680
+0x05. PC0X03
+
+0:07:21.680,0:07:32.480
+branch if equal address 0x08 PC 0x05.
+Increment X register PC 0x06. Jump to
+
+0:07:32.480,0:07:36.000
+address one. PC0X01.
+
+0:07:36.000,0:07:48.480
+Compare X register with immediate 0x05. PC
+0x03 branch if equal address 0x08 PC 0x05
+
+0:07:48.480,0:07:49.360
+increment X
+
+0:07:49.360,0:07:55.680
+register PC 0x06 jump to address one P Okay,
+
+0:07:55.680,0:07:59.360
+so now we are jumped to address one. I I
+caught it
+
+0:07:59.360,0:08:04.240
+halfway through it. Okay, I did the compare
+and it fell through still because it's not
+
+0:08:04.240,0:08:05.440
+equal. The
+
+0:08:05.440,0:08:09.200
+next time we're coming up, X is going to be
+five. So, I'm going to start stepping at
+
+0:08:09.200,0:08:10.640
+this point. ,
+
+0:08:10.640,0:08:16.320
+, we're going to I think this is, , oh, no,
+it's we I stopped it before the beq. Okay.
+
+0:08:16.320,0:08:16.880
+So,
+
+0:08:16.880,0:08:22.880
+so it's still negative because we checked to
+see if four and if if four was less than
+
+0:08:22.880,0:08:23.920
+five and it
+
+0:08:23.920,0:08:30.720
+is. So that the the the n is still. So,
+we're going to branch x03 branch equal
+
+0:08:30.720,0:08:33.760
+address 0x08.
+
+0:08:33.760,0:08:39.200
+Do one more. This is going to be the
+increment. PC0x05 increment
+
+0:08:39.200,0:08:40.960
+X register. Now
+we're going to do
+
+0:08:40.960,0:08:49.280
+an absolute jump back up to the top of the
+loop. PC06 jump to address one. Okay, here
+
+0:08:49.280,0:08:50.080
+we are. So
+
+0:08:50.080,0:08:54.800
+look, X is now five. This is a top tested
+loop. The next thing we're going
+
+0:08:54.800,0:08:55.440
+to do is
+we're going
+
+0:08:55.440,0:09:01.440
+to compare it and watch the little Z flag.
+Happy little Z flag turn on. One step.
+
+0:09:01.440,0:09:04.800
+PC0x01 compare X
+
+0:09:04.800,0:09:14.080
+register with immediate 0x05. There we go.
+So the Z register is now set and the BEQ is
+
+0:09:14.080,0:09:14.720
+going to read
+
+0:09:14.720,0:09:21.120
+the Z the Z flag actually not register. I
+think as one bit registers. Okay. And so the
+
+0:09:21.120,0:09:22.640
+BEQ is
+
+0:09:22.640,0:09:27.360
+going to jump and remember it's going to
+take this three 1 and add it to five and
+
+0:09:27.360,0:09:28.960
+jump to eight. So
+
+0:09:28.960,0:09:39.440
+let's party. PC0x03 branch if equal address
+0x08 and now we're at X08 and then we're
+
+0:09:39.440,0:09:40.640
+going to do PC
+
+0:09:40.640,0:09:46.160
+X08 break no printed output. So there's no
+printed output because we didn't store
+
+0:09:46.160,0:09:47.120
+anything. We didn't
+
+0:09:47.120,0:09:52.800
+store anything in the memory. We are just
+showing you how loops work. Okay. So I hope
+
+0:09:52.800,0:09:53.680
+this has been
+
+0:09:53.680,0:09:58.560
+helpful in a simple loop. In a bit we're
+going to do both. So, this is both
+
+0:09:58.560,0:09:59.280
+a loop
+and an
+
+0:09:59.280,0:10:03.920
+if test. And then we're going to do a couple
+more that get a little bit more complicated.

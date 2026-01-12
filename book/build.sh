@@ -22,6 +22,7 @@ pandoc \
   --template=templates/kdp-6x9.tex \
   --pdf-engine=xelatex \
   --toc \
+  --no-highlight \
   --resource-path=".:images:chapters" \
   -o build/ca4e.pdf
 
@@ -33,6 +34,7 @@ pandoc \
   --standalone \
   --toc \
   --css styles/book.css \
+  --no-highlight \
   --resource-path=".:images:chapters" \
   -o build/ca4e.html
 
@@ -42,6 +44,7 @@ pandoc \
   "${CHAPTERS[@]}" \
   --from markdown \
   --toc \
+  --no-highlight \
   --resource-path=".:images:chapters" \
   -o build/ca4e.epub
 

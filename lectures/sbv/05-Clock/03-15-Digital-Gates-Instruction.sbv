@@ -1,0 +1,215 @@
+0:00:00.480,0:00:05.040
+Hello and welcome to another walkthrough for 
+Computer architecture for everybody. So now
+
+0:00:05.040,0:00:12.480
+What we're going to do is we're going to do 
+The single instruction CPU. And so before we
+
+0:00:12.480,0:00:20.960
+Walk through the counter circuit and the counter 
+Basically takes an adder and a register and takes
+
+0:00:20.960,0:00:24.480
+The outputs of the register, one of the inputs 
+Of the adder and then hardcodes the other one
+
+0:00:24.480,0:00:29.920
+To one. So it's like an increment instruction. 
+Okay? So it's incrementing whatever was in the
+
+0:00:29.920,0:00:34.880
+Register and then we have a clock and once the 
+Clock starts it starts doing its increment thing.
+
+0:00:34.880,0:00:40.560
+So you can see I it's running low to high low 
+To high and then it every on every clock pulse
+
+0:00:40.560,0:00:45.920
+The registers goes up by one and the speed of 
+Our clock is 1 second and again what we did is
+
+0:00:45.920,0:00:53.440
+We made a simple wristwatch but this is like a 
+Wristwatch this is not a programmable CPU. So
+
+0:00:53.440,0:01:00.880
+What I talked about in lecture is I talked about 
+The simplest possible two instruction CPU. So we
+
+0:01:00.880,0:01:06.880
+Need something where it does something different 
+Based on input from the outside world. What did
+
+0:01:06.880,0:01:16.240
+I happen there? Instruction. Did I type it wrong? 
+Yeah. Okay. So here we have an instruction. This
+
+0:01:16.240,0:01:22.640
+Is the in the the single instruction computer. 
+I'm going to let's add another output here.
+
+0:01:22.640,0:01:29.440
+So we can watch the clock going high and low just 
+Just so that you can see that clock going high and
+
+0:01:29.440,0:01:42.080
+Low. so the clock is high and so it's copied 
+This in. So it's exactly like the counter except
+
+0:01:42.080,0:01:48.960
+It has some decode logic. We think of this in a 
+CPU as decode logic where we have an instruction
+
+0:01:48.960,0:01:56.240
+And that instruction can be either a zero or a 
+One and when the instruction is a zero we are
+
+0:01:56.240,0:02:04.800
+Clearing the register. So let's go ahead and start 
+The clock and so now the register is zero and so
+
+0:02:04.800,0:02:11.360
+The we're the instruction is zero. So the way 
+It works is the output of the adder is in effect
+
+0:02:11.360,0:02:17.440
+Blocked because we're taking the output of an 
+Adder and running it through three and gates. And
+
+0:02:17.440,0:02:24.400
+Then the input to the register is all zeros when 
+The instruction is zero. That's the reset case.
+
+0:02:24.400,0:02:29.200
+And as soon as we type the instruction, set the 
+Instruction to one, then it becomes an increment
+
+0:02:29.200,0:02:35.760
+Instruction. And so you can now see the thing we 
+Saw before except the ANDgates the decode logic is
+
+0:02:35.760,0:02:42.160
+Seeing an instruction that is increment and it's 
+Now passing every second it's passing through the
+
+0:02:42.160,0:02:49.040
+Data from the output and now we're doing just the 
+Increment but it's incrementing but only when the
+
+0:02:49.040,0:02:55.520
+Instruction is one. So as soon as I So that's like 
+One instruction, one instruction, one instruction,
+
+0:02:55.520,0:03:01.360
+One instruction, and now oh now your instruction 
+Are a reset. And so no matter what the value was
+
+0:03:01.360,0:03:06.240
+As the clock continues to click, it's running 
+Reset instructions, which is setting the register
+
+0:03:06.240,0:03:12.240
+To zero. And again, all it's really doing is every 
+Time the clock ticks, it's copying from the inputs
+
+0:03:12.240,0:03:17.920
+Into the register, but because the AND gates are 
+Suppressing the output of the adder in a sense,
+
+0:03:17.920,0:03:26.320
+They're blocking it. And so let's go ahead and 
+Send some increment instructions. Increment,
+
+0:03:26.320,0:03:35.920
+Increment, increment, increment, increment. 
+And so you'll see that it copies it and away
+
+0:03:35.920,0:03:43.760
+It goes. And so that is our little two instruction 
+Central processing unit with a one second, one
+
+0:03:43.760,0:03:52.160
+Hertz clock. It's adding one. Hey, so let's just 
+Do something fun. Let's just add two. Let's
+
+0:03:52.160,0:03:57.680
+Let's tell it to stop first. Oh, wait, wait. Oh, 
+Crap. I didn't mean to delete it. , hey, wait. I
+
+0:03:57.680,0:04:04.880
+Can reload it again. Here we go. Let's reload the 
+Instruction circuit. I deleted it. That's a good
+
+0:04:04.880,0:04:13.360
+Reason to save and reload it. See how easy that 
+Was? , okay. So, , so let's go ahead and let's
+
+0:04:13.360,0:04:20.640
+I'll have the clock be off. So what I'm going to 
+Do is I'm going to delete this input and I'm going
+
+0:04:20.640,0:04:27.440
+To put the input here on from to the two. So now 
+We're going to be adding two. It's going to be
+
+0:04:27.440,0:04:34.400
+Like 2 4 6 8 kind of a thing. Now we have to put 
+A one here because that so that's like B1 is zero,
+
+0:04:34.400,0:04:39.760
+B2 is one, and B3 is zero. So that's adding two. 
+So you'll notice we're not even starting yet
+
+0:04:39.760,0:04:45.680
+Because the register has the value of zero inside 
+Of it and it's sending that to the adder and the
+
+0:04:45.680,0:04:53.760
+Adder is adding zero on the A's plus two on the 
+B's. And so it's got 0 plus two. So now we're
+
+0:04:53.760,0:05:01.520
+Going to have a counter that counts 2 4 6 8 which 
+Is too high and overflows and then two 4 0 2 4 6
+
+0:05:01.520,0:05:05.840
+Overflow I think is what we're going to get. So 
+Let's turn this baby on. So the clock is starting
+
+0:05:05.840,0:05:11.360
+But we still are sending the clear instruction. So 
+The two is being ignored because the AND gates the
+
+0:05:11.360,0:05:16.800
+Decode logic in this little baby CPU is blocking 
+It. So let's go ahead and turn it into the
+
+0:05:16.800,0:05:26.400
+Increment and we'll start seeing this thing go up 
+By two 02 clock clock 4. So we're making a we're
+
+0:05:26.400,0:05:33.840
+Making an adder that counts by twos. Six. The next 
+Thing will be overflow. And it's a zero again,
+
+0:05:33.840,0:05:47.520
+Right? And so it goes 0 2 4 6 overflow. 0 2 4 6 
+Overflow. Okay. And so I hope that you found
+
+0:05:47.520,0:05:52.320
+This little thing interesting. You don't have 
+To do it. You could you can build it. It's not
+
+0:05:52.320,0:05:56.800
+That hard to build. It's it just is this one's 
+A little hard because you got all these little
+
+0:05:56.800,0:06:03.440
+Wires. You got to get them to look pretty. But 
+That's what these way points are for. , but you
+
+0:06:03.440,0:06:09.760
+Can always just load one up and then play with it 
+Yourself. Okay, cheers. H. , see you on the net.

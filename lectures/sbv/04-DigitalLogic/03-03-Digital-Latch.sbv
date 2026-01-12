@@ -1,0 +1,367 @@
+0:00:00.160,0:00:05.280
+So we just got done adding numbers with 
+gates with carry. But now we're going to
+
+0:00:05.280,0:00:10.240
+do something a little more difficult, which 
+is storing data with gates. And so that basic
+
+0:00:10.240,0:00:16.640
+is a way we can create memory systems, whether 
+it's registers inside of the CPU or high-speed
+
+0:00:16.640,0:00:23.760
+memory. We can create ways to store zeros and 
+ones over time. The key there is over time.
+
+0:00:23.760,0:00:30.640
+So we'll it'll take us a while to develop this 
+concept but the key thing here is that we use
+
+0:00:30.640,0:00:38.960
+feedback loops and in this circuit which calls is 
+called a set reset latch it basically has this Q
+
+0:00:38.960,0:00:46.400
+output and a Q not output and you'll notice that 
+the there is a top NOR gate and a bottom NOR gate
+
+0:00:46.400,0:00:53.520
+and the top output is get put as one of the inputs 
+to the bottom norate and the bottom output is put
+
+0:00:53.520,0:01:02.160
+is one of the inputs to the top nor gate. Now 
+you'll look at the little SRQ truth table and
+
+0:01:02.160,0:01:10.880
+and what happens is if Q has a value and S and R 
+are zero, the value of Q will be maintained. So
+
+0:01:10.880,0:01:19.760
+let's just let's just trace that through. So let's 
+just assume that R and S are zero and Q is one.
+
+0:01:20.960,0:01:31.360
+So the the one from Q is the second input to the 
+lower N norgate and that is a one input. So the
+
+0:01:31.360,0:01:39.920
+output of this lower N norgate is a zero which is 
+then the input to the top NOR gate. And as soon
+
+0:01:39.920,0:01:48.880
+as the the the input the the the Q not input to 
+the top N norgate is zero and R is zero as well
+
+0:01:48.880,0:01:56.720
+then that means that Q is one because it's a NOR 
+gate and Q is one so it goes to the bottom but Q
+
+0:01:56.720,0:02:03.520
+Q being one and S being zero means that Q knot 
+is zero the zero goes back up R being zero and
+
+0:02:03.520,0:02:15.600
+a zero 0 equals 1. So what happens is once Q is 
+one, it stays one. It's sticky. Now you can put
+
+0:02:15.600,0:02:22.800
+in combinations of S and R to set the value 
+for Q. If you look at the truth table, if you
+
+0:02:22.800,0:02:32.080
+set S to zero and R to one, then the Q becomes 
+a zero. And then if you set the R back to zero,
+
+0:02:32.080,0:02:39.440
+it's Q stays zero. And if you set S to one and R 
+to zero, then Q becomes a one. But then if you set
+
+0:02:39.440,0:02:49.360
+that S back to zero, then Q maintains. So we can 
+store either a zero in the Q or a one in Q. And
+
+0:02:49.360,0:02:55.920
+then as long as we keep the inputs SNR0, that one 
+just goes round and round and round between those
+
+0:02:55.920,0:03:02.240
+two NOR gates. So we're going to cover this a 
+little bit more. Here's the truth table. Now,
+
+0:03:02.240,0:03:06.400
+we're just not going to show those NOR gates. 
+We're just going to call this an SR latch. Again,
+
+0:03:06.400,0:03:12.800
+that's what we do. We make take two gates and make 
+a component so we can talk about it. When SNR are
+
+0:03:12.800,0:03:20.160
+zero, the latch maintains its internal state. That 
+Q output of one says that means that we set it
+
+0:03:20.160,0:03:28.560
+to one at some previous time and now we're just 
+putting inputs of 0 0 and the output stays one.
+
+0:03:28.560,0:03:35.440
+So if we have S of one and R of zero then that 
+makes the internal storage to one and then what
+
+0:03:35.440,0:03:43.120
+you've got to do is you got to take that S down to 
+zero but then the output maintains. So two zeros
+
+0:03:43.120,0:03:51.280
+means keep your state. Now if we make the S be a 
+zero and the R be a one that's going to set the
+
+0:03:51.280,0:03:58.080
+output to zero. And then the next thing you do 
+is you set R to zero and then the output stays
+
+0:03:58.080,0:04:04.080
+Now, how we do this is a little bit tricky, 
+right? And we'll we'll make smarter latches,
+
+0:04:04.080,0:04:10.640
+but this is the simplest latch, and it's literally 
+two NOR gates. Okay, that's it. Now, we're going
+
+0:04:10.640,0:04:14.800
+to have to build some more logic because this is 
+kind of inconvenient because that 2-1 situation
+
+0:04:14.800,0:04:21.920
+is kind of a pain in the neck. Now, I'll just 
+let you know that you can try to build an SR
+
+0:04:21.920,0:04:30.080
+latch using two NOR gates in my simulator, and 
+it won't work. Now maybe someday I will make the
+
+0:04:30.080,0:04:36.880
+circuit emulation of my digital logic simulator 
+better. But the problem is is that because this
+
+0:04:36.880,0:04:45.040
+is a timebased circuit with feedback, you have to 
+build a circuit emulation that understands that
+
+0:04:45.040,0:04:50.720
+these two things are happening round and round 
+and round and round and and you can build them,
+
+0:04:50.720,0:04:56.400
+but it's a lot harder to build them because you 
+have to deal with time rather than just zeros and
+
+0:04:56.400,0:05:01.200
+ones flowing through a circuit. So, my circuit 
+emulator because I want to keep it simple and
+
+0:05:01.200,0:05:05.840
+easy to use, it really deals with what we call 
+combinatoric circuits, which kind of the ones
+
+0:05:05.840,0:05:11.840
+and the zeros move from one side to the other. 
+Um, but the feedback ones, I can't do it. So,
+
+0:05:11.840,0:05:17.760
+what you have to do in my circuit emulator is use 
+the SR component, which does work because it's not
+
+0:05:17.760,0:05:24.320
+really two norates. It's a little component that 
+the software understands. So don't yell at me and
+
+0:05:24.320,0:05:31.520
+don't f file a GitHub uh issue if you try to build 
+an SR latch and it doesn't work and that's under
+
+0:05:31.520,0:05:39.680
+under unfortunate. Okay, so I mentioned that 
+the SR latch is kind of uh clunky, right? The
+
+0:05:39.680,0:05:50.320
+SR latch is you're you're not allowed to give it 
+one one as input. Okay. And so the latch that is
+
+0:05:50.320,0:05:58.080
+more useful is what we call a gated D latch. And 
+the gated Dlatch has basically a clock input and
+
+0:05:58.080,0:06:06.160
+a data input. And the way it works is as long as 
+the clock is zero, Q stays the same thing, right?
+
+0:06:06.160,0:06:16.800
+So whatever it was before and as soon as clock is 
+set to one, that then copies D into the internal
+
+0:06:16.800,0:06:23.120
+state. So if you set clock to one and D to zero, 
+the internal state becomes zero. And if you set
+
+0:06:23.120,0:06:27.920
+clock equals 1 and D equals 1, then the internal 
+state is one. And then you set clock back back
+
+0:06:27.920,0:06:34.480
+to zero and that zero or one stays over time. If 
+you look at it, there's several ways to build it,
+
+0:06:34.480,0:06:40.080
+but in this case, I'm using two NAND gates with 
+the feedback loop. And then you're kind of there's
+
+0:06:40.080,0:06:46.000
+like an S and an R in the middle of it, but then 
+there's this this the D and the C are set up so
+
+0:06:46.000,0:06:52.960
+that it can never send the wrong value into the 
+the SR like latch. Right? So you have this bit of
+
+0:06:52.960,0:07:03.040
+logic in the beginning that says when C is one, 
+copy D into the latch part and when C is zero,
+
+0:07:03.040,0:07:09.120
+ignore what is happening on D. So that's another 
+way to look at this. If we start with one in in
+
+0:07:09.120,0:07:15.840
+in the state in the internal value and we have the 
+clock of zero and the D is zero that at this point
+
+0:07:15.840,0:07:21.040
+D is being ignored because the clock is zero. Then 
+what we want to do is we want to store a zero in
+
+0:07:21.040,0:07:30.080
+it. So we we pulse the clock to be one and that 
+at that moment copies the zero into the one bit
+
+0:07:30.080,0:07:37.200
+latch and then we can set the clock back to zero 
+and then the zero will be remembered. So we don't
+
+0:07:37.200,0:07:42.560
+really care what the DV value is once the clock 
+is back to zero. You can flip the DV value back
+
+0:07:42.560,0:07:49.920
+as much as you like when the clock is zero. So 
+you can set D to one. The clock is still zero
+
+0:07:49.920,0:07:55.840
+and the output is still zero. Then you pulse 
+the clock by setting it to one. And then the
+
+0:07:55.840,0:08:01.600
+one is copied into it and to the output. And then 
+when we're done copying, we set the clock back to
+
+0:08:01.600,0:08:08.560
+zero. And the D is one. But then you can set the 
+D to zero because as the while the clock is zero,
+
+0:08:08.560,0:08:15.280
+the D is being ignored. And so you can see how 
+this you put whatever value you want on the D
+
+0:08:15.280,0:08:23.920
+and then you pulse the clock to copy D into the 
+latch. That's why they called it a gated D latch.
+
+0:08:23.920,0:08:31.200
+The clock acts as the gate. When the clock is 
+high, it copies its input. When the clock is low,
+
+0:08:31.200,0:08:40.640
+it ignores its input. And we're going to do what 
+we always do, and that is combine these things,
+
+0:08:40.640,0:08:47.840
+3D latches, and we're going to make a threebit 
+register. And we're going to represent in this
+
+0:08:47.840,0:08:55.040
+three-bit register numbers from 0 through 7. 
+So, we have three bits, a ones bit, a two's bit,
+
+0:08:55.040,0:09:01.280
+and a four's bit. And we're going to we have a 
+switch that has ones, twos, and fours that's going
+
+0:09:01.280,0:09:05.440
+into the D of each of the corresponding ones. And 
+then we have a single clock pulse. We're going to
+
+0:09:05.440,0:09:13.120
+pulse them all at the same time. So the internal 
+storage of the bits is 101. And so we can take
+
+0:09:13.120,0:09:21.520
+the output of the three bits and feed it into a 
+Nixie tube and get it out. Once we can build this,
+
+0:09:21.520,0:09:27.280
+we don't need to make three one bit latches. We 
+can make a three-bit latch. And that's what we're
+
+0:09:27.280,0:09:36.960
+going to use going forward. And that's pretty much 
+what a register is inside of a microprocessor in
+
+0:09:36.960,0:09:42.560
+that it's a three-bit latch and somewhere 
+it's getting its operands, a ones column,
+
+0:09:42.560,0:09:49.200
+a tw's column, and a four's column. And then we 
+pulse the clock to copy from those inputs into
+
+0:09:49.200,0:09:55.200
+the register. So the register then the clock goes 
+back to zero. So the register stores a value for a
+
+0:09:55.200,0:10:01.360
+while until we hit the clock button and it copies 
+its inputs again. Then we take the clock back to
+
+0:10:01.360,0:10:08.400
+zero and then it stays the same. After a while, 
+we'll we'll use the convenient stuff. Now we
+
+0:10:08.400,0:10:13.520
+have registers and we have Nixie tubes and we can 
+copy the output of the register to the Nixie tube
+
+0:10:13.520,0:10:19.680
+and we can see what the value is inside of the 
+Nixie tube. And so you can see that we're slowly
+
+0:10:19.680,0:10:28.320
+but surely, you know, building all the stuff 
+that might eventually become a microprocessor,
+
+0:10:28.320,0:10:34.240
+right? You know, we're building logic, putting 
+them together. I don't know what this might be.
+
+0:10:34.240,0:10:40.560
+This might be a half adder for all I know from 
+an old 1970s computer. But slowly but surely we
+
+0:10:40.560,0:10:51.440
+are deciding what to put on our CPU traces which 
+is wires and gates transistors to do addition,
+
+0:10:51.440,0:11:03.853
+subtraction, jumping, the kinds of things that 
+computers want to do. [Music] [Applause] [Music]

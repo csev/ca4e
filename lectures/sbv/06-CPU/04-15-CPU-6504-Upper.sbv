@@ -1,0 +1,486 @@
+0:00:00.320,0:00:04.640
+Hello and welcome to another walkthrough for
+computer architecture for everybody. We're
+
+0:00:04.640,0:00:13.120
+continuing on our CDC 6504 emulator. And now
+we're going to load our most complex sample.
+So let's
+
+0:00:13.120,0:00:19.040
+take a look at its assembly language. here
+we have it. And let's move it over here. And
+let's
+
+0:00:19.040,0:00:23.680
+move it up so we see all of the
+instructions. There we go. We can just
+barely see all the
+
+0:00:23.680,0:00:27.520
+instructions. This is our first thing that's
+so long that we're going to end up in the
+second
+
+0:00:27.520,0:00:32.480
+column of the instructions. So to start at
+what we've got here, we got a data pseudo
+operation
+
+0:00:32.480,0:00:40.240
+that fills the data memory with the string
+hello E l with H being uppercase already and
+E l. When
+
+0:00:40.240,0:00:44.720
+we're done, we want all these characters to
+be upper uppercase. And so we're going to
+write
+
+0:00:44.720,0:00:50.080
+a loop that's going to go through from zero
+until it's and it's going to stop at a zero
+
+0:00:50.080,0:00:54.960
+bite and it's going to load the value, check
+if it's already uppercase. If it's not, it's
+
+0:00:54.960,0:01:00.160
+going to subtract 20 to it, which we did
+before because that's the mapping between
+uppercase and
+
+0:01:00.160,0:01:05.760
+lowercase. And we're going to store it back
+in. So we're done. 48 won't change because
+that's already
+
+0:01:05.760,0:01:12.480
+uppercase. 65 will become 45. 65 6 C will
+become 4C, etc. And then it'll stop and
+it'll print out
+
+0:01:12.480,0:01:20.560
+the uppercase. So this is just a an
+uppercase method in Python or whatever.
+Okay. So
+
+0:01:20.560,0:01:25.920
+let's take a look at the code. We have a top
+of a loop and we have a jump to the top of
+the loop
+
+0:01:25.920,0:01:32.320
+at the bottom. This is a we're using x as
+our iteration variable x because we have
+this
+
+0:01:32.320,0:01:40.480
+really cool load that says I want to load
+from zero offset by the current value in x.
+Okay,
+
+0:01:40.480,0:01:44.800
+so x is going to start at zero because we're
+going to clear it and then we're going to
+add we're
+
+0:01:44.800,0:01:50.640
+going to slowly but surely add x. So this is
+x= x + one each time through the loop. So
+this
+
+0:01:50.640,0:01:58.080
+is the bottom of the loop, the continue area
+where we're saying x++ or x= x+1 to advance
+
+0:01:58.080,0:02:03.600
+x through the string because we're going to
+use x as the array offset as it's going
+through our
+
+0:02:03.600,0:02:10.000
+little array. So we're going to load it.
+We're going to load the value offset by x.
+And then
+
+0:02:10.000,0:02:14.960
+we're going to immediately check to see if
+we got a zero bite. And that's how we
+terminate this loop
+
+0:02:14.960,0:02:19.600
+when we hit a zero bite. So we only want to
+go through memory until we hit a zero bite.
+Okay? So,
+
+0:02:19.600,0:02:23.760
+we don't want to run out of memory or blow
+up or run into something else. We stop at a
+zero
+
+0:02:23.760,0:02:30.880
+bite. And then we're going to check to see
+if the letter we just got is already
+uppercase. If it is,
+
+0:02:30.880,0:02:36.000
+that means it's less than lowercase a.
+That's how ASKI works, right? So, let me go
+ahead
+
+0:02:36.000,0:02:47.440
+and show you the ASI stuff. So if you look
+at ASI you find that all the uppercase
+characters
+
+0:02:47.440,0:02:55.760
+the lowercase characters are higher by a
+factor of 20 hex. So a lowercase a is 61 and
+uppercase
+
+0:02:55.760,0:03:05.040
+a is 41. You subtract 0x20 to get from
+lowerase to upper. And our code is going to
+upper. So,
+
+0:03:05.040,0:03:12.480
+we're checking to see if we are above or
+below lowercase A. And if we're if
+
+0:03:12.480,0:03:18.800
+we're below lowerase I A already, we're
+going to do a branch minus down here and
+
+0:03:18.800,0:03:26.240
+then increment to go to the next one. If on
+the other hand, we are
+
+0:03:26.240,0:03:31.120
+above the letter A, then we're going to
+subtract 20 and then we're going to store
+
+0:03:31.120,0:03:36.480
+that using our in index again as X. So x is
+really cool. It's just going to be our
+
+0:03:36.480,0:03:40.720
+counter. And so this register is the
+iteration variable. Well,
+
+0:03:40.720,0:03:46.080
+it is the iteration variable of our loop. So
+let's go ahead and and get started. So
+
+0:03:46.080,0:03:51.360
+we'll turn on narration of execution. Line
+ourselves up here. Take our first step.
+Clear
+
+0:03:51.360,0:03:58.960
+the X register. PC0 X register. So now we're
+at the top of the loop and we're going to do
+
+0:03:58.960,0:04:06.560
+a load from in memory location zero offset
+by X register. So that the X register is
+actually part
+
+0:04:06.560,0:04:16.800
+of this instruction. Okay. So let's go ahead
+and load that PC01 accumulator from address
+0
+
+0:04:16.800,0:04:26.000
+with X. Okay. So now you see that the
+accumulator 0x48 and that is the uppercase
+hello. And so the
+
+0:04:26.000,0:04:32.160
+next thing we're going to do and and that
+load set the Z flag and the N flag and it's
+neither
+
+0:04:32.160,0:04:46.800
+zero nor negative. And so let's go ahead and
+run the if test to see if we're done with
+the loop.
+
+0:04:46.800,0:04:52.720
+exit of the loop, but it didn't because
+we're not we're not minus yet. And so that
+was our that's
+
+0:04:52.720,0:05:01.280
+our top tested loop. And now what we're
+going to do is we're gonna say if this is
+greater than a if
+
+0:05:01.280,0:05:06.160
+it's if it's a or if it's less than a, we're
+going to skip these next two lines. And the
+next two
+
+0:05:06.160,0:05:13.440
+lines are a subtract of 0x20 and then an
+indexed store into memory locations zero
+offset by x. But
+
+0:05:13.440,0:05:20.640
+x is still position zero. So that is so this
+is the letter H and it is already uppercase.
+So we're
+
+0:05:20.640,0:05:32.320
+going to skip around this subtraction
+calculation PC05 compare accumulator with
+immediate 0x61
+
+0:05:32.320,0:05:36.320
+and now we're going to branch because it is
+N. So
+
+0:05:36.320,0:05:43.440
+we're going to branch F minus. That means
+we're already uppercase PCR
+
+0:05:43.440,0:05:52.080
+minus address. So it went to 0x0 D which
+skipped around the subtraction. And now
+we're at the
+
+0:05:52.080,0:05:59.360
+continue or the loop bottom the increment
+part of the loop. And we're going to add one
+to X
+
+0:05:59.360,0:06:11.280
+PC increment X register PC jump to address
+one. Oh, I I I it went and did it
+automatically. So,
+
+0:06:11.280,0:06:16.800
+we went up to the top of the loop and I
+didn't catch it fast enough. So, it already
+went and
+
+0:06:16.800,0:06:25.200
+X is now one. So, it's loading memory
+location one into the accumulator. Okay. And
+so the accumulator
+
+0:06:25.200,0:06:34.320
+now is nonzero. So we're we're going to
+check to see if the loop is done. PC3 branch
+equal address
+
+0:06:34.320,0:06:48.640
+0x10. And it didn't. So now we're going to
+check to see the case of our current
+character PC06.
+
+0:06:48.640,0:06:56.160
+So that is checking to see if it's above or
+below a. and this one is above A and so
+
+0:06:56.160,0:07:02.160
+we're going to have to map it into
+uppercase. So you'll notice that this this
+BMI does not jump to
+
+0:07:02.160,0:07:14.400
+the c label. This one falls through PC 0x07
+ifus address 0x0. So now we're at 0x09 not
+0x0D. And
+
+0:07:14.400,0:07:20.320
+now we're going to do the subtract of 20 and
+then we're going to store it into the
+memory.
+
+0:07:20.320,0:07:31.920
+PC0x09 subtract with carry immediate 0x20
+and now we're going to store it PC0 store
+
+0:07:31.920,0:07:40.160
+accumulator to address zero and X so so now
+in location one we took this 45 that was our
+
+0:07:40.160,0:07:47.520
+calculated uppercase character and now it
+has been stored in position one and so the
+next
+
+0:07:47.520,0:07:59.200
+thing we do is add one and and jump to the
+top of the loop. PC 0 increment x register
+PC jump
+
+0:07:59.200,0:08:03.520
+to address one. So now we're at the top of
+the loop. We're going to grab the next
+instru the
+
+0:08:03.520,0:08:09.600
+next character because x is now two. So
+we're going to grab this the the two offset
+from our
+
+0:08:09.600,0:08:21.520
+array. PC01 load accumulator from address.
+So we got 60. So, I'm going to just run this
+a bit,
+
+0:08:21.520,0:08:27.840
+okay? And I'll try to stop it so that I can
+show you the last iteration of the loop. So,
+
+0:08:27.840,0:08:35.040
+we'll watch X I'll probably try to catch it
+while X sub the fourth iteration the
+
+0:08:35.040,0:08:42.000
+well the fifth iteration but sub4 is
+running. Let's see if I can start it and
+then catch it.
+
+0:08:42.000,0:08:56.880
+PC0x03 branch if equal address 0x10 PC 0x05
+compare accumulator with immediate 0x61 PC
+0x07
+
+0:08:56.880,0:09:05.040
+branch if minus address 0x0 we're on a
+series of things that have to be converted
+to uppercase
+
+0:09:05.040,0:09:18.640
+now PC store accumulator to address zero
+index with X PC 0x0 D increment X register
+PC0 X0 E jump
+
+0:09:18.640,0:09:29.600
+to address one PC 0x01 Load the accumulator
+from address 0 and X with X PC 0x03 branch
+if equal
+
+0:09:29.600,0:09:42.320
+address 0x10 PC 0x05 compare a cumulator
+with immediate 0x61 PC 0x07 7 branch if
+minus address
+
+0:09:42.320,0:09:54.640
+0x0 B PC 0x09 subtract with carry immediate
+0x20 PC 0x0 B store accumulator to address
+zero
+
+0:09:54.640,0:10:09.680
+index with X PC 0x0 D increment X register
+PC0 X0E jump to address one PC 0x01 Lation
+
+0:10:09.680,0:10:25.040
+X PC 0x03 branch if equal address 0x10 PC
+0x05 compare a cumulator with immediate 0x61
+PC 0x07
+
+0:10:25.040,0:10:33.600
+branch if minus address 0x0 PC 0x0 Okay, so
+I stopped it. So where are we at here?
+
+0:10:33.600,0:10:39.680
+We're about to store this last character. We
+got it subtracted. So it's it's now
+uppercase
+
+0:10:39.680,0:10:45.920
+and we're about to store it into position
+offset by X and X. Our inoc our iteration
+
+0:10:45.920,0:10:56.400
+variable is four PC store accumulator to
+address Z and X with X. The next thing we're
+going to do
+
+0:10:56.400,0:11:04.880
+is increment X and so X is going to become
+five. PC0X0 D increment X register. And now
+
+0:11:04.880,0:11:12.320
+we're going to jump to the top of the loop.
+PC0 X0 E jump to address one. So now we're
+at
+
+0:11:12.320,0:11:19.520
+the top of the loop. So X is five and we're
+going to load the character at offset five.
+
+0:11:19.520,0:11:24.400
+And so now you'll notice as soon as we do
+this accumulator is going to be zero and the
+Z flag
+
+0:11:24.400,0:11:35.520
+is going to be set. PC0x01 load accumulator
+from address z. So C got accumulator of zero
+
+0:11:35.520,0:11:43.200
+and we got Z. So now we will do a BEQ to
+done. So we're going to jump right out of
+
+0:11:43.200,0:11:55.440
+this loop because now we've hit the zero
+bite in our character array. PC03 branch if
+address 0x10.
+
+0:11:55.440,0:12:04.960
+One more. PC0 break printed output. Hello.
+So, it finished. It finished. And look,
+
+0:12:04.960,0:12:13.520
+it printed out an uppercase version of the
+word hello. So, I recommend that you go in
+and you
+
+0:12:13.520,0:12:18.640
+play with this and you load this and you
+control the reset, the narrate, the
+stepping. You
+
+0:12:18.640,0:12:24.960
+see how I'm doing it. , it it I'll tell you,
+I I know what I'm doing and it's really hard
+to
+
+0:12:24.960,0:12:29.280
+read these things and that's why I think of
+this from an assembly language perspective.
+
+0:12:29.280,0:12:33.840
+trying to figure out. It doesn't hurt to
+hover over and say, "Oh, that's the compare
+
+0:12:33.840,0:12:39.680
+instruction and that is the letter A." And
+you can hover over these things and learn
+some
+
+0:12:39.680,0:12:47.760
+stuff about what each of the locations is.
+But so this is a nice little bit of code
+that is a
+
+0:12:47.760,0:12:54.000
+loop with an if test. It's got increments.
+It's got a continue in it. And so it is,
+
+0:12:54.000,0:12:59.680
+, a non-trivial piece of code. the the
+smallest non-trivial piece of code that
+
+0:12:59.680,0:13:05.840
+I could fit into this particular emulator on
+a screen that's small enough that maybe
+
+0:13:05.840,0:13:12.640
+that you can see this on a mobile device.
+So, I hope you found this useful. Cheers.

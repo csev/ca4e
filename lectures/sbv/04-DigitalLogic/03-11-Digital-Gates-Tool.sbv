@@ -1,0 +1,242 @@
+0:00:00.080,0:00:06.240
+And welcome to another walkthrough for computer
+Architecture for everybody. In this walkthrough,
+
+0:00:06.240,0:00:11.840
+We're going to cover the gates, the gate layout
+System and the gate simulation system. It has an
+
+0:00:11.840,0:00:17.120
+Extensive help, probably more than you need
+If you get stuck or you want to paste some of
+
+0:00:17.120,0:00:20.880
+This stuff into AI and figure out how to how
+To use it. So, I'm just going to walk through
+
+0:00:20.880,0:00:26.240
+The basic features. So we have a wide range of
+Components all the way from something as simple
+
+0:00:26.240,0:00:33.360
+As a single and gate or an input or an output
+That we can put in or we can put something much
+
+0:00:33.360,0:00:38.960
+More simpler like a Nixie display right so if we
+Take this Nixie display and you can drag things
+
+0:00:38.960,0:00:43.520
+Around and you can connect them to the input
+And so this is the Nixie display that's got a
+
+0:00:43.520,0:00:49.920
+One two and four input so let's play with that a
+Little bit give ourselves another input oops click
+
+0:00:49.920,0:00:57.440
+To connect them and Then so so you so I've got
+This Nixie input. It's a three because it's a one
+
+0:00:57.440,0:01:04.080
+And a one. So it's a one. the two input is one
+And the one input is one. Let's go ahead and bring
+
+0:01:04.080,0:01:15.120
+Another input in and connect it. Oops. Connect.
+Connect. There we go. So now it is a seven. Right.
+
+0:01:15.120,0:01:23.760
+So this is a Nixie. You can do some practice.
+So that's a a four and a two and a zero which
+
+0:01:23.760,0:01:33.280
+Is a six. And you can rename these things. So I'm
+Going to call this I'm going to call this one ones
+
+0:01:33.280,0:01:40.800
+And I'm going call this one twos. So this little
+Tag you can tag and then click on something and
+
+0:01:40.800,0:01:47.520
+Then fours. So we can have the bits for the
+Ones, twos, and fours. And if we turn it off,
+
+0:01:47.520,0:01:52.400
+Then that's going to be a two. So that's a two.
+If I add one to that, then that's three. And so
+
+0:01:52.400,0:01:57.920
+That's a And you can just build these little
+Circuits., so one of the things that I'll
+
+0:01:57.920,0:02:04.480
+Just show you that is really weird is there's an
+Automatic layout. So like, so like if I had to
+
+0:02:04.480,0:02:10.800
+Put this input over here,, it's trying its
+Hardest. Laying out circuits is a hard thing.
+
+0:02:10.800,0:02:15.120
+And I've got it using spline curves. But if you
+Come over and you highlight and double click,
+
+0:02:15.120,0:02:21.840
+You will create what's called a waypoint. And then
+I can I can route these wires creatively
+
+0:02:21.840,0:02:27.360
+And then drag these waypoints. It doesn't change
+The circuits at all. And so I can make this look
+
+0:02:27.360,0:02:36.480
+A little bit better using way points. Okay. and
+So couple other things. Let's see. we can get a
+
+0:02:36.480,0:02:44.640
+Component, a full ladder component. So, it's carry
+In, an A and a B, and then a sum and a carry out.
+
+0:02:44.640,0:02:49.840
+And that is,, inside of that, inside of
+Every one of these are transistors. And Nixie tube
+
+0:02:49.840,0:02:55.520
+Has got some glowing stuff. It's it's actually a
+Tube. I just put it in because it's pretty., we
+
+0:02:55.520,0:03:01.920
+Got a JK flip-flop, which and so a JK flip-flop.
+, I'll go through this in a little bit more.
+
+0:03:01.920,0:03:06.880
+We've got even a thing called a three-bit latch,
+Which we'll use later as a register. It has some
+
+0:03:06.880,0:03:12.960
+Inputs and outputs and it has an internal state
+And the pulsing on the clock copies the input
+
+0:03:12.960,0:03:19.040
+Into the internal state. Then letting go of the
+Clock will copy the internal state to the output
+
+0:03:19.040,0:03:27.120
+And we have a three bit adder that takes A and B
+In the ones, twos and fours column and then the
+
+0:03:27.120,0:03:34.880
+Sum comes out. And so that is basically the kinds
+Of things that you can can do. And remember that
+
+0:03:34.880,0:03:42.160
+Every one of these things eventually turns into
+Transistors. Okay, so let's I showed you the tag.
+
+0:03:42.160,0:03:48.640
+The tag you just grab something and then fun and
+You just give it a name. And so that gives these
+
+0:03:48.640,0:03:53.680
+Things names. You can delete something by clicking
+The little trash can icon and then highlighting an
+
+0:03:53.680,0:03:58.960
+Item and it deletes it. And if you click and
+Delete something that has a wire associated
+
+0:03:58.960,0:04:11.360
+With it, it can deletes the wire as well., you
+Can save a circuit stuff and it saves the circuit
+
+0:04:11.360,0:04:15.600
+Inside your browser in what's called local storage
+In your browser and then you can load it. So,
+
+0:04:15.600,0:04:20.240
+If you're in the middle of working on something
+And you want to save it and load it, well,
+
+0:04:20.240,0:04:24.960
+Let let me do this. I'm going to clear all of
+Them. Clear everything. Get rid of everything.
+
+0:04:24.960,0:04:31.680
+And now I can reload that circuit from the storage
+That was called stuff. It was a crazy circuit.
+
+0:04:31.680,0:04:36.000
+So, I just loaded stuff back up. And so, that
+Was that circuit. I saved it. I loaded it. You
+
+0:04:36.000,0:04:40.640
+Could load it. You could add a thing. We
+Could Let's add another input. And then
+
+0:04:40.640,0:04:55.680
+Connect it up and then save it as stuff again.
+Save. Okay. Now, let's clear everything again
+
+0:04:55.680,0:05:04.320
+And then load stuff back up. And you should see
+
+0:05:04.320,0:05:10.560
+And it's edited. See, I can I can load it. I can
+Edit it and then save it and then load it again.
+
+0:05:10.560,0:05:14.960
+And so if you if you are to go and relaunch
+This, I'll just refresh the page and you'll
+
+0:05:14.960,0:05:19.760
+See what happens here. It's gone. That's all
+Just in the browser storage. But if you were
+
+0:05:19.760,0:05:27.040
+Clever enough to save it, you can load it back up.
+So again, depending on how complex the work that
+
+0:05:27.040,0:05:32.560
+You're going to do, you can use load and save.
+So let's go through a couple of other things.
+
+0:05:32.560,0:05:38.160
+They like I mentioned, if you if you're
+Trying to like make the wires route nicely,
+
+0:05:38.160,0:05:42.000
+You can double click on the line and
+Create a waypoint. And I don't know why,
+
+0:05:42.000,0:05:46.560
+But I have a thing to hide the waypoints if you
+Don't want to see them and then show them back.
+
+0:05:46.560,0:05:52.720
+There's also a command down here, and that's
+Described in the help documentation. So you can
+
+0:05:52.720,0:06:00.240
+Say place NAND and so it'll put a NAND in there
+If you really want to read the instructions.,
+
+0:06:00.240,0:06:06.320
+And I did this to some degree for accessibility
+Where you can,, place a NAND and give it
+
+0:06:06.320,0:06:10.960
+A name and then you can connect the output
+Of the NAND to the input of something.,
+
+0:06:10.960,0:06:15.280
+We'll see how well people find that to use.
+I put it in there. I may have to work on it
+
+0:06:15.280,0:06:23.440
+And improve it over time, but you can show and
+Hide. You can show and hide the command line
+
+0:06:23.440,0:06:30.240
+Interface. I hope that this basic walkthrough of
+The gates layout tool has been helpful to you.

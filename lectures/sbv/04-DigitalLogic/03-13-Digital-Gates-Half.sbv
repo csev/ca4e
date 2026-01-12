@@ -1,0 +1,98 @@
+0:00:00.560,0:00:06.560
+Hello and welcome to another walkthrough for  computer architecture for everybody. So in
+
+0:00:06.560,0:00:11.520
+this walkthrough we are going to walk through  the assignment of building a half adder. So in
+
+0:00:11.520,0:00:16.160
+the instructions for this half adder we are seeing  see the reference diagram. So it's really nothing
+
+0:00:16.160,0:00:21.600
+more than an exclusive or at the top and an and at  the bottom with the input of a and b and a sum and
+
+0:00:21.600,0:00:26.640
+carry as the output. The output of the exclusive  or is the sum and the output of the and is the
+
+0:00:26.640,0:00:32.320
+carry. And we just run the inputs to both of the  gates and away we go. So I can just leave this up.
+
+0:00:32.320,0:00:39.200
+And so let's just go ahead and start putting this  in. Input put place an input. Place another input.
+
+0:00:39.200,0:00:45.680
+Let's place an exclusive or. And again remember  these are just these are just transistors. They're
+
+0:00:45.680,0:00:50.240
+just kind of in functional block diagrams  that are useful to us. And then let's do an
+
+0:00:50.240,0:00:59.040
+and. place an and and then wire up the inputs  to the two inputs of the exclusive or. I mean,
+
+0:00:59.040,0:01:04.560
+oops, there we go. That input goes to the  other input to the exclusive or then the
+
+0:01:04.560,0:01:09.280
+uh inputs to the and both of them go to the  and I mean and really what we're doing is
+
+0:01:09.280,0:01:18.640
+we're just making the truth table work.  Then we need an output. The sum output
+
+0:01:18.640,0:01:24.400
+is the exclusive or and then the carry out output
+
+0:01:24.400,0:01:33.360
+carry out output is the and. So both are true. So  1 + 1 equals 2. So that's a that's a 0 1 that's
+
+0:01:33.360,0:01:41.280
+two. Um so let's go ahead and tag these correctly.  Let's tag the top one sum. Let's tag the bottom
+
+0:01:41.280,0:01:49.600
+one carry. Oh, wait a sec. Are we supposed  to call it carry or carry out? See out. So,
+
+0:01:49.600,0:01:54.320
+we're supposed to call that one see out. So,  the reference diagram is not quite right. That's
+
+0:01:54.320,0:02:00.880
+okay. Cut. That reference diagram was just from  the lecture. So, we got C out. And then we have
+
+0:02:00.880,0:02:09.360
+Let's go back to the specs. Got inputs of A and  B. Let's tag the input of A. Tag the input of B.
+
+0:02:12.240,0:02:17.760
+Right. So 1 plus oop that's tagged wrong.
+
+0:02:17.760,0:02:28.160
+Okay. So we have 1 plus 1 equals 0 carry the one.  Uh 0 + 0 is 0 carry the zero. 0 + 1 is 1 carry
+
+0:02:28.160,0:02:34.080
+the zero. So this looks like it's working pretty  well. Um you can take a look at the truth table,
+
+0:02:34.080,0:02:41.120
+right? So this truth table is zero of a  and a one of b and the sum should be one and
+
+0:02:41.120,0:02:45.280
+the carry out should be one and so it looks  good. So you can sort of verify this. You can
+
+0:02:45.280,0:02:49.840
+manually manipulate the one and the zero. It's  a good way to remember how half adders work.
+
+0:02:49.840,0:02:54.560
+So let's go ahead and start the grading. And it  says we got all required components are properly
+
+0:02:54.560,0:03:00.160
+labeled. We got a a and a b and a sum and a c  out. And then we got an exor and an andgate.
+
+0:03:00.160,0:03:06.720
+That's good. And now it's going to do all the  four truth tables. 0 0 turns into a of 0 b of
+
+0:03:06.720,0:03:12.720
+0 turns into a sum of zero c out of zero. A of 0  b of one turns into a sum of one and a c out of
+
+0:03:12.720,0:03:21.040
+zero. A of one and b of zero is sum is one c out  is zero and then we finish and away we go. So,
+
+0:03:21.040,0:03:26.240
+I hope this little walkthrough of how to  do a half adder assignment in the gates
+
+0:03:26.240,0:03:29.680
+layout tool for computer architecture  for everybody has been helpful to

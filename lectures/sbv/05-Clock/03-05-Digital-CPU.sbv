@@ -1,0 +1,355 @@
+0:00:00.240,0:00:06.880
+So now we're going to bring this all together 
+and we're going to build a simple programmable,
+
+0:00:06.880,0:00:13.600
+flexible, programmable central processor building 
+it all with gates. Okay, it's not going to be very
+
+0:00:13.600,0:00:22.800
+sophisticated, but it's going to be a programmable 
+processor. So let's go back to the beginning of my
+
+0:00:22.800,0:00:28.080
+Python class and look at this picture again 
+where we have a central processing unit that
+
+0:00:28.080,0:00:34.960
+has registers and arithmetic logic units and it 
+processes instructions and in the main memory
+
+0:00:34.960,0:00:41.360
+we have the code and data. And so when we write 
+a program we kind of are putting ourselves into
+
+0:00:41.360,0:00:48.560
+that main memory. The central processor asks what 
+next and that says give me the next instruction
+
+0:00:48.560,0:00:53.840
+and those that next instruction is a series 
+of binary numbers zeros and ones coming out
+
+0:00:53.840,0:00:58.720
+of the memory of the computer. Then it decodes 
+that instruction and it says what am I going
+
+0:00:58.720,0:01:04.240
+to do? Maybe load some load a value from memory 
+store a value from memory perform a calculation
+
+0:01:04.240,0:01:09.200
+inside the central processing unit. And then when 
+that's done, the central processing unit says,
+
+0:01:09.200,0:01:13.760
+"Give me the next instruction." And then the main 
+memory gives the next instruction. And since this
+
+0:01:13.760,0:01:22.480
+is a oversimplified generic computer, suitable 
+for a very beginning Python programming class,
+
+0:01:22.480,0:01:30.560
+but let's use a little more advanced terminology 
+that you will eventually hear. So inside the CPU,
+
+0:01:30.560,0:01:36.000
+there's a thing called the arithmetic logic 
+unit. We call it the ALU. It's like the adder
+
+0:01:36.000,0:01:41.040
+code. We've already built a three-bit adder. That 
+would be in the arithmetic logic unit. When they
+
+0:01:41.040,0:01:46.400
+mean logic, they mean comparison, like if tests. 
+If tests are checked, like is x less than zero?
+
+0:01:46.400,0:01:52.080
+That's part of the logic part of the arithmetic 
+logic. Registers are temporary places to store
+
+0:01:52.080,0:01:58.800
+data in the CPU that does not require going 
+to and from memory all the time. We've already
+
+0:01:58.800,0:02:04.320
+built a register. We built a three-bit latch, 
+which I also told you was a threebit register.
+
+0:02:05.040,0:02:15.280
+And then what we have is programs and they come 
+from the memory. And so the the memory has a
+
+0:02:15.280,0:02:23.040
+series of program instructions. The CPU has what's 
+called a program counter, and it retrieves the
+
+0:02:23.040,0:02:30.640
+next instruction, decides what kind of instruction 
+it is, and then sends signals to the registers
+
+0:02:30.640,0:02:37.280
+and the ALU, whether it's loading data or storing 
+data or making computations. Coming up very soon,
+
+0:02:37.280,0:02:42.640
+we're going to actually design a simple CPU that 
+has machine language. It's going to be a complete
+
+0:02:42.640,0:02:47.200
+architecture. It will have a machine language 
+and an assembly language completely defined and
+
+0:02:47.200,0:02:53.920
+we will write programs in this little machine 
+language. Now it's called the CDC 8512 because
+
+0:02:53.920,0:02:59.200
+when I was young and starting just starting out I 
+programmed on a computer called the control data
+
+0:02:59.200,0:03:06.560
+corporation CDC 6500 and back when the computer 
+museum in in Seattle was open they had a running
+
+0:03:06.560,0:03:12.480
+one of these things and I have a video which 
+I will share with you. Um, unfortunately, uh,
+
+0:03:12.480,0:03:17.760
+with the passing of Paul L and that that museum, 
+uh, closed, but that's that's unfortunate. So,
+
+0:03:17.760,0:03:22.480
+I've seen one running recently. I've got some 
+video and I will share that with you, but that's
+
+0:03:22.480,0:03:26.720
+that's not what we're doing right now. I'm just 
+telling you that what we're doing right now is a
+
+0:03:26.720,0:03:37.360
+step toward building a real live full function CPU 
+with machine language and data, etc. So, but now
+
+0:03:37.360,0:03:42.880
+we're going to build a really, really simple CPU. 
+It's going to have one register. It's a three-bit
+
+0:03:42.880,0:03:50.800
+latch. It's going to have two machine instructions 
+that we can inform the CPU what we want done. And
+
+0:03:50.800,0:03:57.600
+it has a clock that happens every second. So, it 
+runs one of two instructions every second. The
+
+0:03:57.600,0:04:03.040
+zero instruction, again, it's machine language, 
+clears the latch, and the one instruction tells
+
+0:04:03.040,0:04:08.400
+the latch to add one to itself. And like I said, 
+this is going to happen once per second and we
+
+0:04:08.400,0:04:16.720
+can submit a zero instruction or a one instruction 
+once per second. So we're going to have this built
+
+0:04:16.720,0:04:24.480
+and it's going to run on our emulator. This is the 
+CPU. The emulator has a clock. It has a three-bit
+
+0:04:24.480,0:04:30.320
+latch which is our register. Then it has an adder. 
+One of the operands to the adder is the output of
+
+0:04:30.320,0:04:37.040
+the latch. The other operand to the adder is a one 
+hard-coded one and then you take the output of the
+
+0:04:37.040,0:04:43.280
+adder. Now before we had run this straight into 
+the latch so that the it would just add one every
+
+0:04:43.280,0:04:51.280
+time. But now what we have is some decoding logic. 
+So if the instruction is zero, recall the latch
+
+0:04:51.280,0:04:57.840
+is supposed to be set to zero. If the instruction 
+is one, we're adding one to the latch every clock
+
+0:04:57.840,0:05:02.960
+pulse. And that clock is going up and down once 
+per second. The part that we've added here from
+
+0:05:02.960,0:05:08.240
+the previous example is this logic. When you look 
+at real CPUs, you're going to see that they have
+
+0:05:08.240,0:05:13.120
+a series of control logic. And what does the 
+control logic do? It reads the next instruction
+
+0:05:13.120,0:05:19.840
+from memory and it does what's called decoding it. 
+And then it distributes signals to give orders to
+
+0:05:19.840,0:05:28.320
+the rest of it. And so in this case what's going 
+to happen is this andgate is going to block the
+
+0:05:28.320,0:05:34.320
+output because we just put ands. We are running 
+the the one two and four column of the sum through
+
+0:05:34.320,0:05:39.360
+the ANDgate and then we're hard- coding zero the 
+instruction zero to the other inputs of the three
+
+0:05:39.360,0:05:45.040
+and gates. And so the output of those AND gates if 
+the instruction is zero is zero no matter what the
+
+0:05:45.040,0:05:52.560
+other inputs are from the adder. Okay. So we'll 
+start this with instruction zero. So every time
+
+0:05:52.560,0:06:00.160
+the clock goes, the inputs to the latch are all 
+zeros because the instruction input is a zero
+
+0:06:00.160,0:06:07.680
+and zero and anything is a zero. So clock tick 
+tick tick. Every time this clock is ticking, that
+
+0:06:07.680,0:06:13.280
+latch is resetting, meaning copying zero from its 
+inputs. So the adder is like happily adding one
+
+0:06:13.280,0:06:21.120
+to the zero but that's it because the adder inputs 
+are being blocked from coming back into the latch
+
+0:06:21.120,0:06:27.440
+by the endgates. So you see when the instruction 
+is zero the endgates function as a block in effect
+
+0:06:27.440,0:06:36.960
+turning off the data going into the the latch. Now 
+we're going to switch the instruction to one and
+
+0:06:36.960,0:06:45.280
+we wait one clock pulse. So then what happens is 
+the one instruction going to the three and gates
+
+0:06:45.280,0:06:51.920
+is no longer blocking data. So whatever the 
+outputs are coming from the adder are passing
+
+0:06:51.920,0:06:58.160
+right through the okay in this particular case the 
+adder has a four that is presenting a four at the
+
+0:06:58.160,0:07:03.760
+input. Four's column is a one and the two's column 
+is a zero and the ones column is a zero. While
+
+0:07:03.760,0:07:12.560
+the clock is low, that four is at the input to the 
+register/latch. And then when the clock goes high,
+
+0:07:12.560,0:07:17.520
+then we'll copy the four into the latch. In the 
+beginning, you start with the instruction zero,
+
+0:07:17.520,0:07:22.960
+the latch is zero, the adder is one, but 
+the zero instruction is blocking data to
+
+0:07:22.960,0:07:28.720
+go back into the latch. It's blocked because 
+it's a zero instruction. On the other hand,
+
+0:07:28.720,0:07:35.520
+if there is a one instruction, then this functions 
+like a counter. That means every second it goes up
+
+0:07:35.520,0:07:41.360
+by one. So when the clock is high, it copies 
+the input. Then the clock goes low. Then the
+
+0:07:41.360,0:07:46.320
+the latch value goes to output the adder adds 
+one. Then when the as long as the instruction
+
+0:07:46.320,0:07:54.160
+stays one and the clock goes high, the output of 
+the adder is once again copied into the latch. So
+
+0:07:54.160,0:08:00.880
+it's a very simple two instruction computer. We 
+simply touch the instruction. We program this by
+
+0:08:00.880,0:08:06.800
+touching the instruction value switch and setting 
+it to zero or one. So this is a two instruction
+
+0:08:06.800,0:08:14.080
+computer. What's missing? Well, really it's 
+really hard to build a CPU where you can reach
+
+0:08:14.080,0:08:19.920
+in and touch a button and have the instruction be 
+the button that you touched. The clock rate is,
+
+0:08:19.920,0:08:25.120
+you know, megahertz, not one hertz. and so you 
+can't send the instruction. So really what you
+
+0:08:25.120,0:08:32.560
+want is a flexible way to store and retrieve 
+instructions so that the instructions can be
+
+0:08:32.560,0:08:40.080
+presented to the CPU fast enough to keep up with 
+the clock rate. So we really want a flexible long
+
+0:08:40.080,0:08:47.600
+sequence of many instructions executed one after 
+another which we would call software or a program.
+
+0:08:47.600,0:08:52.880
+So up next, we're going to think about how 
+we might store sequences of instruction in
+
+0:08:52.880,0:09:01.360
+the memory and then retrieve those instructions 
+from the memory and then execute them in the CPU.
+
+0:09:01.360,0:09:04.720
+Wait just a second. There were 
+a lot of switches on the front
+
+0:09:04.720,0:09:12.720
+of a Colossus's computer in a 
+video from an earlier lecture.
+
+0:09:19.440,0:09:24.000
+Yes, the earliest computers did have 
+switches on the front to control program
+
+0:09:24.000,0:09:29.120
+behavior. These switches often controlled 
+conditional variables, so program behavior
+
+0:09:29.120,0:09:34.000
+could be changed while flipping a switch 
+while the program was running. Actually,
+
+0:09:34.000,0:09:40.480
+those switches were more like the variables 
+that could be changed on the front panel.

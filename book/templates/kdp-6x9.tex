@@ -37,6 +37,9 @@
 \usepackage{xcolor}
 \usepackage[hidelinks]{hyperref}
 
+% Background color for code blocks
+\definecolor{shadecolor}{RGB}{245,247,249}
+
 % --- Code blocks (Pandoc) ---
 \usepackage{fancyvrb}
 \usepackage{fvextra}
@@ -52,6 +55,10 @@
 % --- Lists ---
 \usepackage{enumitem}
 \setlist{itemsep=0.25em,topsep=0.35em}
+
+% Pandoc tight lists
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
 % --- Headers/footers ---
 \usepackage{fancyhdr}

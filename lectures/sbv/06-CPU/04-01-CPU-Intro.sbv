@@ -1,0 +1,210 @@
+0:00:00.240,0:00:06.080
+Hello and welcome to the lecture where we explore 
+microprocessors by learning machine language and
+
+0:00:06.080,0:00:13.200
+assembly language and re-implementing software 
+in the lowest possible language. So we're going
+
+0:00:13.200,0:00:17.760
+to start with our two instruction CPU from the 
+previous section and look kind of what it did
+
+0:00:17.760,0:00:23.520
+and what it didn't do. Uh because our next CPU is 
+going to have more data, we're going to have to
+
+0:00:23.520,0:00:29.360
+learn hexadecimal notation instead of base 2. And 
+then we're going to take a look at the foundations
+
+0:00:29.360,0:00:35.280
+of programming from Python for everybody. Uh 
+sequential, conditional, and iteration-based
+
+0:00:35.280,0:00:39.040
+programming. And we're going to re-implement all 
+those things in machine language and and assembly
+
+0:00:39.040,0:00:44.880
+language. We'll take a look at real CPUs that are 
+in the in the market now like Intel x86 and ARM.
+
+0:00:44.880,0:00:52.560
+And then the historical CPU, the the 6502. Um, 
+the CPU that we're going to simulate and build
+
+0:00:52.560,0:01:00.320
+is called the CD I called it the CDC 6504. It 
+really is mostly a 6502. Um, with some homage to
+
+0:01:00.320,0:01:06.240
+the first machine language that I ever knew, which 
+was the CDC 6500. So, we're going to learn about
+
+0:01:06.240,0:01:11.520
+the architecture registers, those kinds of things. 
+And then machine language, the actual zeros and
+
+0:01:11.520,0:01:19.680
+ones that the 6502 executes. And then assembly 
+language, it's is a very low-level uh language
+
+0:01:19.680,0:01:25.200
+which has a one-to-one correspondence with machine 
+language. And after we've played with an emulator
+
+0:01:25.200,0:01:28.960
+long enough, we'll realize that, you know, 
+emulators can be a pretty cool thing. And they're
+
+0:01:28.960,0:01:33.680
+actually not that hard to not that hard to write. 
+And we'll look at some of the emulators like
+
+0:01:35.840,0:01:42.000
+WASM and JavaScript. We're going to take a look 
+at how Internet Archive uh keeps old games alive
+
+0:01:42.000,0:01:47.440
+using a series of emulators that run all inside 
+your browser. And then we're going to finish up
+
+0:01:47.440,0:01:54.720
+talking about CPU evolution over the decades. So 
+if we take a look at the end of the lecture in
+
+0:01:54.720,0:02:02.880
+the previous section, we had built a CPU that had 
+in effect one 4-bit register, one 4-bit adder, a
+
+0:02:02.880,0:02:10.560
+clock, and then one instruction that chose between 
+whether or not we reset the register, the latch,
+
+0:02:10.560,0:02:16.560
+or we incremented the latch. And interestingly, 
+that's where we're going to start. But like what
+
+0:02:16.560,0:02:23.600
+is missing? And and the answer is if we go all 
+the way back to chapter 1, slide 19, Python for
+
+0:02:23.600,0:02:32.560
+everybody, a class that I started teaching in 
+the mid 2000s. Basically, what we're missing is
+
+0:02:32.560,0:02:38.720
+instructions that are coming from the main memory 
+to program the central processing unit. And those
+
+0:02:38.720,0:02:44.560
+instructions guide the central processing unit 
+as to how to use the hardware inside that central
+
+0:02:44.560,0:02:49.200
+processing unit. And those instructions 
+are zeros and ones that are represented
+
+0:02:49.200,0:02:54.880
+by electrical impulses that are coming into the 
+central processor. If we look at a little more
+
+0:02:54.880,0:03:00.560
+detail in the central processor, there's a number 
+of different resources in the central processor.
+
+0:03:00.560,0:03:09.200
+There is the ALU the arithmetic and logic unit 
+which has adders comparison multipliers sometimes
+
+0:03:09.200,0:03:16.320
+and then there is a place we store super fast 
+data to feed to and from the ALU the registers
+
+0:03:16.320,0:03:22.160
+so usually the ALU doesn't operate on things that 
+are in the memory we load data into the registers
+
+0:03:22.160,0:03:28.720
+and then we do computations with the ALU the PC 
+or program counter is the most important register
+
+0:03:28.720,0:03:36.240
+of all because it tells tells the CPU where in the 
+memory to retrieve the next instruction. So based
+
+0:03:36.240,0:03:43.360
+on where the PC is pointing, the CPU retrieves a 
+me an instruction from the memory and the register
+
+0:03:43.360,0:03:48.800
+CIR current instruction register which is not 
+shown on a lot of architecture diagrams but in
+
+0:03:48.800,0:03:56.240
+a sense the the machine code the 8, 16 or more 
+bits is loaded into the CPU in a register and
+
+0:03:56.240,0:04:01.920
+then it does what's called decoding and that is 
+it looks at the bits says if this an add is this
+
+0:04:01.920,0:04:06.800
+a subtract is this an increment is this a clear 
+what is the instruction uction and then what the
+
+0:04:06.800,0:04:14.240
+decoder does is it in effect sends signals to 
+the rest of the parts of the central processing
+
+0:04:14.240,0:04:20.320
+unit to take say oh okay we're going to add so 
+take this register feed it to the ALU add this
+
+0:04:20.320,0:04:25.840
+other register and then take the result from that 
+addition and put it into a different register and
+
+0:04:25.840,0:04:31.840
+of course there's a clock and the clock causes the 
+logic to happen our emulator is going to run on
+
+0:04:31.840,0:04:38.640
+a one hertz clock which is one one instruction 
+per second and um the real 6502 is 1 megahertz
+
+0:04:38.640,0:04:44.000
+which is a million instructions per second which 
+of course compared to modern processors is not
+
+0:04:44.000,0:04:51.360
+very many. So the machine language instructions 
+that we're going to do are going to be 8 bits and
+
+0:04:51.360,0:04:56.720
+there is an assembly language which is a symbolic 
+representation like if we want to clear the X
+
+0:04:56.720,0:05:06.000
+register set it to zero then we have an op code of 
+1 1 0 0 1 0 and so you can just see these op codes
+
+0:05:06.000,0:05:11.600
+for various things. There's a clear we're showing 
+an increment a load constant a load from memory
+
+0:05:11.600,0:05:16.240
+and then a store back to memory. We're going to 
+see lots of these. So, so don't don't slow down
+
+0:05:16.240,0:05:21.520
+uh and learn this. Um and so up next, we're 
+going to learn hexadecimal because the more
+
+0:05:21.520,0:05:32.000
+data we have, the we can't just use base 2 for 
+everything because it's not a very dense format.
+
+0:05:32.000,0:05:33.698
+[Music] [Applause] [Music]

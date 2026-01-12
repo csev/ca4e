@@ -1,0 +1,410 @@
+0:00:00.240,0:00:06.720
+So let's learn base 16 otherwise known as 
+hexadecimal. So the key to it would be nice
+
+0:00:06.720,0:00:11.760
+if we could just use base 2 for everything but 
+zeros and ones are easy to understand but when
+
+0:00:11.760,0:00:18.720
+numbers get larger like characters for example 
+are eight bits it's really hard to represent that
+
+0:00:18.720,0:00:24.320
+all in base 2. So it's we we tend to see in the 
+real world that most machine language and other
+
+0:00:24.320,0:00:30.640
+things require you to understand hexadecimal. So, 
+if you take a look at base two, it was easy. We
+
+0:00:30.640,0:00:35.760
+had a simple conversion table. And I hope by now 
+some of you have memorized this little table. I
+
+0:00:35.760,0:00:40.560
+know I've memorized I I just, you know, when 
+I see seven, I see three ones. When I see six,
+
+0:00:40.560,0:00:48.400
+I see 1 1 zero. I know this by heart. Okay, now 
+that's cool. We're seeing all numbers that we're
+
+0:00:48.400,0:00:56.560
+familiar with. Base 16 says we are going to 
+represent 0 through 15 with a single digit.
+
+0:00:56.560,0:01:02.880
+Right? So 15 is 15 but with two digits. And 
+so the whole idea of changing bases is that we
+
+0:01:02.880,0:01:12.080
+have digits. So we need to come up with a single 
+digit that represents 9 10 11 12 13 14 and 15.
+
+0:01:12.800,0:01:18.640
+And so I basically said, okay, wouldn't it be cool 
+if we would use emojis for that? Because I have
+
+0:01:18.640,0:01:30.080
+trouble remembering hexadecimal. So if we imagine 
+that um 10, which is kind of zero, 11, 12, 13,
+
+0:01:30.080,0:01:37.360
+I don't they don't have an emoji for four fingers, 
+and then 15. So I I put a shamrock in for 14. Um,
+
+0:01:37.360,0:01:43.600
+and so, so the point here is you need a 
+single character to represent it. And so,
+
+0:01:43.600,0:01:49.440
+so I I made this up and then I'm like, "Hey, 
+AI, what emojis would you use to represent
+
+0:01:49.440,0:01:56.880
+um 10 through 15?" So, there is an actual emoji 
+that's 10, but there is no emoji for 11. And so,
+
+0:01:56.880,0:02:06.000
+they use the pause emoji. And then they used a 
+clock, 12:00, 1:00, 2:00, and 3:00. And it's not
+
+0:02:06.000,0:02:13.040
+too bad. And um American Sign Languages uses one 
+hand. I think I think this is 11 or maybe Yeah,
+
+0:02:13.040,0:02:19.200
+I think this is 11. Uh and so British Sign 
+Language is different. Uh the problem is is we
+
+0:02:19.200,0:02:25.520
+don't get emotion uh when we uh make emojis. So 
+we can't really use American Sign Language even
+
+0:02:25.520,0:02:33.280
+though American Sign Language has way to represent 
+11 12 13 and 14 and 15 uh with kind of a gesture.
+
+0:02:34.000,0:02:40.880
+So the problem was is basically whatever 1930 1940 
+when we started using hexadecimal we didn't have
+
+0:02:40.880,0:02:47.520
+emojis it was just too early and so all we had 
+was ASCII characters and so we have repurposed
+
+0:02:47.520,0:02:56.000
+A through F to represent 10 through 15 for base 16 
+numbers. So a is 10. The first number that is not
+
+0:02:56.000,0:03:05.600
+a single digit, right? And f is 15 and f is all 
+ones. Four four ones is one one one is f. Okay. So
+
+0:03:05.600,0:03:10.880
+we just used a through f. It it's a little weird 
+because there's the letter a and then there is
+
+0:03:10.880,0:03:15.920
+the hexadecimal digit a but you have to kind of 
+get used to it to say oh we're in a context of a
+
+0:03:15.920,0:03:23.680
+number here. So so that means 10. A means 10. So 
+if we look at the conversion between base 16 and
+
+0:03:23.680,0:03:29.440
+base 10 and I got my little cheat sheet here of 10 
+through 15 because 0 through nine is pretty easy.
+
+0:03:29.440,0:03:35.600
+Again base 10 says that each column is a power 
+of 10. So the far right column is 10 to the 0ero
+
+0:03:35.600,0:03:41.360
+which is the ones column. The the middle column is 
+10 to the 1 which is the 10's column. And then the
+
+0:03:41.360,0:03:50.720
+third column is 10 squared which is the hundred's 
+column. And so 123 is 1 * 100 2 * 10 + 3 * 1 which
+
+0:03:50.720,0:03:59.200
+is 123 b 10 which of course it is in base 16. Now 
+we have more digits to work with. So we have 7b
+
+0:03:59.200,0:04:09.760
+base 16. Well the far right is 16 to the 0 or 
+1 and then the second digit is 16 to the first
+
+0:04:09.760,0:04:20.880
+power. So the result is 7 * 16 + 11 * 1 which is 
+112 + 11 which is 123. Now one thing we like about
+
+0:04:20.880,0:04:29.760
+base 16 is it's easily converted to and from base 
+2. Um and so if you have 8 bit numbers you can
+
+0:04:29.760,0:04:34.720
+represent them with two base 16 digits. And that's 
+what we're going to work with a lot going forward
+
+0:04:34.720,0:04:43.680
+is eight bit numbers. So you can take and convert 
+like 7B b 16 which is a bite and you can convert
+
+0:04:43.680,0:04:50.240
+the seven and then you convert the b and that's 
+the base 2. And so to some degree hexadimal is
+
+0:04:50.240,0:04:59.040
+just a more succinct base 2 where four digits of 
+base 2 become one digit of base 16. If we did this
+
+0:04:59.040,0:05:03.440
+on base 10, there wouldn't be this nice lineup 
+because you can make really long hexadesimal
+
+0:05:03.440,0:05:13.280
+numbers and they still line up on every four-bit 
+boundary with base 2. So for now, keep it simple.
+
+0:05:13.280,0:05:20.720
+I tend to have to go through base 10. Um, you 
+know, we have a eights column now. So the top line
+
+0:05:20.720,0:05:32.080
+is 1 8 + 1 2 which is 10. 8 + 2 is 10. And that is 
+a base 16. uh 8 which is 1 0 0 0 is 8 base 10 and
+
+0:05:32.080,0:05:40.400
+8 base 16. So all the numbers 0 through nine are 
+easy. And then all ones 1 one1 is 8 + 4 + 2 + 1
+
+0:05:40.400,0:05:48.000
+which is 15. And that's f in base 16. So I've 
+told you that I'm pretty much a whiz at base 8,
+
+0:05:48.000,0:05:55.200
+which is three base 2 digits. I I can kind of do 
+that in my sleep. I am not very good at base 16.
+
+0:05:55.200,0:06:02.160
+Hopefully, you'll be better at it. Or maybe not. 
+So, this is my this is how I do base 16 in my head
+
+0:06:02.160,0:06:10.000
+and it's not pretty. So, F is easy because that's 
+15. That's the largest base 16 digit. And it's all
+
+0:06:10.000,0:06:17.440
+ones, right? That's cool. It's base 16. F is one 
+less. It's all ones. If you add one to it, it's
+
+0:06:17.440,0:06:24.240
+it turns into the 16 column. So an E I can do E 
+because I just take the all the digits and I take
+
+0:06:24.240,0:06:32.560
+off the one bit, right? So that's like 14. I can 
+get that. A is easy because it's like nine. What's
+
+0:06:32.560,0:06:38.640
+after nine? Oh, it's A. And so I can do that. So I 
+understand that's 10. And B is 11. And I was like,
+
+0:06:38.640,0:06:47.120
+uh, it's kind of like one beyond uh, A. And so I 
+can see what B is. I have problems with C and D,
+
+0:06:47.120,0:06:54.800
+right? I mean, I eventually have to slow down and 
+use my brain and go A 10, B1, C12, and then I have
+
+0:06:54.800,0:07:00.240
+to convert to base 2, which is 11 1, and then 
+I'm like, oh, that's A+ 4. Oh, yeah, 12. Yeah,
+
+0:07:00.240,0:07:07.440
+there you go. And D just makes me crazy, right? 
+I sooner or later sometimes with D, I'm like,
+
+0:07:07.440,0:07:14.640
+uh, what is it? And then I have to write it 
+down. So um for a good time you can go ahead
+
+0:07:14.640,0:07:22.560
+and ask AI what is a good way to do hex to base 
+2 conversions in your head. I did that and it
+
+0:07:22.560,0:07:28.240
+was really complex. So no so maybe I'm okay by 
+being confused about this. So just make yourself
+
+0:07:28.240,0:07:33.680
+a little cheat sheet whenever you have to do 
+hex or just get used to it or look at a table.
+
+0:07:33.680,0:07:38.880
+A lot of what we're going to do is represent 
+characters. And characters are asking characters
+
+0:07:38.880,0:07:46.160
+are eight bits and can really nicely and densely 
+be represented by two hex digits. We called these
+
+0:07:46.160,0:07:52.400
+half bytes, nibbles. Um not that it matters 
+much, but this asky chart shows the decimal,
+
+0:07:52.400,0:07:58.960
+the hex um octal, which we tend not to use, 
+and then the binary. So if you look at 42,
+
+0:07:58.960,0:08:07.280
+it's kind of small on this screen, but you see 
+that it's 42 decimal and 0x2A hexadimal, which is
+
+0:08:07.280,0:08:13.680
+asterisk. And so I tend to just look these things 
+up and I don't really convert them um and just
+
+0:08:13.680,0:08:22.640
+use hex as a way to look things up in things like 
+ASI tables. Now while we're speaking about ASI so
+
+0:08:22.640,0:08:32.800
+so ASI is a historical code set basically that is 
+very western and really goes back to Latin really
+
+0:08:32.800,0:08:41.280
+and because we have 8bit bytes um and the west 
+built computers early on we tended to have asy
+
+0:08:41.280,0:08:47.520
+character sets were universal across computers 
+but that's not real there's Asian character sets
+
+0:08:47.520,0:08:53.520
+sets and Indian character sets and Arabic and 
+Persian character sets. They're they're all kind
+
+0:08:53.520,0:09:01.520
+of different. And so what happened was in in the 
+time where computing became a worldwide activity,
+
+0:09:01.520,0:09:08.240
+we needed to come up with a way to interchange 
+characters that are way bigger than eight bits.
+
+0:09:08.240,0:09:16.320
+And somebody came up with the idea of Unicode. And 
+Unicode has all kinds of character sets, you know,
+
+0:09:16.320,0:09:22.080
+Latin and ASKI start and then they just have all 
+kinds of character sets. Some of these are Latin
+
+0:09:22.080,0:09:26.880
+characters with like umlouts and all things like 
+that. And some of them are like Asian characters
+
+0:09:26.880,0:09:32.640
+that are pictograms. Now, recently emojis are in 
+Unicode as well. And so some of the emojis that
+
+0:09:32.640,0:09:40.480
+I've showed you are actually have a Unicode 
+code. Unicode represents things by 32 bits.
+
+0:09:40.480,0:09:46.560
+That's pretty large given that 8 bits is how ASI 
+is represented in Undeode is 32 bits. But the idea
+
+0:09:46.560,0:09:54.000
+is is there's a lot of characters sets around this 
+universe. Now, we're not inventing too many more
+
+0:09:54.000,0:10:00.720
+and they did things like added emojis to Unicode, 
+but basically 32 bits is like in the billions of
+
+0:10:00.720,0:10:06.160
+possible characters. So, I think we're probably 
+okay. The problem is is as we move between
+
+0:10:06.160,0:10:13.200
+computers or store data on hard drives, we don't 
+really want every character to take up 32 bits.
+
+0:10:13.200,0:10:19.520
+So for example, Python 3 internally represents 
+strings as Unicode, which means they're pretty
+
+0:10:19.520,0:10:25.360
+large. Okay? But then before we stick them on 
+a hard drive or send them across a network,
+
+0:10:25.360,0:10:35.520
+we condense them. And there are ways to compress 
+these 32-bit unic codes into shorter. So one is
+
+0:10:35.520,0:10:41.120
+UTF-32 which is four byte stuff. That's the long 
+one. It's fixed length and it just says we'll
+
+0:10:41.120,0:10:47.840
+take that whole unic code and send it along. 
+UTF-16 is fixed length. It's two bytes. It's a
+
+0:10:47.840,0:10:55.600
+lot denser and um there's a mapping. Um but the 
+most successful one of these is a thing called
+
+0:10:55.600,0:11:06.080
+UTF8 which might not be intuitive but basically 
+UTF8 is one to four bytes and it is for most ASI
+
+0:11:06.080,0:11:13.200
+UTF8 and ASI are the same things and then there's 
+these little extension codes I mean this is a 16-
+
+0:11:13.200,0:11:20.960
+bit code or a 32-bit code and so you can represent 
+all of Unicode with UTF8 sometimes you're sending
+
+0:11:20.960,0:11:26.560
+one bite if it's ASKY, sometimes two, three, 
+and even four bytes are being sent across. And
+
+0:11:26.560,0:11:33.520
+so UTF8 is pretty much the practice for encoding 
+data to be exchanged across systems. So I got to
+
+0:11:33.520,0:11:40.080
+have a graph here that sort of shows that, you 
+know, in 2008 there was choices to be made. Um,
+
+0:11:40.080,0:11:47.680
+but since then everything is pretty much UTF8. And 
+so we're at the point now where systems that are
+
+0:11:47.680,0:11:53.200
+reading and writing data to disk or the network 
+only pretty much use UTF8. And it happens to be
+
+0:11:53.200,0:11:58.560
+ASKY. That works. Okay. But what we're doing 
+is we're working on a computer from the 1970s,
+
+0:11:58.560,0:12:05.840
+which is this 6502 computer. And so we're going 
+to just accept that it's ASI for now. But real
+
+0:12:05.840,0:12:13.520
+computers tend to work in UTF8 and can convert 
+from ASI or Unicode to UTF8 uh quite nicely.
+
+0:12:13.520,0:12:15.434
+[Music] [Applause] [Music]

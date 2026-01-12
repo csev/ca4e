@@ -1,0 +1,326 @@
+0:00:00.240,0:00:05.440
+Hello and welcome to another walk through of 
+computer architecture for everybody. This is
+
+0:00:05.440,0:00:11.280
+a walk through of our VLSI design layout tool very 
+large scale integration. The tool where we sort of
+
+0:00:11.280,0:00:17.600
+build circuits by painting layers that turn into 
+photo-liththography. Although it's probably these
+
+0:00:17.600,0:00:23.520
+days laser lithography, but you get the idea. 
+So the the basic idea is you can draw these pure
+
+0:00:23.520,0:00:29.280
+areas that are going to have metal placed on them. 
+You can also erase them. And it doesn't really
+
+0:00:29.280,0:00:34.080
+matter how you place them. As long as you erase 
+them and put them together, you can end up with
+
+0:00:34.080,0:00:38.960
+quite weird shapes. I'll put some positive voltage 
+in one area. And you see the positive voltage goes
+
+0:00:38.960,0:00:44.080
+wherever the metal is. Even though the way I drew 
+it was I drew a piece, then I chopped a piece out
+
+0:00:44.080,0:00:50.960
+of it, etc., etc. So, let me clear this all out 
+and let me work on a not gate because a no tgate
+
+0:00:50.960,0:00:57.840
+is is a pretty good and simple way to understand 
+how this things works. So you could take a look at
+
+0:00:57.840,0:01:03.120
+the the image from the lecture and paint exactly 
+the thing it does and that's a good good thing to
+
+0:01:03.120,0:01:08.400
+do. But I'm going to do it a little differently. 
+I'm going to start from the transistors outward.
+
+0:01:08.400,0:01:14.560
+And so I'm going to start with the PPOS transistor 
+at the top. So I'm going to have a vertical bit
+
+0:01:14.560,0:01:21.840
+of P-doped silicon. And then I'm going to 
+make a vertical piece of Nope silicon. And
+
+0:01:21.840,0:01:27.920
+then I'm going to take some polysilicon and run 
+across because where the intersection happens
+
+0:01:27.920,0:01:32.640
+with between a polysilicon and an ndoped and a 
+polysilicon and a p-doped that's where transistors
+
+0:01:32.640,0:01:40.160
+happen. So at these two intersections there are 
+transistors. Okay. And so if we take a look at the
+
+0:01:40.160,0:01:44.640
+layers we can see because there's always 
+this layer viewer. This layer viewer says,
+
+0:01:44.640,0:01:49.840
+"Oh, there's some P diffusion." And now we've got 
+some P diffusion touching polysilicon which makes
+
+0:01:49.840,0:01:54.560
+a PMOS transistor. Then we have N-doped diffusion. 
+We have some polysilicon and then when they touch
+
+0:01:54.560,0:02:01.440
+when they cover each other up then there is an 
+NMOS transistor that is created. So we now have
+
+0:02:01.440,0:02:09.040
+Oh, I got to erase that. You can just erase stuff 
+if you mess it up. So now what we got to do is we
+
+0:02:09.040,0:02:14.160
+got to get some electricity to these. So we got to 
+draw the rest of the circuit. Okay. So, the first
+
+0:02:14.160,0:02:20.560
+thing I'm going to do is I'm going to draw the 
+output and that's going to be a bit of metal. So,
+
+0:02:20.560,0:02:29.680
+I overlap the metal with the P diffusion and the 
+N diffusion. Now, if I take a look at the layers,
+
+0:02:29.680,0:02:35.600
+you see that where I overlap the metal and the P 
+diffusion, there's still a gap. And where I metal
+
+0:02:35.600,0:02:41.520
+met the N diffusion and the metal, there's still a 
+gap. If I want to actually connect them together,
+
+0:02:41.520,0:02:47.680
+I have to explicitly connect them together. So I 
+am going to do that by punching a VIA. It's like
+
+0:02:47.680,0:02:56.080
+drilling a little hole and then pouring I don't 
+know metal into it. But so now what we have is we
+
+0:02:56.080,0:03:00.800
+have the P diffusion overlapping the metal and 
+the N diffusion overlapping the metal. But now
+
+0:03:00.800,0:03:05.280
+there's a little connector that goes down through 
+the center. So we are working in three dimensions
+
+0:03:05.280,0:03:08.880
+here. They're all kind of layered on top of 
+one another. But then we want to connect the
+
+0:03:08.880,0:03:15.680
+layers. Away we go. Okay. So now I want to 
+actually make some input. So I'm going to take the
+
+0:03:15.680,0:03:23.280
+input these two polysilicons and then I'll just 
+drop a little input out here a little bit. And so
+
+0:03:23.280,0:03:29.840
+the polysilicon and the metal do not touch until 
+I punch a VIA there. So I punch a little hole,
+
+0:03:29.840,0:03:34.480
+punch a little hole, and away we go. And then the 
+next thing I want to do is I want to have a place
+
+0:03:34.480,0:03:39.360
+to get the output. So, I'll pull a little bit of 
+metal out here. Um, metal touching metal doesn't
+
+0:03:39.360,0:03:45.680
+need a via. So, we're pretty much almost done 
+at this point. If we put some voltage up here
+
+0:03:45.680,0:03:56.080
+in the orange in the P-Doped silicon and we put 
+some ground at the bottom in the N-doped silicon,
+
+0:03:56.080,0:04:00.400
+what you see is the the voltage is flowing, but 
+because there's no voltage on the transistor,
+
+0:04:00.400,0:04:11.920
+the transistor ends up being a block to the whole 
+thing. Okay? So if you recall the the PMOS is open
+
+0:04:11.920,0:04:18.720
+on ground and closed on positive and the NMOS is 
+the opposite where it is open on positive and I
+
+0:04:18.720,0:04:24.400
+mean closed on positive uh closed on ground 
+and opened on positive. I messed myself up.
+
+0:04:24.400,0:04:28.320
+So let's just go ahead and put some voltage in. I 
+probably should have done that. So now you see the
+
+0:04:28.320,0:04:36.000
+transistor in operation. So I've got voltage on 
+the input and that is causing the upper transistor
+
+0:04:36.000,0:04:40.560
+to block voltage from flowing. So voltage would 
+come into the PMOS transistor but not leave the
+
+0:04:41.120,0:04:47.120
+transistor. If we then look at the NMOS transistor 
+in the bottom you see the ground is flowing up
+
+0:04:47.120,0:04:53.120
+but in this case it's flowing through the NMOS 
+transistor to the output and so the output is is
+
+0:04:53.120,0:04:59.200
+negative. Now, if we switch and put ground as the 
+input, which we do like that, then you see that
+
+0:04:59.200,0:05:06.240
+the PMOS at the top is conducting and the plus 
+is going all the way out to the output. Um, oops,
+
+0:05:06.240,0:05:11.200
+I just put a ground there. That messes that thing 
+up. And but I can fix that. Watch. I can just say
+
+0:05:11.200,0:05:16.720
+erase. Come back. Come back. I just hovered and 
+hit it. So, I erased that guy. So, now it's back
+
+0:05:16.720,0:05:27.760
+to being a happy little not gate. Okay. So, that's 
+a happy little not gate. Um, let's go ahead and
+
+0:05:27.760,0:05:32.640
+turn this in for our assignment. It tells you 
+to place a probe with a label A on the input
+
+0:05:32.640,0:05:37.040
+to your not gate. So, there's a thing called a 
+probe and we're going to replace this ground with
+
+0:05:37.040,0:05:45.600
+input A and it says place a probe with a label 
+Q on the output. So, we got A and Q. So, now I
+
+0:05:45.600,0:05:50.320
+think we're in good shape. We already built the we 
+already built the not gate and we tested it. So,
+
+0:05:50.320,0:05:55.600
+let's just go ahead and start the grading. So, it 
+checks to see if there's an A and a Q probe. And
+
+0:05:55.600,0:06:00.720
+we named them correctly. Doesn't know we may 
+have them have them in the wrong place. We're
+
+0:06:00.720,0:06:05.760
+we're set A to ground and it check to see if the 
+output is VCC, which is right. That's the first
+
+0:06:05.760,0:06:11.520
+half of the Not. Now, it checks sets A to VCC 
+and then set checks to see if the Q is ground.
+
+0:06:11.520,0:06:17.920
+And that's correct. And so, we are done and we 
+have earned our grade. So before I stop here,
+
+0:06:17.920,0:06:24.160
+a couple other things to show you. There is this 
+really cool feature called Read Circuit. And I'm
+
+0:06:24.160,0:06:34.240
+going to press it and then just stay quiet. 
+Draw VCC at (8, 1). Draw probe A at (4, 6)
+
+0:06:34.240,0:06:47.440
+with voltage VCC. Draw P plus diffusion from (8, 
+1) to (8, 5). Draw polyilicon from (6, 3) to (10,
+
+0:06:47.440,0:07:02.080
+3). Draw polyilicon from (6, 9) to (10, 9). Draw 
+metal from (6, 3) to (6, 9). Draw metal from (8,
+
+0:07:02.080,0:07:17.920
+5) to (8, 7). Draw metal from (4, 6) to (6,6). 
+Draw metal from (8, 6) to (11, 6) draw VIA (6,
+
+0:07:17.920,0:07:36.080
+3) draw via (8, 5) draw VIA (8, 7) draw via (6, 9) 
+draw probe A (4, 6) with voltage VCC draw probe Q
+
+0:07:36.080,0:07:51.440
+at (11, 6) with voltage zero Draw N plus diffusion 
+from (8, 7) to (8, 12). Draw GND at (11, 1).
+
+0:07:51.440,0:07:57.440
+So that's pretty cool. There's also a way for 
+you to load and save. This is going to use
+
+0:07:57.440,0:08:02.400
+um space on your um on your browser. This is using
+
+0:08:02.400,0:08:09.440
+what's called browser local storage. 
+So I'll just call this one not two.
+
+0:08:11.520,0:08:16.240
+And so if you look and do load, you could reload 
+to not two. So I'll just leave that for a bit.
+
+0:08:16.240,0:08:24.640
+So then the one last thing I will show you uh is 
+there is this command line. And so you can type um
+
+0:08:24.640,0:08:36.160
+you can type commands here. I'm going to say draw 
+metal from (2, 2) to (10, 10). This is going to
+
+0:08:36.160,0:08:41.520
+ruin my circuit, but you'll get the idea. So that 
+just drew the metal and so I messed up my whole
+
+0:08:41.520,0:08:47.920
+circuit. Um, but you can see that you could place 
+these things. So if I started over from scratch,
+
+0:08:47.920,0:09:06.640
+I could type draw draw poly silicon from (3, 6) to 
+(10, 6). See? So you could draw all those things
+
+0:09:06.640,0:09:14.320
+and um that's actually what the uh the save and 
+the restore actually return knows all of those
+
+0:09:14.320,0:09:20.480
+uh items. So there's some help for this that you 
+might find uh useful. Talks a lot about how to do
+
+0:09:20.480,0:09:27.360
+stuff. It gives you hints as to how to complete 
+your homework etc. So um I hope you found this
+
+0:09:27.360,0:09:33.840
+interesting this walk through on the VLSI design 
+system for uh computer architecture for everybody.

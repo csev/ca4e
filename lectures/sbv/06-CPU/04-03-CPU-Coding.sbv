@@ -1,0 +1,423 @@
+0:00:00.080,0:00:04.640
+So in this section we're going to talk about 
+like what is programming and we're going to do
+
+0:00:04.640,0:00:12.400
+so by reviewing things like Python and C. And 
+the reason we take a look at this is that when
+
+0:00:12.400,0:00:19.280
+we write Python or C that code has to execute 
+eventually in machine language. So in the end
+
+0:00:19.280,0:00:24.960
+any program that we can write must also be 
+representable in machine language. So if we
+
+0:00:24.960,0:00:30.160
+look at patterns in high level programming, we 
+need to be able to replicate those patterns in
+
+0:00:30.160,0:00:37.760
+machine language. So I'm going to take you back in 
+time to 2008 when I first was teaching the course
+
+0:00:37.760,0:00:43.920
+that would become Python for Everybody on campus 
+at the University of Michigan. This was chapter 1,
+
+0:00:43.920,0:00:50.400
+slide 19. So this is for people who'd never seen 
+a computer, never I mean never you programmed a
+
+0:00:50.400,0:00:56.160
+computer, never didn't know what programming was. 
+And I introduced computer architecture in slide
+
+0:00:56.160,0:01:04.640
+19. And why was that? Well, my goal at that point 
+was to teach people that to become a programmer,
+
+0:01:04.640,0:01:09.840
+you kind of move into the machine. Your code 
+moves into the machine and it provides the
+
+0:01:09.840,0:01:15.760
+instructions to the central processing unit. 
+And so your goal to becoming a programmer is
+
+0:01:15.760,0:01:22.160
+to be able to provide those instructions so 
+you can have the overall machine do the thing
+
+0:01:22.160,0:01:28.720
+that you want to do. Now the key is those 
+instructions and I said this in chapter 1
+
+0:01:28.720,0:01:35.680
+slide 19 those instructions are zeros and 
+ones and they are what is called machine
+
+0:01:35.680,0:01:42.000
+language and those instructions are moved from 
+the main memory to the central processing unit.
+
+0:01:42.960,0:01:52.640
+using wires. And that was like the first half hour 
+of the first day of programming. And now some of
+
+0:01:52.640,0:01:58.800
+you have been with me for some time. And now we're 
+at the point where we're going to understand what
+
+0:01:58.800,0:02:07.680
+exactly a central processing unit is. Okay. So 
+let me show you some of the artifacts that I used
+
+0:02:07.680,0:02:13.120
+when teaching that class. So let's start with the 
+central processor. I've shown you this AMD central
+
+0:02:13.120,0:02:18.320
+processor before. We now know how to build this 
+chip. We understand that instructions will come
+
+0:02:18.320,0:02:24.560
+into these wires, right? So like if there is uh 
+eight of them, we can represent those eight wires
+
+0:02:24.560,0:02:30.080
+as a hexadecimal digit because we just learned 
+how to do hexadecimal. Now the place that these
+
+0:02:30.080,0:02:37.440
+instructions come from in that same picture is 
+the memory. And so again, you've got wires and
+
+0:02:37.440,0:02:43.920
+four of these wires equals one hexadecimal digit, 
+right? Lots of wires. We got chips that store,
+
+0:02:43.920,0:02:50.560
+but we've also learned how to build uh latches 
+that are ways to store memory electronically
+
+0:02:50.560,0:02:55.920
+and then retrieve that memory. But then we have 
+to come up with a way to connect these things
+
+0:02:55.920,0:03:05.200
+together. And that's what's called a motherboard, 
+right? And so the CPU plugs in to the Oops,
+
+0:03:05.200,0:03:12.800
+here we go. CPU plugs into the CPU slot. The 
+memory plugs into a memory slot. And there are
+
+0:03:12.800,0:03:20.400
+wires on this motherboard that are laid out to 
+pull so that the CPU can ask the memory for some
+
+0:03:20.400,0:03:27.280
+data instructions. And it comes here and it and we 
+also load and store the, you know, the the things
+
+0:03:27.280,0:03:33.040
+we're going to compute from the memory as well. 
+And so if you look at this, it's got like big and
+
+0:03:33.040,0:03:38.240
+small wires. It's mostly wires with these little 
+through holes that are soldered into the wires.
+
+0:03:38.240,0:03:45.440
+Um you can see kind of big things. They're like 
+roads and lakes, but these wires go. And so again,
+
+0:03:45.440,0:03:51.600
+I'm going to sorry, I'm going to get all stuck 
+on this. Four of these little pins, I mean,
+
+0:03:51.600,0:03:57.200
+eight of these little pins are two hex digits. So 
+we can represent all these pins perhaps with a big
+
+0:03:57.200,0:04:03.040
+long hex string. And that's kind of why we're so 
+obsessed with hexadecimal. I'm clearly obsessed
+
+0:04:03.040,0:04:08.960
+with hexadecimal. And the other thing that I 
+showed students in the very beginning was this
+
+0:04:08.960,0:04:14.960
+disc drive. Now, modern computers don't have disc 
+drives that actually have any physical spinning.
+
+0:04:14.960,0:04:20.160
+But basically, this was magnetic material and 
+this head would go in and out. I think this is now
+
+0:04:20.160,0:04:25.920
+broken, but the head would go in and out and the 
+data would be stored on cylinders up and down. And
+
+0:04:25.920,0:04:30.560
+so this head would move in and out. And if you're 
+old enough, you would remember your computer while
+
+0:04:30.560,0:04:34.720
+you're reading disc, it would go uh uh uh grunt 
+grunt grunt grunt grunt. Well, that grunt is this
+
+0:04:34.720,0:04:40.720
+stuff moving back and forth. And it seems as 
+though I have had this over 10 years and I've
+
+0:04:40.720,0:04:45.760
+scratched it and I've broken it. But you get the 
+idea that this was long-term storage and you could
+
+0:04:45.760,0:04:52.720
+store a lot more data than you can in RAM. The 
+the the memory is fast and efficient but limited
+
+0:04:52.720,0:04:57.360
+and disc drives are much larger in terms of the 
+amount of data they can store. And once stored,
+
+0:04:57.360,0:05:07.280
+it stays there and doesn't require power. Now, 
+the other thing that I showed my students,
+
+0:05:07.280,0:05:11.200
+the other thing that I showed my students is 
+something a little bit more modern, which is a
+
+0:05:11.200,0:05:17.520
+little more like what's in your cell phone, etc. 
+And this is a Raspberry Pi. And what's happened
+
+0:05:17.520,0:05:22.640
+is as they can manufacture more and more stuff 
+on a single chip, you can get to what's called a
+
+0:05:22.640,0:05:30.320
+single chip computer. So, in this has got the CPU, 
+it's got some long-term storage, it's got the RAM,
+
+0:05:30.320,0:05:35.040
+etc., etc. And so, this is got everything 
+in it because it's really just electronic
+
+0:05:35.040,0:05:40.320
+stuff. And as the manufacturing capability got 
+better and better, this is an ARM processor,
+
+0:05:40.320,0:05:46.240
+which we'll talk about later, and some RAM, etc. 
+And this is one of the early Raspberry Pies.
+
+0:05:46.960,0:05:52.880
+So 15 years ago, it was a little easier to show 
+computer architecture by showing the components
+
+0:05:52.880,0:05:58.320
+that made up computer architecture. It's not 
+just a picture. It was physical devices that
+
+0:05:58.320,0:06:02.560
+implemented the computer architecture. The 
+instructions were stored in the memory. The
+
+0:06:02.560,0:06:06.880
+whole program when the computer was off was 
+stored on the hard drive, loaded into memory,
+
+0:06:06.880,0:06:12.800
+etc. And the motherboard connected all of these 
+pieces together. So the next thing that I describe
+
+0:06:12.800,0:06:21.920
+to my students in SI502 Python for everybody 
+is how we construct programs and these are the
+
+0:06:21.920,0:06:27.520
+essential things like a recipe or an installation 
+instructions. A program is a sequence of steps to
+
+0:06:27.520,0:06:33.920
+be done in order like the Macarena. Some steps 
+are conditional. They may be skipped and another
+
+0:06:33.920,0:06:39.600
+way you have a group of steps that may want to be 
+repeated. And the fourth way is like functions. we
+
+0:06:39.600,0:06:46.160
+store and retrieve a set of steps. We are going to 
+cover the first three of these in machine language
+
+0:06:46.160,0:06:52.000
+to sort of prove to you that machine language can 
+do exactly what high level languages do just with
+
+0:06:52.000,0:06:57.600
+a different syntax and a different level of detail 
+that you you're limited with what you can do in
+
+0:06:57.600,0:07:02.640
+machine language. Some people feel like machine 
+language limitations is kind of wonderful until
+
+0:07:02.640,0:07:07.440
+you start writing really complex programs. Okay, 
+but the first view of machine language that you're
+
+0:07:07.440,0:07:11.840
+going like, "Wow, this is kind of nice. Maybe 
+I should have learned this at the beginning."
+
+0:07:11.840,0:07:19.520
+So now into some Python, we have first sequential 
+steps. You just write lines of code one after the
+
+0:07:19.520,0:07:26.560
+other. And like x= 2, print x, that prints out 
+the two, x= x + 2, we just added to two to x,
+
+0:07:26.560,0:07:33.760
+and then print x. So what next? What next? the CPU 
+through its program counter is advancing through
+
+0:07:33.760,0:07:39.360
+the instructions and doing whatever it is until 
+it executes a halt instruction which means okay
+
+0:07:39.360,0:07:46.320
+we're now done you the programmer have said we're 
+done there's also conditional steps like you know
+
+0:07:46.320,0:07:53.200
+x= 5 if x is less than 10 print smaller if x 
+is greater than 20 print bigger or print Finis
+
+0:07:53.200,0:07:59.360
+and so this is things like the print smaller is 
+going to run but the print bigger is not going to
+
+0:07:59.360,0:08:07.520
+run and we represent these on the left hand side 
+with a flowchart. And so I have been teaching with
+
+0:08:07.520,0:08:12.240
+flowcharts. A lot of people think flowcharts are 
+uncool, but in the next couple of lectures you're
+
+0:08:12.240,0:08:19.440
+going to appreciate flowcharts because in a sense 
+we are guiding the what next bit to either do
+
+0:08:19.440,0:08:26.960
+something or skip something. And so logically 
+they're beautiful. The the code in Python is
+
+0:08:26.960,0:08:30.640
+beautiful. There are these blocks. they either 
+run or don't run. But really what we're doing
+
+0:08:30.640,0:08:37.680
+at a lower level is we're manipulating where the 
+computer is picking its next instruction from.
+
+0:08:37.680,0:08:43.360
+And this all will come together in a little 
+bit. And it gets even more complex when we do
+
+0:08:43.360,0:08:50.320
+repeated steps, right? Where we have an iteration 
+variable, we have a loop. So n equals 5. Well,
+
+0:08:50.320,0:08:55.440
+n greater than zero. That's a top- tested loop 
+with a question mark. And if n is still greater
+
+0:08:55.440,0:09:00.320
+than zero, we run the body of the loop, print 
+it, and then subtract one from it. And now then
+
+0:09:00.320,0:09:04.880
+we know that we go back up to the top of the 
+loop. And the first thing we do at the top of
+
+0:09:04.880,0:09:11.440
+the loop is test it again. Is n as changed. Is 
+n still greater than zero? I mean, if it's not
+
+0:09:11.440,0:09:15.600
+greater than zero, we skip and finish and print 
+blast off. And if it is still greater than zero,
+
+0:09:15.600,0:09:20.080
+we run the iteration again and again. You of 
+course can create infinite loops with this
+
+0:09:20.080,0:09:25.520
+if you don't change the iteration variable 
+each time through the loop. And that brings
+
+0:09:25.520,0:09:31.520
+us to variables. So a variable is a place in 
+memory where a programmer can store data and
+
+0:09:31.520,0:09:40.080
+then later retrieve it using a variable name 
+like x= 12.2 y= 14 and then x= 100 replaces it.
+
+0:09:40.880,0:09:48.640
+Now, for some of you who've took my Django course, 
+I finally admit that X is not just a drawer that's
+
+0:09:48.640,0:09:58.400
+got a label on it. X is a pointer to an object. 
+So, X= 12.2 means 12.2 is an object and X refers
+
+0:09:58.400,0:10:03.600
+to that object. When we say X= 100, there's 
+another object called 100 and X has changed to
+
+0:10:03.600,0:10:10.080
+point to that. So if you've taken my CC class 
+then you realize that with pointers that this
+
+0:10:10.080,0:10:16.160
+is exactly true. A a variable is a place where 
+you can put one and exactly one value and when
+
+0:10:16.160,0:10:23.280
+you reassign it that value is replaced just like 
+this picture up next. We're going to learn about
+
+0:10:23.280,0:10:28.320
+how variables work in machine language. And it 
+will probably come as no surprise to you that
+
+0:10:28.320,0:10:33.600
+they work exactly like how C thinks about them 
+because C is one of the lowest level programming
+
+0:10:33.600,0:10:41.120
+languages which is just a tiny step above machine 
+language. And so instead of being Python with all
+
+0:10:41.120,0:10:45.360
+its object orientation eventually that whole 
+Python object orientation turns into machine
+
+0:10:45.360,0:10:55.440
+language but variables don't exactly work like 
+this slide tells us. But in machine language,
+
+0:10:55.440,0:11:06.504
+this slide is exactly correct. So let's 
+get to that now. [Music] [Applause] [Music]

@@ -1,0 +1,419 @@
+0:00:02.000,0:00:08.880
+Hello and welcome to another code walkthrough
+for computer architecture for everybody. In this
+
+0:00:08.880,0:00:14.240
+walkthrough, we're going to walk through the
+uppercase converter. So what this is is this
+
+0:00:14.240,0:00:20.640
+is again WASM in the JavaScript environment. So
+it's output is console.log and that's about it.
+
+0:00:20.640,0:00:24.480
+It we're not even taking some input. We're going
+to hardcode our input. And then what we're going
+
+0:00:24.480,0:00:33.440
+to do is write a function called make an uppercase
+copy of the string. Okay. And so this gives us a
+
+0:00:33.440,0:00:40.480
+little bit more time to take a bit more look
+at WASM. Not that I want you to understand or
+
+0:00:40.480,0:00:45.280
+code WASM. You may even use AI to help solve
+this one assignment. So you're going to take
+
+0:00:45.280,0:00:50.480
+this uppercase code and you're going to write
+a lowercase version of it. So you got to kind
+
+0:00:50.480,0:00:54.800
+of dig through this code and figure out where
+it's doing the uppercase and then switch it to
+
+0:00:54.800,0:01:00.240
+doing lowercase. And it might be a little bit
+of work and you might even use AI a little bit
+
+0:01:00.240,0:01:05.040
+to help you do this. But I'm just going to walk
+through this code to help you out. So we're going
+
+0:01:05.040,0:01:10.160
+to our output's going to go to console.log. We're
+going to create some memory. We're going to put a
+
+0:01:10.160,0:01:15.840
+string in there at location zero. And then we're
+going to make it so JavaScript can execute it.
+
+0:01:15.840,0:01:22.800
+And so we are going to then say copy and go to
+uppercase and we're taking some input variables
+
+0:01:22.800,0:01:32.560
+some making some local variables. So this
+parenthesy funk it basically WASM is a stack
+
+0:01:32.560,0:01:37.920
+oriented language. So when you go into a funks
+you can think of a new stack frame being created
+
+0:01:37.920,0:01:44.080
+just like you would in any other programming
+language. And then so in that stack frame there
+
+0:01:44.080,0:01:48.960
+are variables that belong in that stack frame
+and that's what we're talking about here. And
+
+0:01:48.960,0:01:56.480
+we're setting some values and getting things done.
+and then we have some two instructions or two
+
+0:01:56.480,0:02:03.600
+instructions that might look a little weird to
+you. One is the block. And so the idea there are
+
+0:02:03.600,0:02:16.640
+no labels in WASM there are constructs. There is
+a execution stack. And so when you start a block
+
+0:02:16.640,0:02:20.400
+and we'll go down to the bottom of this block.
+Where's the end of the block? I think the end
+
+0:02:20.400,0:02:26.160
+of the block is right here. Oh, wait. Oh, I missed
+it. Missed it. Come back. Come back. Okay. I think
+
+0:02:26.160,0:02:33.360
+the end of the block is here. , yeah. No, the
+end of the block is here and this is the end of
+
+0:02:33.360,0:02:43.360
+the loop. And so what happens here is the block
+creates a temporary label that only exists in
+
+0:02:43.360,0:02:51.280
+this block. And you can branch to the loop end.
+It doesn't have to be named copy loop end. They
+
+0:02:51.280,0:02:57.120
+just named it copy loop end because that's what's
+going on. So if this branch if true this is a this
+
+0:02:57.120,0:03:03.760
+is a comparing doing a comparison between
+the character to see if it was a zero bite right
+
+0:03:03.760,0:03:10.640
+and if it we hit the zero bite we're going to
+exit the loop and we're going to branch to this
+
+0:03:10.640,0:03:17.520
+copy end. Now copy end is not the top of this it
+is the next statement after the end of the block.
+
+0:03:17.520,0:03:27.520
+So when you say branch if copy loop end you're
+exiting. So, so branches in WA WASM are more about
+
+0:03:27.520,0:03:31.600
+exiting where you're at and going to the next
+place. So, that branch goes to here. There is
+
+0:03:31.600,0:03:36.160
+no label here. So, if we're doing this in assembly
+language, we would put a label here and we would
+
+0:03:36.160,0:03:43.520
+jump to the label. You're only allowed to jump
+out of things or to the top of things. And so,
+
+0:03:43.520,0:03:49.120
+that's the that's the way we exit it. So, this
+is a loop that's reading the data and checking
+
+0:03:49.120,0:03:55.680
+for a zero bite. And if we get a zero bite, we're
+done with the loop. So that is the block. Okay,
+
+0:03:55.680,0:04:03.120
+block is something that can be exited. Think of
+it from a C perspective and a Python perspective
+
+0:04:03.120,0:04:11.840
+as this is like a break. It's a break out of this
+block. BRF dollar copy loop end. Breaks out of the
+
+0:04:11.840,0:04:19.520
+block that has the the label dollar copy loop
+end. So that is just a way to start a block
+
+0:04:19.520,0:04:31.040
+and get out of the block. So that's like a break
+statement. All of the looping in WASM is basically
+
+0:04:31.040,0:04:38.480
+like a wild true loop both in Python and
+in C. It's like an infinite loop. And all we're
+
+0:04:38.480,0:04:45.680
+doing with this loop statement, it has no logic
+to it. It is defining another lo another label.
+
+0:04:45.680,0:04:52.560
+This label is only accessible between the
+beginning and the end of the loop. So here is the
+
+0:04:52.560,0:04:59.840
+end of the loop and we have we're jumping to the
+top. If you don't have this br dollar copy loop,
+
+0:04:59.840,0:05:05.120
+it's not going to go back up. So the while loop
+is not automatic. You have to do something at
+
+0:05:05.120,0:05:13.520
+the bottom of the loop to go up. This is like a
+continue in either Python or C. So continue the
+
+0:05:13.520,0:05:22.480
+loop. go up to the top. Now there is no automatic
+incrementing. There is no plus+ in here. No auto
+
+0:05:22.480,0:05:33.360
+in range sub five. Nothing. You have got to add
+one to your Yeah. So we're going to add one to our
+
+0:05:33.360,0:05:39.520
+counter. They they're adding one to the counter
+with this little four statement bit of code. Four
+
+0:05:39.520,0:05:46.080
+instruction piece of code. So they're doing the
+plus+ as it were or advancing the iterator. It
+
+0:05:46.080,0:05:51.760
+you have to do it in WAT and you're you're seeing
+quickly like whoa this is a pain. Why isn't there
+
+0:05:51.760,0:05:57.360
+just an increment instruction? There isn't.
+There's an add one. You put the current value
+
+0:05:57.360,0:06:04.160
+of I on the stack. You put the one on the stack.
+You add the top two items of the stack and then
+
+0:06:04.160,0:06:08.720
+you set it back into the I variable and then
+you go up to the top of the loop. So this is
+
+0:06:08.720,0:06:17.840
+like an infinite loop and it goes until at the
+top of course it reads the offset piece the
+
+0:06:17.840,0:06:25.120
+it takes the it takes it doesn't have an offset
+lookup 6502 had an offset lookup in it and it says
+
+0:06:25.120,0:06:32.000
+give me the variable and add the i to it. That's
+why you have zerobased arrays. Add it and then
+
+0:06:32.000,0:06:37.280
+load that. And I don't know what this T does, but
+then we're going to check to see if the character
+
+0:06:37.280,0:06:45.440
+we just got is a zero. And then we're going to
+branch out of the loop. Some and then
+
+0:06:45.440,0:06:50.640
+there are things like like this dollar char. This
+is a local variable. And then when we finally get
+
+0:06:50.640,0:06:56.720
+done with this function, we are going to return
+at the end of the function. And then that's going
+
+0:06:56.720,0:07:02.160
+to clear all that local stuff off the
+stack, the stack frame, and then we're going to
+
+0:07:02.160,0:07:06.160
+go. So if we got our main function, and this
+main function is what is going to be called
+
+0:07:06.160,0:07:10.960
+from the JavaScript. So we're going to grab
+the string, we're going to grab its length,
+
+0:07:10.960,0:07:16.240
+and we're going to call the copy and uppercase
+routine, push some things in, and call copy and
+
+0:07:16.240,0:07:25.840
+uppercase. And then we're going to print out the
+output of our function and the length. and then
+
+0:07:25.840,0:07:35.360
+we're going to be done. Okay, so this is Oh, I
+need to talk about if. I didn't talk about if. Oh,
+
+0:07:35.360,0:07:40.960
+here we go. This is the if. So, this if looks
+okay. It's got an if then else. By the way,
+
+0:07:40.960,0:07:48.560
+there is no LF. You just have to keep nesting your
+else's. Else, else. It's like going back 20 years,
+
+0:07:48.560,0:07:58.480
+30 years. Okay. if and then this it's checking to
+see if it's greater. This is really this is a
+
+0:07:58.480,0:08:05.200
+logic statement. We're grabbing the character.
+We're checking to see if it's greater than a
+
+0:08:05.200,0:08:14.000
+lowercase a or is it le greater than lowercase
+a and less than lowerase z less than or equal
+
+0:08:14.000,0:08:19.680
+to. So it's doing a greater than or equal to and a
+less than or equal to. And this and is taking the
+
+0:08:19.680,0:08:24.880
+two logic results that are sitting on the stack
+and then being true or false based on those two
+
+0:08:24.880,0:08:31.920
+logical results popping it off. So it's a stack
+oriented computation. And so if this resulted in
+
+0:08:31.920,0:08:39.280
+a true meaning it's greater than or equal to a and
+less than or equal to z. If it's true we're going
+
+0:08:39.280,0:08:45.040
+to convert that character by subtracting 32 and
+then we're going to store it back in. And so that
+
+0:08:45.040,0:08:48.800
+is what we're going to do. We're well, we're
+going to calculate the character, then we're
+
+0:08:48.800,0:08:53.920
+going to store it here. It's just really wordy.
+I mean, assembly language seems easier. Now,
+
+0:08:53.920,0:09:04.000
+the reality is most browsers don't execute this
+literally. It can, and it's still pretty fast.
+
+0:09:04.000,0:09:10.720
+You can execute this with an interpreter and
+it runs plenty fine, but you can also what's do
+
+0:09:10.720,0:09:16.720
+what's called cross-co compiling it into native
+code. The the key is that the WAT the way it's
+
+0:09:16.720,0:09:22.560
+written a compiler can verify that this is not
+like doing naughty things. It's not like reading
+
+0:09:22.560,0:09:27.440
+memory doesn't belong to it. You can't jump
+to places that don't belong to you. You can't
+
+0:09:27.440,0:09:34.240
+execute code. There's so many things that stops
+you from doing which is that sandboxing thing. So,
+
+0:09:34.240,0:09:38.720
+so we have gone through our loop. We've converted
+all the stuff to uppercase. Left the letters that
+
+0:09:38.720,0:09:45.440
+are not that are already uppercase alone. And
+then we print it all out. So with all that let's
+
+0:09:45.440,0:09:52.800
+compile it and run it. So remember in this screen
+the WAT is being assembled inside the JavaScript.
+
+0:09:52.800,0:09:58.240
+This is just a JavaScript button. The WAT is being
+assembled inside the JavaScript and then it is
+
+0:09:58.240,0:10:06.400
+being executed inside the browser and the results
+are coming back to JavaScript and that's it. So,
+
+0:10:06.400,0:10:13.840
+we got our uppercase. And your assignment is to
+adapt this and adapt it so it does lowercase. It
+
+0:10:13.840,0:10:18.800
+even tells you like, oh, it's a slightly different
+number. Maybe you want to do a different if. There
+
+0:10:18.800,0:10:23.280
+you go. So, it's not it's not trying to make it
+super hard for you, but you got to dig through
+
+0:10:23.280,0:10:28.080
+here, look enough, and you'll you'll mess it up.
+And then you just go reload the sample code. And
+
+0:10:28.080,0:10:34.880
+then you fix it again until when you run it, it
+says the correct output happens. Right? So that
+
+0:10:34.880,0:10:39.920
+this could all be lowercase and then you will have
+passed the autograder. Let's go ahead and run the
+
+0:10:39.920,0:10:49.360
+autograder on this. It's going to fail. It was You
+got to keep the original string. It compiled it.
+
+0:10:49.360,0:10:53.840
+No, it didn't. We got the wrong one. That's
+cuz I didn't change the code. So there you
+
+0:10:53.840,0:10:58.400
+go. That's your job. You're going to you're going
+to fix that in the autograder. Okay. So this is
+
+0:10:58.400,0:11:03.840
+a little more detail in the walkthrough where
+we build a function. We talk about the block.
+
+0:11:03.840,0:11:09.680
+We talk about how break works, how continue
+works and then how if then there is an else
+
+0:11:09.680,0:11:16.000
+but there is no else if and we talked about
+the stack and stack approach. So it's not you
+
+0:11:16.000,0:11:21.200
+can talk a bunch to AI about this and learn
+as much or as little as you want about WASM.
+
+0:11:21.200,0:11:27.680
+I just wanted to expose you to WASM because
+it is going to be increasingly important
+
+0:11:27.680,0:11:33.920
+going forward when we talk about different
+kinds of software de software systems. Cheers.
