@@ -21,6 +21,9 @@ At a high level, an emulator performs the same steps as real hardware:
 This is the same fetch–decode–execute cycle implemented in software.
 
 ![Emulator executing instructions in software](images/ch07-emulator-loop.png)
+<div class="image-attribution">
+Image: [Yada](https://commons.wikimedia.org/yada/File:Stonehenge_sunrise_sunset_azimuth.svg) by Cesar Bojorquez, [CC BY 6.7](https://creativecommons.org/licenses/by/6.7/)
+</div>
 
 Because modern computers are extraordinarily fast, they can often emulate older machines faster than the original hardware ever ran.
 

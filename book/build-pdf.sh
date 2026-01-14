@@ -39,6 +39,67 @@ pandoc \
   --resource-path=".:images:chapters" \
   -o build/ca4e.tex
 
+# 1b) Post-process LaTeX to add image credits section
+# Extract attributions from markdown and add credits before \printindex
+if grep -q 'class="image-attribution"' chapters/*.md 2>/dev/null && ! grep -q "\\chapter{Image Credits}" build/ca4e.tex; then
+  # Build credits section by extracting attributions from markdown
+  CREDITS_TMP=$(mktemp)
+  echo "\\chapter{Image Credits}" > "$CREDITS_TMP"
+  echo "\\begin{itemize}" >> "$CREDITS_TMP"
+  
+  # Extract attributions: process each markdown file
+  ATTRIB_NUM=0
+  for md_file in chapters/*.md; do
+    # Look for attribution divs and extract the content line (line after the div tag)
+    IN_DIV=false
+    while IFS= read -r line; do
+      if [[ "$line" =~ class=\"image-attribution\" ]]; then
+        IN_DIV=true
+        continue
+      fi
+      if [[ "$IN_DIV" == true ]] && [[ -n "$line" ]] && [[ ! "$line" =~ ^\</div ]]; then
+        ATTRIB_NUM=$((ATTRIB_NUM + 1))
+        # Clean up the attribution text: remove HTML tags, convert markdown links to LaTeX \href
+        # Use perl for more reliable regex replacement
+        CLEANED=$(echo "$line" | \
+          sed 's/<[^>]*>//g' | \
+          perl -pe 's/\[([^\]]+)\]\(([^)]+)\)/\\href{$2}{$1}/g' | \
+          sed 's/^[[:space:]]*//' | \
+          sed 's/[[:space:]]*$//')
+        # Escape special LaTeX characters in \href URLs only
+        CLEANED=$(echo "$CLEANED" | perl -pe 's/\\href\{([^}]+)\}/\\href{'$(echo '\1' | sed 's/_/\\_/g' | sed 's/#/\\#/g' | sed 's/%/\\%/g')'}/g')
+        echo "\\item[$ATTRIB_NUM] $CLEANED" >> "$CREDITS_TMP"
+        IN_DIV=false
+      fi
+      if [[ "$line" =~ ^\</div ]]; then
+        IN_DIV=false
+      fi
+    done < "$md_file"
+  done
+  
+  echo "\\end{itemize}" >> "$CREDITS_TMP"
+  
+  # Insert credits before \printindex
+  if grep -q "\\printindex" build/ca4e.tex && [[ -s "$CREDITS_TMP" ]] && [[ "$ATTRIB_NUM" -gt 0 ]]; then
+    # Use awk with proper escaping - read credits from file
+    awk -v credits_file="$CREDITS_TMP" '
+      /\\printindex/ {
+        while ((getline line < credits_file) > 0) {
+          print line
+        }
+        close(credits_file)
+        print
+        next
+      }
+      { print }
+    ' build/ca4e.tex > build/ca4e.tex.tmp && mv build/ca4e.tex.tmp build/ca4e.tex
+  else
+    echo "Skipping credits: printindex=$(grep -c '\\printindex' build/ca4e.tex), file_size=$(wc -c < "$CREDITS_TMP"), attrib_count=$ATTRIB_NUM"
+  fi
+  
+  rm -f "$CREDITS_TMP"
+fi
+
 # Ensure images directory is accessible from build/ directory
 # XeLaTeX runs with -output-directory=build, so it needs images/ in build/
 if [[ ! -e build/images ]]; then
