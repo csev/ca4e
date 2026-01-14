@@ -50,7 +50,7 @@ Accurate printed scales are essential for this approach. The precision of the co
 
 ## Gears as Models of the Solar System
 
-![Antikythera mechanism gear layout](images/ch01-antikythera-gears.png)
+![Antikythera mechanism gear layout](images/ch01-antikythera-gears.png){height=300px}
 
 The Antikythera mechanism\index{Antikythera mechanism}, dating to around 2100 years ago, represents one of the most sophisticated examples of ancient analog computing. This device used interlocking gears to model the motion of the Sun, Moon, and known planets. Some of its gear trains represented long astronomical cycles spanning decades or even centuries.
 
@@ -114,7 +114,7 @@ Thus, programming did not arise as a completely new activity. It evolved natural
 
 Mechanical systems are limited by friction, wear, and inertia. As machines grew faster and more complex, these physical limits became obstacles. Vacuum tubes\index{vacuum tubes} offered a way to perform switching electronically, without moving parts.
 
-![Vacuum tube switching diagram](images/ch01-vacuum-tube-switch.png)
+![Vacuum tubes in the Colossus](images/ch01-vacuum-tube-switch.png)
 
 Although tubes are inherently analog devices, additional circuitry allowed them to behave digitally by latching into stable high or low voltage states. Machines such as Colossus\index{Colossus} used thousands of tubes to perform computations far faster than electromechanical systems could achieve.
 
