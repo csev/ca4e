@@ -12,7 +12,36 @@ Numbers</title>
     .ca4e-nav { display:flex; gap:1rem; align-items:center; margin: 1.25rem 0; padding:.75rem 0; border-top:1px solid #ddd; border-bottom:1px solid #ddd; }
     .ca4e-spacer { flex: 1; }
     .ca4e-nav a { text-decoration:none; }
+    img { max-height: 200px; width: auto; height: auto; display: block; margin: 0 auto; }
+    figure { margin: 1.5em 0; }
+    figcaption { text-align: center; font-style: italic; margin-top: 0.5em; }
   </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var chapterNum = '1';
+      var sectionNum = 0;
+      var figureNum = 0;
+      
+      // Number h2 sections
+      var h2s = document.querySelectorAll('h2');
+      h2s.forEach(function(h2) {
+        sectionNum++;
+        var text = h2.textContent;
+        h2.textContent = chapterNum + '.' + sectionNum + ' ' + text;
+      });
+      
+      // Number figures
+      var figures = document.querySelectorAll('figure');
+      figures.forEach(function(fig) {
+        figureNum++;
+        var caption = fig.querySelector('figcaption');
+        if (caption) {
+          var text = caption.textContent;
+          caption.innerHTML = '<strong>Figure ' + chapterNum + '.' + figureNum + ':</strong> ' + text;
+        }
+      });
+    });
+  </script>
 </head>
 <body>
 <nav class="ca4e-nav" aria-label="Chapter navigation">
@@ -72,7 +101,7 @@ at particular times of year. These structures functioned as durable,
 physical data sets that could be read simply by observing the
 environment.</p>
 <figure>
-<img src="images/ch01-stonehenge-sunrise.png"
+<img src="images/ch01-stonehenge-sunrise.png" height="150"
 alt="Seasonal sunrise and sunset alignment at Stonehenge" />
 <figcaption aria-hidden="true">Seasonal sunrise and sunset alignment at
 Stonehenge</figcaption>
@@ -119,7 +148,7 @@ manufacturing process becomes part of the calculation.</p>
 <h2 id="gears-as-models-of-the-solar-system">Gears as Models of the
 Solar System</h2>
 <figure>
-<img src="images/ch01-antikythera-gears.png"
+<img src="images/ch01-antikythera-gears.png" height="200"
 alt="Antikythera mechanism gear layout" />
 <figcaption aria-hidden="true">Antikythera mechanism gear
 layout</figcaption>
@@ -226,9 +255,8 @@ obstacles. Vacuum tubes offered a way to perform switching
 electronically, without moving parts.</p>
 <figure>
 <img src="images/ch01-vacuum-tube-switch.png"
-alt="Vacuum tube switching diagram" />
-<figcaption aria-hidden="true">Vacuum tube switching
-diagram</figcaption>
+alt="Vacuum tubes in the Colossus" />
+<figcaption aria-hidden="true">Vacuum tubes in the Colossus</figcaption>
 </figure>
 <p>Although tubes are inherently analog devices, additional circuitry
 allowed them to behave digitally by latching into stable high or low

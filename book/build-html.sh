@@ -15,6 +15,19 @@ TITLE_FALLBACK="${TITLE_FALLBACK:-Computer Architecture for Everybody}"
 
 mkdir -p "$OUTDIR"
 
+# Copy or link images directory to output directory so HTML can reference them
+if [[ ! -e "$OUTDIR/images" ]]; then
+  # Try relative symlink first, fall back to absolute symlink or copy
+  OUTDIR_ABS="$(cd "$OUTDIR" && pwd)"
+  IMAGES_ABS="$ROOT/images"
+  rel_path=$(python3 -c "import os.path; print(os.path.relpath('$IMAGES_ABS', '$OUTDIR_ABS'))" 2>/dev/null)
+  if [[ -n "$rel_path" ]]; then
+    ln -s "$rel_path" "$OUTDIR/images" 2>/dev/null || ln -s "$IMAGES_ABS" "$OUTDIR/images" 2>/dev/null || cp -r "$ROOT/images" "$OUTDIR/images"
+  else
+    ln -s "$IMAGES_ABS" "$OUTDIR/images" 2>/dev/null || cp -r "$ROOT/images" "$OUTDIR/images"
+  fi
+fi
+
 if ! command -v pandoc >/dev/null 2>&1; then
   echo "ERROR: pandoc not found. Install with: brew install pandoc"
   exit 1
@@ -97,7 +110,36 @@ $endfor$
     .ca4e-nav { display:flex; gap:1rem; align-items:center; margin: 1.25rem 0; padding:.75rem 0; border-top:1px solid #ddd; border-bottom:1px solid #ddd; }
     .ca4e-spacer { flex: 1; }
     .ca4e-nav a { text-decoration:none; }
+    img { max-height: 200px; width: auto; height: auto; display: block; margin: 0 auto; }
+    figure { margin: 1.5em 0; }
+    figcaption { text-align: center; font-style: italic; margin-top: 0.5em; }
   </style>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var chapterNum = '$chapter-number$';
+      var sectionNum = 0;
+      var figureNum = 0;
+      
+      // Number h2 sections
+      var h2s = document.querySelectorAll('h2');
+      h2s.forEach(function(h2) {
+        sectionNum++;
+        var text = h2.textContent;
+        h2.textContent = chapterNum + '.' + sectionNum + ' ' + text;
+      });
+      
+      // Number figures
+      var figures = document.querySelectorAll('figure');
+      figures.forEach(function(fig) {
+        figureNum++;
+        var caption = fig.querySelector('figcaption');
+        if (caption) {
+          var text = caption.textContent;
+          caption.innerHTML = '<strong>Figure ' + chapterNum + '.' + figureNum + ':</strong> ' + text;
+        }
+      });
+    });
+  </script>
 </head>
 <body>
 $body$
@@ -135,6 +177,7 @@ pandoc \
   --standalone \
   --template "$TEMPLATE" \
   --metadata title-prefix="$BOOK_TITLE" \
+  --resource-path=".:images:chapters" \
   "${CSS_ARGS[@]}" \
   -o "$OUTDIR/index.html"
 
@@ -164,6 +207,9 @@ for ((idx=0; idx<${#CHAPTERS[@]}; idx++)); do
   } > "$tmp"
 
   chap_title="$(title_for "$md")"
+  
+  # Extract chapter number from filename (e.g., ch01-origins.md -> 1)
+  chap_num=$((idx + 1))
 
   pandoc \
     ${METADATA_FILE:+$METADATA_FILE} \
@@ -173,6 +219,8 @@ for ((idx=0; idx<${#CHAPTERS[@]}; idx++)); do
     --template "$TEMPLATE" \
     --metadata title-prefix="$BOOK_TITLE" \
     --metadata pagetitle="$chap_title" \
+    --metadata chapter-number="$chap_num" \
+    --resource-path=".:images:chapters" \
     "${CSS_ARGS[@]}" \
     -o "$out_html"
 

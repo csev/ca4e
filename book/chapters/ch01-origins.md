@@ -22,7 +22,7 @@ From the earliest civilizations, careful observation of the sky revealed repeati
 
 Over time, physical structures were constructed to embody these patterns directly. Instead of writing numbers in tables, builders placed stones or architectural features so that sunlight or shadows would align at particular times of year. These structures functioned as durable, physical data sets that could be read simply by observing the environment.
 
-![Seasonal sunrise and sunset alignment at Stonehenge](images/ch01-stonehenge-sunrise.png)
+![Seasonal sunrise and sunset alignment at Stonehenge](images/ch01-stonehenge-sunrise.png){height=150px}
 
 ---
 
@@ -50,7 +50,7 @@ Accurate printed scales are essential for this approach. The precision of the co
 
 ## Gears as Models of the Solar System
 
-![Antikythera mechanism gear layout](images/ch01-antikythera-gears.png){height=300px}
+![Antikythera mechanism gear layout](images/ch01-antikythera-gears.png){height=200px}
 
 The Antikythera mechanism\index{Antikythera mechanism}, dating to around 2100 years ago, represents one of the most sophisticated examples of ancient analog computing. This device used interlocking gears to model the motion of the Sun, Moon, and known planets. Some of its gear trains represented long astronomical cycles spanning decades or even centuries.
 

@@ -38,6 +38,12 @@ pandoc \
   --resource-path=".:images:chapters" \
   -o build/ca4e.tex
 
+# Ensure images directory is accessible from build/ directory
+# XeLaTeX runs with -output-directory=build, so it needs images/ in build/
+if [[ ! -e build/images ]]; then
+  ln -s ../images build/images 2>/dev/null || cp -r images build/images
+fi
+
 if [[ "$BUILD_INDEX" == "true" ]]; then
   # 2) First LaTeX pass (creates .idx)
   xelatex -interaction=nonstopmode -halt-on-error -output-directory=build build/ca4e.tex
