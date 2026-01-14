@@ -1,0 +1,2569 @@
+\documentclass[11pt,oneside]{book}
+
+% --- Page geometry (KDP-friendly starting point) ---
+\usepackage[
+  paperwidth=6in,
+  paperheight=9in,
+  inner=0.85in,
+  outer=0.65in,
+  top=0.75in,
+  bottom=0.85in,
+  headheight=14pt,
+  headsep=18pt,
+  footskip=24pt
+]{geometry}
+
+% --- Fonts / Unicode ---
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+% Use widely-available macOS fonts by default.
+% You can customize these later if you install additional fonts.
+\setmainfont{TeX Gyre Pagella}
+\setsansfont{TeX Gyre Heros}
+\setmonofont{TeX Gyre Cursor}
+
+% --- Typography ---
+\usepackage{microtype}
+\usepackage{setspace}
+\setstretch{1.08}
+
+% --- Graphics ---
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% --- Global image sizing ---
+% Never let figures take over the page during drafting
+\setkeys{Gin}{width=\linewidth,height=0.55\textheight,keepaspectratio}
+
+% Pandoc helper (newer pandoc wraps images with \pandocbounded)
+\providecommand{\pandocbounded}[1]{#1}
+
+% --- Colors/links (print-friendly) ---
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+% Background color for code blocks
+\definecolor{shadecolor}{RGB}{245,247,249}
+
+% --- Code blocks (Pandoc) ---
+\usepackage{fancyvrb}
+\usepackage{fvextra}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{
+  breaklines=true,
+  breakanywhere=true,
+  commandchars=\\\{\},
+  fontsize=\small
+}
+\usepackage{framed}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+
+% --- Lists ---
+\usepackage{enumitem}
+\setlist{itemsep=0.25em,topsep=0.35em}
+
+% Pandoc tight lists
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% --- Headers/footers ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C]{\thepage}
+% Avoid headers on chapter opening pages
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \renewcommand{\headrulewidth}{0pt}
+  \fancyfoot[C]{\thepage}
+}
+
+% --- Pandoc variables and structure ---
+\title{Computer Architecture for Everybody}
+\usepackage{titling}
+\pretitle{\begin{center}\LARGE\bfseries}
+\posttitle{\par\end{center}\vskip 0.5em}
+\preauthor{\begin{center}\large}
+\postauthor{\par\end{center}}
+\predate{\begin{center}\large}
+\postdate{\par\end{center}\vskip 1.0em}
+
+\usepackage{makeidx}
+\makeindex
+
+\begin{document}
+
+% --- Title page ---
+\begin{titlepage}
+\centering
+{\LARGE\bfseries Computer Architecture for Everybody \par}
+\vspace{0.5em}
+{\Large From Stonehenge to Silicon \par}
+\vspace{1.5em}
+{\large Charles R. Severance \par}
+\vfill
+{\large 2026 \par}
+\end{titlepage}
+
+% --- Copyright page ---
+\thispagestyle{plain}
+\vspace*{\fill}
+{\small © 2026 Charles R. Severance \par}
+\vspace*{\fill}
+\clearpage
+
+% --- Front matter ---
+\frontmatter
+\tableofcontents
+\clearpage
+
+% --- Main matter ---
+\mainmatter
+\chapter{\texorpdfstring{From Stonehenge\index{Stonehenge} to Silicon:
+Why Computers Began with
+Numbers}{From Stonehenge to Silicon: Why Computers Began with Numbers}}\label{from-stonehenge-to-silicon-why-computers-began-with-numbers}
+
+\index{computer architecture}\index{numbers}
+
+Long before computers were used for communication, entertainment, or
+social interaction, they were built for something far more basic:
+measuring the world and predicting what would happen next. The earliest
+forms of computation were not abstract symbols stored in memory, but
+physical structures designed to model natural processes. These devices
+helped track the seasons, predict the motion of planets, guide
+travelers, and support engineering and trade. In this early period,
+computing was inseparable from mathematics and measurement, and numbers
+were the primary objects being manipulated.
+
+This focus on numerical calculation remained dominant for most of
+computing history. Until the late twentieth century, computers were
+rare, expensive, and primarily used for scientific, military, and
+industrial purposes. There was no internet, and few people interacted
+directly with computing machines. Only later did computers become tools
+for information exchange and personal communication. To understand
+modern computer architecture, it helps to begin with this earlier world,
+where computation meant physically transforming numbers.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Curved Motion and the Need for
+Prediction}\label{curved-motion-and-the-need-for-prediction}
+
+Much of the natural world moves along curves rather than straight lines.
+The arc of a thrown object, the path of the Moon across the sky, and the
+orbit of planets all follow curved trajectories. Predicting such motion
+is difficult\index{prediction}\index{astronomy} because small errors
+accumulate over time, and precise prediction requires repeated
+calculation. While the human brain is good at intuitive estimates,
+accurate forecasting requires systematic measurement and mathematical
+modeling.
+
+The practical need to predict motion---for agriculture,
+navigation\index{navigation}, and astronomy---drove the development of
+early computational tools. These tools were not general-purpose
+machines, but specialized devices that captured particular physical
+relationships and made them easier to reason about. Each device encoded
+a small piece of mathematics in wood, stone, or metal.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Astronomy and Physical Data
+Tables}\label{astronomy-and-physical-data-tables}
+
+From the earliest civilizations, careful observation of the sky revealed
+repeating patterns. The positions of the Sun, Moon, and stars changed in
+predictable ways over the course of days, months, and years. Recording
+these observations allowed calendars to be built, planting seasons to be
+planned, and ceremonial events to be scheduled.
+
+Over time, physical structures were constructed to embody these patterns
+directly. Instead of writing numbers in tables, builders placed stones
+or architectural features so that sunlight or shadows would align at
+particular times of year. These structures functioned as durable,
+physical data sets that could be read simply by observing the
+environment.
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth,height=1.5625in,keepaspectratio]{images/ch01-stonehenge-sunrise.png}
+\caption{Seasonal sunrise and sunset alignment at Stonehenge}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Stonehenge as a Measuring
+Device}\label{stonehenge-as-a-measuring-device}
+
+Stonehenge, constructed in several phases between roughly 5100 and 3600
+years ago, illustrates this idea clearly. The arrangement of stones
+aligns with sunrise and sunset positions that change throughout the
+year. By observing which stones line up with the Sun on a given day,
+seasonal transitions can be predicted.
+
+Rather than storing numbers, Stonehenge stored geometric relationships.
+Over many generations, observations were effectively ``written'' into
+the landscape. In modern terms, the structure can be thought of as a
+calibrated data table, built incrementally through centuries of
+refinement.
+
+Similar solar and lunar alignment structures exist across many cultures,
+from temples in India to monuments in Central America. All reflect the
+same underlying idea: physical construction can encode numerical
+patterns from nature.
+
+\begin{quote}
+Physical computing did not begin with machines. It began with
+architecture.
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Continuous Representations of
+Number}\label{continuous-representations-of-number}
+
+Many early computational devices represented numbers not as symbols, but
+as physical positions. A value might correspond to the angle of a gear,
+the distance of a slider, or the rotation of a dial. Because these
+values could vary smoothly, such systems are called continuous or
+analog\index{analog computing}.
+
+In these devices, mathematical relationships are built into geometry.
+Adding distances can perform multiplication when scales are logarithmic.
+Rotating disks can solve trigonometric problems by turning angles into
+lengths. Instead of executing arithmetic step by step, the device
+produces results through physical alignment.
+
+Accurate printed scales are essential for this approach. The precision
+of the computation depends directly on the precision of the markings and
+the mechanical stability of the device. In effect, the manufacturing
+process becomes part of the calculation.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Gears as Models of the Solar
+System}\label{gears-as-models-of-the-solar-system}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth,height=2.08333in,keepaspectratio]{images/ch01-antikythera-gears.png}
+\caption{Front of ``Fragment A'' of the Antikythera mechanism.}
+\end{figure}
+
+The Antikythera mechanism\index{Antikythera mechanism}, dating to around
+2100 years ago, represents one of the most sophisticated examples of
+ancient analog computing. This device used interlocking gears to model
+the motion of the Sun, Moon, and known planets. Some of its gear trains
+represented long astronomical cycles spanning decades or even centuries.
+
+Rather than calculating planetary positions numerically, the mechanism
+physically enacted the model of the cosmos that astronomers had
+developed. Turning a crank advanced time, and the gears moved
+accordingly. The computation occurred through mechanical interaction,
+not through written arithmetic.
+
+This illustrates a broader principle that remains true today: computing
+systems implement models of reality. Whether those models are built from
+bronze gears or silicon transistors, the purpose is the same---to
+predict behavior by simulating it.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Practical Analog Computing}\label{practical-analog-computing}
+
+\begin{figure}
+\centering
+\includegraphics[width=\linewidth,height=1.5625in,keepaspectratio]{images/ch01-sliderule-scales.png}
+\caption{Slide rule logarithmic scales}
+\end{figure}
+
+Analog computation did not remain confined to astronomy. Devices such as
+slide rules\index{slide rule} transformed multiplication into addition
+by using logarithmic scales. By aligning and sliding rulers, complex
+calculations could be performed quickly and reliably.
+
+A particularly practical example is the E6B flight
+computer\index{E6B flight computer}, still used by pilots to compute
+wind correction angles and ground speed. By rotating dials and aligning
+scales, trigonometric relationships are solved graphically. The device
+does not know anything about airplanes; it simply encodes geometric laws
+that apply to moving vectors.
+
+In each case, the key idea is that physical movement stands in for
+mathematical transformation. The device performs computation because its
+shape embodies mathematical relationships.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Discrete States and Digital
+Devices}\label{discrete-states-and-digital-devices}
+
+\index{digital}\index{discrete state}
+
+Not all physical computation is continuous. Some devices operate using
+discrete, stable states. A mechanical latch, for example, stays in one
+of two positions until enough force is applied to switch it. These
+stable configurations allow information to be stored physically.
+
+Clocks provide a clear example of digital behavior in mechanical
+systems. A pendulum provides regular timing, while ratchets and gears
+count discrete events. When one gear completes a full rotation, it
+advances the next gear, producing the familiar progression from seconds
+to minutes to hours.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch01-clock-carry.png}}
+\caption{Simple Adding Machine with Carry}
+\end{figure}
+
+This mechanism also introduces the concept of carry\index{carry}. When
+one digit overflows, the next digit is incremented. Mechanical systems
+must physically propagate this carry through connected components, a
+process that takes time and introduces delays. Similar effects still
+occur in electronic circuits, where signals must travel between
+components.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Iteration and Mechanical
+Automation}\label{iteration-and-mechanical-automation}
+
+\index{iteration}
+
+Once addition and counting are possible, repeated operations can be
+automated. Multiplication becomes repeated addition, and polynomial
+evaluation becomes a structured sequence of arithmetic steps. Adding
+motors or cranks allows machines to perform long sequences without human
+intervention.
+
+Charles Babbage's Difference
+Engine\index{Difference Engine}\index{Babbage, Charles}, designed in the
+nineteenth century, exploited this idea. It used repeated addition to
+approximate complex mathematical functions and generate accurate tables.
+Although technology at the time could not easily produce all the
+required parts, a complete version built in the late twentieth century
+demonstrated that the design itself was sound.
+
+\begin{quote}
+Architectural ideas often appear long before manufacturing technology
+can fully support them.
+\end{quote}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Human Computers and Early
+Programming}\label{human-computers-and-early-programming}
+
+\index{human computers}\index{programming}
+
+Before electronic machines became common, teams of people performed
+large calculations using mechanical aids and strict procedures. These
+workers were called computers, and their job was to execute long
+sequences of operations reliably.
+
+When electronic computers emerged, much of this procedural knowledge
+transferred directly. Programming languages such as FORTRAN reflected
+existing mathematical workflows, including loops and accumulation of
+results. Writing a program was, in many ways, formalizing what human
+computers had already been doing manually.
+
+Thus, programming did not arise as a completely new activity. It evolved
+naturally from structured numerical work that had existed for
+generations.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{From Mechanical to Electronic
+Switching}\label{from-mechanical-to-electronic-switching}
+
+Mechanical systems are limited by friction, wear, and inertia. As
+machines grew faster and more complex, these physical limits became
+obstacles. Vacuum tubes\index{vacuum tubes} offered a way to perform
+switching electronically, without moving parts.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch01-vacuum-tube-switch.png}}
+\caption{Vacuum tubes in the Colossus}
+\end{figure}
+
+Although tubes are inherently analog devices, additional circuitry
+allowed them to behave digitally by latching into stable high or low
+voltage states. Machines such as Colossus\index{Colossus} used thousands
+of tubes to perform computations far faster than electromechanical
+systems could achieve.
+
+Heat and power consumption remained serious challenges, but electronic
+switching marked a fundamental shift. Computation was no longer
+constrained by mechanical motion.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Why Architecture Begins with
+Numbers}\label{why-architecture-begins-with-numbers}
+
+Across thousands of years, computational devices were developed to
+support astronomy, navigation, engineering, and accounting. These
+systems manipulated numbers that represented physical quantities: time,
+distance, angle, and mass. The architectural ideas that
+emerged---counting, carrying, iteration, state, and switching---remain
+central to computer design today.
+
+Only later did computers become tools for processing text, images, and
+communication. Those capabilities were built on top of numerical
+foundations that had already been refined through centuries of physical
+computing devices.
+
+Understanding this origin helps explain why modern processors still
+devote most of their structure to arithmetic and control of repeated
+operations.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{What Comes Next}\label{what-comes-next}
+
+The transition from mechanical and electronic switching to solid-state
+devices\index{transistor}\index{solid-state} transformed both the speed
+and scale of computation. In the next chapter, attention turns to how
+transistors replaced tubes and gears, and how tiny electrical switches
+became the building blocks of modern computer systems.
+
+\chapter{From Tubes to Transistors: How Solid-State Electronics Changed
+Everything}\label{from-tubes-to-transistors-how-solid-state-electronics-changed-everything}
+
+The earliest electronic computers replaced mechanical motion with
+electrical switching, but they still relied on bulky, fragile components
+that consumed large amounts of power. These components, called vacuum
+tubes or valves, made it possible to build fully electronic machines,
+yet they also imposed severe limits on speed, size, and reliability. The
+transition from tubes to transistors did far more than improve existing
+designs---it reshaped what computers could be and made modern computing
+possible.
+
+This chapter follows that transition. It begins with electronic
+amplification, moves through the physics of semiconductors, and ends
+with logic gates built from complementary transistor pairs. Along the
+way, the story shifts from analog behavior to digital abstraction,
+laying the groundwork for everything that follows in computer
+architecture.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Electronic Switching with Vacuum
+Tubes}\label{electronic-switching-with-vacuum-tubes}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch02-vacuum-tube-triode.png}}
+\caption{Vacuum tube triode structure and electron flow}
+\end{figure}
+
+Vacuum tubes were the first practical electronic devices capable of
+amplifying and switching signals. In the United Kingdom they were
+commonly called valves, a name that reflects their function: controlling
+the flow of electrons much like a valve controls the flow of water.
+Invented in the early twentieth century, tubes were originally developed
+to amplify weak analog signals, especially for long‑distance telephone
+communication, where signals had to be boosted every few miles.
+
+By adjusting the design of a tube, engineers could make it behave more
+like a switch than an amplifier. When the input voltage crossed a
+threshold, the output would move rapidly from low to high voltage. This
+made it possible to represent logical states using electrical levels:
+low voltage for zero and high voltage for one.
+
+Electronic switching was dramatically faster than mechanical relays, and
+it had no moving parts. However, tubes required internal heaters to
+release electrons from the cathode, which meant high power consumption
+and significant heat. They were also physically large, expensive to
+manufacture, and prone to failure over time.
+
+Despite these limitations, tubes enabled the first generation of fully
+electronic computers, including machines such as Colossus, which
+performed calculations at speeds that mechanical systems could not
+approach.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{The Limits of Tube-Based
+Computing}\label{the-limits-of-tube-based-computing}
+
+As computers grew larger and more complex, the drawbacks of vacuum tubes
+became increasingly serious. Thousands of tubes meant thousands of
+potential failure points. Cooling systems became massive engineering
+projects in their own right. Electrical power consumption limited how
+dense and how fast circuits could become.
+
+The fundamental problem was not the logic itself, but the physical
+mechanism used to implement it. A better switching device was
+needed---one that did not rely on heating metal structures or
+maintaining vacuum environments.
+
+That solution emerged from solid-state physics.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Semiconductors and Controlled
+Conductivity}\label{semiconductors-and-controlled-conductivity}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch02-semiconductor-doping.png}}
+\caption{Crystal lattice with P-type and N-type regions}
+\end{figure}
+
+Most materials fall into one of two categories when it comes to
+electricity: conductors, which allow current to flow easily, and
+insulators, which resist current strongly. Semiconductors occupy the
+middle ground. Under the right conditions, they can be made to conduct
+or block current in controlled ways.
+
+Silicon, one of the most common elements in the Earth's crust, becomes
+useful for electronics when small amounts of other elements are added to
+it. This process, called doping, changes how electrons move through the
+crystal lattice. Regions with extra electrons are called N-type, while
+regions missing electrons are called P-type.
+
+When these regions meet, electrical behavior emerges that can be
+precisely controlled by external voltages. At the boundaries between
+P-type and N-type material, electric fields form that regulate the
+movement of charge carriers. These microscopic interactions make it
+possible to build devices that switch and amplify signals without moving
+parts or heaters.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Transistors as Electronic
+Switches}\label{transistors-as-electronic-switches}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch02-transistor-evolution.png}}
+\caption{First point-contact transistor and modern MOSFET comparison}
+\end{figure}
+
+The transistor was developed as a solid-state replacement for the triode
+vacuum tube. Like tubes, transistors could amplify signals and could
+also be designed to behave as switches. But unlike tubes, transistors
+were small, required little power, and generated far less heat.
+
+Early transistors were built using bipolar junction designs, where
+current flowing through one region controlled current in another. Later
+designs used metal-oxide-semiconductor structures, where an electric
+field at a control terminal called the gate regulated conduction through
+a channel of semiconductor material.
+
+In both cases, the key property was the same: a small input signal could
+reliably control a larger output current. This allowed transistors to
+serve as building blocks for both analog amplifiers and digital logic
+circuits.
+
+As manufacturing techniques improved, transistors became smaller,
+faster, and cheaper. What began as laboratory prototypes soon became
+mass-produced components found in radios, calculators, and eventually
+computers.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Analog Amplifiers and Digital
+Switching}\label{analog-amplifiers-and-digital-switching}
+
+Transistors did not immediately replace tubes in all applications. Audio
+amplification, for example, has long relied on both technologies, and
+some musicians and audio engineers still prefer tube-based amplifiers
+for their characteristic distortion patterns.
+
+However, digital logic places very different demands on electronic
+components. In digital systems, what matters most is not the precise
+shape of a waveform, but whether a signal is interpreted as high or low.
+Designs that move quickly and decisively between these two states are
+far more useful than those that reproduce subtle analog variations.
+
+To support digital operation, transistor designs were tuned to behave
+like fast, reliable switches rather than smooth amplifiers. Circuits
+were engineered so that small deviations in input voltage would be
+corrected at the output, restoring clean logical values. This behavior,
+called signal regeneration, is essential for building large digital
+systems where noise and small errors would otherwise accumulate.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{NMOS, PMOS, and Complementary
+Pairs}\label{nmos-pmos-and-complementary-pairs}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch02-nmos-pmos.png}}
+\caption{NMOS and PMOS transistor symbols and conduction paths}
+\end{figure}
+
+Different transistor structures conduct under different conditions. NMOS
+transistors conduct when their gate voltage is high, while PMOS
+transistors conduct when their gate voltage is low. Each type has
+advantages and disadvantages when used alone.
+
+Early integrated circuits often used only one type of transistor,
+resulting in designs that consumed power even when not switching and
+generated significant heat. As chip densities increased, this became a
+serious limitation.
+
+The solution was to pair NMOS and PMOS transistors in complementary
+configurations. In such arrangements, when one transistor is on, the
+other is off. This drastically reduces static power consumption and
+improves switching behavior. The resulting technology is called CMOS,
+short for Complementary Metal‑Oxide‑Semiconductor.
+
+Once CMOS manufacturing became practical in the late twentieth century,
+it transformed computer design. Entire processors could be placed on
+single chips, power requirements dropped dramatically, and circuit
+densities increased by orders of magnitude.
+
+From this point forward, nearly all digital logic in mainstream
+computing has been built using CMOS technology.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{From Transistors to Logic
+Gates}\label{from-transistors-to-logic-gates}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch02-cmos-not-gate.png}}
+\caption{CMOS inverter layout showing pull-up and pull-down networks}
+\end{figure}
+
+While circuits are built from transistors, designers rarely think in
+terms of individual switching devices when creating complex systems.
+Instead, transistors are grouped into higher-level structures called
+logic gates. A gate accepts one or more binary inputs and produces a
+binary output according to a logical rule.
+
+The simplest gate is the inverter, or NOT gate, which produces the
+opposite of its input. In CMOS, an inverter is built from one NMOS
+transistor and one PMOS transistor arranged so that exactly one conducts
+at any time. When the input is low, the PMOS transistor pulls the output
+high. When the input is high, the NMOS transistor pulls the output low.
+
+This complementary behavior provides fast switching and low power usage,
+making it ideal for large-scale digital systems.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Building Complexity from Simple
+Gates}\label{building-complexity-from-simple-gates}
+
+Once reliable gates are available, more complex logical functions can be
+constructed by combining them. Gates such as AND, OR, and exclusive OR
+implement familiar logical operations. Other gates, such as NAND and
+NOR, are especially important because entire digital systems can be
+built using only one of these gate types.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch02-nand-nor-layout.png}}
+\caption{NAND and NOR gate transistor-level structures}
+\end{figure}
+
+Designing digital circuits at the gate level allows engineers to reason
+about behavior using binary logic instead of voltage levels and
+transistor physics. This abstraction makes it possible to build systems
+containing billions of transistors without managing each device
+individually.
+
+From half adders and full adders to registers and processors, nearly
+every component in a computer can be described as an arrangement of
+logic gates operating in synchronized patterns.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Why CMOS Made Modern Computers
+Possible}\label{why-cmos-made-modern-computers-possible}
+
+Before CMOS, logic circuits were relatively slow, generated large
+amounts of heat, and could not be densely packed. Computers filled rooms
+and required elaborate cooling and power infrastructure. With the rise
+of CMOS, these constraints relaxed dramatically.
+
+As transistor sizes shrank and manufacturing improved, entire central
+processing units moved from cabinets to circuit boards, and then onto
+single integrated chips. Power efficiency improved, clock speeds
+increased, and reliability soared.
+
+This shift did not change the logical structure of computation, but it
+changed the physical feasibility of building large and fast systems. The
+same architectural ideas---state, control, and iteration---could now be
+implemented at scales that earlier engineers could only imagine.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Summary: Solid-State Foundations of Digital
+Logic}\label{summary-solid-state-foundations-of-digital-logic}
+
+The move from vacuum tubes to transistors replaced fragile, power-hungry
+components with small, efficient solid-state devices. Advances in
+semiconductor physics and manufacturing enabled reliable electronic
+switching without mechanical motion or heated filaments.
+
+Complementary transistor designs made CMOS the dominant technology for
+digital logic, allowing dense, low-power circuits to become practical.
+By grouping transistors into logic gates, designers gained an
+abstraction that supports the construction of complex systems without
+constant reference to underlying physics.
+
+With these foundations in place, attention can now shift from individual
+devices to how large collections of gates are organized into functional
+computing units.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{What Comes Next}\label{what-comes-next-1}
+
+With solid-state logic established, the next step is to explore how
+gates are combined into arithmetic circuits and memory structures. The
+following chapter examines how simple logical components are assembled
+into adders, registers, and the building blocks of processors.
+
+\chapter{Very Large Scale Integration: From Individual Devices to Entire
+Chips}\label{very-large-scale-integration-from-individual-devices-to-entire-chips}
+
+The invention of the transistor made electronic switching reliable and
+efficient, but early circuits still consisted of individual components
+wired together on circuit boards. Each transistor, resistor, and
+capacitor had to be manufactured separately and then connected by hand
+or by automated assembly. While this approach worked for small systems,
+it quickly became impractical as circuits grew more complex.
+
+Very Large Scale Integration (VLSI) describes the set of technologies
+that made it possible to place enormous numbers of transistors onto a
+single piece of silicon. Instead of assembling computers from individual
+components, entire processors could be manufactured as unified physical
+systems. This shift did not merely improve performance; it fundamentally
+changed how computers were designed, built, and scaled.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{From Discrete Components to Integrated
+Circuits}\label{from-discrete-components-to-integrated-circuits}
+
+Early transistor-based electronics were constructed much like mechanical
+systems: individual parts were mounted on boards and connected with
+wires or metal traces. Even when integrated circuits first appeared,
+they typically contained only a handful of transistors or logic gates.
+
+These early chips reduced size and improved reliability, but they did
+not yet enable full processors to be placed on a single device. Complex
+systems still required many chips working together, with signals
+traveling across boards and connectors. Speed was limited by how fast
+electrical signals could move between packages, and cost increased with
+every additional component.
+
+The next major leap required changing not just circuit design, but
+manufacturing itself.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Planar Transistors and Two-Dimensional
+Manufacturing}\label{planar-transistors-and-two-dimensional-manufacturing}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch03-planar-transistor.png}}
+\caption{Planar transistor cross-section and surface fabrication}
+\end{figure}
+
+Before the 1960s, transistors were often built as small
+three-dimensional structures that had to be individually assembled and
+wired. This made large-scale manufacturing slow, expensive, and
+difficult to automate.
+
+The planar transistor process, developed at Fairchild Semiconductor,
+transformed transistor fabrication into a two-dimensional surface
+process. Instead of assembling parts, chemical and photographic
+techniques were used to shape transistor structures directly on the
+surface of silicon wafers.
+
+By depositing materials in layers and selectively removing regions using
+masks, entire arrays of transistors could be created simultaneously.
+This approach allowed thousands, and eventually billions, of devices to
+be produced in a single manufacturing run.
+
+Planar fabrication made integration scalable.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Wafers, Masks, and
+Photolithography}\label{wafers-masks-and-photolithography}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch03-silicon-wafer-dies.png}}
+\caption{Silicon wafer with multiple die patterns}
+\end{figure}
+
+Modern chip manufacturing begins with thin circular slices of silicon
+called wafers. Each wafer contains many identical copies of a chip
+design, arranged in a grid pattern. After fabrication, the wafer is cut
+into individual chips, each of which becomes a processor, memory device,
+or controller.
+
+Patterns are transferred onto wafers using photolithography. In this
+process, light-sensitive chemicals are exposed through precisely
+designed masks. Each mask defines where material will be added, removed,
+or altered during that step of fabrication.
+
+Multiple masks are used in sequence to build up complex
+three-dimensional structures from stacked layers. Although the
+manufacturing process is layered, the design itself is typically
+described as a two-dimensional layout, where different materials occupy
+specific regions and intersections.
+
+This manufacturing model is what allows enormous numbers of transistors
+to be created with extremely high consistency.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Growth of Transistor Density Over
+Time}\label{growth-of-transistor-density-over-time}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch03-transistor-growth.png}}
+\caption{Historical growth of transistor counts on processors}
+\end{figure}
+
+Once planar manufacturing was established, transistor counts began to
+grow rapidly. The Intel 4004 microprocessor, released in 1971, contained
+approximately 2,300 transistors and was the first commercially available
+single-chip general-purpose processor.
+
+Over the following decades, transistor counts increased by orders of
+magnitude. By the early 2000s, chips contained billions of transistors.
+Modern graphics processors and specialized accelerators now contain tens
+or even hundreds of billions of devices, and experimental wafer-scale
+systems integrate trillions of transistors across entire wafers.
+
+This steady growth is often associated with Moore's Law, an observation
+that transistor density tends to double over fixed time intervals. While
+physical limits now constrain how small transistors can become,
+integration remains the defining feature of modern computing hardware.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Designing with Layout, Not
+Wires}\label{designing-with-layout-not-wires}
+
+As transistor counts increased, manual wiring became impossible.
+Instead, designers describe circuits using layout patterns that specify
+where materials will be placed on the wafer.
+
+VLSI layout tools allow engineers to design using layers that represent
+different physical materials:
+
+\begin{itemize}
+\tightlist
+\item
+  metal for conductors\\
+\item
+  doped silicon regions for transistor channels\\
+\item
+  polysilicon for control gates
+\end{itemize}
+
+When certain layers cross, transistors are formed automatically by the
+manufacturing process. Vertical connections between layers are created
+using structures called vias, which allow signals to move between wiring
+layers.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch03-vlsi-layers.png}}
+\caption{Layered VLSI layout showing metal, diffusion, and polysilicon}
+\end{figure}
+
+Rather than drawing individual transistors explicitly, designers arrange
+geometric regions whose interactions produce the desired electrical
+behavior. Logical structure emerges from physical geometry.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{From Layout to Logic Gates}\label{from-layout-to-logic-gates}
+
+Just as transistors are grouped into logic gates in circuit design,
+layout patterns are arranged to produce gate behavior at the physical
+level.
+
+A CMOS inverter, for example, is created by arranging one PMOS and one
+NMOS transistor so that exactly one conducts for any input value. When
+input voltage is low, the PMOS pulls the output high. When input voltage
+is high, the NMOS pulls the output low.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch03-vlsi-not-layout.png}}
+\caption{CMOS inverter layout in VLSI form}
+\end{figure}
+
+More complex gates such as NAND and NOR are built by combining multiple
+transistors in series and parallel arrangements. The same logical
+relationships studied in gate diagrams appear again in physical form as
+geometric structures on silicon.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch03-vlsi-nand-layout.png}}
+\caption{CMOS NAND gate VLSI layout}
+\end{figure}
+
+This repetition of structure across abstraction levels is one of the
+defining characteristics of computer architecture: logical design
+mirrors physical implementation.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Design Tools and Educational
+Models}\label{design-tools-and-educational-models}
+
+Professional VLSI design requires sophisticated tools that model
+electrical behavior, timing, power consumption, and manufacturing
+constraints. One of the most widely used educational tools for learning
+layout is the open-source Magic VLSI system, originally developed at
+Berkeley in the early 1980s and still widely used in academic
+instruction.
+
+Educational layout environments simplify many aspects of real
+fabrication. They may allow layer overlaps or ignore detailed spacing
+rules that would be impossible to manufacture reliably. These
+simplifications make it easier to understand core ideas, even if the
+resulting layouts would not be suitable for commercial fabrication.
+
+Simplified emulators and browser-based tools used for instruction focus
+on conceptual correctness rather than full physical accuracy. They
+illustrate how geometry produces logical behavior without modeling every
+manufacturing constraint.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Why Integration Changes
+Architecture}\label{why-integration-changes-architecture}
+
+When entire systems fit onto single chips, communication between
+components becomes far faster and more reliable. Signals no longer need
+to traverse long board traces or pass through connectors between
+packages. Memory, arithmetic units, and control logic can be tightly
+integrated and optimized together.
+
+This physical proximity enables architectural features that would be
+impractical in discrete-component systems, such as deep pipelines, large
+on-chip caches, and complex parallel execution units.
+
+Integration also shifts economic considerations. Instead of assembling
+systems from parts, the primary cost becomes chip design and
+fabrication, while replication becomes inexpensive once manufacturing is
+established.
+
+As a result, architectural decisions increasingly reflect trade-offs
+between silicon area, power consumption, and performance rather than
+assembly complexity.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Summary: Manufacturing Enables
+Abstraction}\label{summary-manufacturing-enables-abstraction}
+
+Very Large Scale Integration made it possible to place entire computing
+systems onto single pieces of silicon. Planar fabrication,
+photolithography, and layered manufacturing transformed transistor
+construction into a massively parallel industrial process.
+
+Layout-based design replaced manual wiring, and logical structures
+emerged from physical geometry. Transistors became gates, gates became
+arithmetic units, and complete processors became manufacturable as
+single devices.
+
+With integration established, the focus of computer architecture can now
+shift away from manufacturing techniques and toward how logic itself is
+organized to perform computation.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{What Comes Next}\label{what-comes-next-2}
+
+With logic gates available as reliable building blocks, the next step is
+to examine how arithmetic operations and memory storage are implemented
+using combinations of gates. The following chapter explores how numbers
+are added, stored, and manipulated using purely digital logic
+structures.
+
+\chapter{Digital Logic: Building Computation from
+Gates}\label{digital-logic-building-computation-from-gates}
+
+With reliable transistors and scalable manufacturing in place, attention
+can shift from how devices are built to how computation itself is
+organized. Digital logic provides the abstraction that allows electrical
+behavior to be treated as mathematical structure. Voltages become
+symbols, wires become signals, and circuits become logical systems that
+can be reasoned about using rules rather than physical measurements.
+
+This chapter introduces the logical building blocks of computers: gates,
+adders, and storage elements. These components form the foundation of
+processors and memory systems.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Computers as Interconnected
+Components}\label{computers-as-interconnected-components}
+
+Inside a computer, information moves along wires that carry electrical
+signals. Each signal is interpreted as either a logical zero or one.
+Groups of wires connect major subsystems such as the central processing
+unit, memory, and input/output devices.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch04-generic-computer.png}}
+\caption{Generic computer system showing CPU, memory, and I/O}
+\end{figure}
+
+Although software describes computation in abstract terms, every
+operation ultimately becomes patterns of electrical signals traveling
+between physical components. Digital logic provides the framework that
+connects these physical movements to symbolic meaning.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{What the CPU Does}\label{what-the-cpu-does}
+
+The central processing unit (CPU) executes programs by repeatedly
+performing a simple cycle: fetch an instruction, interpret it, and
+perform the required operation. The CPU is not intelligent in the human
+sense. It does not understand goals or meaning. Instead, it follows
+mechanical rules at very high speed, executing billions of operations
+per second in modern systems.
+
+Programs written in high-level languages are translated into machine
+instructions that the CPU can execute directly. Each instruction
+specifies small operations such as moving data, performing arithmetic,
+or testing conditions.
+
+At the hardware level, these operations are implemented entirely using
+combinations of logic gates and storage elements.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Logic Gates as Building
+Blocks}\label{logic-gates-as-building-blocks}
+
+Logic gates accept one or more binary inputs and produce a binary
+output. Each gate implements a simple logical rule.
+
+The most common gates include:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{NOT}, which inverts a signal\\
+\item
+  \textbf{AND}, which produces one only if all inputs are one\\
+\item
+  \textbf{OR}, which produces one if any input is one\\
+\item
+  \textbf{XOR}, which produces one if inputs differ
+\end{itemize}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch04-basic-gates.png}}
+\caption{Truth tables and symbols for basic logic gates}
+\end{figure}
+
+Although these operations are simple, they are sufficient to construct
+any digital computation when combined appropriately.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Representing Numbers in
+Binary}\label{representing-numbers-in-binary}
+
+To perform arithmetic using logic gates, numbers must be represented
+using electrical signals. Humans normally use base‑10 representation,
+where each digit represents a power of ten. Digital systems instead use
+base‑2 representation, where each digit represents a power of two.
+
+For example:
+
+\begin{itemize}
+\tightlist
+\item
+  The base‑10 number 6 is written as \textbf{110₂} in binary.\\
+\item
+  The base‑10 number 7 is written as \textbf{111₂}.
+\end{itemize}
+
+Each bit position corresponds to a weight:
+
+\begin{itemize}
+\tightlist
+\item
+  leftmost bit → 4\\
+\item
+  middle bit → 2\\
+\item
+  rightmost bit → 1
+\end{itemize}
+
+Binary representation allows numerical values to be manipulated using
+simple logical operations on individual bits.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch04-binary-place-values.png}}
+\caption{Binary place values for three-bit numbers}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Adding Numbers with Gates: Half
+Adders}\label{adding-numbers-with-gates-half-adders}
+
+The simplest arithmetic operation is addition. When adding two single
+bits, there are four possible input combinations. The result must
+produce both a sum bit and a carry bit.
+
+A \textbf{half adder} is a circuit that adds two bits and produces:
+
+\begin{itemize}
+\tightlist
+\item
+  a \textbf{sum} output\\
+\item
+  a \textbf{carry} output
+\end{itemize}
+
+The sum output is produced by an XOR gate, while the carry output is
+produced by an AND gate.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch04-half-adder.png}}
+\caption{Half adder logic diagram and truth table}
+\end{figure}
+
+This circuit performs correct binary addition for single-bit values.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Full Adders and Multi-Bit
+Addition}\label{full-adders-and-multi-bit-addition}
+
+When adding multi-bit numbers, each bit position must also consider a
+carry value from the previous position. A \textbf{full adder} extends
+the half adder by adding three inputs:
+
+\begin{itemize}
+\tightlist
+\item
+  bit A\\
+\item
+  bit B\\
+\item
+  carry‑in
+\end{itemize}
+
+It produces:
+
+\begin{itemize}
+\tightlist
+\item
+  a sum bit\\
+\item
+  a carry‑out bit
+\end{itemize}
+
+By chaining full adders together, multi-bit addition can be performed.
+Each stage passes its carry output to the next stage, allowing numbers
+of arbitrary length to be added.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch04-full-adder-chain.png}}
+\caption{Chained full adders forming a multi-bit adder}
+\end{figure}
+
+In practice, processors use more sophisticated adder designs to improve
+speed, but the fundamental principle remains the same.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Storing Data with Feedback}\label{storing-data-with-feedback}
+
+Computation requires not only processing data but also remembering it.
+Storage is implemented using circuits that maintain state over time.
+
+The simplest storage element uses \textbf{feedback}, where part of the
+output is fed back into the input of the circuit. This allows a value to
+persist even when the original input signal is removed.
+
+An example is the \textbf{set-reset (SR) latch}, built from two
+cross‑connected NOR gates. Depending on the control inputs, the latch
+can store either a zero or a one.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch04-sr-latch.png}}
+\caption{SR latch built from cross-coupled NOR gates}
+\end{figure}
+
+Feedback loops introduce a new behavior: the circuit's output depends
+not only on current inputs, but also on past states.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Clocked Storage: Gated D
+Latches}\label{clocked-storage-gated-d-latches}
+
+While simple latches can store data, processors require more controlled
+storage that changes only at specific times. This is achieved by
+introducing a clock signal.
+
+A \textbf{gated D latch} has:
+
+\begin{itemize}
+\tightlist
+\item
+  a data input (D)\\
+\item
+  a clock or control input (C)
+\end{itemize}
+
+When the clock is active, the latch copies the data input into its
+internal state. When the clock is inactive, the stored value is held
+constant regardless of changes to the input.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch04-gated-d-latch.png}}
+\caption{Gated D latch timing and structure}
+\end{figure}
+
+This behavior allows many storage elements to update in synchronized
+steps, forming the basis of registers and memory systems.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Registers from Multiple
+Latches}\label{registers-from-multiple-latches}
+
+By grouping multiple gated D latches together, multi-bit storage units
+can be created. For example, three latches can store a three-bit number.
+Larger registers store entire machine words, allowing processors to hold
+intermediate values during computation.
+
+Registers provide fast, temporary storage that supports arithmetic
+operations, branching decisions, and data movement within the CPU.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch04-register.png}}
+\caption{Three-bit register built from gated D latches}
+\end{figure}
+
+These structures form the immediate working memory of the processor.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Tools for Exploring Digital
+Logic}\label{tools-for-exploring-digital-logic}
+
+Modern educational tools allow digital circuits to be built and tested
+interactively. Gate-level simulators can display signal flow, timing,
+and logical behavior, making it easier to understand how complex systems
+emerge from simple components.
+
+Some tools support layout-level construction, while others focus on
+abstract gate connectivity. Both approaches reinforce the relationship
+between physical hardware and logical structure.
+
+By experimenting with gates, adders, and latches, it becomes clear that
+computation arises not from individual devices but from organized
+patterns of interaction.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Summary: From Gates to
+Computation}\label{summary-from-gates-to-computation}
+
+Digital logic transforms electrical behavior into mathematical
+structure. Logic gates implement simple rules, adders perform
+arithmetic, and latches store information over time.
+
+By combining these components, complex machines can be built that
+execute programs, manipulate data, and respond to inputs. The physical
+realities of electronics remain present, but abstraction allows
+designers to reason about systems in logical terms.
+
+With digital logic in place, the final step toward building a processor
+is introducing coordinated timing and instruction sequencing.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{What Comes Next}\label{what-comes-next-3}
+
+The next chapter introduces clocked circuits and control logic. These
+mechanisms coordinate when data moves and when operations occur,
+allowing entire programs to be executed step by step inside the
+processor.
+
+\chapter{Clocked Circuits: Coordinating Computation Over
+Time}\label{clocked-circuits-coordinating-computation-over-time}
+
+Combinational logic circuits, such as adders and logic gates, produce
+outputs that depend only on their current inputs. However, physical
+circuits do not update instantaneously. Signals require time to
+propagate through transistors and wires before stabilizing at their
+final values. As circuits grow larger and more complex, this delay
+becomes increasingly important.
+
+To build reliable systems, digital computers introduce a coordinating
+signal called a \textbf{clock}. The clock defines discrete moments when
+values are allowed to change, allowing computation to proceed in
+synchronized steps rather than continuously drifting through
+intermediate states.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Propagation Delay and Circuit
+Length}\label{propagation-delay-and-circuit-length}
+
+When an input changes, it takes time for the effects of that change to
+travel through the circuit. Each transistor introduces a small delay,
+and long paths through many devices accumulate larger delays.
+
+For example:
+
+\begin{itemize}
+\tightlist
+\item
+  a simple gate settles quickly\\
+\item
+  a multi-bit adder takes longer\\
+\item
+  a multiplier or complex control path may take much longer
+\end{itemize}
+
+If outputs are observed before signals have fully settled, incorrect
+values may be captured. Circuit designers therefore identify the
+\textbf{slowest path} through a system, known as the critical path, and
+ensure that enough time passes before results are used.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch05-propagation-delay.png}}
+\caption{Signal propagation through chained logic elements}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Clock Rate and System
+Timing}\label{clock-rate-and-system-timing}
+
+The clock rate of a processor specifies how often values are allowed to
+be updated. Each clock cycle provides time for signals to propagate and
+stabilize before being stored.
+
+The maximum clock frequency is limited by:
+
+\begin{itemize}
+\tightlist
+\item
+  the physical length of signal paths\\
+\item
+  the number of transistors in the longest logical path\\
+\item
+  the switching speed of the transistors\\
+\item
+  the size of the chip itself
+\end{itemize}
+
+Once the slowest element of the arithmetic and logic unit (ALU) is
+identified, the clock must be slow enough to accommodate that delay.
+Faster clocks allow more operations per second, but only if circuits can
+reliably settle within each cycle.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch05-clock-waveform.png}}
+\caption{Clock waveform showing discrete sampling points}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Separating Computation from
+Storage}\label{separating-computation-from-storage}
+
+To coordinate circuits, designers separate systems into two major
+categories:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{combinational circuits}, which compute continuously\\
+\item
+  \textbf{clocked storage elements}, which update only on clock events
+\end{itemize}
+
+Adders and logic gates belong to the first category. Latches and
+registers belong to the second.
+
+During most of the clock cycle, combinational circuits compute based on
+stable stored inputs. At the clock edge, new values are captured into
+storage elements, and the next cycle of computation begins.
+
+This separation prevents unstable intermediate values from propagating
+into stored state.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Combining Adders, Registers, and
+Clocks}\label{combining-adders-registers-and-clocks}
+
+Consider a simple system that adds two numbers and stores the result:
+
+\begin{itemize}
+\tightlist
+\item
+  a register holds the current value\\
+\item
+  an adder computes a new value\\
+\item
+  a clock controls when the register updates
+\end{itemize}
+
+While the clock is low, the register holds its value and the adder
+continuously computes the sum based on that value. When the clock goes
+high, the computed sum is captured into the register. The next cycle
+begins with a new stable value.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch05-adder-register.png}}
+\caption{Adder feeding a register under clock control}
+\end{figure}
+
+This structure is repeated throughout processors to create step-by-step
+execution.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Building a Counter}\label{building-a-counter}
+
+By feeding the output of a register back into one input of an adder and
+fixing the other input to the value one, a counting circuit can be
+created.
+
+Each clock cycle:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  the adder computes current value plus one\\
+\item
+  the register stores the new value\\
+\item
+  the process repeats
+\end{enumerate}
+
+After reaching the maximum representable value, the counter overflows
+and wraps back to zero.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch05-counter.png}}
+\caption{Counter built from adder and register}
+\end{figure}
+
+This simple structure forms the basis of timers, program counters, and
+many sequencing mechanisms inside computers.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{From Hardware to
+Instructions}\label{from-hardware-to-instructions}
+
+So far, all behavior has been determined by fixed wiring. To build
+programmable machines, behavior must be controlled by
+\textbf{instructions} rather than physical switches.
+
+An instruction is a pattern of bits that specifies which operations
+should occur during a clock cycle. Instead of permanently connecting
+wires to force an action, instruction bits enable or disable parts of
+the circuit dynamically.
+
+This is achieved through \textbf{control logic} that interprets
+instruction bits and routes signals accordingly.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{A Two-Instruction CPU}\label{a-two-instruction-cpu}
+
+A minimal processor can be built using:
+
+\begin{itemize}
+\tightlist
+\item
+  a small register\\
+\item
+  an adder\\
+\item
+  control gates\\
+\item
+  a clock
+\end{itemize}
+
+Suppose the machine supports two instructions:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{0} --- clear the register\\
+\item
+  \textbf{1} --- add one to the register
+\end{itemize}
+
+Instruction bits are connected to control gates that determine whether
+the adder output or zero is fed into the register. On each clock cycle,
+the selected value is stored.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch05-tiny-cpu.png}}
+\caption{Tiny CPU datapath with instruction-controlled inputs}
+\end{figure}
+
+Although extremely simple, this system demonstrates the core idea of
+programmable behavior: control signals modify data paths on each cycle.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Why Memory Is Required}\label{why-memory-is-required}
+
+Manual instruction selection is not sufficient for general computation.
+Real programs require sequences of many instructions executed
+automatically.
+
+To support this, computers store instructions in memory and retrieve
+them one by one during execution. This leads to the
+\textbf{fetch--decode--execute cycle}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  fetch instruction from memory\\
+\item
+  decode instruction bits into control signals\\
+\item
+  execute operation\\
+\item
+  repeat
+\end{enumerate}
+
+This loop continues as long as the program runs.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch05-fde-cycle.png}}
+\caption{Fetch-decode-execute cycle diagram}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Program Counter and Instruction
+Register}\label{program-counter-and-instruction-register}
+
+Two special registers manage instruction sequencing:
+
+\begin{itemize}
+\tightlist
+\item
+  the \textbf{Program Counter (PC)} stores the address of the next
+  instruction\\
+\item
+  the \textbf{Current Instruction Register (CIR)} holds the instruction
+  being executed
+\end{itemize}
+
+On each cycle, the PC advances, memory is accessed, and the CIR loads
+the next instruction. Decoder circuits then examine the instruction bits
+and activate the appropriate control signals for the ALU and registers.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch05-pc-cir.png}}
+\caption{PC and CIR interaction with memory and control logic}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Decoding Instructions with
+Gates}\label{decoding-instructions-with-gates}
+
+Instruction decoding is performed using combinations of logic gates
+called \textbf{decoders}. A decoder converts bit patterns into
+individual control lines.
+
+For example, if an instruction has three bits, a decoder can generate
+eight distinct control signals, one for each possible instruction value.
+These signals activate specific parts of the circuit for each
+instruction type.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch05-decoder.png}}
+\caption{Binary decoder activating control lines}
+\end{figure}
+
+This mechanism allows compact binary instructions to control large
+physical systems.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Abstraction Through
+Repetition}\label{abstraction-through-repetition}
+
+Although real processors contain billions of transistors, they are
+composed of repeated versions of the same fundamental structures:
+
+\begin{itemize}
+\tightlist
+\item
+  adders\\
+\item
+  registers\\
+\item
+  multiplexers\\
+\item
+  decoders
+\end{itemize}
+
+Complex behavior emerges from organized combinations of simple
+components operating under synchronized timing.
+
+This layered abstraction allows designers to reason about machines in
+terms of data paths and control flows rather than individual
+transistors.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Summary: Time Makes Programs
+Possible}\label{summary-time-makes-programs-possible}
+
+Clocked circuits introduce controlled timing into digital systems,
+allowing stable computation to occur in discrete steps. By separating
+combinational logic from storage and coordinating updates with a clock,
+reliable large-scale systems become possible.
+
+Control logic and instruction decoding transform fixed circuits into
+programmable machines. Registers, adders, and decoders cooperate to
+execute instruction sequences automatically.
+
+With clocked execution in place, computers can now run programs rather
+than merely perform fixed calculations.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{What Comes Next}\label{what-comes-next-4}
+
+The next chapter examines machine language and processor architecture in
+more detail, using a small but complete instruction set inspired by
+early microprocessors. Programs will be written directly in machine code
+and executed in an emulator to reveal how software and hardware meet at
+the lowest level.
+
+\chapter{CPU Architecture and Machine Code: How Programs Actually
+Run}\label{cpu-architecture-and-machine-code-how-programs-actually-run}
+
+Up to this point, digital systems have been built from logic gates,
+storage elements, and clocked circuits. These components make it
+possible to store values and perform arithmetic, but they do not yet
+explain how a general-purpose machine can follow a sequence of
+instructions. That capability emerges when computation is organized
+around a central processing unit (CPU) that repeatedly executes a simple
+control loop.
+
+This chapter introduces a complete, working processor model and shows
+how machine instructions drive its behavior. Programs are examined not
+as abstract algorithms, but as concrete patterns of bits stored in
+memory that directly control hardware.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{From Fixed Circuits to Programmable
+Machines}\label{from-fixed-circuits-to-programmable-machines}
+
+In earlier chapters, behavior was determined by wiring. If a circuit
+always adds two numbers or always increments a counter, then its
+function is fixed at design time. Programmable machines replace fixed
+control paths with instruction-controlled behavior.
+
+Instead of hardwiring what happens each cycle, instruction bits select
+which operations occur and where data flows. The same physical hardware
+can perform many different tasks simply by changing the contents of
+memory.
+
+This separation between hardware and program is the defining feature of
+general-purpose computers.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{A Simple but Complete CPU}\label{a-simple-but-complete-cpu}
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch06-cpu-block-diagram.png}}
+\caption{Block diagram of the CDC6504-style CPU}
+\end{figure}
+
+A minimal but realistic processor can be built from the following
+components:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Registers} that store temporary values\\
+\item
+  a \textbf{Program Counter (PC)} that holds the address of the next
+  instruction\\
+\item
+  an \textbf{Instruction Register (IR)} that holds the current
+  instruction\\
+\item
+  an \textbf{Arithmetic Logic Unit (ALU)} that performs arithmetic and
+  logic\\
+\item
+  \textbf{Memory} that stores both instructions and data\\
+\item
+  \textbf{Control logic} that interprets instruction bits
+\end{itemize}
+
+The CDC6504 emulator used in this book models a processor inspired by
+early microprocessors, with a small number of registers and a compact
+instruction set. Despite its simplicity, it contains all of the
+essential elements found in modern CPUs.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Registers: Fast, Small
+Storage}\label{registers-fast-small-storage}
+
+Registers are small storage locations located directly inside the CPU.
+They are much faster to access than memory and are used to hold
+intermediate results during computation.
+
+Typical registers include:
+
+\begin{itemize}
+\tightlist
+\item
+  an \textbf{Accumulator (A)} for arithmetic results\\
+\item
+  index registers such as \textbf{X} and \textbf{Y} for addressing and
+  looping\\
+\item
+  a \textbf{Status register} that holds condition flags
+\end{itemize}
+
+Flags record results of previous operations, such as whether a value was
+zero or whether an arithmetic overflow occurred. Later instructions can
+examine these flags to make decisions.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch06-registers-flags.png}}
+\caption{CPU register set and status flags}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Memory: Where Programs and Data
+Live}\label{memory-where-programs-and-data-live}
+
+Memory stores both instructions and data as sequences of bytes. Each
+byte is located at an address, and the Program Counter specifies which
+address should be read next.
+
+Although modern computers often separate instruction and data memory
+internally, most early processors---and many simple designs---use a
+single memory space for both. In such systems, instructions are simply
+data that the CPU interprets in a special way.
+
+This is why programs can be modified, copied, and even generated by
+other programs.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{The Fetch--Decode--Execute
+Cycle}\label{the-fetchdecodeexecute-cycle}
+
+Every instruction executed by the CPU follows the same basic sequence:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Fetch} the instruction from memory using the Program Counter\\
+\item
+  \textbf{Decode} the instruction to determine what operation to
+  perform\\
+\item
+  \textbf{Execute} the operation using the ALU and registers\\
+\item
+  \textbf{Update} the Program Counter to the next instruction
+\end{enumerate}
+
+This loop repeats continuously while the program runs.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch06-fde-detailed.png}}
+\caption{Fetch-decode-execute cycle with PC, IR, and control signals}
+\end{figure}
+
+Clock signals coordinate each stage so that values are stable when they
+are stored or used.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Why Hexadecimal Is Used}\label{why-hexadecimal-is-used}
+
+Machine instructions are sequences of bits, but long binary strings are
+difficult for humans to read. Hexadecimal notation groups bits into sets
+of four, making memory contents easier to inspect and write.
+
+For example:
+
+\begin{itemize}
+\tightlist
+\item
+  binary: \texttt{1010\ 1111}\\
+\item
+  hex: \texttt{AF}
+\end{itemize}
+
+Each hexadecimal digit corresponds exactly to four binary bits. This
+mapping makes it convenient to display memory as rows of hex values
+while still representing precise machine data.
+
+Assemblers, debuggers, and emulators commonly display memory using
+hexadecimal for this reason.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch06-hex-memory.png}}
+\caption{Memory display showing hexadecimal values}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Instruction Formats and
+Operands}\label{instruction-formats-and-operands}
+
+Each machine instruction contains:
+
+\begin{itemize}
+\tightlist
+\item
+  an \textbf{opcode} that specifies the operation\\
+\item
+  zero or more \textbf{operands} that specify data or addresses
+\end{itemize}
+
+Some instructions operate directly on registers, while others reference
+memory. Common addressing modes include:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Immediate}: value is part of the instruction\\
+\item
+  \textbf{Direct}: instruction contains a memory address\\
+\item
+  \textbf{Indexed}: address is computed using a register plus an offset
+\end{itemize}
+
+Different addressing modes allow programs to work with arrays, tables,
+and strings efficiently.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch06-instruction-format.png}}
+\caption{Instruction format and addressing modes}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Control Logic and Decoding}\label{control-logic-and-decoding}
+
+Instruction decoding is performed by control logic that converts opcode
+bits into control signals. These signals determine:
+
+\begin{itemize}
+\tightlist
+\item
+  which registers receive data\\
+\item
+  whether the ALU performs addition, subtraction, or comparison\\
+\item
+  whether memory is read or written\\
+\item
+  whether the Program Counter is modified
+\end{itemize}
+
+Conceptually, decoding is a large decision tree built from logic gates.
+In real processors, this logic is carefully optimized to minimize delay
+along critical paths.
+
+Although decoding may appear complex, it is simply a systematic
+application of digital logic to route signals correctly.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Sequential Flow, Branches, and
+Loops}\label{sequential-flow-branches-and-loops}
+
+By default, the Program Counter advances to the next instruction after
+each cycle, causing instructions to execute sequentially. Branch
+instructions modify the Program Counter based on conditions stored in
+status flags.
+
+This makes loops possible:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  perform an operation\\
+\item
+  test a condition\\
+\item
+  branch back if the condition is not yet met
+\end{enumerate}
+
+All higher-level control structures---such as while loops and if
+statements---ultimately reduce to conditional branches that alter the
+Program Counter.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch06-branch-flow.png}}
+\caption{Branch instruction modifying program flow}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Example: Counting with a
+Loop}\label{example-counting-with-a-loop}
+
+Consider a simple loop that increments a register until it reaches a
+limit. In assembly language, this might look like:
+
+\begin{verbatim}
+LOAD A, #0
+LOOP:
+ADD  A, #1
+CMP  A, #10
+BNE  LOOP
+\end{verbatim}
+
+Each line corresponds to one or more machine instructions. During
+execution, the Program Counter repeatedly jumps back to the label until
+the condition is satisfied.
+
+At the hardware level, this behavior is nothing more than controlled
+updates to registers and the Program Counter on each clock cycle.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Assembly Language as a Human
+Interface}\label{assembly-language-as-a-human-interface}
+
+Machine code is difficult to write directly. Assembly language provides
+symbolic names for instructions and allows labels to represent
+addresses. An \textbf{assembler} translates these symbolic programs into
+machine code.
+
+Assembly language does not add new capabilities to the machine. It
+merely makes programs easier to write and understand.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch06-assembler.png}}
+\caption{Assembly source translated into machine code by an assembler}
+\end{figure}
+
+For educational purposes, writing small programs in assembly reveals
+exactly how software controls hardware.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Strings, Characters, and
+Memory}\label{strings-characters-and-memory}
+
+Characters are stored as numeric codes, such as ASCII values. A string
+is simply a sequence of character codes stored in memory.
+
+Programs that process text operate by:
+
+\begin{itemize}
+\tightlist
+\item
+  loading a character from memory\\
+\item
+  testing or modifying it\\
+\item
+  storing it back
+\end{itemize}
+
+Operations such as converting letters to uppercase are performed by
+arithmetic on character codes, not by any special text-handling
+hardware.
+
+This illustrates that all data---numbers, characters, images---are
+treated uniformly as binary values by the processor.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{From Python to Machine
+Instructions}\label{from-python-to-machine-instructions}
+
+High-level languages such as Python hide hardware details, but their
+execution still depends on machine instructions.
+
+A loop written in Python becomes:
+
+\begin{itemize}
+\tightlist
+\item
+  comparisons\\
+\item
+  branches\\
+\item
+  register updates
+\end{itemize}
+
+at the machine level. Although modern systems add layers such as virtual
+machines and just-in-time compilation, the final execution always
+reduces to instructions executed by hardware.
+
+Understanding machine code provides insight into performance, memory
+usage, and the real cost of software operations.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Why This Model Still
+Matters}\label{why-this-model-still-matters}
+
+Modern processors are far more complex than early microprocessors, with
+multiple cores, deep pipelines, and sophisticated memory systems.
+However, they still execute programs using the same fundamental
+principles:
+
+\begin{itemize}
+\tightlist
+\item
+  fetch instructions\\
+\item
+  decode operations\\
+\item
+  manipulate registers and memory\\
+\item
+  update the Program Counter
+\end{itemize}
+
+The complexity lies in doing many of these steps in parallel and at
+extremely high speeds, not in changing the basic execution model.
+
+Learning a small, complete CPU provides a foundation for understanding
+much larger systems.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Summary: Programs Are Physical
+Processes}\label{summary-programs-are-physical-processes}
+
+Programs are not abstract mathematical objects running in isolation.
+They are physical processes enacted by electrical signals moving through
+circuits, coordinated by clocks, and shaped by control logic.
+
+Machine instructions directly control data paths and storage elements.
+Assembly language offers a symbolic view of these instructions, while
+high-level languages build additional layers of abstraction on top.
+
+By examining how a complete processor executes real programs, the
+relationship between hardware and software becomes concrete and
+observable.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{What Comes Next}\label{what-comes-next-5}
+
+With a complete CPU model in place, attention can now turn to how
+real-world processors improve performance through techniques such as
+pipelining, caching, and parallel execution. The next chapter explores
+how architectural enhancements build on the same foundations while
+dramatically increasing speed.
+
+\chapter{WebAssembly and Emulation: Running Real Programs in the
+Browser}\label{webassembly-and-emulation-running-real-programs-in-the-browser}
+
+After building a complete mental model of how a CPU executes machine
+instructions, it becomes possible to recognize the same ideas appearing
+in unexpected places. One of the most surprising is the modern web
+browser. Today, browsers include built‑in virtual machines capable of
+executing low‑level binary code safely and efficiently.
+
+This chapter explores how emulation and WebAssembly connect historical
+machine architectures to modern execution environments, and why the
+browser can now act as a practical platform for systems programming.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{From Hardware to Emulators}\label{from-hardware-to-emulators}
+
+An emulator is a program that imitates the behavior of a hardware
+processor. Instead of electrical signals moving through gates, software
+interprets instruction bytes and updates simulated registers and memory.
+
+At a high level, an emulator performs the same steps as real hardware:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  read the next instruction\\
+\item
+  decode the opcode\\
+\item
+  perform the operation\\
+\item
+  update registers and memory\\
+\item
+  advance the program counter
+\end{enumerate}
+
+This is the same fetch--decode--execute cycle implemented in software.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch07-emulator-loop.png}}
+\caption{Emulator executing instructions in software}
+\end{figure}
+
+Because modern computers are extraordinarily fast, they can often
+emulate older machines faster than the original hardware ever ran.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Why Emulation Is Practical
+Today}\label{why-emulation-is-practical-today}
+
+Early microprocessors such as the MOS 6502 contained only a few thousand
+transistors and ran at clock speeds measured in megahertz. Modern
+processors contain billions of transistors and operate at several
+gigahertz.
+
+This enormous performance gap means that:
+
+\begin{itemize}
+\tightlist
+\item
+  JavaScript running in a browser can emulate historical CPUs in real
+  time\\
+\item
+  graphics and sound can be simulated accurately\\
+\item
+  entire vintage game systems can be recreated in software
+\end{itemize}
+
+Web sites such as the Internet Archive host playable emulations of
+classic arcade machines that run entirely in the browser.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch07-arcade-emulator.png}}
+\caption{Classic game running in a browser-based emulator}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{The CDC6504 Emulator}\label{the-cdc6504-emulator}
+
+The CDC6504 emulator used in this course models a processor inspired by
+the MOS 6502 instruction set with a simplified architecture. It
+includes:
+
+\begin{itemize}
+\tightlist
+\item
+  registers (A, X, Y, status flags)\\
+\item
+  instruction memory\\
+\item
+  data memory\\
+\item
+  branching and arithmetic instructions
+\end{itemize}
+
+Each instruction is implemented as a small block of JavaScript that
+updates simulated hardware state.
+
+Conceptually, each opcode becomes a function that performs the same
+register and memory updates that real circuitry would perform in
+silicon.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch07-cdc6504-ui.png}}
+\caption{Emulator showing registers, memory, and instruction pointer}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Machine Code Inside
+Software}\label{machine-code-inside-software}
+
+When an emulator runs, machine code is not special. It is simply a
+sequence of numbers stored in an array. The emulator reads these numbers
+and interprets them as instructions.
+
+For example:
+
+\begin{itemize}
+\tightlist
+\item
+  a value may represent ``load accumulator''\\
+\item
+  the next value may represent an address or constant\\
+\item
+  branching instructions modify the program counter
+\end{itemize}
+
+The meaning comes entirely from how the emulator interprets the bits.
+
+This mirrors exactly what real hardware does, except that software
+replaces physical wiring.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{From Native CPUs to Virtual
+Machines}\label{from-native-cpus-to-virtual-machines}
+
+Historically, assembly language targeted specific processors:
+
+\begin{itemize}
+\tightlist
+\item
+  MOS 6502\\
+\item
+  Intel x86\\
+\item
+  ARM
+\end{itemize}
+
+Programs compiled for one architecture could not run on another without
+translation or emulation.
+
+WebAssembly changes this model by defining a portable virtual
+instruction set that runs on top of browsers and other runtimes.
+
+Instead of targeting physical hardware, compilers target a standardized
+virtual machine.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{What Is WebAssembly?}\label{what-is-webassembly}
+
+WebAssembly (WASM) is a low‑level, binary instruction format designed
+for safe and efficient execution in browsers and other environments. It
+is not tied to any specific physical CPU.
+
+Key characteristics include:
+
+\begin{itemize}
+\tightlist
+\item
+  structured control flow\\
+\item
+  validated instruction sequences\\
+\item
+  sandboxed memory access\\
+\item
+  deterministic execution
+\end{itemize}
+
+WASM programs cannot access files, devices, or the operating system
+directly. All interaction with the outside world occurs through
+carefully controlled interfaces provided by the host environment.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch07-wasm-sandbox.png}}
+\caption{WebAssembly execution sandbox inside the browser}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{From C to WASM}\label{from-c-to-wasm}
+
+Languages such as C and C++ can be compiled to WebAssembly using modern
+toolchains. The compilation process is:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  source code is compiled to WASM bytecode\\
+\item
+  the browser loads and validates the module\\
+\item
+  the runtime translates WASM to native machine code\\
+\item
+  the program executes at near‑native speed
+\end{enumerate}
+
+From the browser's perspective, WebAssembly is just another kind of
+executable content, similar to JavaScript but closer to machine
+operations.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{A WASM ``Hello, World''}\label{a-wasm-hello-world}
+
+A minimal WebAssembly program may look like this in textual form (WAT):
+
+\begin{verbatim}
+(module
+  (import "console" "log" (func $log (param i32 i32)))
+  (memory 1)
+  (data (i32.const 0) "Hello, World!")
+  (func $main (result i32)
+    (call $log (i32.const 0) (i32.const 13))
+    (i32.const 42)
+  )
+  (export "main" (func $main))
+)
+\end{verbatim}
+
+This code:
+
+\begin{itemize}
+\tightlist
+\item
+  allocates memory\\
+\item
+  stores a string\\
+\item
+  calls a logging function\\
+\item
+  returns a numeric value
+\end{itemize}
+
+When compiled, it becomes a compact binary format that the browser can
+execute efficiently.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{images/ch07-wasm-hex.png}}
+\caption{Hex dump of compiled WebAssembly module}
+\end{figure}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{WASM Compared to Traditional
+Assembly}\label{wasm-compared-to-traditional-assembly}
+
+Although WebAssembly resembles assembly language, it differs in
+important ways:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Sandboxed by design} --- no direct memory or OS access\\
+\item
+  \textbf{Safe execution model} --- code is validated before running\\
+\item
+  \textbf{Portable bytecode} --- same program runs on any platform\\
+\item
+  \textbf{Abstract machine} --- targets a virtual stack machine\\
+\item
+  \textbf{Host optimization} --- browsers compile and optimize at
+  runtime
+\end{itemize}
+
+Traditional assembly runs with full process privileges and depends
+entirely on the operating system for protection. WASM embeds safety into
+the execution model itself.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Loops, Functions, and the
+Stack}\label{loops-functions-and-the-stack}
+
+Like physical CPUs, WebAssembly supports:
+
+\begin{itemize}
+\tightlist
+\item
+  local variables\\
+\item
+  function calls\\
+\item
+  loops and branches\\
+\item
+  a call stack
+\end{itemize}
+
+When a function is called, parameters and return addresses are managed
+using stack structures maintained by the runtime.
+
+Even though the environment is virtual, the same concepts of control
+flow and memory organization still apply.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{From Historical CPUs to Modern
+Devices}\label{from-historical-cpus-to-modern-devices}
+
+Over the last fifty years, many processor families have been developed,
+but two now dominate consumer computing:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{ARM} processors, used in phones, tablets, and most laptops\\
+\item
+  \textbf{x86} processors, used in many desktop and server systems
+\end{itemize}
+
+These architectures differ internally, but they all implement the same
+fundamental ideas explored in this book: registers, memory,
+instructions, and controlled execution.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Case Study: Apple's CPU
+Transitions}\label{case-study-apples-cpu-transitions}
+
+Apple has moved across several processor families:
+
+\begin{itemize}
+\tightlist
+\item
+  MOS 6502 --- early Apple computers\\
+\item
+  Motorola 68000 --- early Macintosh systems\\
+\item
+  PowerPC --- mid‑1990s through mid‑2000s\\
+\item
+  Intel x86 --- 2006 through 2020\\
+\item
+  Apple‑designed ARM --- 2020 to present
+\end{itemize}
+
+To ease transitions, Apple built machine‑code translation systems that
+converted programs from one architecture to another at launch time. This
+allowed users to run older software while new native versions were
+developed.
+
+These transitions demonstrate that software compatibility can be
+preserved even as hardware changes dramatically.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Why the 6502 Still Matters}\label{why-the-6502-still-matters}
+
+The design philosophy of early microprocessors influenced later
+architectures. Engineers who designed early ARM processors had deep
+experience with the 6502, and many principles carried forward into
+modern instruction set design.
+
+Although modern processors are vastly more complex, the core ideas
+remain recognizable.
+
+Understanding a small historical CPU therefore provides insight into the
+design of modern systems.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Emulation as a Learning
+Tool}\label{emulation-as-a-learning-tool}
+
+Emulators allow direct observation of how instructions change machine
+state:
+
+\begin{itemize}
+\tightlist
+\item
+  registers update\\
+\item
+  memory changes\\
+\item
+  branches alter execution flow
+\end{itemize}
+
+This visibility is rarely available on modern hardware, where pipelines
+and caches obscure internal behavior.
+
+For learning computer architecture, emulation provides clarity that real
+machines no longer expose.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Summary: Abstraction Without Losing
+Reality}\label{summary-abstraction-without-losing-reality}
+
+WebAssembly and emulation demonstrate that low‑level computation remains
+relevant even in modern software systems. Programs still execute as
+sequences of instructions that manipulate memory and registers, whether
+those instructions are interpreted, emulated, or executed directly in
+silicon.
+
+The same architectural principles govern both historical processors and
+modern virtual machines. Only the layers of abstraction have changed.
+
+By tracing the path from physical circuits to browser‑based execution,
+the continuity of computer architecture becomes clear.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Closing Thoughts}\label{closing-thoughts}
+
+Computers have evolved enormously in speed and scale, but not in
+fundamental design. Logic gates became processors, processors became
+systems, and systems became virtual machines running inside browsers.
+
+Understanding how computation works at the lowest level makes it
+possible to see through layers of abstraction and recognize the same
+mechanisms at work everywhere---from embedded devices to cloud servers
+to web pages running in a browser.
+
+This perspective provides both practical insight and a deeper
+appreciation for the remarkable continuity of computing technology.
+
+% --- Back matter (optional) ---
+% \backmatter
+
+\appendix
+\chapter{Image Credits}
+\begin{itemize}
+\item[Figure 1.1] Image: \href{https://commons.wikimedia.org/wiki/File:Stonehenge_sunrise_sunset_azimuth.svg}{Stonehenge Sunrise Aunset Azimuth}, Wikipedia, by Cesar Bojorquez, \href{https://creativecommons.org/licenses/by/2.0/}{CC BY 2.0}
+\item[Figure 1.2] Image: \href{https://commons.wikimedia.org/wiki/File:Antikythera_Fragment_A_%28Front%29.webp}{Front of "Fragment A" of the Antikythera mechanism.}, Wikipedia, by Logg Tandy, \href{https://creativecommons.org/licenses/by/4.0/}{CC BY 4.0}
+\item[Figure 1.3] Photo: Charles Severance
+\item[Figure 1.4] Photo: Charles Severance
+\item[Figure 1.5] Photo: Charles Severance
+\end{itemize}
+\printindex
+
+\end{document}

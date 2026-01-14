@@ -1,0 +1,145 @@
+\documentclass[11pt,oneside]{book}
+
+% --- Page geometry (KDP-friendly starting point) ---
+\usepackage[
+  paperwidth=6in,
+  paperheight=9in,
+  inner=0.85in,
+  outer=0.65in,
+  top=0.75in,
+  bottom=0.85in,
+  headheight=14pt,
+  headsep=18pt,
+  footskip=24pt
+]{geometry}
+
+% --- Fonts / Unicode ---
+\usepackage{fontspec}
+\defaultfontfeatures{Ligatures=TeX}
+% Use widely-available macOS fonts by default.
+% You can customize these later if you install additional fonts.
+\setmainfont{TeX Gyre Pagella}
+\setsansfont{TeX Gyre Heros}
+\setmonofont{TeX Gyre Cursor}
+
+% --- Typography ---
+\usepackage{microtype}
+\usepackage{setspace}
+\setstretch{1.08}
+
+% --- Graphics ---
+\usepackage{graphicx}
+\usepackage{grffile}
+\usepackage{caption}
+\captionsetup{font=small,labelfont=bf}
+
+% --- Global image sizing ---
+% Never let figures take over the page during drafting
+\setkeys{Gin}{width=\linewidth,height=0.55\textheight,keepaspectratio}
+
+% Pandoc helper (newer pandoc wraps images with \pandocbounded)
+\providecommand{\pandocbounded}[1]{#1}
+
+% --- Colors/links (print-friendly) ---
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+% Background color for code blocks
+\definecolor{shadecolor}{RGB}{245,247,249}
+
+% --- Code blocks (Pandoc) ---
+\usepackage{fancyvrb}
+\usepackage{fvextra}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{
+  breaklines=true,
+  breakanywhere=true,
+  commandchars=\\\{\},
+  fontsize=\small
+}
+\usepackage{framed}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+
+% --- Lists ---
+\usepackage{enumitem}
+\setlist{itemsep=0.25em,topsep=0.35em}
+
+% Pandoc tight lists
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% --- Headers/footers ---
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\fancyfoot[C]{\thepage}
+% Avoid headers on chapter opening pages
+\fancypagestyle{plain}{%
+  \fancyhf{}
+  \renewcommand{\headrulewidth}{0pt}
+  \fancyfoot[C]{\thepage}
+}
+
+% --- Pandoc variables and structure ---
+$if(title)$
+\title{$title$}
+$endif$
+$if(subtitle)$
+\usepackage{titling}
+\pretitle{\begin{center}\LARGE\bfseries}
+\posttitle{\par\end{center}\vskip 0.5em}
+\preauthor{\begin{center}\large}
+\postauthor{\par\end{center}}
+\predate{\begin{center}\large}
+\postdate{\par\end{center}\vskip 1.0em}
+$endif$
+
+\usepackage{makeidx}
+\makeindex
+
+\begin{document}
+
+% --- Title page ---
+\begin{titlepage}
+\centering
+{\LARGE\bfseries $title$ \par}
+\vspace{0.5em}
+$if(subtitle)$
+{\Large $subtitle$ \par}
+\vspace{1.5em}
+$endif$
+$if(author)$
+{\large $author$ \par}
+\vfill
+$endif$
+$if(date)$
+{\large $date$ \par}
+$endif$
+\end{titlepage}
+
+% --- Copyright page ---
+\thispagestyle{plain}
+\vspace*{\fill}
+$if(rights)$
+{\small $rights$ \par}
+$endif$
+\vspace*{\fill}
+\clearpage
+
+% --- Front matter ---
+\frontmatter
+$if(toc)$
+\tableofcontents
+\clearpage
+$endif$
+
+% --- Main matter ---
+\mainmatter
+$body$
+
+% --- Back matter (optional) ---
+% \backmatter
+
+\printindex
+
+\end{document}
