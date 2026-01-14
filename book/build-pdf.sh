@@ -44,7 +44,8 @@ pandoc \
 if grep -q 'class="image-attribution"' chapters/*.md 2>/dev/null && ! grep -q "\\chapter{Image Credits}" build/ca4e.tex; then
   # Build credits section by extracting attributions from markdown
   CREDITS_TMP=$(mktemp)
-  echo "\\chapter{Image Credits}" > "$CREDITS_TMP"
+  echo "\\appendix" >> "$CREDITS_TMP"
+  echo "\\chapter{Image Credits}" >> "$CREDITS_TMP"
   echo "\\begin{itemize}" >> "$CREDITS_TMP"
   
   # Extract attributions: process each markdown file
