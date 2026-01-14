@@ -59,9 +59,9 @@ function Div(el)
         figure_count = 1
       end
       local fig_ref = string.format("%d.%d", current_chapter, figure_count)
-      return pandoc.Para({
-        pandoc.Str('[' .. fig_ref .. ']')
-      })
+      -- Format as centered, smaller text to stay within margins
+      return pandoc.RawBlock('latex', 
+        '\\begin{center}\\small[' .. fig_ref .. ']\\end{center}')
     else
       -- HTML: keep inline but add target="_blank" to all links
       local new_content = {}

@@ -119,6 +119,9 @@ Thus, programming did not arise as a completely new activity. It evolved natural
 Mechanical systems are limited by friction, wear, and inertia. As machines grew faster and more complex, these physical limits became obstacles. Vacuum tubes\index{vacuum tubes} offered a way to perform switching electronically, without moving parts.
 
 ![Vacuum tubes in the Colossus](images/ch01-vacuum-tube-switch.png)
+<div class="image-attribution">
+Image: [Tubes](https://commons.wikimedia.org/tubes/File:Stonehenge_sunrise_sunset_azimuth.svg) by The colossus [CC BY 4.2](https://creativecommons.org/licenses/by/4.2/)
+</div>
 
 Although tubes are inherently analog devices, additional circuitry allowed them to behave digitally by latching into stable high or low voltage states. Machines such as Colossus\index{Colossus} used thousands of tubes to perform computations far faster than electromechanical systems could achieve.
 
