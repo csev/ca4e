@@ -35,6 +35,7 @@ pandoc \
   --template=templates/kdp-6x9.tex \
   --toc \
   --no-highlight \
+  --lua-filter=filters/image-attributions.lua \
   --resource-path=".:images:chapters" \
   -o build/ca4e.tex
 

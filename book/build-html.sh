@@ -118,6 +118,8 @@ $endfor$
     img { max-height: 200px; width: auto; height: auto; display: block; margin: 0 auto; }
     figure { margin: 1.5em 0; }
     figcaption { text-align: center; font-style: italic; margin-top: 0.5em; }
+    .image-attribution { font-size: 0.85em; color: #666; margin-top: 0.5em; margin-bottom: 1em; text-align: center; font-style: italic; }
+    .image-attribution a { color: #0066cc; }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -233,6 +235,7 @@ for ((idx=0; idx<${#CHAPTERS[@]}; idx++)); do
     --metadata title-prefix="$BOOK_TITLE" \
     --metadata pagetitle="$chap_title" \
     --metadata chapter-number="$chap_num" \
+    --lua-filter=filters/image-attributions.lua \
     --resource-path=".:images:chapters" \
     "${CSS_ARGS[@]}" \
     -o "$out_html"

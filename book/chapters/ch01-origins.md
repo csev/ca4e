@@ -24,6 +24,10 @@ Over time, physical structures were constructed to embody these patterns directl
 
 ![Seasonal sunrise and sunset alignment at Stonehenge](images/ch01-stonehenge-sunrise.png){height=150px}
 
+<div class="image-attribution">
+Image: [Stonehenge Sunrise Aunset Azimuth](https://commons.wikimedia.org/wiki/File:Stonehenge_sunrise_sunset_azimuth.svg) by Cesar Bojorquez, [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)
+</div>
+
 ---
 
 ## Stonehenge as a Measuring Device
