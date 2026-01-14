@@ -18,27 +18,35 @@ Transistors: How Solid-State Electronics Changed Everything</title>
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       var chapterNum = '2';
-      var sectionNum = 0;
-      var figureNum = 0;
       
-      // Number h2 sections
-      var h2s = document.querySelectorAll('h2');
-      h2s.forEach(function(h2) {
-        sectionNum++;
-        var text = h2.textContent;
-        h2.textContent = chapterNum + '.' + sectionNum + ' ' + text;
-      });
+      // Only number if chapterNum is not empty (index page has empty string)
+      // On index page: chapterNum will be empty string ""
+      // On chapter pages: chapterNum will be "1", "2", etc.
+      var isValid = chapterNum && chapterNum.trim() !== '';
       
-      // Number figures
-      var figures = document.querySelectorAll('figure');
-      figures.forEach(function(fig) {
-        figureNum++;
-        var caption = fig.querySelector('figcaption');
-        if (caption) {
-          var text = caption.textContent;
-          caption.innerHTML = '<strong>Figure ' + chapterNum + '.' + figureNum + ':</strong> ' + text;
-        }
-      });
+      if (isValid) {
+        var sectionNum = 0;
+        var figureNum = 0;
+        
+        // Number h2 sections
+        var h2s = document.querySelectorAll('h2');
+        h2s.forEach(function(h2) {
+          sectionNum++;
+          var text = h2.textContent;
+          h2.textContent = chapterNum + '.' + sectionNum + ' ' + text;
+        });
+        
+        // Number figures
+        var figures = document.querySelectorAll('figure');
+        figures.forEach(function(fig) {
+          figureNum++;
+          var caption = fig.querySelector('figcaption');
+          if (caption) {
+            var text = caption.textContent;
+            caption.innerHTML = '<strong>Figure ' + chapterNum + '.' + figureNum + ':</strong> ' + text;
+          }
+        });
+      }
     });
   </script>
 </head>
