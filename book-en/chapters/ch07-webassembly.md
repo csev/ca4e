@@ -1,14 +1,16 @@
 # WebAssembly and Emulation: Running Real Programs in the Browser
 
+\index{WebAssembly}\index{emulation}\index{emulator}
+
 After building a complete mental model of how a CPU executes machine instructions, it becomes possible to recognize the same ideas appearing in unexpected places. One of the most surprising is the modern web browser. Today, browsers include built‑in virtual machines capable of executing low‑level binary code safely and efficiently.
 
-This chapter explores how emulation and WebAssembly connect historical machine architectures to modern execution environments, and why the browser can now act as a practical platform for systems programming.
+This chapter explores how emulation\index{emulation} and WebAssembly\index{WebAssembly} connect historical machine architectures to modern execution environments, and why the browser can now act as a practical platform for systems programming.
 
 ---
 
 ## From Hardware to Emulators
 
-An emulator is a program that imitates the behavior of a hardware processor. Instead of electrical signals moving through gates, software interprets instruction bytes and updates simulated registers and memory.
+An emulator\index{emulator} is a program that imitates the behavior of a hardware processor. Instead of electrical signals moving through gates, software interprets instruction bytes and updates simulated registers and memory.
 
 At a high level, an emulator performs the same steps as real hardware:
 
@@ -44,7 +46,7 @@ Web sites such as the Internet Archive host playable emulations of classic arcad
 
 ## The CDC6504 Emulator
 
-The CDC6504 emulator used in this course models a processor inspired by the MOS 6502 instruction set with a simplified architecture. It includes:
+The CDC6504 emulator\index{CDC6504} used in this course models a processor inspired by the MOS 6502\index{MOS 6502} instruction set with a simplified architecture. It includes:
 
 - registers (A, X, Y, status flags)  
 - instruction memory  
@@ -79,13 +81,13 @@ This mirrors exactly what real hardware does, except that software replaces phys
 
 Historically, assembly language targeted specific processors:
 
-- MOS 6502  
-- Intel x86  
-- ARM  
+- MOS 6502\index{MOS 6502}  
+- Intel x86\index{x86}  
+- ARM\index{ARM}  
 
 Programs compiled for one architecture could not run on another without translation or emulation.
 
-WebAssembly changes this model by defining a portable virtual instruction set that runs on top of browsers and other runtimes.
+WebAssembly changes this model by defining a portable virtual instruction set\index{virtual machine} that runs on top of browsers and other runtimes.
 
 Instead of targeting physical hardware, compilers target a standardized virtual machine.
 
@@ -93,13 +95,13 @@ Instead of targeting physical hardware, compilers target a standardized virtual 
 
 ## What Is WebAssembly?
 
-WebAssembly (WASM) is a low‑level, binary instruction format designed for safe and efficient execution in browsers and other environments. It is not tied to any specific physical CPU.
+WebAssembly (WASM)\index{WebAssembly} is a low‑level, binary instruction format designed for safe and efficient execution in browsers and other environments. It is not tied to any specific physical CPU.
 
 Key characteristics include:
 
 - structured control flow  
 - validated instruction sequences  
-- sandboxed memory access  
+- sandboxed memory access\index{sandbox}  
 - deterministic execution  
 
 WASM programs cannot access files, devices, or the operating system directly. All interaction with the outside world occurs through carefully controlled interfaces provided by the host environment.
@@ -123,7 +125,7 @@ From the browser’s perspective, WebAssembly is just another kind of executable
 
 ## A WASM "Hello, World"
 
-A minimal WebAssembly program may look like this in textual form (WAT):
+A minimal WebAssembly program may look like this in textual form (WAT)\index{WAT}:
 
 ```wat
 (module
@@ -184,8 +186,8 @@ Even though the environment is virtual, the same concepts of control flow and me
 
 Over the last fifty years, many processor families have been developed, but two now dominate consumer computing:
 
-- **ARM** processors, used in phones, tablets, and most laptops  
-- **x86** processors, used in many desktop and server systems  
+- **ARM**\index{ARM} processors, used in phones, tablets, and most laptops  
+- **x86**\index{x86} processors, used in many desktop and server systems  
 
 These architectures differ internally, but they all implement the same fundamental ideas explored in this book: registers, memory, instructions, and controlled execution.
 

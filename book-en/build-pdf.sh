@@ -10,7 +10,9 @@ if [[ "${1:-}" == "--index" ]]; then
   BUILD_INDEX=true
 fi
 
+# Clean up temporary LaTeX files from previous builds
 mkdir -p build
+rm -f build/ca4e.aux build/ca4e.idx build/ca4e.ind build/ca4e.ilg build/ca4e.log build/ca4e.out build/ca4e.toc build/ca4e.tex
 
 # Collect chapters in lexical order (ch01, ch02, ...)
 CHAPTERS=(chapters/*.md)

@@ -1,8 +1,10 @@
 # Digital Logic: Building Computation from Gates
 
-With reliable transistors and scalable manufacturing in place, attention can shift from how devices are built to how computation itself is organized. Digital logic provides the abstraction that allows electrical behavior to be treated as mathematical structure. Voltages become symbols, wires become signals, and circuits become logical systems that can be reasoned about using rules rather than physical measurements.
+\index{digital logic}\index{logic gates}\index{CPU}
 
-This chapter introduces the logical building blocks of computers: gates, adders, and storage elements. These components form the foundation of processors and memory systems.
+With reliable transistors and scalable manufacturing in place, attention can shift from how devices are built to how computation itself is organized. Digital logic\index{digital logic} provides the abstraction that allows electrical behavior to be treated as mathematical structure. Voltages become symbols, wires become signals, and circuits become logical systems that can be reasoned about using rules rather than physical measurements.
+
+This chapter introduces the logical building blocks of computers: gates\index{logic gates}, adders\index{adders}, and storage elements. These components form the foundation of processors and memory systems.
 
 ---
 
@@ -18,7 +20,7 @@ Although software describes computation in abstract terms, every operation ultim
 
 ## What the CPU Does
 
-The central processing unit (CPU) executes programs by repeatedly performing a simple cycle: fetch an instruction, interpret it, and perform the required operation. The CPU is not intelligent in the human sense. It does not understand goals or meaning. Instead, it follows mechanical rules at very high speed, executing billions of operations per second in modern systems.
+The central processing unit (CPU)\index{CPU} executes programs by repeatedly performing a simple cycle: fetch an instruction, interpret it, and perform the required operation. The CPU is not intelligent in the human sense. It does not understand goals or meaning. Instead, it follows mechanical rules at very high speed, executing billions of operations per second in modern systems.
 
 Programs written in high-level languages are translated into machine instructions that the CPU can execute directly. Each instruction specifies small operations such as moving data, performing arithmetic, or testing conditions.
 
@@ -45,7 +47,7 @@ Although these operations are simple, they are sufficient to construct any digit
 
 ## Representing Numbers in Binary
 
-To perform arithmetic using logic gates, numbers must be represented using electrical signals. Humans normally use base‑10 representation, where each digit represents a power of ten. Digital systems instead use base‑2 representation, where each digit represents a power of two.
+To perform arithmetic using logic gates, numbers must be represented using electrical signals. Humans normally use base‑10 representation\index{binary representation}, where each digit represents a power of ten. Digital systems instead use base‑2 representation\index{binary}, where each digit represents a power of two.
 
 For example:
 
@@ -68,10 +70,10 @@ Binary representation allows numerical values to be manipulated using simple log
 
 The simplest arithmetic operation is addition. When adding two single bits, there are four possible input combinations. The result must produce both a sum bit and a carry bit.
 
-A **half adder** is a circuit that adds two bits and produces:
+A **half adder**\index{half adder} is a circuit that adds two bits and produces:
 
 - a **sum** output  
-- a **carry** output  
+- a **carry** output\index{carry}  
 
 The sum output is produced by an XOR gate, while the carry output is produced by an AND gate.
 
@@ -83,7 +85,7 @@ This circuit performs correct binary addition for single-bit values.
 
 ## Full Adders and Multi-Bit Addition
 
-When adding multi-bit numbers, each bit position must also consider a carry value from the previous position. A **full adder** extends the half adder by adding three inputs:
+When adding multi-bit numbers, each bit position must also consider a carry value from the previous position. A **full adder**\index{full adder} extends the half adder by adding three inputs:
 
 - bit A  
 - bit B  
@@ -106,9 +108,9 @@ In practice, processors use more sophisticated adder designs to improve speed, b
 
 Computation requires not only processing data but also remembering it. Storage is implemented using circuits that maintain state over time.
 
-The simplest storage element uses **feedback**, where part of the output is fed back into the input of the circuit. This allows a value to persist even when the original input signal is removed.
+The simplest storage element uses **feedback**\index{feedback}, where part of the output is fed back into the input of the circuit. This allows a value to persist even when the original input signal is removed.
 
-An example is the **set-reset (SR) latch**, built from two cross‑connected NOR gates. Depending on the control inputs, the latch can store either a zero or a one.
+An example is the **set-reset (SR) latch**\index{SR latch}, built from two cross‑connected NOR gates. Depending on the control inputs, the latch can store either a zero or a one.
 
 ![SR latch built from cross-coupled NOR gates](images/ch04-sr-latch.png)
 
@@ -118,9 +120,9 @@ Feedback loops introduce a new behavior: the circuit’s output depends not only
 
 ## Clocked Storage: Gated D Latches
 
-While simple latches can store data, processors require more controlled storage that changes only at specific times. This is achieved by introducing a clock signal.
+While simple latches can store data, processors require more controlled storage that changes only at specific times. This is achieved by introducing a clock signal\index{clock}.
 
-A **gated D latch** has:
+A **gated D latch**\index{gated D latch} has:
 
 - a data input (D)  
 - a clock or control input (C)  
@@ -135,7 +137,7 @@ This behavior allows many storage elements to update in synchronized steps, form
 
 ## Registers from Multiple Latches
 
-By grouping multiple gated D latches together, multi-bit storage units can be created. For example, three latches can store a three-bit number. Larger registers store entire machine words, allowing processors to hold intermediate values during computation.
+By grouping multiple gated D latches together, multi-bit storage units can be created. For example, three latches can store a three-bit number. Larger registers\index{registers} store entire machine words, allowing processors to hold intermediate values during computation.
 
 Registers provide fast, temporary storage that supports arithmetic operations, branching decisions, and data movement within the CPU.
 

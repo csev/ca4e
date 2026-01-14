@@ -1,8 +1,10 @@
 # CPU Architecture and Machine Code: How Programs Actually Run
 
-Up to this point, digital systems have been built from logic gates, storage elements, and clocked circuits. These components make it possible to store values and perform arithmetic, but they do not yet explain how a general-purpose machine can follow a sequence of instructions. That capability emerges when computation is organized around a central processing unit (CPU) that repeatedly executes a simple control loop.
+\index{CPU}\index{machine code}\index{CDC6504}
 
-This chapter introduces a complete, working processor model and shows how machine instructions drive its behavior. Programs are examined not as abstract algorithms, but as concrete patterns of bits stored in memory that directly control hardware.
+Up to this point, digital systems have been built from logic gates, storage elements, and clocked circuits. These components make it possible to store values and perform arithmetic, but they do not yet explain how a general-purpose machine can follow a sequence of instructions. That capability emerges when computation is organized around a central processing unit (CPU)\index{CPU} that repeatedly executes a simple control loop.
+
+This chapter introduces a complete, working processor model and shows how machine instructions\index{machine code} drive its behavior. Programs are examined not as abstract algorithms, but as concrete patterns of bits stored in memory that directly control hardware.
 
 ---
 
@@ -22,26 +24,26 @@ This separation between hardware and program is the defining feature of general-
 
 A minimal but realistic processor can be built from the following components:
 
-- **Registers** that store temporary values  
-- a **Program Counter (PC)** that holds the address of the next instruction  
-- an **Instruction Register (IR)** that holds the current instruction  
-- an **Arithmetic Logic Unit (ALU)** that performs arithmetic and logic  
-- **Memory** that stores both instructions and data  
-- **Control logic** that interprets instruction bits  
+- **Registers**\index{registers} that store temporary values  
+- a **Program Counter (PC)**\index{Program Counter} that holds the address of the next instruction  
+- an **Instruction Register (IR)**\index{Instruction Register} that holds the current instruction  
+- an **Arithmetic Logic Unit (ALU)**\index{ALU} that performs arithmetic and logic  
+- **Memory**\index{memory} that stores both instructions and data  
+- **Control logic**\index{control logic} that interprets instruction bits  
 
-The CDC6504 emulator used in this book models a processor inspired by early microprocessors, with a small number of registers and a compact instruction set. Despite its simplicity, it contains all of the essential elements found in modern CPUs.
+The CDC6504 emulator\index{CDC6504} used in this book models a processor inspired by early microprocessors, with a small number of registers and a compact instruction set. Despite its simplicity, it contains all of the essential elements found in modern CPUs.
 
 ---
 
 ## Registers: Fast, Small Storage
 
-Registers are small storage locations located directly inside the CPU. They are much faster to access than memory and are used to hold intermediate results during computation.
+Registers\index{registers} are small storage locations located directly inside the CPU. They are much faster to access than memory and are used to hold intermediate results during computation.
 
 Typical registers include:
 
-- an **Accumulator (A)** for arithmetic results  
+- an **Accumulator (A)**\index{Accumulator} for arithmetic results  
 - index registers such as **X** and **Y** for addressing and looping  
-- a **Status register** that holds condition flags  
+- a **Status register**\index{status register} that holds condition flags\index{flags}  
 
 Flags record results of previous operations, such as whether a value was zero or whether an arithmetic overflow occurred. Later instructions can examine these flags to make decisions.
 
@@ -68,7 +70,7 @@ Every instruction executed by the CPU follows the same basic sequence:
 3. **Execute** the operation using the ALU and registers  
 4. **Update** the Program Counter to the next instruction  
 
-This loop repeats continuously while the program runs.
+This loop\index{fetch-decode-execute cycle} repeats continuously while the program runs.
 
 ![Fetch-decode-execute cycle with PC, IR, and control signals](images/ch06-fde-detailed.png)
 
@@ -78,7 +80,7 @@ Clock signals coordinate each stage so that values are stable when they are stor
 
 ## Why Hexadecimal Is Used
 
-Machine instructions are sequences of bits, but long binary strings are difficult for humans to read. Hexadecimal notation groups bits into sets of four, making memory contents easier to inspect and write.
+Machine instructions are sequences of bits, but long binary strings are difficult for humans to read. Hexadecimal notation\index{hexadecimal} groups bits into sets of four, making memory contents easier to inspect and write.
 
 For example:
 
@@ -87,7 +89,7 @@ For example:
 
 Each hexadecimal digit corresponds exactly to four binary bits. This mapping makes it convenient to display memory as rows of hex values while still representing precise machine data.
 
-Assemblers, debuggers, and emulators commonly display memory using hexadecimal for this reason.
+Assemblers\index{assembler}, debuggers, and emulators commonly display memory using hexadecimal for this reason.
 
 ![Memory display showing hexadecimal values](images/ch06-hex-memory.png)
 
@@ -97,14 +99,14 @@ Assemblers, debuggers, and emulators commonly display memory using hexadecimal f
 
 Each machine instruction contains:
 
-- an **opcode** that specifies the operation  
-- zero or more **operands** that specify data or addresses  
+- an **opcode**\index{opcode} that specifies the operation  
+- zero or more **operands**\index{operands} that specify data or addresses  
 
-Some instructions operate directly on registers, while others reference memory. Common addressing modes include:
+Some instructions operate directly on registers, while others reference memory. Common addressing modes\index{addressing modes} include:
 
-- **Immediate**: value is part of the instruction  
-- **Direct**: instruction contains a memory address  
-- **Indexed**: address is computed using a register plus an offset  
+- **Immediate**\index{immediate addressing}: value is part of the instruction  
+- **Direct**\index{direct addressing}: instruction contains a memory address  
+- **Indexed**\index{indexed addressing}: address is computed using a register plus an offset  
 
 Different addressing modes allow programs to work with arrays, tables, and strings efficiently.
 
@@ -163,7 +165,7 @@ At the hardware level, this behavior is nothing more than controlled updates to 
 
 ## Assembly Language as a Human Interface
 
-Machine code is difficult to write directly. Assembly language provides symbolic names for instructions and allows labels to represent addresses. An **assembler** translates these symbolic programs into machine code.
+Machine code is difficult to write directly. Assembly language\index{assembly language} provides symbolic names for instructions and allows labels to represent addresses. An **assembler**\index{assembler} translates these symbolic programs into machine code.
 
 Assembly language does not add new capabilities to the machine. It merely makes programs easier to write and understand.
 
@@ -175,7 +177,7 @@ For educational purposes, writing small programs in assembly reveals exactly how
 
 ## Strings, Characters, and Memory
 
-Characters are stored as numeric codes, such as ASCII values. A string is simply a sequence of character codes stored in memory.
+Characters are stored as numeric codes, such as ASCII values\index{ASCII}. A string is simply a sequence of character codes stored in memory.
 
 Programs that process text operate by:
 

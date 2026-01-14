@@ -1,6 +1,6 @@
-# From Stonehenge\index{Stonehenge} to Silicon: Why Computers Began with Numbers
+# From Stonehenge to Silicon: Why Computers Began with Numbers
 
-\index{computer architecture}\index{numbers}
+\index{Stonehenge}\index{computer architecture}\index{numbers}
 
 Long before computers were used for communication, entertainment, or social interaction, they were built for something far more basic: measuring the world and predicting what would happen next. The earliest forms of computation were not abstract symbols stored in memory, but physical structures designed to model natural processes. These devices helped track the seasons, predict the motion of planets, guide travelers, and support engineering and trade. In this early period, computing was inseparable from mathematics and measurement, and numbers were the primary objects being manipulated.
 
@@ -105,7 +105,7 @@ This mechanism also introduces the concept of carry\index{carry}. When one digit
 
 Once addition and counting are possible, repeated operations can be automated. Multiplication becomes repeated addition, and polynomial evaluation becomes a structured sequence of arithmetic steps. Adding motors or cranks allows machines to perform long sequences without human intervention.
 
-Charles Babbage’s Difference Engine\index{Difference Engine}\index{Babbage, Charles}, designed in the nineteenth century, exploited this idea. It used repeated addition to approximate complex mathematical functions and generate accurate tables. Although technology at the time could not easily produce all the required parts, a complete version built in the late twentieth century demonstrated that the design itself was sound.
+Charles Babbage's Difference Engine\index{Difference Engine}\index{Babbage}, designed in the nineteenth century, exploited this idea. It used repeated addition to approximate complex mathematical functions and generate accurate tables. Although technology at the time could not easily produce all the required parts, a complete version built in the late twentieth century demonstrated that the design itself was sound.
 
 > Architectural ideas often appear long before manufacturing technology can fully support them.
 
