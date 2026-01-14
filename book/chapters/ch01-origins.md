@@ -25,7 +25,7 @@ Over time, physical structures were constructed to embody these patterns directl
 ![Seasonal sunrise and sunset alignment at Stonehenge](images/ch01-stonehenge-sunrise.png){height=150px}
 
 <div class="image-attribution">
-Image: [Stonehenge Sunrise Aunset Azimuth](https://commons.wikimedia.org/wiki/File:Stonehenge_sunrise_sunset_azimuth.svg) by Cesar Bojorquez, [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)
+Image: [Stonehenge Sunrise Aunset Azimuth](https://commons.wikimedia.org/wiki/File:Stonehenge_sunrise_sunset_azimuth.svg), Wikipedia, by Cesar Bojorquez, [CC BY 2.0](https://creativecommons.org/licenses/by/2.0/)
 </div>
 
 ---
@@ -54,7 +54,10 @@ Accurate printed scales are essential for this approach. The precision of the co
 
 ## Gears as Models of the Solar System
 
-![Antikythera mechanism gear layout](images/ch01-antikythera-gears.png){height=200px}
+![Front of "Fragment A" of the Antikythera mechanism. ](images/ch01-antikythera-gears.png){height=200px}
+<div class="image-attribution">
+Image: [Front of "Fragment A" of the Antikythera mechanism.](https://commons.wikimedia.org/wiki/File:Antikythera_Fragment_A_%28Front%29.webp), Wikipedia, by Logg Tandy, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/)
+</div>
 
 The Antikythera mechanism\index{Antikythera mechanism}, dating to around 2100 years ago, represents one of the most sophisticated examples of ancient analog computing. This device used interlocking gears to model the motion of the Sun, Moon, and known planets. Some of its gear trains represented long astronomical cycles spanning decades or even centuries.
 
@@ -66,7 +69,10 @@ This illustrates a broader principle that remains true today: computing systems 
 
 ## Practical Analog Computing
 
-![Slide rule logarithmic scales](images/ch01-sliderule-scales.png)
+![Slide rule logarithmic scales](images/ch01-sliderule-scales.png){height=150px}
+<div class="image-attribution">
+Photo: Charles Severance
+</div>
 
 Analog computation did not remain confined to astronomy. Devices such as slide rules\index{slide rule} transformed multiplication into addition by using logarithmic scales. By aligning and sliding rulers, complex calculations could be performed quickly and reliably.
 
@@ -84,7 +90,10 @@ Not all physical computation is continuous. Some devices operate using discrete,
 
 Clocks provide a clear example of digital behavior in mechanical systems. A pendulum provides regular timing, while ratchets and gears count discrete events. When one gear completes a full rotation, it advances the next gear, producing the familiar progression from seconds to minutes to hours.
 
-![Clock gear train with carry propagation](images/ch01-clock-carry.png)
+![Simple Adding Machine with Carry](images/ch01-clock-carry.png)
+<div class="image-attribution">
+Photo: Charles Severance
+</div>
 
 This mechanism also introduces the concept of carry\index{carry}. When one digit overflows, the next digit is incremented. Mechanical systems must physically propagate this carry through connected components, a process that takes time and introduces delays. Similar effects still occur in electronic circuits, where signals must travel between components.
 
@@ -120,7 +129,7 @@ Mechanical systems are limited by friction, wear, and inertia. As machines grew 
 
 ![Vacuum tubes in the Colossus](images/ch01-vacuum-tube-switch.png)
 <div class="image-attribution">
-Image: [Tubes](https://commons.wikimedia.org/tubes/File:Stonehenge_sunrise_sunset_azimuth.svg) by The colossus [CC BY 4.2](https://creativecommons.org/licenses/by/4.2/)
+Photo: Charles Severance
 </div>
 
 Although tubes are inherently analog devices, additional circuitry allowed them to behave digitally by latching into stable high or low voltage states. Machines such as Colossus\index{Colossus} used thousands of tubes to perform computations far faster than electromechanical systems could achieve.
