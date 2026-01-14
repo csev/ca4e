@@ -48,20 +48,30 @@ if grep -q 'class="image-attribution"' chapters/*.md 2>/dev/null && ! grep -q "\
   echo "\\chapter{Image Credits}" >> "$CREDITS_TMP"
   echo "\\begin{itemize}" >> "$CREDITS_TMP"
   
-  # Extract attributions: process each markdown file
-  ATTRIB_NUM=0
+  # First, build a map of figure numbers by finding figures in LaTeX and matching to attributions
+  # Process each markdown file and track chapter + figure numbers
+  CHAP_NUM=0
   for md_file in chapters/*.md; do
-    # Look for attribution divs and extract the content line (line after the div tag)
+    CHAP_NUM=$((CHAP_NUM + 1))
+    FIG_NUM=0
+    
+    # Count images (figures) in this chapter before each attribution
     IN_DIV=false
     while IFS= read -r line; do
+      # Count images (markdown image syntax)
+      if [[ "$line" =~ ^!\[.*\]\(images/ ]]; then
+        FIG_NUM=$((FIG_NUM + 1))
+      fi
+      # When we find an attribution, use current figure number
       if [[ "$line" =~ class=\"image-attribution\" ]]; then
         IN_DIV=true
         continue
       fi
       if [[ "$IN_DIV" == true ]] && [[ -n "$line" ]] && [[ ! "$line" =~ ^\</div ]]; then
-        ATTRIB_NUM=$((ATTRIB_NUM + 1))
+        # Use figure number in format chapter.figure (e.g., 1.1, 1.2, 7.5)
+        FIG_REF="${CHAP_NUM}.${FIG_NUM}"
+        
         # Clean up the attribution text: remove HTML tags, convert markdown links to LaTeX \href
-        # Use perl for more reliable regex replacement
         CLEANED=$(echo "$line" | \
           sed 's/<[^>]*>//g' | \
           perl -pe 's/\[([^\]]+)\]\(([^)]+)\)/\\href{$2}{$1}/g' | \
@@ -69,7 +79,7 @@ if grep -q 'class="image-attribution"' chapters/*.md 2>/dev/null && ! grep -q "\
           sed 's/[[:space:]]*$//')
         # Escape special LaTeX characters in \href URLs only
         CLEANED=$(echo "$CLEANED" | perl -pe 's/\\href\{([^}]+)\}/\\href{'$(echo '\1' | sed 's/_/\\_/g' | sed 's/#/\\#/g' | sed 's/%/\\%/g')'}/g')
-        echo "\\item[$ATTRIB_NUM] $CLEANED" >> "$CREDITS_TMP"
+        echo "\\item[Figure $FIG_REF] $CLEANED" >> "$CREDITS_TMP"
         IN_DIV=false
       fi
       if [[ "$line" =~ ^\</div ]]; then
@@ -81,7 +91,7 @@ if grep -q 'class="image-attribution"' chapters/*.md 2>/dev/null && ! grep -q "\
   echo "\\end{itemize}" >> "$CREDITS_TMP"
   
   # Insert credits before \printindex
-  if grep -q "\\printindex" build/ca4e.tex && [[ -s "$CREDITS_TMP" ]] && [[ "$ATTRIB_NUM" -gt 0 ]]; then
+  if grep -q "\\printindex" build/ca4e.tex && [[ -s "$CREDITS_TMP" ]]; then
     # Use awk with proper escaping - read credits from file
     awk -v credits_file="$CREDITS_TMP" '
       /\\printindex/ {

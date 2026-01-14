@@ -2,6 +2,11 @@
 -- In HTML: attributions stay inline
 -- In PDF: attributions are collected at the end via post-processing script
 
+-- Track figures per chapter for numbering
+local current_chapter = 0  -- Will be set to 1 on first chapter header
+local figure_count = 0
+local first_chapter_seen = false
+
 -- Helper function to add target="_blank" to all links
 function add_target_blank(inline)
   if inline.t == 'Link' then
@@ -20,15 +25,42 @@ function add_target_blank(inline)
   end
 end
 
+function Header(el)
+  -- Detect chapter headers (level 1) to reset figure counter
+  if el.level == 1 and FORMAT == 'latex' then
+    if not first_chapter_seen then
+      current_chapter = 1
+      first_chapter_seen = true
+    else
+      current_chapter = current_chapter + 1
+    end
+    figure_count = 0
+  end
+  return el
+end
+
+function Image(el)
+  -- Track images to count figures per chapter
+  -- Increment when we see an image
+  if FORMAT == 'latex' then
+    figure_count = figure_count + 1
+  end
+  return el
+end
+
 function Div(el)
   if el.classes:includes('image-attribution') then
-    -- For PDF/LaTeX: return a reference number (credits added via post-processing)
+    -- For PDF/LaTeX: return a reference with figure number
     -- For HTML: return the div with target="_blank" added to links
     if FORMAT == 'latex' then
-      -- Count existing references to determine number
-      -- This is approximate - the post-processing script will handle the actual numbering
+      -- The image should have been processed before this div, so figure_count should be correct
+      -- But if it's 0, it means we haven't seen the image yet, so increment it
+      if figure_count == 0 then
+        figure_count = 1
+      end
+      local fig_ref = string.format("%d.%d", current_chapter, figure_count)
       return pandoc.Para({
-        pandoc.Str('[1]')
+        pandoc.Str('[' .. fig_ref .. ']')
       })
     else
       -- HTML: keep inline but add target="_blank" to all links
