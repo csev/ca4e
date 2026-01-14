@@ -4,6 +4,14 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 cd "$ROOT"
 
+# Build EPUB (will skip PDF rebuild if PDF already exists)
+if [[ -f "$ROOT/build-epub.sh" ]]; then
+  "$ROOT/build-epub.sh"
+else
+  echo "ERROR: build-epub.sh not found"
+  exit 1
+fi
+
 # Build PDF with index first
 if [[ -f "$ROOT/build-pdf.sh" ]]; then
   echo "Building PDF with index..."
@@ -13,13 +21,6 @@ else
   exit 1
 fi
 
-# Build EPUB (will skip PDF rebuild if PDF already exists)
-if [[ -f "$ROOT/build-epub.sh" ]]; then
-  "$ROOT/build-epub.sh"
-else
-  echo "ERROR: build-epub.sh not found"
-  exit 1
-fi
 
 echo "Done."
 echo "Outputs:"
