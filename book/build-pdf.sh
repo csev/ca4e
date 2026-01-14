@@ -39,6 +39,8 @@ pandoc \
   --resource-path=".:images:chapters" \
   -o build/ca4e.tex
 
+# No need to process inline references - they're suppressed in the Lua filter
+
 # 1b) Post-process LaTeX to add image credits section
 # Extract attributions from markdown and add credits before \printindex
 if grep -q 'class="image-attribution"' chapters/*.md 2>/dev/null && ! grep -q "\\chapter{Image Credits}" build/ca4e.tex; then

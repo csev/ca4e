@@ -50,18 +50,11 @@ end
 
 function Div(el)
   if el.classes:includes('image-attribution') then
-    -- For PDF/LaTeX: return a reference with figure number
+    -- For PDF/LaTeX: suppress inline reference (all attributions collected in appendix)
     -- For HTML: return the div with target="_blank" added to links
     if FORMAT == 'latex' then
-      -- The image should have been processed before this div, so figure_count should be correct
-      -- But if it's 0, it means we haven't seen the image yet, so increment it
-      if figure_count == 0 then
-        figure_count = 1
-      end
-      local fig_ref = string.format("%d.%d", current_chapter, figure_count)
-      -- Format as centered, smaller text to stay within margins
-      return pandoc.RawBlock('latex', 
-        '\\begin{center}\\small[' .. fig_ref .. ']\\end{center}')
+      -- Return nothing - references only appear in Image Credits appendix
+      return {}
     else
       -- HTML: keep inline but add target="_blank" to all links
       local new_content = {}
