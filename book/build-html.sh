@@ -28,6 +28,11 @@ if [[ ! -e "$OUTDIR/images" ]]; then
   fi
 fi
 
+# Copy CSS file directly to output directory
+if [[ -f "$CSS_FILE" ]]; then
+  cp "$CSS_FILE" "$OUTDIR/book.css"
+fi
+
 if ! command -v pandoc >/dev/null 2>&1; then
   echo "ERROR: pandoc not found. Install with: brew install pandoc"
   exit 1
@@ -55,7 +60,7 @@ fi
 
 CSS_ARGS=()
 if [[ -f "$CSS_FILE" ]]; then
-  CSS_ARGS+=( --css "$CSS_FILE" )
+  CSS_ARGS+=( --css "book.css" )
 fi
 
 out_name_for() {
