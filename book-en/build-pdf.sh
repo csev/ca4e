@@ -146,12 +146,12 @@ echo "PDF build complete: build/ca4e.pdf"
 
 # Copy PDF to book folder in root (for GitHub) - only when indexes are generated
 if [[ "$BUILD_INDEX" == "true" ]]; then
-  BOOK_DIR="../book"
-  mkdir -p "$BOOK_DIR"
-  if [[ -f "build/ca4e.pdf" ]]; then
+BOOK_DIR="../book"
+mkdir -p "$BOOK_DIR"
+if [[ -f "build/ca4e.pdf" ]]; then
     cp "build/ca4e.pdf" "$BOOK_DIR/ca4e-en.pdf"
     echo "Copied PDF to: $BOOK_DIR/ca4e-en.pdf"
-  else
-    echo "WARNING: build/ca4e.pdf not found, skipping copy"
+else
+  echo "WARNING: build/ca4e.pdf not found, skipping copy"
   fi
 fi

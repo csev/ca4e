@@ -61,13 +61,13 @@ class="ca4e-spacer"></span>
 </nav>
 <h1 id="clocked-circuits-coordinating-computation-over-time">Clocked
 Circuits: Coordinating Computation Over Time</h1>
-<p></p>
+<p> </p>
 <p>Combinational logic circuits, such as adders and logic gates, produce
 outputs that depend only on their current inputs. However, physical
 circuits do not update instantaneously. Signals require time to
 propagate through transistors and wires before stabilizing at their
 final values. As circuits grow larger and more complex, this delay
-becomes increasingly important.</p>
+becomes increasingly important. </p>
 <p>To build reliable systems, digital computers introduce a coordinating
 signal called a <strong>clock</strong>. The clock defines discrete
 moments when values are allowed to change, allowing computation to
@@ -81,11 +81,8 @@ to travel through the circuit. Each transistor introduces a small delay,
 and long paths through many devices accumulate larger delays.</p>
 <p>For example:</p>
 <ul>
-<li>a simple gate settles quickly<br />
-</li>
-<li>a multi-bit adder takes longer<br />
-</li>
-<li>a multiplier or complex control path may take much longer</li>
+<li>a simple gate settles quickly - a multi-bit adder takes longer - a
+multiplier or complex control path may take much longer</li>
 </ul>
 <p>If outputs are observed before signals have fully settled, incorrect
 values may be captured. Circuit designers therefore identify the
@@ -101,21 +98,17 @@ elements</figcaption>
 <h2 id="clock-rate-and-system-timing">Clock Rate and System Timing</h2>
 <p>The clock rate of a processor specifies how often values are allowed
 to be updated. Each clock cycle provides time for signals to propagate
-and stabilize before being stored.</p>
+and stabilize before being stored. </p>
 <p>The maximum clock frequency is limited by:</p>
 <ul>
-<li>the physical length of signal paths<br />
-</li>
-<li>the number of transistors in the longest logical path<br />
-</li>
-<li>the switching speed of the transistors<br />
-</li>
-<li>the size of the chip itself</li>
+<li>the physical length of signal paths - the number of transistors in
+the longest logical path - the switching speed of the transistors - the
+size of the chip itself</li>
 </ul>
 <p>Once the slowest element of the arithmetic and logic unit (ALU) is
 identified, the clock must be slow enough to accommodate that delay.
 Faster clocks allow more operations per second, but only if circuits can
-reliably settle within each cycle.</p>
+reliably settle within each cycle. </p>
 <figure>
 <img src="images/ch05-clock-waveform.png"
 alt="Clock waveform showing discrete sampling points" />
@@ -129,8 +122,7 @@ Storage</h2>
 categories:</p>
 <ul>
 <li><strong>combinational circuits</strong>, which compute
-continuously<br />
-</li>
+continuously</li>
 <li><strong>clocked storage elements</strong>, which update only on
 clock events</li>
 </ul>
@@ -147,11 +139,8 @@ Registers, and Clocks</h2>
 <p>Consider a simple system that adds two numbers and stores the
 result:</p>
 <ul>
-<li>a register holds the current value<br />
-</li>
-<li>an adder computes a new value<br />
-</li>
-<li>a clock controls when the register updates</li>
+<li>a register holds the current value - an adder computes a new value -
+a clock controls when the register updates</li>
 </ul>
 <p>While the clock is low, the register holds its value and the adder
 continuously computes the sum based on that value. When the clock goes
@@ -169,14 +158,11 @@ step-by-step execution.</p>
 <h2 id="building-a-counter">Building a Counter</h2>
 <p>By feeding the output of a register back into one input of an adder
 and fixing the other input to the value one, a counting circuit can be
-created.</p>
+created. </p>
 <p>Each clock cycle:</p>
 <ol type="1">
-<li>the adder computes current value plus one<br />
-</li>
-<li>the register stores the new value<br />
-</li>
-<li>the process repeats</li>
+<li>the adder computes current value plus one 2. the register stores the
+new value 3. the process repeats</li>
 </ol>
 <p>After reaching the maximum representable value, the counter overflows
 and wraps back to zero.</p>
@@ -187,7 +173,7 @@ alt="Counter built from adder and register" />
 register</figcaption>
 </figure>
 <p>This simple structure forms the basis of timers, program counters,
-and many sequencing mechanisms inside computers.</p>
+and many sequencing mechanisms inside computers. </p>
 <hr />
 <h2 id="from-hardware-to-instructions">From Hardware to
 Instructions</h2>
@@ -204,18 +190,11 @@ interprets instruction bits and routes signals accordingly.</p>
 <h2 id="a-two-instruction-cpu">A Two-Instruction CPU</h2>
 <p>A minimal processor can be built using:</p>
 <ul>
-<li>a small register<br />
-</li>
-<li>an adder<br />
-</li>
-<li>control gates<br />
-</li>
-<li>a clock</li>
+<li>a small register - an adder - control gates - a clock</li>
 </ul>
 <p>Suppose the machine supports two instructions:</p>
 <ul>
-<li><strong>0</strong> — clear the register<br />
-</li>
+<li><strong>0</strong> — clear the register</li>
 <li><strong>1</strong> — add one to the register</li>
 </ul>
 <p>Instruction bits are connected to control gates that determine
@@ -239,13 +218,8 @@ executed automatically.</p>
 them one by one during execution. This leads to the
 <strong>fetch–decode–execute cycle</strong>:</p>
 <ol type="1">
-<li>fetch instruction from memory<br />
-</li>
-<li>decode instruction bits into control signals<br />
-</li>
-<li>execute operation<br />
-</li>
-<li>repeat</li>
+<li>fetch instruction from memory 2. decode instruction bits into
+control signals 3. execute operation 4. repeat</li>
 </ol>
 <p>This loop continues as long as the program runs.</p>
 <figure>
@@ -260,15 +234,14 @@ Instruction Register</h2>
 <p>Two special registers manage instruction sequencing:</p>
 <ul>
 <li>the <strong>Program Counter (PC)</strong> stores the address of the
-next instruction<br />
-</li>
+next instruction</li>
 <li>the <strong>Current Instruction Register (CIR)</strong> holds the
 instruction being executed</li>
 </ul>
 <p>On each cycle, the PC advances, memory is accessed, and the CIR loads
 the next instruction. Decoder circuits then examine the instruction bits
-and activate the appropriate control signals for the ALU and
-registers.</p>
+and activate the appropriate control signals for the ALU and registers.
+</p>
 <figure>
 <img src="images/ch05-pc-cir.png"
 alt="PC and CIR interaction with memory and control logic" />
@@ -299,13 +272,7 @@ Repetition</h2>
 <p>Although real processors contain billions of transistors, they are
 composed of repeated versions of the same fundamental structures:</p>
 <ul>
-<li>adders<br />
-</li>
-<li>registers<br />
-</li>
-<li>multiplexers<br />
-</li>
-<li>decoders</li>
+<li>adders - registers - multiplexers - decoders</li>
 </ul>
 <p>Complex behavior emerges from organized combinations of simple
 components operating under synchronized timing.</p>

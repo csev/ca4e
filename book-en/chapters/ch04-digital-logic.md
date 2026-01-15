@@ -1,10 +1,20 @@
 # Digital Logic: Building Computation from Gates
 
-\index{digital logic}\index{logic gates}\index{CPU}
+\index{digital logic}
+\index{logic gates}
+\index{CPU}
 
-With reliable transistors and scalable manufacturing in place, attention can shift from how devices are built to how computation itself is organized. Digital logic\index{digital logic} provides the abstraction that allows electrical behavior to be treated as mathematical structure. Voltages become symbols, wires become signals, and circuits become logical systems that can be reasoned about using rules rather than physical measurements.
+With reliable transistors and scalable manufacturing in place, attention can shift from
+how devices are built to how computation itself is organized. Digital logic provides the
+abstraction that allows electrical behavior to be treated as mathematical structure.
+Voltages become symbols, wires become signals, and circuits become logical systems that
+can be reasoned about using rules rather than physical measurements.
+\index{digital logic}
 
-This chapter introduces the logical building blocks of computers: gates\index{logic gates}, adders\index{adders}, and storage elements. These components form the foundation of processors and memory systems.
+This chapter introduces the logical building blocks of computers: gates, adders, and
+storage elements. These components form the foundation of processors and memory systems.
+\index{logic gates}
+\index{adders}
 
 ---
 
@@ -24,7 +34,12 @@ logic provides the framework that connects these physical movements to symbolic 
 
 ## What the CPU Does
 
-The central processing unit (CPU)\index{CPU} executes programs by repeatedly performing a simple cycle: fetch an instruction, interpret it, and perform the required operation. The CPU is not intelligent in the human sense. It does not understand goals or meaning. Instead, it follows mechanical rules at very high speed, executing billions of operations per second in modern systems.
+The central processing unit (CPU) executes programs by repeatedly performing a simple
+cycle: fetch an instruction, interpret it, and perform the required operation. The CPU is
+not intelligent in the human sense. It does not understand goals or meaning. Instead, it
+follows mechanical rules at very high speed, executing billions of operations per second
+in modern systems.
+\index{CPU}
 
 Programs written in high-level languages are translated into machine instructions that the
 CPU can execute directly. Each instruction specifies small operations such as moving data,
@@ -42,10 +57,10 @@ implements a simple logical rule.
 
 The most common gates include:
 
-- **NOT**, which inverts a signal  
-- **AND**, which produces one only if all inputs are one  
-- **OR**, which produces one if any input is one  
-- **XOR**, which produces one if inputs differ  
+- **NOT**, which inverts a signal
+- **AND**, which produces one only if all inputs are one
+- **OR**, which produces one if any input is one
+- **XOR**, which produces one if inputs differ
 
 ![Truth tables and symbols for basic logic gates](images/ch04-basic-gates.png)
 
@@ -56,12 +71,17 @@ computation when combined appropriately.
 
 ## Representing Numbers in Binary
 
-To perform arithmetic using logic gates, numbers must be represented using electrical signals. Humans normally use base‑10 representation\index{binary representation}, where each digit represents a power of ten. Digital systems instead use base‑2 representation\index{binary}, where each digit represents a power of two.
+To perform arithmetic using logic gates, numbers must be represented using electrical
+signals. Humans normally use base‑10 representation, where each digit represents a power
+of ten. Digital systems instead use base‑2 representation, where each digit represents a
+power of two.
+\index{binary representation}
+\index{binary}
 
 For example:
 
-- The base‑10 number 6 is written as **110₂** in binary.  
-- The base‑10 number 7 is written as **111₂**.  
+- The base‑10 number 6 is written as **110₂** in binary.
+- The base‑10 number 7 is written as **111₂**.
 
 Each bit position corresponds to a weight:
 
@@ -81,8 +101,8 @@ possible input combinations. The result must produce both a sum bit and a carry 
 
 A **half adder**\index{half adder} is a circuit that adds two bits and produces:
 
-- a **sum** output  
-- a **carry** output\index{carry}  
+- a **sum** output
+- a **carry** output\index{carry}
 
 The sum output is produced by an XOR gate, while the carry output is produced by an AND
 gate.
@@ -131,7 +151,9 @@ inputs, but also on past states.
 
 ## Clocked Storage: Gated D Latches
 
-While simple latches can store data, processors require more controlled storage that changes only at specific times. This is achieved by introducing a clock signal\index{clock}.
+While simple latches can store data, processors require more controlled storage that
+changes only at specific times. This is achieved by introducing a clock signal.
+\index{clock}
 
 A **gated D latch**\index{gated D latch} has:
 
@@ -150,7 +172,10 @@ basis of registers and memory systems.
 
 ## Registers from Multiple Latches
 
-By grouping multiple gated D latches together, multi-bit storage units can be created. For example, three latches can store a three-bit number. Larger registers\index{registers} store entire machine words, allowing processors to hold intermediate values during computation.
+By grouping multiple gated D latches together, multi-bit storage units can be created. For
+example, three latches can store a three-bit number. Larger registers store entire machine
+words, allowing processors to hold intermediate values during computation.
+\index{registers}
 
 Registers provide fast, temporary storage that supports arithmetic operations, branching
 decisions, and data movement within the CPU.
@@ -196,3 +221,4 @@ coordinated timing and instruction sequencing.
 The next chapter introduces clocked circuits and control logic. These mechanisms
 coordinate when data moves and when operations occur, allowing entire programs to be
 executed step by step inside the processor.
+

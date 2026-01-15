@@ -61,18 +61,18 @@ class="ca4e-spacer"></span>
 </nav>
 <h1 id="cpu-architecture-and-machine-code-how-programs-actually-run">CPU
 Architecture and Machine Code: How Programs Actually Run</h1>
-<p></p>
+<p> </p>
 <p>Up to this point, digital systems have been built from logic gates,
 storage elements, and clocked circuits. These components make it
 possible to store values and perform arithmetic, but they do not yet
 explain how a general-purpose machine can follow a sequence of
 instructions. That capability emerges when computation is organized
 around a central processing unit (CPU) that repeatedly executes a simple
-control loop.</p>
+control loop. </p>
 <p>This chapter introduces a complete, working processor model and shows
 how machine instructions drive its behavior. Programs are examined not
 as abstract algorithms, but as concrete patterns of bits stored in
-memory that directly control hardware.</p>
+memory that directly control hardware. </p>
 <hr />
 <h2 id="from-fixed-circuits-to-programmable-machines">From Fixed
 Circuits to Programmable Machines</h2>
@@ -97,38 +97,31 @@ CPU</figcaption>
 <p>A minimal but realistic processor can be built from the following
 components:</p>
 <ul>
-<li><strong>Registers</strong> that store temporary values<br />
-</li>
+<li><strong>Registers</strong> that store temporary values</li>
 <li>a <strong>Program Counter (PC)</strong> that holds the address of
-the next instruction<br />
-</li>
+the next instruction</li>
 <li>an <strong>Instruction Register (IR)</strong> that holds the current
-instruction<br />
-</li>
+instruction</li>
 <li>an <strong>Arithmetic Logic Unit (ALU)</strong> that performs
-arithmetic and logic<br />
-</li>
-<li><strong>Memory</strong> that stores both instructions and data<br />
-</li>
+arithmetic and logic</li>
+<li><strong>Memory</strong> that stores both instructions and data</li>
 <li><strong>Control logic</strong> that interprets instruction bits</li>
 </ul>
 <p>The CDC6504 emulator used in this book models a processor inspired by
 early microprocessors, with a small number of registers and a compact
 instruction set. Despite its simplicity, it contains all of the
-essential elements found in modern CPUs.</p>
+essential elements found in modern CPUs. </p>
 <hr />
 <h2 id="registers-fast-small-storage">Registers: Fast, Small
 Storage</h2>
 <p>Registers are small storage locations located directly inside the
 CPU. They are much faster to access than memory and are used to hold
-intermediate results during computation.</p>
+intermediate results during computation. </p>
 <p>Typical registers include:</p>
 <ul>
-<li>an <strong>Accumulator (A)</strong> for arithmetic results<br />
-</li>
+<li>an <strong>Accumulator (A)</strong> for arithmetic results</li>
 <li>index registers such as <strong>X</strong> and <strong>Y</strong>
-for addressing and looping<br />
-</li>
+for addressing and looping</li>
 <li>a <strong>Status register</strong> that holds condition flags</li>
 </ul>
 <p>Flags record results of previous operations, such as whether a value
@@ -159,18 +152,15 @@ Cycle</h2>
 sequence:</p>
 <ol type="1">
 <li><strong>Fetch</strong> the instruction from memory using the Program
-Counter<br />
-</li>
+Counter</li>
 <li><strong>Decode</strong> the instruction to determine what operation
-to perform<br />
-</li>
+to perform</li>
 <li><strong>Execute</strong> the operation using the ALU and
-registers<br />
-</li>
+registers</li>
 <li><strong>Update</strong> the Program Counter to the next
 instruction</li>
 </ol>
-<p>This loop repeats continuously while the program runs.</p>
+<p>This loop repeats continuously while the program runs. </p>
 <figure>
 <img src="images/ch06-fde-detailed.png"
 alt="Fetch-decode-execute cycle with PC, IR, and control signals" />
@@ -183,18 +173,17 @@ they are stored or used.</p>
 <h2 id="why-hexadecimal-is-used">Why Hexadecimal Is Used</h2>
 <p>Machine instructions are sequences of bits, but long binary strings
 are difficult for humans to read. Hexadecimal notation groups bits into
-sets of four, making memory contents easier to inspect and write.</p>
+sets of four, making memory contents easier to inspect and write. </p>
 <p>For example:</p>
 <ul>
-<li>binary: <code>1010 1111</code><br />
-</li>
+<li>binary: <code>1010 1111</code></li>
 <li>hex: <code>AF</code></li>
 </ul>
 <p>Each hexadecimal digit corresponds exactly to four binary bits. This
 mapping makes it convenient to display memory as rows of hex values
 while still representing precise machine data.</p>
 <p>Assemblers, debuggers, and emulators commonly display memory using
-hexadecimal for this reason.</p>
+hexadecimal for this reason. </p>
 <figure>
 <img src="images/ch06-hex-memory.png"
 alt="Memory display showing hexadecimal values" />
@@ -206,18 +195,15 @@ values</figcaption>
 Operands</h2>
 <p>Each machine instruction contains:</p>
 <ul>
-<li>an <strong>opcode</strong> that specifies the operation<br />
-</li>
+<li>an <strong>opcode</strong> that specifies the operation</li>
 <li>zero or more <strong>operands</strong> that specify data or
 addresses</li>
 </ul>
 <p>Some instructions operate directly on registers, while others
-reference memory. Common addressing modes include:</p>
+reference memory. Common addressing modes include: </p>
 <ul>
-<li><strong>Immediate</strong>: value is part of the instruction<br />
-</li>
-<li><strong>Direct</strong>: instruction contains a memory address<br />
-</li>
+<li><strong>Immediate</strong>: value is part of the instruction</li>
+<li><strong>Direct</strong>: instruction contains a memory address</li>
 <li><strong>Indexed</strong>: address is computed using a register plus
 an offset</li>
 </ul>
@@ -234,13 +220,9 @@ modes</figcaption>
 <p>Instruction decoding is performed by control logic that converts
 opcode bits into control signals. These signals determine:</p>
 <ul>
-<li>which registers receive data<br />
-</li>
-<li>whether the ALU performs addition, subtraction, or comparison<br />
-</li>
-<li>whether memory is read or written<br />
-</li>
-<li>whether the Program Counter is modified</li>
+<li>which registers receive data - whether the ALU performs addition,
+subtraction, or comparison - whether memory is read or written - whether
+the Program Counter is modified</li>
 </ul>
 <p>Conceptually, decoding is a large decision tree built from logic
 gates. In real processors, this logic is carefully optimized to minimize
@@ -256,11 +238,8 @@ instructions modify the Program Counter based on conditions stored in
 status flags.</p>
 <p>This makes loops possible:</p>
 <ol type="1">
-<li>perform an operation<br />
-</li>
-<li>test a condition<br />
-</li>
-<li>branch back if the condition is not yet met</li>
+<li>perform an operation 2. test a condition 3. branch back if the
+condition is not yet met</li>
 </ol>
 <p>All higher-level control structures—such as while loops and if
 statements—ultimately reduce to conditional branches that alter the
@@ -307,14 +286,11 @@ exactly how software controls hardware.</p>
 <h2 id="strings-characters-and-memory">Strings, Characters, and
 Memory</h2>
 <p>Characters are stored as numeric codes, such as ASCII values. A
-string is simply a sequence of character codes stored in memory.</p>
+string is simply a sequence of character codes stored in memory. </p>
 <p>Programs that process text operate by:</p>
 <ul>
-<li>loading a character from memory<br />
-</li>
-<li>testing or modifying it<br />
-</li>
-<li>storing it back</li>
+<li>loading a character from memory - testing or modifying it - storing
+it back</li>
 </ul>
 <p>Operations such as converting letters to uppercase are performed by
 arithmetic on character codes, not by any special text-handling
@@ -328,11 +304,7 @@ Instructions</h2>
 execution still depends on machine instructions.</p>
 <p>A loop written in Python becomes:</p>
 <ul>
-<li>comparisons<br />
-</li>
-<li>branches<br />
-</li>
-<li>register updates</li>
+<li>comparisons - branches - register updates</li>
 </ul>
 <p>at the machine level. Although modern systems add layers such as
 virtual machines and just-in-time compilation, the final execution
@@ -346,13 +318,8 @@ with multiple cores, deep pipelines, and sophisticated memory systems.
 However, they still execute programs using the same fundamental
 principles:</p>
 <ul>
-<li>fetch instructions<br />
-</li>
-<li>decode operations<br />
-</li>
-<li>manipulate registers and memory<br />
-</li>
-<li>update the Program Counter</li>
+<li>fetch instructions - decode operations - manipulate registers and
+memory - update the Program Counter</li>
 </ul>
 <p>The complexity lies in doing many of these steps in parallel and at
 extremely high speeds, not in changing the basic execution model.</p>

@@ -1,6 +1,8 @@
 # Very Large Scale Integration: From Individual Devices to Entire Chips
 
-\index{VLSI}\index{Very Large Scale Integration}\index{integrated circuits}
+\index{VLSI}
+\index{Very Large Scale Integration}
+\index{integrated circuits}
 
 The invention of the transistor made electronic switching reliable and efficient, but
 early circuits still consisted of individual components wired together on circuit boards.
@@ -8,7 +10,12 @@ Each transistor, resistor, and capacitor had to be manufactured separately and t
 connected by hand or by automated assembly. While this approach worked for small systems,
 it quickly became impractical as circuits grew more complex.
 
-Very Large Scale Integration (VLSI)\index{VLSI} describes the set of technologies that made it possible to place enormous numbers of transistors onto a single piece of silicon. Instead of assembling computers from individual components, entire processors could be manufactured as unified physical systems. This shift did not merely improve performance; it fundamentally changed how computers were designed, built, and scaled.
+Very Large Scale Integration (VLSI) describes the set of technologies that made it
+possible to place enormous numbers of transistors onto a single piece of silicon. Instead
+of assembling computers from individual components, entire processors could be
+manufactured as unified physical systems. This shift did not merely improve performance;
+it fundamentally changed how computers were designed, built, and scaled.
+\index{VLSI}
 
 ---
 
@@ -37,7 +44,12 @@ Before the 1960s, transistors were often built as small three-dimensional struct
 had to be individually assembled and wired. This made large-scale manufacturing slow,
 expensive, and difficult to automate.
 
-The planar transistor process\index{planar transistors}, developed at Fairchild Semiconductor, transformed transistor fabrication into a two-dimensional surface process. Instead of assembling parts, chemical and photographic techniques were used to shape transistor structures directly on the surface of silicon wafers\index{wafers}.
+The planar transistor process, developed at Fairchild Semiconductor, transformed
+transistor fabrication into a two-dimensional surface process. Instead of assembling
+parts, chemical and photographic techniques were used to shape transistor structures
+directly on the surface of silicon wafers.
+\index{planar transistors}
+\index{wafers}
 
 By depositing materials in layers and selectively removing regions using masks, entire
 arrays of transistors could be created simultaneously. This approach allowed thousands,
@@ -51,9 +63,17 @@ Planar fabrication made integration scalable.
 
 ![Silicon wafer with multiple die patterns](images/ch03-silicon-wafer-dies.png)
 
-Modern chip manufacturing begins with thin circular slices of silicon called wafers\index{wafers}. Each wafer contains many identical copies of a chip design, arranged in a grid pattern. After fabrication, the wafer is cut into individual chips, each of which becomes a processor, memory device, or controller.
+Modern chip manufacturing begins with thin circular slices of silicon called wafers. Each
+wafer contains many identical copies of a chip design, arranged in a grid pattern. After
+fabrication, the wafer is cut into individual chips, each of which becomes a processor,
+memory device, or controller.
+\index{wafers}
 
-Patterns are transferred onto wafers using photolithography\index{photolithography}. In this process, light-sensitive chemicals are exposed through precisely designed masks\index{masks}. Each mask defines where material will be added, removed, or altered during that step of fabrication.
+Patterns are transferred onto wafers using photolithography. In this process,
+light-sensitive chemicals are exposed through precisely designed masks. Each mask defines
+where material will be added, removed, or altered during that step of fabrication.
+\index{photolithography}
+\index{masks}
 
 Multiple masks are used in sequence to build up complex three-dimensional structures from
 stacked layers. Although the manufacturing process is layered, the design itself is
@@ -69,20 +89,30 @@ extremely high consistency.
 
 ![Historical growth of transistor counts on processors](images/ch03-transistor-growth.png)
 
-Once planar manufacturing was established, transistor counts began to grow rapidly. The Intel 4004 microprocessor\index{Intel 4004}, released in 1971, contained approximately 2,300 transistors and was the first commercially available single-chip general-purpose processor.
+Once planar manufacturing was established, transistor counts began to grow rapidly. The
+Intel 4004 microprocessor, released in 1971, contained approximately 2,300 transistors and
+was the first commercially available single-chip general-purpose processor.
+\index{Intel 4004}
 
 Over the following decades, transistor counts increased by orders of magnitude. By the
 early 2000s, chips contained billions of transistors. Modern graphics processors and
 specialized accelerators now contain tens or even hundreds of billions of devices, and
 experimental wafer-scale systems integrate trillions of transistors across entire wafers.
 
-This steady growth is often associated with Moore's Law\index{Moore's Law}, an observation that transistor density tends to double over fixed time intervals. While physical limits now constrain how small transistors can become, integration remains the defining feature of modern computing hardware.
+This steady growth is often associated with Moore's Law, an observation that transistor
+density tends to double over fixed time intervals. While physical limits now constrain how
+small transistors can become, integration remains the defining feature of modern computing
+hardware.
+\index{Moore's Law}
 
 ---
 
 ## Designing with Layout, Not Wires
 
-As transistor counts increased, manual wiring became impossible. Instead, designers describe circuits using layout patterns\index{layout} that specify where materials will be placed on the wafer.
+As transistor counts increased, manual wiring became impossible. Instead, designers
+describe circuits using layout patterns that specify where materials will be placed on the
+wafer.
+\index{layout}
 
 VLSI layout tools allow engineers to design using layers that represent different physical
 materials:
@@ -90,7 +120,10 @@ materials:
 - metal for conductors - doped silicon regions for transistor channels - polysilicon for
 control gates
 
-When certain layers cross, transistors are formed automatically by the manufacturing process. Vertical connections between layers are created using structures called vias\index{vias}, which allow signals to move between wiring layers.
+When certain layers cross, transistors are formed automatically by the manufacturing
+process. Vertical connections between layers are created using structures called vias,
+which allow signals to move between wiring layers.
+\index{vias}
 
 ![Layered VLSI layout showing metal, diffusion, and polysilicon](images/ch03-vlsi-layers.png)
 
@@ -124,7 +157,11 @@ characteristics of computer architecture: logical design mirrors physical implem
 
 ## Design Tools and Educational Models
 
-Professional VLSI design requires sophisticated tools that model electrical behavior, timing, power consumption, and manufacturing constraints. One of the most widely used educational tools for learning layout is the open-source Magic VLSI system\index{Magic VLSI}, originally developed at Berkeley in the early 1980s and still widely used in academic instruction.
+Professional VLSI design requires sophisticated tools that model electrical behavior,
+timing, power consumption, and manufacturing constraints. One of the most widely used
+educational tools for learning layout is the open-source Magic VLSI system, originally
+developed at Berkeley in the early 1980s and still widely used in academic instruction.
+\index{Magic VLSI}
 
 Educational layout environments simplify many aspects of real fabrication. They may allow
 layer overlaps or ignore detailed spacing rules that would be impossible to manufacture
@@ -178,3 +215,4 @@ With logic gates available as reliable building blocks, the next step is to exam
 arithmetic operations and memory storage are implemented using combinations of gates. The
 following chapter explores how numbers are added, stored, and manipulated using purely
 digital logic structures.
+

@@ -1,8 +1,18 @@
 # From Tubes to Transistors: How Solid-State Electronics Changed Everything
 
-\index{vacuum tubes}\index{transistors}\index{solid-state electronics}
+\index{vacuum tubes}
+\index{transistors}
+\index{solid-state electronics}
 
-The earliest electronic computers replaced mechanical motion with electrical switching, but they still relied on bulky, fragile components that consumed large amounts of power. These components, called vacuum tubes\index{vacuum tubes} or valves\index{valves}, made it possible to build fully electronic machines, yet they also imposed severe limits on speed, size, and reliability. The transition from tubes to transistors\index{transistors} did far more than improve existing designs—it reshaped what computers could be and made modern computing possible.
+The earliest electronic computers replaced mechanical motion with electrical switching,
+but they still relied on bulky, fragile components that consumed large amounts of power.
+These components, called vacuum tubes or valves, made it possible to build fully
+electronic machines, yet they also imposed severe limits on speed, size, and reliability.
+The transition from tubes to transistors did far more than improve existing designs—it
+reshaped what computers could be and made modern computing possible.
+\index{vacuum tubes}
+\index{valves}
+\index{transistors}
 
 This chapter follows that transition. It begins with electronic amplification, moves
 through the physics of semiconductors, and ends with logic gates built from complementary
@@ -57,9 +67,22 @@ That solution emerged from solid-state physics.
 
 ![Crystal lattice with P-type and N-type regions](images/ch02-semiconductor-doping.png)
 
-Most materials fall into one of two categories when it comes to electricity: conductors\index{conductors}, which allow current to flow easily, and insulators\index{insulators}, which resist current strongly. Semiconductors\index{semiconductors} occupy the middle ground. Under the right conditions, they can be made to conduct or block current in controlled ways.
+Most materials fall into one of two categories when it comes to electricity: conductors,
+which allow current to flow easily, and insulators, which resist current strongly.
+Semiconductors occupy the middle ground. Under the right conditions, they can be made to
+conduct or block current in controlled ways.
+\index{conductors}
+\index{insulators}
+\index{semiconductors}
 
-Silicon\index{silicon}, one of the most common elements in the Earth's crust, becomes useful for electronics when small amounts of other elements are added to it. This process, called doping\index{doping}, changes how electrons move through the crystal lattice. Regions with extra electrons are called N-type\index{N-type}, while regions missing electrons are called P-type\index{P-type}.
+Silicon, one of the most common elements in the Earth's crust, becomes useful for
+electronics when small amounts of other elements are added to it. This process, called
+doping, changes how electrons move through the crystal lattice. Regions with extra
+electrons are called N-type, while regions missing electrons are called P-type.
+\index{silicon}
+\index{doping}
+\index{N-type}
+\index{P-type}
 
 When these regions meet, electrical behavior emerges that can be precisely controlled by
 external voltages. At the boundaries between P-type and N-type material, electric fields
@@ -115,13 +138,21 @@ where noise and small errors would otherwise accumulate.
 
 ![NMOS and PMOS transistor symbols and conduction paths](images/ch02-nmos-pmos.png)
 
-Different transistor structures conduct under different conditions. NMOS transistors\index{NMOS} conduct when their gate voltage is high, while PMOS transistors\index{PMOS} conduct when their gate voltage is low. Each type has advantages and disadvantages when used alone.
+Different transistor structures conduct under different conditions. NMOS transistors
+conduct when their gate voltage is high, while PMOS transistors conduct when their gate
+voltage is low. Each type has advantages and disadvantages when used alone.
+\index{NMOS}
+\index{PMOS}
 
 Early integrated circuits often used only one type of transistor, resulting in designs
 that consumed power even when not switching and generated significant heat. As chip
 densities increased, this became a serious limitation.
 
-The solution was to pair NMOS and PMOS transistors in complementary configurations. In such arrangements, when one transistor is on, the other is off. This drastically reduces static power consumption and improves switching behavior. The resulting technology is called CMOS\index{CMOS}, short for Complementary Metal‑Oxide‑Semiconductor.
+The solution was to pair NMOS and PMOS transistors in complementary configurations. In
+such arrangements, when one transistor is on, the other is off. This drastically reduces
+static power consumption and improves switching behavior. The resulting technology is
+called CMOS, short for Complementary Metal‑Oxide‑Semiconductor.
+\index{CMOS}
 
 Once CMOS manufacturing became practical in the late twentieth century, it transformed
 computer design. Entire processors could be placed on single chips, power requirements
@@ -136,9 +167,18 @@ using CMOS technology.
 
 ![CMOS inverter layout showing pull-up and pull-down networks](images/ch02-cmos-not-gate.png)
 
-While circuits are built from transistors, designers rarely think in terms of individual switching devices when creating complex systems. Instead, transistors are grouped into higher-level structures called logic gates\index{logic gates}. A gate accepts one or more binary inputs and produces a binary output according to a logical rule.
+While circuits are built from transistors, designers rarely think in terms of individual
+switching devices when creating complex systems. Instead, transistors are grouped into
+higher-level structures called logic gates. A gate accepts one or more binary inputs and
+produces a binary output according to a logical rule.
+\index{logic gates}
 
-The simplest gate is the inverter\index{inverter}, or NOT gate\index{NOT gate}, which produces the opposite of its input. In CMOS, an inverter is built from one NMOS transistor and one PMOS transistor arranged so that exactly one conducts at any time. When the input is low, the PMOS transistor pulls the output high. When the input is high, the NMOS transistor pulls the output low.
+The simplest gate is the inverter, or NOT gate, which produces the opposite of its input.
+In CMOS, an inverter is built from one NMOS transistor and one PMOS transistor arranged so
+that exactly one conducts at any time. When the input is low, the PMOS transistor pulls
+the output high. When the input is high, the NMOS transistor pulls the output low.
+\index{inverter}
+\index{NOT gate}
 
 This complementary behavior provides fast switching and low power usage, making it ideal
 for large-scale digital systems.
@@ -147,7 +187,15 @@ for large-scale digital systems.
 
 ## Building Complexity from Simple Gates
 
-Once reliable gates are available, more complex logical functions can be constructed by combining them. Gates such as AND\index{AND gate}, OR\index{OR gate}, and exclusive OR\index{XOR gate} implement familiar logical operations. Other gates, such as NAND\index{NAND gate} and NOR\index{NOR gate}, are especially important because entire digital systems can be built using only one of these gate types.
+Once reliable gates are available, more complex logical functions can be constructed by
+combining them. Gates such as AND, OR, and exclusive OR implement familiar logical
+operations. Other gates, such as NAND and NOR, are especially important because entire
+digital systems can be built using only one of these gate types.
+\index{AND gate}
+\index{OR gate}
+\index{XOR gate}
+\index{NAND gate}
+\index{NOR gate}
 
 ![NAND and NOR gate transistor-level structures](images/ch02-nand-nor-layout.png)
 
@@ -201,3 +249,4 @@ With solid-state logic established, the next step is to explore how gates are co
 into arithmetic circuits and memory structures. The following chapter examines how simple
 logical components are assembled into adders, registers, and the building blocks of
 processors.
+

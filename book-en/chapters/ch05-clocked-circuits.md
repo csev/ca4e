@@ -1,8 +1,15 @@
 # Clocked Circuits: Coordinating Computation Over Time
 
-\index{clocked circuits}\index{clock}\index{propagation delay}
+\index{clocked circuits}
+\index{clock}
+\index{propagation delay}
 
-Combinational logic circuits\index{combinational circuits}, such as adders and logic gates, produce outputs that depend only on their current inputs. However, physical circuits do not update instantaneously. Signals require time to propagate through transistors and wires before stabilizing at their final values. As circuits grow larger and more complex, this delay becomes increasingly important.
+Combinational logic circuits, such as adders and logic gates, produce outputs that depend
+only on their current inputs. However, physical circuits do not update instantaneously.
+Signals require time to propagate through transistors and wires before stabilizing at
+their final values. As circuits grow larger and more complex, this delay becomes
+increasingly important.
+\index{combinational circuits}
 
 To build reliable systems, digital computers introduce a coordinating signal called a **clock**\index{clock}. The clock defines discrete moments when values are allowed to change, allowing computation to proceed in synchronized steps rather than continuously drifting through intermediate states.
 
@@ -27,14 +34,19 @@ If outputs are observed before signals have fully settled, incorrect values may 
 
 ## Clock Rate and System Timing
 
-The clock rate\index{clock rate} of a processor specifies how often values are allowed to be updated. Each clock cycle provides time for signals to propagate and stabilize before being stored.
+The clock rate of a processor specifies how often values are allowed to be updated. Each
+clock cycle provides time for signals to propagate and stabilize before being stored.
+\index{clock rate}
 
 The maximum clock frequency is limited by:
 
 - the physical length of signal paths - the number of transistors in the longest logical
 path - the switching speed of the transistors - the size of the chip itself
 
-Once the slowest element of the arithmetic and logic unit (ALU)\index{ALU} is identified, the clock must be slow enough to accommodate that delay. Faster clocks allow more operations per second, but only if circuits can reliably settle within each cycle.
+Once the slowest element of the arithmetic and logic unit (ALU) is identified, the clock
+must be slow enough to accommodate that delay. Faster clocks allow more operations per
+second, but only if circuits can reliably settle within each cycle.
+\index{ALU}
 
 ![Clock waveform showing discrete sampling points](images/ch05-clock-waveform.png)
 
@@ -44,8 +56,8 @@ Once the slowest element of the arithmetic and logic unit (ALU)\index{ALU} is id
 
 To coordinate circuits, designers separate systems into two major categories:
 
-- **combinational circuits**\index{combinational circuits}, which compute continuously  
-- **clocked storage elements**\index{clocked storage}, which update only on clock events  
+- **combinational circuits**\index{combinational circuits}, which compute continuously
+- **clocked storage elements**\index{clocked storage}, which update only on clock events
 
 Adders and logic gates belong to the first category. Latches and registers belong to the
 second.
@@ -77,7 +89,9 @@ This structure is repeated throughout processors to create step-by-step executio
 
 ## Building a Counter
 
-By feeding the output of a register back into one input of an adder and fixing the other input to the value one, a counting circuit\index{counter} can be created.
+By feeding the output of a register back into one input of an adder and fixing the other
+input to the value one, a counting circuit can be created.
+\index{counter}
 
 Each clock cycle:
 
@@ -89,7 +103,9 @@ zero.
 
 ![Counter built from adder and register](images/ch05-counter.png)
 
-This simple structure forms the basis of timers, program counters\index{Program Counter}, and many sequencing mechanisms inside computers.
+This simple structure forms the basis of timers, program counters, and many sequencing
+mechanisms inside computers.
+\index{Program Counter}
 
 ---
 
@@ -113,8 +129,8 @@ A minimal processor can be built using:
 
 Suppose the machine supports two instructions:
 
-- **0** — clear the register  
-- **1** — add one to the register  
+- **0** — clear the register
+- **1** — add one to the register
 
 Instruction bits are connected to control gates that determine whether the adder output or
 zero is fed into the register. On each clock cycle, the selected value is stored.
@@ -146,10 +162,13 @@ This loop continues as long as the program runs.
 
 Two special registers manage instruction sequencing:
 
-- the **Program Counter (PC)**\index{Program Counter} stores the address of the next instruction  
-- the **Current Instruction Register (CIR)**\index{Current Instruction Register} holds the instruction being executed  
+- the **Program Counter (PC)**\index{Program Counter} stores the address of the next instruction
+- the **Current Instruction Register (CIR)**\index{Current Instruction Register} holds the instruction being executed
 
-On each cycle, the PC advances, memory is accessed, and the CIR loads the next instruction. Decoder circuits\index{decoder} then examine the instruction bits and activate the appropriate control signals for the ALU and registers.
+On each cycle, the PC advances, memory is accessed, and the CIR loads the next
+instruction. Decoder circuits then examine the instruction bits and activate the
+appropriate control signals for the ALU and registers.
+\index{decoder}
 
 ![PC and CIR interaction with memory and control logic](images/ch05-pc-cir.png)
 
@@ -205,3 +224,4 @@ The next chapter examines machine language and processor architecture in more de
 using a small but complete instruction set inspired by early microprocessors. Programs
 will be written directly in machine code and executed in an emulator to reveal how
 software and hardware meet at the lowest level.
+

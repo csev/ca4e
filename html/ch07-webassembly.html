@@ -61,7 +61,7 @@ class="ca4e-spacer"></span>
 <h1
 id="webassembly-and-emulation-running-real-programs-in-the-browser">WebAssembly
 and Emulation: Running Real Programs in the Browser</h1>
-<p></p>
+<p> </p>
 <p>After building a complete mental model of how a CPU executes machine
 instructions, it becomes possible to recognize the same ideas appearing
 in unexpected places. One of the most surprising is the modern web
@@ -70,25 +70,19 @@ executing low‑level binary code safely and efficiently.</p>
 <p>This chapter explores how emulation and WebAssembly connect
 historical machine architectures to modern execution environments, and
 why the browser can now act as a practical platform for systems
-programming.</p>
+programming. </p>
 <hr />
 <h2 id="from-hardware-to-emulators">From Hardware to Emulators</h2>
 <p>An emulator is a program that imitates the behavior of a hardware
 processor. Instead of electrical signals moving through gates, software
-interprets instruction bytes and updates simulated registers and
-memory.</p>
+interprets instruction bytes and updates simulated registers and memory.
+</p>
 <p>At a high level, an emulator performs the same steps as real
 hardware:</p>
 <ol type="1">
-<li>read the next instruction<br />
-</li>
-<li>decode the opcode<br />
-</li>
-<li>perform the operation<br />
-</li>
-<li>update registers and memory<br />
-</li>
-<li>advance the program counter</li>
+<li>read the next instruction 2. decode the opcode 3. perform the
+operation 4. update registers and memory 5. advance the program
+counter</li>
 </ol>
 <p>This is the same fetch–decode–execute cycle implemented in
 software.</p>
@@ -110,11 +104,8 @@ gigahertz.</p>
 <p>This enormous performance gap means that:</p>
 <ul>
 <li>JavaScript running in a browser can emulate historical CPUs in real
-time<br />
-</li>
-<li>graphics and sound can be simulated accurately<br />
-</li>
-<li>entire vintage game systems can be recreated in software</li>
+time - graphics and sound can be simulated accurately - entire vintage
+game systems can be recreated in software</li>
 </ul>
 <p>Web sites such as the Internet Archive host playable emulations of
 classic arcade machines that run entirely in the browser.</p>
@@ -128,15 +119,10 @@ emulator</figcaption>
 <h2 id="the-cdc6504-emulator">The CDC6504 Emulator</h2>
 <p>The CDC6504 emulator used in this course models a processor inspired
 by the MOS 6502 instruction set with a simplified architecture. It
-includes:</p>
+includes: </p>
 <ul>
-<li>registers (A, X, Y, status flags)<br />
-</li>
-<li>instruction memory<br />
-</li>
-<li>data memory<br />
-</li>
-<li>branching and arithmetic instructions</li>
+<li>registers (A, X, Y, status flags) - instruction memory - data memory
+- branching and arithmetic instructions</li>
 </ul>
 <p>Each instruction is implemented as a small block of JavaScript that
 updates simulated hardware state.</p>
@@ -156,11 +142,9 @@ sequence of numbers stored in an array. The emulator reads these numbers
 and interprets them as instructions.</p>
 <p>For example:</p>
 <ul>
-<li>a value may represent “load accumulator”<br />
-</li>
-<li>the next value may represent an address or constant<br />
-</li>
-<li>branching instructions modify the program counter</li>
+<li>a value may represent “load accumulator” - the next value may
+represent an address or constant - branching instructions modify the
+program counter</li>
 </ul>
 <p>The meaning comes entirely from how the emulator interprets the
 bits.</p>
@@ -171,32 +155,23 @@ replaces physical wiring.</p>
 Virtual Machines</h2>
 <p>Historically, assembly language targeted specific processors:</p>
 <ul>
-<li>MOS 6502<br />
-</li>
-<li>Intel x86<br />
-</li>
-<li>ARM</li>
+<li>MOS 6502 - Intel x86 - ARM </li>
 </ul>
 <p>Programs compiled for one architecture could not run on another
 without translation or emulation.</p>
 <p>WebAssembly changes this model by defining a portable virtual
-instruction set that runs on top of browsers and other runtimes.</p>
+instruction set that runs on top of browsers and other runtimes. </p>
 <p>Instead of targeting physical hardware, compilers target a
 standardized virtual machine.</p>
 <hr />
 <h2 id="what-is-webassembly">What Is WebAssembly?</h2>
 <p>WebAssembly (WASM) is a low‑level, binary instruction format designed
 for safe and efficient execution in browsers and other environments. It
-is not tied to any specific physical CPU.</p>
+is not tied to any specific physical CPU. </p>
 <p>Key characteristics include:</p>
 <ul>
-<li>structured control flow<br />
-</li>
-<li>validated instruction sequences<br />
-</li>
-<li>sandboxed memory access<br />
-</li>
-<li>deterministic execution</li>
+<li>structured control flow - validated instruction sequences -
+sandboxed memory access - deterministic execution </li>
 </ul>
 <p>WASM programs cannot access files, devices, or the operating system
 directly. All interaction with the outside world occurs through
@@ -212,13 +187,10 @@ browser</figcaption>
 <p>Languages such as C and C++ can be compiled to WebAssembly using
 modern toolchains. The compilation process is:</p>
 <ol type="1">
-<li>source code is compiled to WASM bytecode<br />
-</li>
-<li>the browser loads and validates the module<br />
-</li>
-<li>the runtime translates WASM to native machine code<br />
-</li>
-<li>the program executes at near‑native speed</li>
+<li>source code is compiled to WASM bytecode 2. the browser loads and
+validates the module</li>
+<li>the runtime translates WASM to native machine code 4. the program
+executes at near‑native speed</li>
 </ol>
 <p>From the browser’s perspective, WebAssembly is just another kind of
 executable content, similar to JavaScript but closer to machine
@@ -226,7 +198,7 @@ operations.</p>
 <hr />
 <h2 id="a-wasm-hello-world">A WASM “Hello, World”</h2>
 <p>A minimal WebAssembly program may look like this in textual form
-(WAT):</p>
+(WAT): </p>
 <pre class="wat"><code>(module
   (import &quot;console&quot; &quot;log&quot; (func $log (param i32 i32)))
   (memory 1)
@@ -239,13 +211,8 @@ operations.</p>
 )</code></pre>
 <p>This code:</p>
 <ul>
-<li>allocates memory<br />
-</li>
-<li>stores a string<br />
-</li>
-<li>calls a logging function<br />
-</li>
-<li>returns a numeric value</li>
+<li>allocates memory - stores a string - calls a logging function -
+returns a numeric value</li>
 </ul>
 <p>When compiled, it becomes a compact binary format that the browser
 can execute efficiently.</p>
@@ -262,17 +229,13 @@ Traditional Assembly</h2>
 important ways:</p>
 <ul>
 <li><strong>Sandboxed by design</strong> — no direct memory or OS
-access<br />
-</li>
+access</li>
 <li><strong>Safe execution model</strong> — code is validated before
-running<br />
-</li>
+running</li>
 <li><strong>Portable bytecode</strong> — same program runs on any
-platform<br />
-</li>
+platform</li>
 <li><strong>Abstract machine</strong> — targets a virtual stack
-machine<br />
-</li>
+machine</li>
 <li><strong>Host optimization</strong> — browsers compile and optimize
 at runtime</li>
 </ul>
@@ -284,13 +247,8 @@ the execution model itself.</p>
 Stack</h2>
 <p>Like physical CPUs, WebAssembly supports:</p>
 <ul>
-<li>local variables<br />
-</li>
-<li>function calls<br />
-</li>
-<li>loops and branches<br />
-</li>
-<li>a call stack</li>
+<li>local variables - function calls - loops and branches - a call
+stack</li>
 </ul>
 <p>When a function is called, parameters and return addresses are
 managed using stack structures maintained by the runtime.</p>
@@ -303,8 +261,7 @@ Modern Devices</h2>
 developed, but two now dominate consumer computing:</p>
 <ul>
 <li><strong>ARM</strong> processors, used in phones, tablets, and most
-laptops<br />
-</li>
+laptops</li>
 <li><strong>x86</strong> processors, used in many desktop and server
 systems</li>
 </ul>
@@ -316,15 +273,9 @@ instructions, and controlled execution.</p>
 Transitions</h2>
 <p>Apple has moved across several processor families:</p>
 <ul>
-<li>MOS 6502 — early Apple computers<br />
-</li>
-<li>Motorola 68000 — early Macintosh systems<br />
-</li>
-<li>PowerPC — mid‑1990s through mid‑2000s<br />
-</li>
-<li>Intel x86 — 2006 through 2020<br />
-</li>
-<li>Apple‑designed ARM — 2020 to present</li>
+<li>MOS 6502 — early Apple computers - Motorola 68000 — early Macintosh
+systems - PowerPC — mid‑1990s through mid‑2000s - Intel x86 — 2006
+through 2020 - Apple‑designed ARM — 2020 to present</li>
 </ul>
 <p>To ease transitions, Apple built machine‑code translation systems
 that converted programs from one architecture to another at launch time.
@@ -347,11 +298,8 @@ the design of modern systems.</p>
 <p>Emulators allow direct observation of how instructions change machine
 state:</p>
 <ul>
-<li>registers update<br />
-</li>
-<li>memory changes<br />
-</li>
-<li>branches alter execution flow</li>
+<li>registers update - memory changes - branches alter execution
+flow</li>
 </ul>
 <p>This visibility is rarely available on modern hardware, where
 pipelines and caches obscure internal behavior.</p>

@@ -61,17 +61,17 @@ Previous</a> <a class="ca4e-next" href="ch05-clocked-circuits.html">Next
 </nav>
 <h1 id="digital-logic-building-computation-from-gates">Digital Logic:
 Building Computation from Gates</h1>
-<p></p>
+<p> </p>
 <p>With reliable transistors and scalable manufacturing in place,
 attention can shift from how devices are built to how computation itself
 is organized. Digital logic provides the abstraction that allows
 electrical behavior to be treated as mathematical structure. Voltages
 become symbols, wires become signals, and circuits become logical
 systems that can be reasoned about using rules rather than physical
-measurements.</p>
+measurements. </p>
 <p>This chapter introduces the logical building blocks of computers:
 gates, adders, and storage elements. These components form the
-foundation of processors and memory systems.</p>
+foundation of processors and memory systems. </p>
 <hr />
 <h2 id="computers-as-interconnected-components">Computers as
 Interconnected Components</h2>
@@ -96,7 +96,7 @@ performing a simple cycle: fetch an instruction, interpret it, and
 perform the required operation. The CPU is not intelligent in the human
 sense. It does not understand goals or meaning. Instead, it follows
 mechanical rules at very high speed, executing billions of operations
-per second in modern systems.</p>
+per second in modern systems. </p>
 <p>Programs written in high-level languages are translated into machine
 instructions that the CPU can execute directly. Each instruction
 specifies small operations such as moving data, performing arithmetic,
@@ -110,13 +110,10 @@ Blocks</h2>
 output. Each gate implements a simple logical rule.</p>
 <p>The most common gates include:</p>
 <ul>
-<li><strong>NOT</strong>, which inverts a signal<br />
-</li>
+<li><strong>NOT</strong>, which inverts a signal</li>
 <li><strong>AND</strong>, which produces one only if all inputs are
-one<br />
-</li>
-<li><strong>OR</strong>, which produces one if any input is one<br />
-</li>
+one</li>
+<li><strong>OR</strong>, which produces one if any input is one</li>
 <li><strong>XOR</strong>, which produces one if inputs differ</li>
 </ul>
 <figure>
@@ -133,21 +130,16 @@ Binary</h2>
 <p>To perform arithmetic using logic gates, numbers must be represented
 using electrical signals. Humans normally use base‑10 representation,
 where each digit represents a power of ten. Digital systems instead use
-base‑2 representation, where each digit represents a power of two.</p>
+base‑2 representation, where each digit represents a power of two. </p>
 <p>For example:</p>
 <ul>
 <li>The base‑10 number 6 is written as <strong>110₂</strong> in
-binary.<br />
-</li>
+binary.</li>
 <li>The base‑10 number 7 is written as <strong>111₂</strong>.</li>
 </ul>
 <p>Each bit position corresponds to a weight:</p>
 <ul>
-<li>leftmost bit → 4<br />
-</li>
-<li>middle bit → 2<br />
-</li>
-<li>rightmost bit → 1</li>
+<li>leftmost bit → 4 - middle bit → 2 - rightmost bit → 1</li>
 </ul>
 <p>Binary representation allows numerical values to be manipulated using
 simple logical operations on individual bits.</p>
@@ -166,8 +158,7 @@ produce both a sum bit and a carry bit.</p>
 <p>A <strong>half adder</strong> is a circuit that adds two bits and
 produces:</p>
 <ul>
-<li>a <strong>sum</strong> output<br />
-</li>
+<li>a <strong>sum</strong> output</li>
 <li>a <strong>carry</strong> output</li>
 </ul>
 <p>The sum output is produced by an XOR gate, while the carry output is
@@ -187,17 +178,11 @@ Addition</h2>
 carry value from the previous position. A <strong>full adder</strong>
 extends the half adder by adding three inputs:</p>
 <ul>
-<li>bit A<br />
-</li>
-<li>bit B<br />
-</li>
-<li>carry‑in</li>
+<li>bit A - bit B - carry‑in</li>
 </ul>
 <p>It produces:</p>
 <ul>
-<li>a sum bit<br />
-</li>
-<li>a carry‑out bit</li>
+<li>a sum bit - a carry‑out bit</li>
 </ul>
 <p>By chaining full adders together, multi-bit addition can be
 performed. Each stage passes its carry output to the next stage,
@@ -235,12 +220,10 @@ not only on current inputs, but also on past states.</p>
 Latches</h2>
 <p>While simple latches can store data, processors require more
 controlled storage that changes only at specific times. This is achieved
-by introducing a clock signal.</p>
+by introducing a clock signal. </p>
 <p>A <strong>gated D latch</strong> has:</p>
 <ul>
-<li>a data input (D)<br />
-</li>
-<li>a clock or control input (C)</li>
+<li>a data input (D) - a clock or control input (C)</li>
 </ul>
 <p>When the clock is active, the latch copies the data input into its
 internal state. When the clock is inactive, the stored value is held
@@ -259,7 +242,7 @@ Latches</h2>
 <p>By grouping multiple gated D latches together, multi-bit storage
 units can be created. For example, three latches can store a three-bit
 number. Larger registers store entire machine words, allowing processors
-to hold intermediate values during computation.</p>
+to hold intermediate values during computation. </p>
 <p>Registers provide fast, temporary storage that supports arithmetic
 operations, branching decisions, and data movement within the CPU.</p>
 <figure>
