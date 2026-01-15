@@ -147,6 +147,35 @@ In each case, the key idea is that physical movement stands in for mathematical
 transformation. The device performs computation because its shape embodies mathematical
 relationships.
 
+## Using the E6B to Compute Wind Correction
+
+The E6B flight computer solves a practical navigation problem: when flying through moving
+air, the aircraft's heading and ground track differ due to wind. To reach a destination,
+pilots must point the aircraft in a direction that compensates for wind drift, while
+maintaining the desired ground track course.
+
+![E6B Airplane Wind Correction Computer](images/ch01-e6b-and-plane.png)
+<div class="image-attribution">
+Photo: Charles Severance
+</div>
+
+The E6B performs this vector computation graphically. On the device, a circular slide rule
+represents the relationship between airspeed, wind speed, wind direction, heading, and
+ground track. To use it, the pilot first sets the wind direction and speed on the outer
+scale. Then, by rotating the inner disk to align the desired ground track course, the
+device reveals the required heading angle and resulting ground speed.
+
+This computation involves vector addition: the aircraft's velocity through the air plus the
+wind's velocity equals the ground velocity. Rather than calculating these vectors
+numerically using trigonometry, the E6B encodes the relationships geometrically. The
+physical alignment of scales performs the vector addition automatically. When the scales
+are positioned correctly, the solution appears directly—no arithmetic required.
+
+The device demonstrates that computation can occur through spatial relationships rather
+than sequential numerical operations. By arranging scales and markers to represent
+mathematical relationships, the E6B transforms a complex vector problem into a simple
+mechanical alignment task.
+
 ---
 
 ## Discrete States and Digital Devices
