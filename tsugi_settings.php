@@ -42,9 +42,6 @@ $CFG->ownername = 'Charles Severance';
 $CFG->owneremail = 'drchuck@learnxp.com';
 $CFG->providekeys = true;  // true
 
-$CFG->setExtension('django_version', '4.2');
-$CFG->setExtension('django_version_short', '42');
-
 $buildmenu = $CFG->dirroot."/../buildmenu.php";
 if ( file_exists($buildmenu) ) {
     require_once $buildmenu;
