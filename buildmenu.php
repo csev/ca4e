@@ -6,28 +6,25 @@ function buildMenu() {
     global $CFG;
     $R = $CFG->apphome . '/';
     $T = $CFG->wwwroot . '/';
-    $L = $CFG->wwwroot . '/lms/';
-    $A = $L . 'announce';
 
     $adminmenu = isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true";
     $set = new \Tsugi\UI\MenuSet();
     $set->setHome($CFG->servicename, $CFG->apphome);
 
-    // Generate URLs using rest_path and addSession
-    $json_url = U::addSession($A . '/json.php');
-    $dismiss_url = U::addSession($A . '/dismiss.php');
-    $view_url = U::addSession($A . '/index.php');
+    $json_url = $R . 'announcements/json';
+    $dismiss_url = $R . 'announcements/dismiss';
+    $view_url = $R . 'announcements';
 
     if ( U::isNotEmpty($CFG->lessons) ) {
-        $set->addLeft('Lessons', $L.'lessons');
+        $set->addLeft('Lessons', $R.'lessons');
     }
-    if ( U::isNotEmpty($CFG->tdiscus) && $CFG->tdiscus ) $set->addLeft('Discussions', $L.'discussions');
+    if ( U::isNotEmpty($CFG->tdiscus) && $CFG->tdiscus ) $set->addLeft('Discussions', $R.'discussions');
     if ( ! isset($_SESSION['id']) ) {
         $set->addLeft('Explore', $R.'explore');
     }
 
     if ( U::isNotEmpty($CFG->lessons) && isset($_SESSION['id']) ) {
-        $set->addLeft('My Progress', $L.'assignments');
+        $set->addLeft('My Progress', $R.'assignments');
     }
 
     if ( U::isNotEmpty($CFG->lessons) && (! isset($_SESSION['id'])) && is_dir('assn') ) {
@@ -36,13 +33,13 @@ function buildMenu() {
 
     if ( isset($_SESSION['id']) ) {
         $submenu = new \Tsugi\UI\Menu();
-        $submenu->addLink('Profile', $L.'profile');
+        $submenu->addLink('Profile', $R.'profile');
         if ( isset($CFG->google_map_api_key) ) {
-            $submenu->addLink('Map', $L.'map');
+            $submenu->addLink('Map', $R.'map');
         }
-        $submenu->addLink('Announcements', $L.'announce');
-        $submenu->addLink('Grades', $L.'grades');
-        $submenu->addLink('Pages', $L.'pages');
+        $submenu->addLink('Announcements', $R.'announcements');
+        $submenu->addLink('Grades', $R.'grades');
+        $submenu->addLink('Pages', $R.'pages');
         $submenu->addLink('LMS Integration', $T . 'settings');
 
         if ( isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true" ) {
