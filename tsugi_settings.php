@@ -48,5 +48,8 @@ if ( file_exists($buildmenu) ) {
     $CFG->defaultmenu = buildMenu();
 }
 
+// Debug
+// $CFG->setExtension('launch_debug', true);
+
 
 
