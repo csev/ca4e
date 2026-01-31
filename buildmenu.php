@@ -39,6 +39,7 @@ function buildMenu() {
             $submenu->addLink('Map', $R.'map');
         }
         $submenu->addLink('Announcements', $R.'announcements');
+        $submenu->addLink('Notifications', $R.'notifications');
         $submenu->addLink('Grades', $R.'grades');
         $submenu->addLink('Pages', $R.'pages');
         $submenu->addLink('LMS Integration', $T . 'settings');
@@ -54,13 +55,14 @@ function buildMenu() {
             $set->addRight(htmlentities($_SESSION['displayname']), $submenu);
         }
     } else {
-        $set->addRight('Login', $T.'login.php');
+        $set->addRight('Login', $R.'login');
     }
 
     $set->addRight('Instructor', 'https://online.dr-chuck.com', true, array('target' => '_self'));
 
     if ( isset($_SESSION['id']) ) {
-        $set->addRight('<tsugi-announce json-url="'. htmlspecialchars($json_url) . '" dismiss-url="'. htmlspecialchars($dismiss_url) . '" view-url="'. htmlspecialchars($view_url) . '"> </tsugi-announce>', false);
+        $notifications_url = $R . 'notifications';
+        $set->addRight('<tsugi-announce json-url="'. htmlspecialchars($json_url) . '" dismiss-url="'. htmlspecialchars($dismiss_url) . '" view-url="'. htmlspecialchars($view_url) . '" notifications-url="'. htmlspecialchars($notifications_url) . '"></tsugi-announce>', false);
     }
 
     return $set;

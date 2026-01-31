@@ -29,6 +29,8 @@ $CFG->giftquizzes = $CFG->dirroot.'/../ca4e-private/quiz';
 
 $CFG->tdiscus = $CFG->apphome . '/mod/tdiscus/';
 
+$CFG->google_login_redirect = $CFG->apphome . "/login";
+
 // $CFG->launcherror = $CFG->apphome . "/launcherror";
 
 $CFG->lessons = $CFG->dirroot.'/../lessons.json';
@@ -41,6 +43,13 @@ $CFG->lessons = $CFG->dirroot.'/../lessons-items.json';
 $CFG->ownername = 'Charles Severance';
 $CFG->owneremail = 'drchuck@learnxp.com';
 $CFG->providekeys = true;  // true
+
+// VAPID keys for push notifications
+// Generate keys at: https://giga.tools/developer-tools/vapid-key-generator
+// Or see tsugi/VAPID_SETUP.md for detailed instructions and alternatives
+// $CFG->vapid_public_key = 'YOUR_PUBLIC_KEY_HERE';
+// $CFG->vapid_private_key = 'YOUR_PRIVATE_KEY_HERE';
+// $CFG->vapid_subject = 'mailto:drchuck@learnxp.com'; // Required: mailto: URL with your email
 
 $buildmenu = $CFG->dirroot."/../buildmenu.php";
 if ( file_exists($buildmenu) ) {

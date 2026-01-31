@@ -606,6 +606,44 @@ if (errorOutput && !errorOutput.classList.contains('hidden') && errorOutput.text
 }
 ```
 
+## Composer Dependency Management
+
+### CRITICAL: Never Run Broad Composer Upgrades
+**NEVER** run `composer update` without specifying a specific package name. This will upgrade ALL packages and can break the project.
+
+**IMPORTANT**: The `vendor/` folder is committed to git and managed carefully. This ensures:
+- Production servers can deploy with just `git checkout` - no composer install required
+- All servers (dev, staging, production) run the exact same code
+- No build steps needed on production deployments
+- Major dependency upgrades are done in branches with extensive testing
+
+Do NOT make dependency changes without explicit approval. Any composer command that modifies `vendor/` will be committed to git.
+
+### Allowed Composer Commands
+- `composer install --no-dev --ignore-platform-reqs` - Install dependencies from lock file (safe, no upgrades)
+- `composer update <package-name> --ignore-platform-reqs` - Update ONLY the specified package (requires approval)
+- `composer require <package-name> --ignore-platform-reqs` - Add a new package (requires approval)
+- `composer show <package-name>` - Check if a package is installed (read-only, safe)
+
+### Forbidden Composer Commands
+- `composer update` - NEVER run this without a package name
+- `composer update --no-dev` - Still upgrades everything, forbidden
+- Any command that would upgrade multiple packages
+- Any composer command that modifies vendor/ without explicit user request
+
+### Adding New Packages (Requires Approval)
+1. Add the package to `composer.json` manually, OR
+2. Use `composer require <package-name> --ignore-platform-reqs` (this updates composer.json and composer.lock)
+3. Then run `composer install --no-dev --ignore-platform-reqs` to install
+4. **IMPORTANT**: Changes to `vendor/` will be committed to git - ensure this is intentional
+
+### Restoring After Accidental Upgrade
+If packages were accidentally upgraded:
+1. `git checkout composer.lock` - Restore the lock file
+2. `git checkout composer.json` - Restore composer.json if it was modified
+3. `git checkout vendor/` - Restore the vendor folder to exact committed state
+4. `composer install --no-dev --ignore-platform-reqs` - Reinstall at correct versions (if needed)
+
 ## Resources
 - Tsugi Documentation: `tsugi/vendor/tsugi/lib/docs/`
 - LTI Specification: IMS Global Learning Consortium
