@@ -31,6 +31,8 @@ $CFG->tdiscus = $CFG->apphome . '/mod/tdiscus/';
 
 $CFG->google_login_redirect = $CFG->apphome . "/login";
 
+$CFG->service_worker = true;
+
 // $CFG->launcherror = $CFG->apphome . "/launcherror";
 
 $CFG->lessons = $CFG->dirroot.'/../lessons.json';
