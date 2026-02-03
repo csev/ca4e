@@ -257,9 +257,10 @@
                 },
                 {
                     "type": "video",
-                    "title": "Building a CMOS Nor Gate From Transistors (8:04)",
-                    "youtube": "iiqLOn-WHA0",
-                    "media": "ca4e-media/02-SolidState/02-10-SolidState-CMOS-Nor.mov"
+                    "title": "Building a CMOS Nor Gate From Transistors (7:28)",
+                    "youtube": "DBtucp_ukSE",
+                    "fcp": "CA4E-Demos/02-Solid-State/02-10-SolidState-CMOS-Nor",
+                    "media": "ca4e-media/02-SolidState/02-10-SolidState-CMOS-Nor.m4v"
                 },
                 {
                     "type": "header",
@@ -441,15 +442,17 @@
                 },
                 {
                     "type": "video",
-                    "title": "VLSI Not Gate Layout (9:37)",
-                    "youtube": "ryVUYyCXsaM",
-                    "media": "ca4e-media/03-VLSI/03-11-SolidState-VLSI-Not.mov"
+                    "title": "VLSI Not Gate Layout (8:30)",
+                    "youtube": "qdpnzRvoGtk",
+                    "fcp": "CA4E-Demos/03-VLSI/03-11-SolidState-VLSI-Not",
+                    "media": "ca4e-media/03-VLSI/03-11-SolidState-VLSI-Not.m4v"
                 },
                 {
                     "type": "video",
-                    "title": "VLSI NAND Gate Layout | Computer Architecture for Everybody (9:02)",
-                    "youtube": "IYf7Wtrf8Ig",
-                    "media": "ca4e-media/03-VLSI/03-12-SolidState-VLSI-Nand.mov"
+                    "title": "VLSI NAND Gate Layout | Computer Architecture for Everybody (7:45)",
+                    "youtube": "wb3MH8Lr6oM",
+                    "fcp": "CA4E-Demos/03-VLSI/03-12-SolidState-VLSI-Nand",
+                    "media": "ca4e-media/03-VLSI/03-12-SolidState-VLSI-Nand.m4v"
                 },
                 {
                     "type": "header",
@@ -638,21 +641,24 @@
                 },
                 {
                     "type": "video",
-                    "title": "Gates Layout Tool Walkthrough (6:31)",
-                    "youtube": "T2FnPn-JrB0",
-                    "media": "ca4e-media/04-DigitalLogic/04-11-Digital-Gates-Tool.mov"
+                    "title": "Gates Layout Tool Walkthrough (5:46)",
+                    "youtube": "t3zuq1fu_mA",
+                    "fcp": "CA4E-Demos/04-DigitalLogic/04-11-Digital-Gates-Tool",
+                    "media": "ca4e-media/04-DigitalLogic/04-11-Digital-Gates-Tool.m4v"
                 },
                 {
                     "type": "video",
-                    "title": "Half Adder Assignment Walkthrough (3:30)",
-                    "youtube": "eJQlIlypCJo",
-                    "media": "ca4e-media/04-DigitalLogic/04-13-Digital-Gates-Half.mov"
+                    "title": "Autograded AND Gate Assignment Walkthrough (2:52)",
+                    "youtube": "Q_e187MplhI",
+                    "fcp": "CA4E-Demos/04-DigitalLogic/04-12-Digital-Gates-And",
+                    "media": "ca4e-media/04-DigitalLogic/04-12-Digital-Gates-And.m4v"
                 },
                 {
                     "type": "video",
-                    "title": "Autograded AND Gate Assignment Walkthrough (2:45)",
-                    "youtube": "p-kLkObk-18",
-                    "media": "ca4e-media/04-DigitalLogic/04-12-Digital-Gates-And.mov"
+                    "title": "Half Adder Assignment Walkthrough (3:20)",
+                    "youtube": "1rFMW0ubwp8",
+                    "fcp": "CA4E-Demos/04-DigitalLogic/04-13-Digital-Gates-Half",
+                    "media": "ca4e-media/04-DigitalLogic/04-13-Digital-Gates-Half.m4v"
                 },
                 {
                     "type": "header",
@@ -822,15 +828,17 @@
                 },
                 {
                     "type": "video",
-                    "title": "Building a Clocked Counter with Adders and Latches (10:25)",
-                    "youtube": "jh5WK3HF3o8",
-                    "media": "ca4e-media/05-Clock/05-14-Digital-Gates-Counter.mov"
+                    "title": "Building a Clocked Counter with Adders and Latches (9:26)",
+                    "youtube": "AkkL4aOWfSI",
+                    "reference": "CA4E-Demos/05-Clock/05-14-Digital-Gates-Counter",
+                    "media": "ca4e-media/05-Clock/05-14-Digital-Gates-Counter.m4v"
                 },
                 {
                     "type": "video",
-                    "title": "Building a Tiny CPU: A Two-Instruction Computer Walkthrough (6:10)",
-                    "youtube": "5sF_GXJgjCE",
-                    "media": "ca4e-media/05-Clock/05-15-Digital-Gates-Instruction.mov"
+                    "title": "Building a Tiny CPU: A Two-Instruction Computer Walkthrough (5:35)",
+                    "youtube": "EnZtPJLPbho",
+                    "reference": "CA4E-Demos/05-Clock/05-15-Digital-Gates-Instruction",
+                    "media": "ca4e-media/05-Clock/05-15-Digital-Gates-Instruction.m4v"
                 },
                 {
                     "type": "header",
@@ -961,28 +969,38 @@
                 },
                 {
                     "type": "video",
-                    "title": "Learning CPU Emulation with the CDC6504: Registers, Memory, and Instructions (6:45)",
-                    "youtube": "DZcvrHLaPRU"
+                    "title": "Learning CPU Emulation with the CDC6504: Registers, Memory, and Instructions (5:55)",
+                    "reference": "CA4E-Demos/06-CPU/06-11-CPU-6504-UI-Walkthrough",
+                    "media": "ca4e-media/06-CPU/06-11-CPU-6504-UI-Walkthrough.m4v",
+                    "youtube": "EXRg96qoX2Y"
                 },
                 {
                     "type": "video",
-                    "title": "Stepping Through a CPU Emulator: CDC6504 Instructions, Memory, and State (5:16)",
-                    "youtube": "H8M0vBEUDc4"
+                    "title": "Stepping Through a CPU Emulator: CDC6504 Instructions, Memory, and State (4:53)",
+                    "reference": "CA4E-Demos/06-CPU/06-12-CPU-6504-Simple-Samples",
+                    "media": "ca4e-media/06-CPU/06-12-CPU-6504-Simple-Samples.m4v",
+                    "youtube": "UwOHhsQe4QU"
                 },
                 {
                     "type": "video",
-                    "title": "Loops in Machine Language: Branching in the CDC6504 Emulator (10:07)",
-                    "youtube": "0aztFBPTEC0"
+                    "title": "Loops in Machine Language: Branching in the CDC6504 Emulator (9:09)",
+                    "reference": "CA4E-Demos/06-CPU/06-13-CPU-6504-For-Loop",
+                    "media": "ca4e-media/06-CPU/06-13-CPU-6504-For-Loop.m4v",
+                    "youtube": "-5CVRhmOFoU"
                 },
                 {
                     "type": "video",
-                    "title": "Understanding Conditional Branches in a CDC6504 (5:29)",
-                    "youtube": "kj8pox7YWKc"
+                    "title": "Understanding Conditional Branches in a CDC6504 (4:59)",
+                    "reference": "CA4E-Demos/06-CPU/06-14-CPU-6504-If-Test",
+                    "media": "ca4e-media/06-CPU/06-14-CPU-6504-If-Test.m4v",
+                    "youtube": "WIBdo1Dh9cE"
                 },
                 {
                     "type": "video",
-                    "title": "String Processing in Machine Language: CDC6504 Uppercase Example (13:15)",
-                    "youtube": "GjQ7bKe5Ln4"
+                    "title": "String Processing in Machine Language: CDC6504 Uppercase Example (12:05)",
+                    "reference": "CA4E-Demos/06-CPU/06-15-CPU-6504-Upper",
+                    "media": "ca4e-media/06-CPU/06-15-CPU-6504-Upper.m4v",
+                    "youtube": "pccnXG8pooA"
                 },
                 {
                     "type": "header",
@@ -1147,18 +1165,24 @@
                 },
                 {
                     "type": "video",
-                    "title": "Introducing WebAssembly (WASM): From Hello World Source Code to Execution (4:28)",
-                    "youtube": "SI-uPfnn6qk"
+                    "title": "Introducing WebAssembly (WASM): From Hello World Source Code to Execution (3:58)",
+                    "reference": "CA4E-Demos/07-Emulator/07-11-WASM-Hello-JS",
+                    "media": "ca4e-media/07-Emulator/07-11-WASM-Hello-JS.m4v",
+                    "youtube": "Gr7uTE0CUfI"
                 },
                 {
                     "type": "video",
                     "title": "Compiling C to WebAssembly (WASM) and Running It in the Browser (7:01)",
-                    "youtube": "TY1OeBhJKE4"
+                    "reference": "CA4E-Demos/07-Emulator/07-12-WASM-Hello-C",
+                    "media": "ca4e-media/07-Emulator/07-12-WASM-Hello-C.m4v",
+                    "youtube": "_ce9ty_4TfM"
                 },
                 {
                     "type": "video",
-                    "title": "Loops and the Stack: A String-to-Uppercase Example in WASM (11:35)",
-                    "youtube": "7im5IhwpX84"
+                    "title": "Loops and the Stack: A String-to-Uppercase Example in WASM (10:39)",
+                    "reference": "CA4E-Demos/07-Emulator/07-13-WASM-Upper",
+                    "media": "ca4e-media/07-Emulator/07-13-WASM-Upper.m4v",
+                    "youtube": "vS4rty2_xys"
                 },
                 {
                     "type": "header",

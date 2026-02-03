@@ -11,10 +11,6 @@ function buildMenu() {
     $set = new \Tsugi\UI\MenuSet();
     $set->setHome($CFG->servicename, $CFG->apphome);
 
-    $json_url = $R . 'announcements/json';
-    $dismiss_url = $R . 'announcements/dismiss';
-    $view_url = $R . 'announcements';
-
     if ( U::isNotEmpty($CFG->lessons) ) {
         $set->addLeft('Lessons', $R.'lessons');
         // $set->addLeft('Lessons', $R.'/tsugi/lms/lessons');
@@ -61,8 +57,7 @@ function buildMenu() {
     $set->addRight('Instructor', 'https://online.dr-chuck.com', true, array('target' => '_self'));
 
     if ( isset($_SESSION['id']) ) {
-        $notifications_url = $R . 'notifications';
-        $set->addRight('<tsugi-announce json-url="'. htmlspecialchars($json_url) . '" dismiss-url="'. htmlspecialchars($dismiss_url) . '" view-url="'. htmlspecialchars($view_url) . '" notifications-url="'. htmlspecialchars($notifications_url) . '"></tsugi-announce>', false);
+        $set->addRight('<tsugi-notifications api-url="'. htmlspecialchars($T . 'api/notifications.php') . '" notifications-view-url="'. htmlspecialchars($R . 'notifications') . '" announcements-view-url="'. htmlspecialchars($R . 'announcements') . '"></tsugi-notifications>', false);
     }
 
     return $set;
