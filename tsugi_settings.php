@@ -40,6 +40,7 @@ $CFG->lessons = $CFG->dirroot.'/../lessons.json';
 $CFG->setExtension('lessons2_enable', true);
 $CFG->setExtension('lessons_debug_conversion', false);
 $CFG->lessons = $CFG->dirroot.'/../lessons-items.json';
+$CFG->youtube_playlist = 'PLa58EAvBOOSJjrzDrl9eVigR5SQQ0W-3D';
 
 // Information on the owner of this system
 $CFG->ownername = 'Charles Severance';
