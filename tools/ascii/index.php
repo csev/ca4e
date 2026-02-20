@@ -340,7 +340,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     <div id="assignmentModal" class="assignment-modal hidden">
         <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
             <span>📋 Assignment</span>
-            <button class="close-btn" onclick="closeAssignmentModal()" title="Close">×</button>
+            <button class="close-btn" onclick="closeAssignmentModal()" title="Close" aria-label="Close">×</button>
         </div>
         <div class="modal-content">
             <p id="assignmentInstructions">

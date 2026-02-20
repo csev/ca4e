@@ -387,8 +387,8 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 <?php if ($USER && $USER->instructor) : ?>
                     <a href="<?php echo addSession('instructor.php'); ?>" class="instructor-button" title="Instructor Panel">Instructor</a>
 <?php endif; ?>
-                    <button id="asciiChart" style="background-color: #17a2b8; font-weight: bold;" title="ASCII Chart">ASCII</button>
-                    <button id="help" style="background-color: #28a745; font-weight: bold;">?</button>
+                    <button id="asciiChart" style="background-color: #17a2b8; font-weight: bold;" title="ASCII Chart" aria-label="Open ASCII chart">ASCII</button>
+                    <button id="help" style="background-color: #28a745; font-weight: bold;" aria-label="Open documentation">?</button>
                 </div>
             </div>
             
@@ -854,7 +854,7 @@ BRK`;
     <div id="assignmentModal" class="assignment-modal hidden">
         <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
             <span>📋 Assignment</span>
-            <button class="close-btn" onclick="closeAssignmentModal()" title="Close">×</button>
+            <button class="close-btn" onclick="closeAssignmentModal()" title="Close" aria-label="Close">×</button>
         </div>
         <div class="modal-content">
             <p id="assignmentInstructions">
@@ -872,7 +872,7 @@ BRK`;
     <div id="viewAssemblyModal" class="assignment-modal hidden">
         <div id="viewAssemblyModalHeader" class="modal-header" title="Drag to move">
             <span>📄 View Assembly</span>
-            <button class="close-btn" onclick="closeViewAssemblyModal()" title="Close">×</button>
+            <button class="close-btn" onclick="closeViewAssemblyModal()" title="Close" aria-label="Close">×</button>
         </div>
         <div class="modal-content">
             <pre id="viewAssemblyContent" style="background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 4px; padding: 12px; font-family: 'Courier New', monospace; font-size: 14px; white-space: pre; max-height: 60vh; overflow-x: auto; overflow-y: auto; margin: 0;">No assembly code loaded</pre>
@@ -884,7 +884,7 @@ BRK`;
     <div id="asciiChartModal" class="assignment-modal hidden">
         <div id="asciiChartModalHeader" class="modal-header" title="Drag to move">
             <span>📊 ASCII Chart</span>
-            <button class="close-btn" onclick="closeAsciiChartModal()" title="Close">×</button>
+            <button class="close-btn" onclick="closeAsciiChartModal()" title="Close" aria-label="Close">×</button>
         </div>
         <div id="asciiChartModalContent" class="modal-content" style="padding: 10px; display: flex; justify-content: center; overflow-y: auto; height: calc(100% - 50px);">
             <div id="asciiChartContent">

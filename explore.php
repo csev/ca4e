@@ -11,14 +11,14 @@ require "nav.php";
 $seconds = time();
 $val = intdiv($seconds, 5);
 $photos = [
-    "images/arduino-2713093_1280.jpg",
-    "images/seven-segment-957235_1280.jpg",
-    "images/vishnu-mohanan-O68LT-zCYFg-unsplash.jpg",
-    "images/wirth_interview.png",
-    "images/cdc_6500_cpu_living_computer.png",
-    "images/cdc_6500_console_living_computer.png",
+    ["src" => "images/arduino-2713093_1280.jpg", "alt" => "Arduino microcontroller board with components"],
+    ["src" => "images/seven-segment-957235_1280.jpg", "alt" => "Seven-segment display showing numeric digits"],
+    ["src" => "images/vishnu-mohanan-O68LT-zCYFg-unsplash.jpg", "alt" => "Electronic circuit components and wiring"],
+    ["src" => "images/wirth_interview.png", "alt" => "Niklaus Wirth, creator of Pascal and Modula"],
+    ["src" => "images/cdc_6500_cpu_living_computer.png", "alt" => "CDC 6500 CPU from the Living Computer Museum"],
+    ["src" => "images/cdc_6500_console_living_computer.png", "alt" => "CDC 6500 console from the Living Computer Museum"],
 ];
-$photo = $photos[intdiv(time(), 1) % count($photos)];
+$photo = $photos[intdiv(time(), 1) % count($photos)]["src"];
 ?>
 
 <!-- Fix for smartphone screen responsiveness -->
@@ -30,21 +30,21 @@ code {
 
 <div id="container">
 <div style="margin-left: 10px; float:right">
-<div id="carousel" class="carousel slide" data-ride="carousel">
+<div id="carousel" class="carousel slide" data-ride="carousel" role="region" aria-label="Featured photos">
   <div class="carousel-inner">
-    <?php foreach($photos as $index => $img): ?>
+    <?php foreach($photos as $index => $item): ?>
         <div class="carousel-item item <?= ($index === intdiv(time(), 1) % count($photos)) ? 'active' : '' ?>">
-            <img class="d-block" src="<?= $img ?>"  width="400" height="225"/>
+            <img class="d-block" src="<?= htmlspecialchars($item['src']) ?>" alt="<?= htmlspecialchars($item['alt']) ?>" width="400" height="225"/>
         </div>
     <?php endforeach; ?>
   </div>
 
 <!-- Previous/Next controls -->
-<a class="left carousel-control" href="#carousel" role="button" data-slide="prev">
+<a class="left carousel-control" href="#carousel" role="button" data-slide="prev" aria-label="Previous slide">
 <span class="icon-prev" aria-hidden="true"></span>
 <span class="sr-only">Previous</span>
 </a>
-<a class="right carousel-control" href="#carousel" role="button" data-slide="next">
+<a class="right carousel-control" href="#carousel" role="button" data-slide="next" aria-label="Next slide">
 <span class="icon-next" aria-hidden="true"></span>
 <span class="sr-only">Next</span>
 </a>

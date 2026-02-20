@@ -105,7 +105,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 <?php if ($USER && $USER->instructor) : ?>
                 <a href="instructor.php" style="background-color: #28a745; color: white; font-size: 14px; padding: 8px 15px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; min-width: 60px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-decoration: none; display: inline-block; margin: 2px;">Instructor</a>
 <?php endif; ?>
-                <button onclick="openDocumentation()" style="background-color: #FF9800; color: white; font-weight: bold; font-size: 16px; width: 40px; height: 40px; border-radius: 50%;">?</button>
+                <button onclick="openDocumentation()" style="background-color: #FF9800; color: white; font-weight: bold; font-size: 16px; width: 40px; height: 40px; border-radius: 50%;" aria-label="Open documentation">?</button>
             </div>
             <div id="canvasContainer" style="position:relative; display:inline-block;">
                 <canvas id="vlsiCanvas" width="600" height="600" style="border:1px solid #000000; display:block;"></canvas>
@@ -122,7 +122,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 <div id="assignmentModal" class="assignment-modal hidden">
                     <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
                         <span>📋 Assignment</span>
-                        <button class="close-btn" onclick="closeAssignmentModal()" title="Close">×</button>
+                        <button class="close-btn" onclick="closeAssignmentModal()" title="Close" aria-label="Close">×</button>
                     </div>
                     <div class="modal-content">
                         <p id="assignmentInstructions">

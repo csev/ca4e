@@ -46,8 +46,8 @@ $_SESSION['GSRF'] = 10;
 <?php if ($USER && $USER->instructor) : ?>
                 <a href="<?php echo addSession('instructor.php'); ?>" class="btn instructor-button" title="Instructor Panel">Instructor</a>
 <?php endif; ?>
-                <button id="asciiChart" class="btn btn-help" title="ASCII Chart">ASCII</button>
-                <button id="helpBtn" class="btn btn-help" onclick="openDocumentation()">?</button>
+                <button id="asciiChart" class="btn btn-help" title="ASCII Chart" aria-label="Open ASCII chart">ASCII</button>
+                <button id="helpBtn" class="btn btn-help" onclick="openDocumentation()" aria-label="Open documentation">?</button>
             </div>
         
             <main>
@@ -100,7 +100,7 @@ $_SESSION['GSRF'] = 10;
     <div id="assignmentModal" class="assignment-modal hidden">
         <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
             <span>📋 Assignment</span>
-            <button class="close-btn" onclick="closeAssignmentModal()" title="Close">×</button>
+            <button class="close-btn" onclick="closeAssignmentModal()" title="Close" aria-label="Close">×</button>
         </div>
         <div class="modal-content">
             <p id="assignmentInstructions">
@@ -122,7 +122,7 @@ $_SESSION['GSRF'] = 10;
     <div id="asciiChartModal" class="assignment-modal hidden">
         <div id="asciiChartModalHeader" class="modal-header" title="Drag to move">
             <span>📊 ASCII Chart</span>
-            <button class="close-btn" onclick="closeAsciiChartModal()" title="Close">×</button>
+            <button class="close-btn" onclick="closeAsciiChartModal()" title="Close" aria-label="Close">×</button>
         </div>
         <div id="asciiChartModalContent" class="modal-content" style="padding: 10px; display: flex; justify-content: center; overflow-y: auto; height: calc(100% - 50px);">
             <div id="asciiChartContent">

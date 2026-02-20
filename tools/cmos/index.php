@@ -374,7 +374,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 <?php if ($USER && $USER->instructor) : ?>
             <a href="instructor.php" style="background-color: #28a745; color: white; font-size: 14px; padding: 8px 15px; border-radius: 6px; border: 1px solid #ccc; cursor: pointer; min-width: 60px; transition: all 0.2s ease; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-decoration: none; display: inline-block; margin: 2px;">Instructor</a>
 <?php endif; ?>
-            <button id="helpButton" class="mode-button" title="Documentation" onclick="openDocumentation()">
+            <button id="helpButton" class="mode-button" title="Documentation" onclick="openDocumentation()" aria-label="Open documentation">
                 <span style="font-size: 18px; font-weight: bold;">?</span>
             </button>
         </div>
@@ -394,7 +394,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     <div id="assignmentModal" class="assignment-modal hidden">
         <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
             <span>📋 Assignment</span>
-            <button class="close-btn" onclick="closeAssignmentModal()" title="Close">×</button>
+            <button class="close-btn" onclick="closeAssignmentModal()" title="Close" aria-label="Close">×</button>
         </div>
         <div class="modal-content">
             <p id="assignmentInstructions">

@@ -504,7 +504,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         </div>
         <div class="center-section">
             <button id="tagMode" class="mode-button">🏷️ Tag</button>
-            <button id="delete" class="icon-button">🗑️</button>
+            <button id="delete" class="icon-button" aria-label="Delete selected">🗑️</button>
             <select id="storageDropdown" class="mode-button" style="background-color: #6c757d; color: white; border: none; border-radius: 4px; padding: 8px 12px;">
                 <option value="">💾 Storage</option>
                 <option value="save">💾 Save Circuit</option>
@@ -530,7 +530,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 <?php if ($USER && $USER->instructor) : ?>
             <a href="<?php echo addSession('instructor.php'); ?>" class="instructor-button" title="Instructor Panel">Instructor</a>
 <?php endif; ?>
-            <button id="helpButton" class="help-button" title="Open Help">?</button>
+            <button id="helpButton" class="help-button" title="Open Help" aria-label="Open Help">?</button>
         </div>
     </div>
 
@@ -643,7 +643,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     <div id="assignmentModal" class="assignment-modal hidden">
         <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
             <span>📋 Assignment</span>
-            <button class="close-btn" onclick="closeAssignmentModal()" title="Close">×</button>
+            <button class="close-btn" onclick="closeAssignmentModal()" title="Close" aria-label="Close">×</button>
         </div>
         <div class="modal-content">
             <p id="assignmentInstructions">
