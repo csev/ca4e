@@ -13,7 +13,6 @@ function buildMenu() {
 
     if ( U::isNotEmpty($CFG->lessons) ) {
         $set->addLeft('Lessons', $R.'lessons');
-        // $set->addLeft('Lessons', $R.'/tsugi/lms/lessons');
     }
     if ( U::isNotEmpty($CFG->tdiscus) && $CFG->tdiscus ) $set->addLeft('Discussions', $R.'discussions');
     if ( ! isset($_SESSION['id']) ) {
