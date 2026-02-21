@@ -482,7 +482,8 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 <body>
     <div class="toolbar">
         <div class="gate-selector">
-            <select id="gateSelector">
+            <label for="gateSelector" class="sr-only">Select component to place</label>
+            <select id="gateSelector" aria-label="Select component to place">
                 <option value="">Select Component</option>
                 <option value="INPUT">Input</option>
                 <option value="OUTPUT">Output</option>
@@ -505,7 +506,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         <div class="center-section">
             <button id="tagMode" class="mode-button">🏷️ Tag</button>
             <button id="delete" class="icon-button" aria-label="Delete selected">🗑️</button>
-            <select id="storageDropdown" class="mode-button" style="background-color: #6c757d; color: white; border: none; border-radius: 4px; padding: 8px 12px;">
+            <select id="storageDropdown" class="mode-button" aria-label="Circuit storage options" style="background-color: #6c757d; color: white; border: none; border-radius: 4px; padding: 8px 12px;">
                 <option value="">💾 Storage</option>
                 <option value="save">💾 Save Circuit</option>
                 <option value="load">📁 Load Circuit</option>
@@ -513,7 +514,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             </select>
         </div>
         <div class="commands-selector">
-            <select id="commandsSelector">
+            <select id="commandsSelector" aria-label="Tool commands">
                 <option value="">Select Command</option>
                 <option value="waypointsToggle">👁️ Toggle Waypoints</option>
                 <option value="commandInputToggle">⌨️ Toggle Commands</option>
@@ -544,7 +545,8 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 
     <!-- Command line interface -->
     <div id="commandLine" class="command-line hidden">
-        <input type="text" id="commandInput" placeholder="Type commands here... (e.g., 'place input a', 'place and', 'delete input a', 'connect a output to gate1 input-1')">
+        <label for="commandInput" class="sr-only">Command input</label>
+        <input type="text" id="commandInput" aria-label="Type commands (e.g., place input a, place and, delete input a)" placeholder="Type commands here... (e.g., 'place input a', 'place and', 'delete input a', 'connect a output to gate1 input-1')">
         <div class="status" id="status">Ready. Type 'help' for available commands.</div>
     </div>
 

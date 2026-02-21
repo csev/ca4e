@@ -33,6 +33,18 @@ class ModalManager {
             isVisible: false
         });
         
+        // Accessibility: if this is a dialog, add ARIA attributes
+        if (config.isDialog) {
+            modalElement.setAttribute('role', 'dialog');
+            modalElement.setAttribute('aria-modal', 'true');
+            const header = modalElement.querySelector('.modal-header, [id*="ModalHeader"]');
+            if (header) {
+                const headerId = header.id || `${name}Header`;
+                if (!header.id) header.id = headerId;
+                modalElement.setAttribute('aria-labelledby', headerId);
+            }
+        }
+        
         // Setup modal-specific functionality
         this.setupModal(name);
     }
@@ -70,6 +82,9 @@ class ModalManager {
         
         const { element, config } = modal;
         
+        // Store focused element for restoration when modal closes
+        modal.previouslyFocused = document.activeElement;
+        
         // Call beforeShow callback if provided
         if (config.beforeShow) {
             config.beforeShow(data);
@@ -90,6 +105,12 @@ class ModalManager {
         // Center modal if configured
         if (config.centerOnShow) {
             this.centerModal(element);
+        }
+        
+        // Accessibility: move focus into modal (first focusable or close button)
+        const focusable = element.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+        if (focusable) {
+            focusable.focus();
         }
         
         // Call afterShow callback if provided
@@ -120,6 +141,11 @@ class ModalManager {
         }
         
         modal.isVisible = false;
+        
+        // Accessibility: restore focus to element that had it before modal opened
+        if (modal.previouslyFocused && modal.previouslyFocused.focus) {
+            modal.previouslyFocused.focus();
+        }
         
         // Remove modal-open class from body if no modals are visible
         if (!this.isAnyModalVisible()) {
@@ -338,6 +364,7 @@ class AssignmentModalManager {
         this.modalManager.registerModal('assignment', modalElement, {
             draggable: true,
             centerOnShow: true,
+            isDialog: true,
             beforeShow: () => this.loadInstructions(),
             afterHide: () => this.resetGrading()
         });

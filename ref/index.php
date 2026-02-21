@@ -1,7 +1,13 @@
+<?php
+require_once("../tsugi/config.php");
+use \Tsugi\Util\U;
+?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title><?php echo htmlspecialchars($CFG->servicename); ?> Quick Reference</title>
 <style>
 body {
     font-family: sans-serif;
@@ -48,11 +54,6 @@ ul, #ZUL {
 <body>
 <?php
 // https://www.w3schools.com/howto/howto_js_treeview.asp
-
-require_once("../tsugi/config.php");
-
-use \Tsugi\Util\U;
-
 $contents = file_get_contents("refs.json");
 $json = json_decode($contents);
 $array = (array) $json;
@@ -70,25 +71,31 @@ foreach ($array as $key => $value) {
     if ( $key == $ref ) $down = " caret-down";
     $active = "";
     if ( $key == $ref ) $active = " active";
-    echo('<li><span class="caret'.$down.'">'.$value->title."</span></a>\n");
-    echo('<ul class="nested'.$active.'">'."\n");
+    echo('<li><span class="caret'.$down.'" role="button" tabindex="0" aria-expanded="'.($key == $ref ? 'true' : 'false').'" aria-label="'.htmlspecialchars($value->title).' - expand to view links">'.$value->title."</span>\n");
+    echo('<ul class="nested'.$active.'" role="group" aria-label="'.htmlspecialchars($value->title).' links">'."\n");
     foreach ($value->links as $link) {
         $href = str_replace("{apphome}", $CFG->apphome, $link->href);
-        echo('<li><a href="'.$href.'" target="_blank">'.$link->title.'</a></li>'."\n");
+        echo('<li><a href="'.$href.'" target="_blank" rel="noopener noreferrer">'.$link->title.'</a></li>'."\n");
     }
     echo('</ul></li>'."\n");
 }
-echo("<ul>\n");
+echo("</ul>\n");
 ?>
 
 <script>
 var toggler = document.getElementsByClassName("caret");
-var i;
-
-for (i = 0; i < toggler.length; i++) {
+for (var i = 0; i < toggler.length; i++) {
   toggler[i].addEventListener("click", function() {
-    this.parentElement.querySelector(".nested").classList.toggle("active");
+    var nested = this.parentElement.querySelector(".nested");
+    var isExpanded = nested.classList.toggle("active");
     this.classList.toggle("caret-down");
+    this.setAttribute("aria-expanded", isExpanded);
+  });
+  toggler[i].addEventListener("keydown", function(e) {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      this.click();
+    }
   });
 }
 </script>

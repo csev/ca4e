@@ -28,7 +28,7 @@ code {
 }
 </style>
 
-<div id="container">
+<main id="container">
 <div style="margin-left: 10px; float:right">
 <div id="carousel" class="carousel slide" data-ride="carousel" role="region" aria-label="Featured photos">
   <div class="carousel-inner">
@@ -42,11 +42,9 @@ code {
 <!-- Previous/Next controls -->
 <a class="left carousel-control" href="#carousel" role="button" data-slide="prev" aria-label="Previous slide">
 <span class="icon-prev" aria-hidden="true"></span>
-<span class="sr-only">Previous</span>
 </a>
 <a class="right carousel-control" href="#carousel" role="button" data-slide="next" aria-label="Next slide">
 <span class="icon-next" aria-hidden="true"></span>
-<span class="sr-only">Next</span>
 </a>
 
 
@@ -65,7 +63,7 @@ if ( $front_page_text ) {
 ?>
 <p>
 This course will
-cover digitial electronics, how electronics can be used for
+cover digital electronics, how electronics can be used for
 computation, what machine language is, and what assembly language
 is, and how compiled languages like C work.
 </p>
@@ -88,7 +86,7 @@ The material produced specifically for this site is by Charles Severance and oth
 and is Copyright Creative Commons Attribution 3.0
 unless otherwise indicated.
 </p>
-</div>
+</main>
 <?php
 
 require_once "footer.php";

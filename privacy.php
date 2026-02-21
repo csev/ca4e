@@ -42,7 +42,7 @@ you request not to be tracked using a Do Not Track signal (see below).</p>
 <p>Some pages on this site may use Google Maps.</p>
 <?php } ?>
 <p><strong>How does our site handle Do Not Track signals?</strong></p>
-<p>We do honor Do Not Track signals.  When DNT is indicated, we supress the gathering of all internal analytics data.</p>
+<p>We do honor Do Not Track signals.  When DNT is indicated, we suppress the gathering of all internal analytics data.</p>
 <p><strong>COPPA (Children Online Privacy Protection Act)</strong></p>
 <p>We do not specifically market to children under the age of 13 years old.</p>
 <p><strong>Data Retention</strong></p>

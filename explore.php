@@ -28,7 +28,7 @@ code {
 }
 </style>
 
-<div id="container">
+<main id="container">
 <div style="margin-left: 10px; float:right">
 <div id="carousel" class="carousel slide" data-ride="carousel" role="region" aria-label="Featured photos">
   <div class="carousel-inner">
@@ -42,11 +42,9 @@ code {
 <!-- Previous/Next controls -->
 <a class="left carousel-control" href="#carousel" role="button" data-slide="prev" aria-label="Previous slide">
 <span class="icon-prev" aria-hidden="true"></span>
-<span class="sr-only">Previous</span>
 </a>
 <a class="right carousel-control" href="#carousel" role="button" data-slide="next" aria-label="Next slide">
 <span class="icon-next" aria-hidden="true"></span>
-<span class="sr-only">Next</span>
 </a>
 
 
@@ -62,43 +60,43 @@ This page allows you to explore those tools without logging in.  If you
 log in these same tools are used for assignments under lessons.
 <ul>
 <li>
-<a href="tools/sliderule"  target="_blank" class="text-primary">Interactive Slide Rule</a>
+<a href="tools/sliderule" target="_blank" rel="noopener noreferrer" class="text-primary">Interactive Slide Rule <span class="sr-only">(opens in new tab)</span></a>
 </li>
 <li>
-<a href="tools/e6b"  target="_blank" class="text-primary">Online Pilot Wind Correction Calculator (E6B)</a>
+<a href="tools/e6b" target="_blank" rel="noopener noreferrer" class="text-primary">Online Pilot Wind Correction Calculator (E6B) <span class="sr-only">(opens in new tab)</span></a>
 </li>
 <li>
-<a href="tools/truth"  target="_blank" class="text-primary">Logical Truth Table Practice</a>
+<a href="tools/truth" target="_blank" rel="noopener noreferrer" class="text-primary">Logical Truth Table Practice <span class="sr-only">(opens in new tab)</span></a>
 </li>
 <li>
-<a href="tools/nixie"  target="_blank" class="text-primary">Number conversion Practice - The Nixie Challenge</a>
+<a href="tools/nixie" target="_blank" rel="noopener noreferrer" class="text-primary">Number conversion Practice - The Nixie Challenge <span class="sr-only">(opens in new tab)</span></a>
 </li>
     <li>
-      <a href="tools/cmos/" target="_blank" class="text-primary">CMOS Gate Builder</a>
+      <a href="tools/cmos/" target="_blank" rel="noopener noreferrer" class="text-primary">CMOS Gate Builder <span class="sr-only">(opens in new tab)</span></a>
     </li>
     <li>
-      <a href="tools/mistic/" target="_blank" class="text-primary">Mistic VLSI Layout Tool</a> (inspried by the
-     <a href="http://opencircuitdesign.com/magic/" class="text-primary" target="_blank">Magic VLSI Layout Tool</a>)
+      <a href="tools/mistic/" target="_blank" rel="noopener noreferrer" class="text-primary">Mistic VLSI Layout Tool</a> (inspired by the
+     <a href="http://opencircuitdesign.com/magic/" class="text-primary" target="_blank" rel="noopener noreferrer">Magic VLSI Layout Tool <span class="sr-only">(opens in new tab)</span></a>)
     </li>
     <li>
-      <a href="tools/gates/" target="_blank" class="text-primary">Digital Logic Builder</a>
+      <a href="tools/gates/" target="_blank" rel="noopener noreferrer" class="text-primary">Digital Logic Builder <span class="sr-only">(opens in new tab)</span></a>
     </li>
     <li>
-      <a href="tools/ascii/" target="_blank" class="text-primary">An ASCII chart</a>
+      <a href="tools/ascii/" target="_blank" rel="noopener noreferrer" class="text-primary">An ASCII chart <span class="sr-only">(opens in new tab)</span></a>
     </li>
 <li>
-<a href="tools/cdc6504"  target="_blank" class="text-primary">A CDC6504 Microprocessor Emulator</a> (<a href="tools/cdc6504/documentation.html"  target="_blank" class="text-primary">Documentation</a>)
+<a href="tools/cdc6504" target="_blank" rel="noopener noreferrer" class="text-primary">A CDC6504 Microprocessor Emulator <span class="sr-only">(opens in new tab)</span></a> (<a href="tools/cdc6504/documentation.html" target="_blank" rel="noopener noreferrer" class="text-primary">Documentation <span class="sr-only">(opens in new tab)</span></a>)
 </li>
 <li>
-<a href="tools/wasm"  target="_blank" class="text-primary">WASM Playground</a>
+<a href="tools/wasm" target="_blank" rel="noopener noreferrer" class="text-primary">WASM Playground <span class="sr-only">(opens in new tab)</span></a>
 </li>
 </ul>
 <p>
 Most of these tools were developed with extensive use 
-of <a href="https://cursor.com/download" target="_blank">Cursor.AI</a>.
+of <a href="https://cursor.com/download" target="_blank" rel="noopener noreferrer">Cursor.AI <span class="sr-only">(opens in new tab)</span></a>.
 It was a great study of both the impressive capabilities and
 unfortunate limitations of AI.  I would say 80% impressive /
-20% disappointing - but things got bettwe as 2025 progressed.
+20% disappointing - but things got better as 2025 progressed.
 </p>
 <h2>A Challenge for You</h2>
 <p>
@@ -109,7 +107,7 @@ voltages 🙂 Unfortunately, once the circuits became more complex, the circuit
 emulation was never reliable.
 </p>
 <p>
-<a href="tools/breadboard" target="_blank" class="text-primary">Breadboard</a>
+<a href="tools/breadboard" target="_blank" rel="noopener noreferrer" class="text-primary">Breadboard <span class="sr-only">(opens in new tab)</span></a>
 </p>
 <p>
 I think the core problem is that the simulation needs to be analog and allowed
@@ -120,9 +118,9 @@ to settle. A common quick-and-dirty approach is to repeatedly recompute voltages
 <p>
 I’ll be honest: part of the problem is that I dropped out of Electrical
 Engineering shortly after I almost learned
-<a href="https://en.wikipedia.org/wiki/Mesh_analysis" target="_blank">Mesh Analysis</a>
+<a href="https://en.wikipedia.org/wiki/Mesh_analysis" target="_blank" rel="noopener noreferrer">Mesh Analysis <span class="sr-only">(opens in new tab)</span></a>
 and
-<a href="https://en.wikipedia.org/wiki/Nodal_analysis" target="_blank">Nodal Analysis</a>.
+<a href="https://en.wikipedia.org/wiki/Nodal_analysis" target="_blank" rel="noopener noreferrer">Nodal Analysis <span class="sr-only">(opens in new tab)</span></a>.
 I knew enough to know just how hard this problem really is. After spending 40+
 hours begging AI to solve it — and watching it fail repeatedly — I finally
 decided to build the circuit emulation by hand when I had 40 hours of my own
@@ -138,14 +136,14 @@ changing over time. I got a prettty cool UI pretty quickly with AI - but
 when it came to circuit emulation - AI was so lost that I gave up quickly.
 </p>
 <p>
-<a href="tools/analog" target="_blank" class="text-primary">Analog</a>
+<a href="tools/analog" target="_blank" rel="noopener noreferrer" class="text-primary">Analog <span class="sr-only">(opens in new tab)</span></a>
 </p>
 <p>
 One theory I have is wat about a year for AI to get smarter and then try it again :)
 </p>
 <p>
 So here’s your challenge: check out the
-<a href="https://www.github.com/csev/ca4e" target="_blank">CA4E GitHub repository</a>
+<a href="https://www.github.com/csev/ca4e" target="_blank" rel="noopener noreferrer">CA4E GitHub repository <span class="sr-only">(opens in new tab)</span></a>
 and fix one (or both) of these tools. Breadboard is more useful to me
 pedagogically, is closer to being complete, and is frankly easier than
 Analog. If you fix Breadboard, send me a PR — and then I’ll have to redo the
@@ -166,7 +164,7 @@ The material produced specifically for this site is by Charles Severance and oth
 and is Copyright Creative Commons Attribution 3.0
 unless otherwise indicated.
 </p>
-</div>
+</main>
 <?php
 
 require_once "footer.php";
