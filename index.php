@@ -30,28 +30,7 @@ code {
 
 <main id="container">
 <div style="margin-left: 10px; float:right">
-<div id="carousel" class="carousel slide" data-ride="carousel" role="region" aria-label="Featured photos">
-  <div class="carousel-inner">
-    <?php foreach($photos as $index => $item): ?>
-        <div class="carousel-item item <?= ($index === intdiv(time(), 1) % count($photos)) ? 'active' : '' ?>">
-            <img class="d-block" src="<?= htmlspecialchars($item['src']) ?>" alt="<?= htmlspecialchars($item['alt']) ?>" width="400" height="225"/>
-        </div>
-    <?php endforeach; ?>
-  </div>
-
-<!-- Previous/Next controls -->
-<a class="left carousel-control" href="#carousel" role="button" data-slide="prev" aria-label="Previous slide">
-<span class="icon-prev" aria-hidden="true"></span>
-</a>
-<a class="right carousel-control" href="#carousel" role="button" data-slide="next" aria-label="Next slide">
-<span class="icon-next" aria-hidden="true"></span>
-</a>
-
-
-</div>
-<!--
-<iframe width="400" height="225" src="https://www.youtube.com/embed/oxJQB4f2MMs?rel=0" frameborder="0" allowfullscreen></iframe>
--->
+<iframe width="400" height="225" src="https://www.youtube.com/embed/DK3Oq4PKxKU?list=PLa58EAvBOOSJjrzDrl9eVigR5SQQ0W-3D&rel=0" frameborder="0" allowfullscreen title="Django for Everybody course introduction video"></iframe>
 </div>
 <h1>Computer Architecture for Everybody</h1>
 <?php
