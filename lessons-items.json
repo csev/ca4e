@@ -13,6 +13,7 @@
         {
             "title": "Origins of Computing",
             "image": "bimage/ca4e_history.png",
+            "linkedin": true,
             "threshold": "0.8",
             "assignments": [
                 "ca4e_01_hist_quiz",
