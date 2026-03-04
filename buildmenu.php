@@ -37,6 +37,7 @@ function buildMenu() {
         $submenu->addLink('Notifications', $R.'notifications');
         $submenu->addLink('Grades', $R.'grades');
         $submenu->addLink('Pages', $R.'pages');
+        $submenu->addLink('Badges', $R.'badges');
         $submenu->addLink('LMS Integration', $T . 'settings');
 
         if ( isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true" ) {

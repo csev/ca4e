@@ -9,6 +9,82 @@
         "https://github.com/tsugitools/tdiscus",
         "https://github.com/tsugitools/aipaper"
     ],
+    "badges": [
+        {
+            "title": "Origins of Computing",
+            "image": "bimage/ca4e_history.png",
+            "threshold": "0.8",
+            "assignments": [
+                "ca4e_01_hist_quiz",
+                "ca4e_01_sliderule"
+            ]
+        },
+        {
+            "title": "Digital Electronics",
+            "image": "bimage/ca4e_electronics.png",
+            "threshold": "0.8",
+            "assignments": [
+                "ca4e_02_solid_quiz",
+                "ca4e_02_truth_all",
+                "ca4e_02_cmos_not",
+                "ca4e_02_cmos_nor",
+                "ca4e_02_vlsi_quiz",
+                "ca4e_02_vlsi_not",
+                "ca4e_02_vlsi_nand",
+                "ca4e_02_vlsi_nor"
+            ]
+        },
+        {
+            "title": "Digital Logic",
+            "image": "bimage/ca4e_logic.png",
+            "threshold": "0.8",
+            "assignments": [
+                "ca4e_03_logic_quiz",
+                "ca4e_03_and",
+                "ca4e_03_nixie2",
+                "ca4e_03_halfadder",
+                "ca4e_03_nixie_add",
+                "ca4e_03_full_adder",
+                "ca4e_03_clock_quiz"
+            ]
+        },
+        {
+            "title": "Computer Architecture",
+            "image": "bimage/ca4e_complete.png",
+            "threshold": "0.8",
+            "linkedin": true,
+            "assignments": [
+                "ca4e_01_hist_quiz",
+                "ca4e_01_sliderule",
+
+                "ca4e_02_solid_quiz",
+                "ca4e_02_truth_all",
+                "ca4e_02_cmos_not",
+                "ca4e_02_cmos_nor",
+                "ca4e_02_vlsi_quiz",
+                "ca4e_02_vlsi_not",
+                "ca4e_02_vlsi_nand",
+                "ca4e_02_vlsi_nor",
+
+                "ca4e_03_logic_quiz",
+                "ca4e_03_and",
+                "ca4e_03_nixie2",
+                "ca4e_03_halfadder",
+                "ca4e_03_nixie_add",
+                "ca4e_03_full_adder",
+                "ca4e_03_clock_quiz",
+
+                "ca4e_04_cpu_quiz",
+                "ca4e_04_nixie16",
+                "ca4e_04_cdc_42",
+                "ca4e_04_cdc_phrase",
+                "ca4e_04_cdc_lower",
+                "ca4e_04_cpu_wasm",
+                "ca4e_04_wasm_phrase",
+                "ca4e_04_wasm_lower"
+            ]
+        }
+    ],
     "discussions": [
         {
             "title": "Welcome to Computer Architecture Programming for Everybody",
