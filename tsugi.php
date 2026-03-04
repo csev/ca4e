@@ -15,8 +15,8 @@ if ( $file ) {
     return;
 }
 
-// Pull in the Koseu LMS (/lessons, /map, /badges ...)
-$app = new \Koseu\Core\Application($launch);
+// Pull in the Tsugi LMS Tool Routes (/lessons, /map, /badges ...)
+$app = new \Tsugi\Contollers\Tsugi($launch);
 $app['debug'] = true;
 
 $app->run();
