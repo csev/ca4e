@@ -16,7 +16,7 @@ if ( $file ) {
 }
 
 // Pull in the Tsugi LMS Tool Routes (/lessons, /map, /badges ...)
-$app = new \Tsugi\Contollers\Tsugi($launch);
+$app = new \Tsugi\Controllers\Tsugi($launch);
 $app['debug'] = true;
 
 $app->run();
