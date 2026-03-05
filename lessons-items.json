@@ -194,7 +194,7 @@
                     ]
                 },
                 {
-                    "type": "lti",
+                    "type": "not-lti",
                     "title": "Paper: Reflections on The Origins of Computing",
                     "launch": "{apphome}/mod/aipaper/",
                     "resource_link_id": "ca4e_0_paper",
