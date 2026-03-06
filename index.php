@@ -50,7 +50,6 @@ is, and how compiled languages like C work.
 You can explore the digital design tools developed for this course
 by clicking on the <a href="explore">Explore</a> link above.
 </p>
-<?php } /* End of there is a front page */ ?>
 If you want to use these Creative Commons Licensed materials
 in your own classes you can
 <a href="materials.php">download or link</a> to the artifacts on this site,
@@ -65,6 +64,7 @@ The material produced specifically for this site is by Charles Severance and oth
 and is Copyright Creative Commons Attribution 3.0
 unless otherwise indicated.
 </p>
+<?php } /* End of there is a front page */ ?>
 </main>
 <?php
 
