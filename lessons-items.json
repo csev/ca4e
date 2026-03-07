@@ -1,5 +1,5 @@
 {
-    "title": "Computer Architecture for Everybody (CC4E)",
+    "title": "Computer Architecture for Everybody (CA4E)",
     "description": "Hello and welcome to my site where you learn computer architecture chip design.",
     "count": true,
     "required_modules": [
@@ -260,22 +260,22 @@
                 },
                 {
                     "type": "video",
-                    "title": "Video:  Monash Museum of Computing History Interviews ",
+                    "title": "Video: Monash Museum of Computing History Interviews",
                     "youtube": "o7_dQbKPG_Q"
                 },
                 {
                     "type": "video",
-                    "title": "Video: IEEE Computer: Alan Turing at Bletchley Park ",
+                    "title": "Video: IEEE Computer: Alan Turing at Bletchley Park",
                     "youtube": "5nK_ft0Lf1s"
                 },
                 {
                     "type": "video",
-                    "title": " Niklaus Wirth on Teaching Computer Science ",
+                    "title": "Niklaus Wirth on Teaching Computer Science",
                     "youtube": "BJIqHIYSDrk"
                 },
                 {
                     "type": "video",
-                    "title": "Office Hours: Valencia, Spain, 29-Mar-2022 ",
+                    "title": "Office Hours: Valencia, Spain, 29-Mar-2022",
                     "youtube": "pVpwO5yrBn8"
                 },
                 {
@@ -417,7 +417,7 @@
                 },
                 {
                     "type": "video",
-                    "title": " AT&T Archives: A Modern Aladdin's Lamp, about vacuum tubes,1940 ",
+                    "title": "AT&T Archives: A Modern Aladdin's Lamp, about vacuum tubes, 1940",
                     "youtube": "_-JzxX75oYc"
                 },
                 {
@@ -432,7 +432,7 @@
                 },
                 {
                     "type": "video",
-                    "title": " The Transistor: a 1953 documentary, anticipating its coming impact on technology ",
+                    "title": "The Transistor: a 1953 documentary, anticipating its coming impact on technology",
                     "youtube": "V9xUQWo4vN0"
                 },
                 {
@@ -452,17 +452,17 @@
                 },
                 {
                     "type": "video",
-                    "title": " IEEE Computing Conversations: Gordon Bell on the Building Blocks of Computing",
+                    "title": "IEEE Computing Conversations: Gordon Bell on the Building Blocks of Computing",
                     "youtube": "8skBtQS-VVE"
                 },
                 {
                     "type": "video",
-                    "title": "IEEE Computing Conversations: The Living Computer Museum ",
+                    "title": "IEEE Computing Conversations: The Living Computer Museum",
                     "youtube": "ZHU4nzIsaIM"
                 },
                 {
                     "type": "video",
-                    "title": " IEEE Computing Conversations: Resurrecting the CDC 6500 Supercomputer video ",
+                    "title": "IEEE Computing Conversations: Resurrecting the CDC 6500 Supercomputer video",
                     "youtube": "wDc1630krls"
                 },
                 {
@@ -481,7 +481,7 @@
             "title": "Very Large Scale Integration (VLSI)",
             "anchor": "vlsi",
             "icon": "fa-flask",
-            "description": "We learn how dramatic improvements in manufacture and miniturization of tansistors through very large scale integration (VLSI) created the high densite chips we still use today.",
+            "description": "We learn how dramatic improvements in manufacture and miniaturization of transistors through very large scale integration (VLSI) created the high density chips we still use today.",
             "items": [
                 {
                     "type": "header",
@@ -609,7 +609,7 @@
                 },
                 {
                     "type": "video",
-                    "title": " AT&T Archives: A Modern Aladdin's Lamp, about vacuum tubes,1940 ",
+                    "title": "AT&T Archives: A Modern Aladdin's Lamp, about vacuum tubes, 1940",
                     "youtube": "_-JzxX75oYc"
                 },
                 {
@@ -624,7 +624,7 @@
                 },
                 {
                     "type": "video",
-                    "title": " The Transistor: a 1953 documentary, anticipating its coming impact on technology ",
+                    "title": "The Transistor: a 1953 documentary, anticipating its coming impact on technology",
                     "youtube": "V9xUQWo4vN0"
                 },
                 {
@@ -644,17 +644,17 @@
                 },
                 {
                     "type": "video",
-                    "title": " IEEE Computing Conversations: Gordon Bell on the Building Blocks of Computing",
+                    "title": "IEEE Computing Conversations: Gordon Bell on the Building Blocks of Computing",
                     "youtube": "8skBtQS-VVE"
                 },
                 {
                     "type": "video",
-                    "title": "IEEE Computing Conversations: The Living Computer Museum ",
+                    "title": "IEEE Computing Conversations: The Living Computer Museum",
                     "youtube": "ZHU4nzIsaIM"
                 },
                 {
                     "type": "video",
-                    "title": " IEEE Computing Conversations: Resurrecting the CDC 6500 Supercomputer video ",
+                    "title": "IEEE Computing Conversations: Resurrecting the CDC 6500 Supercomputer video",
                     "youtube": "wDc1630krls"
                 },
                 {
@@ -841,12 +841,12 @@
                 },
                 {
                     "type": "video",
-                    "title": " IEEE Computing Conversations: Massimo Banzi: Building Arduino ",
+                    "title": "IEEE Computing Conversations: Massimo Banzi: Building Arduino",
                     "youtube": "0VAbvQ2Ti50"
                 },
                 {
                     "type": "video",
-                    "title": "IEEE Computing Conversations:  Andrew S. Tanenbaum: The Impact of MINIX ",
+                    "title": "IEEE Computing Conversations: Andrew S. Tanenbaum: The Impact of MINIX",
                     "youtube": "86_BkFsb4e"
                 },
                 {
@@ -935,7 +935,7 @@
                 },
                 {
                     "type": "lti",
-                    "title": "Quiz: Clocked Logic Circuits Logic",
+                    "title": "Quiz: Clocked Logic Circuits",
                     "launch": "{apphome}/mod/gift/?quiz=05-Clock.txt",
                     "resource_link_id": "ca4e_03_clock_quiz",
                     "custom": [
@@ -956,12 +956,12 @@
                 },
                 {
                     "type": "video",
-                    "title": " IEEE Computing Conversations: Massimo Banzi: Building Arduino ",
+                    "title": "IEEE Computing Conversations: Massimo Banzi: Building Arduino",
                     "youtube": "0VAbvQ2Ti50"
                 },
                 {
                     "type": "video",
-                    "title": "IEEE Computing Conversations:  Andrew S. Tanenbaum: The Impact of MINIX ",
+                    "title": "IEEE Computing Conversations: Andrew S. Tanenbaum: The Impact of MINIX",
                     "youtube": "86_BkFsb4e"
                 },
                 {
@@ -1185,7 +1185,7 @@
                 },
                 {
                     "type": "video",
-                    "title": "IEEE  Computing Conversations: Eben Upton on the Raspberry Pi ",
+                    "title": "IEEE Computing Conversations: Eben Upton on the Raspberry Pi",
                     "youtube": "P5KEiuTT_E8"
                 },
                 {
@@ -1195,7 +1195,7 @@
                 },
                 {
                     "type": "video",
-                    "title": "Office Hours: Seoul Korea 22-September-2016 ",
+                    "title": "Office Hours: Seoul Korea 22-September-2016",
                     "youtube": "2f9YNAIpjjQ"
                 }
             ]
@@ -1204,7 +1204,7 @@
             "title": "Web Assembly",
             "anchor": "wasm",
             "icon": "fa-cogs",
-            "description": "In the future, browser support for WEB Assembly means that for a lot of in browser applications, hardware is an emulator.",
+            "description": "In the future, browser support for WebAssembly means that for a lot of in-browser applications, hardware is an emulator.",
             "items": [
                 {
                     "type": "header",
@@ -1336,12 +1336,12 @@
                 },
                 {
                     "type": "video",
-                    "title": "ARM Instruction Set design history with Sophie Wilson)",
+                    "title": "ARM Instruction Set design history with Sophie Wilson",
                     "youtube": "QqxThgLTLyk"
                 },
                 {
                     "type": "video",
-                    "title": " The potted history of ARM",
+                    "title": "The potted history of ARM",
                     "youtube": "t59EtDxpYmM"
                 },
                 {
@@ -1351,7 +1351,7 @@
                 },
                 {
                     "type": "video",
-                    "title": " Office Hours IIT TechFest, Mumbai, India 12-Dec-2018",
+                    "title": "Office Hours IIT TechFest, Mumbai, India 12-Dec-2018",
                     "youtube": "GITuGFeG7J8"
                 },
                 {
