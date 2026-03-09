@@ -9,7 +9,7 @@
         "https://github.com/tsugitools/tdiscus",
         "https://github.com/tsugitools/aipaper"
     ],
-    "xbadges": [
+    "badges": [
         {
             "title": "Origins of Computing",
             "image": "bimage/ca4e_history.png",
