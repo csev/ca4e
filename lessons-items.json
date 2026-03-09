@@ -12,7 +12,7 @@
     "badges": [
         {
             "title": "Origins of Computing",
-            "image": "bimage/ca4e_history.png",
+            "image": "ca4e_history.png",
             "linkedin": true,
             "threshold": "1.0",
             "assignments": [
@@ -22,7 +22,7 @@
         },
         {
             "title": "Digital Electronics",
-            "image": "bimage/ca4e_electronics.png",
+            "image": "ca4e_electronics.png",
             "threshold": "0.8",
             "assignments": [
                 "ca4e_02_solid_quiz",
@@ -37,7 +37,7 @@
         },
         {
             "title": "Digital Logic",
-            "image": "bimage/ca4e_logic.png",
+            "image": "ca4e_logic.png",
             "threshold": "0.8",
             "assignments": [
                 "ca4e_03_logic_quiz",
@@ -51,7 +51,7 @@
         },
         {
             "title": "Computer Architecture",
-            "image": "bimage/ca4e_complete.png",
+            "image": "ca4e_complete.png",
             "threshold": "0.8",
             "linkedin": true,
             "assignments": [
