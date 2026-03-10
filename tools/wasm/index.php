@@ -220,11 +220,6 @@ $_SESSION['GSRF'] = 10;
             }
         }
 
-        // Function to open documentation
-        function openDocumentation() {
-            window.open('documentation.html', '_blank', 'width=900,height=700,scrollbars=yes,resizable=yes');
-        }
-
         // Initialize the exercise and assignment modal when the page loads
         document.addEventListener('DOMContentLoaded', function() {
             // Create the appropriate exercise instance based on assignment
@@ -255,6 +250,13 @@ $_SESSION['GSRF'] = 10;
         });
     </script>
 <?php endif; ?>
+
+    <script>
+        // Documentation function (always available - help button is always visible)
+        function openDocumentation() {
+            window.open('documentation.html', '_blank', 'width=900,height=700,scrollbars=yes,resizable=yes');
+        }
+    </script>
 
     <script>
         // ASCII Chart Modal functionality

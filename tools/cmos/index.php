@@ -455,6 +455,11 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         // Example usage from browser console:
         // getProbeVoltage('output1')  // Returns voltage of probe labeled 'output1'
 
+        // Documentation function (always available - help button is always visible)
+        function openDocumentation() {
+            window.open('documentation.html', '_blank', 'width=1000,height=800,scrollbars=yes,resizable=yes');
+        }
+
         // Functions to control switches - call from browser console
         function setSwitchHigh(label) {
             return window.circuitEditor.setSwitchHigh(label);
@@ -474,11 +479,6 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         const gradeSubmitUrl = '<?php echo addSession("grade-submit.php"); ?>';
         const isInstructor = <?php echo $USER && $USER->instructor ? 'true' : 'false'; ?>;
         const assignmentType = '<?php echo $assn; ?>';
-
-        // Documentation function
-        function openDocumentation() {
-            window.open('documentation.html', '_blank', 'width=1000,height=800,scrollbars=yes,resizable=yes');
-        }
 
         // Show reference image in assignment dialog
         function showReferenceImage(imagePath) {

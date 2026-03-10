@@ -32,8 +32,11 @@ export class WasmEditor {
         // Run WASM button
         this.runButton.addEventListener('click', () => this.runWasm());
         
-        // Clear editor button
-        document.getElementById('clearEditor').addEventListener('click', () => this.clearEditor());
+        // Clear editor button (only present when user has assignment)
+        const clearEditorBtn = document.getElementById('clearEditor');
+        if (clearEditorBtn) {
+            clearEditorBtn.addEventListener('click', () => this.clearEditor());
+        }
         
         // Show WASM button
         this.showWasmButton.addEventListener('click', () => this.showWasmHex());

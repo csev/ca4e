@@ -106,7 +106,7 @@ $_SESSION['GSRF'] = 10;
                     <h1>Slide Rule</h1>
                 </div>
 <?php if (! $USER) : ?>
-                <a href="../index.php" class="home-link" title="Go to Home">🏠</a>
+                <a href="<?php echo $CFG->apphome; ?>" class="home-link" title="Go to Home">🏠</a>
 <?php endif; ?>
             </div>
         </header>

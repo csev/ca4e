@@ -23,7 +23,7 @@ $LTI = LTIX::session_start();
                     <h1>E6B Wind Calculator</h1>
                     <p>Calculate wind correction angle and ground speed</p>
                 </div>
-                <a href="../index.php" class="home-link" title="Go to Home">🏠</a>
+                <a href="<?php echo $CFG->apphome; ?>" class="home-link" title="Go to Home">🏠</a>
             </div>
         </header>
         
