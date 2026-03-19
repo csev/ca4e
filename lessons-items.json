@@ -118,6 +118,11 @@
                     "href": "{apphome}/lectures/01-Origins.pptx"
                 },
                 {
+                    "type": "slide",
+                    "title": "01-Origins.pdf",
+                    "href": "{apphome}/lectures/01-Origins.pdf"
+                },
+                {
                     "type": "header",
                     "text": "Videos",
                     "level": 2
@@ -302,6 +307,11 @@
                     "type": "slide",
                     "title": "02-SolidState.pptx",
                     "href": "{apphome}/lectures/02-SolidState.pptx"
+                },
+                {
+                    "type": "slide",
+                    "title": "02-SolidState.pdf",
+                    "href": "{apphome}/lectures/02-SolidState.pdf"
                 },
                 {
                     "type": "header",
@@ -496,6 +506,11 @@
                     "href": "{apphome}/lectures/03-VLSI.pptx"
                 },
                 {
+                    "type": "slide",
+                    "title": "03-VLSI.pdf",
+                    "href": "{apphome}/lectures/03-VLSI.pdf"
+                },
+                {
                     "type": "header",
                     "text": "Videos",
                     "level": 2
@@ -688,6 +703,11 @@
                     "href": "{apphome}/lectures/04-DigitalLogic.pptx"
                 },
                 {
+                    "type": "slide",
+                    "title": "04-DigitalLogic.pdf",
+                    "href": "{apphome}/lectures/04-DigitalLogic.pdf"
+                },
+                {
                     "type": "header",
                     "text": "Videos",
                     "level": 2
@@ -875,6 +895,11 @@
                     "href": "{apphome}/lectures/05-Clock.pptx"
                 },
                 {
+                    "type": "slide",
+                    "title": "05-Clock.pdf",
+                    "href": "{apphome}/lectures/05-Clock.pdf"
+                },
+                {
                     "type": "header",
                     "text": "Videos",
                     "level": 2
@@ -993,6 +1018,11 @@
                     "type": "slide",
                     "title": "06-CPU-Machine-Code.pptx",
                     "href": "{apphome}/lectures/06-CPU-Machine-Code.pptx"
+                },
+                {
+                    "type": "slide",
+                    "title": "06-CPU-Machine-Code.pdf",
+                    "href": "{apphome}/lectures/06-CPU-Machine-Code.pdf"
                 },
                 {
                     "type": "header",
@@ -1217,6 +1247,11 @@
                     "type": "slide",
                     "title": "07-Emulator.pptx",
                     "href": "{apphome}/lectures/07-Emulator.pptx"
+                },
+                {
+                    "type": "slide",
+                    "title": "07-Emulator.pdf",
+                    "href": "{apphome}/lectures/07-Emulator.pdf"
                 },
                 {
                     "type": "header",
