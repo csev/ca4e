@@ -50,6 +50,12 @@ is, and how compiled languages like C work.
 You can explore the digital design tools developed for this course
 by clicking on the <a href="explore">Explore</a> link above.
 </p>
+<p>
+You can take this course and earn a certificate at:
+<ul>
+<li><a href="https://www.udemy.com/course/computer-hardware-history/?referralCode=E95943B808A6D0D60EDF" target="_blank">Udemy - Computer Hardware: History from Analog to Digital</a></li>
+</ul>
+<p>
 If you want to use these Creative Commons Licensed materials
 in your own classes you can
 <a href="materials.php">download or link</a> to the artifacts on this site,
