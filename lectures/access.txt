@@ -21,5 +21,12 @@ Panorama: 3 Issues - Reading Order
 03-VLSI.pdf
 Panorama: Perfect
 
+04-DigitalLogic.pptx
+PowerPoint: 4 Unfixable Reading Order
+Panorama: 6 Unfixable Reading Order
+
+04-DigitalLogic.pdf
+Panorama: Perfect
+
 
 
