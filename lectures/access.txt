@@ -22,11 +22,18 @@ Panorama: 3 Issues - Reading Order
 Panorama: Perfect
 
 04-DigitalLogic.pptx
-PowerPoint: 4 Unfixable Reading Order
-Panorama: 6 Unfixable Reading Order
+PowerPoint: 1 Unfixable Reading Order
+Panorama: 4 Reading order
 
 04-DigitalLogic.pdf
 Panorama: Perfect
+
+05-Clock.pptx
+PowerPoint: Perfect
+Panorama: 2 Reading Order
+
+05-Clock.pdf
+Panorama: 1 Reading Order
 
 
 
