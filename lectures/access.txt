@@ -36,4 +36,16 @@ Panorama: 2 Reading Order
 Panorama: 1 Reading Order
 
 
+06-CPU-Machine-Code.pptx
+PowerPoint: Two unfixable reading order
+Panorama:
 
+06-CPU-Machine-Code.pdf
+Panorama:
+
+07-Emulator.pptx
+PowerPoint: 
+Panorama:
+
+07-Emulator.pdf
+Panorama:
