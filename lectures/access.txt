@@ -38,14 +38,14 @@ Panorama: 1 Reading Order
 
 06-CPU-Machine-Code.pptx
 PowerPoint: Two unfixable reading order
-Panorama:
+Panorama: 26 Reading Orders - which I will ignore
 
 06-CPU-Machine-Code.pdf
-Panorama:
+Panorama: Perfect
 
 07-Emulator.pptx
-PowerPoint: 
-Panorama:
+PowerPoint: Perfect
+Panorama: 2 Out of order
 
 07-Emulator.pdf
-Panorama:
+Panorama: Perfect
