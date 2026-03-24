@@ -1,4 +1,27 @@
 
+Accessibility Audit
+-------------------
+
+This summarizes the results of accessibiltiy work wiht the CA4E slide decks.
+
+First I went through in PowerPoint and fixed every issue identified in PowerPoint
+except when it the "kind of dumb" slide reading order analysis would have caused
+bad understandability for either the visual versions or accessible versions. A simple
+example is a figure that goes in a circle repeatedly.  The audit tools want top to
+bottom reading or left to right reading.  A circlular reading pattern cannot do either.
+Similarly is there are two columns and within each of the two columns there is three
+columns, it needs to be read in a way that semantically links the concepts - not pure
+left-to-right top to bottom.
+
+I note below where there are reading order issues that cannot be fixed without
+breaking understanding.
+
+After things were as clean as possible in PPT - I exported them to PDF and then
+checked both the PPT and PDF's with notes below.  I would just mark all the
+reading order stuff in Panorama as "checked".
+
+-- Chuck Mon Mar 23 10:04:16 EDT 2026
+
 
 01-Origins.pptx
 PowerPoint: Perfect
