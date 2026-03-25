@@ -1158,6 +1158,19 @@
                 },
                 {
                     "type": "lti",
+                    "title": "ASCII Character Set Lookup",
+                    "launch": "{apphome}/tools/ascii/",
+                    "resource_link_id": "ca4e_04_ascii",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "AsciiLookupExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
                     "title": "CDC 6504: Print out '42'",
                     "launch": "{apphome}/tools/cdc6504/",
                     "resource_link_id": "ca4e_04_cdc_42",

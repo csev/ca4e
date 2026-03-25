@@ -4,19 +4,14 @@ require_once "../config.php";
 require_once "assignments.php";
 
 use \Tsugi\Core\LTIX;
-use \Tsugi\Core\Settings;
 
 // Initialize LTI if we received a launch.  If this was a non-LTI GET,
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
 
+require_once "../common/assignment-from-request.php";
+
 $_SESSION['GSRF'] = 10;
-
-// See if we have an assignment configured, if not check for a custom variable
-$assn = Settings::linkGetCustom('exercise');
-
-// Make sure it is a valid assignment
-if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -319,7 +314,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         <div class="header">
             <h1>ASCII Character Chart</h1>
             <div class="header-buttons">
-<?php if ($USER && $assn) : ?>
+<?php if ($showAssignmentButton) : ?>
                 <button id="assignmentBtn" class="assignment-btn">Assignment</button>
 <?php endif; ?>
 <?php if ($USER && $USER->instructor) : ?>
@@ -335,7 +330,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         </div>
     </div>
 
-<?php if ($USER && $assn) : ?>
+<?php if ($showAssignmentButton) : ?>
     <!-- Assignment Modal -->
     <div id="assignmentModal" class="assignment-modal hidden">
         <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
@@ -470,14 +465,23 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             }
         }
 
+        const ltiGradePassback = <?php echo $toolLtiGradePassback ? 'true' : 'false'; ?>;
+
         // Grade submission function
         function submitGradeToLMS(grade) {
+            console.log('Sending grade=' + grade);
+            if (!ltiGradePassback) {
+                alert('🎉 Excellent work! You completed the assignment successfully.');
+                if (assignmentModal) {
+                    assignmentModal.classList.add('hidden');
+                }
+                return;
+            }
+
             const formData = new FormData();
             formData.append('grade', grade);
             formData.append('code', 'ASCII_EXERCISE_COMPLETED');
-            
-            console.log('Sending grade=' + grade);
-            
+
             fetch('<?php echo addSession($CFG->wwwroot . '/api/grade-submit.php'); ?>', {
                 method: 'POST',
                 body: formData
