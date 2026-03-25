@@ -160,7 +160,7 @@ $_SESSION['GSRF'] = 10;
             font-family: 'Courier New', monospace;
         }
 
-        /* Adjust canvas height to make room for command line */
+        /* margin-top set by layoutGatesCanvas() to match toolbar height when it wraps */
         #circuitCanvas {
             margin-top: 60px;
             margin-bottom: 0px;

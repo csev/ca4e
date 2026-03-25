@@ -78,12 +78,10 @@ $_SESSION['GSRF'] = 10;
                             <span class="color-indicator" style="background-color: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #333; font-weight: bold;">-</span>
                             GND
                         </div>
-                        <?php if ($USER) : ?>
                         <div class="dropdown-item" onclick="setLayer('probe')">
                             <span class="color-indicator" style="background-color: rgba(128, 0, 128, 0.3);"></span>
                             Probe
                         </div>
-                        <?php endif; ?>
                     </div>
                 </div>
                 <button onclick="confirmClear()" style="background-color: #ffe6e6;">🗑️</button>
@@ -285,7 +283,7 @@ $_SESSION['GSRF'] = 10;
                     const copy = Math.min(oldSize, newSize);
                     for (let i = 0; i < copy; i++) {
                         for (let j = 0; j < copy; j++) {
-                            for (let l = 0; l < 7; l++) {
+                            for (let l = 0; l < 8; l++) {
                                 newGrid[i][j][l] = oldGrid[i][j][l];
                             }
                         }

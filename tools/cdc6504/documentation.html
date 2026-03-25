@@ -174,13 +174,13 @@
         </p>
         
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('usage')">Usage</button>
-            <button class="nav-tab" onclick="showTab('registers')">Registers</button>
-            <button class="nav-tab" onclick="showTab('instructions')">Instructions</button>
-            <button class="nav-tab" onclick="showTab('examples')">Examples</button>
-            <button class="nav-tab" onclick="showTab('errors')">Error Handling</button>
-            <button class="nav-tab" onclick="showTab('labels')">Labels</button>
-            <button class="nav-tab" onclick="showTab('references')">References</button>
+            <button type="button" class="nav-tab active" onclick="showTab('usage', this)">Usage</button>
+            <button type="button" class="nav-tab" onclick="showTab('registers', this)">Registers</button>
+            <button type="button" class="nav-tab" onclick="showTab('instructions', this)">Instructions</button>
+            <button type="button" class="nav-tab" onclick="showTab('examples', this)">Examples</button>
+            <button type="button" class="nav-tab" onclick="showTab('errors', this)">Error Handling</button>
+            <button type="button" class="nav-tab" onclick="showTab('labels', this)">Labels</button>
+            <button type="button" class="nav-tab" onclick="showTab('references', this)">References</button>
         </div>
         
         <div id="usage" class="tab-content active">
@@ -250,8 +250,6 @@
         </div>
         
         <div id="registers" class="tab-content">
-        
-        <div id="registers" class="tab-content active">
             <h2>Register Reference</h2>
             
             <div class="register-grid">
@@ -968,20 +966,20 @@ BRK           ; Stop
     </div>
     
     <script>
-        function showTab(tabName) {
-            // Hide all tab contents
+        function showTab(tabName, buttonEl) {
             const tabContents = document.querySelectorAll('.tab-content');
             tabContents.forEach(content => content.classList.remove('active'));
-            
-            // Remove active class from all tabs
+
             const tabs = document.querySelectorAll('.nav-tab');
             tabs.forEach(tab => tab.classList.remove('active'));
-            
-            // Show selected tab content
-            document.getElementById(tabName).classList.add('active');
-            
-            // Add active class to clicked tab
-            event.target.classList.add('active');
+
+            const panel = document.getElementById(tabName);
+            if (panel) {
+                panel.classList.add('active');
+            }
+            if (buttonEl) {
+                buttonEl.classList.add('active');
+            }
         }
     </script>
 </body>

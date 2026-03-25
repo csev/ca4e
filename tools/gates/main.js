@@ -35,9 +35,7 @@ class CircuitEditor {
         // Create circuit instance for computations with message display function
         this.circuit = new Circuit(this.showMessage.bind(this));
         
-        // Set canvas size
-        this.canvas.width = window.innerWidth - 40;
-        this.canvas.height = window.innerHeight - 100;
+        // Canvas size set by layoutGatesCanvas() (toolbar wraps on narrow screens)
         
         this.hoveredNode = null;
         this.hoveredWire = null;
@@ -97,8 +95,7 @@ class CircuitEditor {
         // Initialize the circuit hash after all setup is complete
         this.lastCircuitHash = this.computeCircuitHash();
         
-        // Start render loop
-        this.render();
+        layoutGatesCanvas(this);
     }
 
     initializeEventListeners() {
@@ -137,11 +134,7 @@ class CircuitEditor {
                         } else {
                             commandLine.classList.add('hidden');
                         }
-                        // Also adjust canvas margin when toggling
-                        const canvas = document.getElementById('circuitCanvas');
-                        if (canvas) {
-                            canvas.style.marginBottom = this.showCommandInput ? '100px' : '0px';
-                        }
+                        layoutGatesCanvas(this);
                     }
                     this.showMessage(this.showCommandInput ? 'Commands shown' : 'Commands hidden');
                     if (this.screenReaderMode) {
@@ -2968,9 +2961,57 @@ Examples:
     }
 }
 
+/**
+ * Keep canvas below the fixed toolbar when it wraps (narrow viewports) and size the bitmap to the viewport.
+ */
+function layoutGatesCanvas(editor) {
+    const ed = editor !== undefined ? editor : window.circuitEditor;
+    const canvas = document.getElementById('circuitCanvas');
+    const toolbar = document.querySelector('.toolbar');
+    const statusBar = document.querySelector('.status-bar');
+    const commandLine = document.getElementById('commandLine');
+    if (!canvas || !toolbar) {
+        return;
+    }
+
+    const bodyStyles = getComputedStyle(document.body);
+    const padTop = parseFloat(bodyStyles.paddingTop) || 0;
+    const padBottom = parseFloat(bodyStyles.paddingBottom) || 0;
+    const padV = padTop + padBottom;
+
+    const toolbarH = toolbar.offsetHeight;
+    const statusH = statusBar ? statusBar.offsetHeight : 28;
+    const cmdOpen = commandLine && !commandLine.classList.contains('hidden');
+    const cmdH = cmdOpen ? commandLine.offsetHeight : 0;
+    const bottomReserved = Math.max(statusH, cmdH);
+
+    const gap = 10;
+    const marginTop = Math.max(8, toolbarH + gap - padTop);
+    canvas.style.marginTop = marginTop + 'px';
+    canvas.style.marginBottom = '0px';
+
+    const w = Math.max(200, window.innerWidth - 40);
+    const verticalUsed = toolbarH + bottomReserved + padV + gap + 8;
+    const h = Math.max(200, window.innerHeight - verticalUsed);
+
+    if (ed && ed.canvas) {
+        ed.canvas.width = w;
+        ed.canvas.height = h;
+        ed.render();
+    } else {
+        canvas.width = w;
+        canvas.height = h;
+    }
+}
+
 // Initialize the circuit editor when the page loads
 window.addEventListener('load', () => {
     window.circuitEditor = new CircuitEditor();
+
+    const toolbarEl = document.querySelector('.toolbar');
+    if (toolbarEl && typeof ResizeObserver !== 'undefined') {
+        new ResizeObserver(() => layoutGatesCanvas()).observe(toolbarEl);
+    }
     
     // Initialize save/restore functionality
     const saveRestoreManager = new SaveRestoreManager('gates', {
@@ -3457,11 +3498,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Add window resize handler
 window.addEventListener('resize', () => {
-    if (window.circuitEditor) {
-        window.circuitEditor.canvas.width = window.innerWidth - 40;
-        window.circuitEditor.canvas.height = window.innerHeight - 100;
-        window.circuitEditor.render();
-    }
+    layoutGatesCanvas();
 }); 
