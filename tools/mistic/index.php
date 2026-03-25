@@ -5,18 +5,14 @@ require_once "register.php";
 require_once "assignments.php";
 
 use \Tsugi\Core\LTIX;
-use \Tsugi\Core\Settings; 
 
 // Initialize LTI if we received a launch.  If this was a non-LTI GET,
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
 
-$_SESSION['GSRF'] = 10;
+require_once "../common/assignment-from-request.php";
 
-// See if we have an assignment configured, if not check for a custom variable
-$assn = Settings::linkGetCustom('exercise');
-// Make sure it is a valid assignment
-if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
+$_SESSION['GSRF'] = 10;
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -98,7 +94,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     <option value="delete">🗑️ Delete Layout</option>
                 </select>
                 <button onclick="toggleCommandLine()" style="background-color: #6c757d; color: white;">Commands</button>
-<?php if ($USER && $assn) : ?>
+<?php if ($showAssignmentButton) : ?>
                 <button id="assignmentBtn" style="background-color:#fff0e6;">Assignment</button>
 <?php endif; ?>
                 <button id="readCircuitBtn" onclick="readCircuit()" style="background-color: #607D8B; color: white;">Read Circuit</button>
@@ -118,7 +114,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         <canvas id="layerCanvas" width="220" height="240" style="border:1px solid #000000;"></canvas>
                     </div>
                 </div>
-<?php if ($USER && $assn) : ?>
+<?php if ($showAssignmentButton) : ?>
                 <div id="assignmentModal" class="assignment-modal hidden">
                     <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
                         <span>📋 Assignment</span>
@@ -156,7 +152,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 const layerModalHeader = document.getElementById('layerModalHeader');
                 const canvasContainer = document.getElementById('canvasContainer');
                 const readCircuitBtn = document.getElementById('readCircuitBtn');
-<?php if ($USER && $assn) : ?>
+<?php if ($showAssignmentButton) : ?>
                 const assignmentModal = document.getElementById('assignmentModal');
                 const assignmentModalHeader = document.getElementById('assignmentModalHeader');
                 const assignmentBtn = document.getElementById('assignmentBtn');
@@ -584,11 +580,12 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     }
                 }
 
-<?php if ($USER) : ?>
+<?php if ($showAssignmentButton) : ?>
                 // Assignment modal variables
                 const gradeSubmitUrl = '<?php echo addSession("grade-submit.php"); ?>';
-                const isInstructor = <?php echo $USER && $USER->instructor ? 'true' : 'false'; ?>;
+                const isInstructor = <?php echo ($USER && $USER->instructor) ? 'true' : 'false'; ?>;
                 const assignmentType = '<?php echo $assn; ?>';
+                const ltiGradePassback = <?php echo $toolLtiGradePassback ? 'true' : 'false'; ?>;
 
                 // Initialize assignment modal using common utilities (moved to after exercise creation)
 
@@ -683,18 +680,25 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                 // LTI Grade Submission Function
                 function submitGradeToLMS(grade) {
                     console.log('Submitting grade to LMS:', grade);
-                    
-                    // Check if we're in an LTI session (user is authenticated)
-                    <?php if ($USER) : ?>
+                    const closeModal = () => {
+                        if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
+                            assignmentModalManager.hide();
+                        }
+                    };
+                    if (!ltiGradePassback) {
+                        const stepText = document.getElementById('stepText');
+                        if (stepText) {
+                            stepText.innerHTML = `<span style="color: green;">✓ Assignment completed!</span>`;
+                        }
+                        alert('🎉 Excellent work! You completed the assignment successfully.');
+                        closeModal();
+                        return;
+                    }
                     console.log('User is authenticated via LTI, proceeding with grade submission...');
-                    
-                    // Submit the grade via AJAX using form data (as expected by the endpoint)
                     const formData = new FormData();
                     formData.append('grade', grade);
-                    formData.append('code', 'VLSI_NOT_GATE_COMPLETED'); // Add a code identifier for the assignment
-                    
+                    formData.append('code', 'VLSI_NOT_GATE_COMPLETED');
                     console.log('Sending grade=' + grade);
-                    
                     fetch('<?php echo addSession($CFG->wwwroot . '/api/grade-submit.php'); ?>', {
                         method: 'POST',
                         body: formData
@@ -709,51 +713,32 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     .then(data => {
                         console.log('Grade response received...');
                         console.log(data);
-                        
                         if (data.status === 'success') {
                             console.log('Grade submitted successfully:', data);
-                            // Show success message to user
                             const stepText = document.getElementById('stepText');
                             if (stepText) {
                                 stepText.innerHTML = `<span style="color: green;">✓ Assignment completed! Grade ${grade} submitted to LMS.</span>`;
                             }
-                            // Show alert to user
                             alert(`🎉 Congratulations! Your grade of 1.0 has been successfully submitted to the LMS.`);
                         } else {
                             console.error('Grade submission failed:', data);
-                            // Show error message to user
                             const stepText = document.getElementById('stepText');
                             if (stepText) {
                                 stepText.innerHTML = `<span style="color: orange;">⚠ Assignment completed, but grade submission failed: ${data.detail}</span>`;
                             }
-                            // Show error alert to user
                             alert(`⚠️ Grade submission failed: ${data.detail}\n\nYour assignment was completed successfully, but the grade could not be sent to the LMS. Please contact your instructor.`);
                         }
-                        
-                        // Close the assignment modal after showing the alert
-                        if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
-                            assignmentModalManager.hide();
-                        }
+                        closeModal();
                     })
                     .catch(error => {
                         console.error('Error submitting grade:', error);
-                        // Show error message to user
                         const stepText = document.getElementById('stepText');
                         if (stepText) {
                             stepText.innerHTML = `<span style="color: orange;">⚠ Assignment completed, but grade submission failed: ${error.message}</span>`;
                         }
-                        // Show error alert to user
                         alert(`⚠️ Grade submission error: ${error.message}\n\nYour assignment was completed successfully, but there was a technical error sending the grade to the LMS. Please contact your instructor.`);
-                        
-                        // Close the assignment modal after showing the alert
-                        if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
-                            assignmentModalManager.hide();
-                        }
+                        closeModal();
                     });
-                    <?php else : ?>
-                    // User is not authenticated (anonymous access), just log it
-                    console.log('Anonymous user - grade not submitted to LMS:', grade);
-                    <?php endif; ?>
                 }
 
                 // Initialize the exercise when the page loads
@@ -782,6 +767,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                         assignmentType: assignmentType
                     });
                 });
+<?php endif; ?>
 
                 function drawNotGate() {
                     // Clear the canvas first
@@ -890,7 +876,6 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     
                     console.log('✨ NAND gate magically appeared!');
                 }
-<?php endif; ?>
 
                 function flashCommandOutline(command) {
                     // Parse the command to extract coordinates
@@ -1456,7 +1441,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     layerModalHeader.addEventListener('touchstart', onPointerDown, { passive: false });
                 })();
 
-<?php if ($USER) : ?>
+<?php if ($showAssignmentButton) : ?>
                 // Drag handling for the assignment modal (mouse + touch)
                 (function enableAssignmentDrag() {
                     if (!assignmentModal || !assignmentModalHeader) return;

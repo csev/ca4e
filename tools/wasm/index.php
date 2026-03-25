@@ -4,16 +4,12 @@ require_once "../config.php";
 require_once "assignments.php";
 
 use \Tsugi\Core\LTIX;
-use \Tsugi\Core\Settings;
 
 // Initialize LTI if we received a launch.  If this was a non-LTI GET,
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
 
-// See if we have an assignment configured, if not check for a custom variable
-$assn = Settings::linkGetCustom('exercise');
-// Make sure it is a valid assignment
-if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
+require_once "../common/assignment-from-request.php";
 
 // Allow the grading web services to work
 $_SESSION['GSRF'] = 10; 
@@ -39,7 +35,7 @@ $_SESSION['GSRF'] = 10;
                     <option value="load">📁 Load</option>
                     <option value="delete">🗑️ Delete</option>
                 </select>
-<?php if ($USER && $assn) : ?>
+<?php if ($showAssignmentButton) : ?>
                 <button id="assignmentBtn" class="btn btn-assignment">Assignment</button>
                 <button id="clearEditor" class="btn">Clear</button>
 <?php endif; ?>
@@ -95,7 +91,7 @@ $_SESSION['GSRF'] = 10;
         </div>
     </div>
 
-<?php if ($USER && $assn) : ?>
+<?php if ($showAssignmentButton) : ?>
     <!-- Assignment Modal -->
     <div id="assignmentModal" class="assignment-modal hidden">
         <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
@@ -143,30 +139,34 @@ $_SESSION['GSRF'] = 10;
         });
     </script>
 
-<?php if ($USER && $assn) : ?>
+<?php if ($showAssignmentButton) : ?>
     <script src="../common/exercise-base.js"></script>
     <script src="exercises.js"></script>
     <script>
         let currentExercise = null;
         const gradeSubmitUrl = '<?php echo addSession($CFG->wwwroot . '/api/grade-submit.php'); ?>';
-        const isInstructor = <?php echo $USER && $USER->instructor ? 'true' : 'false'; ?>;
+        const isInstructor = <?php echo ($USER && $USER->instructor) ? 'true' : 'false'; ?>;
         const assignmentType = '<?php echo $assn; ?>';
+        const ltiGradePassback = <?php echo $toolLtiGradePassback ? 'true' : 'false'; ?>;
 
         // LTI Grade Submission Function
         window.submitGradeToLMS = function(grade) {
             console.log('Submitting grade to LMS:', grade);
-            
-            // Check if we're in an LTI session (user is authenticated)
-            <?php if ($USER) : ?>
+            const closeModal = () => {
+                if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
+                    assignmentModalManager.hide();
+                }
+            };
+            if (!ltiGradePassback) {
+                alert('🎉 Excellent work! You completed the assignment successfully.');
+                closeModal();
+                return;
+            }
             console.log('User is authenticated via LTI, proceeding with grade submission...');
-            
-            // Submit the grade via AJAX using form data (as expected by the endpoint)
             const formData = new FormData();
             formData.append('grade', grade);
-            formData.append('code', 'WASM_EXERCISE_COMPLETED'); // Add a code identifier for the assignment
-            
+            formData.append('code', 'WASM_EXERCISE_COMPLETED');
             console.log('Sending grade=' + grade);
-            
             fetch('<?php echo addSession($CFG->wwwroot . '/api/grade-submit.php'); ?>', {
                 method: 'POST',
                 body: formData
@@ -181,36 +181,20 @@ $_SESSION['GSRF'] = 10;
             .then(data => {
                 console.log('Grade response received...');
                 console.log(data);
-                
                 if (data.status === 'success') {
                     console.log('Grade submitted successfully:', data);
-                    // Show success message to user
                     alert(`🎉 Congratulations! Your grade of 1.0 has been successfully submitted to the LMS.`);
                 } else {
                     console.error('Grade submission failed:', data);
-                    // Show error alert to user
                     alert(`⚠️ Grade submission failed: ${data.detail}\n\nYour assignment was completed successfully, but the grade could not be sent to the LMS. Please contact your instructor.`);
                 }
-                
-                // Close the assignment modal after showing the alert
-                if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
-                    assignmentModalManager.hide();
-                }
+                closeModal();
             })
             .catch(error => {
                 console.error('Error submitting grade:', error);
-                // Show error alert to user
                 alert(`⚠️ Grade submission error: ${error.message}\n\nYour assignment was completed successfully, but there was a technical error sending the grade to the LMS. Please contact your instructor.`);
-                
-                // Close the assignment modal after showing the alert
-                if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
-                    assignmentModalManager.hide();
-                }
+                closeModal();
             });
-            <?php else : ?>
-            // User is not authenticated (anonymous access), just log it
-            console.log('Anonymous user - grade not submitted to LMS:', grade);
-            <?php endif; ?>
         };
 
         // Global function for HTML onclick handlers

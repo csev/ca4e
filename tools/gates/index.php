@@ -4,19 +4,15 @@ require_once "../config.php";
 require_once "assignments.php";
 
 use \Tsugi\Core\LTIX;
-use \Tsugi\Core\Settings;
 
 // Initialize LTI if we received a launch.  If this was a non-LTI GET,
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
 
+require_once "../common/assignment-from-request.php";
+
 // Allow the grading web services to work
 $_SESSION['GSRF'] = 10;
-
-// See if we have an assignment configured, if not check for a custom variable
-$assn = Settings::linkGetCustom('exercise');
-// Make sure it is a valid assignment
-if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -525,7 +521,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             </select>
         </div>
         <div class="right-section">
-<?php if ($USER && $assn) : ?>
+<?php if ($showAssignmentButton) : ?>
             <button id="assignmentBtn" class="assignment-btn" title="Open Assignment">Assignment</button>
 <?php endif; ?>
 <?php if ($USER && $USER->instructor) : ?>
@@ -640,7 +636,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         window.isInstructor = <?php echo $USER && $USER->instructor ? 'true' : 'false'; ?>;
     </script>
 
-<?php if ($USER && $assn) : ?>
+<?php if ($showAssignmentButton) : ?>
     <!-- Assignment Modal -->
     <div id="assignmentModal" class="assignment-modal hidden">
         <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
@@ -673,6 +669,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
         const gradeSubmitUrl = '<?php echo addSession("grade-submit.php"); ?>';
         const isInstructor = window.isInstructor; // Use the globally set value
         const assignmentType = '<?php echo $assn; ?>';
+        const ltiGradePassback = <?php echo $toolLtiGradePassback ? 'true' : 'false'; ?>;
 
         // Initialize assignment modal using common utilities (moved to after exercise creation)
 
@@ -685,6 +682,16 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 
         // Grade submission function
         function submitGradeToLMS(grade) {
+            const closeModal = () => {
+                if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
+                    assignmentModalManager.hide();
+                }
+            };
+            if (!ltiGradePassback) {
+                alert('🎉 Excellent work! You completed the assignment successfully.');
+                closeModal();
+                return;
+            }
             const formData = new FormData();
             formData.append('grade', grade);
             formData.append('code', 'GATES_EXERCISE_COMPLETED');
@@ -699,28 +706,17 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
             .then(data => {
                 console.log('Grade submission response:', data);
                 if (data.status === 'success') {
-                    // Show success message
                     alert('🎉 Excellent work! Your assignment has been completed successfully and your grade has been submitted to the LMS.');
                 } else {
                     console.error('Grade submission failed:', data);
-                    // Show error alert to user
                     alert(`⚠️ Grade submission failed: ${data.detail}\n\nYour assignment was completed successfully, but the grade could not be sent to the LMS. Please contact your instructor.`);
                 }
-                
-                // Close the assignment modal after showing the alert
-                if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
-                    assignmentModalManager.hide();
-                }
+                closeModal();
             })
             .catch(error => {
                 console.error('Grade submission error:', error);
-                // Show error alert to user
                 alert(`⚠️ Grade submission error: ${error.message}\n\nYour assignment was completed successfully, but there was a technical error sending the grade to the LMS. Please contact your instructor.`);
-                
-                // Close the assignment modal after showing the alert
-                if (typeof assignmentModalManager !== 'undefined' && assignmentModalManager.hide) {
-                    assignmentModalManager.hide();
-                }
+                closeModal();
             });
         }
 

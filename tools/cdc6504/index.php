@@ -4,19 +4,14 @@ require_once "../config.php";
 require_once "assignments.php";
 
 use \Tsugi\Core\LTIX;
-use \Tsugi\Core\Settings;
 
 // Initialize LTI if we received a launch.  If this was a non-LTI GET,
 // then $USER will be null (i.e. anonymous)
 $LTI = LTIX::session_start();
 
+require_once "../common/assignment-from-request.php";
+
 $_SESSION['GSRF'] = 10;
-
-// See if we have an assignment configured, if not check for a custom variable
-$assn = Settings::linkGetCustom('exercise');
-
-// Make sure it is a valid assignment
-if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -381,7 +376,7 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
                     </select>
                 </div>
                 <div class="nav-right">
-<?php if ($USER && $assn) : ?>
+<?php if ($showAssignmentButton) : ?>
                     <button id="assignmentBtn" class="assignment-btn">Assignment</button>
 <?php endif; ?>
 <?php if ($USER && $USER->instructor) : ?>
@@ -849,7 +844,7 @@ BRK`;
         });
     </script>
 
-<?php if ($USER && $assn) : ?>
+<?php if ($showAssignmentButton) : ?>
     <!-- Assignment Modal -->
     <div id="assignmentModal" class="assignment-modal hidden">
         <div id="assignmentModalHeader" class="modal-header" title="Drag to move">
@@ -962,7 +957,20 @@ BRK`;
         }
 
         // Grade submission function
+        const ltiGradePassback = <?php echo $toolLtiGradePassback ? 'true' : 'false'; ?>;
+
         function submitGradeToLMS(grade) {
+            const assignmentModal = document.getElementById('assignmentModal');
+            const closeModal = () => {
+                if (assignmentModal) {
+                    assignmentModal.classList.add('hidden');
+                }
+            };
+            if (!ltiGradePassback) {
+                alert('🎉 Excellent work! You completed the assignment successfully.');
+                closeModal();
+                return;
+            }
             const formData = new FormData();
             formData.append('grade', grade);
             formData.append('code', 'CDC6504_EXERCISE_COMPLETED');
@@ -977,22 +985,15 @@ BRK`;
             .then(data => {
                 console.log('Grade submission response:', data);
                 if (data.status === 'success') {
-                    // Show success message
                     alert('🎉 Excellent work! Your assignment has been completed successfully and your grade has been submitted to the LMS.');
-                    // Close the assignment modal automatically
-                    const assignmentModal = document.getElementById('assignmentModal');
-                    if (assignmentModal) {
-                        assignmentModal.classList.add('hidden');
-                    }
+                    closeModal();
                 } else {
                     console.error('Grade submission failed:', data);
-                    // Show error alert to user
                     alert(`⚠️ Grade submission failed: ${data.detail}\n\nYour assignment was completed successfully, but the grade could not be sent to the LMS. Please contact your instructor.`);
                 }
             })
             .catch(error => {
                 console.error('Grade submission error:', error);
-                // Show error alert to user
                 alert(`⚠️ Grade submission error: ${error.message}\n\nYour assignment was completed successfully, but there was a technical error sending the grade to the LMS. Please contact your instructor.`);
             });
         }
