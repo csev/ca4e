@@ -8,9 +8,18 @@ use \Tsugi\Core\Settings;
 
 $LTI = LTIX::session_start();
 
+global $LINK;
+
 $assn = Settings::linkGetCustom('exercise');
 if ($assn && !isset($assignments[$assn])) {
     $assn = null;
+}
+// Direct access (no LTI tool link): allow ?exercise=HexConversions (or any valid key)
+if (!$LINK && isset($_GET['exercise'])) {
+    $getExercise = $_GET['exercise'];
+    if (is_string($getExercise) && isset($assignments[$getExercise])) {
+        $assn = $getExercise;
+    }
 }
 if (!$assn) {
     $keys = array_keys($assignments);
