@@ -6,6 +6,15 @@
  */
 
 /**
+ * Index into a phrase list from the local calendar day (1–31), so the word is
+ * stable for all visitors for that day and changes once per day.
+ */
+function cdc6504PhraseIndexFromDayOfMonth(arrayLength) {
+    const dayOfMonth = new Date().getDate();
+    return (dayOfMonth - 1) % arrayLength;
+}
+
+/**
  * CDC6504-specific Exercise class that extends the common base
  * The base Exercise class is loaded from ../common/exercise-base.js
  */
@@ -94,14 +103,12 @@ class CDC6504Exercise extends Exercise {
 }
 
 /**
- * Simple Print 42 Exercise
- * 
- * Students need to have a CDC6504 program that outputs the number 42
- * This version skips assembly and just runs the program to check output
+ * Fun-word exercise: output a word from a fixed list.
+ * Phrase index follows the local calendar day (cdc6504PhraseIndexFromDayOfMonth).
  */
 class HelloWorldExercise extends CDC6504Exercise {
     constructor() {
-        // List of fun random words to randomly choose from
+        // List of fun random words to choose from
         const phrases = [
             'Awesome!',
             'Fantastic!',
@@ -121,9 +128,8 @@ class HelloWorldExercise extends CDC6504Exercise {
             'Stupendous!'
         ];
         
-        // Randomly select a phrase (use local variable before super())
-        const randomIndex = Math.floor(Math.random() * phrases.length);
-        const targetPhrase = phrases[randomIndex];
+        const phraseIndex = cdc6504PhraseIndexFromDayOfMonth(phrases.length);
+        const targetPhrase = phrases[phraseIndex];
         
         const steps = [
             { name: "Program Execution", description: `Run program and check if it outputs '${targetPhrase}'` }

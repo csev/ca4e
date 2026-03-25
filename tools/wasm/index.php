@@ -11,6 +11,13 @@ $LTI = LTIX::session_start();
 
 require_once "../common/assignment-from-request.php";
 
+// Direct access without LTI: use Random Phrase assignment; phrase index is
+// derived from the day of the month in exercises.js (stable for the calendar day).
+if (!$USER && !$LINK && !$assn) {
+    $assn = 'RandomPhraseExercise';
+    $showAssignmentButton = true;
+}
+
 // Allow the grading web services to work
 $_SESSION['GSRF'] = 10; 
 

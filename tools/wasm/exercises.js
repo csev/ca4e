@@ -6,6 +6,15 @@
  */
 
 /**
+ * Index into a phrase list from the local calendar day (1–31), so the phrase is
+ * stable for all visitors for that day and changes once per day.
+ */
+function wasmPhraseIndexFromDayOfMonth(arrayLength) {
+    const dayOfMonth = new Date().getDate();
+    return (dayOfMonth - 1) % arrayLength;
+}
+
+/**
  * WASM-specific Exercise class that extends the common base
  * The base Exercise class is loaded from ../common/exercise-base.js
  */
@@ -313,13 +322,12 @@ class PrintOut42Exercise extends WASMExercise {
 
 /**
  * Random Phrase Exercise
- * 
- * Students need to output a randomly selected phrase
- * The phrase is chosen at exercise creation time and displayed in instructions
+ *
+ * Phrase index follows the local calendar day (wasmPhraseIndexFromDayOfMonth).
  */
 class RandomPhraseExercise extends WASMExercise {
     constructor() {
-        // List of phrases to randomly choose from (all longer than "Hello World!")
+        // Phrase list (all longer than "Hello World!")
         const phrases = [
             'Hello there, friend!',
             'Good morning, everyone!',
@@ -339,9 +347,8 @@ class RandomPhraseExercise extends WASMExercise {
             'Hello and welcome to CA4E!'
         ];
         
-        // Randomly select a phrase (use local variable before super())
-        const randomIndex = Math.floor(Math.random() * phrases.length);
-        const targetPhrase = phrases[randomIndex];
+        const phraseIndex = wasmPhraseIndexFromDayOfMonth(phrases.length);
+        const targetPhrase = phrases[phraseIndex];
         
         const steps = [
             { name: "WAT Compilation", description: "Check if WAT code compiles to WASM without errors" },

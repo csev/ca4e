@@ -11,6 +11,13 @@ $LTI = LTIX::session_start();
 
 require_once "../common/assignment-from-request.php";
 
+// Direct access without LTI: still use the fun-word assignment; phrase is chosen
+// from the day of the month in exercises.js (stable for the calendar day).
+if (!$USER && !$LINK && !$assn) {
+    $assn = 'HelloWorldExercise';
+    $showAssignmentButton = true;
+}
+
 $_SESSION['GSRF'] = 10;
 ?><!DOCTYPE html>
 <html lang="en">
