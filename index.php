@@ -54,6 +54,7 @@ by clicking on the <a href="explore">Explore</a> link above.
 You can take this course and earn a certificate at:
 <ul>
 <li><a href="https://www.udemy.com/course/computer-hardware-history/?referralCode=E95943B808A6D0D60EDF" target="_blank">Udemy - Computer Hardware: History from Analog to Digital</a></li>
+<li><a href="https://www.udemy.com/course/how-microprocessors-are-built-and-programmed/?referralCode=76AA3778A203F3AADF5D" target="_blank">Udemy - How Microprocessors are Built and Programmed</a></li>
 </ul>
 <p>
 If you want to use these Creative Commons Licensed materials
