@@ -41,8 +41,8 @@ if ( $front_page_text ) {
 } else {
 ?>
 <p>
-This course will
-cover digital electronics, how electronics can be used for
+This course 
+covers digital electronics, how electronics can be used for
 computation, what machine language is, and what assembly language
 is, and how compiled languages like C work.
 </p>
