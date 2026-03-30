@@ -20,11 +20,7 @@ function buildMenu() {
     }
 
     if ( U::isNotEmpty($CFG->lessons) && isset($_SESSION['id']) ) {
-        $set->addLeft('My Progress', $R.'assignments');
-    }
-
-    if ( U::isNotEmpty($CFG->lessons) && (! isset($_SESSION['id'])) && is_dir('assn') ) {
-        $set->addLeft('Assignments', $R.'assn');
+        $set->addLeft('Assignments', $R.'assignments');
     }
 
     if ( isset($_SESSION['id']) ) {
