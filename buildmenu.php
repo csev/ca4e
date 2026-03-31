@@ -54,6 +54,14 @@ function buildMenu() {
 
     if ( isset($_SESSION['id']) ) {
         $set->addRight('<tsugi-notifications api-url="'. htmlspecialchars($T . 'api/notifications.php') . '" notifications-view-url="'. htmlspecialchars($R . 'notifications') . '" announcements-view-url="'. htmlspecialchars($R . 'announcements') . '"></tsugi-notifications>', false);
+
+
+        $discordUrl = 'https://discord.dr-chuck.com';
+        $discordIcon = '<i class="fab fa-discord" aria-hidden="true" style="font-size:1.75em;line-height:1;color:#fff;vertical-align:middle"></i>';
+        $set->addRight(
+            '<a href="' . htmlspecialchars($discordUrl) . '" target="_blank" rel="noopener noreferrer" title="Discord" aria-label="Discord" style="display:inline-flex;align-items:center;line-height:1">' . $discordIcon . '</a>',
+            false
+        );
     }
 
     return $set;
