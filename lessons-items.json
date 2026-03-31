@@ -247,11 +247,6 @@
                 },
                 {
                     "type": "header",
-                    "text": "Class Leaderboard",
-                    "level": 2
-                },
-                {
-                    "type": "header",
                     "text": "References",
                     "level": 2
                 },
@@ -274,6 +269,7 @@
                     "type": "lti",
                     "title": "Class Leaderboard (Experimental)",
                     "launch": "{apphome}/mod/board/",
+                    "result": false,
                     "resource_link_id": "ca4e_01_leaderboard"
                 },
                 {
