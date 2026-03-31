@@ -23,6 +23,9 @@ class CDC6504Exercise extends Exercise {
      * Start the grading process with CDC6504-specific behavior
      */
     startGrading() {
+        if (typeof window !== 'undefined' && typeof window.recordAttemptToLMS === 'function') {
+            window.recordAttemptToLMS();
+        }
         this.currentStep = 0;
         this.isGrading = true;
         this.hideInstructions();

@@ -145,18 +145,31 @@ const MAX_BINARY_ADDITION_SCORE = 10;
 const MAX_CONVERSION_SCORE = 10;
 
 function submitGradeToLms(grade, message) {
-    const url = window.gradeSubmitUrl || 'grade-submit.php';
-    fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `grade=${encodeURIComponent(grade)}`
-    }).then(() => {
-        if (message) {
-            alert(message);
-        }
-    }).catch(() => {
-        console.warn('Failed to submit grade to LMS');
-    });
+    const cfg = window.nixieConfig || {};
+    const gradeUrl = cfg.gradeSubmitUrl || window.gradeSubmitUrl || 'grade-submit.php';
+    const attemptUrl = cfg.recordAttemptUrl;
+    const postGrade = () => {
+        const fd = new FormData();
+        fd.append('grade', String(grade));
+        fd.append('code', 'NIXIE_EXERCISE_COMPLETED');
+        fetch(gradeUrl, { method: 'POST', body: fd, credentials: 'same-origin' })
+            .then((r) => r.json().catch(() => ({})))
+            .then(() => {
+                if (message) {
+                    alert(message);
+                }
+            })
+            .catch(() => {
+                console.warn('Failed to submit grade to LMS');
+            });
+    };
+    if (attemptUrl) {
+        fetch(attemptUrl, { method: 'POST', body: new FormData(), credentials: 'same-origin' })
+            .catch(() => {})
+            .finally(() => postGrade());
+    } else {
+        postGrade();
+    }
 }
 
 function initTabbedCards() {

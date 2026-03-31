@@ -12,6 +12,7 @@ $LTI = LTIX::session_start();
 
 // Allow the grading web services to work
 $_SESSION['GSRF'] = 10;
+$_SESSION['RECORD_ATTEMPT_GSRF'] = 50;
 
 // See if we have an assignment configured, if not check for a custom variable
 $assn = Settings::linkGetCustom('exercise');
@@ -420,6 +421,9 @@ if ( $assn && ! isset($assignments[$assn]) ) $assn = null;
     <script src="circuit.js"></script>
     <script src="editor.js"></script>
     <script src="../common/exercise-base.js"></script>
+    <script>
+        window.CA4E_RECORD_ATTEMPT_URL = <?php echo json_encode(addSession($CFG->wwwroot . '/api/record-attempt.php')); ?>;
+    </script>
     <script src="exercises.js"></script>
     <script>
         // Utility functions to read probe values

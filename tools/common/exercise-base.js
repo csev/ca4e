@@ -31,6 +31,9 @@ class Exercise {
      * Start the grading process
      */
     startGrading() {
+        if (typeof window !== 'undefined' && typeof window.recordAttemptToLMS === 'function') {
+            window.recordAttemptToLMS();
+        }
         this.currentStep = 0;
         this.isGrading = true;
         this.hideInstructions();
@@ -235,4 +238,15 @@ class Exercise {
 // Export for use in other files
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { Exercise };
+}
+
+if (typeof window !== 'undefined' && typeof window.recordAttemptToLMS !== 'function') {
+    window.recordAttemptToLMS = function recordAttemptToLMS() {
+        const url = window.CA4E_RECORD_ATTEMPT_URL;
+        if (!url) {
+            return;
+        }
+        const fd = new FormData();
+        fetch(url, { method: 'POST', body: fd, credentials: 'same-origin' }).catch(() => {});
+    };
 }

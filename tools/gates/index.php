@@ -13,6 +13,7 @@ require_once "../common/assignment-from-request.php";
 
 // Allow the grading web services to work
 $_SESSION['GSRF'] = 10;
+$_SESSION['RECORD_ATTEMPT_GSRF'] = 50;
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -659,6 +660,9 @@ $_SESSION['GSRF'] = 10;
     </div>
 
     <script src="../common/exercise-base.js"></script>
+    <script>
+        window.CA4E_RECORD_ATTEMPT_URL = <?php echo json_encode(addSession($CFG->wwwroot . '/api/record-attempt.php')); ?>;
+    </script>
     <script src="exercises.js"></script>
     <script>
         // Debug: Check if HalfAdderExercise is loaded

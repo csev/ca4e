@@ -8,6 +8,10 @@ use \Tsugi\Core\Settings;
 
 $LTI = LTIX::session_start();
 
+if ($USER) {
+    $_SESSION['RECORD_ATTEMPT_GSRF'] = 50;
+}
+
 $assn = Settings::linkGetCustom('exercise');
 if ($assn && !isset($assignments[$assn])) {
     $assn = null;
@@ -116,6 +120,7 @@ $tagline = $taglines[$assn] ?? 'Build intuition for digital logic gates.';
 window.logicConfig = <?php echo json_encode(array(
     'assignment' => $assn,
     'gradeSubmitUrl' => addSession('grade-submit.php'),
+    'recordAttemptUrl' => $USER ? addSession($CFG->wwwroot . '/api/record-attempt.php') : null,
     'maxScore' => $maxScore,
 )); ?>;
 </script>

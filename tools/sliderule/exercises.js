@@ -98,7 +98,9 @@ class SlideRuleMultiplicationExercise {
     // Start grading process
     startGrading() {
         console.log('startGrading called, gradingStep:', this.gradingStep);
-        
+        if (typeof window !== 'undefined' && typeof window.recordAttemptToLMS === 'function') {
+            window.recordAttemptToLMS();
+        }
         if (!this.currentProblem) {
             this.generateProblem();
         }

@@ -12,7 +12,8 @@ $LTI = LTIX::session_start();
 $assn = "SlideRuleMultiplicationExercise";
 
 // Allow the grading web services to work
-$_SESSION['GSRF'] = 10; 
+$_SESSION['GSRF'] = 10;
+$_SESSION['RECORD_ATTEMPT_GSRF'] = 50; 
 ?><!DOCTYPE html>
 <html lang="en">
 <head>
@@ -191,10 +192,12 @@ $_SESSION['GSRF'] = 10;
 <?php endif; ?>
     
     <script src="script.js"></script>
+    <script src="../common/record-attempt.js"></script>
     <script src="exercises.js"></script>
     <script>
         // Set the grade submission URL for the exercise
         const GRADE_SUBMIT_URL = '<?php echo addSession($CFG->wwwroot . '/api/grade-submit.php'); ?>';
+        window.CA4E_RECORD_ATTEMPT_URL = <?php echo json_encode(addSession($CFG->wwwroot . '/api/record-attempt.php')); ?>;
         
         // Set user authentication status
         const USER_AUTHENTICATED = <?php echo $USER ? 'true' : 'false'; ?>;

@@ -13,6 +13,7 @@ $LTI = LTIX::session_start();
 require_once "../common/assignment-from-request.php";
 
 $_SESSION['GSRF'] = 10;
+$_SESSION['RECORD_ATTEMPT_GSRF'] = 50;
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -140,6 +141,9 @@ $_SESSION['GSRF'] = 10;
             <script src="../common/grading-interface.js"></script>
             <script src="../common/tool-utilities.js"></script>
             <script src="../common/exercise-base.js"></script>
+            <script>
+                window.CA4E_RECORD_ATTEMPT_URL = <?php echo json_encode(addSession($CFG->wwwroot . '/api/record-attempt.php')); ?>;
+            </script>
     <script src="exercises.js"></script>
             <script>
                 const canvas = document.getElementById('vlsiCanvas');

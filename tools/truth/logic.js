@@ -209,23 +209,33 @@
     }
 
     function submitGradeToLms(grade, message) {
-        const url = config.gradeSubmitUrl || 'grade-submit.php';
-        fetch(url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `grade=${encodeURIComponent(grade)}`,
-        })
-            .then((response) => response.json().catch(() => ({})))
-            .then(() => {
-                if (message) {
-                    alert(message);
-                }
+        const gradeUrl = config.gradeSubmitUrl || 'grade-submit.php';
+        const attemptUrl = config.recordAttemptUrl;
+        const postGrade = () => {
+            fetch(gradeUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `grade=${encodeURIComponent(grade)}`,
             })
-            .catch(() => {
-                console.warn('Unable to submit grade to the LMS at this time.');
-            });
+                .then((response) => response.json().catch(() => ({})))
+                .then(() => {
+                    if (message) {
+                        alert(message);
+                    }
+                })
+                .catch(() => {
+                    console.warn('Unable to submit grade to the LMS at this time.');
+                });
+        };
+        if (attemptUrl) {
+            fetch(attemptUrl, { method: 'POST', body: new FormData(), credentials: 'same-origin' })
+                .catch(() => {})
+                .finally(() => postGrade());
+        } else {
+            postGrade();
+        }
     }
 
     function pickGate() {

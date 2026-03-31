@@ -15,6 +15,9 @@ class CMOSExercise extends Exercise {
      * Start the grading process with CMOS-specific behavior
      */
     startGrading() {
+        if (typeof window !== 'undefined' && typeof window.recordAttemptToLMS === 'function') {
+            window.recordAttemptToLMS();
+        }
         this.currentStep = 0;
         this.isGrading = true;
         this.hideStartGradingSection();

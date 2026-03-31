@@ -19,7 +19,8 @@ if (!$USER && !$LINK && !$assn) {
 }
 
 // Allow the grading web services to work
-$_SESSION['GSRF'] = 10; 
+$_SESSION['GSRF'] = 10;
+$_SESSION['RECORD_ATTEMPT_GSRF'] = 50;
 
 ?><!DOCTYPE html>
 <html lang="en">
@@ -152,6 +153,7 @@ $_SESSION['GSRF'] = 10;
     <script>
         let currentExercise = null;
         const gradeSubmitUrl = '<?php echo addSession($CFG->wwwroot . '/api/grade-submit.php'); ?>';
+        window.CA4E_RECORD_ATTEMPT_URL = <?php echo json_encode(addSession($CFG->wwwroot . '/api/record-attempt.php')); ?>;
         const isInstructor = <?php echo ($USER && $USER->instructor) ? 'true' : 'false'; ?>;
         const assignmentType = '<?php echo $assn; ?>';
         const ltiGradePassback = <?php echo $toolLtiGradePassback ? 'true' : 'false'; ?>;

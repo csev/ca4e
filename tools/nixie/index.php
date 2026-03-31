@@ -8,6 +8,11 @@ use \Tsugi\Core\Settings;
 
 $LTI = LTIX::session_start();
 
+if ($USER) {
+    $_SESSION['GSRF'] = 10;
+    $_SESSION['RECORD_ATTEMPT_GSRF'] = 50;
+}
+
 global $LINK;
 
 $assn = Settings::linkGetCustom('exercise');
@@ -271,7 +276,11 @@ $tagline = $taglines[$assn] ?? 'Sharpen your digital logic intuition.';
 </div>
 
 <script>
-window.nixieConfig = <?php echo json_encode(array('assignment' => $assn)); ?>;
+window.nixieConfig = <?php echo json_encode(array(
+    'assignment' => $assn,
+    'gradeSubmitUrl' => $USER ? addSession($CFG->wwwroot . '/api/grade-submit.php') : null,
+    'recordAttemptUrl' => $USER ? addSession($CFG->wwwroot . '/api/record-attempt.php') : null,
+)); ?>;
 </script>
 <script src="nixie.js"></script>
 </body>
