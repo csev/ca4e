@@ -34,6 +34,7 @@ function buildMenu() {
         $submenu->addLink('Grades', $R.'grades');
         $submenu->addLink('Pages', $R.'pages');
         $submenu->addLink('Badges', $R.'badges');
+        $submenu->addLink('Courses', 'https://online.dr-chuck.com');
         $submenu->addLink('LMS Integration', $T . 'settings');
 
         if ( isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true" ) {
@@ -50,18 +51,16 @@ function buildMenu() {
         $set->addRight('Login', $R.'login');
     }
 
-    $set->addRight('Courses', 'https://online.dr-chuck.com', true, array('target' => '_self'));
 
     if ( isset($_SESSION['id']) ) {
         $set->addRight('<tsugi-notifications api-url="'. htmlspecialchars($T . 'api/notifications.php') . '" notifications-view-url="'. htmlspecialchars($R . 'notifications') . '" announcements-view-url="'. htmlspecialchars($R . 'announcements') . '"></tsugi-notifications>', false);
 
 
         $discordUrl = 'https://discord.dr-chuck.com';
-        $discordIcon = '<i class="fab fa-discord" aria-hidden="true" style="font-size:1.75em;line-height:1;color:#fff;vertical-align:middle"></i>';
-        $set->addRight(
-            '<a href="' . htmlspecialchars($discordUrl) . '" target="_blank" rel="noopener noreferrer" title="Discord" aria-label="Discord" style="display:inline-flex;align-items:center;line-height:1">' . $discordIcon . '</a>',
-            false
-        );
+        $discordIcon = '<i class="fab fa-discord" aria-hidden="true" style="font-size:1.75em;color:#fff;"></i>';
+        $set->addRight($discordIcon, $discordUrl, true, 'title="Discord" aria-label="Discord"');
+    } else {
+        $set->addRight('Courses', 'https://online.dr-chuck.com', true, array('target' => '_self'));
     }
 
     return $set;
