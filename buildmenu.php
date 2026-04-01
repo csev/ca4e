@@ -32,6 +32,9 @@ function buildMenu() {
         $submenu->addLink('Announcements', $R.'announcements');
         $submenu->addLink('Notifications', $R.'notifications');
         $submenu->addLink('Grades', $R.'grades');
+        if ( U::isNotEmpty($CFG->lessons) ) {
+            $submenu->addLink('Calendar', $R.'calendar');
+        }
         $submenu->addLink('Pages', $R.'pages');
         $submenu->addLink('Badges', $R.'badges');
         $submenu->addLink('Courses', 'https://online.dr-chuck.com');
