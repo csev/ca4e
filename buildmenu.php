@@ -8,6 +8,10 @@ function buildMenu() {
     $T = $CFG->wwwroot . '/';
 
     $adminmenu = isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true";
+    $showCalendarDueUi = isset($_SESSION['id'])
+        && U::isNotEmpty($CFG->lessons)
+        && \Tsugi\Grades\GradeUtil::showDueDates(U::get($_SESSION, 'context_id', 0));
+
     $set = new \Tsugi\UI\MenuSet();
     $set->setHome($CFG->servicename, $CFG->apphome);
 
@@ -32,7 +36,7 @@ function buildMenu() {
         $submenu->addLink('Announcements', $R.'announcements');
         $submenu->addLink('Notifications', $R.'notifications');
         $submenu->addLink('Grades', $R.'grades');
-        if ( U::isNotEmpty($CFG->lessons) ) {
+        if ( $showCalendarDueUi ) {
             $submenu->addLink('Calendar', $R.'calendar');
         }
         $submenu->addLink('Pages', $R.'pages');
@@ -58,7 +62,7 @@ function buildMenu() {
     if ( isset($_SESSION['id']) ) {
         $set->addRight('<tsugi-notifications api-url="'. htmlspecialchars($T . 'api/notifications.php') . '" notifications-view-url="'. htmlspecialchars($R . 'notifications') . '" announcements-view-url="'. htmlspecialchars($R . 'announcements') . '"></tsugi-notifications>', false);
 
-        if ( U::isNotEmpty($CFG->lessons) ) {
+        if ( $showCalendarDueUi ) {
             $set->addRight('<tsugi-calendar-due api-url="'. htmlspecialchars($R . 'calendar/json') . '" lessons-url="'. htmlspecialchars($R . 'lessons') . '"></tsugi-calendar-due>', false);
         }
 
