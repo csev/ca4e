@@ -53,12 +53,6 @@ $CFG->providekeys = true;  // true
 // $CFG->vapid_private_key = 'YOUR_PRIVATE_KEY_HERE';
 // $CFG->vapid_subject = 'mailto:drchuck@learnxp.com'; // Required: mailto: URL with your email
 
-$buildmenu = $CFG->dirroot."/../buildmenu.php";
-if ( file_exists($buildmenu) ) {
-    require_once $buildmenu;
-    $CFG->defaultmenu = buildMenu();
-}
-
 // Debug
 // $CFG->setExtension('launch_debug', true);
 
