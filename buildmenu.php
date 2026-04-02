@@ -60,15 +60,29 @@ function buildMenu() {
 
 
     if ( isset($_SESSION['id']) ) {
-        $set->addRight('<tsugi-notifications api-url="'. htmlspecialchars($T . 'api/notifications.php') . '" notifications-view-url="'. htmlspecialchars($R . 'notifications') . '" announcements-view-url="'. htmlspecialchars($R . 'announcements') . '"></tsugi-notifications>', false);
+        /* hidden-xs: hide WC in collapsed nav; links stay in profile dropdown */
+        $set->addRight(
+            '<tsugi-notifications api-url="'. htmlspecialchars($T . 'api/notifications.php') . '" notifications-view-url="'. htmlspecialchars($R . 'notifications') . '" announcements-view-url="'. htmlspecialchars($R . 'announcements') . '"></tsugi-notifications>',
+            false,
+            true,
+            'hidden-xs'
+        );
 
         if ( $showCalendarDueUi ) {
-            $set->addRight('<tsugi-calendar-due api-url="'. htmlspecialchars($R . 'calendar/json') . '" lessons-url="'. htmlspecialchars($R . 'lessons') . '"></tsugi-calendar-due>', false);
+            $set->addRight(
+                '<tsugi-calendar-due api-url="'. htmlspecialchars($R . 'calendar/json') . '" lessons-url="'. htmlspecialchars($R . 'lessons') . '"></tsugi-calendar-due>',
+                false,
+                true,
+                'hidden-xs'
+            );
         }
 
         $discordUrl = 'https://discord.dr-chuck.com';
         $discordIcon = '<i class="fab fa-discord" aria-hidden="true" style="font-size:1.75em;color:#fff;"></i>';
-        $set->addRight($discordIcon, $discordUrl, true, 'title="Discord" aria-label="Discord"');
+        /* Wide: icon only; xs: plain text (same URL) */
+        /* data-tsugi-li-class: whole &lt;li&gt; hidden/shown (avoids empty row when only &lt;a&gt; is hidden-xs) */
+        $set->addRight($discordIcon, $discordUrl, true, 'title="Discord" aria-label="Discord" data-tsugi-li-class="hidden-xs"');
+        $set->addRight('Discord', $discordUrl, true, 'title="Discord" aria-label="Discord" data-tsugi-li-class="visible-xs"');
     } else {
         $set->addRight('Courses', 'https://online.dr-chuck.com', true, array('target' => '_self'));
     }
