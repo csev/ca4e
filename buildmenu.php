@@ -42,6 +42,7 @@ function buildMenu() {
         $submenu->addLink('Pages', $R.'pages');
         $submenu->addLink('Badges', $R.'badges');
         $submenu->addLink('Courses', 'https://online.dr-chuck.com');
+        $submenu->addLink('Leaderboard', $R . 'launch/ca4e_01_leaderboard');
         $submenu->addLink('LMS Integration', $T . 'settings');
 
         if ( isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true" ) {
