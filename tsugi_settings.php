@@ -27,7 +27,7 @@ $CFG->giftquizzes = $CFG->dirroot.'/../ca4e-private/quiz';
 
 // $CFG->youtube_url = $CFG->apphome . '/mod/youtube/';
 
-$CFG->tdiscus = $CFG->apphome . '/mod/tdiscus/';
+$CFG->tdiscus = $CFG->wwwroot . '/tools/tdiscus/';
 
 $CFG->google_login_redirect = $CFG->apphome . "/login";
 

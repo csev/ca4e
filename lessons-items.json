@@ -6,7 +6,6 @@
         "https://github.com/tsugitools/gift",
         "https://github.com/tsugitools/youtube",
         "https://github.com/tsugitools/peer-grade",
-        "https://github.com/tsugitools/tdiscus",
         "https://github.com/tsugitools/aipaper"
     ],
     "badges": [
@@ -91,12 +90,12 @@
     "discussions": [
         {
             "title": "Welcome to Computer Architecture Programming for Everybody",
-            "launch": "{apphome}/mod/tdiscus/",
+            "launch": "{apphome}/tsugi/tool/tdiscus/",
             "resource_link_id": "discussion_welcome"
         },
         {
             "title": "Report Bugs in Course Material",
-            "launch": "{apphome}/mod/tdiscus/",
+            "launch": "{apphome}/tsugi/tool/tdiscus/",
             "resource_link_id": "discussion_bugs"
         }
     ],
@@ -172,7 +171,7 @@
                 {
                     "type": "discussion",
                     "title": "History / Introduction",
-                    "launch": "{apphome}/mod/tdiscus/",
+                    "launch": "{apphome}/tsugi/tool/tdiscus/",
                     "resource_link_id": "discuss_01_origins"
                 },
                 {
@@ -368,7 +367,7 @@
                 {
                     "type": "discussion",
                     "title": "Transistors and Solid State Computing",
-                    "launch": "{apphome}/mod/tdiscus/",
+                    "launch": "{apphome}/tsugi/tool/tdiscus/",
                     "resource_link_id": "discuss_02_transistors"
                 },
                 {
@@ -565,7 +564,7 @@
                 {
                     "type": "discussion",
                     "title": "VLSI Design",
-                    "launch": "{apphome}/mod/tdiscus/",
+                    "launch": "{apphome}/tsugi/tool/tdiscus/",
                     "resource_link_id": "discuss_02_vlsi"
                 },
                 {
@@ -776,7 +775,7 @@
                 {
                     "type": "discussion",
                     "title": "Digital Logic",
-                    "launch": "{apphome}/mod/tdiscus/",
+                    "launch": "{apphome}/tsugi/tool/tdiscus/",
                     "resource_link_id": "discuss_03_logic"
                 },
                 {
@@ -961,7 +960,7 @@
                 {
                     "type": "discussion",
                     "title": "Clocked Circuits",
-                    "launch": "{apphome}/mod/tdiscus/",
+                    "launch": "{apphome}/tsugi/tool/tdiscus/",
                     "resource_link_id": "discuss_03_clocked"
                 },
                 {
@@ -1128,7 +1127,7 @@
                 {
                     "type": "discussion",
                     "title": "CPU Design and Machine Code",
-                    "launch": "{apphome}/mod/tdiscus/",
+                    "launch": "{apphome}/tsugi/tool/tdiscus/",
                     "resource_link_id": "discuss_04_cpu"
                 },
                 {
@@ -1328,7 +1327,7 @@
                 {
                     "type": "discussion",
                     "title": "Web Assembly",
-                    "launch": "{apphome}/mod/tdiscus/",
+                    "launch": "{apphome}/tsugi/tool/tdiscus/",
                     "resource_link_id": "discuss_04_wasm"
                 },
                 {
