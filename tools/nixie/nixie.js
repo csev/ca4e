@@ -260,6 +260,12 @@ function initBase2Conversions() {
     }
 
     function getBinaryFromInputs() {
+        for (const input of conversionInputs) {
+            const v = input.value.trim();
+            if (v !== '0' && v !== '1') {
+                return null;
+            }
+        }
         return conversionInputs.reduce((total, input) => {
             const weight = Number(input.dataset.weight || 0);
             const bit = input.value === '1' ? 1 : 0;
@@ -304,6 +310,12 @@ function initBase2Conversions() {
         }
 
         const answer = getBinaryFromInputs();
+        if (answer === null) {
+            resetFeedback(decimalFeedback);
+            cancelDecimalAutoAdvance();
+            return;
+        }
+
         if (answer === decimalChallengeValue) {
             decimalFeedback.textContent = `Correct! ${decimalChallengeValue.toString(2).padStart(3, '0')} is ${decimalChallengeValue}.`;
             decimalFeedback.classList.remove('incorrect');
@@ -378,7 +390,7 @@ function initBase2Conversions() {
         decimalInteracted = false;
         decimalCompleted = false;
         cancelDecimalAutoAdvance();
-        conversionInputs[conversionInputs.length - 1].focus();
+        conversionInputs[0].focus();
     }
 
     function nextBinaryChallenge() {
