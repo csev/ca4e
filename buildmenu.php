@@ -26,6 +26,8 @@ function buildMenu() {
         $set->addLeft('Assignments', $R.'assignments');
     }
 
+    $set->addLeft('Discord', 'https://discord.dr-chuck.com');
+
     if ( isset($_SESSION['id']) ) {
         $submenu = new \Tsugi\UI\Menu();
         $submenu->addLink('Profile', $R.'profile');
@@ -65,7 +67,7 @@ function buildMenu() {
             '<tsugi-notifications api-url="'. htmlspecialchars($T . 'api/notifications.php') . '" notifications-view-url="'. htmlspecialchars($R . 'notifications') . '" announcements-view-url="'. htmlspecialchars($R . 'announcements') . '"></tsugi-notifications>',
             false,
             true,
-            'hidden-xs'
+            'hidden-xs tsugi-wc-nav-item'
         );
 
         if ( $showCalendarDueUi ) {
@@ -73,7 +75,7 @@ function buildMenu() {
                 '<tsugi-calendar-due api-url="'. htmlspecialchars($R . 'calendar/json') . '" lessons-url="'. htmlspecialchars($R . 'lessons') . '"></tsugi-calendar-due>',
                 false,
                 true,
-                'hidden-xs'
+                'hidden-xs tsugi-wc-nav-item'
             );
         }
         if ( U::isNotEmpty($CFG->tdiscus) && $CFG->tdiscus ) {
@@ -81,16 +83,9 @@ function buildMenu() {
                 '<tsugi-discussions api-url="'. htmlspecialchars($R . 'discussions/json') . '" discussions-url="'. htmlspecialchars($R . 'discussions') . '"></tsugi-discussions>',
                 false,
                 true,
-                'hidden-xs'
+                'hidden-xs tsugi-wc-nav-item'
             );
         }
-
-        $discordUrl = 'https://discord.dr-chuck.com';
-        $discordIcon = '<i class="fab fa-discord" aria-hidden="true" style="font-size:1.75em;color:#fff;"></i>';
-        /* Wide: icon only; xs: plain text (same URL) */
-        /* data-tsugi-li-class: whole &lt;li&gt; hidden/shown (avoids empty row when only &lt;a&gt; is hidden-xs) */
-        $set->addRight($discordIcon, $discordUrl, true, 'title="Discord" aria-label="Discord" data-tsugi-li-class="hidden-xs"');
-        $set->addRight('Discord', $discordUrl, true, 'title="Discord" aria-label="Discord" data-tsugi-li-class="visible-xs"');
     } else {
         $set->addRight('Courses', 'https://online.dr-chuck.com', true, array('target' => '_self'));
     }
