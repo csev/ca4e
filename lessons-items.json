@@ -436,6 +436,11 @@
                     "level": 2
                 },
                 {
+                    "type": "reference",
+                    "title": "Introduction to vacuum tubes",
+                    "href": "https://www.njarc.org/manuals/Articles-books/Introduction%20to%20vacuum%20tubes.pdf"
+                },
+                {
                     "type": "video",
                     "title": "AT&T Archives: A Modern Aladdin's Lamp, about vacuum tubes, 1940",
                     "youtube": "_-JzxX75oYc"
