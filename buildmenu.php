@@ -18,7 +18,6 @@ function buildMenu() {
     if ( U::isNotEmpty($CFG->lessons) ) {
         $set->addLeft('Lessons', $R.'lessons');
     }
-    if ( U::isNotEmpty($CFG->tdiscus) && $CFG->tdiscus ) $set->addLeft('Discussions', $R.'discussions');
     if ( ! isset($_SESSION['id']) ) {
         $set->addLeft('Explore', $R.'explore');
     }
@@ -72,6 +71,14 @@ function buildMenu() {
         if ( $showCalendarDueUi ) {
             $set->addRight(
                 '<tsugi-calendar-due api-url="'. htmlspecialchars($R . 'calendar/json') . '" lessons-url="'. htmlspecialchars($R . 'lessons') . '"></tsugi-calendar-due>',
+                false,
+                true,
+                'hidden-xs'
+            );
+        }
+        if ( U::isNotEmpty($CFG->tdiscus) && $CFG->tdiscus ) {
+            $set->addRight(
+                '<tsugi-discussions api-url="'. htmlspecialchars($R . 'discussions/json') . '" discussions-url="'. htmlspecialchars($R . 'discussions') . '"></tsugi-discussions>',
                 false,
                 true,
                 'hidden-xs'
