@@ -181,6 +181,36 @@ $_SESSION['RECORD_ATTEMPT_GSRF'] = 50;
                 const layerVCC = 5;
                 const layerGND = 6;
                 const layerProbe = 7;
+                const LAYER_NAMES = ['polysilicon', 'N+', 'P+', 'contact', 'metal', 'VCC', 'GND', 'probe'];
+
+                /** Per compute(): cap detailed propagate lines (phase summaries are always logged when debug is on). */
+                let voltageDebugPropagateCap = 500;
+                let voltageDebugPropagateCount = 0;
+                let voltageDebugBlockCap = 80;
+                let voltageDebugBlockCount = 0;
+
+                function isVoltageDebugEnabled() {
+                    if ( typeof window !== 'undefined' && window.MISTIC_DEBUG_VOLTAGE === true ) {
+                        return true;
+                    }
+                    try {
+                        const v = new URLSearchParams(window.location.search).get('debugVoltage');
+                        return v === '1' || v === 'true' || v === 'yes';
+                    } catch (err) {
+                        return false;
+                    }
+                }
+
+                function voltageDebug(msg, data) {
+                    if ( ! isVoltageDebugEnabled() ) {
+                        return;
+                    }
+                    if ( data !== undefined ) {
+                        console.log('[MISTIC voltage]', msg, data);
+                    } else {
+                        console.log('[MISTIC voltage]', msg);
+                    }
+                }
 
                 let currentLayer = '';
                 let isDrawing = false;
@@ -1784,6 +1814,10 @@ $_SESSION['RECORD_ATTEMPT_GSRF'] = 50;
                 }
 
                 function compute() {
+                    voltageDebugPropagateCount = 0;
+                    voltageDebugBlockCount = 0;
+                    voltageDebug('compute: reset volts to 0', { grid: grid.length });
+
                     for (let i = 0; i < grid.length; i++) {
                         for (let j = 0; j < grid[i].length; j++) {
                             for (let l = 0; l < 8; l++) {
@@ -1831,6 +1865,8 @@ $_SESSION['RECORD_ATTEMPT_GSRF'] = 50;
                         }
                     }
 
+                    voltageDebug('compute: sources applied (VCC/GND/probe seeds in volts)');
+
                     let changed = true;
                     for (let phase = 0; phase < 5; phase++) {
                         try {
@@ -1848,6 +1884,8 @@ $_SESSION['RECORD_ATTEMPT_GSRF'] = 50;
                                 }
                             }
 
+                            const spreadChanged = changed;
+                            let contactWrites = 0;
                             for (let i = 0; i < grid.length; i++) {
                                 for (let j = 0; j < grid[i].length; j++) {
                                     if (grid[i][j][layerContact]) {
@@ -1859,16 +1897,31 @@ $_SESSION['RECORD_ATTEMPT_GSRF'] = 50;
                                             if (volts[i][j][l] != voltage) {
                                                 changed = true;
                                                 volts[i][j][l] = voltage;
+                                                contactWrites++;
                                             }
                                         }
                                     }
                                 }
                             }
-                            if (!changed) break;
+                            voltageDebug('compute: phase done', {
+                                phase,
+                                neighborSpreadChanged: spreadChanged,
+                                contactLayerWrites: contactWrites,
+                                phaseMadeChanges: changed
+                            });
+                            if (!changed) {
+                                voltageDebug('compute: converged early', { phase });
+                                break;
+                            }
                         } catch (e) {
+                            voltageDebug('compute: stopped (error)', { phase, message: e && e.message ? e.message : String(e) });
                             break;
                         }
                     }
+                    voltageDebug('compute: finished', {
+                        propagateLogs: voltageDebugPropagateCount,
+                        blockLogs: voltageDebugBlockCount
+                    });
                 }
 
                 function propogateVoltage(voltage, i, j, l) {
@@ -1878,15 +1931,47 @@ $_SESSION['RECORD_ATTEMPT_GSRF'] = 50;
                     if (!grid[i][j][l]) return false;
                     if (volts[i][j][l] == -1*voltage && voltage != 0) {
                         console.log('short detected', i, j, l);
+                        voltageDebug('propagate: SHORT (VCC vs GND)', { row: i, col: j, layer: l, layerName: LAYER_NAMES[l] });
                         for ( let ll = 0; ll < 8; ll++) volts[i][j][ll] = 100;
                         throw new Error('short detected');
                     }
                     if (volts[i][j][l] == voltage) return false;
 
-                    if (l == layerNPlus && grid[i][j][layerPolysilicon] && volts[i][j][layerPolysilicon] != 1) return;
-                    if (l == layerPPlus && grid[i][j][layerPolysilicon] && volts[i][j][layerPolysilicon] != -1) return;
+                    if (l == layerNPlus && grid[i][j][layerPolysilicon] && volts[i][j][layerPolysilicon] != 1) {
+                        if ( isVoltageDebugEnabled() && voltageDebugBlockCount < voltageDebugBlockCap ) {
+                            voltageDebugBlockCount++;
+                            voltageDebug('propagate: blocked (N+ needs poly gate VCC)', { row: i, col: j, polyV: volts[i][j][layerPolysilicon] });
+                        }
+                        return false;
+                    }
+                    if (l == layerPPlus && grid[i][j][layerPolysilicon] && volts[i][j][layerPolysilicon] != -1) {
+                        if ( isVoltageDebugEnabled() && voltageDebugBlockCount < voltageDebugBlockCap ) {
+                            voltageDebugBlockCount++;
+                            voltageDebug('propagate: blocked (P+ needs poly gate GND)', { row: i, col: j, polyV: volts[i][j][layerPolysilicon] });
+                        }
+                        return false;
+                    }
 
                     volts[i][j][l] = voltage;
+                    if ( isVoltageDebugEnabled() && voltageDebugPropagateCount < voltageDebugPropagateCap ) {
+                        voltageDebugPropagateCount++;
+                        voltageDebug('propagate: set cell', {
+                            row: i,
+                            col: j,
+                            layer: l,
+                            layerName: LAYER_NAMES[l],
+                            v: voltage
+                        });
+                    }
+
+                    // Via ties every drawn layer at (i,j): treat other layers as neighbors here.
+                    if (grid[i][j][layerContact]) {
+                        for (let ll = 0; ll < 8; ll++) {
+                            if (ll !== l && grid[i][j][ll]) {
+                                propogateVoltage(voltage, i, j, ll);
+                            }
+                        }
+                    }
 
                     if (i > 0) propogateVoltage(voltage, i-1, j, l);
                     if (j > 0) propogateVoltage(voltage, i, j-1, l);
@@ -1970,6 +2055,23 @@ $_SESSION['RECORD_ATTEMPT_GSRF'] = 50;
                     recompute: function() {
                         compute();
                         redrawAllTiles();
+                    },
+
+                    /** Enable/disable console logging during compute() / propogateVoltage (also ?debugVoltage=1). */
+                    setVoltageDebug: function(on) {
+                        window.MISTIC_DEBUG_VOLTAGE = !!on;
+                        console.log('[MISTIC] voltage debug', window.MISTIC_DEBUG_VOLTAGE ? 'on' : 'off');
+                    },
+
+                    getVoltageDebug: function() {
+                        return isVoltageDebugEnabled();
+                    },
+
+                    /** Max "propagate: set cell" lines per compute() (phase summaries are unlimited). */
+                    setVoltageDebugPropagateCap: function(n) {
+                        if ( typeof n === 'number' && n > 0 ) {
+                            voltageDebugPropagateCap = Math.floor(n);
+                        }
                     }
                 };
             </script>
