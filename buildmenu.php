@@ -27,22 +27,23 @@ function buildMenu() {
     }
 
     if ( isset($_SESSION['id']) ) {
-        $set->addLeft('Discord', 'https://discord.dr-chuck.com');
         $submenu = new \Tsugi\UI\Menu();
         $submenu->addLink('Profile', $R.'profile');
         if ( isset($CFG->google_map_api_key) ) {
             $submenu->addLink('Map', $R.'map');
         }
+        $submenu->addLink('Discussions', $R.'discussions');
         $submenu->addLink('Announcements', $R.'announcements');
-        $submenu->addLink('Notifications', $R.'notifications');
         $submenu->addLink('Grades', $R.'grades');
         if ( $showCalendarDueUi ) {
             $submenu->addLink('Calendar', $R.'calendar');
         }
+        $set->addLeft('Discord', 'https://discord.dr-chuck.com');
         $submenu->addLink('Pages', $R.'pages');
         $submenu->addLink('Badges', $R.'badges');
-        $submenu->addLink('Courses', 'https://online.dr-chuck.com');
+        $submenu->addLink('Notifications', $R.'notifications');
         $submenu->addLink('Leaderboard', $R . 'launch/ca4e_01_leaderboard');
+        $submenu->addLink('Courses', 'https://online.dr-chuck.com');
         $submenu->addLink('LMS Integration', $T . 'settings');
 
         if ( isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true" ) {
@@ -51,7 +52,6 @@ function buildMenu() {
         $submenu->addLink('Logout', $R.'logout');
         if ( isset($_SESSION['avatar']) ) {
             $set->addRight('<img src="'.$_SESSION['avatar'].'" alt="'.htmlentities(__('User profile')).'" title="'.htmlentities(__('User Profile Menu - Includes logout')).'" style="height: 2em;"/>', $submenu);
-            // htmlentities($_SESSION['displayname']), $submenu);
         } else {
             $set->addRight(htmlentities($_SESSION['displayname']), $submenu);
         }
