@@ -26,9 +26,8 @@ function buildMenu() {
         $set->addLeft('Assignments', $R.'assignments');
     }
 
-    $set->addLeft('Discord', 'https://discord.dr-chuck.com');
-
     if ( isset($_SESSION['id']) ) {
+        $set->addLeft('Discord', 'https://discord.dr-chuck.com');
         $submenu = new \Tsugi\UI\Menu();
         $submenu->addLink('Profile', $R.'profile');
         if ( isset($CFG->google_map_api_key) ) {
