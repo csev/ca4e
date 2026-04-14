@@ -877,7 +877,7 @@ BRK`;
                 <div id="stepDisplay"></div>
                 <button id="gradeBtn" onclick="startGrading()">Start Grading</button>
                 <div class="grading-mode-note">
-                    Grading runs in fast mode (up to 3 minutes) to quickly detect whether your program halts and produces the expected output.
+                    Grading runs in fast mode (up to 1 minute) to quickly detect whether your program halts and produces the expected output.
                 </div>
             </div>
         </div>

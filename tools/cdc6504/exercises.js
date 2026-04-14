@@ -18,7 +18,7 @@ function cdc6504PhraseIndexFromDayOfMonth(arrayLength) {
  * Run emulator in grading fast mode while keeping the same wall-clock timeout.
  * Falls back to a faster clock if fast-run API is unavailable.
  */
-async function runEmulatorForGrading(emulator, timeoutMs = 180000) {
+async function runEmulatorForGrading(emulator, timeoutMs = 60000) {
     const previousNarration = emulator.narrateEnabled;
     const previousClockSpeed = emulator.clockSpeed;
 
@@ -221,10 +221,10 @@ class HelloWorldExercise extends CDC6504Exercise {
             emulator.cpu.x2 = 0;
             emulator.cpu.x3 = 0;
 
-            // Run in fast grading mode with a 3-minute wall-clock timeout.
-            const runResult = await runEmulatorForGrading(emulator, 180000);
+            // Run in fast grading mode with a 1-minute wall-clock timeout.
+            const runResult = await runEmulatorForGrading(emulator, 60000);
             if (runResult.timedOut) {
-                return { passed: false, message: "Program did not complete within 3 minutes. Check for infinite loops." };
+                return { passed: false, message: "Program did not complete within 1 minute. Check for infinite loops." };
             }
 
             const output = emulator.output.trim();
@@ -341,10 +341,10 @@ class Print42Exercise extends CDC6504Exercise {
                 return { passed: false, message: "No program loaded. Please load or assemble a program first." };
             }
 
-            // Run in fast grading mode with a 3-minute wall-clock timeout.
-            const runResult = await runEmulatorForGrading(emulator, 180000);
+            // Run in fast grading mode with a 1-minute wall-clock timeout.
+            const runResult = await runEmulatorForGrading(emulator, 60000);
             if (runResult.timedOut) {
-                return { passed: false, message: "Program did not complete within 3 minutes. Check for infinite loops." };
+                return { passed: false, message: "Program did not complete within 1 minute. Check for infinite loops." };
             }
 
             const status = emulator.getStatus();
@@ -507,10 +507,10 @@ class LowercaseConversionExercise extends CDC6504Exercise {
             emulator.cpu.x2 = 0;
             emulator.cpu.x3 = 0;
 
-            // Run in fast grading mode with a 3-minute wall-clock timeout.
-            const runResult = await runEmulatorForGrading(emulator, 180000);
+            // Run in fast grading mode with a 1-minute wall-clock timeout.
+            const runResult = await runEmulatorForGrading(emulator, 60000);
             if (runResult.timedOut) {
-                return { passed: false, message: "Program did not complete within 3 minutes. Check for infinite loops." };
+                return { passed: false, message: "Program did not complete within 1 minute. Check for infinite loops." };
             }
 
             const output = emulator.output.trim();

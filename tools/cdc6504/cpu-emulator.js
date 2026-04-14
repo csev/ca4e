@@ -1481,7 +1481,7 @@ class CDC6504Emulator {
     }
 
     // Run as fast as possible for autograding within a wall-clock budget.
-    async runFastUntilStop(maxWaitMs = 180000) {
+    async runFastUntilStop(maxWaitMs = 60000) {
         if (this.clockInterval) {
             clearInterval(this.clockInterval);
             this.clockInterval = null;
