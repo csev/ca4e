@@ -15,6 +15,41 @@ function cdc6504PhraseIndexFromDayOfMonth(arrayLength) {
 }
 
 /**
+ * Run emulator in grading fast mode while keeping the same wall-clock timeout.
+ * Falls back to a faster clock if fast-run API is unavailable.
+ */
+async function runEmulatorForGrading(emulator, timeoutMs = 180000) {
+    const previousNarration = emulator.narrateEnabled;
+    const previousClockSpeed = emulator.clockSpeed;
+
+    emulator.narrateEnabled = false;
+
+    try {
+        if (typeof emulator.runFastUntilStop === 'function') {
+            return await emulator.runFastUntilStop(timeoutMs);
+        }
+
+        emulator.clockSpeed = 1;
+        emulator.start();
+        const startTime = Date.now();
+
+        while (Date.now() - startTime < timeoutMs) {
+            const status = emulator.getStatus();
+            if (!status.running) {
+                return { timedOut: false };
+            }
+            await new Promise(resolve => setTimeout(resolve, 10));
+        }
+
+        emulator.stop();
+        return { timedOut: true };
+    } finally {
+        emulator.narrateEnabled = previousNarration;
+        emulator.clockSpeed = previousClockSpeed;
+    }
+}
+
+/**
  * CDC6504-specific Exercise class that extends the common base
  * The base Exercise class is loaded from ../common/exercise-base.js
  */
@@ -186,40 +221,25 @@ class HelloWorldExercise extends CDC6504Exercise {
             emulator.cpu.x2 = 0;
             emulator.cpu.x3 = 0;
 
-            // Start the program
-            emulator.start();
+            // Run in fast grading mode with a 3-minute wall-clock timeout.
+            const runResult = await runEmulatorForGrading(emulator, 180000);
+            if (runResult.timedOut) {
+                return { passed: false, message: "Program did not complete within 3 minutes. Check for infinite loops." };
+            }
 
-            // Wait for program to complete (with timeout)
-            const timeout = 5000; // 5 seconds
-            const startTime = Date.now();
-            
-            while (Date.now() - startTime < timeout) {
-                const status = emulator.getStatus();
-                
-                if (!status.running) {
-                    // Program has stopped (regardless of how it stopped)
-                    const output = emulator.output.trim();
-                    
-                    // Update the UI to show the output
-                    if (typeof window.updateOutput === 'function') {
-                        window.updateOutput();
-                    }
-                    
-                    // Check if output contains the target phrase
-                    if (output.includes(this.targetPhrase)) {
-                        return { passed: true, message: `✅ Program output contains '${this.targetPhrase}'!` };
-                    } else {
-                        return { passed: false, message: `Expected output to contain '${this.targetPhrase}' but got: "${output}"` };
-                    }
-                }
-                
-                // Wait a bit before checking again
-                await new Promise(resolve => setTimeout(resolve, 100));
+            const output = emulator.output.trim();
+
+            // Update the UI to show the output
+            if (typeof window.updateOutput === 'function') {
+                window.updateOutput();
             }
             
-            // Timeout reached
-            emulator.stop(); // Stop the program if it's still running
-            return { passed: false, message: "Program did not complete within 5 seconds. Check for infinite loops." };
+            // Check if output contains the target phrase
+            if (output.includes(this.targetPhrase)) {
+                return { passed: true, message: `✅ Program output contains '${this.targetPhrase}'!` };
+            } else {
+                return { passed: false, message: `Expected output to contain '${this.targetPhrase}' but got: "${output}"` };
+            }
             
         } catch (error) {
             return { passed: false, message: `Error during execution: ${error.message}` };
@@ -321,39 +341,25 @@ class Print42Exercise extends CDC6504Exercise {
                 return { passed: false, message: "No program loaded. Please load or assemble a program first." };
             }
 
-            // Start the program directly
-            emulator.start();
+            // Run in fast grading mode with a 3-minute wall-clock timeout.
+            const runResult = await runEmulatorForGrading(emulator, 180000);
+            if (runResult.timedOut) {
+                return { passed: false, message: "Program did not complete within 3 minutes. Check for infinite loops." };
+            }
 
-            // Wait for the program to complete (with timeout)
-            const maxWaitTime = 5000; // 5 seconds
-            const startTime = Date.now();
+            const status = emulator.getStatus();
+            const output = status.output ? status.output.trim() : '';
             
-            while (Date.now() - startTime < maxWaitTime) {
-                const status = emulator.getStatus();
-                
-                if (!status.running) {
-                    // Program has stopped (regardless of how it stopped)
-                    const output = status.output ? status.output.trim() : '';
-                    
-                    // Update the UI to show the output
-                    if (typeof window.updateOutput === 'function') {
-                        window.updateOutput();
-                    }
-                    
-                    if (output.includes('42')) {
-                        return { passed: true, message: "✅ Program executed successfully and output '42'!" };
-                    } else {
-                        return { passed: false, message: `Program stopped but output was '${output}', expected '42'.` };
-                    }
-                }
-                
-                // Wait a bit before checking again
-                await new Promise(resolve => setTimeout(resolve, 100));
+            // Update the UI to show the output
+            if (typeof window.updateOutput === 'function') {
+                window.updateOutput();
             }
             
-            // Timeout reached
-            emulator.stop(); // Stop the program if it's still running
-            return { passed: false, message: "Program did not complete within 5 seconds. Check for infinite loops." };
+            if (output.includes('42')) {
+                return { passed: true, message: "✅ Program executed successfully and output '42'!" };
+            } else {
+                return { passed: false, message: `Program stopped but output was '${output}', expected '42'.` };
+            }
             
         } catch (error) {
             return { passed: false, message: `Error during execution: ${error.message}` };
@@ -501,50 +507,35 @@ class LowercaseConversionExercise extends CDC6504Exercise {
             emulator.cpu.x2 = 0;
             emulator.cpu.x3 = 0;
 
-            // Start the program
-            emulator.start();
+            // Run in fast grading mode with a 3-minute wall-clock timeout.
+            const runResult = await runEmulatorForGrading(emulator, 180000);
+            if (runResult.timedOut) {
+                return { passed: false, message: "Program did not complete within 3 minutes. Check for infinite loops." };
+            }
 
-            // Wait for program to complete (with timeout)
-            const timeout = 5000; // 5 seconds
-            const startTime = Date.now();
+            const output = emulator.output.trim();
             
-            while (Date.now() - startTime < timeout) {
-                const status = emulator.getStatus();
-                
-                if (!status.running) {
-                    // Program has stopped (regardless of how it stopped)
-                    const output = emulator.output.trim();
-                    
-                    // Update the UI to show the output
-                    if (typeof window.updateOutput === 'function') {
-                        window.updateOutput();
-                    }
-                    
-                    // Check if output contains the expected lowercase string
-                    if (output.includes(this.expectedOutput)) {
-                        return { passed: true, message: `✅ Program correctly outputs "${this.expectedOutput}"!` };
-                    } else {
-                        // Check if they have the original mixed-case string in output (which would be wrong)
-                        if (output.includes(this.originalString)) {
-                            return { 
-                                passed: false, 
-                                message: `Your output still contains the original mixed-case string "${this.originalString}". You need to convert it to lowercase "${this.expectedOutput}".` 
-                            };
-                        }
-                        return { 
-                            passed: false, 
-                            message: `Expected output to contain "${this.expectedOutput}", but got: "${output}"` 
-                        };
-                    }
-                }
-                
-                // Wait a bit before checking again
-                await new Promise(resolve => setTimeout(resolve, 100));
+            // Update the UI to show the output
+            if (typeof window.updateOutput === 'function') {
+                window.updateOutput();
             }
             
-            // Timeout reached
-            emulator.stop(); // Stop the program if it's still running
-            return { passed: false, message: "Program did not complete within 5 seconds. Check for infinite loops." };
+            // Check if output contains the expected lowercase string
+            if (output.includes(this.expectedOutput)) {
+                return { passed: true, message: `✅ Program correctly outputs "${this.expectedOutput}"!` };
+            } else {
+                // Check if they have the original mixed-case string in output (which would be wrong)
+                if (output.includes(this.originalString)) {
+                    return { 
+                        passed: false, 
+                        message: `Your output still contains the original mixed-case string "${this.originalString}". You need to convert it to lowercase "${this.expectedOutput}".` 
+                    };
+                }
+                return { 
+                    passed: false, 
+                    message: `Expected output to contain "${this.expectedOutput}", but got: "${output}"` 
+                };
+            }
             
         } catch (error) {
             return { passed: false, message: `Error during execution: ${error.message}` };

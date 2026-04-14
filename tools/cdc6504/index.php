@@ -235,6 +235,16 @@ $_SESSION['RECORD_ATTEMPT_GSRF'] = 50;
             background-color: #218838;
         }
 
+        .grading-mode-note {
+            margin-top: 8px;
+            padding: 8px 10px;
+            border: 1px solid #ffeeba;
+            border-radius: 4px;
+            background: #fff3cd;
+            color: #856404;
+            font-size: 13px;
+        }
+
         #stepDisplay {
             margin: 15px 0;
             padding: 10px;
@@ -866,6 +876,9 @@ BRK`;
             <div id="gradingSection" style="margin-top: 20px;">
                 <div id="stepDisplay"></div>
                 <button id="gradeBtn" onclick="startGrading()">Start Grading</button>
+                <div class="grading-mode-note">
+                    Grading runs in fast mode (up to 3 minutes) to quickly detect whether your program halts and produces the expected output.
+                </div>
             </div>
         </div>
     </div>

@@ -1480,6 +1480,42 @@ class CDC6504Emulator {
         return await this.executeStep();
     }
 
+    // Run as fast as possible for autograding within a wall-clock budget.
+    async runFastUntilStop(maxWaitMs = 180000) {
+        if (this.clockInterval) {
+            clearInterval(this.clockInterval);
+            this.clockInterval = null;
+        }
+
+        this.running = true;
+        const startTime = Date.now();
+        let stepCount = 0;
+
+        while (this.running && (Date.now() - startTime) < maxWaitMs) {
+            const result = await this.executeStep();
+            stepCount++;
+
+            if (result === null || !this.running) {
+                break;
+            }
+
+            // Yield periodically so the browser can process UI updates.
+            if (stepCount % 200 === 0) {
+                await new Promise(resolve => setTimeout(resolve, 0));
+            }
+        }
+
+        const timedOut = this.running;
+        if (timedOut) {
+            this.stop();
+        }
+
+        return {
+            timedOut: timedOut,
+            stepCount: stepCount
+        };
+    }
+
     // Load the Hello program (6502)
     loadHelloProgram() {
         this.reset();
