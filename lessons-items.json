@@ -898,6 +898,13 @@
             "description": "We examine circuits where operations happen under control of a clock that orchestrates the various aspects of a central processing unit.",
             "items": [
                 {
+                    "type": "video",
+                    "title": "Welcome to Clocked Circuits",
+                    "reference": "CA4E-Lectures/05-Clock/05-00-Hi",
+                    "media": "ca4e-media/05-Clock/05-00-Hi.m4v",
+                    "youtube": "YOwm_Ux9zKQ"
+                },
+                {
                     "type": "header",
                     "text": "Slides",
                     "level": 2
@@ -1022,6 +1029,13 @@
             "icon": "fa-calculator",
             "description": "Machine code - CDC 6504.",
             "items": [
+                {
+                    "type": "video",
+                    "title": "Welcome to CPU Design",
+                    "reference": "CA4E-Lectures/06-CPU/06-00-Hi",
+                    "media": "ca4e-media/06-CPU/06-00-Hi.m4v",
+                    "youtube": "3yawCNgikLQ"
+                },
                 {
                     "type": "header",
                     "text": "Slides",
