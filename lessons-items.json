@@ -182,7 +182,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: Origins of Computing",
-                    "launch": "{apphome}/mod/gift/?quiz=01-Origins.txt",
+                    "launch": "{apphome}/tsugi/tool/gift/?quiz=01-Origins.txt",
                     "resource_link_id": "ca4e_01_hist_quiz",
                     "custom": [
                         {
@@ -378,7 +378,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: Solid State Computing",
-                    "launch": "{apphome}/mod/gift/?quiz=02-SolidState.txt",
+                    "launch": "{apphome}/tsugi/tool/gift/?quiz=02-SolidState.txt",
                     "resource_link_id": "ca4e_02_solid_quiz",
                     "custom": [
                         {
@@ -580,7 +580,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: Very Large Scale Integration",
-                    "launch": "{apphome}/mod/gift/?quiz=03-VLSI.txt",
+                    "launch": "{apphome}/tsugi/tool/gift/?quiz=03-VLSI.txt",
                     "resource_link_id": "ca4e_02_vlsi_quiz",
                     "custom": [
                         {
@@ -791,7 +791,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: Gates and Digital Logic",
-                    "launch": "{apphome}/mod/gift/?quiz=04-DigitalLogic.txt",
+                    "launch": "{apphome}/tsugi/tool/gift/?quiz=04-DigitalLogic.txt",
                     "resource_link_id": "ca4e_03_logic_quiz",
                     "custom": [
                         {
@@ -983,7 +983,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: Clocked Logic Circuits",
-                    "launch": "{apphome}/mod/gift/?quiz=05-Clock.txt",
+                    "launch": "{apphome}/tsugi/tool/gift/?quiz=05-Clock.txt",
                     "resource_link_id": "ca4e_03_clock_quiz",
                     "custom": [
                         {
@@ -1157,7 +1157,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: CPU Design and Machine Code",
-                    "launch": "{apphome}/mod/gift/?quiz=06-MachineCode.txt",
+                    "launch": "{apphome}/tsugi/tool/gift/?quiz=06-MachineCode.txt",
                     "resource_link_id": "ca4e_04_cpu_quiz",
                     "custom": [
                         {
@@ -1357,7 +1357,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: Emulators and Web Assembly",
-                    "launch": "{apphome}/mod/gift/?quiz=07-Emulator.txt",
+                    "launch": "{apphome}/tsugi/tool/gift/?quiz=07-Emulator.txt",
                     "resource_link_id": "ca4e_04_cpu_wasm",
                     "custom": [
                         {
