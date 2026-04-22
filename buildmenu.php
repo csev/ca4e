@@ -43,7 +43,7 @@ function buildMenu() {
         $submenu->addLink('Badges', $R.'badges');
         $submenu->addLink('Notifications', $R.'notifications');
         $submenu->addLink('Leaderboard', $R . 'launch/ca4e_01_leaderboard');
-        $submenu->addLink('Courses', 'https://online.dr-chuck.com');
+        $submenu->addLink('Courses', $R.'coursesredirect.php');
         $submenu->addLink('LMS Integration', $T . 'settings');
 
         if ( isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true" ) {
@@ -86,7 +86,7 @@ function buildMenu() {
             );
         }
     } else {
-        $set->addRight('Courses', 'https://online.dr-chuck.com', true, array('target' => '_self'));
+        $set->addRight('Courses', $R.'coursesredirect.php');
     }
 
     return $set;

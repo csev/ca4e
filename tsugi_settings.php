@@ -22,6 +22,7 @@ $CFG->theme = array(
 );
 
 $CFG->context_title = "Computer Architecture for Everybody";
+$CFG->tool_folders = array("admin", "../tools", "../mod", "tool");
 
 $CFG->giftquizzes = $CFG->dirroot.'/../ca4e-private/quiz';
 
