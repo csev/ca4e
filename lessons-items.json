@@ -90,12 +90,12 @@
     "discussions": [
         {
             "title": "Welcome to Computer Architecture Programming for Everybody",
-            "launch": "{apphome}/tsugi/tool/tdiscus/",
+            "launch": "tsugi/tool/tdiscus/",
             "resource_link_id": "discussion_welcome"
         },
         {
             "title": "Report Bugs in Course Material",
-            "launch": "{apphome}/tsugi/tool/tdiscus/",
+            "launch": "tsugi/tool/tdiscus/",
             "resource_link_id": "discussion_bugs"
         }
     ],
@@ -171,7 +171,7 @@
                 {
                     "type": "discussion",
                     "title": "History / Introduction",
-                    "launch": "{apphome}/tsugi/tool/tdiscus/",
+                    "launch": "tsugi/tool/tdiscus/",
                     "resource_link_id": "discuss_01_origins"
                 },
                 {
@@ -182,7 +182,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: Origins of Computing",
-                    "launch": "{apphome}/tsugi/tool/gift/?quiz=01-Origins.txt",
+                    "launch": "tsugi/tool/gift/?quiz=01-Origins.txt",
                     "resource_link_id": "ca4e_01_hist_quiz",
                     "custom": [
                         {
@@ -198,7 +198,7 @@
                 {
                     "type": "lti",
                     "title": "Using a Slide Rule for Multiplication",
-                    "launch": "{apphome}/tools/sliderule/",
+                    "launch": "tools/sliderule/",
                     "resource_link_id": "ca4e_01_sliderule",
                     "target": "_blank",
                     "custom": [
@@ -367,7 +367,7 @@
                 {
                     "type": "discussion",
                     "title": "Transistors and Solid State Computing",
-                    "launch": "{apphome}/tsugi/tool/tdiscus/",
+                    "launch": "tsugi/tool/tdiscus/",
                     "resource_link_id": "discuss_02_transistors"
                 },
                 {
@@ -378,7 +378,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: Solid State Computing",
-                    "launch": "{apphome}/tsugi/tool/gift/?quiz=02-SolidState.txt",
+                    "launch": "tsugi/tool/gift/?quiz=02-SolidState.txt",
                     "resource_link_id": "ca4e_02_solid_quiz",
                     "custom": [
                         {
@@ -394,7 +394,7 @@
                 {
                     "type": "lti",
                     "title": "All Gates Truth Tables",
-                    "launch": "{apphome}/tools/truth/",
+                    "launch": "tools/truth/",
                     "resource_link_id": "ca4e_02_truth_all",
                     "target": "_blank",
                     "custom": [
@@ -407,7 +407,7 @@
                 {
                     "type": "lti",
                     "title": "Building a Not Gate with CMOS Transistors",
-                    "launch": "{apphome}/tools/cmos/",
+                    "launch": "tools/cmos/",
                     "resource_link_id": "ca4e_02_cmos_not",
                     "target": "_blank",
                     "custom": [
@@ -420,7 +420,7 @@
                 {
                     "type": "lti",
                     "title": "Building a Nor Gate with CMOS Transistors",
-                    "launch": "{apphome}/tools/cmos/",
+                    "launch": "tools/cmos/",
                     "resource_link_id": "ca4e_02_cmos_nor",
                     "target": "_blank",
                     "custom": [
@@ -569,7 +569,7 @@
                 {
                     "type": "discussion",
                     "title": "VLSI Design",
-                    "launch": "{apphome}/tsugi/tool/tdiscus/",
+                    "launch": "tsugi/tool/tdiscus/",
                     "resource_link_id": "discuss_02_vlsi"
                 },
                 {
@@ -580,7 +580,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: Very Large Scale Integration",
-                    "launch": "{apphome}/tsugi/tool/gift/?quiz=03-VLSI.txt",
+                    "launch": "tsugi/tool/gift/?quiz=03-VLSI.txt",
                     "resource_link_id": "ca4e_02_vlsi_quiz",
                     "custom": [
                         {
@@ -596,7 +596,7 @@
                 {
                     "type": "lti",
                     "title": "Mistic: Building a Not Gate with VLSI Layout",
-                    "launch": "{apphome}/tools/mistic/",
+                    "launch": "tools/mistic/",
                     "resource_link_id": "ca4e_02_vlsi_not",
                     "target": "_blank",
                     "custom": [
@@ -609,7 +609,7 @@
                 {
                     "type": "lti",
                     "title": "Mistic: Building a Nand Gate with VLSI Layout",
-                    "launch": "{apphome}/tools/mistic/",
+                    "launch": "tools/mistic/",
                     "resource_link_id": "ca4e_02_vlsi_nand",
                     "target": "_blank",
                     "custom": [
@@ -622,7 +622,7 @@
                 {
                     "type": "lti",
                     "title": "Mistic: Building a Nor Gate with VLSI Layout",
-                    "launch": "{apphome}/tools/mistic/",
+                    "launch": "tools/mistic/",
                     "resource_link_id": "ca4e_02_vlsi_nor",
                     "target": "_blank",
                     "custom": [
@@ -780,7 +780,7 @@
                 {
                     "type": "discussion",
                     "title": "Digital Logic",
-                    "launch": "{apphome}/tsugi/tool/tdiscus/",
+                    "launch": "tsugi/tool/tdiscus/",
                     "resource_link_id": "discuss_03_logic"
                 },
                 {
@@ -791,7 +791,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: Gates and Digital Logic",
-                    "launch": "{apphome}/tsugi/tool/gift/?quiz=04-DigitalLogic.txt",
+                    "launch": "tsugi/tool/gift/?quiz=04-DigitalLogic.txt",
                     "resource_link_id": "ca4e_03_logic_quiz",
                     "custom": [
                         {
@@ -807,7 +807,7 @@
                 {
                     "type": "lti",
                     "title": "Building an And Gate",
-                    "launch": "{apphome}/tools/gates/",
+                    "launch": "tools/gates/",
                     "resource_link_id": "ca4e_03_and",
                     "target": "_blank",
                     "custom": [
@@ -820,7 +820,7 @@
                 {
                     "type": "lti",
                     "title": "Base-10 ⇄ Base-2 conversions (0-7)",
-                    "launch": "{apphome}/tools/nixie/",
+                    "launch": "tools/nixie/",
                     "resource_link_id": "ca4e_03_nixie2",
                     "target": "_blank",
                     "custom": [
@@ -833,7 +833,7 @@
                 {
                     "type": "lti",
                     "title": "Building a Half-Adder",
-                    "launch": "{apphome}/tools/gates/",
+                    "launch": "tools/gates/",
                     "resource_link_id": "ca4e_03_halfadder",
                     "target": "_blank",
                     "custom": [
@@ -846,7 +846,7 @@
                 {
                     "type": "lti",
                     "title": "Binary addition practice (3-bit + 3-bit)",
-                    "launch": "{apphome}/tools/nixie/",
+                    "launch": "tools/nixie/",
                     "resource_link_id": "ca4e_03_nixie_add",
                     "target": "_blank",
                     "custom": [
@@ -859,7 +859,7 @@
                 {
                     "type": "lti",
                     "title": "Building a Full-Adder",
-                    "launch": "{apphome}/tools/gates/",
+                    "launch": "tools/gates/",
                     "resource_link_id": "ca4e_03_full_adder",
                     "target": "_blank",
                     "custom": [
@@ -972,7 +972,7 @@
                 {
                     "type": "discussion",
                     "title": "Clocked Circuits",
-                    "launch": "{apphome}/tsugi/tool/tdiscus/",
+                    "launch": "tsugi/tool/tdiscus/",
                     "resource_link_id": "discuss_03_clocked"
                 },
                 {
@@ -983,7 +983,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: Clocked Logic Circuits",
-                    "launch": "{apphome}/tsugi/tool/gift/?quiz=05-Clock.txt",
+                    "launch": "tsugi/tool/gift/?quiz=05-Clock.txt",
                     "resource_link_id": "ca4e_03_clock_quiz",
                     "custom": [
                         {
@@ -1146,7 +1146,7 @@
                 {
                     "type": "discussion",
                     "title": "CPU Design and Machine Code",
-                    "launch": "{apphome}/tsugi/tool/tdiscus/",
+                    "launch": "tsugi/tool/tdiscus/",
                     "resource_link_id": "discuss_04_cpu"
                 },
                 {
@@ -1157,7 +1157,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: CPU Design and Machine Code",
-                    "launch": "{apphome}/tsugi/tool/gift/?quiz=06-MachineCode.txt",
+                    "launch": "tsugi/tool/gift/?quiz=06-MachineCode.txt",
                     "resource_link_id": "ca4e_04_cpu_quiz",
                     "custom": [
                         {
@@ -1173,7 +1173,7 @@
                 {
                     "type": "lti",
                     "title": "Hex ⇄ Decimal conversions",
-                    "launch": "{apphome}/tools/nixie/",
+                    "launch": "tools/nixie/",
                     "resource_link_id": "ca4e_04_nixie16",
                     "target": "_blank",
                     "custom": [
@@ -1186,7 +1186,7 @@
                 {
                     "type": "lti",
                     "title": "ASCII Character Set Lookup",
-                    "launch": "{apphome}/tools/ascii/",
+                    "launch": "tools/ascii/",
                     "resource_link_id": "ca4e_04_ascii",
                     "target": "_blank",
                     "custom": [
@@ -1199,7 +1199,7 @@
                 {
                     "type": "lti",
                     "title": "CDC 6504: Print out '42'",
-                    "launch": "{apphome}/tools/cdc6504/",
+                    "launch": "tools/cdc6504/",
                     "resource_link_id": "ca4e_04_cdc_42",
                     "target": "_blank",
                     "custom": [
@@ -1212,7 +1212,7 @@
                 {
                     "type": "lti",
                     "title": "CDC 6504: Print a Random Phrase",
-                    "launch": "{apphome}/tools/cdc6504/",
+                    "launch": "tools/cdc6504/",
                     "resource_link_id": "ca4e_04_cdc_phrase",
                     "target": "_blank",
                     "custom": [
@@ -1225,7 +1225,7 @@
                 {
                     "type": "lti",
                     "title": "CDC 6504: Lower Case a String",
-                    "launch": "{apphome}/tools/cdc6504/",
+                    "launch": "tools/cdc6504/",
                     "resource_link_id": "ca4e_04_cdc_lower",
                     "target": "_blank",
                     "custom": [
@@ -1346,7 +1346,7 @@
                 {
                     "type": "discussion",
                     "title": "Web Assembly",
-                    "launch": "{apphome}/tsugi/tool/tdiscus/",
+                    "launch": "tsugi/tool/tdiscus/",
                     "resource_link_id": "discuss_04_wasm"
                 },
                 {
@@ -1357,7 +1357,7 @@
                 {
                     "type": "lti",
                     "title": "Quiz: Emulators and Web Assembly",
-                    "launch": "{apphome}/tsugi/tool/gift/?quiz=07-Emulator.txt",
+                    "launch": "tsugi/tool/gift/?quiz=07-Emulator.txt",
                     "resource_link_id": "ca4e_04_cpu_wasm",
                     "custom": [
                         {
@@ -1373,7 +1373,7 @@
                 {
                     "type": "lti",
                     "title": "WASM: Print Random Phrase",
-                    "launch": "{apphome}/tools/wasm/",
+                    "launch": "tools/wasm/",
                     "resource_link_id": "ca4e_04_wasm_phrase",
                     "target": "_blank",
                     "custom": [
@@ -1386,7 +1386,7 @@
                 {
                     "type": "lti",
                     "title": "WASM: Lower Case a String",
-                    "launch": "{apphome}/tools/wasm/",
+                    "launch": "tools/wasm/",
                     "resource_link_id": "ca4e_04_wasm_lower",
                     "target": "_blank",
                     "custom": [
