@@ -3,11 +3,13 @@
 use \Tsugi\Util\U;
 
 function buildMenu() {
-    global $CFG;
+    global $CFG, $USER;
     $R = $CFG->apphome . '/';
     $T = $CFG->wwwroot . '/';
 
     $adminmenu = isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true";
+    $isInstructor = (isset($USER) && $USER && isset($USER->instructor) && $USER->instructor)
+        || (isset($_SESSION['instructor']) && $_SESSION['instructor']);
     $showCalendarDueUi = isset($_SESSION['id'])
         && U::isNotEmpty($CFG->lessons)
         && \Tsugi\Grades\GradeUtil::showDueDates(U::get($_SESSION, 'context_id', 0));
@@ -28,22 +30,24 @@ function buildMenu() {
 
     if ( isset($_SESSION['id']) ) {
         $submenu = new \Tsugi\UI\Menu();
-        $submenu->addLink('Profile', $R.'profile');
+        $submenu->addLink('Announcements', $R.'announcements');
+        $submenu->addLink('Grades', $R.'grades');
+        $submenu->addLink('Pages', $R.'pages');
+        $submenu->addLink('Discussions', $R.'discussions');
+        if ( $isInstructor ) {
+            $submenu->addLink('Notifications', $R.'notifications');
+        }
+        $submenu->addLink('Courses', $R.'coursesredirect.php');
         if ( isset($CFG->google_map_api_key) ) {
             $submenu->addLink('Map', $R.'map');
         }
-        $submenu->addLink('Discussions', $R.'discussions');
-        $submenu->addLink('Announcements', $R.'announcements');
-        $submenu->addLink('Grades', $R.'grades');
+        $submenu->addLink('Profile', $R.'profile');
         if ( $showCalendarDueUi ) {
             $submenu->addLink('Calendar', $R.'calendar');
         }
         $set->addLeft('Discord', 'https://discord.dr-chuck.com');
-        $submenu->addLink('Pages', $R.'pages');
         $submenu->addLink('Badges', $R.'badges');
-        $submenu->addLink('Notifications', $R.'notifications');
         $submenu->addLink('Leaderboard', $R . 'launch/ca4e_01_leaderboard');
-        $submenu->addLink('Courses', $R.'coursesredirect.php');
         $submenu->addLink('LMS Integration', $T . 'settings');
 
         if ( isset($_COOKIE['adminmenu']) && $_COOKIE['adminmenu'] == "true" ) {
