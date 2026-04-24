@@ -451,26 +451,6 @@
                     "youtube": "WiQvGRjrLnU"
                 },
                 {
-                    "type": "reference",
-                    "title": "IEEE Spectrum: The Silicon Dioxide Solution",
-                    "href": "https://spectrum.ieee.org/the-silicon-dioxide-solution"
-                },
-                {
-                    "type": "video",
-                    "title": "The Transistor: a 1953 documentary, anticipating its coming impact on technology",
-                    "youtube": "V9xUQWo4vN0"
-                },
-                {
-                    "type": "video",
-                    "title": "AT&T Archives: Microworld",
-                    "youtube": "q2kd1B0Ybto"
-                },
-                {
-                    "type": "video",
-                    "title": "YouTube: I Built A Dice Without Writing a Single Line of Code",
-                    "youtube": "cZxBj7fzkkk"
-                },
-                {
                     "type": "header",
                     "text": "Bonus",
                     "level": 2
@@ -479,16 +459,6 @@
                     "type": "video",
                     "title": "IEEE Computing Conversations: Gordon Bell on the Building Blocks of Computing",
                     "youtube": "8skBtQS-VVE"
-                },
-                {
-                    "type": "video",
-                    "title": "IEEE Computing Conversations: The Living Computer Museum",
-                    "youtube": "ZHU4nzIsaIM"
-                },
-                {
-                    "type": "video",
-                    "title": "IEEE Computing Conversations: Resurrecting the CDC 6500 Supercomputer video",
-                    "youtube": "wDc1630krls"
                 },
                 {
                     "type": "video",
@@ -638,16 +608,6 @@
                     "level": 2
                 },
                 {
-                    "type": "video",
-                    "title": "AT&T Archives: A Modern Aladdin's Lamp, about vacuum tubes, 1940",
-                    "youtube": "_-JzxX75oYc"
-                },
-                {
-                    "type": "video",
-                    "title": "AT&T Archives: Genesis of the Transistor",
-                    "youtube": "WiQvGRjrLnU"
-                },
-                {
                     "type": "reference",
                     "title": "IEEE Spectrum: The Silicon Dioxide Solution",
                     "href": "https://spectrum.ieee.org/the-silicon-dioxide-solution"
@@ -674,18 +634,8 @@
                 },
                 {
                     "type": "video",
-                    "title": "IEEE Computing Conversations: Gordon Bell on the Building Blocks of Computing",
-                    "youtube": "8skBtQS-VVE"
-                },
-                {
-                    "type": "video",
-                    "title": "IEEE Computing Conversations: The Living Computer Museum",
-                    "youtube": "ZHU4nzIsaIM"
-                },
-                {
-                    "type": "video",
-                    "title": "IEEE Computing Conversations: Resurrecting the CDC 6500 Supercomputer video",
-                    "youtube": "wDc1630krls"
+                    "title": "IEEE Computing Conversations: Eben Upton on the Raspberry Pi",
+                    "youtube": "P5KEiuTT_E8"
                 },
                 {
                     "type": "video",
@@ -881,11 +831,6 @@
                 },
                 {
                     "type": "video",
-                    "title": "IEEE Computing Conversations: Andrew S. Tanenbaum: The Impact of MINIX",
-                    "youtube": "86_BkFsb4eI"
-                },
-                {
-                    "type": "video",
                     "title": "Office Hours: New York, NY 25-May-2016",
                     "youtube": "1SQ4eAeVV4Y"
                 }
@@ -1003,18 +948,8 @@
                 },
                 {
                     "type": "video",
-                    "title": "IEEE Computing Conversations: Massimo Banzi: Building Arduino",
-                    "youtube": "0VAbvQ2Ti50"
-                },
-                {
-                    "type": "video",
                     "title": "IEEE Computing Conversations: Andrew S. Tanenbaum: The Impact of MINIX",
                     "youtube": "86_BkFsb4e"
-                },
-                {
-                    "type": "video",
-                    "title": "Face to Face Office Hours Kyoto, Japan, 11-Dec-2019",
-                    "youtube": "cl_-OhsbEEg"
                 },
                 {
                     "type": "video",
@@ -1258,8 +1193,13 @@
                 },
                 {
                     "type": "video",
-                    "title": "IEEE Computing Conversations: Eben Upton on the Raspberry Pi",
-                    "youtube": "P5KEiuTT_E8"
+                    "title": "IEEE Computing Conversations: The Living Computer Museum",
+                    "youtube": "ZHU4nzIsaIM"
+                },
+                {
+                    "type": "video",
+                    "title": "IEEE Computing Conversations: Resurrecting the CDC 6500 Supercomputer video",
+                    "youtube": "wDc1630krls"
                 },
                 {
                     "type": "video",
