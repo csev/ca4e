@@ -57,5 +57,15 @@ $CFG->providekeys = true;  // true
 // Debug
 // $CFG->setExtension('launch_debug', true);
 
+$CFG->top_menu_callback = function() {
+    global $CFG;
+    $buildmenu = $CFG->dirroot.'/../buildmenu.php';
+    if ( ! file_exists($buildmenu) ) {
+        return false;
+    }
+    require_once $buildmenu;
+    return buildMenu();
+};
+
 
 
