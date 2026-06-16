@@ -38,7 +38,7 @@ $CFG->service_worker = true;
 # $CFG->setExtension('lessons2_enable', true);
 # $CFG->setExtension('lessons_debug_conversion', false);
 
-$CFG->lessons = $CFG->dirroot.'/../lessons-items.json';
+$CFG->lessons = $CFG->dirroot.'/../lessons.json';
 
 $CFG->youtube_playlist = 'PLa58EAvBOOSJjrzDrl9eVigR5SQQ0W-3D';
 

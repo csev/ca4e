@@ -1,0 +1,1386 @@
+{
+    "title": "Computer Architecture for Everybody (CA4E)",
+    "description": "Hello and welcome to my site where you learn computer architecture chip design.",
+    "count": true,
+    "required_modules": [
+        "https://github.com/tsugitools/youtube",
+        "https://github.com/tsugitools/aipaper"
+    ],
+    "badges": [
+        {
+            "title": "Origins of Computing",
+            "image": "ca4e_history.png",
+            "completion": true,
+            "linkedin": true,
+            "threshold": "1.0",
+            "assignments": [
+                "ca4e_01_hist_quiz",
+                "ca4e_01_sliderule"
+            ]
+        },
+        {
+            "title": "Digital Electronics",
+            "image": "ca4e_electronics.png",
+            "threshold": "0.8",
+            "assignments": [
+                "ca4e_02_solid_quiz",
+                "ca4e_02_truth_all",
+                "ca4e_02_cmos_not",
+                "ca4e_02_cmos_nor",
+                "ca4e_02_vlsi_quiz",
+                "ca4e_02_vlsi_not",
+                "ca4e_02_vlsi_nand",
+                "ca4e_02_vlsi_nor"
+            ]
+        },
+        {
+            "title": "Digital Logic",
+            "image": "ca4e_logic.png",
+            "threshold": "0.8",
+            "assignments": [
+                "ca4e_03_logic_quiz",
+                "ca4e_03_and",
+                "ca4e_03_nixie2",
+                "ca4e_03_halfadder",
+                "ca4e_03_nixie_add",
+                "ca4e_03_full_adder",
+                "ca4e_03_clock_quiz"
+            ]
+        },
+        {
+            "title": "Computer Architecture",
+            "image": "ca4e_complete.png",
+            "threshold": "0.8",
+            "linkedin": true,
+            "completion": true,
+            "assignments": [
+                "ca4e_01_hist_quiz",
+                "ca4e_01_sliderule",
+
+                "ca4e_02_solid_quiz",
+                "ca4e_02_truth_all",
+                "ca4e_02_cmos_not",
+                "ca4e_02_cmos_nor",
+                "ca4e_02_vlsi_quiz",
+                "ca4e_02_vlsi_not",
+                "ca4e_02_vlsi_nand",
+                "ca4e_02_vlsi_nor",
+
+                "ca4e_03_logic_quiz",
+                "ca4e_03_and",
+                "ca4e_03_nixie2",
+                "ca4e_03_halfadder",
+                "ca4e_03_nixie_add",
+                "ca4e_03_full_adder",
+                "ca4e_03_clock_quiz",
+
+                "ca4e_04_cpu_quiz",
+                "ca4e_04_nixie16",
+                "ca4e_04_cdc_42",
+                "ca4e_04_cdc_phrase",
+                "ca4e_04_cdc_lower",
+                "ca4e_04_cpu_wasm",
+                "ca4e_04_wasm_phrase",
+                "ca4e_04_wasm_lower"
+            ]
+        }
+    ],
+    "discussions": [
+        {
+            "title": "Welcome to Computer Architecture Programming for Everybody",
+            "launch": "tsugi/tool/tdiscus/",
+            "resource_link_id": "discussion_welcome"
+        },
+        {
+            "title": "Report Bugs in Course Material",
+            "launch": "tsugi/tool/tdiscus/",
+            "resource_link_id": "discussion_bugs"
+        }
+    ],
+    "launches": [
+                {
+                    "type": "lti",
+                    "title": "Class Leaderboard (Experimental)",
+                    "launch": "{apphome}/mod/board/",
+                    "result": false,
+                    "resource_link_id": "ca4e_01_leaderboard"
+                }
+    ],
+    "modules": [
+        {
+            "title": "Origins of Computing",
+            "anchor": "origins",
+            "icon": "fa-history",
+            "description": "We look at humans and their relationship with Technology since Stonehenge through the advent of early electronic and electromechanical computers.",
+            "items": [
+                {
+                    "type": "header",
+                    "text": "Slides",
+                    "level": 2
+                },
+                {
+                    "type": "slide",
+                    "title": "01-Origins.pptx",
+                    "href": "{apphome}/lectures/01-Origins.pptx"
+                },
+                {
+                    "type": "slide",
+                    "title": "01-Origins.pdf",
+                    "href": "{apphome}/lectures/01-Origins.pdf"
+                },
+                {
+                    "type": "header",
+                    "text": "Videos",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Origins of Data, Computing: Lines, Curves, and Numbers - Part 1 (11:10)",
+                    "reference": "CA4E-Lectures/01-Origins/01-01-Origins-StoneHenge.m4v",
+                    "media": "ca4e-media/01-Origins/01-01-Origins-StoneHenge.m4v",
+                    "youtube": "TorNiFp_hyY"
+                },
+                {
+                    "type": "video",
+                    "title": "Exploring Analog / Continuous Computing Devices - Part 2 (14:15)",
+                    "reference": "CA4E-Lectures/01-Origins/01-02-Origins-SlideRule.m4v",
+                    "media": "ca4e-media/01-Origins/01-02-Origins-SlideRule.m4v",
+                    "youtube": "BruoDcgZzPQ"
+                },
+                {
+                    "type": "video",
+                    "title": "Exploring Physical Digital Devices - Part 3 (11:03)",
+                    "reference": "CA4E-Lectures/01-Origins/01-03-Origins-Digital.m4v",
+                    "media": "ca4e-media/01-Origins/01-03-Origins-Digital.m4v",
+                    "youtube": "w5eWEZ4o6KM"
+                },
+                {
+                    "type": "video",
+                    "title": "Exploring Hardware Iteration - Part 4 (10:58)",
+                    "reference": "CA4E-Lectures/01-Origins/01-04-Origins-Iterations.m4v",
+                    "media": "ca4e-media/01-Origins/01-04-Origins-Iteration.m4v",
+                    "youtube": "Um4UyGvlc44"
+                },
+                {
+                    "type": "header",
+                    "text": "Discussions",
+                    "level": 2
+                },
+                {
+                    "type": "discussion",
+                    "title": "History / Introduction",
+                    "launch": "tsugi/tool/tdiscus/",
+                    "resource_link_id": "discuss_01_origins"
+                },
+                {
+                    "type": "header",
+                    "text": "Assessments",
+                    "level": 2
+                },
+                {
+                    "type": "lti",
+                    "title": "Quiz: Origins of Computing",
+                    "launch": "tsugi/tool/gift/?quiz=01-Origins.txt",
+                    "resource_link_id": "ca4e_01_hist_quiz",
+                    "custom": [
+                        {
+                            "key": "tries",
+                            "value": "3"
+                        },
+                        {
+                            "key": "delay",
+                            "value": "601"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "Using a Slide Rule for Multiplication",
+                    "launch": "tools/sliderule/",
+                    "resource_link_id": "ca4e_01_sliderule",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "CmosNotGateExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "not-lti",
+                    "title": "Paper: Reflections on The Origins of Computing",
+                    "launch": "{apphome}/mod/aipaper/",
+                    "resource_link_id": "ca4e_0_paper",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "instructions",
+                            "value": "Reflect on a topic in this section by adding additional detail, or describe a topic that you believe should have been included."
+                        },
+                        {
+                            "key": "submitpoints",
+                            "value": 60
+                        },
+                        {
+                            "key": "instructorpoints",
+                            "value": 10
+                        },
+                        {
+                            "key": "commentpoints",
+                            "value": 10
+                        },
+                        {
+                            "key": "mincomments",
+                            "value": 3
+                        },
+                        {
+                            "key": "userealnames",
+                            "value": 0
+                        },
+                        {
+                            "key": "allowall",
+                            "value": 1
+                        },
+                        {
+                            "key": "resubmit",
+                            "value": 1
+                        },
+                        {
+                            "key": "auto_timeout",
+                            "value": 172800
+                        }
+                    ]
+                },
+                {
+                    "type": "header",
+                    "text": "References",
+                    "level": 2
+                },
+                {
+                    "type": "reference",
+                    "title": "Film: Popular Mechanics - How Mechanical Computers Work",
+                    "href": "https://www.popularmechanics.com/technology/a19668/1953-video-how-mechanical-computers-work/"
+                },
+                {
+                    "type": "reference",
+                    "title": "Mark I Fire Control Computer - Electromechanical Analog Computer",
+                    "href": "https://en.wikipedia.org/wiki/Mark_I_Fire_Control_Computer"
+                },
+                {
+                    "type": "header",
+                    "text": "Bonus",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Video: Monash Museum of Computing History Interviews",
+                    "youtube": "o7_dQbKPG_Q"
+                },
+                {
+                    "type": "video",
+                    "title": "Video: IEEE Computer: Alan Turing at Bletchley Park",
+                    "youtube": "5nK_ft0Lf1s"
+                },
+                {
+                    "type": "video",
+                    "title": "Niklaus Wirth on Teaching Computer Science",
+                    "youtube": "BJIqHIYSDrk"
+                },
+                {
+                    "type": "video",
+                    "title": "Office Hours: Valencia, Spain, 29-Mar-2022",
+                    "youtube": "pVpwO5yrBn8"
+                },
+                {
+                    "type": "video",
+                    "title": "Office Hours: Gingerman Raceway, South Haven MI, 23-Oct-2022",
+                    "youtube": "FliYfB9GojA"
+                }
+            ]
+        },
+        {
+            "title": "Innovating with Transistors",
+            "anchor": "transistors",
+            "icon": "fa-bolt",
+            "description": "We look how the invention of the transistor changed everything.",
+            "items": [
+                {
+                    "type": "header",
+                    "text": "Slides",
+                    "level": 2
+                },
+                {
+                    "type": "slide",
+                    "title": "02-SolidState.pptx",
+                    "href": "{apphome}/lectures/02-SolidState.pptx"
+                },
+                {
+                    "type": "slide",
+                    "title": "02-SolidState.pdf",
+                    "href": "{apphome}/lectures/02-SolidState.pdf"
+                },
+                {
+                    "type": "header",
+                    "text": "Videos",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Solid State: Starting with Tubes - Part 1 (10:29)",
+                    "reference": "CA4E-Lectures/02-SolidState/02-01-SolidState-Tubes.m4v",
+                    "media": "ca4e-media/02-SolidState/02-01-SolidState-Tubes.m4v",
+                    "youtube": "eRDh3t1QL5Y"
+                },
+                {
+                    "type": "video",
+                    "title": "Solid State: From Tubes to Transistors - Part 2 (10:24)",
+                    "reference": "CA4E-Lectures/02-SolidState/02-02-SolidState-Transistors.m4v",
+                    "media": "ca4e-media/02-SolidState/02-02-SolidState-Transistor.m4v",
+                    "youtube": "V1BzdYrDakI"
+                },
+                {
+                    "type": "video",
+                    "title": "Solid State: From Transistors to Gates - Part 3 (17:31)",
+                    "reference": "CA4E-Lectures/02-SolidState/02-03-SolidState-Gates.m4v",
+                    "media": "ca4e-media/02-SolidState/02-03-SolidState-Gates.m4v",
+                    "youtube": "-qNm_MewmzM"
+                },
+                {
+                    "type": "header",
+                    "text": "Demonstrations",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Building a CMOS Nor Gate From Transistors (7:28)",
+                    "youtube": "DBtucp_ukSE",
+                    "fcp": "CA4E-Demos/02-Solid-State/02-10-SolidState-CMOS-Nor",
+                    "media": "ca4e-media/02-SolidState/02-10-SolidState-CMOS-Nor.m4v"
+                },
+                {
+                    "type": "header",
+                    "text": "Discussions",
+                    "level": 2
+                },
+                {
+                    "type": "discussion",
+                    "title": "Transistors and Solid State Computing",
+                    "launch": "tsugi/tool/tdiscus/",
+                    "resource_link_id": "discuss_02_transistors"
+                },
+                {
+                    "type": "header",
+                    "text": "Assessments",
+                    "level": 2
+                },
+                {
+                    "type": "lti",
+                    "title": "Quiz: Solid State Computing",
+                    "launch": "tsugi/tool/gift/?quiz=02-SolidState.txt",
+                    "resource_link_id": "ca4e_02_solid_quiz",
+                    "custom": [
+                        {
+                            "key": "tries",
+                            "value": "3"
+                        },
+                        {
+                            "key": "delay",
+                            "value": "601"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "All Gates Truth Tables",
+                    "launch": "tools/truth/",
+                    "resource_link_id": "ca4e_02_truth_all",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "AllGates"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "Building a Not Gate with CMOS Transistors",
+                    "launch": "tools/cmos/",
+                    "resource_link_id": "ca4e_02_cmos_not",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "CmosNotGateExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "Building a Nor Gate with CMOS Transistors",
+                    "launch": "tools/cmos/",
+                    "resource_link_id": "ca4e_02_cmos_nor",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "CmosNorGateExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "header",
+                    "text": "References",
+                    "level": 2
+                },
+                {
+                    "type": "reference",
+                    "title": "Introduction to vacuum tubes",
+                    "href": "https://www.njarc.org/manuals/Articles-books/Introduction%20to%20vacuum%20tubes.pdf"
+                },
+                {
+                    "type": "video",
+                    "title": "AT&T Archives: A Modern Aladdin's Lamp, about vacuum tubes, 1940",
+                    "youtube": "_-JzxX75oYc"
+                },
+                {
+                    "type": "video",
+                    "title": "AT&T Archives: Genesis of the Transistor",
+                    "youtube": "WiQvGRjrLnU"
+                },
+                {
+                    "type": "header",
+                    "text": "Bonus",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "IEEE Computing Conversations: Gordon Bell on the Building Blocks of Computing",
+                    "youtube": "8skBtQS-VVE"
+                },
+                {
+                    "type": "video",
+                    "title": "Office Hours: Melbourne Australia",
+                    "youtube": "GD9RSoVDKkw"
+                },
+                {
+                    "type": "video",
+                    "title": "Office Hours: Pittsburgh, PA, 15-May-2024",
+                    "youtube": "YZjb5kZUClQ"
+                }
+            ]
+        },
+        {
+            "title": "Very Large Scale Integration (VLSI)",
+            "anchor": "vlsi",
+            "icon": "fa-flask",
+            "description": "We learn how dramatic improvements in manufacture and miniaturization of transistors through very large scale integration (VLSI) created the high density chips we still use today.",
+            "items": [
+                {
+                    "type": "header",
+                    "text": "Slides",
+                    "level": 2
+                },
+                {
+                    "type": "slide",
+                    "title": "03-VLSI.pptx",
+                    "href": "{apphome}/lectures/03-VLSI.pptx"
+                },
+                {
+                    "type": "slide",
+                    "title": "03-VLSI.pdf",
+                    "href": "{apphome}/lectures/03-VLSI.pdf"
+                },
+                {
+                    "type": "header",
+                    "text": "Videos",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Solid State: From Transistors to Wafers - Part 4 (9:18)",
+                    "reference": "CA4E-Lectures/03-VLSI/03-04-SolidState-Gates.m4v",
+                    "media": "ca4e-media/03-VLSI/03-03-SolidState-Gates.m4v",
+                    "youtube": "z4U3el4fgXo"
+                },
+                {
+                    "type": "video",
+                    "title": "Solid State: VLSI Design Layout - Part 5 (10:46)",
+                    "reference": "CA4E-Lectures/03-VLSI/03-05-SolidState-VLSI.m4v",
+                    "media": "ca4e-media/03-VLSI/03-05-SolidState-VLSI.m4v",
+                    "youtube": "8pVwRnKecgc"
+                },
+                {
+                    "type": "header",
+                    "text": "Demonstrations",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "VLSI Not Gate Layout (8:30)",
+                    "youtube": "qdpnzRvoGtk",
+                    "fcp": "CA4E-Demos/03-VLSI/03-11-SolidState-VLSI-Not",
+                    "media": "ca4e-media/03-VLSI/03-11-SolidState-VLSI-Not.m4v"
+                },
+                {
+                    "type": "video",
+                    "title": "VLSI NAND Gate Layout | Computer Architecture for Everybody (7:45)",
+                    "youtube": "wb3MH8Lr6oM",
+                    "fcp": "CA4E-Demos/03-VLSI/03-12-SolidState-VLSI-Nand",
+                    "media": "ca4e-media/03-VLSI/03-12-SolidState-VLSI-Nand.m4v"
+                },
+                {
+                    "type": "header",
+                    "text": "Discussions",
+                    "level": 2
+                },
+                {
+                    "type": "discussion",
+                    "title": "VLSI Design",
+                    "launch": "tsugi/tool/tdiscus/",
+                    "resource_link_id": "discuss_02_vlsi"
+                },
+                {
+                    "type": "header",
+                    "text": "Assessments",
+                    "level": 2
+                },
+                {
+                    "type": "lti",
+                    "title": "Quiz: Very Large Scale Integration",
+                    "launch": "tsugi/tool/gift/?quiz=03-VLSI.txt",
+                    "resource_link_id": "ca4e_02_vlsi_quiz",
+                    "custom": [
+                        {
+                            "key": "tries",
+                            "value": "3"
+                        },
+                        {
+                            "key": "delay",
+                            "value": "601"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "Mistic: Building a Not Gate with VLSI Layout",
+                    "launch": "tools/mistic/",
+                    "resource_link_id": "ca4e_02_vlsi_not",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "NotGateExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "Mistic: Building a Nand Gate with VLSI Layout",
+                    "launch": "tools/mistic/",
+                    "resource_link_id": "ca4e_02_vlsi_nand",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "NandGateExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "Mistic: Building a Nor Gate with VLSI Layout",
+                    "launch": "tools/mistic/",
+                    "resource_link_id": "ca4e_02_vlsi_nor",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "NorGateExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "header",
+                    "text": "References",
+                    "level": 2
+                },
+                {
+                    "type": "reference",
+                    "title": "IEEE Spectrum: The Silicon Dioxide Solution",
+                    "href": "https://spectrum.ieee.org/the-silicon-dioxide-solution"
+                },
+                {
+                    "type": "video",
+                    "title": "The Transistor: a 1953 documentary, anticipating its coming impact on technology",
+                    "youtube": "V9xUQWo4vN0"
+                },
+                {
+                    "type": "video",
+                    "title": "AT&T Archives: Microworld",
+                    "youtube": "q2kd1B0Ybto"
+                },
+                {
+                    "type": "video",
+                    "title": "YouTube: I Built A Dice Without Writing a Single Line of Code",
+                    "youtube": "cZxBj7fzkkk"
+                },
+                {
+                    "type": "header",
+                    "text": "Bonus",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "IEEE Computing Conversations: Eben Upton on the Raspberry Pi",
+                    "youtube": "P5KEiuTT_E8"
+                },
+                {
+                    "type": "video",
+                    "title": "Face to Face Office Hours Ann Arbor, MI 8-Oct-2025 At Tijos",
+                    "youtube": "hPseLDCRwkk"
+                },
+                {
+                    "type": "video",
+                    "title": "Dr. Chuck Face-to-Face Office Hours - Amsterdam (2012-11-12)",
+                    "youtube": "lWxUFvYmeq0"
+                }
+            ]
+        },
+        {
+            "title": "Digital Logic",
+            "anchor": "digital",
+            "icon": "fa-microchip",
+            "description": "We move from the electrical aspects of computing to the more abstract logical domain.",
+            "items": [
+                {
+                    "type": "header",
+                    "text": "Slides",
+                    "level": 2
+                },
+                {
+                    "type": "slide",
+                    "title": "04-DigitalLogic.pptx",
+                    "href": "{apphome}/lectures/04-DigitalLogic.pptx"
+                },
+                {
+                    "type": "slide",
+                    "title": "04-DigitalLogic.pdf",
+                    "href": "{apphome}/lectures/04-DigitalLogic.pdf"
+                },
+                {
+                    "type": "header",
+                    "text": "Videos",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Digital Logic: Computer Architecture - Part 1 (7:23)",
+                    "reference": "CA4E-Lectures/04-DigitalLogic/04-01-Digital-Arch.m4v",
+                    "media": "ca4e-media/04-DigitalLogic/04-01-Digital-Arch.m4v",
+                    "youtube": "nZlKs4_ic14"
+                },
+                {
+                    "type": "video",
+                    "title": "Digital Logic: Adding Numbers with Gates - Part 2 (14:04)",
+                    "reference": "CA4E-Lectures/04-DigitalLogic/04-02-Digital-Gates.m4v",
+                    "media": "ca4e-media/04-DigitalLogic/04-02-Digital-Gates.m4v",
+                    "youtube": "hkeYhDXvc2k"
+                },
+                {
+                    "type": "video",
+                    "title": "Digital Logic: Storing Data with Gates - Part 3 (11:08)",
+                    "reference": "CA4E-Lectures/04-DigitalLogic/04-03-Digital-Latch.m4v",
+                    "media": "ca4e-media/04-DigitalLogic/04-03-Digital-Latch.m4v",
+                    "youtube": "a_EjfUA0Fpc"
+                },
+                {
+                    "type": "header",
+                    "text": "Demonstrations",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Gates Layout Tool Walkthrough (5:46)",
+                    "youtube": "t3zuq1fu_mA",
+                    "fcp": "CA4E-Demos/04-DigitalLogic/04-11-Digital-Gates-Tool",
+                    "media": "ca4e-media/04-DigitalLogic/04-11-Digital-Gates-Tool.m4v"
+                },
+                {
+                    "type": "video",
+                    "title": "Autograded AND Gate Assignment Walkthrough (2:52)",
+                    "youtube": "Q_e187MplhI",
+                    "fcp": "CA4E-Demos/04-DigitalLogic/04-12-Digital-Gates-And",
+                    "media": "ca4e-media/04-DigitalLogic/04-12-Digital-Gates-And.m4v"
+                },
+                {
+                    "type": "video",
+                    "title": "Half Adder Assignment Walkthrough (3:20)",
+                    "youtube": "1rFMW0ubwp8",
+                    "fcp": "CA4E-Demos/04-DigitalLogic/04-13-Digital-Gates-Half",
+                    "media": "ca4e-media/04-DigitalLogic/04-13-Digital-Gates-Half.m4v"
+                },
+                {
+                    "type": "header",
+                    "text": "Discussions",
+                    "level": 2
+                },
+                {
+                    "type": "discussion",
+                    "title": "Digital Logic",
+                    "launch": "tsugi/tool/tdiscus/",
+                    "resource_link_id": "discuss_03_logic"
+                },
+                {
+                    "type": "header",
+                    "text": "Assessments",
+                    "level": 2
+                },
+                {
+                    "type": "lti",
+                    "title": "Quiz: Gates and Digital Logic",
+                    "launch": "tsugi/tool/gift/?quiz=04-DigitalLogic.txt",
+                    "resource_link_id": "ca4e_03_logic_quiz",
+                    "custom": [
+                        {
+                            "key": "tries",
+                            "value": "3"
+                        },
+                        {
+                            "key": "delay",
+                            "value": "601"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "Building an And Gate",
+                    "launch": "tools/gates/",
+                    "resource_link_id": "ca4e_03_and",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "AndGateExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "Base-10 ⇄ Base-2 conversions (0-7)",
+                    "launch": "tools/nixie/",
+                    "resource_link_id": "ca4e_03_nixie2",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "Base2Conversions"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "Building a Half-Adder",
+                    "launch": "tools/gates/",
+                    "resource_link_id": "ca4e_03_halfadder",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "HalfAdderExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "Binary addition practice (3-bit + 3-bit)",
+                    "launch": "tools/nixie/",
+                    "resource_link_id": "ca4e_03_nixie_add",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "BinaryAddition"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "Building a Full-Adder",
+                    "launch": "tools/gates/",
+                    "resource_link_id": "ca4e_03_full_adder",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "FullAdderExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "header",
+                    "text": "Bonus",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "IEEE Computing Conversations: Massimo Banzi: Building Arduino",
+                    "youtube": "0VAbvQ2Ti50"
+                },
+                {
+                    "type": "video",
+                    "title": "Office Hours: New York, NY 25-May-2016",
+                    "youtube": "1SQ4eAeVV4Y"
+                }
+            ]
+        },
+        {
+            "title": "Clocked Circuits",
+            "anchor": "clock",
+            "icon": "fa-clock",
+            "description": "We examine circuits where operations happen under control of a clock that orchestrates the various aspects of a central processing unit.",
+            "items": [
+                {
+                    "type": "video",
+                    "title": "Welcome to Clocked Circuits",
+                    "reference": "CA4E-Lectures/05-Clock/05-00-Hi",
+                    "media": "ca4e-media/05-Clock/05-00-Hi.m4v",
+                    "youtube": "YOwm_Ux9zKQ"
+                },
+                {
+                    "type": "header",
+                    "text": "Slides",
+                    "level": 2
+                },
+                {
+                    "type": "slide",
+                    "title": "05-Clock.pptx",
+                    "href": "{apphome}/lectures/05-Clock.pptx"
+                },
+                {
+                    "type": "slide",
+                    "title": "05-Clock.pdf",
+                    "href": "{apphome}/lectures/05-Clock.pdf"
+                },
+                {
+                    "type": "header",
+                    "text": "Videos",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Digital Logic: Clocked Circuits and Clock Rates - Part 4 (7:34)",
+                    "reference": "CA4E-Lectures/05-Clock/05-04-Digital-Clock.m4v",
+                    "media": "ca4e-media/05-Clock/05-04-Digital-Clock.m4v",
+                    "youtube": "7HeXWTR6kxc"
+                },
+                {
+                    "type": "video",
+                    "title": "Digital: Building a Two Instruction CPU with Gates - Part 5 (9:49)",
+                    "reference": "CA4E-Lectures/05-Clock/05-05-Digital-CPU.m4v",
+                    "media": "ca4e-media/05-Clock/05-05-Digital-CPU.m4v",
+                    "youtube": "MmIEGsTQp-Q"
+                },
+                {
+                    "type": "video",
+                    "title": "Digital: CPU Architecture - Storing Code in Memory - Part 6 (4:18)",
+                    "reference": "CA4E-Lectures/05-Clock/05-06-Digital-Code.m4v",
+                    "media": "ca4e-media/05-Clock/05-06-Digital-Code.m4v",
+                    "youtube": "fM0-1Hc8vKM"
+                },
+                {
+                    "type": "header",
+                    "text": "Demonstrations",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Building a Clocked Counter with Adders and Latches (9:26)",
+                    "youtube": "AkkL4aOWfSI",
+                    "reference": "CA4E-Demos/05-Clock/05-14-Digital-Gates-Counter",
+                    "media": "ca4e-media/05-Clock/05-14-Digital-Gates-Counter.m4v"
+                },
+                {
+                    "type": "video",
+                    "title": "Building a Tiny CPU: A Two-Instruction Computer Walkthrough (5:35)",
+                    "youtube": "EnZtPJLPbho",
+                    "reference": "CA4E-Demos/05-Clock/05-15-Digital-Gates-Instruction",
+                    "media": "ca4e-media/05-Clock/05-15-Digital-Gates-Instruction.m4v"
+                },
+                {
+                    "type": "header",
+                    "text": "Discussions",
+                    "level": 2
+                },
+                {
+                    "type": "discussion",
+                    "title": "Clocked Circuits",
+                    "launch": "tsugi/tool/tdiscus/",
+                    "resource_link_id": "discuss_03_clocked"
+                },
+                {
+                    "type": "header",
+                    "text": "Assessments",
+                    "level": 2
+                },
+                {
+                    "type": "lti",
+                    "title": "Quiz: Clocked Logic Circuits",
+                    "launch": "tsugi/tool/gift/?quiz=05-Clock.txt",
+                    "resource_link_id": "ca4e_03_clock_quiz",
+                    "custom": [
+                        {
+                            "key": "tries",
+                            "value": "3"
+                        },
+                        {
+                            "key": "delay",
+                            "value": "601"
+                        }
+                    ]
+                },
+                {
+                    "type": "header",
+                    "text": "Bonus",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "IEEE Computing Conversations: Andrew S. Tanenbaum: The Impact of MINIX",
+                    "youtube": "86_BkFsb4e"
+                },
+                {
+                    "type": "video",
+                    "title": "Office Hours: Mountain View CA",
+                    "youtube": "7UV9GWofRAk"
+                }
+            ]
+        },
+        {
+            "title": "CPU Design and Machine Code",
+            "anchor": "cpu",
+            "icon": "fa-calculator",
+            "description": "Machine code - CDC 6504.",
+            "items": [
+                {
+                    "type": "video",
+                    "title": "Welcome to CPU Design",
+                    "reference": "CA4E-Lectures/06-CPU/06-00-Hi",
+                    "media": "ca4e-media/06-CPU/06-00-Hi.m4v",
+                    "youtube": "3yawCNgikLQ"
+                },
+                {
+                    "type": "header",
+                    "text": "Slides",
+                    "level": 2
+                },
+                {
+                    "type": "slide",
+                    "title": "06-CPU-Machine-Code.pptx",
+                    "href": "{apphome}/lectures/06-CPU-Machine-Code.pptx"
+                },
+                {
+                    "type": "slide",
+                    "title": "06-CPU-Machine-Code.pdf",
+                    "href": "{apphome}/lectures/06-CPU-Machine-Code.pdf"
+                },
+                {
+                    "type": "header",
+                    "text": "Videos",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Exploring Microprocessors: From Python to Machine Language & the 6502 CPU - Part 1 (5:38)",
+                    "reference": "CA4E-Lectures/06-CPU/06-01-CPU-Intro.m4v",
+                    "media": "ca4e-media/06-CPU/06-01-CPU-Intro.m4v",
+                    "old-youtube": "IF0ZopcXRl8",
+                    "youtube": "hVWUQfINmYk"
+                },
+                {
+                    "type": "video",
+                    "title": "Understanding Hexadecimal (Base 16) — Why Computers Use It & How to Think in It - Part 2 (12:24)",
+                    "reference": "CA4E-Lectures/06-CPU/06-02-CPU-Hex.m4v",
+                    "media": "ca4e-media/06-CPU/06-02-CPU-Hex.m4v",
+                    "youtube": "V_4Ord6x9H4"
+                },
+                {
+                    "type": "video",
+                    "title": "What Is Programming? From Python to Machine Language & Into the CPU - Part 3 (11:10)",
+                    "reference": "CA4E-Lectures/06-CPU/04-03-CPU-Coding.m4v",
+                    "media": "ca4e-media/06-CPU/06-03-CPU-Coding.m4v",
+                    "youtube": "dh6pI8Xjysc"
+                },
+                {
+                    "type": "video",
+                    "title": "Exploring the 6502 Architecture in the CDC6504 Emulator - Part 4 (9:49)",
+                    "reference": "CA4E-Lectures/06-CPU/06-04-CPU-Arch.m4v",
+                    "media": "ca4e-media/06-CPU/06-04-CPU-Arch.m4v",
+                    "youtube": "L2fzgapBoOg"
+                },
+                {
+                    "type": "video",
+                    "title": "Machine Language — Loops, Branching & Assembly vs. Machine Code - Part 5 (18:43)",
+                    "reference": "CA4E-Lectures/06-CPU/06-05-CPU-Machine.m4v",
+                    "media": "ca4e-media/06-CPU/06-05-CPU-Machine.m4v",
+                    "youtube": "h92PhKl2elU"
+                },
+                {
+                    "type": "video",
+                    "title": "CDC 6504 Assembly Language: Hello World, Math, and Upper Casing Strings - Part 6 (13:05)",
+                    "reference": "CA4E-Lectures/06-CPU/06-06-CPU-Assembly.m4v",
+                    "media": "ca4e-media/06-CPU/06-06-CPU-Assembly.m4v",
+                    "youtube": "BGIr2P2bpUY"
+                },
+                {
+                    "type": "header",
+                    "text": "Demonstrations",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Learning CPU Emulation with the CDC6504: Registers, Memory, and Instructions (5:55)",
+                    "reference": "CA4E-Demos/06-CPU/06-11-CPU-6504-UI-Walkthrough",
+                    "media": "ca4e-media/06-CPU/06-11-CPU-6504-UI-Walkthrough.m4v",
+                    "youtube": "EXRg96qoX2Y"
+                },
+                {
+                    "type": "video",
+                    "title": "Stepping Through a CPU Emulator: CDC6504 Instructions, Memory, and State (4:53)",
+                    "reference": "CA4E-Demos/06-CPU/06-12-CPU-6504-Simple-Samples",
+                    "media": "ca4e-media/06-CPU/06-12-CPU-6504-Simple-Samples.m4v",
+                    "youtube": "UwOHhsQe4QU"
+                },
+                {
+                    "type": "video",
+                    "title": "Loops in Machine Language: Branching in the CDC6504 Emulator (9:09)",
+                    "reference": "CA4E-Demos/06-CPU/06-13-CPU-6504-For-Loop",
+                    "media": "ca4e-media/06-CPU/06-13-CPU-6504-For-Loop.m4v",
+                    "youtube": "-5CVRhmOFoU"
+                },
+                {
+                    "type": "video",
+                    "title": "Understanding Conditional Branches in a CDC6504 (4:59)",
+                    "reference": "CA4E-Demos/06-CPU/06-14-CPU-6504-If-Test",
+                    "media": "ca4e-media/06-CPU/06-14-CPU-6504-If-Test.m4v",
+                    "youtube": "WIBdo1Dh9cE"
+                },
+                {
+                    "type": "video",
+                    "title": "String Processing in Machine Language: CDC6504 Uppercase Example (12:05)",
+                    "reference": "CA4E-Demos/06-CPU/06-15-CPU-6504-Upper",
+                    "media": "ca4e-media/06-CPU/06-15-CPU-6504-Upper.m4v",
+                    "youtube": "pccnXG8pooA"
+                },
+                {
+                    "type": "header",
+                    "text": "Discussions",
+                    "level": 2
+                },
+                {
+                    "type": "discussion",
+                    "title": "CPU Design and Machine Code",
+                    "launch": "tsugi/tool/tdiscus/",
+                    "resource_link_id": "discuss_04_cpu"
+                },
+                {
+                    "type": "header",
+                    "text": "Assessments",
+                    "level": 2
+                },
+                {
+                    "type": "lti",
+                    "title": "Quiz: CPU Design and Machine Code",
+                    "launch": "tsugi/tool/gift/?quiz=06-MachineCode.txt",
+                    "resource_link_id": "ca4e_04_cpu_quiz",
+                    "custom": [
+                        {
+                            "key": "tries",
+                            "value": "3"
+                        },
+                        {
+                            "key": "delay",
+                            "value": "601"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "Hex ⇄ Decimal conversions",
+                    "launch": "tools/nixie/",
+                    "resource_link_id": "ca4e_04_nixie16",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "HexConversions"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "ASCII Character Set Lookup",
+                    "launch": "tools/ascii/",
+                    "resource_link_id": "ca4e_04_ascii",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "AsciiLookupExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "CDC 6504: Print out '42'",
+                    "launch": "tools/cdc6504/",
+                    "resource_link_id": "ca4e_04_cdc_42",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "Print42Exercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "CDC 6504: Print a Random Phrase",
+                    "launch": "tools/cdc6504/",
+                    "resource_link_id": "ca4e_04_cdc_phrase",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "HelloWorldExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "CDC 6504: Lower Case a String",
+                    "launch": "tools/cdc6504/",
+                    "resource_link_id": "ca4e_04_cdc_lower",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "LowercaseConversionExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "header",
+                    "text": "References",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Fun: The 6502 Rotate Right Myth",
+                    "youtube": "Uk_QC1eU0Fg"
+                },
+                {
+                    "type": "video",
+                    "title": "Fun: Python for Everybody - Introduction to Computer Architecture (Chapter 1 Part 2)",
+                    "youtube": "VQZTZsXk8sA"
+                },
+                {
+                    "type": "header",
+                    "text": "Bonus",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "IEEE Computing Conversations: The Living Computer Museum",
+                    "youtube": "ZHU4nzIsaIM"
+                },
+                {
+                    "type": "video",
+                    "title": "IEEE Computing Conversations: Resurrecting the CDC 6500 Supercomputer video",
+                    "youtube": "wDc1630krls"
+                },
+                {
+                    "type": "video",
+                    "title": "Dr. Chuck Face-to-Face Office Hours - Manila, Philippines (2012-11-26)",
+                    "youtube": "R6zlQZcM72o"
+                },
+                {
+                    "type": "video",
+                    "title": "Office Hours: Seoul Korea 22-September-2016",
+                    "youtube": "2f9YNAIpjjQ"
+                }
+            ]
+        },
+        {
+            "title": "Web Assembly",
+            "anchor": "wasm",
+            "icon": "fa-cogs",
+            "description": "In the future, browser support for WebAssembly means that for a lot of in-browser applications, hardware is an emulator.",
+            "items": [
+                {
+                    "type": "header",
+                    "text": "Slides",
+                    "level": 2
+                },
+                {
+                    "type": "slide",
+                    "title": "07-Emulator.pptx",
+                    "href": "{apphome}/lectures/07-Emulator.pptx"
+                },
+                {
+                    "type": "slide",
+                    "title": "07-Emulator.pdf",
+                    "href": "{apphome}/lectures/07-Emulator.pdf"
+                },
+                {
+                    "type": "header",
+                    "text": "Videos",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "From 6502 to Web Assembly: Modern Day Emulators - Part 7 (10:56)",
+                    "reference": "CA4E-Lectures/07-Emulator/07-07-CPU-Emulators.m4v",
+                    "media": "ca4e-media/07-Emulator/07-07-CPU-Emulator.m4v",
+                    "youtube": "WwHwIBlmWWM"
+                },
+                {
+                    "type": "video",
+                    "title": "From 6502 to ARM: The 50-Year Journey of CPU Evolution & Apple’s CPU Strategy- Part 8 (7:31)",
+                    "reference": "CA4E-Lectures/07-Emulator/07-08-CPU-History.m4v",
+                    "media": "ca4e-media/07-Emulator/07-08-CPU-History.m4v",
+                    "youtube": "bsUKo48cMrA"
+                },
+                {
+                    "type": "header",
+                    "text": "Demonstrations",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Introducing WebAssembly (WASM): From Hello World Source Code to Execution (3:58)",
+                    "reference": "CA4E-Demos/07-Emulator/07-11-WASM-Hello-JS",
+                    "media": "ca4e-media/07-Emulator/07-11-WASM-Hello-JS.m4v",
+                    "youtube": "Gr7uTE0CUfI"
+                },
+                {
+                    "type": "video",
+                    "title": "Compiling C to WebAssembly (WASM) and Running It in the Browser (7:01)",
+                    "reference": "CA4E-Demos/07-Emulator/07-12-WASM-Hello-C",
+                    "media": "ca4e-media/07-Emulator/07-12-WASM-Hello-C.m4v",
+                    "youtube": "_ce9ty_4TfM"
+                },
+                {
+                    "type": "video",
+                    "title": "Loops and the Stack: A String-to-Uppercase Example in WASM (10:39)",
+                    "reference": "CA4E-Demos/07-Emulator/07-13-WASM-Upper",
+                    "media": "ca4e-media/07-Emulator/07-13-WASM-Upper.m4v",
+                    "youtube": "vS4rty2_xys"
+                },
+                {
+                    "type": "header",
+                    "text": "Discussions",
+                    "level": 2
+                },
+                {
+                    "type": "discussion",
+                    "title": "Web Assembly",
+                    "launch": "tsugi/tool/tdiscus/",
+                    "resource_link_id": "discuss_04_wasm"
+                },
+                {
+                    "type": "header",
+                    "text": "Assessments",
+                    "level": 2
+                },
+                {
+                    "type": "lti",
+                    "title": "Quiz: Emulators and Web Assembly",
+                    "launch": "tsugi/tool/gift/?quiz=07-Emulator.txt",
+                    "resource_link_id": "ca4e_04_cpu_wasm",
+                    "custom": [
+                        {
+                            "key": "tries",
+                            "value": "3"
+                        },
+                        {
+                            "key": "delay",
+                            "value": "601"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "WASM: Print Random Phrase",
+                    "launch": "tools/wasm/",
+                    "resource_link_id": "ca4e_04_wasm_phrase",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "RandomPhraseExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "lti",
+                    "title": "WASM: Lower Case a String",
+                    "launch": "tools/wasm/",
+                    "resource_link_id": "ca4e_04_wasm_lower",
+                    "target": "_blank",
+                    "custom": [
+                        {
+                            "key": "exercise",
+                            "value": "LowercaseConversionExercise"
+                        }
+                    ]
+                },
+                {
+                    "type": "header",
+                    "text": "References",
+                    "level": 2
+                },
+                {
+                    "type": "reference",
+                    "title": "WAT Generated from 'Hello World!' in C",
+                    "href": "{apphome}/lectures/07-Emulator/hello.wat"
+                },
+                {
+                    "type": "reference",
+                    "title": "Hex dump of WASM 'Hello World!' in C",
+                    "href": "{apphome}/lectures/07-Emulator/hello_wasm.txt"
+                },
+                {
+                    "type": "video",
+                    "title": "ARM Instruction Set design history with Sophie Wilson",
+                    "youtube": "QqxThgLTLyk"
+                },
+                {
+                    "type": "video",
+                    "title": "The potted history of ARM",
+                    "youtube": "t59EtDxpYmM"
+                },
+                {
+                    "type": "header",
+                    "text": "Bonus",
+                    "level": 2
+                },
+                {
+                    "type": "video",
+                    "title": "Office Hours IIT TechFest, Mumbai, India 12-Dec-2018",
+                    "youtube": "GITuGFeG7J8"
+                },
+                {
+                    "type": "video",
+                    "title": "Office Hours: Puebla, Mexico",
+                    "youtube": "O7jookwwf20"
+                },
+                {
+                    "type": "reference",
+                    "title": "Humor: The original “WAT” talk by Gary Bernhardt about Ruby and JavaScript quirks (2012)",
+                    "href": "https://www.destroyallsoftware.com/talks/wat"
+                }
+            ]
+        }
+    ]
+}
