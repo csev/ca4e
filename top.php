@@ -1,11 +1,15 @@
 <?php
 use \Tsugi\Core\LTIX;
 
-if ( ! isset($CFG) ) {
-    if (!defined('COOKIE_SESSION')) define('COOKIE_SESSION', true);
-    require_once "tsugi/config.php";
-    $LAUNCH = LTIX::session_start();
+if ( ! defined('COOKIE_SESSION') ) {
+    define('COOKIE_SESSION', true);
 }
+
+if ( ! isset($CFG) ) {
+    require_once "tsugi/config.php";
+}
+
+$LAUNCH = LTIX::session_start();
 
 require_once "tsugi/config.php";
 
