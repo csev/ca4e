@@ -9,11 +9,12 @@ kaltura_category_id: null
 kaltura_playlist_id: 1_p8621h63
 course_hint: Computer Architecture for Everybody, CA4E, computer architecture, hardware, digital logic, VLSI, Dr. Chuck, Chuck Severance
 title_prefix: CA
+title_ordinal_start: 0
 extra_tags: ca4e, ca4e-lecture
 extra_description: For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
 entries:
   00-Welcome/00-01-Intro-NoBrand.m4v:
-    title: CA 00 01 Intro NoBrand (3:32)
+    title: CA 00.01 00 01 Intro NoBrand (3:32)
     ai_title: null
     youtube_id: null
     kaltura_id: null
@@ -27,7 +28,7 @@ entries:
     description: |
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   00-Welcome/00-01-Intro.m4v:
-    title: CA 00 01 Intro (3:32)
+    title: CA 00.02 00 01 Intro (3:32)
     ai_title: null
     youtube_id: null
     kaltura_id: null
@@ -41,7 +42,7 @@ entries:
     description: |
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   01-Origins/01-01-Origins-StoneHenge.m4v:
-    title: 'CA Origins of Data, Computing: Lines, Curves, and Numbers - Part 1 (11:04)'
+    title: 'CA 01.01 Origins of Data, Computing: Lines, Curves, and Numbers - Part 1 (11:04)'
     ai_title: null
     youtube_id: TorNiFp_hyY
     kaltura_id: 1_fow2em5j
@@ -61,7 +62,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   01-Origins/01-02-Origins-SlideRule.m4v:
-    title: CA Exploring Analog / Continuous Computing Devices - Part 2 (14:14)
+    title: CA 01.02 Exploring Analog / Continuous Computing Devices - Part 2 (14:14)
     ai_title: null
     youtube_id: BruoDcgZzPQ
     kaltura_id: 1_610claom
@@ -85,7 +86,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   01-Origins/01-03-Origins-Digital.m4v:
-    title: CA Exploring Physical Digital Devices - Part 3 (11:03)
+    title: CA 01.03 Exploring Physical Digital Devices - Part 3 (11:03)
     ai_title: null
     youtube_id: w5eWEZ4o6KM
     kaltura_id: 1_bznlkgqc
@@ -103,7 +104,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   01-Origins/01-04-Origins-Iteration.m4v:
-    title: CA Exploring Hardware Iteration - Part 4 (10:58)
+    title: CA 01.04 Exploring Hardware Iteration - Part 4 (10:58)
     ai_title: null
     youtube_id: Um4UyGvlc44
     kaltura_id: 1_kdbma5ga
@@ -121,7 +122,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   02-SolidState/02-01-SolidState-Tubes.m4v:
-    title: 'CA Solid State: Starting with Tubes - Part 1 (10:29)'
+    title: 'CA 02.01 Solid State: Starting with Tubes - Part 1 (10:29)'
     ai_title: null
     youtube_id: eRDh3t1QL5Y
     kaltura_id: 1_1inn4m1p
@@ -139,7 +140,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   02-SolidState/02-02-SolidState-Transistor.m4v:
-    title: 'CA Solid State: From Tubes to Transistors - Part 2 (10:23)'
+    title: 'CA 02.02 Solid State: From Tubes to Transistors - Part 2 (10:23)'
     ai_title: null
     youtube_id: V1BzdYrDakI
     kaltura_id: 1_wx51l1xo
@@ -161,7 +162,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   02-SolidState/02-03-SolidState-Gates.m4v:
-    title: 'CA Solid State: From Transistors to Gates - Part 3 (17:28)'
+    title: 'CA 02.03 Solid State: From Transistors to Gates - Part 3 (17:28)'
     ai_title: null
     youtube_id: -qNm_MewmzM
     kaltura_id: 1_4bltz2at
@@ -182,7 +183,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   02-SolidState/02-10-SolidState-CMOS-Nor.m4v:
-    title: CA Building a CMOS Nor Gate From Transistors (7:28)
+    title: CA 02.04 Building a CMOS Nor Gate From Transistors (7:28)
     ai_title: null
     youtube_id: DBtucp_ukSE
     kaltura_id: 1_fexo85bi
@@ -222,7 +223,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   03-VLSI/03-04-SolidState-Wafers.m4v:
-    title: 'CA Solid State: From Transistors to Wafers - Part 4 (9:18)'
+    title: 'CA 03.01 Solid State: From Transistors to Wafers - Part 4 (9:18)'
     ai_title: null
     youtube_id: z4U3el4fgXo
     kaltura_id: 1_kwcvdjq0
@@ -240,7 +241,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   03-VLSI/03-05-SolidState-VLSI.m4v:
-    title: 'CA Solid State: VLSI Design Layout - Part 5 (10:44)'
+    title: 'CA 03.02 Solid State: VLSI Design Layout - Part 5 (10:44)'
     ai_title: null
     youtube_id: 8pVwRnKecgc
     kaltura_id: 1_leysuek6
@@ -260,7 +261,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   03-VLSI/03-11-SolidState-VLSI-Not.m4v:
-    title: CA VLSI Not Gate Layout (8:29)
+    title: CA 03.03 VLSI Not Gate Layout (8:29)
     ai_title: null
     youtube_id: qdpnzRvoGtk
     kaltura_id: 1_ksiszsir
@@ -306,7 +307,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   03-VLSI/03-12-SolidState-VLSI-Nand.m4v:
-    title: CA VLSI NAND Gate Layout | Computer Architecture for Everybody (7:45)
+    title: CA 03.04 VLSI NAND Gate Layout | Computer Architecture for Everybody (7:45)
     ai_title: null
     youtube_id: wb3MH8Lr6oM
     kaltura_id: 1_pkn1ymlh
@@ -348,7 +349,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   04-DigitalLogic/04-01-Digital-Arch.m4v:
-    title: 'CA Digital Logic: Computer Architecture - Part 1 (7:23)'
+    title: 'CA 04.01 Digital Logic: Computer Architecture - Part 1 (7:23)'
     ai_title: null
     youtube_id: nZlKs4_ic14
     kaltura_id: 1_4jrcs6pw
@@ -366,7 +367,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   04-DigitalLogic/04-02-Digital-Gates.m4v:
-    title: 'CA Digital Logic: Adding Numbers with Gates - Part 2 (14:04)'
+    title: 'CA 04.02 Digital Logic: Adding Numbers with Gates - Part 2 (14:04)'
     ai_title: null
     youtube_id: hkeYhDXvc2k
     kaltura_id: 1_gzb9v2hm
@@ -384,7 +385,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   04-DigitalLogic/04-03-Digital-Latch.m4v:
-    title: 'CA Digital Logic: Storing Data with Gates - Part 3 (11:07)'
+    title: 'CA 04.03 Digital Logic: Storing Data with Gates - Part 3 (11:07)'
     ai_title: null
     youtube_id: a_EjfUA0Fpc
     kaltura_id: 1_s7o4ivrz
@@ -402,7 +403,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   04-DigitalLogic/04-11-Digital-Gates-Tool.m4v:
-    title: CA Gates Layout Tool Walkthrough (5:45)
+    title: CA 04.04 Gates Layout Tool Walkthrough (5:45)
     ai_title: null
     youtube_id: t3zuq1fu_mA
     kaltura_id: 1_e7a22wyt
@@ -424,7 +425,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   04-DigitalLogic/04-12-Digital-Gates-And.m4v:
-    title: CA Autograded AND Gate Assignment Walkthrough (2:52)
+    title: CA 04.05 Autograded AND Gate Assignment Walkthrough (2:52)
     ai_title: null
     youtube_id: Q_e187MplhI
     kaltura_id: 1_0k5c2ot8
@@ -450,7 +451,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   04-DigitalLogic/04-13-Digital-Gates-Half.m4v:
-    title: CA Half Adder Assignment Walkthrough (3:19)
+    title: CA 04.06 Half Adder Assignment Walkthrough (3:19)
     ai_title: null
     youtube_id: 1rFMW0ubwp8
     kaltura_id: 1_rdpvasr0
@@ -476,7 +477,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   05-Clock/05-00-Hi.m4v:
-    title: CA Welcome to Clocked Circuits (1:11)
+    title: CA 05.01 Welcome to Clocked Circuits (1:11)
     ai_title: null
     youtube_id: YOwm_Ux9zKQ
     kaltura_id: 1_axapkz7p
@@ -494,7 +495,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   05-Clock/05-04-Digital-Clock.m4v:
-    title: 'CA Digital Logic: Clocked Circuits and Clock Rates - Part 4 (7:34)'
+    title: 'CA 05.02 Digital Logic: Clocked Circuits and Clock Rates - Part 4 (7:34)'
     ai_title: null
     youtube_id: 7HeXWTR6kxc
     kaltura_id: 1_is6b1sa2
@@ -512,7 +513,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   05-Clock/05-05-Digital-CPU.m4v:
-    title: 'CA Digital: Building a Two Instruction CPU with Gates - Part 5 (9:49)'
+    title: 'CA 05.03 Digital: Building a Two Instruction CPU with Gates - Part 5 (9:49)'
     ai_title: null
     youtube_id: MmIEGsTQp-Q
     kaltura_id: 1_9f9253pr
@@ -530,7 +531,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   05-Clock/05-06-Digital-Code.m4v:
-    title: 'CA Digital: CPU Architecture - Storing Code in Memory - Part 6 (4:17)'
+    title: 'CA 05.04 Digital: CPU Architecture - Storing Code in Memory - Part 6 (4:17)'
     ai_title: null
     youtube_id: fM0-1Hc8vKM
     kaltura_id: 1_m8wwvl1l
@@ -548,7 +549,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   05-Clock/05-14-Digital-Gates-Counter.m4v:
-    title: CA Building a Clocked Counter with Adders and Latches (9:26)
+    title: CA 05.05 Building a Clocked Counter with Adders and Latches (9:26)
     ai_title: null
     youtube_id: AkkL4aOWfSI
     kaltura_id: 1_4diegzj0
@@ -588,7 +589,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   05-Clock/05-15-Digital-Gates-Instruction.m4v:
-    title: 'CA Building a Tiny CPU: A Two-Instruction Computer Walkthrough (5:34)'
+    title: 'CA 05.06 Building a Tiny CPU: A Two-Instruction Computer Walkthrough (5:34)'
     ai_title: null
     youtube_id: EnZtPJLPbho
     kaltura_id: 1_ucrrf6kh
@@ -626,7 +627,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   06-CPU/06-00-Hi.m4v:
-    title: CA Welcome to CPU Design (0:45)
+    title: CA 06.01 Welcome to CPU Design (0:45)
     ai_title: null
     youtube_id: 3yawCNgikLQ
     kaltura_id: 1_c97w0emk
@@ -644,7 +645,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   06-CPU/06-01-CPU-Intro.m4v:
-    title: 'CA Exploring Microprocessors: From Python to Machine Language & the 6502 CPU - Part 1 (5:37)'
+    title: 'CA 06.02 Exploring Microprocessors: From Python to Machine Language & the 6502 CPU - Part 1 (5:37)'
     ai_title: null
     youtube_id: hVWUQfINmYk
     kaltura_id: 1_lmfnj5gf
@@ -662,7 +663,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   06-CPU/06-02-CPU-Hex.m4v:
-    title: CA Understanding Hexadecimal (Base 16) — Why Computers Use It & How to Think in It - Part 2 (12:24)
+    title: CA 06.03 Understanding Hexadecimal (Base 16) — Why Computers Use It & How to Think in It - Part 2 (12:24)
     ai_title: null
     youtube_id: V_4Ord6x9H4
     kaltura_id: 1_96zx5a22
@@ -680,7 +681,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   06-CPU/06-03-CPU-Coding.m4v:
-    title: CA What Is Programming? From Python to Machine Language & Into the CPU - Part 3 (11:10)
+    title: CA 06.04 What Is Programming? From Python to Machine Language & Into the CPU - Part 3 (11:10)
     ai_title: null
     youtube_id: dh6pI8Xjysc
     kaltura_id: 1_380jkpmz
@@ -700,7 +701,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   06-CPU/06-04-CPU-Arch.m4v:
-    title: CA Exploring the 6502 Architecture in the CDC6504 Emulator - Part 4 (9:48)
+    title: CA 06.05 Exploring the 6502 Architecture in the CDC6504 Emulator - Part 4 (9:48)
     ai_title: null
     youtube_id: L2fzgapBoOg
     kaltura_id: 1_grjvgjbb
@@ -718,7 +719,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   06-CPU/06-05-CPU-Machine.m4v:
-    title: CA Machine Language — Loops, Branching & Assembly vs. Machine Code - Part 5 (18:43)
+    title: CA 06.06 Machine Language — Loops, Branching & Assembly vs. Machine Code - Part 5 (18:43)
     ai_title: null
     youtube_id: h92PhKl2elU
     kaltura_id: 1_1vc735bs
@@ -736,7 +737,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   06-CPU/06-06-CPU-Assembly.m4v:
-    title: 'CA CDC 6504 Assembly Language: Hello World, Math, and Upper Casing Strings - Part 6 (13:05)'
+    title: 'CA 06.07 CDC 6504 Assembly Language: Hello World, Math, and Upper Casing Strings - Part 6 (13:05)'
     ai_title: null
     youtube_id: BGIr2P2bpUY
     kaltura_id: 1_ibllrehz
@@ -754,7 +755,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   06-CPU/06-11-CPU-6504-UI-Walkthrough.m4v:
-    title: 'CA Learning CPU Emulation with the CDC6504: Registers, Memory, and Instructions (5:55)'
+    title: 'CA 06.08 Learning CPU Emulation with the CDC6504: Registers, Memory, and Instructions (5:55)'
     ai_title: null
     youtube_id: EXRg96qoX2Y
     kaltura_id: 1_as6u5h0y
@@ -787,7 +788,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   06-CPU/06-12-CPU-6504-Simple-Samples.m4v:
-    title: 'CA Stepping Through a CPU Emulator: CDC6504 Instructions, Memory, and State (4:53)'
+    title: 'CA 06.09 Stepping Through a CPU Emulator: CDC6504 Instructions, Memory, and State (4:53)'
     ai_title: null
     youtube_id: UwOHhsQe4QU
     kaltura_id: 1_2kas3f8j
@@ -821,7 +822,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   06-CPU/06-13-CPU-6504-For-Loop.m4v:
-    title: 'CA Loops in Machine Language: Branching in the CDC6504 Emulator (9:09)'
+    title: 'CA 06.10 Loops in Machine Language: Branching in the CDC6504 Emulator (9:09)'
     ai_title: null
     youtube_id: -5CVRhmOFoU
     kaltura_id: 1_r73zcpm9
@@ -853,7 +854,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   06-CPU/06-14-CPU-6504-If-Test.m4v:
-    title: CA Understanding Conditional Branches in a CDC6504 (4:58)
+    title: CA 06.11 Understanding Conditional Branches in a CDC6504 (4:58)
     ai_title: null
     youtube_id: WIBdo1Dh9cE
     kaltura_id: 1_24v2g9kt
@@ -889,7 +890,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   06-CPU/06-15-CPU-6504-Upper.m4v:
-    title: 'CA String Processing in Machine Language: CDC6504 Uppercase Example (12:05)'
+    title: 'CA 06.12 String Processing in Machine Language: CDC6504 Uppercase Example (12:05)'
     ai_title: null
     youtube_id: pccnXG8pooA
     kaltura_id: 1_6067g0zy
@@ -925,7 +926,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   07-Emulator/07-07-CPU-Emulator.m4v:
-    title: 'CA From 6502 to Web Assembly: Modern Day Emulators - Part 7 (10:56)'
+    title: 'CA 07.01 From 6502 to Web Assembly: Modern Day Emulators - Part 7 (10:56)'
     ai_title: null
     youtube_id: WwHwIBlmWWM
     kaltura_id: 1_gb7rsoul
@@ -943,7 +944,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   07-Emulator/07-08-CPU-History.m4v:
-    title: 'CA From 6502 to ARM: The 50-Year Journey of CPU Evolution & Apple’s CPU Strategy- Part 8 (7:30)'
+    title: 'CA 07.02 From 6502 to ARM: The 50-Year Journey of CPU Evolution & Apple’s CPU Strategy- Part 8 (7:30)'
     ai_title: null
     youtube_id: bsUKo48cMrA
     kaltura_id: 1_ysw5gqeq
@@ -979,7 +980,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   07-Emulator/07-11-WASM-Hello-JS.m4v:
-    title: 'CA Introducing WebAssembly (WASM): From Hello World Source Code to Execution (3:58)'
+    title: 'CA 07.03 Introducing WebAssembly (WASM): From Hello World Source Code to Execution (3:58)'
     ai_title: null
     youtube_id: Gr7uTE0CUfI
     kaltura_id: 1_ppb4itzw
@@ -1001,7 +1002,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   07-Emulator/07-12-WASM-Hello-C.m4v:
-    title: CA Compiling C to WebAssembly (WASM) and Running It in the Browser (6:49)
+    title: CA 07.04 Compiling C to WebAssembly (WASM) and Running It in the Browser (6:49)
     ai_title: null
     youtube_id: _ce9ty_4TfM
     kaltura_id: 1_olfxzim0
@@ -1023,7 +1024,7 @@ entries:
 
       For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
   07-Emulator/07-13-WASM-Upper.m4v:
-    title: 'CA Loops and the Stack: A String-to-Uppercase Example in WASM (10:39)'
+    title: 'CA 07.05 Loops and the Stack: A String-to-Uppercase Example in WASM (10:39)'
     ai_title: null
     youtube_id: vS4rty2_xys
     kaltura_id: 1_4m12wntv

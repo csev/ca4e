@@ -137,7 +137,7 @@
                     "type": "video",
                     "title": "Origins of Data, Computing: Lines, Curves, and Numbers - Part 1 (11:10)",
                     "reference": "CA4E-Lectures/01-Origins/01-01-Origins-StoneHenge.m4v",
-                    "media": "ca4e-media/01-Origins/01-01-Origins-StoneHenge.m4v",
+                    "media": "01-Origins/01-01-Origins-StoneHenge.m4v",
                     "youtube": "TorNiFp_hyY",
                     "kaltura_id": "1_fow2em5j"
                 },
@@ -145,21 +145,21 @@
                     "type": "video",
                     "title": "Exploring Analog / Continuous Computing Devices - Part 2 (14:15)",
                     "reference": "CA4E-Lectures/01-Origins/01-02-Origins-SlideRule.m4v",
-                    "media": "ca4e-media/01-Origins/01-02-Origins-SlideRule.m4v",
+                    "media": "01-Origins/01-02-Origins-SlideRule.m4v",
                     "youtube": "BruoDcgZzPQ"
                 },
                 {
                     "type": "video",
                     "title": "Exploring Physical Digital Devices - Part 3 (11:03)",
                     "reference": "CA4E-Lectures/01-Origins/01-03-Origins-Digital.m4v",
-                    "media": "ca4e-media/01-Origins/01-03-Origins-Digital.m4v",
+                    "media": "01-Origins/01-03-Origins-Digital.m4v",
                     "youtube": "w5eWEZ4o6KM"
                 },
                 {
                     "type": "video",
                     "title": "Exploring Hardware Iteration - Part 4 (10:58)",
                     "reference": "CA4E-Lectures/01-Origins/01-04-Origins-Iterations.m4v",
-                    "media": "ca4e-media/01-Origins/01-04-Origins-Iteration.m4v",
+                    "media": "01-Origins/01-04-Origins-Iteration.m4v",
                     "youtube": "Um4UyGvlc44"
                 },
                 {
@@ -329,21 +329,21 @@
                     "type": "video",
                     "title": "Solid State: Starting with Tubes - Part 1 (10:29)",
                     "reference": "CA4E-Lectures/02-SolidState/02-01-SolidState-Tubes.m4v",
-                    "media": "ca4e-media/02-SolidState/02-01-SolidState-Tubes.m4v",
+                    "media": "02-SolidState/02-01-SolidState-Tubes.m4v",
                     "youtube": "eRDh3t1QL5Y"
                 },
                 {
                     "type": "video",
                     "title": "Solid State: From Tubes to Transistors - Part 2 (10:24)",
                     "reference": "CA4E-Lectures/02-SolidState/02-02-SolidState-Transistors.m4v",
-                    "media": "ca4e-media/02-SolidState/02-02-SolidState-Transistor.m4v",
+                    "media": "02-SolidState/02-02-SolidState-Transistor.m4v",
                     "youtube": "V1BzdYrDakI"
                 },
                 {
                     "type": "video",
                     "title": "Solid State: From Transistors to Gates - Part 3 (17:31)",
                     "reference": "CA4E-Lectures/02-SolidState/02-03-SolidState-Gates.m4v",
-                    "media": "ca4e-media/02-SolidState/02-03-SolidState-Gates.m4v",
+                    "media": "02-SolidState/02-03-SolidState-Gates.m4v",
                     "youtube": "-qNm_MewmzM"
                 },
                 {
@@ -356,7 +356,7 @@
                     "title": "Building a CMOS Nor Gate From Transistors (7:28)",
                     "youtube": "DBtucp_ukSE",
                     "fcp": "CA4E-Demos/02-Solid-State/02-10-SolidState-CMOS-Nor",
-                    "media": "ca4e-media/02-SolidState/02-10-SolidState-CMOS-Nor.m4v"
+                    "media": "02-SolidState/02-10-SolidState-CMOS-Nor.m4v"
                 },
                 {
                     "type": "header",
@@ -501,14 +501,14 @@
                     "type": "video",
                     "title": "Solid State: From Transistors to Wafers - Part 4 (9:18)",
                     "reference": "CA4E-Lectures/03-VLSI/03-04-SolidState-Wafers.m4v",
-                    "media": "ca4e-media/03-VLSI/03-04-SolidState-Wafers.m4v",
+                    "media": "03-VLSI/03-04-SolidState-Wafers.m4v",
                     "youtube": "z4U3el4fgXo"
                 },
                 {
                     "type": "video",
                     "title": "Solid State: VLSI Design Layout - Part 5 (10:46)",
                     "reference": "CA4E-Lectures/03-VLSI/03-05-SolidState-VLSI.m4v",
-                    "media": "ca4e-media/03-VLSI/03-05-SolidState-VLSI.m4v",
+                    "media": "03-VLSI/03-05-SolidState-VLSI.m4v",
                     "youtube": "8pVwRnKecgc"
                 },
                 {
@@ -521,14 +521,14 @@
                     "title": "VLSI Not Gate Layout (8:30)",
                     "youtube": "qdpnzRvoGtk",
                     "fcp": "CA4E-Demos/03-VLSI/03-11-SolidState-VLSI-Not",
-                    "media": "ca4e-media/03-VLSI/03-11-SolidState-VLSI-Not.m4v"
+                    "media": "03-VLSI/03-11-SolidState-VLSI-Not.m4v"
                 },
                 {
                     "type": "video",
                     "title": "VLSI NAND Gate Layout | Computer Architecture for Everybody (7:45)",
                     "youtube": "wb3MH8Lr6oM",
                     "fcp": "CA4E-Demos/03-VLSI/03-12-SolidState-VLSI-Nand",
-                    "media": "ca4e-media/03-VLSI/03-12-SolidState-VLSI-Nand.m4v"
+                    "media": "03-VLSI/03-12-SolidState-VLSI-Nand.m4v"
                 },
                 {
                     "type": "header",
@@ -678,21 +678,21 @@
                     "type": "video",
                     "title": "Digital Logic: Computer Architecture - Part 1 (7:23)",
                     "reference": "CA4E-Lectures/04-DigitalLogic/04-01-Digital-Arch.m4v",
-                    "media": "ca4e-media/04-DigitalLogic/04-01-Digital-Arch.m4v",
+                    "media": "04-DigitalLogic/04-01-Digital-Arch.m4v",
                     "youtube": "nZlKs4_ic14"
                 },
                 {
                     "type": "video",
                     "title": "Digital Logic: Adding Numbers with Gates - Part 2 (14:04)",
                     "reference": "CA4E-Lectures/04-DigitalLogic/04-02-Digital-Gates.m4v",
-                    "media": "ca4e-media/04-DigitalLogic/04-02-Digital-Gates.m4v",
+                    "media": "04-DigitalLogic/04-02-Digital-Gates.m4v",
                     "youtube": "hkeYhDXvc2k"
                 },
                 {
                     "type": "video",
                     "title": "Digital Logic: Storing Data with Gates - Part 3 (11:08)",
                     "reference": "CA4E-Lectures/04-DigitalLogic/04-03-Digital-Latch.m4v",
-                    "media": "ca4e-media/04-DigitalLogic/04-03-Digital-Latch.m4v",
+                    "media": "04-DigitalLogic/04-03-Digital-Latch.m4v",
                     "youtube": "a_EjfUA0Fpc"
                 },
                 {
@@ -705,21 +705,21 @@
                     "title": "Gates Layout Tool Walkthrough (5:46)",
                     "youtube": "t3zuq1fu_mA",
                     "fcp": "CA4E-Demos/04-DigitalLogic/04-11-Digital-Gates-Tool",
-                    "media": "ca4e-media/04-DigitalLogic/04-11-Digital-Gates-Tool.m4v"
+                    "media": "04-DigitalLogic/04-11-Digital-Gates-Tool.m4v"
                 },
                 {
                     "type": "video",
                     "title": "Autograded AND Gate Assignment Walkthrough (2:52)",
                     "youtube": "Q_e187MplhI",
                     "fcp": "CA4E-Demos/04-DigitalLogic/04-12-Digital-Gates-And",
-                    "media": "ca4e-media/04-DigitalLogic/04-12-Digital-Gates-And.m4v"
+                    "media": "04-DigitalLogic/04-12-Digital-Gates-And.m4v"
                 },
                 {
                     "type": "video",
                     "title": "Half Adder Assignment Walkthrough (3:20)",
                     "youtube": "1rFMW0ubwp8",
                     "fcp": "CA4E-Demos/04-DigitalLogic/04-13-Digital-Gates-Half",
-                    "media": "ca4e-media/04-DigitalLogic/04-13-Digital-Gates-Half.m4v"
+                    "media": "04-DigitalLogic/04-13-Digital-Gates-Half.m4v"
                 },
                 {
                     "type": "header",
@@ -845,7 +845,7 @@
                     "type": "video",
                     "title": "Welcome to Clocked Circuits",
                     "reference": "CA4E-Lectures/05-Clock/05-00-Hi",
-                    "media": "ca4e-media/05-Clock/05-00-Hi.m4v",
+                    "media": "05-Clock/05-00-Hi.m4v",
                     "youtube": "YOwm_Ux9zKQ"
                 },
                 {
@@ -872,21 +872,21 @@
                     "type": "video",
                     "title": "Digital Logic: Clocked Circuits and Clock Rates - Part 4 (7:34)",
                     "reference": "CA4E-Lectures/05-Clock/05-04-Digital-Clock.m4v",
-                    "media": "ca4e-media/05-Clock/05-04-Digital-Clock.m4v",
+                    "media": "05-Clock/05-04-Digital-Clock.m4v",
                     "youtube": "7HeXWTR6kxc"
                 },
                 {
                     "type": "video",
                     "title": "Digital: Building a Two Instruction CPU with Gates - Part 5 (9:49)",
                     "reference": "CA4E-Lectures/05-Clock/05-05-Digital-CPU.m4v",
-                    "media": "ca4e-media/05-Clock/05-05-Digital-CPU.m4v",
+                    "media": "05-Clock/05-05-Digital-CPU.m4v",
                     "youtube": "MmIEGsTQp-Q"
                 },
                 {
                     "type": "video",
                     "title": "Digital: CPU Architecture - Storing Code in Memory - Part 6 (4:18)",
                     "reference": "CA4E-Lectures/05-Clock/05-06-Digital-Code.m4v",
-                    "media": "ca4e-media/05-Clock/05-06-Digital-Code.m4v",
+                    "media": "05-Clock/05-06-Digital-Code.m4v",
                     "youtube": "fM0-1Hc8vKM"
                 },
                 {
@@ -899,14 +899,14 @@
                     "title": "Building a Clocked Counter with Adders and Latches (9:26)",
                     "youtube": "AkkL4aOWfSI",
                     "reference": "CA4E-Demos/05-Clock/05-14-Digital-Gates-Counter",
-                    "media": "ca4e-media/05-Clock/05-14-Digital-Gates-Counter.m4v"
+                    "media": "05-Clock/05-14-Digital-Gates-Counter.m4v"
                 },
                 {
                     "type": "video",
                     "title": "Building a Tiny CPU: A Two-Instruction Computer Walkthrough (5:35)",
                     "youtube": "EnZtPJLPbho",
                     "reference": "CA4E-Demos/05-Clock/05-15-Digital-Gates-Instruction",
-                    "media": "ca4e-media/05-Clock/05-15-Digital-Gates-Instruction.m4v"
+                    "media": "05-Clock/05-15-Digital-Gates-Instruction.m4v"
                 },
                 {
                     "type": "header",
@@ -967,7 +967,7 @@
                     "type": "video",
                     "title": "Welcome to CPU Design",
                     "reference": "CA4E-Lectures/06-CPU/06-00-Hi",
-                    "media": "ca4e-media/06-CPU/06-00-Hi.m4v",
+                    "media": "06-CPU/06-00-Hi.m4v",
                     "youtube": "3yawCNgikLQ"
                 },
                 {
@@ -994,7 +994,7 @@
                     "type": "video",
                     "title": "Exploring Microprocessors: From Python to Machine Language & the 6502 CPU - Part 1 (5:38)",
                     "reference": "CA4E-Lectures/06-CPU/06-01-CPU-Intro.m4v",
-                    "media": "ca4e-media/06-CPU/06-01-CPU-Intro.m4v",
+                    "media": "06-CPU/06-01-CPU-Intro.m4v",
                     "old-youtube": "IF0ZopcXRl8",
                     "youtube": "hVWUQfINmYk"
                 },
@@ -1002,35 +1002,35 @@
                     "type": "video",
                     "title": "Understanding Hexadecimal (Base 16) — Why Computers Use It & How to Think in It - Part 2 (12:24)",
                     "reference": "CA4E-Lectures/06-CPU/06-02-CPU-Hex.m4v",
-                    "media": "ca4e-media/06-CPU/06-02-CPU-Hex.m4v",
+                    "media": "06-CPU/06-02-CPU-Hex.m4v",
                     "youtube": "V_4Ord6x9H4"
                 },
                 {
                     "type": "video",
                     "title": "What Is Programming? From Python to Machine Language & Into the CPU - Part 3 (11:10)",
                     "reference": "CA4E-Lectures/06-CPU/04-03-CPU-Coding.m4v",
-                    "media": "ca4e-media/06-CPU/06-03-CPU-Coding.m4v",
+                    "media": "06-CPU/06-03-CPU-Coding.m4v",
                     "youtube": "dh6pI8Xjysc"
                 },
                 {
                     "type": "video",
                     "title": "Exploring the 6502 Architecture in the CDC6504 Emulator - Part 4 (9:49)",
                     "reference": "CA4E-Lectures/06-CPU/06-04-CPU-Arch.m4v",
-                    "media": "ca4e-media/06-CPU/06-04-CPU-Arch.m4v",
+                    "media": "06-CPU/06-04-CPU-Arch.m4v",
                     "youtube": "L2fzgapBoOg"
                 },
                 {
                     "type": "video",
                     "title": "Machine Language — Loops, Branching & Assembly vs. Machine Code - Part 5 (18:43)",
                     "reference": "CA4E-Lectures/06-CPU/06-05-CPU-Machine.m4v",
-                    "media": "ca4e-media/06-CPU/06-05-CPU-Machine.m4v",
+                    "media": "06-CPU/06-05-CPU-Machine.m4v",
                     "youtube": "h92PhKl2elU"
                 },
                 {
                     "type": "video",
                     "title": "CDC 6504 Assembly Language: Hello World, Math, and Upper Casing Strings - Part 6 (13:05)",
                     "reference": "CA4E-Lectures/06-CPU/06-06-CPU-Assembly.m4v",
-                    "media": "ca4e-media/06-CPU/06-06-CPU-Assembly.m4v",
+                    "media": "06-CPU/06-06-CPU-Assembly.m4v",
                     "youtube": "BGIr2P2bpUY"
                 },
                 {
@@ -1042,35 +1042,35 @@
                     "type": "video",
                     "title": "Learning CPU Emulation with the CDC6504: Registers, Memory, and Instructions (5:55)",
                     "reference": "CA4E-Demos/06-CPU/06-11-CPU-6504-UI-Walkthrough",
-                    "media": "ca4e-media/06-CPU/06-11-CPU-6504-UI-Walkthrough.m4v",
+                    "media": "06-CPU/06-11-CPU-6504-UI-Walkthrough.m4v",
                     "youtube": "EXRg96qoX2Y"
                 },
                 {
                     "type": "video",
                     "title": "Stepping Through a CPU Emulator: CDC6504 Instructions, Memory, and State (4:53)",
                     "reference": "CA4E-Demos/06-CPU/06-12-CPU-6504-Simple-Samples",
-                    "media": "ca4e-media/06-CPU/06-12-CPU-6504-Simple-Samples.m4v",
+                    "media": "06-CPU/06-12-CPU-6504-Simple-Samples.m4v",
                     "youtube": "UwOHhsQe4QU"
                 },
                 {
                     "type": "video",
                     "title": "Loops in Machine Language: Branching in the CDC6504 Emulator (9:09)",
                     "reference": "CA4E-Demos/06-CPU/06-13-CPU-6504-For-Loop",
-                    "media": "ca4e-media/06-CPU/06-13-CPU-6504-For-Loop.m4v",
+                    "media": "06-CPU/06-13-CPU-6504-For-Loop.m4v",
                     "youtube": "-5CVRhmOFoU"
                 },
                 {
                     "type": "video",
                     "title": "Understanding Conditional Branches in a CDC6504 (4:59)",
                     "reference": "CA4E-Demos/06-CPU/06-14-CPU-6504-If-Test",
-                    "media": "ca4e-media/06-CPU/06-14-CPU-6504-If-Test.m4v",
+                    "media": "06-CPU/06-14-CPU-6504-If-Test.m4v",
                     "youtube": "WIBdo1Dh9cE"
                 },
                 {
                     "type": "video",
                     "title": "String Processing in Machine Language: CDC6504 Uppercase Example (12:05)",
                     "reference": "CA4E-Demos/06-CPU/06-15-CPU-6504-Upper",
-                    "media": "ca4e-media/06-CPU/06-15-CPU-6504-Upper.m4v",
+                    "media": "06-CPU/06-15-CPU-6504-Upper.m4v",
                     "youtube": "pccnXG8pooA"
                 },
                 {
@@ -1242,14 +1242,14 @@
                     "type": "video",
                     "title": "From 6502 to Web Assembly: Modern Day Emulators - Part 7 (10:56)",
                     "reference": "CA4E-Lectures/07-Emulator/07-07-CPU-Emulators.m4v",
-                    "media": "ca4e-media/07-Emulator/07-07-CPU-Emulator.m4v",
+                    "media": "07-Emulator/07-07-CPU-Emulator.m4v",
                     "youtube": "WwHwIBlmWWM"
                 },
                 {
                     "type": "video",
                     "title": "From 6502 to ARM: The 50-Year Journey of CPU Evolution & Apple’s CPU Strategy- Part 8 (7:31)",
                     "reference": "CA4E-Lectures/07-Emulator/07-08-CPU-History.m4v",
-                    "media": "ca4e-media/07-Emulator/07-08-CPU-History.m4v",
+                    "media": "07-Emulator/07-08-CPU-History.m4v",
                     "youtube": "bsUKo48cMrA"
                 },
                 {
@@ -1261,21 +1261,21 @@
                     "type": "video",
                     "title": "Introducing WebAssembly (WASM): From Hello World Source Code to Execution (3:58)",
                     "reference": "CA4E-Demos/07-Emulator/07-11-WASM-Hello-JS",
-                    "media": "ca4e-media/07-Emulator/07-11-WASM-Hello-JS.m4v",
+                    "media": "07-Emulator/07-11-WASM-Hello-JS.m4v",
                     "youtube": "Gr7uTE0CUfI"
                 },
                 {
                     "type": "video",
                     "title": "Compiling C to WebAssembly (WASM) and Running It in the Browser (7:01)",
                     "reference": "CA4E-Demos/07-Emulator/07-12-WASM-Hello-C",
-                    "media": "ca4e-media/07-Emulator/07-12-WASM-Hello-C.m4v",
+                    "media": "07-Emulator/07-12-WASM-Hello-C.m4v",
                     "youtube": "_ce9ty_4TfM"
                 },
                 {
                     "type": "video",
                     "title": "Loops and the Stack: A String-to-Uppercase Example in WASM (10:39)",
                     "reference": "CA4E-Demos/07-Emulator/07-13-WASM-Upper",
-                    "media": "ca4e-media/07-Emulator/07-13-WASM-Upper.m4v",
+                    "media": "07-Emulator/07-13-WASM-Upper.m4v",
                     "youtube": "vS4rty2_xys"
                 },
                 {
