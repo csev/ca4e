@@ -1,0 +1,86 @@
+ Hello and welcome to our lecture on the CDC 6504 architecture. So as you'll soon see, this is a
+ blend of two names so that I can avoid confusion with the actual processor that you're simulating.
+ So the processor that we're simulating is the MOS Technology 6502. There are many microprocessors
+ that have deep historical significance. The 6502 is a very significant processor in terms of the
+ history of CPU architecture and its evolution. It was launched in 1975 and the key to it was low
+ cost of manufacture. It was simple. It only had four thousand transistors. Remember the Intel 4004
+ had two thousand three hundred transistors. This ran into megahertz and they kept the price low at
+ twenty five dollars. So it just allowed a whole series of hobbyist computers like the Apple One.
+ That was a hobbyist computer. And so it sort of just opened up a whole bunch of things.
+ And so the problem is, is that if I name my emulator the 6502 emulator, it would get lost
+ in all of the confusion. So I changed it to the CDC 6504 to pay homage to the first computer that
+ I ever used in the 1970s from Control Data Corporation. I learned Fortran on it. I learned
+ assembly language on it. I learned machine language on it. And I have a picture here
+ of a running version of this computer at the Living Computer Museum in Seattle,
+ Washington that sadly is now closed after Paul Allen passed away. But I have a video that I
+ will share with you that is a video of a running CDC 6500 from a couple of years ago. I further was
+ lucky to meet an important influencer in the CDC 6500 history, Nicholas Werth, and he invented
+ Pascal. I used Pascal. I supported the Pascal compiler. It was a really important part of my
+ own sort of education was to build compilers. And so I'm going to show you an artifact from
+ that time period. So this is from-- I don't know if you can see it. Let's see if you can see it
+ here. This is from-- yeah, there you go-- 1980. This was a one-year project in computer science
+ where I-- this is assembly language from the CDC 6500. This is a compiler and an optimizer,
+ and so it was written in Fortran. These are line printers. Let's see if I can find something
+ interesting to show you with all kinds of documentation. And so we wrote all this stuff
+ in 1979 and 1980. It was a two-student project, and I have kept it for all this time.
+ There we go. So that's an artifact from the CDC 6500. And again, I named the CDC 6504
+ just so I had something to search on. So this is the architecture of the CDC 6504.
+ And the first thing you have to understand is the registers. And when you start using this
+ interactively online, you'll be reading these registers. So the most important register, the
+ what next register, is the program counter, also known as the PC. As we've seen in some earlier
+ lectures, there's the current instruction register, which is important. And it often is not shown on
+ architecture diagrams, even though it's very important. The accumulator. So the CDC 6504 and
+ the 6502 is an accumulator-based system. And that's sort of like the most power. They have one single
+ most powerful register, and that is the accumulator. As you do operations, they set flags after every
+ operation so that you can do if tests. So was the last result zero? Was the last result negative?
+ It has two more registers that are a little less powerful than the accumulator called the X and Y
+ registers. And on the emulator itself that I've built, it shows the instructions in base two,
+ which makes it easier to decode. And the data memory will be shown in hex, given that most of
+ the time we're just going to be putting characters into the data memory. So we program the CDC 6504
+ in machine language. And so there's some really good documentation that is that I built with the
+ help of AI. So this is a similar language for the clear instruction, clear X, increment X,
+ et cetera, et cetera. So we'll cover these in much more detail. So let's start right away
+ with our first program. So you can kind of go back. So our program is going to compute one plus one
+ equals two in the X register. So the PC tells the system where to retrieve the next instruction from.
+ So when the program, when the computer starts, before we start it running,
+ the PC starts at zero. And so the first instruction is one, one, one, zero, zero, one, zero,
+ which is clearing the X register. Now the system starts at zeros in there, but it's probably smart
+ just to clear it anywhere, anyway. Then it has two increment instructions, and then it has an all
+ zeros instruction, which says stop. Okay. So let's walk this through. So when the first execution of
+ the first instruction is done, well, that sets the X register to zero. But then the side effect of
+ that is to increment the PC register to one and then run that instruction. And so when that
+ instruction runs, we increment X. And so you can see that X is now incremented to one. But then once
+ that instruction is run, then it moves to the O2 instruction. And that is also an increment,
+ which it reads, and then it increments X to two. And then it runs to the last instruction, which is
+ a break. And then that stops our program. So it runs, runs three instructions, and then stops.
+ So at this point, you might say to yourself, "Oh, wait a second. This seems familiar."
+ Clearing a register and incrementing a register, and then stopping, that's something we've done
+ before. Literally, in previous lectures, you have built a two instruction computer with a latch,
+ and an adder, and a clock. And so you can say, "Oh, well, what is this?" Well, the register is
+ like the latch. The adder is the thing that does the increment for us, because the latch's output
+ goes into the adder, and we've hard-coded a one to the other input of the adder. And then we have a
+ clock that decides when things are going to run. And then we have an instruction, which is either
+ zero or one. This is a one-bit computer, right? And the thing that I complained about several times
+ in previous lectures is that it's not reading instructions from memory. What we just got done
+ doing is reading instructions from memory. And then there's the decode logic, which is always
+ a difficult thing for students to understand, where it is looking at literally the bits of
+ the instruction and using AND gates and OR gates, actually enabling or disabling parts of the
+ processor. So the increment instruction, or the loading into the latch based on the clock,
+ is turned off based on the instruction. So the decoding, and if you look at the decoding of a
+ typical microprocessor, it's like a whole city block, right? And so the instructions in a real
+ computer sitting in memory, the decoding has to look at all eight of those bits in our 6502,
+ and it has to send all those bits to various places to turn on and off elements of the registers
+ and elements of the arithmetic logic unit. And so we had it, this is eight-bit instructions,
+ which means we have a whole bunch of things that we can do and control. Now,
+ if you think about it, at this point, if you had enough time,
+ you could build a CDC 6504 and manufacturing capability. Because if you go to that simple CPU
+ and that simple CPU, the latch, the adder, and the clock can be mapped to transistors,
+ because underneath them they're transistors, and we covered that. And then we showed you how to make
+ VLSI logic design, where you can lay out in a two-dimensional grid different materials that
+ cause transistors, right? And then all you would need is a billion dollar personal manufacturing
+ facility to turn those transistor layouts into chips. And then you could cut those chips up,
+ and then you could manufacture a 6502. Now, the goal of this course is not for you to go
+ and build a two billion dollar microprocessor fabrication facility, but to understand that
+ really you know the essence of the entire process to build a complex CPU and produce it. It's
+ possible, and you understand the basics of it. So up next we're just going to start going into
+ more detail of the entire machine language.

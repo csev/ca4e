@@ -1,0 +1,37 @@
+ Welcome to another walkthrough for computer architecture for everybody.
+ In this, I want to do an assignment.
+ And so, sometimes when you launch this, you will have an assignment.
+ And that assignment will be auto-graded.
+ So we're going to build a simple AND gate circuit with two inputs and one output.
+ So let's go ahead and do that. Let's place an AND gate.
+ Oh, no. Let's turn on the command and let's use, let's say, place AND.
+ And then say, place input, place input.
+ So we got some inputs. I don't remember the syntax to connect them.
+ So we got, I'm going to move them around and make them line up a little bit.
+ I'm going to connect the inputs to the, the two inputs to the AND gate.
+ And then I'm going to place an output, put the output here.
+ And then we'll test to see. Oh, come on. Connect.
+ There we go. Now it's connected.
+ Okay. So we've got our AND gate working.
+ 0, 1, 1, 0, 1, 1. And it's a 1. Okay.
+ So let's go ahead and do the auto-grader.
+ So we haven't done everything yet. It gives you a truth table.
+ So we can say, start grading. And it's going to say, ooh, it's looking for input labeled A.
+ I found inputs 1 and input 2. Please use the tag tool to label your inputs.
+ Okay. And so we are going to do that.
+ We're going to use the tag tool to call this one input A.
+ Okay. And we're going to use the tag tool to mention this one is B.
+ This is a pretty simple assignment. And let's still make a mistake.
+ We got to connect the output to Q, but let's just, let's start the grading.
+ Missing output label Q. Fix that, fix it with the tag tool.
+ So we'll go ahead and call this Q.
+ And then you can see it's going to auto-grade, and this time it's going to hopefully work.
+ So it says, okay, we found all the required components.
+ All required components are properly labeled A, B, and Q.
+ Then it says it's got it. We got an AND gate. That's cool.
+ So let's just see if 0, A of 0, B of 0 results in an output of 0, and it does.
+ Let's try an A of 0 and B of 1. Does it, does it cruise an output of 0? Yes, it does.
+ And does it, an A of 1 and B of 0 produce a 0? Yes, it does.
+ And the last test is the 1 and the 1, and it gives us an AND,
+ and sends great back to the learning management system.
+ So I hope you found this useful. Cheers.

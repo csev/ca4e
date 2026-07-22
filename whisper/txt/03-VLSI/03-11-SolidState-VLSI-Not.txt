@@ -1,0 +1,77 @@
+ hello, and welcome to another walkthrough of computer architecture for everybody this is a
+ walkthrough of our VLSI design layout tool, very large scale integration, the tool where we sort of
+ build circuits by painting layers that turn into photolithography although it's probably these days
+ laser lithography but you get the idea the basic idea is you can draw these pure areas that are
+ going to have metal placed on them you can also erase them and it doesn't really matter how you
+ place them as long as you erase them and put them together you can end up with quite weird shapes
+ i'll put some positive voltage in one area and you see the positive voltage goes wherever the
+ metal is even though the way i drew it was i drew a piece then i chopped a piece out of it etc etc
+ so let me clear this all out and let me work on a not gate because a not gate is is a pretty good
+ and simple way to understand how this works so you could take a look at the image from the lecture
+ and paint exactly the thing it does and that's a good good thing to do but i'm going to do it a
+ little differently i'm going to start from the transistors outward and so i'm going to start
+ with the the pMOS transistor at the top so i'm going to have a vertical bit of p-doped silicon
+ and then i'm going to make a vertical piece of n-doped silicon and then i'm going to take some
+ polysilicon and run across because where the intersection happens between a p-silicon and
+ n-doped and a p-silicon and a p-doped that's where transistors happen so at these two intersections
+ there are transistors okay and so if we take a look at the layers we can see because there's
+ always this layer viewer then there is an n-MOS transistor that is created so we now have oh
+ i gotta erase that you can just erase stuff if you mess it up so now what we got to do is
+ we got to get some electricity to these so we got to draw the rest of the circuit okay so the
+ first thing i'm going to do is i'm going to draw the output and that's going to be a bit of metal
+ bit of metal so i overlap the metal with the p-diffusion and the n-diffusion now if i take
+ a look at the layers you see that where i overlap the metal and the p-diffusion there's still a gap
+ and where i met the end diffusion and the metal there's still a gap if i want to actually connect
+ them together i have to explicitly connect them together so i am going to do that by punching
+ a via it's like drilling a little hole and then pouring i don't know metal into it but so now what
+ we have is we have the p-diffusion overlapping the metal and the end diffusion overlapping the
+ metal but now there's a little connector that goes down through the center so we are working
+ in three dimensions here they're all kind of layered on top of one another but then we want
+ to connect the layers away we go okay so now i want to actually make some input so i'm going
+ to take the input these two polysilicons and then i'll just drop a little input out here a little
+ bit and so the polysilicon and the metal do not touch until i punch a via there so i punch a little
+ hole punch a little hole and away we go and then the next thing i want to do is i want to have a
+ place to get the output so i'll pull a little bit of metal out here metal touching metal doesn't need
+ a via so we're pretty much almost done at this point if we put some voltage up here in the orange
+ in the p-dope silicon and we put some ground at the bottom in the n-dope silicon what you see is
+ that the voltage is flowing but because there's no voltage on the transistor the transistor ends up
+ being a block to the whole thing okay so if you recall the p-moss is open on ground and closed on
+ positive and the n-moss is the opposite where it is closed on ground and opened on positive so let's
+ just go ahead and put some voltage in i probably should have done that so now you see the transistor
+ in operation so i've got voltage on the input and that is causing the upper p-moss transition
+ to block voltage from flowing so voltage would come into the p-moss transistor but not leave
+ the transistor if we then look at the n-moss transistor in the bottom you see the ground is
+ flowing up but in this case it's flowing through the n-moss transistor to the output and so the
+ output is negative now if we switch and put ground as the input which we do like that then you see
+ that the p-moss at the top is conducting and the plus is going all the way out to the output oops
+ i just put a ground there that messes that thing up and but i can fix that watch i can just say
+ erase come back come back i just hovered and hit it so i erased that guy so now it's back to being
+ a happy little not gate okay so that's a happy little not gate um let's go ahead and turn this
+ in for our assignment it tells you to place a probe with a label a on the input to your not gate
+ so there's a thing called a probe and we're going to replace this ground with input a and it says
+ place a probe with a label q on the output so we got a and q so now i think we're in good shape
+ we already built the not gate and we tested it so let's just go ahead and start the grading
+ so it checks to see if there's an a and a q probe and we named them correctly doesn't know we may
+ have him in the wrong place we're set a to ground and check to see if the output is vcc which is
+ right that's the first half of the knot now it checks sets a to vcc and then set checks to see
+ if the q is ground and that's correct and so we are done and we have earned our grade in that so
+ before i stop here a couple other things to show you there is this really cool feature called
+ read circuit and i'm gonna press it and then just stay quiet draw vcc eight one draw probe a at four
+ six with voltage vcc draw p plus diffusion from eight one two eight five draw polysilicon from
+ six three two ten three draw polysilicon from six nine two ten nine draw metal from six three two
+ six nine draw metal from eight five two eight seven draw metal from four six two six six draw metal from
+ eight six two eleven six draw via six three draw via eight five draw via eight seven draw via six
+ nine draw probe a at four six with voltage vcc draw probe q at eleven six with voltage zero
+ draw n plus diffusion from eight seven two eight twelve draw gnd at eight twelve so that's pretty
+ cool there's also a way for you to load and save this is going to use um space on your on your
+ browser this is using what's called browser local storage so i'll just call this one not two
+ and so if you look and do load you could reload to not two so i'll just leave that for a bit
+ the one last thing i will show you is there is this command line and so you can type
+ you can type commands here i'm going to say draw metal from two comma two to ten comma ten
+ this is going to ruin my circuit but you'll get the idea so that just drew the metal and so i
+ messed up my whole circuit but you can see that you could place these things so if i started over
+ from scratch i could type draw draw poly silicon from three comma six to ten comma six see so you
+ could draw all those things that's actually what the save and the restore actually knows all of
+ those items so there's some help for this that you might find useful talks a lot about how to
+ do stuff it gives you hints as to how to complete your homework etc so i hope you found this
+ interesting this walkthrough on the vlsi design system for computer architecture for everybody

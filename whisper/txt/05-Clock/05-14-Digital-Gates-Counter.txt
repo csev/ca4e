@@ -1,0 +1,90 @@
+ welcome to yet another gate layout walkthrough for computer architecture for everybody. In this we're
+ going to play with several of the circuits, the counter and the single instruction. So if you go
+ back and you take a look at the counter, I'm going to build one and then I'm going to actually load
+ it. So we're just going to do a three bit adder, put the three bit adder in the middle here. And so
+ the adder takes the one, two, and four, one, two, and four as A and B and then produces a sum, right?
+ So if I just take an input of one, another input over here of one, and I hook the input to the one
+ input, and then I hook the other one to the output, and then I change this. And so this is going to,
+ if I have one plus one is two, so this is kind of a weird layout here, but this is zero plus one
+ is, should be one, okay? So I had to kind of toggle that a little bit, dragging it around,
+ kind of confused it. So there you go. The idea here is we're going to make a counter and we're
+ going to make a counter by creating a clocked circuit. So let me delete this input, delete
+ this input. So this is an adder. Whatever we present as its input, it's going to sum them
+ together, zero through seven, produce the output and tell us what the output is. And then we're
+ going to make a three-bit latch, and I'll take the output. The latch is like a little register,
+ so that the register is, it takes its inputs, it ignores its inputs until you put a one at the
+ clock. Let's go put a clock here. So when the clock is one, the inputs are being copied to the
+ outputs, okay? And so let's do this. Let's make an input over here. It's kind of like a bunch of
+ flip-flops output over here. So the current state of the latch, what's stored in the register is a
+ value of one, and we can change this all day long and it's ignoring it. That's just like a flip-flop.
+ It's just like a JK flip-flop. This is a series of JK flip-flops in here. Flip on and off. And then
+ if we want to tell this register to latch in its input values, we can say do that, and then it
+ latches in its input values. And then when the clock goes low again, then it copies the output
+ values. So now the internal state is zero, the outputs are zero because the clock is low. So if
+ I, again, now I can change this and nothing changes because it's a latch, and then I say,
+ oh, let that clock go high, copies it in, then the clock goes low, and it copies it out, okay?
+ So let's go ahead and build a simple counter where we're just going to take a value and store it in
+ this register. Okay, so now we got the register. It's still got a one in it. So we're going to
+ take this and we're going to connect the sum values to the input values of the latch. And this
+ is a situation where those little waypoints can be really helpful. So I'm going to drag that one
+ there, connect this one to this one, connect the two values, this second bit, then make a waypoint.
+ You got to double-click to make a waypoint. So we can make a waypoint. And then connect the four
+ values to the latch and double-click to make a waypoint, and pull this out to make it so that you
+ can sort of see it. So all I did is I connected the corresponding outputs of the adder to the input
+ of the latch. And then we're going to take the output of the latch and connect it to the input
+ of the adder. Now the thing that's going to make this work so it doesn't just kind of explode and
+ start on fire is this clock circuit. So I'm going to put an input on the clock circuit. I'm going to
+ set that to zero. So as long as the clock circuit is zero, the current state of the latch is being
+ copied to the output values. And then what I'm going to do is I'm going to make this add one
+ every time. I'll just take an input and connect it to the one value of the B op-rand of the adder.
+ Let's make this look prettier by putting a waypoint in. Look how pretty that is. Waypoint, nice.
+ Let's put a waypoint here while we're at it to make it pretty. Look at that. Oh,
+ it's a pretty little clock. So now this is a zero, but I want to turn this to a one.
+ And so what happens now is we are being presented with a one on the A inputs, the number one,
+ one, zero, zero, and a one on the B inputs. So the adder is continuously computing. So think of this
+ as three full adders. It's continuously computing. And it's continuously presenting this two,
+ which is zero, one, zero. It's presenting two at the inputs of the latch. But because the latch
+ currently has a clock of zero, we are not copying it. So what'll happen here is hit the clock goes
+ to one, we will see that the two is copied from the adder to the latch, but the two is not copied
+ to the outputs of the latch and therefore to the inputs of the adder until the clock goes low again.
+ So now the clock went low. So now the two is being presented on the inputs to the adder
+ and the plus one. And so we get three. So if I could just start clicking this clock off and on,
+ and remember it, when it goes to one, it copies from the adder to the latch. When it goes to zero,
+ it copies from the latch back to the adder. Otherwise it would just go, and the timing would
+ be very, very weird at that point. So this is a clock circuit and these registers inside CPUs
+ tend to be clocked. And so we'll do this, but let's just add a clock to it so that we don't have to
+ keep clicking. So let's take a look at this clock component and hook up an output to it.
+ And so the clock, come on, hook up a happy little output. There we go. Okay. So the clock is
+ currently off and it's producing a one. So I'm going to click on the clock to turn it on. So now
+ it's giving high, low. And you'll see that every second the clock is going from high to low to high
+ to low to high to low. And so what I'm going to do is I'm going to delete this little manual clock
+ that I put in, goodbye, and delete this little output, goodbye, and I'm going to connect the high
+ value to the clock value on the latch. And let's go ahead and put a little waypoint in here to make
+ it a little prettier. You can drag these waypoints quite nicely. If anybody wants to grab the source
+ to this and give me a better routing algorithm, I would greatly appreciate it. So now what we're
+ seeing here is this clock is going high to low. Here, let's go ahead and put a little output here
+ so we can watch what's going on a little better. Connect the high to the output. So you can see
+ the clock is going from zero to one to zero to one. And every time it goes to one, it copies into
+ the latch. And then every time it goes to zero, it copies from the latch to the adder and ignores.
+ The thing that makes this work is like the six is being ignored until the clock goes high. So we now
+ have a little counter that's counting up to seven and then resetting itself. You see it kind of says
+ overflow? That's because when you add seven plus one, it's zero overflow. That's when you carry out
+ of the top full adder. Okay, so we just made a simple counter that goes from zero through seven
+ and counts up seconds. And so you could think of this as like a little clock. I think I might be
+ able to put for fun a little Nixie. Let's see if I can make a Nixie work here. So here's a Nixie tube
+ and I think that I can copy this. This is going to look ugly. I'll just kind of copy them here.
+ Let's copy the Nixie there. Copy. It's still running.
+ I'm just taking the one, two, and the four values and copying them from the sum output.
+ There we go. Now all we did is, come on Nixie, move. Okay, so the Nixie is just
+ keeping track of what's going here. We could actually put a Nixie in between here.
+ So you could see if the Nixie outputs seven and seven, the adder tells us what its current output
+ value is and the latch tells us. But you can actually take the Nixie and use it to copy things.
+ But it's pretty and it's really pretty darn awesome. So that was a counter example. So I
+ hope you found this walkthrough useful and I hope that you can construct your own counter. Now I'll
+ just say I got a cheat code in here. Okay, so if you really want to, you can just load a counter.
+ I stored a counter inside of it and so there goes a counter. The clock's off. It's got everything we
+ just said. It's got all the stuff connected. It's a little prettier than the one I just drew. But I'll
+ turn it on and it's starting. It's just counting every second, right? And the actual data here is
+ the data in the latch and that would be the thing that you would be just seeing if you were building
+ like a digital wristwatch or something like that. Okay, so again, thanks for listening. I hope you
+ found this walkthrough useful.

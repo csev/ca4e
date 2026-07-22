@@ -1,0 +1,379 @@
+ So now I want to talk about the concept of logic gates.
+ So what are logic gates?
+ Well logic gates are not a real thing.
+ Transistors are a real thing.
+ A logic gate is an abstraction that we use
+ as hardware designers to greatly simplify our lives.
+ This is no different than when I was teaching you software
+ and I'm like, look at this cool low level way
+ of doing this, that, and the other thing.
+ And you're like, oh, that's really pretty complex.
+ And then in the next breath, I say,
+ well, if we extend this object,
+ we get all this work for free.
+ And now our code goes from 75 lines down to two lines.
+ And that's kind of how abstractions work.
+ And that's how gates work.
+ So gates, we don't need to think about sort
+ of response graphs of input voltages and output voltages.
+ We don't have to think about that.
+ That still is a thing.
+ Gates don't make the whole analog problem go away.
+ They just make it so we don't think about it anymore.
+ And that's a problem that the folks
+ who manufacture these chips have solved
+ in the manufacturing process.
+ We pretty much say, let's make a gate
+ and then somehow the gates are manufactured
+ out of analog components.
+ The way we think about gates is beautiful.
+ We think about zeros and ones,
+ which is very much digital logic.
+ And the concept of digital logic predates computers.
+ Absolutely.
+ And so we just say, oh, this gate, this not gate,
+ if presented with an input of zero, gives an output of one.
+ And if it's presented with an input of one,
+ it gives an output of zero.
+ And that's a not gate.
+ And I like starting with a not gate.
+ First is the simplest thing.
+ We can see how it's built from transistors,
+ but it also is like, it's active.
+ It's doing something.
+ It's not just copying something.
+ So we'll build much more complex logic circuits.
+ We're gonna see much more complex gates.
+ But I can't really run away from history quite yet.
+ Over time, as manufacturing capabilities changed
+ from PMOS to NMOS to CMOS,
+ the way we built a logic gate underneath the abstraction,
+ all these logic gates have an input of A
+ and an output of out.
+ If you put a zero at A, you get a one at out.
+ If you could put a one at A, you get a zero at out.
+ And so there are three symbols, like the VDD,
+ there's like a nine volt battery
+ that has its positive terminal at VDD,
+ and it's negative terminal at the little ground symbol
+ at the bottom.
+ The other thing we see is a PMOS transistor.
+ At the top there, it's a transistor.
+ It's kind of implying that there's a switch going on
+ or a valve if you want.
+ The little circle says PMOS
+ and the lack of little circle says NMOS.
+ And then the bottom thing is a resistor.
+ And it's probably easiest to talk about these
+ in the concept of how they work.
+ So if you present a zero,
+ let's start with the PMOS in 1972.
+ You present a zero at the input.
+ That means that the PMOS transistor conducts.
+ And so that means that the positive voltage
+ is copied to output.
+ So when you press a zero, it conducts and it goes to output.
+ The PMOS transistor is now conducting
+ both to get the voltage to the output
+ to produce a one at the output,
+ but also connecting through the resistor to ground.
+ Now, every time you see a resistor,
+ it's kind of like a pack.
+ And the problem is, is resistors heat up.
+ But if you didn't have that resistor there,
+ all the little lines, the wires, the tiny wires,
+ and perhaps even the transistor, they would melt.
+ So the resistors are there to protect the transistors, okay?
+ And protect the wires, frankly.
+ When NMOS is presented with a zero,
+ that means it's an open circuit.
+ And so the nice thing there is,
+ when you present it with a zero,
+ it just copies through a resistor,
+ the voltage to the output.
+ And the cool thing there is,
+ it's not really sending as much current to the output,
+ 'cause all that output is being as connected
+ to the input of another transistor later in the circuit.
+ And so that doesn't really heat up so badly.
+ Now, if you look at CMOS,
+ what you have is a PMOS transistor at the top
+ and an NMOS transistor at the bottom.
+ And they work in pairs.
+ And so in the case of the zero,
+ the PMOS transistor conducts and the NMOS transistor
+ doesn't conduct.
+ And so there is no resistor
+ and the voltage is copied to the output.
+ Now, let's look at the case of the one.
+ In PMOS, when you present a one,
+ the PMOS is an open circuit.
+ And so that means that we need the output to be zero,
+ which means we have to connect the ground to the output.
+ That is connected through a resistor,
+ but it's low current because the output
+ is just going to the input of another transistor.
+ And so if you look then at the NMOS,
+ we have the opposite problem
+ when we were presented with a one
+ because the NMOS then conducts,
+ it both conducts the ground to the output
+ and it conducts the positive to the ground.
+ But that would be a short circuit
+ unless we put a resistor there.
+ So there you got a thing heating up.
+ So the problem is with PMOS and NMOS,
+ one of the two states for both of them
+ is going to be causing heat.
+ One is causing heat on a zero,
+ the other is causing heat on a one.
+ But then we look at the CMOS, okay?
+ And what we see when we present a one
+ and we want an output of zero,
+ well, the NMOS transistor at the bottom is conducting
+ and so ground is connected to the output,
+ which is exactly what we want.
+ And the PMOS transistor is an open circuit.
+ So the voltage VDD is not being connected.
+ And we don't need a resistor.
+ And so what you see is there are no resistors
+ and there is just, you have to be able to build
+ at a low level, both PMOS and NMOS transistors
+ in the same circuit, like really tiny.
+ And so what happened was is NMOS and PMOS were hot
+ and the hotter they were, the less dense the chips could be.
+ So once we went to CMOS, and again,
+ that was really not a question of wanting it,
+ it's a question of practical manufacturing, okay?
+ And so at some point, mid 1980s, Intel 486,
+ CMOS became practical, all of a sudden,
+ you didn't have to have a central processor
+ the size of a large cabinet.
+ And part of that large cabinet had to do
+ with how much power it was taking
+ and how much heat it was generating.
+ If you put it all together,
+ it would just like instantly melt.
+ And so you had to kind of take these transistors
+ and keep them and resistors in NMOS and PMOS computers
+ and keep them away from each other
+ because they would overheat because of the resistors.
+ But the moment that you can take the size of a computer
+ from 10 feet end to end to one inch end to end,
+ everything got faster.
+ So in 1983 is a long time ago,
+ there hasn't been a major like upheaval in,
+ they talk about like quantum computing and stuff,
+ but, and that would be a major upheaval at this level,
+ but really from 1983 to present,
+ we just pretty much make CMOS
+ because once we could manufacture it reliably,
+ we'll do CMOS, okay?
+ So now what I wanna show you is a tool that I built
+ called a CMOS layout tool.
+ And so this way you can connect them
+ and put them together and simulate circuits.
+ So let's take a look at this tool.
+ Okay, across the top,
+ we have a number of things that you can place in this circuit
+ and then we'll draw wires in between them.
+ So let's start with a probe.
+ Here's a probe.
+ And if we connect the probe to the positive,
+ you see that the probe is reading
+ that now it's got five volts.
+ Now, if we delete that and we place a probe
+ and connect it to the negative, it's zero.
+ So part of what we're gonna do in the NOT gate
+ is have a switch as input.
+ A switch is in effect a switch
+ that either goes to the positive or the ground.
+ And you can imagine there's a wire running up here
+ and a wire running down there,
+ but I didn't show that.
+ It's just sort of like another little,
+ it's connected either to the top or the bottom
+ so that we can test our circuits.
+ So what we're gonna do is build a circuit
+ that can create the logic so that whatever we have here
+ as input, we're going to have output
+ that is the opposite of that.
+ So these, after a while you get used to these.
+ So let's first put a PMOS transistor at the top
+ and then put a NMOS transistor below it.
+ So we're gonna connect the voltage
+ to the top connector of the PMOS transistor,
+ and then we're gonna connect the bottom connection
+ of the NMOS transistor to ground,
+ and then we're gonna take the output
+ of the NMOS transistor
+ and connect it to the PMOS transistor.
+ Now I say PMOS, the little circle is PMOS,
+ and the lack of the little circle is NMOS.
+ And so the output is going to be connected,
+ it can be connected either place,
+ but the output is basically connected
+ to the connection between the two transistors.
+ And then the last thing we have to do
+ is connect the switch to the grid
+ of each of these transistors, and now we have it.
+ So you can see that it's been sort of adapting and changing.
+ And the key thing is that the PMOS and NMOS transistors
+ have kind of opposite logic.
+ So the PMOS here is presented with a five volts,
+ which means it's an open circuit,
+ and the NMOS is presented with five volts,
+ which means it's a closed circuit.
+ And that's what this little green line is saying,
+ that it's a closed circuit.
+ So if I flip this, it means that the PMOS transistor conducts
+ and the NMOS transistor no longer conducts.
+ Okay, and so now the output is five volts
+ because the five volts is flowing
+ through the PMOS transistor to the output.
+ If I flip it, the PMOS transistor opens up
+ and the ground flows through the NMOS transistor
+ to the output.
+ And so that's it, and that's the picture
+ that I've been showing you that shows the PMOS and NMOS,
+ and there are no resistors in here,
+ so there's no dangerous heat.
+ So I can flip this as fast as I like.
+ And you can see it flipping back and forth,
+ and it's really activating or closing a closed circuit,
+ a circuit to close on either the NMOS or the PMOS,
+ but we've constructed it in a way
+ that it's like an if-then-else for circuit transmission.
+ And that's why I kind of call this NOT gate
+ an electrical if statement.
+ So basically that was a NOT gate,
+ and we're going to build much more complex digital gates,
+ but then we're gonna build circuits out of those gates.
+ We're not really gonna build very complex circuits
+ out of transistors,
+ although ultimately they're manufactured as transistors.
+ And so there is mathematical logic
+ that predates computers for AND and OR,
+ exclusive OR and NOT.
+ And then there's other logic that we kind of learn to use
+ because we could build them with fewer transistors,
+ NAND and NOR, and NAND is NOT AND, and NOR is NOR.
+ So our classic logic gates come from digital logic,
+ something that was a theoretical thing
+ that there was a pen and paper
+ well before computers came on the scene.
+ So the first digital logic gate is a NOT gate
+ that simply inverts its input.
+ Zero becomes one, one becomes zero.
+ An AND gate is simple.
+ If both of its inputs are one,
+ then the output is one, otherwise the output is zero.
+ The OR gate is if either of its inputs is one,
+ the output is one.
+ And if both inputs are zero, the output is zero.
+ And then there's the exclusive OR gate,
+ which we're gonna find really useful.
+ It's kind of a, it almost like counts its inputs.
+ It's not a counter in any way, but it counts its inputs.
+ If one of the inputs is one, its output is one.
+ If both the inputs are zero or both the inputs are one,
+ the output of an exclusive OR gate is zero.
+ Now, it turns out that we tended to use those AND, OR,
+ and NOT in classic digital logic math,
+ but it turns out that it's easier to build NAND and NOR,
+ which is really an inversion of the AND
+ and an inversion of the NOR.
+ Now, you could throw a NOT gate on the end of these things
+ to make them be ANDs and ORs,
+ but it turned out that early times,
+ we just could build NANDs and NORs
+ with a lot fewer transistors.
+ And so the NAND gate is the opposite of AND,
+ which means that if any of the inputs of a NAND is zero,
+ the output is a one.
+ And if both the inputs of a NAND are one,
+ the output is a zero.
+ And similarly for the OR.
+ If both the inputs are zero, the output's a one.
+ And if any of the inputs of the NOR are one,
+ the output is a zero.
+ It is literally NOT AND and NOT OR,
+ and can be turned into AND and OR with one more NOT gate,
+ which means that you would put two more transistors
+ at the end of each of these things.
+ I wanna show you how we can lay out a NOR gate.
+ And the basic idea of these things
+ is that it's kinda like a NOT gate,
+ and that's what's cool about it.
+ Except there are two PMOS transistors at the top
+ and two NMOS transistors at the bottom.
+ The bottom set of transistors decide
+ when it's connected to ground,
+ and the top set of transistors decide
+ when it's connected to five volts.
+ And they work in kinda parallel and opposite
+ to make sure that there's never a connection
+ from the voltage to the ground.
+ It's either the ground to the output
+ or the voltage to the output.
+ So let's do a real quick walkthrough of a NOR gate.
+ So NOT OR.
+ So right now we have inputs of one.
+ Now we've made the input zero, so when it's zero,
+ both are zeros, then the output is a one.
+ And if any of them are one, either of them are one,
+ then the output becomes zero.
+ And so it's not that tricky.
+ It sorta looks like an extended NOT gate
+ in that basically we've got two PMOS transistors at the top,
+ and if either of them are one,
+ that blocks the flow of electricity
+ from the five volts to the output.
+ And the same is true, we have in parallel NMOS gates
+ where if either of them is on,
+ that connects ground to the output.
+ So you can see that when I have them both,
+ with both of them on, both A and B on,
+ you see that both of the NMOS transistors are conducting
+ and so ground comes up.
+ But like if I just change one of them,
+ you see that the five volts is flowing through
+ the top PMOS, but it's being stopped by the second PMOS.
+ And so that means that the plus five
+ does not flow to the output.
+ And looking at the NMOS transistors,
+ you see that this one is not conducting,
+ but the other one, the B input is conducting.
+ And so there's at least one path from the output to ground.
+ If I flip these, you'll see that now that A is one
+ and B is zero, you see that the plus five is blocked
+ by the non-conducting first PMOS transistor
+ and the ground passes through the conducting NMOS transistor,
+ the first NMOS, the A NMOS transistor.
+ And so just kind of look at it,
+ you see that what it is is really just
+ kind of more not gates that has the,
+ it's either gonna conduct eventually from the top
+ or the bottom, and now we can have all the combinations
+ of the inputs that work and by creating this structure.
+ And so you could create a three input NOR gate,
+ a four input NOR gate, et cetera, et cetera, et cetera.
+ So this is just a look at an upcoming lecture
+ and an upcoming tool that you're going to use.
+ Now, once we have the abstraction of digital logic,
+ we can start designing circuits using digital logic design.
+ And all of a sudden, it just is a lot simpler
+ and a lot less cluttered.
+ So here is a NAND gate designed at the level of a gate
+ with inputs and outputs.
+ And you're gonna like it.
+ Well, we're not gonna build complex circuits
+ using transistors.
+ All we're trying to do right now is give you the mapping
+ from transistors to gates so that later when we use gates,
+ you just assume that it's okay
+ that there are transistors underneath.
+ (upbeat music)
+ (upbeat music)
+ (upbeat music)
+ (upbeat music)

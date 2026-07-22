@@ -1,0 +1,91 @@
+ hello and welcome to our lecture on computer architecture now to some degree
+ that might seem like a contradiction in terms because the whole name of the
+ course is computer architecture but we're kind of at the point where we have
+ gotten to the level where we've built up enough basic stuff to really start
+ talking about computer architecture like what's a central processing unit we know
+ what gates are we're gonna start with the gates we're not gonna worry about
+ transistors we're not gonna worry about tubes we're not gonna worry about slide
+ rules and then we're gonna just go from there actually for me this phase is a
+ little more comfortable I was never a computer engineer or electrical
+ engineer and I kind of understand transistors and so that first half was
+ kind of fun for me to do a bunch of research for you and share with you what
+ I thought was important about transistors and tubes etc but now we're
+ gonna start with gates what can we do with an and gate and or gate not gate
+ exclusive or etc first we're gonna learn how to start adding numbers because
+ calculation and multiplication and addition are important what about the
+ full adders and half adders we have to learn about number representation how do
+ computers represent numbers base 2 base 10 and hexadecimal then we're going to
+ figure out how we actually store data using gates to store data we'll learn
+ about latches and flip-flops and once we start getting larger and more
+ complicated circuits we're starting to talk about delay and speed and clock
+ rate and all those kinds of things and then we'll start thinking about how you
+ build a computer that can execute programs machine code where you write
+ software in zeros and ones and then ultimately we'll take a look at how
+ CPUs are put together the architecture of CPUs so we often start with computer
+ architecture to talk about the whole computer like there's there's up things
+ like motherboards let me let me give you a close-up view of a motherboard but
+ actually this really isn't just any old motherboard when I started teaching
+ programming back in 2008 this was the motherboard that I would pass around the
+ class this is from a desktop computer it's a I think it's probably like a 300
+ megahertz computer which is really slow I also passed around the CPU that went to
+ this so there's the CPU that went to this particular computer and and I
+ passed it around the class because I wanted people to feel I wanted them to
+ feel the the wires that come out of these things to get a sense of this is
+ all very electrical and I've been talking from the beginning of the course
+ to the level of this is all very electrical so if you look at the back
+ of this there are little tiny wires many of them going all like little streets
+ and chips are like buildings that are in in a neighborhood and the wires go
+ between them and the other thing I wanted people to do is like pass this
+ around it because you can't feel it here but these are kind of pointy little
+ things where the chips and connectors come through the board and they're
+ soldered together and that's where these connectors are connecting to these wires
+ and so I just wanted people to get a sense that inside of a computer there
+ was something and it was physical and it was a thing and like a CPU the CPU has
+ has little pins on it and I wanted people to touch the pins you can see
+ many people over the years have touched these pins and they're all bent up and
+ so here I used to pass around this memory chip and again this is all from
+ 2008 so that people could get a physical feeling of what was inside of computers
+ doing all of this work so generally if you think about all those wires they
+ generally are taking a zero or one back and forth and that's the what we like
+ about gates and gates simplify the analogness of all circuits and make it
+ so that we can think of them digitally and so this is a slide from a lecture
+ that I created in 2008 where I basically said this is what a computer does it has
+ a central processing unit which processes instructions it has main
+ memory which is where the instructions and data are stored it has secondary
+ memory which is like disk drives where you save files and load data etc and
+ databases live on disk drives and then put output devices like keyboards and
+ mice and things like that and so the definitions that I used back then were a
+ central processing unit runs the program the CPU is programmed physically to
+ wonder what to do next it's not really smart but it is very very fast and we
+ program it to be smart right input devices like keyboard mouse and touch
+ screen output devices like the screen speakers printer DVD burner or whatever
+ main memories small fast temporary storage and secondary memory is the
+ larger more permanent storage that you can power cycle and not come off and so
+ this notion that central processing units are built to think about what next
+ means that we are inside the computer when we write software we live in the
+ main memory of the computer and our instructions feed the what next that the
+ CPU will see toward the end we'll understand with a fetch execute cycle
+ which is fetch what is it I'm supposed to do next I did that now grab the next
+ one that's the fetch execute cycle now we can program this in something like
+ say Python but really it's not it's really programmed in machine language
+ which is zeros and ones and by the end of this lecture in the beginning of the
+ next lecture you will be programming in zeros and ones believe me this this one
+ is a little difficult so you just take your time and
+ follow along with how this goes and so from the last lecture we really saw the
+ growth of transistors where we had 16 transistors on a little tiny circuit to
+ laying out hundreds and millions and billions of transistors on little tiny
+ chips and so with that we can create increasingly complicated processes now
+ the way this design process usually works and we did VLSI layout in the
+ previous lectures we tend not to do VLSI layout for modern computers we tend to
+ build reusable components like an adder or a latch or something like that and
+ then we wire those all together and then software takes our abstract design of
+ gates and latches that that think in terms of zeros and ones and components
+ like adders and multipliers and ripple carry adders etc and then turn that into
+ a transistor layout and some of the things that computer CPUs do are so
+ important like adding and multiplying and like little caches and registers that
+ we might tune the hardware layout and the transistors a little bit but in
+ general software does all of the work and takes our abstract design and turns
+ it into an optimal layout for our chip and then of course we use photolithography
+ so up next we're going to talk about how we use gates to add numbers again going
+ to the point where we have gates now how can we construct multiple gate circuits
+ that accomplish the kinds of things that microprocessors want to do

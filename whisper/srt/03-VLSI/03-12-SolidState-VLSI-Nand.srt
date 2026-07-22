@@ -1,0 +1,788 @@
+1
+00:00:00,000 --> 00:00:05,580
+ - Hello and welcome through another walkthrough for computer architecture for everybody.
+
+2
+00:00:05,580 --> 00:00:08,780
+ In this walkthrough, I am going to walk through the building
+
+3
+00:00:08,780 --> 00:00:10,840
+ of a slightly more complex circuit.
+
+4
+00:00:10,840 --> 00:00:14,040
+ In this case, we are going to build a NAND gate.
+
+5
+00:00:14,040 --> 00:00:17,020
+ So NAND of course is the opposite of AND.
+
+6
+00:00:17,020 --> 00:00:20,140
+ So if both inputs are one, the output is zero.
+
+7
+00:00:20,140 --> 00:00:22,760
+ And if any of the outputs are zero, the output is one.
+
+8
+00:00:22,760 --> 00:00:24,180
+ It's the opposite of AND.
+
+9
+00:00:24,180 --> 00:00:26,240
+ And so let's take a look at the picture.
+
+10
+00:00:26,240 --> 00:00:29,000
+ So the way this works is there are two inputs
+
+11
+00:00:29,000 --> 00:00:32,180
+ and there is a set of PMOS transistors at the top,
+
+12
+00:00:32,180 --> 00:00:34,780
+ kind of in parallel going from the positive voltage
+
+13
+00:00:34,780 --> 00:00:37,120
+ to a common wire in the middle to out.
+
+14
+00:00:37,120 --> 00:00:40,460
+ And then there is a set of NMOS transistors in series
+
+15
+00:00:40,460 --> 00:00:41,940
+ between the out and the ground.
+
+16
+00:00:41,940 --> 00:00:43,780
+ 'Cause this is CMOS circuitry.
+
+17
+00:00:43,780 --> 00:00:47,380
+ The goal is to either have VDD come out or ground to come out,
+
+18
+00:00:47,380 --> 00:00:49,540
+ depending on A and B in the combination,
+
+19
+00:00:49,540 --> 00:00:50,580
+ based on the truth table.
+
+20
+00:00:50,580 --> 00:00:52,300
+ So let's go ahead and draw this.
+
+21
+00:00:52,300 --> 00:00:54,820
+ So I'm gonna draw this in a little more traditional way
+
+22
+00:00:54,820 --> 00:00:56,820
+ than I did in my previous demonstration.
+
+23
+00:00:56,820 --> 00:01:00,340
+ It's pretty common to just draw a line across the top
+
+24
+00:01:00,340 --> 00:01:02,840
+ and put the VCC across the top.
+
+25
+00:01:02,840 --> 00:01:04,980
+ So you see that we're sort of emulating
+
+26
+00:01:04,980 --> 00:01:07,140
+ a lot of what these diagrams look like.
+
+27
+00:01:07,140 --> 00:01:09,460
+ And then what I wanna do is I wanna create
+
+28
+00:01:09,460 --> 00:01:12,820
+ two P transistors, so the A and the B.
+
+29
+00:01:12,820 --> 00:01:16,220
+ And so I'm gonna drop a little bit of P-dope silicon down.
+
+30
+00:01:16,220 --> 00:01:18,320
+ I'm gonna give myself plenty of space
+
+31
+00:01:18,320 --> 00:01:20,200
+ and make these plenty long.
+
+32
+00:01:20,200 --> 00:01:22,420
+ Okay.
+
+33
+00:01:22,420 --> 00:01:24,460
+ And then I'm gonna make some transistors there
+
+34
+00:01:24,460 --> 00:01:26,380
+ by putting some poly across.
+
+35
+00:01:26,380 --> 00:01:27,340
+ I'm gonna put it like,
+
+36
+00:01:27,340 --> 00:01:29,620
+ I'm gonna keep this really tiny for now, okay?
+
+37
+00:01:29,620 --> 00:01:30,700
+ So there's some poly.
+
+38
+00:01:30,700 --> 00:01:31,860
+ So there's two transistors.
+
+39
+00:01:31,860 --> 00:01:34,940
+ So we just made, by crossing the P-dope silicon
+
+40
+00:01:34,940 --> 00:01:36,580
+ and the poly silicon twice,
+
+41
+00:01:36,580 --> 00:01:40,340
+ we now have transistors that we can hook A and B up to.
+
+42
+00:01:40,340 --> 00:01:41,820
+ We'll wire them up later.
+
+43
+00:01:41,820 --> 00:01:44,220
+ And then what we're gonna do is we're gonna make the output.
+
+44
+00:01:44,220 --> 00:01:46,980
+ I'll just make the output be a horizontal piece
+
+45
+00:01:46,980 --> 00:01:47,880
+ of metal wire.
+
+46
+00:01:47,880 --> 00:01:50,020
+ Now I've gotta put some vias in here
+
+47
+00:01:50,020 --> 00:01:52,860
+ so I can connect the P-dope silicon to the metal
+
+48
+00:01:52,860 --> 00:01:53,700
+ where I need to.
+
+49
+00:01:53,700 --> 00:01:55,500
+ So let's punch a couple of vias in.
+
+50
+00:01:55,500 --> 00:01:57,620
+ Via, via, via, via.
+
+51
+00:01:57,620 --> 00:02:00,780
+ So now the orange P-dope silicon
+
+52
+00:02:00,780 --> 00:02:02,540
+ and the metals are connected.
+
+53
+00:02:02,540 --> 00:02:03,380
+ Okay.
+
+54
+00:02:03,380 --> 00:02:05,020
+ So the next thing we need to do
+
+55
+00:02:05,020 --> 00:02:08,980
+ is we need to make some NMOS transistors down at the bottom.
+
+56
+00:02:08,980 --> 00:02:11,020
+ So let's grab some N-dope silicon
+
+57
+00:02:11,020 --> 00:02:14,340
+ and hook this up here.
+
+58
+00:02:14,340 --> 00:02:20,340
+ And then, oops, I need to fix that.
+
+59
+00:02:20,340 --> 00:02:21,500
+ I need to erase that.
+
+60
+00:02:21,500 --> 00:02:24,900
+ I need to give myself a little space here.
+
+61
+00:02:26,020 --> 00:02:27,900
+ So I wanna make some N-dope silicon
+
+62
+00:02:27,900 --> 00:02:30,360
+ that kind of comes down from the center wire a little bit.
+
+63
+00:02:30,360 --> 00:02:34,300
+ And then I am going to make some more N-dope silicon.
+
+64
+00:02:34,300 --> 00:02:36,380
+ Actually, I don't know if I need to do that.
+
+65
+00:02:36,380 --> 00:02:39,800
+ Let's try to make it in one big piece of N-dope silicon.
+
+66
+00:02:39,800 --> 00:02:41,660
+ Let me make my N-dope silicon longer.
+
+67
+00:02:41,660 --> 00:02:44,360
+ And now let's put some polysilicon in
+
+68
+00:02:44,360 --> 00:02:46,180
+ to make two more transistors.
+
+69
+00:02:46,180 --> 00:02:49,120
+ So we're gonna put transistor here
+
+70
+00:02:49,120 --> 00:02:51,000
+ and then another transistor here.
+
+71
+00:02:51,000 --> 00:02:52,420
+ So that's two transistors,
+
+72
+00:02:52,420 --> 00:02:55,280
+ two NMOS transistors that are right there.
+
+73
+00:02:55,280 --> 00:02:58,820
+ And I think I might as well put my ground in now.
+
+74
+00:02:58,820 --> 00:03:00,340
+ The ground down here.
+
+75
+00:03:00,340 --> 00:03:01,880
+ Traditionally, you sort of draw that
+
+76
+00:03:01,880 --> 00:03:03,900
+ as a long horizontal line.
+
+77
+00:03:03,900 --> 00:03:07,040
+ I will place some zero or ground voltage
+
+78
+00:03:07,040 --> 00:03:08,860
+ and then I'll place a couple of vias
+
+79
+00:03:08,860 --> 00:03:12,140
+ to make sure to connect the green N-dope silicon
+
+80
+00:03:12,140 --> 00:03:14,380
+ to the metal in both of the places.
+
+81
+00:03:14,380 --> 00:03:16,640
+ So I think we mostly have this,
+
+82
+00:03:16,640 --> 00:03:19,420
+ except now we've gotta take our inputs
+
+83
+00:03:19,420 --> 00:03:21,500
+ and connect them to those transistors.
+
+84
+00:03:21,500 --> 00:03:24,020
+ So let's make an A input for now.
+
+85
+00:03:24,020 --> 00:03:25,340
+ Let's make a little bit of metal.
+
+86
+00:03:25,340 --> 00:03:26,400
+ This shouldn't be too hard.
+
+87
+00:03:26,400 --> 00:03:29,000
+ So let's just say this is our A input
+
+88
+00:03:29,000 --> 00:03:31,920
+ and then we're gonna hook that to here.
+
+89
+00:03:31,920 --> 00:03:34,240
+ I wanna make that a little longer.
+
+90
+00:03:34,240 --> 00:03:36,600
+ So I'm gonna make my pink a little bit longer.
+
+91
+00:03:36,600 --> 00:03:38,120
+ I'm gonna put A on this one,
+
+92
+00:03:38,120 --> 00:03:39,760
+ which is a little bit different.
+
+93
+00:03:39,760 --> 00:03:41,580
+ So here's the thing.
+
+94
+00:03:41,580 --> 00:03:44,020
+ I can paint this pink, so now I have an overlap.
+
+95
+00:03:44,020 --> 00:03:45,200
+ See how I painted that pink
+
+96
+00:03:45,200 --> 00:03:46,800
+ so it overlaps with the metal now?
+
+97
+00:03:46,800 --> 00:03:50,580
+ So I can pop a via in there, punch, punch.
+
+98
+00:03:50,580 --> 00:03:54,080
+ So that is my A.
+
+99
+00:03:54,080 --> 00:03:55,880
+ Let's go ahead and mark that with a probe.
+
+100
+00:03:55,880 --> 00:03:57,300
+ Let's mark that as A.
+
+101
+00:03:57,300 --> 00:04:00,840
+ Okay, and now we've gotta have B.
+
+102
+00:04:00,840 --> 00:04:03,640
+ B is a little bit trickier.
+
+103
+00:04:03,640 --> 00:04:05,560
+ Where am I gonna, well, let's start with B, E.
+
+104
+00:04:05,560 --> 00:04:07,020
+ Let's put B in easy.
+
+105
+00:04:07,020 --> 00:04:10,420
+ Let's make B, B here.
+
+106
+00:04:10,420 --> 00:04:14,220
+ Okay, so then let's put the contact of B,
+
+107
+00:04:14,220 --> 00:04:17,640
+ the probe B right there.
+
+108
+00:04:17,640 --> 00:04:18,920
+ So now I have B.
+
+109
+00:04:18,920 --> 00:04:22,320
+ Now the key thing is I've got to get this B
+
+110
+00:04:22,320 --> 00:04:26,440
+ up to this second PMOS gate.
+
+111
+00:04:26,440 --> 00:04:28,660
+ So I could do a lot of things here.
+
+112
+00:04:28,660 --> 00:04:31,180
+ I could route it up here, and I'll route it over there.
+
+113
+00:04:31,180 --> 00:04:32,920
+ Or I could route it over here,
+
+114
+00:04:32,920 --> 00:04:34,660
+ and then route it down to here.
+
+115
+00:04:34,660 --> 00:04:36,340
+ So I think I'm gonna come through here.
+
+116
+00:04:36,340 --> 00:04:37,600
+ So you're gonna see something.
+
+117
+00:04:37,600 --> 00:04:39,120
+ I'm gonna take this polysilicon.
+
+118
+00:04:39,120 --> 00:04:41,720
+ And in a real circuit, you might find that this is kinda,
+
+119
+00:04:41,720 --> 00:04:43,240
+ oh, look what I can do.
+
+120
+00:04:43,240 --> 00:04:44,860
+ Because when I make this polysilicon
+
+121
+00:04:44,860 --> 00:04:46,840
+ come across the metal right there,
+
+122
+00:04:46,840 --> 00:04:48,200
+ it's not actually connected.
+
+123
+00:04:48,200 --> 00:04:50,080
+ And then look, ooh, no, ooh, yikes.
+
+124
+00:04:50,080 --> 00:04:52,240
+ I gotta erase it 'cause I made a kind of a blob.
+
+125
+00:04:52,240 --> 00:04:55,860
+ I spilled some, I spilled some polysilicon.
+
+126
+00:04:55,860 --> 00:04:58,000
+ So now I can actually connect this together.
+
+127
+00:04:58,000 --> 00:05:01,760
+ Wow, I think that looks pretty easy at this point.
+
+128
+00:05:01,760 --> 00:05:02,600
+ Did it work?
+
+129
+00:05:02,600 --> 00:05:07,460
+ So I have my A connected to one of the PMOS transistors
+
+130
+00:05:07,460 --> 00:05:09,840
+ and one of the NMOS transistors.
+
+131
+00:05:09,840 --> 00:05:11,740
+ And then I have my B connected to one
+
+132
+00:05:11,740 --> 00:05:14,600
+ of the NMOS transistors and one of the PMOS transistors.
+
+133
+00:05:14,600 --> 00:05:17,520
+ I have a feeling that it is right.
+
+134
+00:05:17,520 --> 00:05:20,120
+ And I think if we look at our assignment,
+
+135
+00:05:20,120 --> 00:05:22,560
+ we're supposed to make a Q as the output.
+
+136
+00:05:22,560 --> 00:05:25,860
+ So let's put another probe here on the output, Q.
+
+137
+00:05:25,860 --> 00:05:28,540
+ So I could run the autograder.
+
+138
+00:05:28,540 --> 00:05:29,440
+ I think I got it.
+
+139
+00:05:29,440 --> 00:05:30,280
+ I think I made one.
+
+140
+00:05:30,280 --> 00:05:31,100
+ It's pretty good here.
+
+141
+00:05:31,100 --> 00:05:34,120
+ But one of the things I do to test these things is,
+
+142
+00:05:34,120 --> 00:05:36,240
+ oh, I didn't mean to put that via there.
+
+143
+00:05:36,240 --> 00:05:37,320
+ Put a VCC there.
+
+144
+00:05:37,320 --> 00:05:40,520
+ So now I can see that I put a plus in the A area
+
+145
+00:05:40,520 --> 00:05:43,700
+ and it stops the PMOS, but it does transmit.
+
+146
+00:05:43,700 --> 00:05:47,400
+ But then I have to put, like, let's put a VCC
+
+147
+00:05:47,400 --> 00:05:49,280
+ where the B is now.
+
+148
+00:05:49,280 --> 00:05:50,280
+ Oh, I'm missing a via.
+
+149
+00:05:50,280 --> 00:05:52,800
+ See how the voltage comes here from the one
+
+150
+00:05:52,800 --> 00:05:54,240
+ and it hits this overlap?
+
+151
+00:05:54,240 --> 00:05:57,920
+ I gotta put a via there because it doesn't really touch.
+
+152
+00:05:57,920 --> 00:05:58,760
+ Boop.
+
+153
+00:05:58,760 --> 00:06:00,540
+ So now I think we got it.
+
+154
+00:06:00,540 --> 00:06:05,540
+ A is one and B is one and the output is zero,
+
+155
+00:06:05,540 --> 00:06:07,240
+ which is good.
+
+156
+00:06:07,240 --> 00:06:08,240
+ So we can keep testing it.
+
+157
+00:06:08,240 --> 00:06:10,680
+ I just tested by popping a ground in here.
+
+158
+00:06:10,680 --> 00:06:14,140
+ So now we have A is zero and B is one
+
+159
+00:06:14,140 --> 00:06:17,140
+ and the output is one, which is what it's supposed to be
+
+160
+00:06:17,140 --> 00:06:18,280
+ because it's a NAND gate.
+
+161
+00:06:18,280 --> 00:06:21,260
+ So I'm gonna go back to putting the probes in.
+
+162
+00:06:21,260 --> 00:06:24,520
+ So you notice how I can just kind of overwrite this stuff.
+
+163
+00:06:24,520 --> 00:06:28,040
+ So there's A and I got the probe B now.
+
+164
+00:06:28,040 --> 00:06:29,560
+ Now I can actually start the grader.
+
+165
+00:06:29,560 --> 00:06:31,700
+ I think it'll go through all the combinations
+
+166
+00:06:31,700 --> 00:06:34,400
+ in the truth table and it will tell us
+
+167
+00:06:34,400 --> 00:06:36,320
+ if it likes the circuit that we built.
+
+168
+00:06:36,320 --> 00:06:37,840
+ So let's go ahead.
+
+169
+00:06:37,840 --> 00:06:40,040
+ Check for the A, B and Q probes.
+
+170
+00:06:40,040 --> 00:06:41,440
+ They seem to be there.
+
+171
+00:06:41,440 --> 00:06:43,820
+ Test, let's set A to zero and B to zero.
+
+172
+00:06:43,820 --> 00:06:45,660
+ And is the output one?
+
+173
+00:06:45,660 --> 00:06:47,560
+ A is zero, B is zero, output's one.
+
+174
+00:06:47,560 --> 00:06:48,400
+ Yes it is.
+
+175
+00:06:48,400 --> 00:06:51,000
+ Set A to zero and B to one.
+
+176
+00:06:51,000 --> 00:06:52,600
+ Is the output zero?
+
+177
+00:06:52,600 --> 00:06:54,440
+ Oh no, the output's supposed to be one in that case.
+
+178
+00:06:54,440 --> 00:06:55,280
+ Yep.
+
+179
+00:06:55,280 --> 00:06:59,000
+ So this is a, and then if we do A to one and B to zero,
+
+180
+00:06:59,000 --> 00:07:00,640
+ the output is one.
+
+181
+00:07:00,640 --> 00:07:03,880
+ And then if we set them both to one, the output is zero,
+
+182
+00:07:03,880 --> 00:07:05,240
+ which it's a NAND gate.
+
+183
+00:07:05,240 --> 00:07:08,160
+ And so we finished and away we go.
+
+184
+00:07:08,160 --> 00:07:11,980
+ So there we did, we took and viewed this image
+
+185
+00:07:11,980 --> 00:07:14,680
+ and made ourselves the gate by laying it out.
+
+186
+00:07:14,680 --> 00:07:17,200
+ And again, I tend to start by laying transistors out,
+
+187
+00:07:17,200 --> 00:07:19,460
+ but you gotta give yourself a little space
+
+188
+00:07:19,460 --> 00:07:22,200
+ as you lay these things out and put them together.
+
+189
+00:07:22,200 --> 00:07:23,880
+ Now I've built them a few times.
+
+190
+00:07:23,880 --> 00:07:25,360
+ The first few that you're gonna build
+
+191
+00:07:25,360 --> 00:07:26,600
+ are going to be a little tricky,
+
+192
+00:07:26,600 --> 00:07:29,440
+ but it's very satisfying when you get them finished.
+
+193
+00:07:29,440 --> 00:07:32,120
+ So I hope you enjoyed this walkthrough
+
+194
+00:07:32,120 --> 00:07:34,640
+ for computer architecture on the building of a gate
+
+195
+00:07:34,640 --> 00:07:36,440
+ using a VLSI design tool.
+
+196
+00:07:36,440 --> 00:07:39,020
+ (upbeat music)
+
+197
+00:07:44,680 --> 00:07:54,680
+ [BLANK_AUDIO]
+

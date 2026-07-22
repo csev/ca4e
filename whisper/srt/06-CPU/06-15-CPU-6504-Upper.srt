@@ -1,0 +1,660 @@
+1
+00:00:00,000 --> 00:00:05,640
+ Hello, and welcome to another walkthrough for Computer Architecture for Everybody. We're continuing on our
+
+2
+00:00:05,640 --> 00:00:13,700
+ CDC 6504 emulator, and now we're going to load our most complex sample. So let's take a look at its assembly language.
+
+3
+00:00:13,700 --> 00:00:20,840
+ Here we have it, and let's move it over here, and let's move it up so we see all of the instructions. There we go.
+
+4
+00:00:20,840 --> 00:00:23,460
+ We can just barely see all the instructions. This is our first thing.
+
+5
+00:00:23,460 --> 00:00:28,300
+ That's so long that we're gonna end up in the second column of the instructions. So to start at what we've got here,
+
+6
+00:00:28,300 --> 00:00:32,980
+ we got a data pseudo operation that fills the data memory with the string "hello"
+
+7
+00:00:32,980 --> 00:00:37,680
+ H-E-L-L-O with H being uppercase already and E-L-L-O. When we're done,
+
+8
+00:00:37,680 --> 00:00:43,500
+ we want all these characters to be uppercase, and so we're gonna write a loop that's going to go through
+
+9
+00:00:43,500 --> 00:00:50,300
+ from 0 until it's, and it's gonna stop at a 0 byte, and it's gonna load the value, check if it's already uppercase.
+
+10
+00:00:50,300 --> 00:00:56,700
+ If it's not, it's gonna subtract 20 to it, which we did before because that's the mapping between uppercase and lowercase,
+
+11
+00:00:56,700 --> 00:01:01,200
+ and then we're gonna store it back in. So when we're done, 48 won't change because that's already uppercase.
+
+12
+00:01:01,200 --> 00:01:07,300
+ 65 will become 45, 6C will become 4C, etc., and then it'll stop and it'll print out the uppercase.
+
+13
+00:01:07,300 --> 00:01:12,380
+ So this is just kind of like an uppercase method in Python or whatever, okay?
+
+14
+00:01:12,380 --> 00:01:18,660
+ So let's take a look at the code. We have a top of a loop, and we have a jump to the top of the loop at the bottom.
+
+15
+00:01:18,660 --> 00:01:25,440
+ We're using X as our iteration variable, X, because we have this really cool load that says I want to load from 0,
+
+16
+00:01:25,900 --> 00:01:28,140
+ offset by the current value in X.
+
+17
+00:01:28,140 --> 00:01:34,640
+ Okay, so X is gonna start at 0 because we're gonna clear it, and then we're gonna slowly but surely add X.
+
+18
+00:01:34,640 --> 00:01:37,980
+ So this is like X equals X plus 1 each time through the loop.
+
+19
+00:01:37,980 --> 00:01:44,500
+ So this is the bottom of the loop, kind of the continue area, where we're saying X plus plus or X equals X plus 1 to
+
+20
+00:01:44,500 --> 00:01:51,120
+ advance X through the string because we're gonna use X as the array offset as it's going through our little array.
+
+21
+00:01:51,120 --> 00:01:57,620
+ We're gonna load the value, offset by X, and then we're gonna immediately check to see if we got a 0 byte,
+
+22
+00:01:57,620 --> 00:02:00,860
+ and that's how we terminate this loop when we hit a 0 byte.
+
+23
+00:02:00,860 --> 00:02:04,120
+ So we only want to go through memory until we hit a 0 byte, okay?
+
+24
+00:02:04,120 --> 00:02:07,380
+ So we don't want to run out of memory or blow up or run into something else.
+
+25
+00:02:07,380 --> 00:02:13,780
+ We stop at a 0 byte, and then we're gonna check to see if the letter we just got is already uppercase.
+
+26
+00:02:13,780 --> 00:02:18,020
+ If it is, that means it's less than lowercase a. That's how ASCII works, right?
+
+27
+00:02:18,020 --> 00:02:20,020
+ So let me go ahead and show you the ASCII stuff.
+
+28
+00:02:20,940 --> 00:02:26,280
+ [silence]
+
+29
+00:02:26,280 --> 00:02:37,160
+ The lowercase characters are higher by a factor of 20 hex, so a, lowercase a is 61, and uppercase a is 41.
+
+30
+00:02:37,160 --> 00:02:42,900
+ You subtract 0 X 20 to get from lowercase to upper, and our code is going to upper.
+
+31
+00:02:42,900 --> 00:02:50,860
+ So we're checking to see if we are above or below lowercase a, if we're below lowercase a already,
+
+32
+00:02:50,860 --> 00:02:54,880
+ we're gonna do a branch minus down here and then increment to go to the next one.
+
+33
+00:02:54,880 --> 00:03:00,960
+ If, on the other hand, we are above the letter a, then we're going to subtract 20,
+
+34
+00:03:00,960 --> 00:03:04,760
+ and then we're gonna store that using our index again as X.
+
+35
+00:03:04,760 --> 00:03:07,100
+ So X is really cool. It's just gonna be our counter.
+
+36
+00:03:07,100 --> 00:03:12,580
+ And so this register is kind of like the iteration variable. Well, it is the iteration variable of our loop.
+
+37
+00:03:12,580 --> 00:03:17,960
+ So let's go ahead and get started. So I'll turn on narration of execution, line ourselves up here,
+
+38
+00:03:17,960 --> 00:03:19,960
+ take our first step, clear the X register.
+
+39
+00:03:19,960 --> 00:03:24,320
+ PC 0X 00, clear X register.
+
+40
+00:03:24,320 --> 00:03:31,600
+ So now we're at the top of the loop, and we're gonna do a load from memory location 0, offset by X register.
+
+41
+00:03:31,600 --> 00:03:37,480
+ The X register is actually part of this instruction, okay? So let's go ahead and load that.
+
+42
+00:03:37,480 --> 00:03:44,320
+ PC 0X 01, load accumulator from address 0 and X with X.
+
+43
+00:03:44,320 --> 00:03:50,420
+ Okay, so now you see that the accumulator is 0X 48, and that is the uppercase hello.
+
+44
+00:03:50,420 --> 00:03:56,920
+ And that load set the Z flag and the N flag, and it's neither 0 nor negative.
+
+45
+00:03:56,920 --> 00:04:01,600
+ And so let's go ahead and run the if test to see if we're done with the loop.
+
+46
+00:04:01,600 --> 00:04:07,840
+ PC 0X 03, branch if equal address 0X 10.
+
+47
+00:04:07,840 --> 00:04:13,680
+ Now 0X 10 would have been this exit of the loop, but it didn't because we're not minus yet.
+
+48
+00:04:13,680 --> 00:04:21,780
+ And so that's our top tested loop, and now what we're gonna do is we're gonna say if this is greater than A,
+
+49
+00:04:21,780 --> 00:04:27,980
+ if it's less than A, we're gonna skip these next two lines, and the next two lines are a subtract of 0X 20,
+
+50
+00:04:27,980 --> 00:04:33,960
+ and then an index store into memory location 0 offset by X, but X is still position 0.
+
+51
+00:04:33,960 --> 00:04:40,720
+ So this is the letter H, and it is already uppercase, so we're gonna skip around this subtraction calculation.
+
+52
+00:04:40,720 --> 00:04:47,160
+ PC 0X 05, compare accumulator with immediate 0X 61.
+
+53
+00:04:47,160 --> 00:04:54,800
+ And now we're gonna branch because it is N, so we're gonna branch if minus, and that means we're already uppercase.
+
+54
+00:04:54,800 --> 00:05:00,920
+ PC 0X 07, branch if minus address 0X 0D.
+
+55
+00:05:00,920 --> 00:05:08,240
+ So it went to 0X 0D, which skipped around the subtraction, and now we're at the kind of continue or the loop bottom,
+
+56
+00:05:08,240 --> 00:05:12,680
+ in the increment part of the loop, and we're gonna add 1 to X.
+
+57
+00:05:12,680 --> 00:05:21,280
+ PC 0X 0D, increment X register PC 0X 0E, jump to address 1.
+
+58
+00:05:21,280 --> 00:05:27,920
+ Oh, it went and did it automatically. So we went up to the top of the loop, and I didn't catch it fast enough,
+
+59
+00:05:27,920 --> 00:05:35,280
+ so it already went, and X is now 1, so it's loading memory location 1 into the accumulator.
+
+60
+00:05:35,280 --> 00:05:42,920
+ Okay, and so the accumulator now is non-zero, so we're gonna check to see if the loop is done.
+
+61
+00:05:42,920 --> 00:05:49,120
+ PC 0X 03, branch if equal address 0X 10.
+
+62
+00:05:49,120 --> 00:05:54,440
+ And it didn't, so now we're gonna check to see the case of our current character.
+
+63
+00:05:54,440 --> 00:06:00,880
+ PC 0X 05, compare accumulator with immediate 0X 61.
+
+64
+00:06:00,880 --> 00:06:06,920
+ So that is checking to see if it's above or below A, and this one is above A,
+
+65
+00:06:06,920 --> 00:06:13,800
+ and so we're gonna have to map it into uppercase, so you'll notice that this BMI does not jump to the CONT label.
+
+66
+00:06:13,800 --> 00:06:15,040
+ This one falls through.
+
+67
+00:06:15,040 --> 00:06:20,760
+ PC 0X 07, branch if minus address 0X 0D.
+
+68
+00:06:20,760 --> 00:06:26,520
+ So now we're at 0X 09, not 0X 0D, and now we're gonna do the subtract of 20,
+
+69
+00:06:26,520 --> 00:06:29,920
+ and then we're gonna store it into the memory.
+
+70
+00:06:29,920 --> 00:06:35,880
+ PC 0X 09, subtract with carry immediate 0X 20.
+
+71
+00:06:35,880 --> 00:06:37,600
+ And now we're gonna store it.
+
+72
+00:06:37,600 --> 00:06:43,600
+ PC 0X 0B, store accumulator to address 0 and X with X.
+
+73
+00:06:43,600 --> 00:06:49,120
+ So now in location 1, we took this 45 that was our calculated uppercase character,
+
+74
+00:06:49,120 --> 00:06:53,760
+ and now it has been stored in position 1.
+
+75
+00:06:53,760 --> 00:06:58,280
+ And so the next thing we do is add 1 and then jump to the top of the loop.
+
+76
+00:06:58,280 --> 00:07:03,120
+ PC 0X 0D, increment X register.
+
+77
+00:07:03,120 --> 00:07:07,280
+ PC 0X 0E, jump to address 1.
+
+78
+00:07:07,280 --> 00:07:08,680
+ So now we're at the top of the loop.
+
+79
+00:07:08,680 --> 00:07:11,480
+ We're gonna grab the next character, 'cause X is now 2,
+
+80
+00:07:11,480 --> 00:07:14,480
+ so we're gonna grab the 2 offset from our array.
+
+81
+00:07:14,480 --> 00:07:20,760
+ PC 0X 01, load accumulator from address 0 and X with X.
+
+82
+00:07:20,760 --> 00:07:25,360
+ So we got 60, so I'm gonna just run this a bit, okay?
+
+83
+00:07:25,360 --> 00:07:30,120
+ And I'll try to stop it so that I can show you kind of the last iteration of the loop.
+
+84
+00:07:30,120 --> 00:07:31,520
+ So we'll watch X.
+
+85
+00:07:31,520 --> 00:07:36,360
+ I'll probably try to catch it while X sub, the fourth iteration,
+
+86
+00:07:36,360 --> 00:07:39,120
+ the, well, the fifth iteration, but sub 4 is running.
+
+87
+00:07:39,120 --> 00:07:43,120
+ Let's see if I can start it and then catch it.
+
+88
+00:07:43,120 --> 00:07:48,720
+ PC 0X 03, branch of equal address 0X 10.
+
+89
+00:07:48,720 --> 00:07:55,280
+ PC 0X 05, compare accumulator with immediate 0X 61.
+
+90
+00:07:55,280 --> 00:08:01,600
+ PC 0X 07, branch of minus address 0X 0D.
+
+91
+00:08:01,600 --> 00:08:06,080
+ We're on a series of things that have to be converted to uppercase now.
+
+92
+00:08:06,080 --> 00:08:12,200
+ PC 0X 0B, store accumulator to address 0 and X with X.
+
+93
+00:08:12,200 --> 00:08:16,320
+ PC 0X 0D, increment X register.
+
+94
+00:08:16,320 --> 00:08:20,200
+ PC 0X 0E, jump to address 1.
+
+95
+00:08:20,200 --> 00:08:25,080
+ PC 0X 01, load accumulator from address 0
+
+96
+00:08:25,080 --> 00:08:26,400
+ and X with X.
+
+97
+00:08:26,400 --> 00:08:32,000
+ PC 0X 03, branch of equal address 0X 10.
+
+98
+00:08:32,000 --> 00:08:38,520
+ PC 0X 05, compare accumulator with immediate 0X 61.
+
+99
+00:08:38,520 --> 00:08:44,280
+ PC 0X 07, branch of minus address 0X 0D.
+
+100
+00:08:44,280 --> 00:08:50,240
+ PC 0X 09, subtract with carry immediate 0X 20.
+
+101
+00:08:50,240 --> 00:08:55,040
+ PC 0X 0B, store accumulator to address 0
+
+102
+00:08:55,040 --> 00:08:56,380
+ and X with X.
+
+103
+00:08:56,380 --> 00:09:00,520
+ PC 0X 0D, increment X register.
+
+104
+00:09:00,520 --> 00:09:04,360
+ PC 0X 0E, jump to address 1.
+
+105
+00:09:04,360 --> 00:09:09,200
+ PC 0X 01, load accumulator from address 0
+
+106
+00:09:09,200 --> 00:09:10,560
+ and X with X.
+
+107
+00:09:10,560 --> 00:09:16,160
+ PC 0X 03, branch of equal address 0X 10.
+
+108
+00:09:16,160 --> 00:09:22,680
+ PC 0X 05, compare accumulator with immediate 0X 61.
+
+109
+00:09:22,680 --> 00:09:28,400
+ PC 0X 07, branch of minus address 0X 0D.
+
+110
+00:09:28,400 --> 00:09:31,080
+ PC 0X 0--
+
+111
+00:09:31,080 --> 00:09:32,560
+ OK, so I kind of stopped it.
+
+112
+00:09:32,560 --> 00:09:33,600
+ So where are we at here?
+
+113
+00:09:33,600 --> 00:09:36,840
+ We're about to store this last character.
+
+114
+00:09:36,840 --> 00:09:39,440
+ We got it subtracted, so it's now uppercase.
+
+115
+00:09:39,440 --> 00:09:42,920
+ And we're about to store it into position offset by X.
+
+116
+00:09:42,920 --> 00:09:45,200
+ Our iteration variable is 4.
+
+117
+00:09:45,200 --> 00:09:52,560
+ PC 0X 0B, store accumulator to address 0 and X with X.
+
+118
+00:09:52,560 --> 00:09:55,680
+ The next thing we're going to do is increment X.
+
+119
+00:09:55,680 --> 00:09:57,520
+ So X is going to become 5.
+
+120
+00:09:57,520 --> 00:10:02,280
+ PC 0X 0D, increment X register.
+
+121
+00:10:02,280 --> 00:10:04,440
+ And now we're going to jump to the top of the loop.
+
+122
+00:10:04,440 --> 00:10:08,240
+ PC 0X 0E, jump to address 1.
+
+123
+00:10:08,240 --> 00:10:09,920
+ So now we're at the top of the loop.
+
+124
+00:10:09,920 --> 00:10:11,440
+ So X is 5.
+
+125
+00:10:11,440 --> 00:10:15,240
+ And we're going to load the character at offset 5.
+
+126
+00:10:15,240 --> 00:10:18,120
+ And so now you'll notice, as soon as we do this,
+
+127
+00:10:18,120 --> 00:10:21,920
+ accumulator is going to be 0 and the Z flag is going to be set.
+
+128
+00:10:21,920 --> 00:10:28,040
+ PC 0X 01, load accumulator from address 0 and X with X.
+
+129
+00:10:28,040 --> 00:10:31,640
+ So see, you got accumulator of 0 and we got Z.
+
+130
+00:10:31,640 --> 00:10:35,680
+ So now we are going to do a BEQ to done.
+
+131
+00:10:35,680 --> 00:10:38,520
+ So we're going to jump right out of this loop
+
+132
+00:10:38,520 --> 00:10:42,280
+ because now we've hit the 0 byte in our character array.
+
+133
+00:10:42,280 --> 00:10:49,160
+ PC 0X 03, branch if equal address 0X 1 0.
+
+134
+00:10:49,160 --> 00:10:49,760
+ One more.
+
+135
+00:10:49,760 --> 00:10:55,600
+ PC 0X 1 0, break printed output, hello.
+
+136
+00:10:55,600 --> 00:10:56,680
+ So it finished.
+
+137
+00:10:56,680 --> 00:10:57,800
+ It finished.
+
+138
+00:10:57,800 --> 00:11:01,120
+ And look, it printed out an uppercase version
+
+139
+00:11:01,120 --> 00:11:03,200
+ of the word hello.
+
+140
+00:11:03,200 --> 00:11:06,280
+ So I recommend that you go in and you play with this
+
+141
+00:11:06,280 --> 00:11:09,520
+ and you load this and you control the reset, the narrate,
+
+142
+00:11:09,520 --> 00:11:10,280
+ the stepping.
+
+143
+00:11:10,280 --> 00:11:11,960
+ You kind of see how I'm doing it.
+
+144
+00:11:11,960 --> 00:11:13,800
+ I'll tell you, I know what I'm doing
+
+145
+00:11:13,800 --> 00:11:15,600
+ and it's really hard to read these things.
+
+146
+00:11:15,600 --> 00:11:17,120
+ And that's why I kind of think of this
+
+147
+00:11:17,120 --> 00:11:18,760
+ from an assembly language perspective.
+
+148
+00:11:18,760 --> 00:11:19,880
+ I'm trying to figure out.
+
+149
+00:11:19,880 --> 00:11:22,160
+ It doesn't hurt to sort of hover over and say,
+
+150
+00:11:22,160 --> 00:11:23,640
+ oh, that's the compare instruction
+
+151
+00:11:23,640 --> 00:11:25,120
+ and that is the letter A.
+
+152
+00:11:25,120 --> 00:11:27,120
+ And you can hover over these things
+
+153
+00:11:27,120 --> 00:11:31,440
+ and learn some stuff about what each of the locations is.
+
+154
+00:11:31,440 --> 00:11:34,280
+ So this is a nice little bit of code
+
+155
+00:11:34,280 --> 00:11:36,440
+ that is a loop with an F test.
+
+156
+00:11:36,440 --> 00:11:37,680
+ It's got increments.
+
+157
+00:11:37,680 --> 00:11:39,040
+ It's got a continue in it.
+
+158
+00:11:39,040 --> 00:11:43,480
+ And so it is kind of a nontrivial piece of code,
+
+159
+00:11:43,480 --> 00:11:45,520
+ the smallest nontrivial piece of code
+
+160
+00:11:45,520 --> 00:11:50,280
+ that I could fit into this particular emulator on a screen
+
+161
+00:11:50,280 --> 00:11:52,840
+ that's small enough that maybe that you can see this
+
+162
+00:11:52,840 --> 00:11:54,080
+ on a mobile device.
+
+163
+00:11:54,080 --> 00:11:56,360
+ So I hope you found this useful.
+
+164
+00:11:56,360 --> 00:11:57,200
+ Cheers.
+
+165
+00:11:57,200 --> 00:11:59,780
+ (upbeat music)
+

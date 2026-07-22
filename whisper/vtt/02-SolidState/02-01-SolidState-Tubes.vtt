@@ -1,0 +1,305 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:06.360
+ Hello and welcome to our lecture on solid state computing. We've got a lot to cover.
+
+00:00:06.360 --> 00:00:09.920
+ At the end of the previous lecture we were talking about the classes and how the tube
+
+00:00:09.920 --> 00:00:16.600
+ was replacing the relay in digital applications and now we're going to talk about the transistor,
+
+00:00:16.600 --> 00:00:21.380
+ its invention and how eventually it replaces tubes in digital applications because the
+
+00:00:21.380 --> 00:00:26.320
+ transistor is faster, less heat, reliable, so many things. We're going to talk about
+
+00:00:26.320 --> 00:00:32.080
+ amplifiers, tubes and transistors but it's complicated. Transistor radios were made possible
+
+00:00:32.080 --> 00:00:37.240
+ by transistors but audiophiles still like their tubes. We'll talk about that in a bit.
+
+00:00:37.240 --> 00:00:44.360
+ We're going to talk about how over time we got better and better at manufacturing transistors
+
+00:00:44.360 --> 00:00:50.160
+ and their underlying transistor technology has changed over time and so the way we think
+
+00:00:50.160 --> 00:00:54.680
+ about this is we create this concept of a digital logic gate which is an abstraction
+
+00:00:54.680 --> 00:01:00.280
+ which is the same and the underlying transistor technology for a digital logic gate can be
+
+00:01:00.280 --> 00:01:05.360
+ very different but the way we think about digital logic gates is the way we can, it's
+
+00:01:05.360 --> 00:01:10.840
+ irrespective of the underlying technology or manufacturing technology. And then transistors
+
+00:01:10.840 --> 00:01:17.000
+ increased in density and scale and eventually we will learn about very large scale integration,
+
+00:01:17.000 --> 00:01:22.240
+ VLSI and learn how we lay out chips and how to manufacture them and just play with that
+
+00:01:22.240 --> 00:01:28.600
+ just a little bit. But let's start at the beginning with vacuum tubes, right? So the
+
+00:01:28.600 --> 00:01:33.760
+ Colossus used valves, the more British way to call it is valves and I think that to some
+
+00:01:33.760 --> 00:01:38.240
+ degree valves is a good way to think about it because it is sort of a remote control
+
+00:01:38.240 --> 00:01:44.960
+ valve that sort of allows less or more electricity through a particular thing based on an input
+
+00:01:44.960 --> 00:01:51.840
+ value. And its initial design was to design analogs, amplify signals, things like long
+
+00:01:51.840 --> 00:01:57.440
+ distance phone calls. You know you have a microphone and a thousand miles away there's
+
+00:01:57.440 --> 00:02:02.160
+ a speaker or a hundred miles away there's a speaker. And so the problem is the amount
+
+00:02:02.160 --> 00:02:07.760
+ of voltage that a microphone would generate is just not enough to get through hundreds
+
+00:02:07.760 --> 00:02:13.840
+ of miles of wires. So about every ten miles you needed a power supply and an amplifier
+
+00:02:13.840 --> 00:02:18.720
+ where the wires would come off, down off of the poles, get amplified, be put back up on
+
+00:02:18.720 --> 00:02:25.840
+ the poles. And the tube is a relatively old concept. It was invented in 1912 by Dr. Lee
+
+00:02:25.840 --> 00:02:31.520
+ DeForest. So let me show you close up a couple things about tubes and relays because the
+
+00:02:31.520 --> 00:02:38.880
+ Colossus really was the transition from tubes to relays. This is a relay and in this device
+
+00:02:38.880 --> 00:02:44.640
+ there's a series of inputs, inputs and outputs and there's a bunch of switches but then there's
+
+00:02:44.640 --> 00:02:48.080
+ a control input and output and the control input and output is what I'm going to be playing
+
+00:02:48.080 --> 00:02:53.280
+ with. Control input and output. So I'm going to be putting electricity on the control input
+
+00:02:53.280 --> 00:03:00.000
+ and what you've got is a spring that keeps contacts one way and then an electromagnet
+
+00:03:00.000 --> 00:03:07.120
+ that pulls the contacts another way. So I've got a little tiny DC power supply. It's a
+
+00:03:07.120 --> 00:03:14.640
+ simple little DC power supply. It's pretty safe. And I'm going to activate this and so
+
+00:03:14.640 --> 00:03:21.440
+ right now the contacts, right there, the contacts are one way and when I activate this the contacts
+
+00:03:21.440 --> 00:03:25.840
+ click to the other way. You can kind of see the contacts moving back and forth and you
+
+00:03:25.840 --> 00:03:31.280
+ can think of that as a zero and a one and on things like the Bomba we use these kinds
+
+00:03:31.280 --> 00:03:37.040
+ of relays to capture zeros and ones and you can even use these eventually to do addition.
+
+00:03:37.040 --> 00:03:42.800
+ The problem with relays and why tubes are better is how fast can you move this back and forth,
+
+00:03:42.800 --> 00:03:48.000
+ right? It's like I'm a video gamer pushing the keys as fast as I can. The problem is is because
+
+00:03:48.000 --> 00:03:53.040
+ there is inertia, there's a spring, and there's physics. There's only a certain amount of speed
+
+00:03:53.040 --> 00:03:58.720
+ that you can get to it and so ultimately tubes don't make a clicking noise. Anything that's
+
+00:03:58.720 --> 00:04:03.120
+ physical digital makes a clicking noise. So I'm going to connect this and keep this connected
+
+00:04:03.120 --> 00:04:12.000
+ and show you one more thing. So now this is energized and I'll turn my voltage down to zero.
+
+00:04:12.000 --> 00:04:17.440
+ So now it's a zero, now it's a one, now it's a zero. But I don't know if you're hearing it,
+
+00:04:17.440 --> 00:04:22.160
+ I'll try to make it so you can hear it even better. There's a moment where this device,
+
+00:04:22.160 --> 00:04:29.680
+ the physics is confused. The amount of voltage going through the electromagnet is not strong
+
+00:04:29.680 --> 00:04:34.800
+ enough to override the little spring at the top. There's a spring right there and so you see that
+
+00:04:34.800 --> 00:04:39.920
+ it's fighting, okay? So the electromagnet and the spring are fighting and let me make the
+
+00:04:39.920 --> 00:04:45.760
+ electromagnet and the spring fight and what you'll see at the bottom here is you'll see this kind of
+
+00:04:45.760 --> 00:04:51.840
+ bouncing back and forth and from a from a digital perspective it's bouncing back and forth from zero
+
+00:04:51.840 --> 00:05:03.760
+ to one. So here I'm going to start it and as I move it up slowly you may not be able to see the
+
+00:05:03.760 --> 00:05:11.920
+ movement but you probably can hear the movement. It is just fighting and it's going back and forth
+
+00:05:11.920 --> 00:05:17.760
+ and it's neither zero nor one at this point. If I go up higher then it will then it switches
+
+00:05:17.760 --> 00:05:22.800
+ and it stops and that transition is an important part of turning analog devices
+
+00:05:22.800 --> 00:05:28.560
+ into digital devices because we have to compensate for that. We have to make sure
+
+00:05:28.560 --> 00:05:35.360
+ that whatever voltage it is that leaves this in an intermediate state halfway between zero and one
+
+00:05:35.360 --> 00:05:43.840
+ is something we compensate for with logic outside of this device. So here I have some consumer
+
+00:05:43.840 --> 00:05:51.360
+ packaging and in the 1950s and the 1960s we would have radios and televisions in our homes and we
+
+00:05:51.360 --> 00:05:56.880
+ would have to go to the store and buy new tubes when the tubes broke down. So this tube that I
+
+00:05:56.880 --> 00:06:05.600
+ showed you before actually has a number. Its number is 6CGAA and after this I will show you the spec
+
+00:06:05.600 --> 00:06:09.920
+ that you can still read online for that. The other thing that's interesting is the packaging. It's a
+
+00:06:09.920 --> 00:06:14.800
+ little paper but it was designed for you to go to the store and to be able to bring home this somewhat
+
+00:06:14.800 --> 00:06:21.440
+ fragile device and not break it. So here is the tube I showed you before and we'll look at the
+
+00:06:21.440 --> 00:06:27.440
+ specification and you'll see the pins. There's nine pins. It talks about the height and you'll
+
+00:06:27.440 --> 00:06:32.800
+ see a bunch of graphs as compared to if you put certain amounts of electricity and voltage on
+
+00:06:32.800 --> 00:06:37.120
+ certain pins then certain things happen and so there's a whole bunch of graphs. So later I'll
+
+00:06:37.120 --> 00:06:43.200
+ start telling you talking to you about those graphs in the abstract. Here are the specifications of the
+
+00:06:43.200 --> 00:06:53.920
+ 6CGAA. It has nine inputs. It's about 2.1 inches tall and you can see which inputs go to the grid,
+
+00:06:53.920 --> 00:07:01.120
+ which inputs go to the heater, and which inputs go to the output voltage that then is the amplified
+
+00:07:01.120 --> 00:07:07.680
+ output voltage. We have these physical devices, these digital tubes, and their original purpose
+
+00:07:08.320 --> 00:07:16.720
+ was to do amplification and to do amplification well you want a nice smooth transition as your
+
+00:07:16.720 --> 00:07:20.960
+ input voltage is increased. You want a smooth transition for your output voltage. You want the
+
+00:07:20.960 --> 00:07:24.880
+ output voltage to be higher but you also want it to be smooth because you're trying to do an
+
+00:07:24.880 --> 00:07:33.040
+ amplification and so the right curve has a nice sort of 45 degree angle linear sloped amplification.
+
+00:07:33.760 --> 00:07:40.000
+ The problem is that when you have such a long time before it kind of goes from the low voltage to the
+
+00:07:40.000 --> 00:07:46.720
+ high voltage that makes the transition period too long. So there's a voltage range that's a zero,
+
+00:07:46.720 --> 00:07:50.960
+ there's a voltage range that's transition, and then there's a voltage range that is one.
+
+00:07:50.960 --> 00:08:00.400
+ So by changing the sizes of things and resistance etc you can build a valve that is not as good of
+
+00:08:00.400 --> 00:08:05.600
+ an audio amplifier but more suitable for digital and what you want to do is you want to take the
+
+00:08:05.600 --> 00:08:12.480
+ transition period from sort of zero to one and make that more narrow meaning that it goes quickly
+
+00:08:12.480 --> 00:08:19.520
+ from quiet to loud in a sense more quickly than you'd want for a real amplifier and you kind of
+
+00:08:19.520 --> 00:08:25.200
+ want it at the one-third point right so you as the input voltage goes from zero to the one-third
+
+00:08:25.200 --> 00:08:32.160
+ point it's kind of zero and then there's a short transition but by the time it gets to like half
+
+00:08:32.160 --> 00:08:40.640
+ of the input voltage the output is a one so you know you could the input could be from 0.1.2.3.4.5
+
+00:08:40.640 --> 00:08:50.400
+ but by the time the input voltage is halfway to one the output voltage is one and this allows for
+
+00:08:50.400 --> 00:08:56.480
+ what we call regeneration so if a circuit has an output that we want to be a zero or one and we
+
+00:08:56.480 --> 00:09:03.120
+ want that to be an input to another circuit then we can regenerate that so you might get like 0.7
+
+00:09:03.120 --> 00:09:08.560
+ coming from a previous circuit and then want it to be one going into the next circuit and so the
+
+00:09:08.560 --> 00:09:14.960
+ idea is you tune these things so they go up quickly and to some degree early so that we get
+
+00:09:14.960 --> 00:09:20.640
+ through a fast transition stage and a long regeneration stage so that you always can
+
+00:09:20.640 --> 00:09:29.520
+ can predictably have a zero or a one even with a very analog device so valves as we've talked they
+
+00:09:29.520 --> 00:09:34.640
+ take a lot of power they generate a lot of heat most of the tubes have heaters inside them that
+
+00:09:34.640 --> 00:09:41.040
+ made it easier for the the electrons to come off the cathode they're physically large you know how
+
+00:09:41.040 --> 00:09:47.040
+ many gigabytes can you put you can't you know 100 bytes would be large to to build with tubes
+
+00:09:47.040 --> 00:09:51.920
+ they're expensive and complex to manufacture because they're made of glass they have tiny
+
+00:09:51.920 --> 00:09:56.480
+ little wires in them that are hard to manufacture and put together and they have to be a vacuum
+
+00:09:56.480 --> 00:10:02.320
+ they do have a soft electronic glow in the dark the soft electronic glow in the dark is
+
+00:10:02.320 --> 00:10:07.840
+ to some an advantage and of course from a technology and electronics perspective
+
+00:10:07.840 --> 00:10:11.760
+ when we think about computers they're at disadvantage so up next we're going to talk about
+
+00:10:11.760 --> 00:10:28.560
+ the semiconductors which begin to address some of the disadvantages of valves slash vacuum tubes.
+

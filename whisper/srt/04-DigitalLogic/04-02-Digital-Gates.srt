@@ -1,0 +1,1144 @@
+1
+00:00:00,000 --> 00:00:03,060
+ So now we're going to start building things with gates.
+
+2
+00:00:03,060 --> 00:00:05,680
+ Gates are our new low-level building blocks.
+
+3
+00:00:05,680 --> 00:00:07,460
+ So the first thing we're going to do
+
+4
+00:00:07,460 --> 00:00:09,880
+ is add some numbers with gates.
+
+5
+00:00:09,880 --> 00:00:12,520
+ And we're going to basically use a pattern much like this,
+
+6
+00:00:12,520 --> 00:00:16,580
+ except that this little adding hand calculator
+
+7
+00:00:16,580 --> 00:00:18,480
+ does numbers from zero through nine.
+
+8
+00:00:18,480 --> 00:00:21,560
+ We're gonna do the same thing with just zero and one,
+
+9
+00:00:21,560 --> 00:00:23,280
+ so they're gonna do base to addition,
+
+10
+00:00:23,280 --> 00:00:25,840
+ but we're still gonna do things like carry.
+
+11
+00:00:25,840 --> 00:00:28,160
+ So when we click over to the next one,
+
+12
+00:00:28,160 --> 00:00:31,480
+ it carries and goes on to the next number.
+
+13
+00:00:31,480 --> 00:00:33,720
+ And so we're gonna solve the carry problem.
+
+14
+00:00:33,720 --> 00:00:37,100
+ At this point, you should know the truth tables
+
+15
+00:00:37,100 --> 00:00:40,200
+ for not an and, an or, and exclusive or.
+
+16
+00:00:40,200 --> 00:00:42,640
+ Now, not an and and or are kinda like
+
+17
+00:00:42,640 --> 00:00:45,480
+ what you've done in programming for a long time now.
+
+18
+00:00:45,480 --> 00:00:47,000
+ Exclusive or is just kinda weird,
+
+19
+00:00:47,000 --> 00:00:50,520
+ meaning that it's more of a counter than a simple or,
+
+20
+00:00:50,520 --> 00:00:53,480
+ which means if one of them is true, the output is true,
+
+21
+00:00:53,480 --> 00:00:57,160
+ and if both are zero or both are one, the output is zero.
+
+22
+00:00:57,160 --> 00:00:59,620
+ And of course, and and nor
+
+23
+00:00:59,620 --> 00:01:02,080
+ are just kind of inverted versions of and and or.
+
+24
+00:01:02,080 --> 00:01:04,520
+ So at this point, I think you should be able to
+
+25
+00:01:04,520 --> 00:01:07,200
+ fill these in and I probably won't need
+
+26
+00:01:07,200 --> 00:01:09,320
+ to explain these to you much more.
+
+27
+00:01:09,320 --> 00:01:13,720
+ But we do wanna represent numbers larger than zero and one.
+
+28
+00:01:13,720 --> 00:01:16,600
+ That would be kind of a limited range.
+
+29
+00:01:16,600 --> 00:01:20,200
+ So what we use is we use base two numbers,
+
+30
+00:01:20,200 --> 00:01:22,920
+ and we take different wires and give them different values.
+
+31
+00:01:22,920 --> 00:01:26,160
+ And so in base two, there's a one's position,
+
+32
+00:01:26,160 --> 00:01:29,480
+ a two's position, a four's, and an eight's position.
+
+33
+00:01:29,480 --> 00:01:31,320
+ And so you can think of three wires
+
+34
+00:01:31,320 --> 00:01:36,160
+ can represent a number from zero through seven.
+
+35
+00:01:36,160 --> 00:01:41,160
+ So in base 10, 123 is one times 100, two times 10,
+
+36
+00:01:41,160 --> 00:01:45,600
+ and three times one, which adds up to 123,
+
+37
+00:01:45,600 --> 00:01:47,360
+ which is kind of redundant.
+
+38
+00:01:47,360 --> 00:01:50,240
+ But if you look at base two, one, one, zero,
+
+39
+00:01:50,240 --> 00:01:53,200
+ that's one times four, which is four,
+
+40
+00:01:53,200 --> 00:01:56,480
+ plus one times two, which is two,
+
+41
+00:01:56,480 --> 00:02:00,160
+ plus zero times one, which is zero, four plus two equals six.
+
+42
+00:02:00,160 --> 00:02:04,000
+ So to convert one, one, zero base two into base 10,
+
+43
+00:02:04,000 --> 00:02:05,740
+ it's six base 10.
+
+44
+00:02:05,740 --> 00:02:07,440
+ We're gonna make things simple for now.
+
+45
+00:02:07,440 --> 00:02:10,280
+ We're not gonna make you generally be able to convert
+
+46
+00:02:10,280 --> 00:02:11,860
+ any base 10 number.
+
+47
+00:02:11,860 --> 00:02:15,160
+ As a matter of fact, for most of the rest of this section
+
+48
+00:02:15,160 --> 00:02:18,400
+ of the class, we will never encounter a number
+
+49
+00:02:18,400 --> 00:02:20,480
+ higher than zero through eight.
+
+50
+00:02:20,480 --> 00:02:23,680
+ Mostly it will be zero through seven, and then once in a while
+
+51
+00:02:23,680 --> 00:02:25,960
+ we'll carry into the eight's position.
+
+52
+00:02:25,960 --> 00:02:29,320
+ So we represent the four's position, the two's position,
+
+53
+00:02:29,320 --> 00:02:30,760
+ and the one's position.
+
+54
+00:02:30,760 --> 00:02:32,800
+ So one, one, zero equals six.
+
+55
+00:02:32,800 --> 00:02:35,640
+ But you can quickly say, oh, that's a four, that's a two,
+
+56
+00:02:35,640 --> 00:02:38,280
+ and no one, which is four plus two equals six.
+
+57
+00:02:38,280 --> 00:02:42,480
+ So you can quickly convert from that.
+
+58
+00:02:42,480 --> 00:02:45,600
+ So the idea of having one wire represent
+
+59
+00:02:45,600 --> 00:02:49,360
+ the ones of a number, another wire representing
+
+60
+00:02:49,360 --> 00:02:52,000
+ the two's of the number, and another wire representing
+
+61
+00:02:52,000 --> 00:02:54,800
+ the four's of the number, is how we can represent
+
+62
+00:02:54,800 --> 00:02:57,620
+ a number from zero through seven.
+
+63
+00:02:57,620 --> 00:03:00,000
+ So in this example that I've given you,
+
+64
+00:03:00,000 --> 00:03:03,200
+ the two's wire is a one, and the four's wire is a one,
+
+65
+00:03:03,200 --> 00:03:06,320
+ and we hook that to a Nixie tube.
+
+66
+00:03:06,320 --> 00:03:07,660
+ Remember Nixie tubes?
+
+67
+00:03:07,660 --> 00:03:13,040
+ The Nixie tube decodes the ones, two's, and four's,
+
+68
+00:03:13,040 --> 00:03:15,000
+ and converts it to base 10.
+
+69
+00:03:15,000 --> 00:03:19,720
+ So if we're putting in zero ones, one two's, and one four's,
+
+70
+00:03:19,720 --> 00:03:21,360
+ well that's two plus four equals six.
+
+71
+00:03:21,360 --> 00:03:24,520
+ And the Nixie tube has the logic to simply display that.
+
+72
+00:03:24,520 --> 00:03:28,040
+ So if we can send it a set of wires, three wires,
+
+73
+00:03:28,040 --> 00:03:30,320
+ it will show us the base 10.
+
+74
+00:03:30,320 --> 00:03:33,960
+ And in order to help you have a good understanding
+
+75
+00:03:33,960 --> 00:03:36,840
+ of quick conversion from base two to base 10,
+
+76
+00:03:36,840 --> 00:03:39,520
+ at least for numbers between zero and seven,
+
+77
+00:03:39,520 --> 00:03:42,080
+ I've got a little game called the Nixie Challenge
+
+78
+00:03:42,080 --> 00:03:45,800
+ that both converts base two to base 10, base 10 to base two,
+
+79
+00:03:45,800 --> 00:03:48,400
+ and adding of base two numbers.
+
+80
+00:03:48,400 --> 00:03:50,800
+ Now speaking of adding base two numbers,
+
+81
+00:03:50,800 --> 00:03:53,360
+ let's start at the very beginning.
+
+82
+00:03:53,360 --> 00:03:55,820
+ One plus one equals two.
+
+83
+00:03:55,820 --> 00:03:59,200
+ That's true in base 10, but it's not true in base two.
+
+84
+00:03:59,200 --> 00:04:01,480
+ 'Cause you don't have the digit two in base two.
+
+85
+00:04:01,480 --> 00:04:05,840
+ So one plus one is zero, carry the one.
+
+86
+00:04:05,840 --> 00:04:09,880
+ Just like five plus five is, in base 10,
+
+87
+00:04:09,880 --> 00:04:12,880
+ is zero, carry the one, or 10.
+
+88
+00:04:12,880 --> 00:04:15,080
+ So one zero base two is two,
+
+89
+00:04:15,080 --> 00:04:16,880
+ because that's a one in the two's position
+
+90
+00:04:16,880 --> 00:04:18,880
+ and a zero in the one's position.
+
+91
+00:04:18,880 --> 00:04:23,360
+ So remember, one plus one equals zero, carry the one.
+
+92
+00:04:23,360 --> 00:04:26,240
+ You see the same pattern when you do two plus two
+
+93
+00:04:26,240 --> 00:04:28,920
+ equals four, zero plus zero equals zero,
+
+94
+00:04:28,920 --> 00:04:31,360
+ one plus one equals zero, carry the one.
+
+95
+00:04:31,360 --> 00:04:32,760
+ And again, the same thing happens
+
+96
+00:04:32,760 --> 00:04:34,360
+ when you do four plus four equals eight.
+
+97
+00:04:34,360 --> 00:04:38,040
+ And so now we've seen our first number greater than seven.
+
+98
+00:04:38,040 --> 00:04:39,800
+ Four plus four equals eight.
+
+99
+00:04:39,800 --> 00:04:43,100
+ Now you gotta carry, you gotta ripple carry
+
+100
+00:04:43,100 --> 00:04:45,600
+ in the three plus one equals four example.
+
+101
+00:04:45,600 --> 00:04:48,360
+ One plus one equals zero, carry the one.
+
+102
+00:04:48,360 --> 00:04:51,160
+ Now in the second column, you gotta add that carry.
+
+103
+00:04:51,160 --> 00:04:55,120
+ The carry one plus the top one equals zero, carry the one.
+
+104
+00:04:55,120 --> 00:04:58,440
+ So now we end up with one, zero, zero, or four.
+
+105
+00:04:58,440 --> 00:05:01,600
+ And so these carries can cruise along.
+
+106
+00:05:01,600 --> 00:05:02,800
+ Three plus two equals five.
+
+107
+00:05:02,800 --> 00:05:05,980
+ You can see there's a one plus zero equals one.
+
+108
+00:05:05,980 --> 00:05:08,140
+ One plus one equals zero, carry the one,
+
+109
+00:05:08,140 --> 00:05:11,200
+ which gives us one, zero, one, which is a four and a one,
+
+110
+00:05:11,200 --> 00:05:12,400
+ which is five.
+
+111
+00:05:12,400 --> 00:05:15,200
+ And then the last one, which is seven, all ones,
+
+112
+00:05:15,200 --> 00:05:18,400
+ which is a four plus a two plus a one, which is seven.
+
+113
+00:05:18,400 --> 00:05:23,400
+ Seven plus one, you start with one plus one equals zero,
+
+114
+00:05:23,400 --> 00:05:26,560
+ carry the one, but then the carry plus the other one
+
+115
+00:05:26,560 --> 00:05:29,320
+ is zero again, carry the one again,
+
+116
+00:05:29,320 --> 00:05:31,800
+ and then the carry plus the one is a zero,
+
+117
+00:05:31,800 --> 00:05:35,400
+ carry the one again, and then you end up with the one.
+
+118
+00:05:35,400 --> 00:05:39,300
+ So seven plus one equals eight.
+
+119
+00:05:39,300 --> 00:05:43,880
+ So the logic that we do here to do one of these columns,
+
+120
+00:05:43,880 --> 00:05:48,880
+ so just the columns, is a thing we call the half adder.
+
+121
+00:05:48,880 --> 00:05:54,240
+ And half adder is a logic circuit that takes as its inputs
+
+122
+00:05:54,240 --> 00:05:56,800
+ the A and the B, and as output,
+
+123
+00:05:56,800 --> 00:05:59,120
+ comes up with the sum and the carry.
+
+124
+00:05:59,120 --> 00:06:02,160
+ Now for now, we're only thinking about one column
+
+125
+00:06:02,160 --> 00:06:06,040
+ of addition, zero plus zero is zero, carry the zero.
+
+126
+00:06:06,040 --> 00:06:08,520
+ Zero plus one is one, carry the zero.
+
+127
+00:06:08,520 --> 00:06:11,120
+ One plus zero equals one, carry the zero.
+
+128
+00:06:11,120 --> 00:06:13,920
+ One plus one equals zero, carry the one.
+
+129
+00:06:13,920 --> 00:06:16,040
+ So if we look at the circuit,
+
+130
+00:06:16,040 --> 00:06:20,400
+ the circuit is a combination of the and and an exclusive or.
+
+131
+00:06:20,400 --> 00:06:22,640
+ And if you look at the two columns,
+
+132
+00:06:22,640 --> 00:06:25,480
+ you look at the sum column, the sum column,
+
+133
+00:06:25,480 --> 00:06:29,440
+ zero, one, one, zero, is just the same as a close of or,
+
+134
+00:06:29,440 --> 00:06:32,320
+ and the carry column is just the same as the and.
+
+135
+00:06:32,320 --> 00:06:34,000
+ So we simply take the A and the B,
+
+136
+00:06:34,000 --> 00:06:36,960
+ both to an exclusive or gate and both to an and gate,
+
+137
+00:06:36,960 --> 00:06:40,080
+ and out comes a sum and a carry.
+
+138
+00:06:40,080 --> 00:06:43,120
+ So two gates gives us a half adder.
+
+139
+00:06:43,120 --> 00:06:44,960
+ So if we look at the different values,
+
+140
+00:06:44,960 --> 00:06:49,640
+ zero plus zero equals zero, carry the zero.
+
+141
+00:06:49,640 --> 00:06:52,960
+ One plus zero equals one, carry the zero.
+
+142
+00:06:52,960 --> 00:06:56,720
+ And one plus one equals zero, carry the one.
+
+143
+00:06:56,720 --> 00:07:00,120
+ So this solves one column of addition.
+
+144
+00:07:00,120 --> 00:07:01,880
+ But if you think about one column of addition
+
+145
+00:07:01,880 --> 00:07:05,280
+ other than the first column, there's also a carry in.
+
+146
+00:07:05,280 --> 00:07:08,840
+ And that's how we solve it with the full adder.
+
+147
+00:07:08,840 --> 00:07:12,560
+ So the full adder, its truth table has a carry in,
+
+148
+00:07:12,560 --> 00:07:17,400
+ a sum A, sum B, and then a sum total and a carry out.
+
+149
+00:07:17,400 --> 00:07:21,840
+ So operands A and B, a carry in, sum and carry out.
+
+150
+00:07:21,840 --> 00:07:25,000
+ So if you get a carry in, that's a one.
+
+151
+00:07:25,000 --> 00:07:27,280
+ If you get an A of one and a B of one,
+
+152
+00:07:27,280 --> 00:07:31,880
+ well that is three, which is the sum is one, carry the one.
+
+153
+00:07:31,880 --> 00:07:33,800
+ So that's a little different, right?
+
+154
+00:07:33,800 --> 00:07:35,960
+ So now we have up to three numbers.
+
+155
+00:07:35,960 --> 00:07:39,280
+ It's kind of like a counter of three bits, right?
+
+156
+00:07:39,280 --> 00:07:41,320
+ And it's showing us that.
+
+157
+00:07:41,320 --> 00:07:44,040
+ But we have a carry in, A and B,
+
+158
+00:07:44,040 --> 00:07:46,400
+ and then a sum and a carry out, okay?
+
+159
+00:07:46,400 --> 00:07:49,420
+ And so it's pretty much what you would expect.
+
+160
+00:07:49,420 --> 00:07:52,200
+ You can think of the sum and the carry out as like,
+
+161
+00:07:52,200 --> 00:07:54,320
+ the carry out is kind of like a two.
+
+162
+00:07:54,320 --> 00:07:56,520
+ When you're carrying to the next column, okay?
+
+163
+00:07:56,520 --> 00:07:58,640
+ So let's take a look at the circuit
+
+164
+00:07:58,640 --> 00:08:01,040
+ that needs to solve this problem.
+
+165
+00:08:01,040 --> 00:08:04,920
+ A full adder compensates for a carry in.
+
+166
+00:08:04,920 --> 00:08:07,500
+ So we call a full adder, a full adder
+
+167
+00:08:07,500 --> 00:08:11,400
+ because it really is two half adders plus a little bit.
+
+168
+00:08:11,400 --> 00:08:15,360
+ So if you look at the section, that's the A and the B,
+
+169
+00:08:15,360 --> 00:08:16,640
+ that's just a half adder.
+
+170
+00:08:16,640 --> 00:08:18,880
+ It's got an exclusivore and an and.
+
+171
+00:08:18,880 --> 00:08:23,440
+ And then what we have is another half adder at the top,
+
+172
+00:08:23,440 --> 00:08:26,280
+ exclusivore two and and two.
+
+173
+00:08:26,280 --> 00:08:30,720
+ And the input to that half adder is the carry in
+
+174
+00:08:30,720 --> 00:08:33,560
+ plus the output of exclusivore one.
+
+175
+00:08:33,560 --> 00:08:36,520
+ Exclusivore two produces the overall sum
+
+176
+00:08:36,520 --> 00:08:38,040
+ of the three numbers.
+
+177
+00:08:38,040 --> 00:08:39,760
+ And then we have to add an or gate
+
+178
+00:08:39,760 --> 00:08:42,960
+ that takes the output of the A and B and,
+
+179
+00:08:42,960 --> 00:08:44,800
+ as well as the and,
+
+180
+00:08:44,800 --> 00:08:46,660
+ and we or it all together and get a carry out.
+
+181
+00:08:46,660 --> 00:08:48,640
+ And you can look at that or as,
+
+182
+00:08:48,640 --> 00:08:51,800
+ did we generate a carry out by A and B?
+
+183
+00:08:51,800 --> 00:08:56,800
+ Or did we generate a carry out because A or B was one
+
+184
+00:08:56,800 --> 00:08:58,200
+ and the carry in was one.
+
+185
+00:08:58,200 --> 00:08:59,760
+ And that's what that or is doing.
+
+186
+00:08:59,760 --> 00:09:02,540
+ So it's probably best to take a quick look
+
+187
+00:09:02,540 --> 00:09:04,520
+ at how this works with a working circuit.
+
+188
+00:09:04,520 --> 00:09:07,460
+ So here is a full adder circuit.
+
+189
+00:09:07,460 --> 00:09:10,840
+ And so we're gonna start and work through carry in,
+
+190
+00:09:10,840 --> 00:09:14,980
+ A and B and then the sum and the carry out.
+
+191
+00:09:14,980 --> 00:09:17,480
+ So we're set them all to zero, so the sum is zero.
+
+192
+00:09:17,480 --> 00:09:21,440
+ So let's just exercise this as a half adder, for example.
+
+193
+00:09:21,440 --> 00:09:23,260
+ So if we make A be one,
+
+194
+00:09:23,260 --> 00:09:27,080
+ then we get a sum of one and a carry out of zero.
+
+195
+00:09:27,080 --> 00:09:29,120
+ And if we make B be one,
+
+196
+00:09:29,120 --> 00:09:32,960
+ then we get a sum of zero and a carry out of one.
+
+197
+00:09:32,960 --> 00:09:35,840
+ And so the carry in is not participating in any way.
+
+198
+00:09:35,840 --> 00:09:39,320
+ This is just a half adder that's working.
+
+199
+00:09:39,320 --> 00:09:41,780
+ So now if we add the carry in,
+
+200
+00:09:41,780 --> 00:09:44,740
+ so now we have carry in of one,
+
+201
+00:09:44,740 --> 00:09:48,980
+ A of one, B of one and sum is one and carry out is one.
+
+202
+00:09:50,680 --> 00:09:52,880
+ And now you can pretty much put any combination
+
+203
+00:09:52,880 --> 00:09:56,080
+ of ones and zeros, and this is kind of a counter
+
+204
+00:09:56,080 --> 00:09:58,760
+ where the carry out plus the sum is like how many.
+
+205
+00:09:58,760 --> 00:10:02,220
+ Carry in is one and A is zero and B is one.
+
+206
+00:10:02,220 --> 00:10:03,880
+ We kind of have two ones,
+
+207
+00:10:03,880 --> 00:10:06,060
+ and so we get a carry out of one and a sum of zero.
+
+208
+00:10:06,060 --> 00:10:10,820
+ That's kind of one zero, which is a two, okay?
+
+209
+00:10:10,820 --> 00:10:12,460
+ So that's a full adder.
+
+210
+00:10:12,460 --> 00:10:17,320
+ It's basically two half adders plus an OR gate.
+
+211
+00:10:17,320 --> 00:10:19,240
+ Now that we built this full adder,
+
+212
+00:10:19,240 --> 00:10:22,360
+ now we won't go into too much detail here,
+
+213
+00:10:22,360 --> 00:10:25,240
+ but this carry out was designed
+
+214
+00:10:25,240 --> 00:10:27,880
+ to become the carry in for the next digit.
+
+215
+00:10:27,880 --> 00:10:31,400
+ So if we look at two plus five equals seven,
+
+216
+00:10:31,400 --> 00:10:36,100
+ we can see the full adder has the A for the ones column
+
+217
+00:10:36,100 --> 00:10:37,800
+ and the B for the ones column,
+
+218
+00:10:37,800 --> 00:10:40,160
+ A for the twos column and B for the twos column
+
+219
+00:10:40,160 --> 00:10:43,320
+ and A for the fours column and B for the fours column.
+
+220
+00:10:43,320 --> 00:10:48,560
+ And so because A is two, A one is zero,
+
+221
+00:10:48,560 --> 00:10:52,760
+ A two is one and A four is zero, so zero one zero.
+
+222
+00:10:52,760 --> 00:10:55,320
+ B is five and so it's one zero one.
+
+223
+00:10:55,320 --> 00:10:59,940
+ So B one is one, B two, the twos column of B is zero
+
+224
+00:10:59,940 --> 00:11:02,320
+ and the fours column of B is one.
+
+225
+00:11:02,320 --> 00:11:04,200
+ And so they just go into these full adders.
+
+226
+00:11:04,200 --> 00:11:06,040
+ And when we say full one in here,
+
+227
+00:11:06,040 --> 00:11:09,740
+ that is those gates that we just got done describing.
+
+228
+00:11:09,740 --> 00:11:13,880
+ And they have a sum out and that goes to our ultimate sum,
+
+229
+00:11:13,880 --> 00:11:15,880
+ but the carry out of each column
+
+230
+00:11:15,880 --> 00:11:18,640
+ goes to the carry in of the next column.
+
+231
+00:11:18,640 --> 00:11:20,960
+ That's what's clever about the full adder.
+
+232
+00:11:20,960 --> 00:11:22,840
+ So this is a ripple carry.
+
+233
+00:11:22,840 --> 00:11:26,700
+ The carry is rippling from one column to the next.
+
+234
+00:11:26,700 --> 00:11:28,980
+ On the screen, it's the top to the bottom.
+
+235
+00:11:28,980 --> 00:11:31,440
+ So you just copy, you connect the carry outs
+
+236
+00:11:31,440 --> 00:11:33,440
+ to the carry in of the next full adder.
+
+237
+00:11:33,440 --> 00:11:36,460
+ And then that full adder has a carry out and away it goes.
+
+238
+00:11:36,460 --> 00:11:38,480
+ Now, if you look at the third one,
+
+239
+00:11:38,480 --> 00:11:41,580
+ you have the carry out that indicates an overflow indicator.
+
+240
+00:11:41,580 --> 00:11:45,480
+ And that is this can only handle numbers from zero through seven.
+
+241
+00:11:45,480 --> 00:11:47,520
+ But if you add five plus five,
+
+242
+00:11:47,520 --> 00:11:51,240
+ that's bigger than seven and the overflow indicator.
+
+243
+00:11:51,240 --> 00:11:53,160
+ We're like, oh, now we just figured out
+
+244
+00:11:53,160 --> 00:11:58,040
+ how to take three full adders and make a three bit adder.
+
+245
+00:11:58,040 --> 00:11:59,440
+ So this is a three bit adder
+
+246
+00:11:59,440 --> 00:12:04,160
+ with the A's on the left-hand side, zero, one, zero or two.
+
+247
+00:12:04,160 --> 00:12:07,760
+ And the B's on the right-hand side, one, zero, one or five.
+
+248
+00:12:07,760 --> 00:12:09,920
+ And you can see the adder has a seven.
+
+249
+00:12:09,920 --> 00:12:12,000
+ We put a little display in there
+
+250
+00:12:12,000 --> 00:12:14,140
+ so you can see the number seven
+
+251
+00:12:14,140 --> 00:12:15,940
+ and it has sums coming out the bottom
+
+252
+00:12:15,940 --> 00:12:18,920
+ and it has overflows coming out the top.
+
+253
+00:12:18,920 --> 00:12:22,520
+ And so this is part of how digital logic works
+
+254
+00:12:22,520 --> 00:12:27,240
+ is that we build something cool like a three bit adder
+
+255
+00:12:27,240 --> 00:12:30,700
+ that's made up of three full adders,
+
+256
+00:12:30,700 --> 00:12:33,320
+ which each full adder is made up of two half adders
+
+257
+00:12:33,320 --> 00:12:35,740
+ plus an OR gate, but we don't have to draw that.
+
+258
+00:12:35,740 --> 00:12:39,080
+ We just say, give me a three bit adder and away you go.
+
+259
+00:12:39,080 --> 00:12:42,160
+ And so we can quickly build abstractions
+
+260
+00:12:42,160 --> 00:12:46,040
+ that are all really cool, reusable componentry.
+
+261
+00:12:46,040 --> 00:12:50,360
+ And so we only build a full adder long enough
+
+262
+00:12:50,360 --> 00:12:52,320
+ to build a three bit adder
+
+263
+00:12:52,320 --> 00:12:55,000
+ to build then a three bit adder component.
+
+264
+00:12:55,000 --> 00:12:57,440
+ And so we can build these things pretty rapidly
+
+265
+00:12:57,440 --> 00:12:59,520
+ and now you can start to see
+
+266
+00:12:59,520 --> 00:13:02,840
+ how we might eventually build a microprocessor.
+
+267
+00:13:02,840 --> 00:13:05,360
+ At least now we have a three bit adder.
+
+268
+00:13:05,360 --> 00:13:06,560
+ And if you listen carefully,
+
+269
+00:13:06,560 --> 00:13:08,680
+ maybe go back and watch this again.
+
+270
+00:13:08,680 --> 00:13:12,520
+ If you look at it carefully, you'll see, you know,
+
+271
+00:13:12,520 --> 00:13:15,780
+ if you go all the way back, you know how many transistors
+
+272
+00:13:15,780 --> 00:13:18,080
+ that you could make a three bit adder.
+
+273
+00:13:18,080 --> 00:13:19,640
+ But it would be a bunch of them.
+
+274
+00:13:19,640 --> 00:13:21,120
+ It would be a bunch of them.
+
+275
+00:13:21,120 --> 00:13:24,160
+ 'Cause remember an AND gate is
+
+276
+00:13:24,160 --> 00:13:29,720
+ four transistors plus the NOT, which is two transistors.
+
+277
+00:13:29,720 --> 00:13:32,200
+ So an AND gate is six transistors.
+
+278
+00:13:32,200 --> 00:13:33,680
+ And that's just an AND gate.
+
+279
+00:13:33,680 --> 00:13:37,720
+ So you figure out after a while that building gates
+
+280
+00:13:37,720 --> 00:13:40,080
+ and then building reusable components,
+
+281
+00:13:40,080 --> 00:13:41,780
+ you know how to build them,
+
+282
+00:13:41,780 --> 00:13:44,240
+ but you don't have to know how to build them
+
+283
+00:13:44,240 --> 00:13:48,800
+ to use a component like a three bit adder in a circuit.
+
+284
+00:13:48,800 --> 00:13:50,320
+ And that's the fun of it all.
+
+285
+00:13:50,320 --> 00:13:53,300
+ And we're gonna keep doing this as we go forward.
+
+286
+00:13:53,300 --> 00:13:55,880
+ (upbeat music)
+

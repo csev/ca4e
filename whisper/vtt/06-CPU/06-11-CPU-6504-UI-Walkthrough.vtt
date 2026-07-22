@@ -1,0 +1,236 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:10.000
+ Hello everybody and welcome to another walkthrough and this time we're going to do some walkthrough in the CDC 6504 machine language emulator.
+
+00:00:10.000 --> 00:00:14.600
+ So let's first just talk a little bit about all the things that we can do here.
+
+00:00:14.600 --> 00:00:17.640
+ So this is kind of our machine language emulator.
+
+00:00:17.640 --> 00:00:19.280
+ We have a series of instructions.
+
+00:00:19.280 --> 00:00:20.520
+ It starts out all zeros.
+
+00:00:20.520 --> 00:00:21.480
+ We have data memory.
+
+00:00:21.480 --> 00:00:23.120
+ We have 256 instructions.
+
+00:00:23.120 --> 00:00:24.920
+ We have 256 data memories.
+
+00:00:24.920 --> 00:00:30.280
+ We have an accumulator register, an X register, and a Y register taken from the 6502.
+
+00:00:30.280 --> 00:00:33.480
+ And then we have the program counter, which points to where we're at.
+
+00:00:33.480 --> 00:00:37.000
+ Our program counter currently says zero pointing at instruction memory zero.
+
+00:00:37.000 --> 00:00:45.200
+ The Z is a flag that once we do a calculation or store some stuff and the result of that is a zero, the Z will check and N stands for negative.
+
+00:00:45.200 --> 00:00:48.320
+ We can branch of negative, branch of positive, branch of zero.
+
+00:00:48.320 --> 00:00:52.320
+ And so these are used to do a pattern of compare, then branch.
+
+00:00:52.320 --> 00:00:55.680
+ We can load a program from here.
+
+00:00:55.680 --> 00:00:58.520
+ Let's just load a simple sample so you can see it.
+
+00:00:58.520 --> 00:01:01.280
+ You can also view the assembly language.
+
+00:01:01.280 --> 00:01:08.800
+ And so what I'll tend to do is I'll tend to put the assembly language over here and I've got this narrate execution.
+
+00:01:08.800 --> 00:01:19.480
+ You can hover over each of the memory locations and it tells you, for example, that this zero X zero zero location is a E2 in hex and it is a clear instruction.
+
+00:01:19.480 --> 00:01:23.320
+ Now, sometimes this is instruction, sometimes it's data when we're doing load immediates.
+
+00:01:23.320 --> 00:01:27.040
+ It tells you, you know, if it's ASCII, it'll tell you what the ASCII character is.
+
+00:01:27.040 --> 00:01:28.400
+ And so it has to interpret this.
+
+00:01:28.400 --> 00:01:32.920
+ But this is just zeros and ones in the computer memory and it's contextualized what's going on.
+
+00:01:32.920 --> 00:01:40.800
+ So this is just a clear instruction, an increment instruction and an increment instruction and then a break, which is just a zero, which stops the thing from running.
+
+00:01:40.800 --> 00:01:46.520
+ And we can see the same thing right here in the assemblies, clear, increment, increment, break.
+
+00:01:46.520 --> 00:01:49.720
+ Eventually, we're going to want to just look at the assembly.
+
+00:01:49.720 --> 00:01:53.680
+ It just makes our lives a lot simpler to watch what's going on.
+
+00:01:53.680 --> 00:01:55.840
+ But reality, it's zeros and ones.
+
+00:01:55.840 --> 00:01:58.880
+ And so we have a couple of options here.
+
+00:01:58.880 --> 00:02:00.880
+ We can start the application.
+
+00:02:00.880 --> 00:02:02.320
+ We can run it a single step.
+
+00:02:02.320 --> 00:02:05.880
+ We can reset it, but that clears everything and we've got to load a new program.
+
+00:02:05.880 --> 00:02:12.080
+ But we have this cool feature called narrate execution and it slows it down and describes everything that's going on.
+
+00:02:12.080 --> 00:02:14.360
+ And so I'm going to tell you in advance what's going to happen.
+
+00:02:14.360 --> 00:02:17.920
+ It's going to clear the X register and you've got to watch the X register here.
+
+00:02:17.920 --> 00:02:23.640
+ And it's going to add one to the X register, watch the X register and then add one again to the X register.
+
+00:02:23.640 --> 00:02:29.360
+ And when it's all said and done, it'll stop and nothing else will have changed except the X register will have a two in it.
+
+00:02:29.360 --> 00:02:39.720
+ So I'm going to move this over here and you can kind of watch as the program counter moves along and just kind of that assembly is there for you to remember.
+
+00:02:39.720 --> 00:02:42.440
+ Later, you can write assembly and get it assembled.
+
+00:02:42.440 --> 00:02:46.560
+ So let me go ahead. It's got narrate execution turned on and let me start it.
+
+00:02:46.560 --> 00:03:04.200
+ PC 0 X 0 0. Clear X register. PC 0 X 0 1. Increment X register. PC 0 X 0 2. Increment X register. PC 0 X 0 3. Break. No printed output.
+
+00:03:04.200 --> 00:03:10.000
+ OK, so you saw what happened there. Let me go and do this a little more slowly.
+
+00:03:10.000 --> 00:03:17.200
+ Let me reload it. Load simple sample and I'm going to instead when we narrate execution, I'm going to hit step.
+
+00:03:17.200 --> 00:03:20.600
+ So you saw it run automatically. And so I'm going to do step.
+
+00:03:20.600 --> 00:03:28.000
+ It's going to run one instruction and narrate it when I press step. PC 0 X 0 0. Clear X register.
+
+00:03:28.000 --> 00:03:31.600
+ OK, so notice that the Z flag, it's a one byte instruction.
+
+00:03:31.600 --> 00:03:34.920
+ So the PC went up by one. The Z flag is now set.
+
+00:03:34.920 --> 00:03:38.880
+ It's not a negative number because the X register is a zero, which is not negative.
+
+00:03:38.880 --> 00:03:42.480
+ And that is the result of that particular instruction.
+
+00:03:42.480 --> 00:03:49.120
+ So let's step again. PC 0 X 0 1. Increment X register.
+
+00:03:49.120 --> 00:03:53.240
+ So we incremented X. So if we look at X, X is now gone from zero to one.
+
+00:03:53.240 --> 00:03:55.960
+ The program counters ready for the next instruction.
+
+00:03:55.960 --> 00:04:00.480
+ But because X is now one, neither the Z nor the N flag is set.
+
+00:04:00.480 --> 00:04:07.000
+ So let's step one more time. PC 0 X 0 2. Increment X register.
+
+00:04:07.000 --> 00:04:10.200
+ OK, so now the next instruction is going to be 0 X 0 3.
+
+00:04:10.200 --> 00:04:14.680
+ And the X register is 2. The Z and the N flags are set accordingly.
+
+00:04:14.680 --> 00:04:18.640
+ When we step again, we're going to hit this break, which is a stop.
+
+00:04:18.640 --> 00:04:24.120
+ And then the program executions. PC 0 X 0 3. Break. No printed output.
+
+00:04:24.120 --> 00:04:28.600
+ And what it's talking about no printed output is in future ones, we put some data.
+
+00:04:28.600 --> 00:04:34.400
+ When we put data in here, the printed output comes out of the first few up to a zero byte in the memory.
+
+00:04:34.400 --> 00:04:41.520
+ But this one has no particular memory. OK, so let's just take a look at a couple of other things that we have.
+
+00:04:41.520 --> 00:04:44.800
+ It has a bunch of documentation. It's pretty cool.
+
+00:04:44.800 --> 00:04:49.720
+ It's probably more you can read this. AI can read this. It's pretty cool.
+
+00:04:49.720 --> 00:04:55.320
+ That's just a URL that you can go paste into AI if you want, and you can ask AI for help writing this code.
+
+00:04:55.320 --> 00:04:58.600
+ And we'll see how well AI does with this, but it has documentation.
+
+00:04:58.600 --> 00:05:02.240
+ We also need an ASCII chart, right? This is not a text one.
+
+00:05:02.240 --> 00:05:06.880
+ So but we have a little ASCII chart that tells that the space is 32 decimal.
+
+00:05:06.880 --> 00:05:10.200
+ It's 20 hex and 0 0 1 0 0.
+
+00:05:10.200 --> 00:05:16.800
+ And remember that hex, you can do a four bit to one column hex to binary conversion.
+
+00:05:16.800 --> 00:05:20.200
+ And for me, I start seeing things like I'll look at like this one here.
+
+00:05:20.200 --> 00:05:22.400
+ I know that's a seven, so that's twenty seven.
+
+00:05:22.400 --> 00:05:26.080
+ I'll see this one one one and I'll see that as an F.
+
+00:05:26.080 --> 00:05:31.120
+ So you'll start to see hopefully after a while, you'll kind of have a hex to binary conversion in your mind.
+
+00:05:31.120 --> 00:05:32.720
+ Decimal is a pain in the neck.
+
+00:05:32.720 --> 00:05:35.680
+ I just got a hand convert both decimal to hex and binary.
+
+00:05:35.680 --> 00:05:40.680
+ And so that's pretty much all of the features of the application.
+
+00:05:40.680 --> 00:05:45.720
+ And so next we're going to go through some of these things in a little bit more detail.
+
+00:05:45.720 --> 00:05:47.560
+ And so come to those in a bit.
+

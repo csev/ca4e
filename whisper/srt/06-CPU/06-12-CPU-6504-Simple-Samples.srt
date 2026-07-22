@@ -1,0 +1,260 @@
+1
+00:00:00,000 --> 00:00:04,880
+ Hello and welcome to another computer architecture CPU emulator walkthrough.
+
+2
+00:00:04,880 --> 00:00:09,400
+ And so in this one we are going to go through a number of simple samples.
+
+3
+00:00:09,400 --> 00:00:13,800
+ And I will turn on the viewing of the assembly language down here, so we can see that.
+
+4
+00:00:13,800 --> 00:00:15,300
+ This one here is really simple.
+
+5
+00:00:15,300 --> 00:00:20,440
+ It is going to load a constant into the A register, 27, that's a decimal 27.
+
+6
+00:00:20,440 --> 00:00:23,760
+ And then we're going to add 15, so this is going to be 27 plus 15.
+
+7
+00:00:23,760 --> 00:00:28,120
+ And then we're going to store it into memory location 00, and then we're going to stop.
+
+8
+00:00:28,120 --> 00:00:30,360
+ So this is going to cause a little bit of output.
+
+9
+00:00:30,360 --> 00:00:35,120
+ So let's go ahead and narrate the execution, and then start it running.
+
+10
+00:00:35,120 --> 00:00:39,760
+ I'll put this in a place where we don't want to hide the memory, because the action is
+
+11
+00:00:39,760 --> 00:00:41,280
+ going to happen here in the memory.
+
+12
+00:00:41,280 --> 00:00:42,280
+ So here we go.
+
+13
+00:00:42,280 --> 00:00:54,320
+ PC 0x00, load the accumulator immediate 0x1B, PC 0x02, add will carry immediate 0x0F, PC
+
+14
+00:00:54,320 --> 00:01:04,640
+ 0x04, store accumulator to address 0, PC 0x06, break printed output asterisk.
+
+15
+00:01:04,640 --> 00:01:09,880
+ So this time we stored something in the memory, so the program will dump the memory up to
+
+16
+00:01:09,880 --> 00:01:11,880
+ a 0 byte, kind of like C, right?
+
+17
+00:01:11,880 --> 00:01:17,720
+ It will dump the memory up to a 0 byte, and 0x2A, let's go look at our ASCII chart.
+
+18
+00:01:17,720 --> 00:01:23,440
+ 0x2A, 0x2A, 0x2A, there we go.
+
+19
+00:01:23,440 --> 00:01:27,800
+ Is a 42 decimal, interesting choice of number, and it's an asterisk.
+
+20
+00:01:27,800 --> 00:01:33,280
+ And so it's a 0x2A, you can see it in the memory, and when the program stops, it prints
+
+21
+00:01:33,280 --> 00:01:34,280
+ it out.
+
+22
+00:01:34,280 --> 00:01:35,280
+ Okay?
+
+23
+00:01:35,280 --> 00:01:39,000
+ So then let's take a look at another simple example.
+
+24
+00:01:39,000 --> 00:01:42,040
+ Let's take a look at the assembly language for it.
+
+25
+00:01:42,040 --> 00:01:48,120
+ So this is going to basically stick that letter H into the accumulator, then store it in memory
+
+26
+00:01:48,120 --> 00:01:53,600
+ location 0, and then put a high in the accumulator, and store that in memory location 1.
+
+27
+00:01:53,600 --> 00:02:01,080
+ So let's go ahead and step that, PC 0x00, load accumulator immediately at 0x48.
+
+28
+00:02:01,080 --> 00:02:07,800
+ I'll go to the next instruction, which is going to store that one.
+
+29
+00:02:07,800 --> 00:02:12,640
+ PC 0x02, store accumulator to address 0.
+
+30
+00:02:12,640 --> 00:02:17,440
+ So we took what was in the accumulator and stored it into memory address 0, and now we're
+
+31
+00:02:17,440 --> 00:02:19,360
+ going to load the I.
+
+32
+00:02:19,360 --> 00:02:26,280
+ PC 0x04, load accumulator immediately at 0x69.
+
+33
+00:02:26,280 --> 00:02:29,400
+ So 0x69 is the letter I, and now we're going to store it.
+
+34
+00:02:29,400 --> 00:02:34,480
+ PC 0x06, store accumulator to address 1.
+
+35
+00:02:34,480 --> 00:02:37,480
+ We just put some data into memory location 1.
+
+36
+00:02:37,480 --> 00:02:41,100
+ We're going to step one more, and it's going to stop, and it's going to print out what
+
+37
+00:02:41,100 --> 00:02:43,080
+ is here in ASCII.
+
+38
+00:02:43,080 --> 00:02:48,680
+ PC 0x08, break, print, hit output, hi.
+
+39
+00:02:48,680 --> 00:02:51,640
+ So it said hi, okay.
+
+40
+00:02:51,640 --> 00:02:55,800
+ And so let's do one more simple one, and this one's kind of weird.
+
+41
+00:02:55,800 --> 00:03:01,000
+ So I have a single instruction, which is break, which is stop, and you'll notice it says zero
+
+42
+00:03:01,000 --> 00:03:07,040
+ zero zero right away, but I use the assembly language data pseudo-op, we call these pseudo-ops,
+
+43
+00:03:07,040 --> 00:03:11,360
+ and it preloads the data, and it says, and this is hello world, so you can see it's hello
+
+44
+00:03:11,360 --> 00:03:15,400
+ world in ASCII, 0x20 is the space.
+
+45
+00:03:15,400 --> 00:03:19,260
+ So we're just going to run this, but it's going to immediately stop, but it's going
+
+46
+00:03:19,260 --> 00:03:23,380
+ to dump the memory because we preloaded data into memory, and so this is really showing
+
+47
+00:03:23,380 --> 00:03:26,440
+ you more about how this data pseudo-operation works.
+
+48
+00:03:26,440 --> 00:03:32,720
+ PC 0x00, break, print, hit output, hello world.
+
+49
+00:03:32,720 --> 00:03:38,280
+ Okay, and so let me then show you one more thing in this.
+
+50
+00:03:38,280 --> 00:03:42,960
+ You can write code in the assembler, okay.
+
+51
+00:03:42,960 --> 00:03:44,760
+ This is a little text editor.
+
+52
+00:03:44,760 --> 00:03:48,180
+ You read the assembly language, you go into the documentation, read the assembly language,
+
+53
+00:03:48,180 --> 00:03:51,880
+ and then you can say take this code and assemble it.
+
+54
+00:03:51,880 --> 00:04:00,320
+ So it assembled it, and so now it says hello CA for E, so there's the, so in location five
+
+55
+00:04:00,320 --> 00:04:03,040
+ is the space, and then C is the 43.
+
+56
+00:04:03,040 --> 00:04:09,040
+ Let's go ahead and bring up a ASCII chart so we can figure out what this memory location
+
+57
+00:04:09,040 --> 00:04:10,120
+ six is.
+
+58
+00:04:10,120 --> 00:04:18,400
+ It's a 0x43, and that's C, and then 41 is the A, right, so you can kind of see this,
+
+59
+00:04:18,400 --> 00:04:19,400
+ and now we're going to run it.
+
+60
+00:04:19,400 --> 00:04:23,120
+ It's only got one instruction, which is a stop instruction, but then it's going to print
+
+61
+00:04:23,120 --> 00:04:24,120
+ out its.
+
+62
+00:04:24,120 --> 00:04:30,320
+ PC 0x00, break, print, hit output, hello CA for E.
+
+63
+00:04:30,320 --> 00:04:35,280
+ That's just really showing you the data thing, and later we will use this to preload data
+
+64
+00:04:35,280 --> 00:04:40,000
+ and then write code that reads from memory and does something to that memory.
+
+65
+00:04:40,000 --> 00:04:45,060
+ But for now, I hope you found this walkthrough with a couple of simple examples useful, cheers.
+

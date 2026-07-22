@@ -1,0 +1,158 @@
+ Now it is time to start building a little more complex machine language, assembly language, applications.
+ And as always, these slides are not necessarily the best reference.
+ Once you listen to them, you should probably start looking at the online documentation that I provide for the CDC 6504.
+ So we'll start with another review of the architecture.
+ By now, this should be pretty familiar to you.
+ We have a program counter, which is telling us where in the instruction memory to retrieve the next instruction.
+ We have the accumulated register, which is kind of the most flexible register.
+ We have the Z and the N flags that tells whether last thing we did in a register was zero or negative or a compare instruction.
+ The X and the Y registers are registers that are a little less capable than the accumulator.
+ We show instruction memory in base two and data memory we show in hex because it usually contains ASCII.
+ So there is a new thing that's only in assembly labels or something that's only in assembly.
+ And this data directive is the thing that's only in assembly.
+ Everything we've done so far in the assembler is populating the instruction memory by parsing the instruction, the assembly language instructions and producing the zeros and ones that are the machine language.
+ But there's also this thing called a data directive where we can fill the data memory up with some pre before the program starts, we load.
+ There's an act called loading. We load the program into the memory, load the instruction memory, and we can preload the data memory with this data directive.
+ But it's not machine code. It is something that assemblers do and give us a loadable image that includes a data segment, basically.
+ And it can either be a quoted string or a series of hex digits.
+ And we mostly will use quoted strings so you can print hello world by having a single line of machine language break, which means halt, but then have the data filled with hello world.
+ And it just turns out that the emulator dumps out the data when it's all done.
+ So this is the simplest program.
+ It's not really machine language, but it's the simplest program in the emulator to make it print hello world.
+ So here's just a couple. So in this one, we're going to add 27 plus 15 and then store it in memory location zero.
+ So we load 27, an immediate, immediate constant into the accumulator.
+ Then we add 15, which is another immediate constant.
+ So that's 42. And then we're going to store that in location memory location zero.
+ So you can see by that. And then we halt.
+ So by the time the program counter makes 0, 0, 5 hex, there is a single 0x2a, which is 42 in hex.
+ And then you can see that that prints out asterisk, because if you go look at your ASCII chart, asterisk is 42 decimal.
+ Our next example is just printing hello.
+ And so we're going to end up putting this in memory so that the program will dump out the memory, starting at memory location zero after the program finishes.
+ So we do an immediate load of the letter H and we start in memory location zero.
+ We do an immediate load of the letter E and store that in location one.
+ We do immediate load of the letter L and store that in location two.
+ And then we store that again in location three because there's two L's.
+ And then we do an immediate load of the letter O and we store that in location four and then we quit.
+ And then if you look at the memory, there is H-E-L-L-O in the memory in hex.
+ And then you can see that the program prints hello out when it's all done.
+ And again, this is just exploring some assembly language slash machine language.
+ So now we're going to do a little more complicated and a little more practical example.
+ So we are going to uppercase a whole string of characters and we're going to take the characters from memory,
+ read them all from memory in a loop, check them, convert them to uppercase and then store them back if necessary.
+ So the key to this is our data is going to be preloaded using the data directive in memory locations zero through four.
+ And that's the hello with the H uppercased already.
+ So now we've run it. You can see the status is halted and you see that it printed out an uppercase hello.
+ And the only real thing that it changed was memory location one, two, three and four are now the uppercase versions of those letters.
+ Now, before we go through that code in some detail, let's think about uppercasing this string in other languages.
+ Now, if you're a Python person, you'd be like hello dot upper.
+ There's a method. Hello.
+ The string is an object and you can call a method dot upper.
+ Now, it's not changing the hello to upper.
+ It is just giving you a copy of that.
+ Now, if we didn't have upper, we would have some pretty ugly Python.
+ So we couldn't you can't change a Python string in place.
+ So you have to take and make a variable.
+ In this case, I'll call it mem because it's like the memory.
+ But you can't change memory in Python.
+ You got to make a new one.
+ So then we're going to have this for loop for XR, which kind of is my way of saying X X register is range len of mem.
+ That's zero. That's going to run XR through zero through four up to but not including five.
+ And then we're going to retrieve memory one character of memory from XR to XR plus one.
+ Put that in the accumulator.
+ And if the accumulator is greater than or equal to A and less than or equal to Z,
+ which is between A and Z inclusive, then we're going to compute the new character.
+ And now you'll see this CHR and ORD.
+ And the problem is, is that in Python, we're not even using ASCII.
+ The hello is Unicode.
+ So ORD says, give me the ordinal of the current character I'm looking at, ACC.
+ Subtract the ordinal of lowercase a and add the ordinal uppercase a.
+ Now, this wouldn't necessarily work for any set of characters because Unicode can have a lot of things.
+ And so the actual uppercase is a little more complex inside of Python.
+ So we've computed the uppercase character if we know it's a lowercase character by mathematics.
+ And then we append it to the new version of the memory, building that up one string at a time.
+ And then we print it out.
+ And so you can't even do this because Python is not really designed for low-level array-like things.
+ Lists are not arrays.
+ Although if you took my C programming class, you would understand that they're kind of arrays, okay?
+ So let's take a look at this in C, which is a lot more like assembly language.
+ So if we take a look at the top of this, we include the standard I/O and we have a main program.
+ And we use the register, register int xr ACC.
+ Now, for those of you who don't know C, the register is a keyword in the C language.
+ And it says, this is going to be something that I'm going to want to make high performance.
+ So put it in a register if you possibly can.
+ Then I'm going to create a character array named mem.
+ Now, this is going to be a six-character array with a zero termination, the letters hello followed by a zero.
+ And so then what we're saying is we're saying for xr equals zero, as long as mem sub xr,
+ we're now looking for that zero terminated string, as long as mem xr is non-zero, continue and then add one to xr.
+ So then we take our, that's our index variable, our loop iteration variable.
+ So we say, oh, let's take the accumulator and load in mem sub xr because xr is our sort of index variable.
+ And in this case, we're dealing with ASCII and we know it.
+ So if the accumulator minus a is less than zero, we continue.
+ And if you recall and see the continue does mean that the increment part of the for loop is executed. So xr plus plus.
+ If not, we're going to say mem x sub xr equals the accumulator minus zero x20.
+ So we're doing the case conversion there and putting it right back into mem xr.
+ That for loops runs five times and then we print out the uppercase.
+ So now we are going to finally walk through the assembly language version of this.
+ So I've got the code on the left and I've got the before memory and the after memory on the right.
+ Now, one of the things that you'll notice is that I have given you on the right hand side,
+ I've given you the sort of pseudo code for the C code that corresponds to the assembly language that we're going to do.
+ So we're going to effectively construct a for loop that's going to loop through an array of characters.
+ So the first thing we do is we're going to set x to zero, clear x.
+ And then we're going to have a label to come back up to the top of our for loop.
+ The next instruction, lda $00, x, is the new instruction we haven't used so far.
+ And this is an index load into the accumulator.
+ $00 is the starting address and the x register contains our offset.
+ So it basically adds x to wherever we're at and then that becomes the address.
+ And then we're going to load that into the accumulator.
+ Now, that act of loading into the accumulator is going to set the z flag and the n flag as any change to any register does.
+ And so we're going to use a BEQ, which is really kind of branch zero.
+ That means if the accumulator is zero, we're going to follow the branch.
+ But in this case, the accumulator is going to have uppercase H, 0x48.
+ And so BEQ is not going to branch, so we're going to fall through.
+ And then we're going to start our if test in a sense.
+ Compare the accumulator to lowercase a.
+ Now, recall that in ASCII, uppercase a is less than lowercase a in the ASCII chart.
+ So if it's already uppercase, that comparison is going to be minus, right?
+ It's going to be negative.
+ And so we're going to branch to, in effect, a label that I called cont, which is sort of like a continue.
+ So we're going to skip the subtract if it's already an uppercase.
+ So BMI cont skips the subtraction if it's already uppercase.
+ Then we come into the continue label.
+ And then we are incrementing x.
+ Now, remember that continue actually runs the increment of a for loop.
+ And then we're going to jump back up to the top of the loop.
+ But x is now 1.
+ And now we're going to load index load from at location 0 with x of 1.
+ And so now we get the 0x65, which is the lowercase e.
+ And we're going to check to see if we're out of the loop or not.
+ We're going to fall through.
+ We're going to compare the lowercase e to lowercase a.
+ And in this case, it's not minus because e is greater than a.
+ And so we're going to do the subtraction.
+ So we're going to convert that to uppercase by subtracting 20 hex.
+ And then we're going to store it right back into that location, which is location 0 indexed by the x register, which is 1.
+ And so that's going to put 0x45 into location 1.
+ Then we drop into the continue.
+ We add 1 to x.
+ The x register becomes 2.
+ And we jump to the top of the loop.
+ So you see how this is kind of working, right?
+ So now x is 2.
+ And so we do an indexed load of location 0 plus 2.
+ Branch if it's equal to done.
+ Check to see if it's uppercase already.
+ And in this case, it's not.
+ So we subtract.
+ So at some point, you can follow this.
+ It will go round and round until we get to an offset of 5.
+ Jump to the top of the loop.
+ We're going to load location 0 plus x, which is 5.
+ And in this case, it's going to be a 0.
+ And then the BEQ is going to be true in a sense.
+ And then we're going to jump to done.
+ And then the application is going to finish and print out its after data, which is fully uppercased.
+ Hello.
+ That's a bunch of assembly language and C and Python.
+ And I would say that you're going to spend a bunch of time with the emulator
+ and a bunch of time with the emulator documentation.
+ And hopefully, with some time, this will all make sense to you.

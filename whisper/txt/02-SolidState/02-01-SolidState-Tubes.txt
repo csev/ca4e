@@ -1,0 +1,101 @@
+ Hello and welcome to our lecture on solid state computing. We've got a lot to cover.
+ At the end of the previous lecture we were talking about the classes and how the tube
+ was replacing the relay in digital applications and now we're going to talk about the transistor,
+ its invention and how eventually it replaces tubes in digital applications because the
+ transistor is faster, less heat, reliable, so many things. We're going to talk about
+ amplifiers, tubes and transistors but it's complicated. Transistor radios were made possible
+ by transistors but audiophiles still like their tubes. We'll talk about that in a bit.
+ We're going to talk about how over time we got better and better at manufacturing transistors
+ and their underlying transistor technology has changed over time and so the way we think
+ about this is we create this concept of a digital logic gate which is an abstraction
+ which is the same and the underlying transistor technology for a digital logic gate can be
+ very different but the way we think about digital logic gates is the way we can, it's
+ irrespective of the underlying technology or manufacturing technology. And then transistors
+ increased in density and scale and eventually we will learn about very large scale integration,
+ VLSI and learn how we lay out chips and how to manufacture them and just play with that
+ just a little bit. But let's start at the beginning with vacuum tubes, right? So the
+ Colossus used valves, the more British way to call it is valves and I think that to some
+ degree valves is a good way to think about it because it is sort of a remote control
+ valve that sort of allows less or more electricity through a particular thing based on an input
+ value. And its initial design was to design analogs, amplify signals, things like long
+ distance phone calls. You know you have a microphone and a thousand miles away there's
+ a speaker or a hundred miles away there's a speaker. And so the problem is the amount
+ of voltage that a microphone would generate is just not enough to get through hundreds
+ of miles of wires. So about every ten miles you needed a power supply and an amplifier
+ where the wires would come off, down off of the poles, get amplified, be put back up on
+ the poles. And the tube is a relatively old concept. It was invented in 1912 by Dr. Lee
+ DeForest. So let me show you close up a couple things about tubes and relays because the
+ Colossus really was the transition from tubes to relays. This is a relay and in this device
+ there's a series of inputs, inputs and outputs and there's a bunch of switches but then there's
+ a control input and output and the control input and output is what I'm going to be playing
+ with. Control input and output. So I'm going to be putting electricity on the control input
+ and what you've got is a spring that keeps contacts one way and then an electromagnet
+ that pulls the contacts another way. So I've got a little tiny DC power supply. It's a
+ simple little DC power supply. It's pretty safe. And I'm going to activate this and so
+ right now the contacts, right there, the contacts are one way and when I activate this the contacts
+ click to the other way. You can kind of see the contacts moving back and forth and you
+ can think of that as a zero and a one and on things like the Bomba we use these kinds
+ of relays to capture zeros and ones and you can even use these eventually to do addition.
+ The problem with relays and why tubes are better is how fast can you move this back and forth,
+ right? It's like I'm a video gamer pushing the keys as fast as I can. The problem is is because
+ there is inertia, there's a spring, and there's physics. There's only a certain amount of speed
+ that you can get to it and so ultimately tubes don't make a clicking noise. Anything that's
+ physical digital makes a clicking noise. So I'm going to connect this and keep this connected
+ and show you one more thing. So now this is energized and I'll turn my voltage down to zero.
+ So now it's a zero, now it's a one, now it's a zero. But I don't know if you're hearing it,
+ I'll try to make it so you can hear it even better. There's a moment where this device,
+ the physics is confused. The amount of voltage going through the electromagnet is not strong
+ enough to override the little spring at the top. There's a spring right there and so you see that
+ it's fighting, okay? So the electromagnet and the spring are fighting and let me make the
+ electromagnet and the spring fight and what you'll see at the bottom here is you'll see this kind of
+ bouncing back and forth and from a from a digital perspective it's bouncing back and forth from zero
+ to one. So here I'm going to start it and as I move it up slowly you may not be able to see the
+ movement but you probably can hear the movement. It is just fighting and it's going back and forth
+ and it's neither zero nor one at this point. If I go up higher then it will then it switches
+ and it stops and that transition is an important part of turning analog devices
+ into digital devices because we have to compensate for that. We have to make sure
+ that whatever voltage it is that leaves this in an intermediate state halfway between zero and one
+ is something we compensate for with logic outside of this device. So here I have some consumer
+ packaging and in the 1950s and the 1960s we would have radios and televisions in our homes and we
+ would have to go to the store and buy new tubes when the tubes broke down. So this tube that I
+ showed you before actually has a number. Its number is 6CGAA and after this I will show you the spec
+ that you can still read online for that. The other thing that's interesting is the packaging. It's a
+ little paper but it was designed for you to go to the store and to be able to bring home this somewhat
+ fragile device and not break it. So here is the tube I showed you before and we'll look at the
+ specification and you'll see the pins. There's nine pins. It talks about the height and you'll
+ see a bunch of graphs as compared to if you put certain amounts of electricity and voltage on
+ certain pins then certain things happen and so there's a whole bunch of graphs. So later I'll
+ start telling you talking to you about those graphs in the abstract. Here are the specifications of the
+ 6CGAA. It has nine inputs. It's about 2.1 inches tall and you can see which inputs go to the grid,
+ which inputs go to the heater, and which inputs go to the output voltage that then is the amplified
+ output voltage. We have these physical devices, these digital tubes, and their original purpose
+ was to do amplification and to do amplification well you want a nice smooth transition as your
+ input voltage is increased. You want a smooth transition for your output voltage. You want the
+ output voltage to be higher but you also want it to be smooth because you're trying to do an
+ amplification and so the right curve has a nice sort of 45 degree angle linear sloped amplification.
+ The problem is that when you have such a long time before it kind of goes from the low voltage to the
+ high voltage that makes the transition period too long. So there's a voltage range that's a zero,
+ there's a voltage range that's transition, and then there's a voltage range that is one.
+ So by changing the sizes of things and resistance etc you can build a valve that is not as good of
+ an audio amplifier but more suitable for digital and what you want to do is you want to take the
+ transition period from sort of zero to one and make that more narrow meaning that it goes quickly
+ from quiet to loud in a sense more quickly than you'd want for a real amplifier and you kind of
+ want it at the one-third point right so you as the input voltage goes from zero to the one-third
+ point it's kind of zero and then there's a short transition but by the time it gets to like half
+ of the input voltage the output is a one so you know you could the input could be from 0.1.2.3.4.5
+ but by the time the input voltage is halfway to one the output voltage is one and this allows for
+ what we call regeneration so if a circuit has an output that we want to be a zero or one and we
+ want that to be an input to another circuit then we can regenerate that so you might get like 0.7
+ coming from a previous circuit and then want it to be one going into the next circuit and so the
+ idea is you tune these things so they go up quickly and to some degree early so that we get
+ through a fast transition stage and a long regeneration stage so that you always can
+ can predictably have a zero or a one even with a very analog device so valves as we've talked they
+ take a lot of power they generate a lot of heat most of the tubes have heaters inside them that
+ made it easier for the the electrons to come off the cathode they're physically large you know how
+ many gigabytes can you put you can't you know 100 bytes would be large to to build with tubes
+ they're expensive and complex to manufacture because they're made of glass they have tiny
+ little wires in them that are hard to manufacture and put together and they have to be a vacuum
+ they do have a soft electronic glow in the dark the soft electronic glow in the dark is
+ to some an advantage and of course from a technology and electronics perspective
+ when we think about computers they're at disadvantage so up next we're going to talk about
+ the semiconductors which begin to address some of the disadvantages of valves slash vacuum tubes.

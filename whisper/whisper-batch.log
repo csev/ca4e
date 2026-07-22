@@ -1,0 +1,3643 @@
+Batch started: Tue Jul 21 23:00:41 EDT 2026
+MEDIA_ROOT=/Users/csev/Desktop/teach/ca4e-media
+WHISPER_ROOT=/Users/csev/htdocs/ca4e/whisper
+COURSE_HINT=Computer Architecture for Everybody, CA4E, computer architecture, hardware, digital logic, VLSI, Dr. Chuck, Chuck Severance
+FROM_LESSONS=1
+LESSONS_JSON=/Users/csev/htdocs/ca4e/lessons.json
+WHISPER=whisper-cli
+MODEL=/Users/csev/models/ggml-medium.bin
+VOCAB_FILES:
+  /Users/csev/htdocs/ca4e/whisper/ca4e-whisper-vocabulary.txt
+REPLACEMENTS_FILES=none
+LOG_FILE=/Users/csev/htdocs/ca4e/whisper/whisper-batch.log
+TXT_DIR=/Users/csev/htdocs/ca4e/whisper/txt
+VTT_DIR=/Users/csev/htdocs/ca4e/whisper/vtt
+SRT_DIR=/Users/csev/htdocs/ca4e/whisper/srt
+TMP_DIR=/Users/csev/htdocs/ca4e/whisper/.whisper-tmp
+RUN_TMP_DIR=/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660
+SUPPORTS_PROMPT=1
+FORCE=0
+QUIET_WHISPER=1
+==================================================
+
+==================================================
+MEDIA: 01-Origins/01-01-Origins-StoneHenge.m4v
+OUTPUT STEM: 01-Origins/01-01-Origins-StoneHenge
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-01-Origins-StoneHenge/audio.wav' (10619541 samples, 663.7 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-01-Origins-StoneHenge/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-01-Origins-StoneHenge/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-01-Origins-StoneHenge/output.srt'
+
+whisper_print_timings:     load time =   492.22 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   247.55 ms
+whisper_print_timings:   sample time =  3088.73 ms / 11173 runs (     0.28 ms per run)
+whisper_print_timings:   encode time = 10266.69 ms /    25 runs (   410.67 ms per run)
+whisper_print_timings:   decode time =   362.56 ms /    38 runs (     9.54 ms per run)
+whisper_print_timings:   batchd time = 27849.72 ms / 11010 runs (     2.53 ms per run)
+whisper_print_timings:   prompt time =  1974.97 ms /  5675 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 44862.59 ms
+ggml_metal_free: deallocating
+DONE: 01-Origins/01-01-Origins-StoneHenge.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:00:45
+  TOTAL  : 00:00:46
+
+==================================================
+MEDIA: 01-Origins/01-02-Origins-SlideRule.m4v
+OUTPUT STEM: 01-Origins/01-02-Origins-SlideRule
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-02-Origins-SlideRule/audio.wav' (13664917 samples, 854.1 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-02-Origins-SlideRule/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-02-Origins-SlideRule/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-02-Origins-SlideRule/output.srt'
+
+whisper_print_timings:     load time =   485.14 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   320.58 ms
+whisper_print_timings:   sample time =  4891.41 ms / 17722 runs (     0.28 ms per run)
+whisper_print_timings:   encode time = 12692.43 ms /    31 runs (   409.43 ms per run)
+whisper_print_timings:   decode time =   454.62 ms /    47 runs (     9.67 ms per run)
+whisper_print_timings:   batchd time = 44294.23 ms / 17523 runs (     2.53 ms per run)
+whisper_print_timings:   prompt time =  2374.01 ms /  6810 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 66189.98 ms
+ggml_metal_free: deallocating
+DONE: 01-Origins/01-02-Origins-SlideRule.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:01:06
+  TOTAL  : 00:01:07
+
+==================================================
+MEDIA: 01-Origins/01-03-Origins-Digital.m4v
+OUTPUT STEM: 01-Origins/01-03-Origins-Digital
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-03-Origins-Digital/audio.wav' (10600768 samples, 662.5 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-03-Origins-Digital/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-03-Origins-Digital/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-03-Origins-Digital/output.srt'
+
+whisper_print_timings:     load time =   493.49 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   247.16 ms
+whisper_print_timings:   sample time =  3085.96 ms / 11211 runs (     0.28 ms per run)
+whisper_print_timings:   encode time = 10653.57 ms /    26 runs (   409.75 ms per run)
+whisper_print_timings:   decode time =   486.33 ms /    51 runs (     9.54 ms per run)
+whisper_print_timings:   batchd time = 27983.01 ms / 11030 runs (     2.54 ms per run)
+whisper_print_timings:   prompt time =  2057.74 ms /  5902 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 45597.54 ms
+ggml_metal_free: deallocating
+DONE: 01-Origins/01-03-Origins-Digital.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:46
+  TOTAL  : 00:00:46
+
+==================================================
+MEDIA: 01-Origins/01-04-Origins-Iteration.m4v
+OUTPUT STEM: 01-Origins/01-04-Origins-Iteration
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-04-Origins-Iteration/audio.wav' (10524992 samples, 657.8 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-04-Origins-Iteration/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-04-Origins-Iteration/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-01-Origins__01-04-Origins-Iteration/output.srt'
+
+whisper_print_timings:     load time =   495.22 ms
+whisper_print_timings:     fallbacks =   3 p /   0 h
+whisper_print_timings:      mel time =   248.10 ms
+whisper_print_timings:   sample time =  3328.81 ms / 11974 runs (     0.28 ms per run)
+whisper_print_timings:   encode time = 10240.77 ms /    25 runs (   409.63 ms per run)
+whisper_print_timings:   decode time =   365.02 ms /    38 runs (     9.61 ms per run)
+whisper_print_timings:   batchd time = 29948.22 ms / 11799 runs (     2.54 ms per run)
+whisper_print_timings:   prompt time =  2061.23 ms /  5876 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 47277.64 ms
+ggml_metal_free: deallocating
+DONE: 01-Origins/01-04-Origins-Iteration.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:00:47
+  TOTAL  : 00:00:48
+
+==================================================
+MEDIA: 02-SolidState/02-01-SolidState-Tubes.m4v
+OUTPUT STEM: 02-SolidState/02-01-SolidState-Tubes
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-01-SolidState-Tubes/audio.wav' (10060096 samples, 628.8 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-01-SolidState-Tubes/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-01-SolidState-Tubes/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-01-SolidState-Tubes/output.srt'
+
+whisper_print_timings:     load time =   493.22 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   240.86 ms
+whisper_print_timings:   sample time =  3126.44 ms / 11200 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =  9828.53 ms /    24 runs (   409.52 ms per run)
+whisper_print_timings:   decode time =   346.96 ms /    36 runs (     9.64 ms per run)
+whisper_print_timings:   batchd time = 28046.91 ms / 11044 runs (     2.54 ms per run)
+whisper_print_timings:   prompt time =  1904.17 ms /  5448 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 44535.40 ms
+ggml_metal_free: deallocating
+DONE: 02-SolidState/02-01-SolidState-Tubes.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:00:45
+  TOTAL  : 00:00:46
+
+==================================================
+MEDIA: 02-SolidState/02-02-SolidState-Transistor.m4v
+OUTPUT STEM: 02-SolidState/02-02-SolidState-Transistor
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-02-SolidState-Transistor/audio.wav' (9972715 samples, 623.3 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-02-SolidState-Transistor/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-02-SolidState-Transistor/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-02-SolidState-Transistor/output.srt'
+
+whisper_print_timings:     load time =   496.11 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   234.97 ms
+whisper_print_timings:   sample time =  3227.30 ms / 11526 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =  9426.19 ms /    23 runs (   409.83 ms per run)
+whisper_print_timings:   decode time =   356.87 ms /    37 runs (     9.65 ms per run)
+whisper_print_timings:   batchd time = 28928.76 ms / 11374 runs (     2.54 ms per run)
+whisper_print_timings:   prompt time =  1825.22 ms /  5221 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 45028.27 ms
+ggml_metal_free: deallocating
+DONE: 02-SolidState/02-02-SolidState-Transistor.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:00:45
+  TOTAL  : 00:00:46
+
+==================================================
+MEDIA: 02-SolidState/02-03-SolidState-Gates.m4v
+OUTPUT STEM: 02-SolidState/02-03-SolidState-Gates
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-03-SolidState-Gates/audio.wav' (16763541 samples, 1047.7 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-03-SolidState-Gates/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-03-SolidState-Gates/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-03-SolidState-Gates/output.srt'
+
+whisper_print_timings:     load time =   492.18 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   393.66 ms
+whisper_print_timings:   sample time =  6111.30 ms / 22114 runs (     0.28 ms per run)
+whisper_print_timings:   encode time = 15559.92 ms /    38 runs (   409.47 ms per run)
+whisper_print_timings:   decode time =   373.78 ms /    39 runs (     9.58 ms per run)
+whisper_print_timings:   batchd time = 55509.87 ms / 21885 runs (     2.54 ms per run)
+whisper_print_timings:   prompt time =  3009.65 ms /  8626 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 82284.30 ms
+ggml_metal_free: deallocating
+DONE: 02-SolidState/02-03-SolidState-Gates.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:01:23
+  TOTAL  : 00:01:24
+
+==================================================
+MEDIA: 02-SolidState/02-10-SolidState-CMOS-Nor.m4v
+OUTPUT STEM: 02-SolidState/02-10-SolidState-CMOS-Nor
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-10-SolidState-CMOS-Nor/audio.wav' (7160811 samples, 447.6 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-10-SolidState-CMOS-Nor/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-10-SolidState-CMOS-Nor/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-02-SolidState__02-10-SolidState-CMOS-Nor/output.srt'
+
+whisper_print_timings:     load time =   497.41 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   167.91 ms
+whisper_print_timings:   sample time =  2369.55 ms /  8603 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =  7024.12 ms /    17 runs (   413.18 ms per run)
+whisper_print_timings:   decode time =   454.53 ms /    47 runs (     9.67 ms per run)
+whisper_print_timings:   batchd time = 21610.15 ms /  8471 runs (     2.55 ms per run)
+whisper_print_timings:   prompt time =  1357.95 ms /  3859 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 33879.33 ms
+ggml_metal_free: deallocating
+DONE: 02-SolidState/02-10-SolidState-CMOS-Nor.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:35
+  TOTAL  : 00:00:35
+
+==================================================
+MEDIA: 03-VLSI/03-04-SolidState-Wafers.m4v
+OUTPUT STEM: 03-VLSI/03-04-SolidState-Wafers
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-04-SolidState-Wafers/audio.wav' (8926187 samples, 557.9 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-04-SolidState-Wafers/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-04-SolidState-Wafers/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-04-SolidState-Wafers/output.srt'
+
+whisper_print_timings:     load time =   491.48 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   209.92 ms
+whisper_print_timings:   sample time =  2335.62 ms /  8532 runs (     0.27 ms per run)
+whisper_print_timings:   encode time =  8866.22 ms /    21 runs (   422.20 ms per run)
+whisper_print_timings:   decode time =   246.19 ms /    25 runs (     9.85 ms per run)
+whisper_print_timings:   batchd time = 21760.60 ms /  8402 runs (     2.59 ms per run)
+whisper_print_timings:   prompt time =  1708.10 ms /  4767 runs (     0.36 ms per run)
+whisper_print_timings:    total time = 36102.89 ms
+ggml_metal_free: deallocating
+DONE: 03-VLSI/03-04-SolidState-Wafers.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:37
+  TOTAL  : 00:00:37
+
+==================================================
+MEDIA: 03-VLSI/03-05-SolidState-VLSI.m4v
+OUTPUT STEM: 03-VLSI/03-05-SolidState-VLSI
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-05-SolidState-VLSI/audio.wav' (10309611 samples, 644.4 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-05-SolidState-VLSI/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-05-SolidState-VLSI/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-05-SolidState-VLSI/output.srt'
+
+whisper_print_timings:     load time =   497.42 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   242.01 ms
+whisper_print_timings:   sample time =  3138.01 ms / 11537 runs (     0.27 ms per run)
+whisper_print_timings:   encode time = 10551.28 ms /    25 runs (   422.05 ms per run)
+whisper_print_timings:   decode time =   197.44 ms /    20 runs (     9.87 ms per run)
+whisper_print_timings:   batchd time = 29813.77 ms / 11392 runs (     2.62 ms per run)
+whisper_print_timings:   prompt time =  2028.36 ms /  5675 runs (     0.36 ms per run)
+whisper_print_timings:    total time = 47034.36 ms
+ggml_metal_free: deallocating
+DONE: 03-VLSI/03-05-SolidState-VLSI.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:48
+  TOTAL  : 00:00:48
+
+==================================================
+MEDIA: 03-VLSI/03-11-SolidState-VLSI-Not.m4v
+OUTPUT STEM: 03-VLSI/03-11-SolidState-VLSI-Not
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-11-SolidState-VLSI-Not/audio.wav' (8150336 samples, 509.4 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-11-SolidState-VLSI-Not/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-11-SolidState-VLSI-Not/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-11-SolidState-VLSI-Not/output.srt'
+
+whisper_print_timings:     load time =   494.80 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   192.49 ms
+whisper_print_timings:   sample time =  2602.54 ms /  9177 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =  8410.42 ms /    20 runs (   420.52 ms per run)
+whisper_print_timings:   decode time =   854.56 ms /    88 runs (     9.71 ms per run)
+whisper_print_timings:   batchd time = 23482.42 ms /  8989 runs (     2.61 ms per run)
+whisper_print_timings:   prompt time =  1612.94 ms /  4540 runs (     0.36 ms per run)
+whisper_print_timings:    total time = 38104.39 ms
+ggml_metal_free: deallocating
+DONE: 03-VLSI/03-11-SolidState-VLSI-Not.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:39
+  TOTAL  : 00:00:39
+
+==================================================
+MEDIA: 03-VLSI/03-12-SolidState-VLSI-Nand.m4v
+OUTPUT STEM: 03-VLSI/03-12-SolidState-VLSI-Nand
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-12-SolidState-VLSI-Nand/audio.wav' (7438997 samples, 464.9 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-12-SolidState-VLSI-Nand/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-12-SolidState-VLSI-Nand/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-03-VLSI__03-12-SolidState-VLSI-Nand/output.srt'
+
+whisper_print_timings:     load time =   541.05 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   176.66 ms
+whisper_print_timings:   sample time =  3360.14 ms / 11466 runs (     0.29 ms per run)
+whisper_print_timings:   encode time =  6970.86 ms /    17 runs (   410.05 ms per run)
+whisper_print_timings:   decode time =   195.45 ms /    20 runs (     9.77 ms per run)
+whisper_print_timings:   batchd time = 32127.14 ms / 11364 runs (     2.83 ms per run)
+whisper_print_timings:   prompt time =  1265.40 ms /  3632 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 45051.47 ms
+ggml_metal_free: deallocating
+DONE: 03-VLSI/03-12-SolidState-VLSI-Nand.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:00:45
+  TOTAL  : 00:00:46
+
+==================================================
+MEDIA: 04-DigitalLogic/04-01-Digital-Arch.m4v
+OUTPUT STEM: 04-DigitalLogic/04-01-Digital-Arch
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-01-Digital-Arch/audio.wav' (7082304 samples, 442.6 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-01-Digital-Arch/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-01-Digital-Arch/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-01-Digital-Arch/output.srt'
+
+whisper_print_timings:     load time =   502.21 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   166.04 ms
+whisper_print_timings:   sample time =  2267.45 ms /  7957 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =  6951.39 ms /    17 runs (   408.91 ms per run)
+whisper_print_timings:   decode time =    58.03 ms /     6 runs (     9.67 ms per run)
+whisper_print_timings:   batchd time = 1023130.75 ms /  7866 runs (   130.07 ms per run)
+whisper_print_timings:   prompt time =  1335.61 ms /  3859 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 1034820.31 ms
+ggml_metal_free: deallocating
+DONE: 04-DigitalLogic/04-01-Digital-Arch.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:17:15
+  TOTAL  : 00:17:16
+
+==================================================
+MEDIA: 04-DigitalLogic/04-02-Digital-Gates.m4v
+OUTPUT STEM: 04-DigitalLogic/04-02-Digital-Gates
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-02-Digital-Gates/audio.wav' (13496299 samples, 843.5 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-02-Digital-Gates/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-02-Digital-Gates/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-02-Digital-Gates/output.srt'
+
+whisper_print_timings:     load time =   482.05 ms
+whisper_print_timings:     fallbacks =   3 p /   0 h
+whisper_print_timings:      mel time =   315.88 ms
+whisper_print_timings:   sample time =  5445.30 ms / 20192 runs (     0.27 ms per run)
+whisper_print_timings:   encode time = 961163.81 ms /    30 runs ( 32038.79 ms per run)
+whisper_print_timings:   decode time =   191.62 ms /    20 runs (     9.58 ms per run)
+whisper_print_timings:   batchd time = 49986.18 ms / 20010 runs (     2.50 ms per run)
+whisper_print_timings:   prompt time =  2498.28 ms /  7171 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 1020826.75 ms
+ggml_metal_free: deallocating
+DONE: 04-DigitalLogic/04-02-Digital-Gates.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:17:01
+  TOTAL  : 00:17:02
+
+==================================================
+MEDIA: 04-DigitalLogic/04-03-Digital-Latch.m4v
+OUTPUT STEM: 04-DigitalLogic/04-03-Digital-Latch
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-03-Digital-Latch/audio.wav' (10676203 samples, 667.3 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-03-Digital-Latch/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-03-Digital-Latch/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-03-Digital-Latch/output.srt'
+
+whisper_print_timings:     load time =   478.28 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   249.64 ms
+whisper_print_timings:   sample time =  3756.52 ms / 11030 runs (     0.34 ms per run)
+whisper_print_timings:   encode time = 929001.75 ms /    26 runs ( 35730.84 ms per run)
+whisper_print_timings:   decode time =   449.89 ms /    47 runs (     9.57 ms per run)
+whisper_print_timings:   batchd time = 27510.22 ms / 10853 runs (     2.53 ms per run)
+whisper_print_timings:   prompt time =  2047.30 ms /  5902 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 964105.25 ms
+ggml_metal_free: deallocating
+DONE: 04-DigitalLogic/04-03-Digital-Latch.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:16:05
+  TOTAL  : 00:16:05
+
+==================================================
+MEDIA: 04-DigitalLogic/04-11-Digital-Gates-Tool.m4v
+OUTPUT STEM: 04-DigitalLogic/04-11-Digital-Gates-Tool
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-11-Digital-Gates-Tool/audio.wav' (5520704 samples, 345.0 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-11-Digital-Gates-Tool/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-11-Digital-Gates-Tool/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-11-Digital-Gates-Tool/output.srt'
+
+whisper_print_timings:     load time =   512.69 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   129.19 ms
+whisper_print_timings:   sample time =  2505.69 ms /  7687 runs (     0.33 ms per run)
+whisper_print_timings:   encode time =  5319.03 ms /    13 runs (   409.16 ms per run)
+whisper_print_timings:   decode time =    95.70 ms /    10 runs (     9.57 ms per run)
+whisper_print_timings:   batchd time = 919665.81 ms /  7612 runs (   120.82 ms per run)
+whisper_print_timings:   prompt time =  1028.08 ms /  2951 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 929593.12 ms
+ggml_metal_free: deallocating
+DONE: 04-DigitalLogic/04-11-Digital-Gates-Tool.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:15:30
+  TOTAL  : 00:15:31
+
+==================================================
+MEDIA: 04-DigitalLogic/04-12-Digital-Gates-And.m4v
+OUTPUT STEM: 04-DigitalLogic/04-12-Digital-Gates-And
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-12-Digital-Gates-And/audio.wav' (2745664 samples, 171.6 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-12-Digital-Gates-And/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-12-Digital-Gates-And/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-12-Digital-Gates-And/output.srt'
+
+whisper_print_timings:     load time =   492.61 ms
+whisper_print_timings:     fallbacks =   3 p /   0 h
+whisper_print_timings:      mel time =    64.90 ms
+whisper_print_timings:   sample time =  1381.18 ms /  4905 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =  2461.52 ms /     6 runs (   410.25 ms per run)
+whisper_print_timings:   decode time =   159.53 ms /    17 runs (     9.38 ms per run)
+whisper_print_timings:   batchd time = 11963.70 ms /  4846 runs (     2.47 ms per run)
+whisper_print_timings:   prompt time =   591.35 ms /  1694 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 17344.85 ms
+ggml_metal_free: deallocating
+DONE: 04-DigitalLogic/04-12-Digital-Gates-And.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:18
+  TOTAL  : 00:00:18
+
+==================================================
+MEDIA: 04-DigitalLogic/04-13-Digital-Gates-Half.m4v
+OUTPUT STEM: 04-DigitalLogic/04-13-Digital-Gates-Half
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-13-Digital-Gates-Half/audio.wav' (3184619 samples, 199.0 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-13-Digital-Gates-Half/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-13-Digital-Gates-Half/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-04-DigitalLogic__04-13-Digital-Gates-Half/output.srt'
+
+whisper_print_timings:     load time =   487.10 ms
+whisper_print_timings:     fallbacks =   2 p /   2 h
+whisper_print_timings:      mel time =    75.56 ms
+whisper_print_timings:   sample time =  1485.60 ms /  4653 runs (     0.32 ms per run)
+whisper_print_timings:   encode time =  3282.08 ms /     8 runs (   410.26 ms per run)
+whisper_print_timings:   decode time =   198.99 ms /    21 runs (     9.48 ms per run)
+whisper_print_timings:   batchd time = 928641.75 ms /  4582 runs (   202.67 ms per run)
+whisper_print_timings:   prompt time =   794.00 ms /  2270 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 935242.81 ms
+ggml_metal_free: deallocating
+DONE: 04-DigitalLogic/04-13-Digital-Gates-Half.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:15:36
+  TOTAL  : 00:15:36
+
+==================================================
+MEDIA: 05-Clock/05-00-Hi.m4v
+OUTPUT STEM: 05-Clock/05-00-Hi
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-00-Hi/audio.wav' (1131840 samples, 70.7 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-00-Hi/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-00-Hi/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-00-Hi/output.srt'
+
+whisper_print_timings:     load time =   490.11 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =    27.33 ms
+whisper_print_timings:   sample time =   385.82 ms /  1196 runs (     0.32 ms per run)
+whisper_print_timings:   encode time =  1240.39 ms /     3 runs (   413.46 ms per run)
+whisper_print_timings:   decode time =     9.55 ms /     1 runs (     9.55 ms per run)
+whisper_print_timings:   batchd time =  2960.95 ms /  1180 runs (     2.51 ms per run)
+whisper_print_timings:   prompt time =   244.09 ms /   681 runs (     0.36 ms per run)
+whisper_print_timings:    total time =  5488.09 ms
+ggml_metal_free: deallocating
+DONE: 05-Clock/05-00-Hi.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:06
+  TOTAL  : 00:00:06
+
+==================================================
+MEDIA: 05-Clock/05-04-Digital-Clock.m4v
+OUTPUT STEM: 05-Clock/05-04-Digital-Clock
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-04-Digital-Clock/audio.wav' (7256725 samples, 453.5 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-04-Digital-Clock/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-04-Digital-Clock/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-04-Digital-Clock/output.srt'
+
+whisper_print_timings:     load time =   539.35 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   176.06 ms
+whisper_print_timings:   sample time =  2952.85 ms /  8057 runs (     0.37 ms per run)
+whisper_print_timings:   encode time =  7363.52 ms /    18 runs (   409.08 ms per run)
+whisper_print_timings:   decode time =   245.40 ms /    26 runs (     9.44 ms per run)
+whisper_print_timings:   batchd time = 20123.41 ms /  7941 runs (     2.53 ms per run)
+whisper_print_timings:   prompt time =  1454.52 ms /  4086 runs (     0.36 ms per run)
+whisper_print_timings:    total time = 33294.41 ms
+ggml_metal_free: deallocating
+DONE: 05-Clock/05-04-Digital-Clock.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:34
+  TOTAL  : 00:00:34
+
+==================================================
+MEDIA: 05-Clock/05-05-Digital-CPU.m4v
+OUTPUT STEM: 05-Clock/05-05-Digital-CPU
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-05-Digital-CPU/audio.wav' (9416683 samples, 588.5 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-05-Digital-CPU/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-05-Digital-CPU/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-05-Digital-CPU/output.srt'
+
+whisper_print_timings:     load time =   475.59 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   221.35 ms
+whisper_print_timings:   sample time =  2859.18 ms / 10394 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =  9002.49 ms /    22 runs (   409.20 ms per run)
+whisper_print_timings:   decode time =   314.93 ms /    33 runs (     9.54 ms per run)
+whisper_print_timings:   batchd time = 957415.75 ms / 10251 runs (    93.40 ms per run)
+whisper_print_timings:   prompt time =  1742.44 ms /  4994 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 972530.19 ms
+ggml_metal_free: deallocating
+DONE: 05-Clock/05-05-Digital-CPU.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:16:13
+  TOTAL  : 00:16:14
+
+==================================================
+MEDIA: 05-Clock/05-06-Digital-Code.m4v
+OUTPUT STEM: 05-Clock/05-06-Digital-Code
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-06-Digital-Code/audio.wav' (4117483 samples, 257.3 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-06-Digital-Code/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-06-Digital-Code/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-06-Digital-Code/output.srt'
+
+whisper_print_timings:     load time =   508.17 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =    97.47 ms
+whisper_print_timings:   sample time =  1430.36 ms /  5182 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =  4089.46 ms /    10 runs (   408.95 ms per run)
+whisper_print_timings:   decode time =   153.93 ms /    16 runs (     9.62 ms per run)
+whisper_print_timings:   batchd time = 12705.92 ms /  5119 runs (     2.48 ms per run)
+whisper_print_timings:   prompt time =   708.66 ms /  2043 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 19936.38 ms
+ggml_metal_free: deallocating
+DONE: 05-Clock/05-06-Digital-Code.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:21
+  TOTAL  : 00:00:21
+
+==================================================
+MEDIA: 05-Clock/05-14-Digital-Gates-Counter.m4v
+OUTPUT STEM: 05-Clock/05-14-Digital-Gates-Counter
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-14-Digital-Gates-Counter/audio.wav' (9055211 samples, 566.0 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-14-Digital-Gates-Counter/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-14-Digital-Gates-Counter/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-14-Digital-Gates-Counter/output.srt'
+
+whisper_print_timings:     load time =   491.29 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   212.70 ms
+whisper_print_timings:   sample time =  3319.40 ms / 11863 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =  8993.56 ms /    22 runs (   408.80 ms per run)
+whisper_print_timings:   decode time =   133.75 ms /    14 runs (     9.55 ms per run)
+whisper_print_timings:   batchd time = 29091.13 ms / 11739 runs (     2.48 ms per run)
+whisper_print_timings:   prompt time =  1733.54 ms /  4994 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 44489.56 ms
+ggml_metal_free: deallocating
+DONE: 05-Clock/05-14-Digital-Gates-Counter.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:45
+  TOTAL  : 00:00:45
+
+==================================================
+MEDIA: 05-Clock/05-15-Digital-Gates-Instruction.m4v
+OUTPUT STEM: 05-Clock/05-15-Digital-Gates-Instruction
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-15-Digital-Gates-Instruction/audio.wav' (5347989 samples, 334.2 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-15-Digital-Gates-Instruction/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-15-Digital-Gates-Instruction/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-05-Clock__05-15-Digital-Gates-Instruction/output.srt'
+
+whisper_print_timings:     load time =   502.17 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   125.44 ms
+whisper_print_timings:   sample time =  1618.12 ms /  5931 runs (     0.27 ms per run)
+whisper_print_timings:   encode time =  5318.44 ms /    13 runs (   409.11 ms per run)
+whisper_print_timings:   decode time =    54.78 ms /     6 runs (     9.13 ms per run)
+whisper_print_timings:   batchd time = 14405.05 ms /  5860 runs (     2.46 ms per run)
+whisper_print_timings:   prompt time =  1029.53 ms /  2951 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 23382.20 ms
+ggml_metal_free: deallocating
+DONE: 05-Clock/05-15-Digital-Gates-Instruction.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:00:23
+  TOTAL  : 00:00:24
+
+==================================================
+MEDIA: 06-CPU/06-00-Hi.m4v
+OUTPUT STEM: 06-CPU/06-00-Hi
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-00-Hi/audio.wav' (727019 samples, 45.4 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-00-Hi/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-00-Hi/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-00-Hi/output.srt'
+
+whisper_print_timings:     load time =   479.43 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =    17.38 ms
+whisper_print_timings:   sample time =   216.57 ms /   775 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =   831.06 ms /     2 runs (   415.53 ms per run)
+whisper_print_timings:   decode time =    10.01 ms /     1 runs (    10.01 ms per run)
+whisper_print_timings:   batchd time =  1881.34 ms /   764 runs (     2.46 ms per run)
+whisper_print_timings:   prompt time =   157.85 ms /   454 runs (     0.35 ms per run)
+whisper_print_timings:    total time =  3685.23 ms
+ggml_metal_free: deallocating
+DONE: 06-CPU/06-00-Hi.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:05
+  TOTAL  : 00:00:05
+
+==================================================
+MEDIA: 06-CPU/06-01-CPU-Intro.m4v
+OUTPUT STEM: 06-CPU/06-01-CPU-Intro
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.006 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-01-CPU-Intro/audio.wav' (5398165 samples, 337.4 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-01-CPU-Intro/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-01-CPU-Intro/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-01-CPU-Intro/output.srt'
+
+whisper_print_timings:     load time =   483.38 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   127.26 ms
+whisper_print_timings:   sample time =  1542.58 ms /  5631 runs (     0.27 ms per run)
+whisper_print_timings:   encode time =  5327.63 ms /    13 runs (   409.82 ms per run)
+whisper_print_timings:   decode time =   286.84 ms /    30 runs (     9.56 ms per run)
+whisper_print_timings:   batchd time = 14110.84 ms /  5536 runs (     2.55 ms per run)
+whisper_print_timings:   prompt time =  1029.00 ms /  2951 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 23241.61 ms
+ggml_metal_free: deallocating
+DONE: 06-CPU/06-01-CPU-Intro.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:24
+  TOTAL  : 00:00:24
+
+==================================================
+MEDIA: 06-CPU/06-02-CPU-Hex.m4v
+OUTPUT STEM: 06-CPU/06-02-CPU-Hex
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-02-CPU-Hex/audio.wav' (11900907 samples, 743.8 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-02-CPU-Hex/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-02-CPU-Hex/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-02-CPU-Hex/output.srt'
+
+whisper_print_timings:     load time =   490.34 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   281.60 ms
+whisper_print_timings:   sample time =  4201.81 ms / 14499 runs (     0.29 ms per run)
+whisper_print_timings:   encode time = 27476.28 ms /    29 runs (   947.46 ms per run)
+whisper_print_timings:   decode time =   391.29 ms /    41 runs (     9.54 ms per run)
+whisper_print_timings:   batchd time = 36811.82 ms / 14313 runs (     2.57 ms per run)
+whisper_print_timings:   prompt time =  2447.34 ms /  6583 runs (     0.37 ms per run)
+whisper_print_timings:    total time = 73002.42 ms
+ggml_metal_free: deallocating
+DONE: 06-CPU/06-02-CPU-Hex.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:01:14
+  TOTAL  : 00:01:14
+
+==================================================
+MEDIA: 06-CPU/06-03-CPU-Coding.m4v
+OUTPUT STEM: 06-CPU/06-03-CPU-Coding
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-03-CPU-Coding/audio.wav' (10715456 samples, 669.7 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-03-CPU-Coding/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-03-CPU-Coding/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-03-CPU-Coding/output.srt'
+
+whisper_print_timings:     load time =   518.10 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   252.32 ms
+whisper_print_timings:   sample time =  3277.06 ms / 11222 runs (     0.29 ms per run)
+whisper_print_timings:   encode time = 10253.23 ms /    25 runs (   410.13 ms per run)
+whisper_print_timings:   decode time =   114.26 ms /    12 runs (     9.52 ms per run)
+whisper_print_timings:   batchd time = 28060.40 ms / 11085 runs (     2.53 ms per run)
+whisper_print_timings:   prompt time =  1974.69 ms /  5675 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 45025.49 ms
+ggml_metal_free: deallocating
+DONE: 06-CPU/06-03-CPU-Coding.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:00:45
+  TOTAL  : 00:00:46
+
+==================================================
+MEDIA: 06-CPU/06-04-CPU-Arch.m4v
+OUTPUT STEM: 06-CPU/06-04-CPU-Arch
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-04-CPU-Arch/audio.wav' (9412928 samples, 588.3 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-04-CPU-Arch/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-04-CPU-Arch/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-04-CPU-Arch/output.srt'
+
+whisper_print_timings:     load time =   487.02 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   248.83 ms
+whisper_print_timings:   sample time =  2867.50 ms / 10095 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =  9018.16 ms /    22 runs (   409.92 ms per run)
+whisper_print_timings:   decode time =   191.70 ms /    20 runs (     9.58 ms per run)
+whisper_print_timings:   batchd time = 25117.37 ms /  9965 runs (     2.52 ms per run)
+whisper_print_timings:   prompt time =  1736.75 ms /  4994 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 40163.55 ms
+ggml_metal_free: deallocating
+DONE: 06-CPU/06-04-CPU-Arch.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:00:40
+  TOTAL  : 00:00:41
+
+==================================================
+MEDIA: 06-CPU/06-05-CPU-Machine.m4v
+OUTPUT STEM: 06-CPU/06-05-CPU-Machine
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-05-CPU-Machine/audio.wav' (17960939 samples, 1122.6 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-05-CPU-Machine/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-05-CPU-Machine/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-05-CPU-Machine/output.srt'
+
+whisper_print_timings:     load time =   494.14 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   422.93 ms
+whisper_print_timings:   sample time =  5952.55 ms / 21159 runs (     0.28 ms per run)
+whisper_print_timings:   encode time = 17193.39 ms /    42 runs (   409.37 ms per run)
+whisper_print_timings:   decode time =   481.42 ms /    50 runs (     9.63 ms per run)
+whisper_print_timings:   batchd time = 53182.35 ms / 20899 runs (     2.54 ms per run)
+whisper_print_timings:   prompt time =  3326.56 ms /  9534 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 81974.30 ms
+ggml_metal_free: deallocating
+DONE: 06-CPU/06-05-CPU-Machine.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:01:23
+  TOTAL  : 00:01:24
+
+==================================================
+MEDIA: 06-CPU/06-06-CPU-Assembly.m4v
+OUTPUT STEM: 06-CPU/06-06-CPU-Assembly
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-06-CPU-Assembly/audio.wav' (12554901 samples, 784.7 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-06-CPU-Assembly/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-06-CPU-Assembly/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-06-CPU-Assembly/output.srt'
+
+whisper_print_timings:     load time =   479.05 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   293.21 ms
+whisper_print_timings:   sample time =  5481.77 ms / 15813 runs (     0.35 ms per run)
+whisper_print_timings:   encode time = 11908.17 ms /    29 runs (   410.63 ms per run)
+whisper_print_timings:   decode time =   393.08 ms /    41 runs (     9.59 ms per run)
+whisper_print_timings:   batchd time = 40575.40 ms / 15627 runs (     2.60 ms per run)
+whisper_print_timings:   prompt time =  2284.69 ms /  6583 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 62063.67 ms
+ggml_metal_free: deallocating
+DONE: 06-CPU/06-06-CPU-Assembly.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:01:02
+  TOTAL  : 00:01:03
+
+==================================================
+MEDIA: 06-CPU/06-11-CPU-6504-UI-Walkthrough.m4v
+OUTPUT STEM: 06-CPU/06-11-CPU-6504-UI-Walkthrough
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-11-CPU-6504-UI-Walkthrough/audio.wav' (5674987 samples, 354.7 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-11-CPU-6504-UI-Walkthrough/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-11-CPU-6504-UI-Walkthrough/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-11-CPU-6504-UI-Walkthrough/output.srt'
+
+whisper_print_timings:     load time =   524.27 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   133.39 ms
+whisper_print_timings:   sample time =  2196.34 ms /  7740 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =  5335.49 ms /    13 runs (   410.42 ms per run)
+whisper_print_timings:   decode time =   466.28 ms /    48 runs (     9.71 ms per run)
+whisper_print_timings:   batchd time = 19308.98 ms /  7627 runs (     2.53 ms per run)
+whisper_print_timings:   prompt time =  1030.65 ms /  2951 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 29338.92 ms
+ggml_metal_free: deallocating
+DONE: 06-CPU/06-11-CPU-6504-UI-Walkthrough.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:00:30
+  TOTAL  : 00:00:31
+
+==================================================
+MEDIA: 06-CPU/06-12-CPU-6504-Simple-Samples.m4v
+OUTPUT STEM: 06-CPU/06-12-CPU-6504-Simple-Samples
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-12-CPU-6504-Simple-Samples/audio.wav' (4685803 samples, 292.9 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-12-CPU-6504-Simple-Samples/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-12-CPU-6504-Simple-Samples/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-12-CPU-6504-Simple-Samples/output.srt'
+
+whisper_print_timings:     load time =   480.34 ms
+whisper_print_timings:     fallbacks =   3 p /   0 h
+whisper_print_timings:      mel time =   110.33 ms
+whisper_print_timings:   sample time =  2157.90 ms /  7713 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =  4520.44 ms /    11 runs (   410.95 ms per run)
+whisper_print_timings:   decode time =   374.95 ms /    39 runs (     9.61 ms per run)
+whisper_print_timings:   batchd time = 19138.13 ms /  7607 runs (     2.52 ms per run)
+whisper_print_timings:   prompt time =  1102.28 ms /  2860 runs (     0.39 ms per run)
+whisper_print_timings:    total time = 28199.10 ms
+ggml_metal_free: deallocating
+DONE: 06-CPU/06-12-CPU-6504-Simple-Samples.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:28
+  TOTAL  : 00:00:28
+
+==================================================
+MEDIA: 06-CPU/06-13-CPU-6504-For-Loop.m4v
+OUTPUT STEM: 06-CPU/06-13-CPU-6504-For-Loop
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-13-CPU-6504-For-Loop/audio.wav' (8783168 samples, 548.9 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-13-CPU-6504-For-Loop/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-13-CPU-6504-For-Loop/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-13-CPU-6504-For-Loop/output.srt'
+
+whisper_print_timings:     load time =   492.80 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   207.20 ms
+whisper_print_timings:   sample time =  2960.13 ms / 10437 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =  9012.44 ms /    22 runs (   409.66 ms per run)
+whisper_print_timings:   decode time =   411.47 ms /    43 runs (     9.57 ms per run)
+whisper_print_timings:   batchd time = 25986.08 ms / 10284 runs (     2.53 ms per run)
+whisper_print_timings:   prompt time =  1736.18 ms /  4994 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 41339.69 ms
+ggml_metal_free: deallocating
+DONE: 06-CPU/06-13-CPU-6504-For-Loop.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:42
+  TOTAL  : 00:00:42
+
+==================================================
+MEDIA: 06-CPU/06-14-CPU-6504-If-Test.m4v
+OUTPUT STEM: 06-CPU/06-14-CPU-6504-If-Test
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-14-CPU-6504-If-Test/audio.wav' (4773184 samples, 298.3 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-14-CPU-6504-If-Test/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-14-CPU-6504-If-Test/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-14-CPU-6504-If-Test/output.srt'
+
+whisper_print_timings:     load time =   500.49 ms
+whisper_print_timings:     fallbacks =   3 p /   0 h
+whisper_print_timings:      mel time =   113.26 ms
+whisper_print_timings:   sample time =  2176.36 ms /  7657 runs (     0.28 ms per run)
+whisper_print_timings:   encode time =  4512.34 ms /    11 runs (   410.21 ms per run)
+whisper_print_timings:   decode time =   424.48 ms /    44 runs (     9.65 ms per run)
+whisper_print_timings:   batchd time = 18968.30 ms /  7546 runs (     2.51 ms per run)
+whisper_print_timings:   prompt time =  1003.47 ms /  2865 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 28012.70 ms
+ggml_metal_free: deallocating
+DONE: 06-CPU/06-14-CPU-6504-If-Test.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:28
+  TOTAL  : 00:00:28
+
+==================================================
+MEDIA: 06-CPU/06-15-CPU-6504-Upper.m4v
+OUTPUT STEM: 06-CPU/06-15-CPU-6504-Upper
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-15-CPU-6504-Upper/audio.wav' (11593365 samples, 724.6 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-15-CPU-6504-Upper/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-15-CPU-6504-Upper/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-06-CPU__06-15-CPU-6504-Upper/output.srt'
+
+whisper_print_timings:     load time =   508.76 ms
+whisper_print_timings:     fallbacks =   3 p /   0 h
+whisper_print_timings:      mel time =   271.67 ms
+whisper_print_timings:   sample time =  4703.66 ms / 16540 runs (     0.28 ms per run)
+whisper_print_timings:   encode time = 10654.37 ms /    26 runs (   409.78 ms per run)
+whisper_print_timings:   decode time =   250.11 ms /    26 runs (     9.62 ms per run)
+whisper_print_timings:   batchd time = 41289.57 ms / 16372 runs (     2.52 ms per run)
+whisper_print_timings:   prompt time =  2184.08 ms /  6266 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 60500.00 ms
+ggml_metal_free: deallocating
+DONE: 06-CPU/06-15-CPU-6504-Upper.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:01:01
+  TOTAL  : 00:01:02
+
+==================================================
+MEDIA: 07-Emulator/07-07-CPU-Emulator.m4v
+OUTPUT STEM: 07-Emulator/07-07-CPU-Emulator
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-07-CPU-Emulator/audio.wav' (10495637 samples, 656.0 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-07-CPU-Emulator/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-07-CPU-Emulator/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-07-CPU-Emulator/output.srt'
+
+whisper_print_timings:     load time =   485.58 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   246.16 ms
+whisper_print_timings:   sample time =  3508.50 ms / 12285 runs (     0.29 ms per run)
+whisper_print_timings:   encode time =  9878.97 ms /    24 runs (   411.62 ms per run)
+whisper_print_timings:   decode time =   194.73 ms /    20 runs (     9.74 ms per run)
+whisper_print_timings:   batchd time = 30697.97 ms / 12145 runs (     2.53 ms per run)
+whisper_print_timings:   prompt time =  1897.52 ms /  5448 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 47454.28 ms
+ggml_metal_free: deallocating
+DONE: 07-Emulator/07-07-CPU-Emulator.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:48
+  TOTAL  : 00:00:48
+
+==================================================
+MEDIA: 07-Emulator/07-08-CPU-History.m4v
+OUTPUT STEM: 07-Emulator/07-08-CPU-History
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-08-CPU-History/audio.wav' (7204160 samples, 450.3 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-08-CPU-History/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-08-CPU-History/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-08-CPU-History/output.srt'
+
+whisper_print_timings:     load time =   519.32 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   170.93 ms
+whisper_print_timings:   sample time =  2164.19 ms /  7512 runs (     0.29 ms per run)
+whisper_print_timings:   encode time =  7442.34 ms /    18 runs (   413.46 ms per run)
+whisper_print_timings:   decode time =   343.72 ms /    35 runs (     9.82 ms per run)
+whisper_print_timings:   batchd time = 18809.37 ms /  7390 runs (     2.55 ms per run)
+whisper_print_timings:   prompt time =  1340.86 ms /  3859 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 31192.03 ms
+ggml_metal_free: deallocating
+DONE: 07-Emulator/07-08-CPU-History.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:31
+  TOTAL  : 00:00:31
+
+==================================================
+MEDIA: 07-Emulator/07-11-WASM-Hello-JS.m4v
+OUTPUT STEM: 07-Emulator/07-11-WASM-Hello-JS
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.008 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-11-WASM-Hello-JS/audio.wav' (3806187 samples, 237.9 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-11-WASM-Hello-JS/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-11-WASM-Hello-JS/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-11-WASM-Hello-JS/output.srt'
+
+whisper_print_timings:     load time =   525.60 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =    90.49 ms
+whisper_print_timings:   sample time =  1276.87 ms /  4457 runs (     0.29 ms per run)
+whisper_print_timings:   encode time =  3732.15 ms /     9 runs (   414.68 ms per run)
+whisper_print_timings:   decode time =   154.83 ms /    16 runs (     9.68 ms per run)
+whisper_print_timings:   batchd time = 11151.69 ms /  4396 runs (     2.54 ms per run)
+whisper_print_timings:   prompt time =   707.97 ms /  2043 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 17881.98 ms
+ggml_metal_free: deallocating
+DONE: 07-Emulator/07-11-WASM-Hello-JS.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:00:18
+  TOTAL  : 00:00:19
+
+==================================================
+MEDIA: 07-Emulator/07-12-WASM-Hello-C.m4v
+OUTPUT STEM: 07-Emulator/07-12-WASM-Hello-C
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-12-WASM-Hello-C/audio.wav' (6541973 samples, 408.9 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-12-WASM-Hello-C/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-12-WASM-Hello-C/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-12-WASM-Hello-C/output.srt'
+
+whisper_print_timings:     load time =   506.37 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   153.75 ms
+whisper_print_timings:   sample time =  2160.75 ms /  7458 runs (     0.29 ms per run)
+whisper_print_timings:   encode time =  6597.91 ms /    16 runs (   412.37 ms per run)
+whisper_print_timings:   decode time =   604.81 ms /    63 runs (     9.60 ms per run)
+whisper_print_timings:   batchd time = 18752.49 ms /  7315 runs (     2.56 ms per run)
+whisper_print_timings:   prompt time =  1263.89 ms /  3632 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 30419.75 ms
+ggml_metal_free: deallocating
+DONE: 07-Emulator/07-12-WASM-Hello-C.m4v
+TIMING:
+  FFMPEG : 00:00:01
+  WHISPER: 00:00:30
+  TOTAL  : 00:00:31
+
+==================================================
+MEDIA: 07-Emulator/07-13-WASM-Upper.m4v
+OUTPUT STEM: 07-Emulator/07-13-WASM-Upper
+STEP 1: Extracting audio with ffmpeg...
+STEP 2: Running whisper-cli...
+whisper_init_from_file_with_params_no_state: loading model from '/Users/csev/models/ggml-medium.bin'
+whisper_init_with_params_no_state: use gpu    = 1
+whisper_init_with_params_no_state: flash attn = 1
+whisper_init_with_params_no_state: gpu_device = 0
+whisper_init_with_params_no_state: dtw        = 0
+ggml_metal_device_init: tensor API disabled for pre-M5 and pre-A19 devices
+ggml_metal_library_init: using embedded metal library
+ggml_metal_library_init: loaded in 0.007 sec
+ggml_metal_rsets_init: creating a residency set collection (keep_alive = 180 s)
+ggml_metal_device_init: GPU name:   Apple M1 Pro
+ggml_metal_device_init: GPU family: MTLGPUFamilyApple7  (1007)
+ggml_metal_device_init: GPU family: MTLGPUFamilyCommon3 (3003)
+ggml_metal_device_init: GPU family: MTLGPUFamilyMetal4  (5002)
+ggml_metal_device_init: simdgroup reduction   = true
+ggml_metal_device_init: simdgroup matrix mul. = true
+ggml_metal_device_init: has unified memory    = true
+ggml_metal_device_init: has bfloat            = true
+ggml_metal_device_init: has tensor            = false
+ggml_metal_device_init: use residency sets    = true
+ggml_metal_device_init: use shared buffers    = true
+ggml_metal_device_init: recommendedMaxWorkingSetSize  = 26800.60 MB
+whisper_init_with_params_no_state: devices    = 3
+whisper_init_with_params_no_state: backends   = 3
+whisper_model_load: loading model
+whisper_model_load: n_vocab       = 51865
+whisper_model_load: n_audio_ctx   = 1500
+whisper_model_load: n_audio_state = 1024
+whisper_model_load: n_audio_head  = 16
+whisper_model_load: n_audio_layer = 24
+whisper_model_load: n_text_ctx    = 448
+whisper_model_load: n_text_state  = 1024
+whisper_model_load: n_text_head   = 16
+whisper_model_load: n_text_layer  = 24
+whisper_model_load: n_mels        = 80
+whisper_model_load: ftype         = 1
+whisper_model_load: qntvr         = 0
+whisper_model_load: type          = 4 (medium)
+whisper_model_load: adding 1608 extra tokens
+whisper_model_load: n_langs       = 99
+whisper_model_load:        Metal total size =  1533.14 MB
+whisper_model_load: model size    = 1533.14 MB
+whisper_backend_init_gpu: device 0: Metal (type: 1)
+whisper_backend_init_gpu: found GPU device 0: Metal (type: 1, cnt: 0)
+whisper_backend_init_gpu: using Metal backend
+ggml_metal_init: allocating
+ggml_metal_init: found device: Apple M1 Pro
+ggml_metal_init: picking default device: Apple M1 Pro
+ggml_metal_init: use fusion         = true
+ggml_metal_init: use concurrency    = true
+ggml_metal_init: use graph optimize = true
+whisper_backend_init: using BLAS backend
+whisper_init_state: kv self size  =   50.33 MB
+whisper_init_state: kv cross size =  150.99 MB
+whisper_init_state: kv pad  size  =    6.29 MB
+whisper_init_state: compute buffer (conv)   =   29.53 MB
+whisper_init_state: compute buffer (encode) =   53.12 MB
+whisper_init_state: compute buffer (cross)  =   20.02 MB
+whisper_init_state: compute buffer (decode) =   99.12 MB
+
+system_info: n_threads = 4 / 10 | WHISPER : COREML = 0 | OPENVINO = 0 | Metal : EMBED_LIBRARY = 1 | CPU : NEON = 1 | ARM_FMA = 1 | FP16_VA = 1 | DOTPROD = 1 | ACCELERATE = 1 | REPACK = 1 | 
+
+main: processing '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-13-WASM-Upper/audio.wav' (10223936 samples, 639.0 sec), 4 threads, 1 processors, 5 beams + best of 5, lang = en, task = transcribe, timestamps = 1 ...
+
+output_txt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-13-WASM-Upper/output.txt'
+output_vtt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-13-WASM-Upper/output.vtt'
+output_srt: saving output to '/Users/csev/htdocs/ca4e/whisper/.whisper-tmp/run-55660/work-07-Emulator__07-13-WASM-Upper/output.srt'
+
+whisper_print_timings:     load time =   492.92 ms
+whisper_print_timings:     fallbacks =   0 p /   0 h
+whisper_print_timings:      mel time =   243.97 ms
+whisper_print_timings:   sample time =  3818.09 ms / 13393 runs (     0.29 ms per run)
+whisper_print_timings:   encode time =  9846.56 ms /    24 runs (   410.27 ms per run)
+whisper_print_timings:   decode time =   243.68 ms /    25 runs (     9.75 ms per run)
+whisper_print_timings:   batchd time = 33404.80 ms / 13248 runs (     2.52 ms per run)
+whisper_print_timings:   prompt time =  1895.10 ms /  5448 runs (     0.35 ms per run)
+whisper_print_timings:    total time = 50490.75 ms
+ggml_metal_free: deallocating
+DONE: 07-Emulator/07-13-WASM-Upper.m4v
+TIMING:
+  FFMPEG : 00:00:00
+  WHISPER: 00:00:51
+  TOTAL  : 00:00:51
+
+==================================================
+Batch finished: Wed Jul 22 01:02:33 EDT 2026
+ELAPSED=02:01:52 (7312s)
+TOTAL=41
+DONE=41
+SKIPPED=0
+FAILED=0
+LOG=/Users/csev/htdocs/ca4e/whisper/whisper-batch.log
+==================================================
+
+TIP: Add a *whisper-replacements* file under /Users/csev/htdocs/ca4e/whisper (optional),
+     then re-apply cleanup to transcripts with:
+  whisper-cleanup.py

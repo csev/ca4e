@@ -1,0 +1,216 @@
+ So now we're going to do a bit of a deep dive into the machine language of our CDC 6504 emulator.
+ I would suggest that if you're doing extensive work or even if you have some visual limitations that you look at the online documentation.
+ It's complete and it's simple and to some degree this lecture is really derived from the online documentation of the CDC 6504.
+ And so we always are going to start and talk about the register and just review it.
+ Hopefully, after a couple of lectures, it'll be sort of natural to you.
+ The program counter is the what next instruction memory starts at zero.
+ The accumulator is the best register.
+ So it's the CDC 6504 is an accumulator based computer, which means that you can do more things with the accumulator than other registers.
+ There are flags, the Z and the N and there's actually more in the 6502, but Z and the N is all I put in here.
+ Z says when you're fiddling with registers, was the last result zero or was the last result negative?
+ And these are used to control ifs and jumps and loops, the Z and the N.
+ The X and the Y are index registers.
+ They're just a little less capable of the accumulator register, and they're actually used in index loads, as we'll see.
+ Instruction memory is shown in base two for easy decoding.
+ Now, the data memory, I show that in hex because mostly what we're putting in the data memory is strings and ASCII characters.
+ OK, so the index instructions are good for loops and the X and Y registers are often used to control counted loops or actually look things up within an array.
+ And so we have an opcode to clear the X register, clear the Y register, add one to it, add one to X and Y and then subtract one from X and Y.
+ Now, if you think about it, the CPU that we built clears and increments with two instructions.
+ So we had an instruction of one which increments and zero which clears.
+ So in addition to 8-bit instructions, there are 16-bit instructions.
+ And so in 16-bit instructions, there is usually a numeric value or a constant or an address that is in the immediately following.
+ So that means that the program counter in this case goes up by two.
+ And so the load A instruction can take a constant value.
+ So you can load A, the character asterisk, which is 42.
+ And so you see the load A instruction at memory location zero and then the actual 42 value, in this case base two, is instruction one.
+ Or you can basically say we're going to do a load, but the address that we want to load from is taken from the following 8-bits.
+ In this case, we're going to load from memory location two and the two is stored in instruction memory location three.
+ So we call these immediate.
+ And the reason we kind of call these things immediate is the constant or the address is immediately following the instruction in case.
+ And so these turn into 16-bit instructions.
+ You can see it as you load one instruction in and there will probably be both a current instruction register and an immediate register.
+ And you would notice that this instruction that we just loaded has an immediate.
+ And so we'd load both of those things and then have them in the CPU to work.
+ So loading and storing operations are important.
+ So you can load into the A register, the X register, and the Y register, and you can store into the A register, X register, and Y register.
+ And you can either load a constant like set A to zero, load A, hashtag zero, or you can say go get memory location F3 and load that in.
+ And so those are the instructions that do loading and storing.
+ Now, when we start dealing with the arrays, we can use the X and the Y.
+ So we can say this address is kind of the beginning of the array and then X and Y are the offset in the array.
+ So you start seeing that you can set X to zero.
+ You can load something from a starting point in memory plus X and then you can add one to zero and then load something again from that same place in memory plus X.
+ And then X become and Y are really well designed to use as iteration variables.
+ And then this is where the accumulator is important, where the accumulator is the register that can do the most things.
+ So we can't add arbitrary values, so we can't add we can add one to X and Y registers, but we can't add five.
+ So ADC hashtag five adds five to it.
+ So the same for subtraction and that you can either add an immediate value like a constant or you can go into some memory and grab that memory and add it to the accumulator.
+ So you can see it says ACC equals ACC plus memory bracket address.
+ That means that we're adding in the data memory at the position that's address, but the address it's an immediate instruction and the next one is the address that we're going to add.
+ So adding and subtracting is the accumulator.
+ Now, the everything that is adding, subtracting, loading, storing, whatever is doing to whatever register sets the Z and the N flags.
+ And so it just as part of the final putting the value into the register, it sets Z and N.
+ So if the value we put in to the register was zero, the Z flag will be a one.
+ It'll be set. If the value we put in was 42, the Z flag will be zero.
+ And the same with positive and negative. Negative numbers are numbers that have the first bit, the tie bit one.
+ We're not doing too much. We won't be doing too much with negative in this class.
+ We'll mostly be setting the zero, but you can do like less than or equal with the negative.
+ So combinations of Z and N can do greater than or equal, less than or equal, et cetera, et cetera.
+ And so there is a special instruction called the compare instruction that says, hey, let's check to see if the accumulator equals five.
+ But you're really saying five accumulator, check them.
+ It's kind of like a subtraction without actually doing the subtraction and then set subtract,
+ set the Z and N flags from the result of the subtraction and then throw away the result of the subtraction.
+ So that's what the comparison operators are. OK. And so you can compare the accumulator, the X and the Y.
+ So there's no if statement in machine code. All there are are conditional jumps.
+ And so that you have to get used to it. When I started in Fortran, everything was a go to before we had structured ifs, if then else.
+ That that's not in machine code. There is a conditional jump, which we'll talk about.
+ And the way you get the conditional jumps to activate is every instruction that changes a register and the compare instructions with don't change registers, set the result flags.
+ There's a Z, which is was the result zero or not. And then the N is was the result negative or not.
+ And so if the result is zero, the Z is one and the N is zero, because zero is not negative.
+ If the result is positive, Z is zero because it's not zero and N is zero because it's not negative.
+ And if the result is negative, Z is zero and one is negative.
+ And yes, you can use these together to create greater than, greater than or equal to, equal, less than, less than or equal to.
+ So that's kind of what you're thinking about, right, is how to implement what we think of as the traditional logical operators in a high level language.
+ So the closest we have to an if statement is a compare and then a conditional jump.
+ And so there are four instructions, right.
+ There's more of them, but these are the four that matter.
+ The B, E, Q, branch, if equal, that means the Z flag is set.
+ B, N, E, branch, if not equal means the Z flag is clear.
+ And then branch minus B, M, I, and then B, P, L means branch plus.
+ So, for example, here's a little tiny bit of code that we can do an uppercase.
+ We're going to convert a lowercase to uppercase and leave uppercase alone.
+ OK, so we do a L, D, A, hashtag, quote, P, quote, which is the ASCII value per P.
+ Now, normally we'd read this from input, but we're not going to.
+ We're just going to hard code the very the value we're going to convert.
+ Then we're going to compare that to the ASCII value for A.
+ So that comparison then sets the Z and the N.
+ And then we're going to say BMI to location 08, which we'll talk about this in a second,
+ how that works, how you know that that's 08.
+ That's kind of tricky, but that's an address in instruction memory, the 08.
+ And then if it's minus, we will skip the next instruction, but if it's not minus,
+ we're going to subtract 20, a hex 20, because that's converting to a lowercase.
+ If you look at the ASCII table, you see that the difference between an uppercase A and
+ a lowercase A is 20, the lowercase A is 20 hex higher than an uppercase A.
+ And then that BMI 08, if it's already uppercase, meaning it's a lower number, that jumps to
+ the BRK and the program stops.
+ You can think of this as if the accumulator is less than the letter A, we're going to
+ skip the next instruction.
+ And if we don't skip, we're going to subtract 20 hex.
+ And if we do skip, we're done.
+ And then in the accumulator will be the uppercase letter, whether or not the original letter
+ that was loaded into the accumulator was uppercase or lowercase.
+ And so this is where flow charts come back.
+ Remember I said flow charts are not cool, although if you ask AI, often flow charts
+ are cool.
+ They're very retro.
+ Well, the key to flow charts is that they work exactly like assembly and machine language.
+ So if we look at the first instruction, which is loading the accumulator with the letter,
+ the lowercase P, then we're doing a compare instruction.
+ So the compare instruction is not something we think of in a high level language.
+ We're asking a question.
+ We're like, huh, compare the accumulator to A and set the flags.
+ That's what the compare instruction is doing, is accumulator equal to less than or greater
+ than A?
+ And so then we say, was the result of that particular compare, a BMI, negative?
+ Because BMI means is the N flag set?
+ And if the N flag is set, we're going to jump to instruction memory location 08.
+ If not, we're going to fall through.
+ And by the way, the actual $1.08 is in the immediately following instruction memory.
+ And so where to jump is the 08.
+ Then if we don't jump, we're going to subtract 20 hex, and the 20 is also in immediate memory.
+ And then the place the program stops is at instruction memory 0x08.
+ So the way, if you're doing this by hand, you would actually kind of leave instruction
+ memory 05 blank, lay everything else out, and then you see where 0x08, the halt, works.
+ And then you would go copy that back in to the 0x05 memory location.
+ That seems painful, painful even for eight instructions.
+ Thankfully, we have this thing called assembly language.
+ So there's no need to compute these instructions by hand.
+ And so if you look at the BMI in this code, you say BMI skip, and then right before the
+ instruction that you want to skip to, you put a little label with a colon.
+ So skip colon.
+ Now it turns out that just like I told you on the last slide, the assembler is making
+ two passes.
+ It literally is assembling all the code and remembering where it needs to change addresses.
+ So it kind of keeps track of that's going to wherever skip turns out to be because skip
+ could be later.
+ So it has to do it all, has to lay it all out, has to figure out where it's going to
+ go in the memory, and then it has to go back and replace the skip with the eight hex so
+ that it knows what it's doing.
+ But for us, we don't care.
+ We write assembly language.
+ We use labels, and the whole notion that you've got to do two passes by hand, we just write
+ assembly language.
+ And so our larger example codes will be assembly language.
+ And so the jumps, like I said, are far simpler than if logic.
+ So in addition to the BEQ, the branch equal, branch not equal, branch minus, and branch
+ plus, we also have an unconditional jump.
+ That's ignoring, you know, you jump to an address.
+ That just says don't look at the flags, just unconditionally jump.
+ But just think about this for a second.
+ The PC, the program counter, is itself a register.
+ So even though we have these opcodes that say branch, sure, or jump, in a sense, you
+ could think of these as just a set of the PC.
+ If we had a assembly language that said set PC to this address, then that would mean that
+ the PC, the next time it would retrieve an instruction, would go to where it's at.
+ So you can think of a jump as set the PC to this address.
+ Or a jump conditional says if this condition is true, set the PC to this address.
+ And of course, these are all 16-bit instructions.
+ And so that address is in the immediately following memory location, OK?
+ So there are also no for and while loops in machine language.
+ And so we have to construct them with these comparisons and conditional branching.
+ So I'm not going to bother showing you the machine language for this.
+ The emulator will allow you to see that.
+ I'm just going to show you the assembly.
+ So on the left is assembly language.
+ An assembly language is a textual language that is not zeros and ones, but there is a
+ one-to-one correspondence that every single assembly language statement turns into directly
+ into machine language.
+ Now it might be an 8-bit machine language or a 16-bit machine language.
+ And the assembler, which is a program that converts this text to machine language, the
+ assembler knows all the rules, the syntax of the pound sign 5.
+ So really, while we have been talking about machine language, we mostly been talking about
+ assembly language.
+ So let's take a look at a really simple for loop.
+ Now this for loop doesn't do anything, it's just constructing this for loop.
+ Or a while loop, it's a top-tested loop.
+ So if we go through this, the first thing we do, and I mentioned that x registers are
+ good for loops and arrays.
+ First thing we're going to do is we're going to clear the x register.
+ Then we're going to have a label that says, here's a place we're going to come back to.
+ But that doesn't take up any memory, that just is something that the assembler is going
+ to remember that location, wherever that location is.
+ Then we're going to compare the x register to 5, like that's saying, huh, hey, let's
+ just look at x, let's look at 5, and then set the z and the n flags.
+ And beq to end, end is a label in this case.
+ So if x equals 5, we're going to jump to the end label.
+ If we're not jumping, we're coming through, we're going to add 1 to x, which is the INX
+ instruction, or x equals x plus 1.
+ Now on this right-hand side, these x's are not really just any old variable.
+ That means the x register.
+ So there's only like the accumulator and the x and the y and program counter and instruction
+ register.
+ But these are not variables.
+ These are just plain old registers.
+ So after the INX instruction, we do an unconditional jump, and you can see that on the flow chart
+ on the right-hand side, perfectly represented to jump back to loop.
+ Now where is loop?
+ What number is loop?
+ We don't know, and we don't care.
+ But the assembler is going to turn that before it gets loaded into the memory's machine language.
+ Loop becomes a number, just like end becomes a number.
+ So we jump to the top of the loop, and you can see that we added 1 to x, and then we
+ compare it to x.
+ We check the branch, which in the second time around, it goes straight down and adds 1 again.
+ So you can see this is a for loop that's going to go round and round and round until x is
+ equal to 5, and then it's going to jump to end.
+ And at end, the program is going to halt.
+ In the next section, we're going to go into-- we're not going to worry quite so much about
+ the machine language.
+ We're going to worry more about the assembly language.
+ So we can talk about building simple algorithms in machine language, but writing them in assembly
+ language.
+ So if you look at the summary of the machine language we've talked about so far, this is
+ not all of them, but they're kind of simple.
+ You load, you compare, you jump, et cetera.
+ You can branch and jump and clear and increment and stop.
+ And it's a real, really simple thing, and it is both simple and powerful, but it's actually
+ super verbose because of its simplicity.

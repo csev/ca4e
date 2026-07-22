@@ -1,0 +1,299 @@
+ - Hello, and welcome to our lecture
+ on continuous analog computing.
+ So there's a lot of things I'm gonna show you.
+ They don't matter too much
+ 'cause the real overall theme here is
+ continuous means that these are devices
+ that have sort of knobs or gears or sliders
+ that use physical movement to approximate a computation.
+ The key to these devices,
+ like this device we'll play with in a little bit,
+ is the carefully printed scales that are on these devices.
+ Because as you move them, you are reading from the scales,
+ you're inputting data into them using the scales
+ and you're taking data out of them using the scales.
+ And so that's a critical element of these,
+ is that the scales are very, very carefully calibrated
+ and built.
+ But then once you've got those scales,
+ the device is pretty simple to operate.
+ That's the basic idea.
+ Now the oldest known continuous analog computer
+ is the Antikythera mechanism.
+ It was found in a shipwreck around Greece
+ near an island called Antikythera.
+ And it uses gears to model the known solar system.
+ It can model the sun and the moon and the earth,
+ Mercury, Venus, Mars, Jupiter, and Saturn.
+ And it doesn't just think of it as 24 hours a day,
+ 365 days a year.
+ That actually is just a simplification.
+ That's why we have leap years.
+ It can model the more complex cycles
+ where 19 year cycles and a 76 year cycle and a 223 cycle.
+ And a lot of people want to think of this thing
+ as quite mystical, like holy mackerel.
+ People build a computer this long ago.
+ And it turns out it's not that all complex.
+ But it had this idea of such an early, such a precise device,
+ so much data, solar, star, and planet observation
+ that went into this, that it really
+ has this air of mystery and mysticism about it.
+ And this led to a movie called "Indiana Jones
+ and the Dial of Destiny."
+ And the basic idea was, is that in addition to the 24/7, 365
+ cycle, there's an even longer cycle.
+ And at some point, this dial of destiny,
+ which is an Antikythera mechanism,
+ will predict when a time portal will open and close.
+ So you can go back in time sort of for one 24 hour period.
+ And that's pretty fun.
+ And I love the movie, and I love the Antikythera mechanism.
+ They've made replicas of the Antikythera mechanism
+ in various museums.
+ But here's the interesting thing.
+ They're not very mystical at all,
+ because you can buy one on Amazon.
+ And I did.
+ So here is a cheap imitation Antikythera mechanism.
+ And you can see here that it has gears,
+ and it has very careful scales.
+ It's got these scales for both the sun scale and the moon
+ scale, so that the phases of the moon,
+ whether it's a full moon, a new moon, et cetera.
+ And so the idea is, the sizes of these gears
+ is carefully calculated by the data in the solar system.
+ And when you spin it around, there we go,
+ you can see that the gears are keeping everything in control.
+ And you can then stop and then read.
+ So we're now in the middle of summer,
+ and it's a particular day, and the moon
+ is in a particular spot.
+ And so that is a very simple Antikythera mechanism.
+ Now, ironically, the way I'm holding this,
+ we have this simple notion that we were taught in school
+ about the solar system, that it says flat plane, like this.
+ And all the planets are kind of in one plane.
+ But it's not true, because it just turns out
+ that the whole sun is moving.
+ So it's like the sun is moving through the Milky Way.
+ And I don't know if I got that very well, but there you go.
+ The sun is moving through the Milky Way.
+ So I couldn't get licensing for a really good video of this,
+ but there are some really pretty videos called--
+ you can go search or look for AI.
+ Tell me about the actual motion of the Earth
+ through the Milky Way galaxy.
+ Oh, and by the way, the notion that the sun
+ was the thing around which everything was rotating,
+ the heliocentrism, got Nicholas Copernicus in trouble in 1543.
+ And you can Google that as well.
+ Now, I want to talk a little bit about modern, continuous analog
+ devices.
+ One's not quite so modern.
+ It's been replaced by the Hampton calculator,
+ which is the slide rule.
+ And the other is a wind calculator for airplane pilots
+ that uses a circular calculator to do trigonometry
+ and Pythagorean theorem, mostly to compensate for wind
+ direction on an airplane.
+ We'll talk about both of them.
+ So let's start talking about a slide rule.
+ So a slide rule is a device.
+ Again, all analog continuous devices have a scale on them.
+ And this is a really tiny, very fine, highly accurate scale
+ that maps numbers to their corresponding logarithm.
+ So you could think of this entire device
+ as a function mapping x to log x.
+ And then what you do is you move this back and forth.
+ And you can affect doing addition and subtraction.
+ And then you can add logarithms.
+ And that's the same as multiplying and subtracting
+ logarithms is the same as dividing,
+ as long as you can keep track of the exponent.
+ And so if you go back in the '50s and the '60s,
+ or if you watch the movie Hidden Figures,
+ you will see that everyone is carrying around a slide rule.
+ And when I watched that movie Hidden Figures,
+ I absolutely loved that detail of everyone
+ having a slide rule, because that's really
+ what it was like to be an engineer back in those times,
+ because we didn't have hand calculators.
+ All we had was a slide rule to do our multiplication for you.
+ And I built an online slide rule that you can play with.
+ So the next thing I want to talk about
+ is computing wind correction in an airplane.
+ So if you take an airplane, it spins a propeller,
+ and it goes through the sky at a certain speed.
+ And you can point it in any direction you want,
+ and then you go up and you fly for a while,
+ point it wherever you want, and then you come back down.
+ And if you know the distance and you know the speed,
+ you can figure out about how long
+ it's going to take an hour and 15 minutes to get there.
+ But there's a problem.
+ There's wind.
+ So let's just say I want to fly this little airplane
+ from me to you.
+ Let me grab it better.
+ I want to fly this airplane from me to you.
+ And you're 100 miles away-ish,
+ and it's going to take me an hour to get to you.
+ But what if there is a wind
+ that's coming from this direction, okay?
+ So the problem is, if I aim at you,
+ the wind is just going to push me,
+ and I'm not going to get to you.
+ And not only it'll take me more than an hour,
+ 'cause the wind is actually not just moving me,
+ but slowing me down.
+ So when that hour is done,
+ I will not be where you're at.
+ I'll be lost.
+ And so a big part of teaching us pilots
+ is to know how to adjust what we call the crab angle,
+ which is to aim the airplane
+ in a different direction than we want to go
+ to compensate for the wind that's pushing us.
+ For our airplane goes 100 knots,
+ which is like roughly miles per hour,
+ and we want to go west 270 degrees,
+ and the wind is out of 300 degrees at 15 knots.
+ If we fly west, the wind will both slow us down.
+ So where should we actually point the plane
+ to actually have a ground track that is west,
+ and what is our effective speed
+ so we can calculate how long it's gonna take us
+ to get there, okay?
+ So one way to do this is the law of signs.
+ Everybody knows the law of signs.
+ The law of signs says that the ratio
+ of the sign of an angle to the sign,
+ the length of the side opposite that angle
+ is the same for triangles, most triangles.
+ Turns out if the angles get too big or too small,
+ you've got to kind of transform a little bit.
+ So it's not too easy.
+ But there is math that tells you
+ how to calculate this effect of wind on an airplane,
+ both in terms of changing ground speed
+ and direction you have to go.
+ And so you'll see we have a headwind, the first one,
+ where the wind is coming from our right and in front of us.
+ Then we have a side wind
+ where it's just coming from our right.
+ And then we have a tailwind
+ which is coming from our right and behind us.
+ And you have to calculate all those things
+ 'cause your plane may speed up or slow down
+ and it might affect where you have to point the plane.
+ And I provide there some simple,
+ beautiful mathematics in Python.
+ And it's actually more complex than that
+ because not every triangle works this way.
+ And so you have to adjust your triangle sometimes.
+ So our airplane goes west and we want to go 270 degrees.
+ The wind is out of the Northwest at 300 degrees and 15 knots.
+ The answer is we're going to fly a heading of 274 degrees
+ and calculate our distance
+ based on a westward ground speed of 87 knots.
+ That's the answer which we could get through trigonometry.
+ But we really don't want to have pilots
+ running trigonometry in a plane maybe at night.
+ They get a call on a radio and it says,
+ the wind is no longer out of 300 at 15 knots.
+ It's out of 243 at 80 knots or whatever.
+ And you got to recalculate where you're at
+ 'cause you're like, you know you've gone a certain distance.
+ You got to recalculate where you're going to point the plane.
+ All those things.
+ And as interesting, as complex as the trigonometry
+ is we really don't want pilots
+ to be doing sign computations in the darkness.
+ And they didn't have hand calculators.
+ And so part of the reason that pilots
+ still train on this stuff
+ is that we don't want to depend too much on technology.
+ I literally have on my cell phone
+ an application that can tell me where the weather is,
+ where I'm at, how high I am, how fast I'm going,
+ all the other planes in the sky, et cetera.
+ And that's great.
+ But part of piloting is not depending
+ on technology too much.
+ You need to be able to just fly the plane
+ if somehow the technology fails you.
+ And so this is still taught in pilot training.
+ It's still tested in your pilot exam.
+ And it's an interesting thing in the notion
+ that this is something that came from
+ probably the 30s or the 40s.
+ It's a really cool analog computer
+ that we learned today as pilots.
+ So let me show you how this works.
+ We're gonna do a simple calculation
+ for airspeed correction and heading correction on an E6B.
+ Our problem is a 15 knot headwind.
+ So we put our little hole at 100
+ and then we go up 15 knots, 110, 115,
+ and put a mark right at the 15 knot mark.
+ And the direction the wind is coming from
+ is 300 degrees.
+ We're flying 300 degrees.
+ We would have a headwind of 15 knots,
+ which would slow us down.
+ Our plane goes 100 knots,
+ so it'd be going 85 on the ground.
+ But that's not where we wanna go.
+ We don't wanna fly to 300.
+ We wanna fly to 270.
+ Now as we're moving this,
+ in a sense this analog calculator
+ is doing a bunch of sines and cosines,
+ Pythagorean theorem, but we don't care.
+ We're just moving it.
+ It is a physical thing and it is recalculated.
+ So the first thing we do is we put the heading
+ that we intend to fly up there at the true index.
+ So we're gonna fly 270 or westerly.
+ Then what we've got to do is we've got to take the point,
+ this point here, and we gotta move it down to 100 knots
+ 'cause that's how fast our plane is.
+ And you can see that the headwind is slowing us down.
+ So now we've compensated for the headwind.
+ And so if you look, our plane normally goes 100 knots,
+ but with this particular wind, this 15 knot wind,
+ it's gonna do 86, 87 knots.
+ And we also have to figure out what we call the crab angle,
+ which is the way we have to fly to go to the west
+ to compensate for the wind.
+ So we have to add four degrees,
+ and that is one, two, three, four.
+ So now we have, without doing any mathematics,
+ nothing but manipulating a physical device,
+ we have calculated the actual airspeed
+ and the compensation that we need to do
+ for a wind of 15 knots out of a heading of 300
+ in order to maintain a heading of 270.
+ The point of this is not to teach flying.
+ It is the fact that a carefully engineered,
+ carefully calibrated physical analog device
+ can do beautiful calculations that are graphical in nature
+ and frankly, very easy to use.
+ Don't need a lot of training.
+ You just have to know how to rotate and move and read
+ using things like sliding, rotating scales, gears.
+ You can even do crazy calculations
+ with things like water and pulleys.
+ So this kind of concludes our brief look
+ at analog computing devices.
+ Up next, we're gonna talk about digital computing devices.
+ And digital computing devices are things
+ that make clicking noises.
+ They're still physical devices.
+ They're by definition analog, but they have two states,
+ and they are stable when in each of the states,
+ and we can have input to change their state.
+ So a pen is kind of a classic physical digital device.
+ (upbeat music)
+ (upbeat music)

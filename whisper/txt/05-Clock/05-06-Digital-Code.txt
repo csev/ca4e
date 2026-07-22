@@ -1,0 +1,93 @@
+ So we're gonna wrap up this section
+ talking a little bit more about what we would do
+ in order to get the instructions,
+ the machine language instructions,
+ instead of coming from a little switch
+ which is completely fake, but instead coming from the memory.
+ And so to do that, we look a little bit more
+ into computer architecture.
+ We talked before about the ALU,
+ the arithmetic and logic unit, as well as the registers.
+ So the ALU has like an adder in it,
+ maybe a multiplier or a comparison module, all in hardware.
+ Then we have registers which have, you know,
+ bits in them like numbers and their temporary storage.
+ And in addition, we're gonna talk a little more now
+ about the logic.
+ Now the load and store, the way we're gonna do it
+ goes to and from registers for like data memory,
+ but for program memory, there's a couple of things
+ that the CPU uses to control program memory.
+ So one is the PC or program counter register.
+ So this is a register that points to the next instruction
+ we're supposed to execute.
+ So the CPU, when it's ready to execute an instruction,
+ it says, oh, the PC tells me where to load it.
+ So I'm gonna load that instruction from the memory
+ into CIR, current instruction register.
+ And that's just some bits, zeros and one.
+ And then I mentioned the idea of a decoder.
+ And in the previous example, we had some AND gates
+ that were in a sense our decoder.
+ So when you have a real CPU,
+ it has a lot more than two instructions.
+ And the decoder is looking at the pattern of bits
+ in the instruction, decoding it,
+ and then sending logic to the ALU and the registers
+ to activate the right thing to get the right thing to happen.
+ So maybe we're gonna add two registers together
+ and store the result in a different register, okay?
+ And the decoder sees that instruction
+ that is the add two registers
+ and store in another register instruction.
+ And then the decoder sees the pattern of that,
+ and then it activates the right registers,
+ the right arithmetic logic unit,
+ and then causes the instruction to happen
+ in one or a couple of clock cycles,
+ depending on how difficult it is.
+ In the previous example, we had like a zero to reset
+ and a one to add one every clock cycle.
+ So it incremented or it stopped, it went back to zero.
+ But in reality, you need a series
+ of machine language instructions,
+ like set register four to zero,
+ compare register four to zero,
+ increment register four, decrement register four.
+ And so there are binary patterns,
+ which are part of the documentation of a microprocessor.
+ So if the decode unit looks at 0100 for the instruction,
+ it says, oh, that's a zero instruction.
+ And then RRR is three bits for a register
+ from zero through seven.
+ So you're setting register three to zero.
+ And so these are just simple patterns,
+ and they might seem really complex to you,
+ but in some ways, they're actually really easy.
+ The number of things you can do
+ in this machine language is really limited.
+ Now it makes programs a lot more verbose.
+ And usually we don't even write the zeros and ones,
+ we write this stuff called assembly,
+ which we'll talk about coming up.
+ Or we write C, which is a higher level language
+ that then generates assembly,
+ which generates machine language.
+ Or we take a language like Python,
+ which sort of almost completely separates us
+ from the machine language.
+ But then Python itself is written in machine language
+ so that it's really fast.
+ So coming up next, we're going to design
+ a very simple central processing unit.
+ I call it the CDC 8512, inspired by my first computer,
+ the Controlled Data Corporation, CDC 6500.
+ It'll have a complete architecture.
+ It'll be completely defined.
+ It'll have a program counter.
+ It'll have an instruction register.
+ And we will write real, very small programs
+ in CDC 8512 machine code,
+ and then run them on an emulator.
+ (upbeat music)
+ (upbeat music)

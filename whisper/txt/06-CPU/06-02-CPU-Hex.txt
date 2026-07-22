@@ -1,0 +1,140 @@
+ So let's learn base sixteen, otherwise known as hexadecimal.
+ So the key to, it would be nice if we could just use base two for everything, but zeros and ones are easy to understand,
+ but when numbers get larger, like characters for example are eight bits, it's really hard to represent that all in base two.
+ So we tend to see in the real world that most machine language and other things require you to understand hexadecimal.
+ So if you take a look at base two, it was easy. We had a simple conversion table, and I hope by now some of you have memorized this little table.
+ I know I've memorized. I just, you know, when I see seven, I see three ones. When I see six, I see one, one, zero.
+ I know this by heart, okay? Now, that's cool. We're seeing all numbers that we're familiar with.
+ Base sixteen says we are going to represent zero through fifteen with a single digit, right?
+ So fifteen is fifteen, but with two digits, and so the whole idea of changing bases is that we have digits.
+ So we need to come up with a single digit that represents nine, ten, eleven, twelve, thirteen, fourteen, and fifteen.
+ And so I basically said, okay, wouldn't it be cool if we would use emojis for that, because I have trouble remembering hexadecimal.
+ So if we imagine that ten, which is kind of zero, eleven, twelve, thirteen, they don't have an emoji for four fingers, and then fifteen.
+ So I put a shamrock in for fourteen, and so the point here is you need a single character to represent it.
+ And so I made this up, and then I'm like, hey, AI, what emojis would you use to represent ten through fifteen?
+ So there is an actual emoji that's ten, but there is no emoji for eleven, and so they use the pause emoji.
+ And then they used a clock, twelve o'clock, one o'clock, two o'clock, and three o'clock, and it's not too bad.
+ And American Sign Languages uses one hand, I think this is eleven, or maybe, yeah, I think this is eleven.
+ And so British Sign Language is different.
+ The problem is we don't get motion when we make emojis, so we can't really use American Sign Language,
+ even though American Sign Language has way to represent eleven, twelve, thirteen, fourteen, and fifteen with kind of a gesture.
+ So the problem was, is basically whatever, 1930, 1940, when we started using hexadecimal, we didn't have emojis, it was just too early.
+ And so all we had was ASCII characters, and so we have repurposed A through F to represent ten through fifteen for base sixteen numbers.
+ So A is ten, the first number that is not a single digit, right, and F is fifteen, and F is all ones, four ones is one, one, one, one, one, is F.
+ Okay, so we just used A through F. It's a little weird, because there's the letter A, and then there is the hexadecimal digit A,
+ but you have to kind of get used to it and say, oh, we're in the context of a number here, so that means ten, A means ten.
+ So if we look at the conversion between base sixteen and base ten, and I've got my little cheat sheet here of ten through fifteen,
+ because zero through nine is pretty easy. Again, base ten says that each column is a power of ten, so the far right column is ten to the zero, which is the ones column.
+ The middle column is ten to the one, which is the tens column, and then the third column is ten squared, which is the hundreds column.
+ So a hundred and twenty-three is one times a hundred, two times ten, plus three times one, which is one twenty-three base ten, which of course it is.
+ In base sixteen now, we have more digits to work with. So we have seven be base sixteen.
+ Well, the far right is sixteen to the zero, or one, and then the second digit is sixteen to the first power.
+ So the result is seven times sixteen plus eleven times one, which is one hundred and twelve plus eleven, which is one hundred and twenty-three.
+ Now, one thing we like about base sixteen is it's easily converted to and from base two.
+ And so if you have eight bit numbers, you can represent them with two base sixteen digits.
+ And that's what we're going to work with a lot going forward is eight bit numbers.
+ So you can take and convert like seven be base sixteen, which is a byte.
+ And you can convert the seven and then you convert the B and that's the base two.
+ And so to some degree, hexadecimal is just a more succinct base two, where four digits of base two become one digit of base sixteen.
+ If we did this on base ten, there wouldn't be this nice lineup because you can make really long hexadecimal numbers.
+ And they still line up on every four bit boundary with base two.
+ So for now, keep it simple. I tend to have to go through base ten.
+ You know, we have eight's column now.
+ So the top line is one eight plus one two, which is ten, eight plus two is ten, and that is a base sixteen.
+ Eight, which is one zero zero zero is eight base ten and eight base sixteen. So all the numbers zero through nine are easy.
+ And then all ones one one one one is eight plus four plus two plus one, which is fifteen.
+ And that's F and base sixteen.
+ So I've told you that I'm pretty much a whiz at base eight, which is three base two digits.
+ I can kind of do that in my sleep. I am not very good at base sixteen.
+ Hopefully you'll be better at it or maybe not.
+ So this is my this is how I do base sixteen in my head and it's not pretty.
+ So F is easy because that's fifteen.
+ That's the largest base sixteen digit and it's all ones. Right.
+ That's cool. It's base sixteen. F is one less. It's all ones.
+ If you add one to it, it's it turns into the sixteen column.
+ So an E I can do E because I just take the all the digits and I take off the one bit.
+ Right. So that's like fourteen.
+ I can get that. A is easy because it's like nine.
+ What's after nine? Oh, it's A. And so I can do that.
+ So I understand that's ten and B is eleven and is like it's kind of like one beyond A.
+ And so I can see what B is. I have problems with C and D. Right.
+ I mean, I eventually have to slow down and use my brain and go A ten B eleven C twelve.
+ And then I have to convert to base two, which is one one zero.
+ And then I'm like, oh, that's a plus four. Oh, yeah.
+ Twelve. Yeah. There you go. And D just makes me crazy. Right.
+ I sooner or later, sometimes with D, I'm like, oh, what is it?
+ And then I have to write it down. So for a good time,
+ you can go ahead and ask AI what is a good way to do hex to base two conversions in your head.
+ I did that and it was really complex.
+ So no. So maybe I'm OK by being confused about this.
+ So just make yourself a little cheat sheet whenever you have to do hex or just get used to it or look at a table.
+ A lot of what we're going to do is represent characters and characters are asking characters are eight bits
+ and can really nicely and densely be represented by two hex digits.
+ We call these half bytes nibbles.
+ Not that it matters much, but this ASCII chart shows the decimal, the hex
+ octal, which we tend not to use, and then the binary.
+ So if you look at forty two, it's kind of small on the screen.
+ But you see that it's forty two decimal and zero X to a hexadecimal, which is asterisk.
+ And so I tend to just look these things up and I don't really convert them
+ and just use hex as a way to look things up in things like ASCII tables.
+ Now, while we're speaking about ASCII, so ASCII is a historical code set,
+ basically, that is very Western and really goes back to Latin, really.
+ And because we have eight bit bytes and the West built computers early on,
+ we tended to have ASCII character sets were universal across computers.
+ But that's not real.
+ There's Asian character sets and Indian character sets and Arabic and Persian character sets.
+ They're they're all kind of different.
+ And so what happened was in in the time where computing became a world wide activity,
+ we needed to come up with a way to interchange characters that are way bigger than eight bits.
+ And somebody came up with the idea of Unicode.
+ And Unicode has all kinds of character sets, you know, Latin and ASCII start.
+ And then they just have all kinds of character sets.
+ Some of these are Latin characters with like umlauts and all things like that.
+ And some of them are like Asian characters that are pictograms.
+ Now, recently, emojis are in Unicode as well.
+ And so some of the emojis that I've showed you are actually have a Unicode code.
+ Unicode represents things by 32 bits.
+ That's pretty large, given that eight bits is how ASCII is represented in Unicode is 32 bits.
+ But the idea is, is there's a lot of characters sets around this universe.
+ Now, we're not inventing too many more.
+ And they did things like added emojis to Unicode.
+ But basically, 32 bits is like in the billions of possible characters.
+ So I think we're probably okay.
+ The problem is, is as we move between computers or store data on hard drives,
+ we don't really want every character to take up 32 bits.
+ So for example, Python 3 internally represents strings as Unicode,
+ which means they're pretty large.
+ Okay, but then before we stick them on a hard drive or send them across a network,
+ we condense them.
+ And there are ways to compress these 32-bit Unicodes into shorter.
+ So one is UTF-32, which is four-byte stuff.
+ That's the long one.
+ It's fixed length.
+ And it just says we'll take that whole Unicode and send it along.
+ UTF-16 is fixed length.
+ It's two bytes.
+ It's a lot denser.
+ And there's a mapping.
+ But the most successful one of these is a thing called UTF-8,
+ which might not be intuitive.
+ But basically, UTF-8 is one to four bytes.
+ And it is for most ASCII, UTF-8 and ASCII are the same things.
+ And then there's these little extension codes.
+ I mean, this is a 16-bit code or a 32-bit code.
+ And so you can represent all of Unicode with UTF-8.
+ Sometimes you're sending one byte if it's ASCII, sometimes two,
+ three, and even four bytes are being sent across.
+ And so UTF-8 is pretty much the practice for encoding data
+ to be exchanged across systems.
+ So I've got to have a graph here that sort of shows that in 2008,
+ there was choices to be made.
+ But since then, everything is pretty much UTF-8.
+ And so the point now where systems that are reading and writing data
+ to disk or the network only pretty much use UTF-8.
+ And it happens to be ASCII, that works okay.
+ But what we're doing is we're working on a computer from the 1970s,
+ which is the 6502 computer.
+ And so we're going to just accept that it's ASCII for now.
+ But real computers tend to work in UTF-8 and can convert from ASCII
+ or Unicode to UTF-8 quite nicely.
+ [ Music ]

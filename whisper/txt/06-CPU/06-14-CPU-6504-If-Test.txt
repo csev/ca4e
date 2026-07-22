@@ -1,0 +1,74 @@
+ Hello and welcome to another walkthrough for computer architecture for everybody.
+ We're playing with our 6504 emulator programming and kind of working through some increasingly complex samples as we go.
+ So we're going to go into the uppercase sample.
+ Now, the previous thing we did was a loop and this is really more of an if test.
+ We're not going to do a loop and the next thing we're going to have an if test and a loop.
+ So we're going to, we're not going to store any data here.
+ It's really simple. We're just doing an if statement.
+ We're going to check in this one, hard coded valuables.
+ We're going to check to see if p is greater than or less than a.
+ So we're going to load into a the constant p.
+ We're going to compare the constant a with the accumulator.
+ We're doing a convert to uppercase here.
+ If it's already uppercase, we're going to skip down and if it's not uppercase, we're going to convert it to uppercase.
+ And this will only work for lowercase a through z, but you get the idea.
+ Okay, so let's take a look here, convert to uppercase.
+ So let's go ahead and so if we look at these things, we got a load.
+ We got our immediate.
+ So that's the letter p.
+ We got our compare and then we have our immediate, which is the letter a.
+ And then we have the branch of minus down two and the branch of minus is really skipping
+ this subtraction and going all the way to eight.
+ So the if then else that we've kind of got here is if it's minus, we're going to skip down two instructions to eight.
+ If it is not minus, we're going to run six and then that's going to be a subtract immediate of zero x 20.
+ Hopefully you kind of see that that's a two and that's a zero because the zero x 20.
+ You can see those at some point.
+ You should start seeing the hex.
+ Okay, let's go ahead and just run this at full speed and maybe I'll talk a little bit about it afterwards.
+ I'm just going to turn on narration and fire.
+ Oh, no, I'm going to step.
+ I'm going to step.
+ So let's do the first one.
+ Let's load the letter p into the accumulator.
+ PC zero x zero zero load accumulator immediate zero x seven zero.
+ So that's a zero x seven zero, which is lowercase p and ASCII.
+ Oh, hang on.
+ Let me bring up the ASCII chart, right?
+ So now we can bring up the ASCII chart.
+ So that's kind of fun.
+ So I got this little ASCII chart for you.
+ Quick computation.
+ So zero x seven zero is a hopefully a lowercase p.
+ Look at that.
+ So zero x seven zero is a lowercase p.
+ The assembler converted this from a quote p quote, which is one of its many load accumulator
+ syntaxes and it changed it into zero one one one zero zero zero and which is the letter p.
+ Now we're going to compare this with the letter a.
+ So where is that?
+ We're instruction two now and we're going to compare it with the a.
+ And a is just
+ 61 hex and there it is.
+ It's 61 hex.
+ And so let's just compare it.
+ Run one instruction.
+ PC zero x zero two compare accumulator with immediate zero x six one.
+ OK, so now we basically have it set so that p, which was in the accumulator, is greater than a.
+ We didn't set the zero flag and we didn't set the negative flag.
+ OK, and if this character that we just compared is less than a, then we're going to skip.
+ If it's not, we're going to subtract 20 from it.
+ So it's not going to be very exciting.
+ This is going to become zero x 50 because we're going to subtract zero x 20.
+ So let's go ahead and run that step.
+ Branch didn't get taken.
+ It fell right through into position zero x zero six.
+ And now we're going to do a subtract.
+ So now the next instruction is to stop, but you'll notice that we did subtract that 70.
+ The accumulator was 70, which is the letter where were we the letter p.
+ And we subtracted 20 hex to it, which just happens to be uppercase p.
+ So this was a convert to uppercase operation.
+ And the last step is just to stop PC zero x zero eight break no printed output.
+ So we didn't store anything.
+ We just are showing a simple if then else,
+ which turns into a sort of compare and skip based on flag values.
+ OK, so I hope you found this particular useful in the walkthrough.
+ And cheers and see you on the net.

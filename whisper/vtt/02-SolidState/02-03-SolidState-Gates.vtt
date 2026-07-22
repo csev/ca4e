@@ -1,0 +1,1139 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.000
+ So now I want to talk about the concept of logic gates.
+
+00:00:04.000 --> 00:00:05.320
+ So what are logic gates?
+
+00:00:05.320 --> 00:00:08.760
+ Well logic gates are not a real thing.
+
+00:00:08.760 --> 00:00:10.240
+ Transistors are a real thing.
+
+00:00:10.240 --> 00:00:12.920
+ A logic gate is an abstraction that we use
+
+00:00:12.920 --> 00:00:16.880
+ as hardware designers to greatly simplify our lives.
+
+00:00:16.880 --> 00:00:19.760
+ This is no different than when I was teaching you software
+
+00:00:19.760 --> 00:00:21.800
+ and I'm like, look at this cool low level way
+
+00:00:21.800 --> 00:00:23.160
+ of doing this, that, and the other thing.
+
+00:00:23.160 --> 00:00:24.880
+ And you're like, oh, that's really pretty complex.
+
+00:00:24.880 --> 00:00:27.480
+ And then in the next breath, I say,
+
+00:00:27.480 --> 00:00:29.040
+ well, if we extend this object,
+
+00:00:29.040 --> 00:00:30.320
+ we get all this work for free.
+
+00:00:30.320 --> 00:00:34.440
+ And now our code goes from 75 lines down to two lines.
+
+00:00:34.440 --> 00:00:37.480
+ And that's kind of how abstractions work.
+
+00:00:37.480 --> 00:00:39.080
+ And that's how gates work.
+
+00:00:39.080 --> 00:00:41.680
+ So gates, we don't need to think about sort
+
+00:00:41.680 --> 00:00:44.480
+ of response graphs of input voltages and output voltages.
+
+00:00:44.480 --> 00:00:45.320
+ We don't have to think about that.
+
+00:00:45.320 --> 00:00:47.160
+ That still is a thing.
+
+00:00:47.160 --> 00:00:51.600
+ Gates don't make the whole analog problem go away.
+
+00:00:51.600 --> 00:00:54.600
+ They just make it so we don't think about it anymore.
+
+00:00:54.600 --> 00:00:56.280
+ And that's a problem that the folks
+
+00:00:56.280 --> 00:00:59.360
+ who manufacture these chips have solved
+
+00:00:59.360 --> 00:01:00.840
+ in the manufacturing process.
+
+00:01:00.840 --> 00:01:03.040
+ We pretty much say, let's make a gate
+
+00:01:03.040 --> 00:01:05.520
+ and then somehow the gates are manufactured
+
+00:01:05.520 --> 00:01:07.520
+ out of analog components.
+
+00:01:07.520 --> 00:01:10.240
+ The way we think about gates is beautiful.
+
+00:01:10.240 --> 00:01:12.160
+ We think about zeros and ones,
+
+00:01:12.160 --> 00:01:14.080
+ which is very much digital logic.
+
+00:01:14.080 --> 00:01:16.480
+ And the concept of digital logic predates computers.
+
+00:01:16.480 --> 00:01:17.600
+ Absolutely.
+
+00:01:17.600 --> 00:01:21.600
+ And so we just say, oh, this gate, this not gate,
+
+00:01:21.600 --> 00:01:24.720
+ if presented with an input of zero, gives an output of one.
+
+00:01:24.720 --> 00:01:26.480
+ And if it's presented with an input of one,
+
+00:01:26.480 --> 00:01:28.360
+ it gives an output of zero.
+
+00:01:28.360 --> 00:01:29.480
+ And that's a not gate.
+
+00:01:29.480 --> 00:01:31.440
+ And I like starting with a not gate.
+
+00:01:31.440 --> 00:01:32.760
+ First is the simplest thing.
+
+00:01:32.760 --> 00:01:35.000
+ We can see how it's built from transistors,
+
+00:01:35.000 --> 00:01:37.560
+ but it also is like, it's active.
+
+00:01:37.560 --> 00:01:38.640
+ It's doing something.
+
+00:01:38.640 --> 00:01:40.680
+ It's not just copying something.
+
+00:01:40.680 --> 00:01:43.600
+ So we'll build much more complex logic circuits.
+
+00:01:43.600 --> 00:01:46.120
+ We're gonna see much more complex gates.
+
+00:01:46.120 --> 00:01:50.840
+ But I can't really run away from history quite yet.
+
+00:01:52.960 --> 00:01:56.480
+ Over time, as manufacturing capabilities changed
+
+00:01:56.480 --> 00:01:59.120
+ from PMOS to NMOS to CMOS,
+
+00:01:59.120 --> 00:02:02.240
+ the way we built a logic gate underneath the abstraction,
+
+00:02:02.240 --> 00:02:04.600
+ all these logic gates have an input of A
+
+00:02:04.600 --> 00:02:06.320
+ and an output of out.
+
+00:02:06.320 --> 00:02:09.520
+ If you put a zero at A, you get a one at out.
+
+00:02:09.520 --> 00:02:12.400
+ If you could put a one at A, you get a zero at out.
+
+00:02:12.400 --> 00:02:16.240
+ And so there are three symbols, like the VDD,
+
+00:02:16.240 --> 00:02:17.880
+ there's like a nine volt battery
+
+00:02:17.880 --> 00:02:20.280
+ that has its positive terminal at VDD,
+
+00:02:20.280 --> 00:02:22.520
+ and it's negative terminal at the little ground symbol
+
+00:02:22.520 --> 00:02:24.120
+ at the bottom.
+
+00:02:24.120 --> 00:02:26.480
+ The other thing we see is a PMOS transistor.
+
+00:02:26.480 --> 00:02:28.920
+ At the top there, it's a transistor.
+
+00:02:28.920 --> 00:02:32.360
+ It's kind of implying that there's a switch going on
+
+00:02:32.360 --> 00:02:34.440
+ or a valve if you want.
+
+00:02:34.440 --> 00:02:36.200
+ The little circle says PMOS
+
+00:02:36.200 --> 00:02:38.400
+ and the lack of little circle says NMOS.
+
+00:02:38.400 --> 00:02:40.400
+ And then the bottom thing is a resistor.
+
+00:02:40.400 --> 00:02:42.600
+ And it's probably easiest to talk about these
+
+00:02:42.600 --> 00:02:45.040
+ in the concept of how they work.
+
+00:02:45.040 --> 00:02:46.920
+ So if you present a zero,
+
+00:02:46.920 --> 00:02:49.600
+ let's start with the PMOS in 1972.
+
+00:02:49.600 --> 00:02:53.040
+ You present a zero at the input.
+
+00:02:53.040 --> 00:02:58.040
+ That means that the PMOS transistor conducts.
+
+00:02:58.040 --> 00:03:01.680
+ And so that means that the positive voltage
+
+00:03:01.680 --> 00:03:03.840
+ is copied to output.
+
+00:03:03.840 --> 00:03:07.560
+ So when you press a zero, it conducts and it goes to output.
+
+00:03:07.560 --> 00:03:10.160
+ The PMOS transistor is now conducting
+
+00:03:10.160 --> 00:03:12.800
+ both to get the voltage to the output
+
+00:03:12.800 --> 00:03:14.600
+ to produce a one at the output,
+
+00:03:14.600 --> 00:03:16.760
+ but also connecting through the resistor to ground.
+
+00:03:16.760 --> 00:03:18.720
+ Now, every time you see a resistor,
+
+00:03:18.720 --> 00:03:21.000
+ it's kind of like a pack.
+
+00:03:21.000 --> 00:03:23.880
+ And the problem is, is resistors heat up.
+
+00:03:23.880 --> 00:03:25.200
+ But if you didn't have that resistor there,
+
+00:03:25.200 --> 00:03:27.840
+ all the little lines, the wires, the tiny wires,
+
+00:03:27.840 --> 00:03:29.680
+ and perhaps even the transistor, they would melt.
+
+00:03:29.680 --> 00:03:34.360
+ So the resistors are there to protect the transistors, okay?
+
+00:03:34.360 --> 00:03:37.080
+ And protect the wires, frankly.
+
+00:03:37.080 --> 00:03:40.240
+ When NMOS is presented with a zero,
+
+00:03:40.240 --> 00:03:42.600
+ that means it's an open circuit.
+
+00:03:42.600 --> 00:03:45.000
+ And so the nice thing there is,
+
+00:03:45.000 --> 00:03:46.560
+ when you present it with a zero,
+
+00:03:46.560 --> 00:03:49.080
+ it just copies through a resistor,
+
+00:03:49.080 --> 00:03:50.400
+ the voltage to the output.
+
+00:03:50.400 --> 00:03:51.400
+ And the cool thing there is,
+
+00:03:51.400 --> 00:03:53.440
+ it's not really sending as much current to the output,
+
+00:03:53.440 --> 00:03:55.280
+ 'cause all that output is being as connected
+
+00:03:55.280 --> 00:03:57.840
+ to the input of another transistor later in the circuit.
+
+00:03:57.840 --> 00:04:00.880
+ And so that doesn't really heat up so badly.
+
+00:04:00.880 --> 00:04:02.240
+ Now, if you look at CMOS,
+
+00:04:02.240 --> 00:04:06.840
+ what you have is a PMOS transistor at the top
+
+00:04:06.840 --> 00:04:09.280
+ and an NMOS transistor at the bottom.
+
+00:04:09.280 --> 00:04:11.440
+ And they work in pairs.
+
+00:04:11.440 --> 00:04:13.840
+ And so in the case of the zero,
+
+00:04:13.840 --> 00:04:17.160
+ the PMOS transistor conducts and the NMOS transistor
+
+00:04:17.160 --> 00:04:18.000
+ doesn't conduct.
+
+00:04:18.000 --> 00:04:20.240
+ And so there is no resistor
+
+00:04:20.240 --> 00:04:23.480
+ and the voltage is copied to the output.
+
+00:04:23.480 --> 00:04:27.600
+ Now, let's look at the case of the one.
+
+00:04:27.600 --> 00:04:30.160
+ In PMOS, when you present a one,
+
+00:04:30.160 --> 00:04:32.000
+ the PMOS is an open circuit.
+
+00:04:32.000 --> 00:04:36.720
+ And so that means that we need the output to be zero,
+
+00:04:36.720 --> 00:04:40.120
+ which means we have to connect the ground to the output.
+
+00:04:40.120 --> 00:04:42.680
+ That is connected through a resistor,
+
+00:04:42.680 --> 00:04:44.760
+ but it's low current because the output
+
+00:04:44.760 --> 00:04:47.160
+ is just going to the input of another transistor.
+
+00:04:47.160 --> 00:04:50.280
+ And so if you look then at the NMOS,
+
+00:04:50.280 --> 00:04:51.560
+ we have the opposite problem
+
+00:04:51.560 --> 00:04:52.920
+ when we were presented with a one
+
+00:04:52.920 --> 00:04:55.520
+ because the NMOS then conducts,
+
+00:04:55.520 --> 00:04:59.120
+ it both conducts the ground to the output
+
+00:04:59.120 --> 00:05:02.960
+ and it conducts the positive to the ground.
+
+00:05:02.960 --> 00:05:04.240
+ But that would be a short circuit
+
+00:05:04.240 --> 00:05:05.880
+ unless we put a resistor there.
+
+00:05:05.880 --> 00:05:08.560
+ So there you got a thing heating up.
+
+00:05:08.560 --> 00:05:11.360
+ So the problem is with PMOS and NMOS,
+
+00:05:11.360 --> 00:05:14.040
+ one of the two states for both of them
+
+00:05:14.040 --> 00:05:16.360
+ is going to be causing heat.
+
+00:05:16.360 --> 00:05:18.760
+ One is causing heat on a zero,
+
+00:05:18.760 --> 00:05:20.280
+ the other is causing heat on a one.
+
+00:05:20.280 --> 00:05:22.560
+ But then we look at the CMOS, okay?
+
+00:05:22.560 --> 00:05:25.600
+ And what we see when we present a one
+
+00:05:25.600 --> 00:05:27.160
+ and we want an output of zero,
+
+00:05:27.160 --> 00:05:30.800
+ well, the NMOS transistor at the bottom is conducting
+
+00:05:30.800 --> 00:05:32.720
+ and so ground is connected to the output,
+
+00:05:32.720 --> 00:05:34.480
+ which is exactly what we want.
+
+00:05:34.480 --> 00:05:37.200
+ And the PMOS transistor is an open circuit.
+
+00:05:37.200 --> 00:05:40.440
+ So the voltage VDD is not being connected.
+
+00:05:40.440 --> 00:05:43.240
+ And we don't need a resistor.
+
+00:05:43.240 --> 00:05:45.880
+ And so what you see is there are no resistors
+
+00:05:45.880 --> 00:05:48.760
+ and there is just, you have to be able to build
+
+00:05:48.760 --> 00:05:52.520
+ at a low level, both PMOS and NMOS transistors
+
+00:05:52.520 --> 00:05:56.120
+ in the same circuit, like really tiny.
+
+00:05:56.120 --> 00:06:01.120
+ And so what happened was is NMOS and PMOS were hot
+
+00:06:01.120 --> 00:06:05.480
+ and the hotter they were, the less dense the chips could be.
+
+00:06:05.480 --> 00:06:07.120
+ So once we went to CMOS, and again,
+
+00:06:07.120 --> 00:06:10.320
+ that was really not a question of wanting it,
+
+00:06:10.320 --> 00:06:14.120
+ it's a question of practical manufacturing, okay?
+
+00:06:14.120 --> 00:06:19.120
+ And so at some point, mid 1980s, Intel 486,
+
+00:06:19.120 --> 00:06:22.400
+ CMOS became practical, all of a sudden,
+
+00:06:22.400 --> 00:06:24.400
+ you didn't have to have a central processor
+
+00:06:24.400 --> 00:06:26.320
+ the size of a large cabinet.
+
+00:06:26.320 --> 00:06:27.920
+ And part of that large cabinet had to do
+
+00:06:27.920 --> 00:06:29.080
+ with how much power it was taking
+
+00:06:29.080 --> 00:06:30.800
+ and how much heat it was generating.
+
+00:06:30.800 --> 00:06:31.960
+ If you put it all together,
+
+00:06:31.960 --> 00:06:33.440
+ it would just like instantly melt.
+
+00:06:33.440 --> 00:06:35.640
+ And so you had to kind of take these transistors
+
+00:06:35.640 --> 00:06:39.480
+ and keep them and resistors in NMOS and PMOS computers
+
+00:06:39.480 --> 00:06:41.000
+ and keep them away from each other
+
+00:06:41.000 --> 00:06:43.800
+ because they would overheat because of the resistors.
+
+00:06:43.800 --> 00:06:50.280
+ But the moment that you can take the size of a computer
+
+00:06:50.280 --> 00:06:55.160
+ from 10 feet end to end to one inch end to end,
+
+00:06:55.160 --> 00:06:57.920
+ everything got faster.
+
+00:06:57.920 --> 00:07:01.320
+ So in 1983 is a long time ago,
+
+00:07:01.320 --> 00:07:04.920
+ there hasn't been a major like upheaval in,
+
+00:07:04.920 --> 00:07:07.280
+ they talk about like quantum computing and stuff,
+
+00:07:07.280 --> 00:07:10.640
+ but, and that would be a major upheaval at this level,
+
+00:07:10.640 --> 00:07:13.000
+ but really from 1983 to present,
+
+00:07:13.000 --> 00:07:14.960
+ we just pretty much make CMOS
+
+00:07:14.960 --> 00:07:18.720
+ because once we could manufacture it reliably,
+
+00:07:18.720 --> 00:07:20.720
+ we'll do CMOS, okay?
+
+00:07:20.720 --> 00:07:25.200
+ So now what I wanna show you is a tool that I built
+
+00:07:25.200 --> 00:07:27.280
+ called a CMOS layout tool.
+
+00:07:27.280 --> 00:07:29.840
+ And so this way you can connect them
+
+00:07:29.840 --> 00:07:32.560
+ and put them together and simulate circuits.
+
+00:07:32.560 --> 00:07:35.080
+ So let's take a look at this tool.
+
+00:07:36.560 --> 00:07:37.960
+ Okay, across the top,
+
+00:07:37.960 --> 00:07:40.600
+ we have a number of things that you can place in this circuit
+
+00:07:40.600 --> 00:07:42.800
+ and then we'll draw wires in between them.
+
+00:07:42.800 --> 00:07:45.280
+ So let's start with a probe.
+
+00:07:45.280 --> 00:07:46.640
+ Here's a probe.
+
+00:07:46.640 --> 00:07:50.280
+ And if we connect the probe to the positive,
+
+00:07:50.280 --> 00:07:53.480
+ you see that the probe is reading
+
+00:07:53.480 --> 00:07:55.400
+ that now it's got five volts.
+
+00:07:55.400 --> 00:07:59.400
+ Now, if we delete that and we place a probe
+
+00:07:59.400 --> 00:08:02.880
+ and connect it to the negative, it's zero.
+
+00:08:02.880 --> 00:08:05.120
+ So part of what we're gonna do in the NOT gate
+
+00:08:05.120 --> 00:08:08.920
+ is have a switch as input.
+
+00:08:08.920 --> 00:08:12.000
+ A switch is in effect a switch
+
+00:08:12.000 --> 00:08:15.600
+ that either goes to the positive or the ground.
+
+00:08:15.600 --> 00:08:18.440
+ And you can imagine there's a wire running up here
+
+00:08:18.440 --> 00:08:19.680
+ and a wire running down there,
+
+00:08:19.680 --> 00:08:21.040
+ but I didn't show that.
+
+00:08:21.040 --> 00:08:23.320
+ It's just sort of like another little,
+
+00:08:23.320 --> 00:08:25.720
+ it's connected either to the top or the bottom
+
+00:08:25.720 --> 00:08:27.600
+ so that we can test our circuits.
+
+00:08:27.600 --> 00:08:29.640
+ So what we're gonna do is build a circuit
+
+00:08:30.760 --> 00:08:35.520
+ that can create the logic so that whatever we have here
+
+00:08:35.520 --> 00:08:38.480
+ as input, we're going to have output
+
+00:08:38.480 --> 00:08:40.440
+ that is the opposite of that.
+
+00:08:40.440 --> 00:08:44.000
+ So these, after a while you get used to these.
+
+00:08:44.000 --> 00:08:47.640
+ So let's first put a PMOS transistor at the top
+
+00:08:47.640 --> 00:08:50.960
+ and then put a NMOS transistor below it.
+
+00:08:50.960 --> 00:08:54.840
+ So we're gonna connect the voltage
+
+00:08:55.760 --> 00:09:00.760
+ to the top connector of the PMOS transistor,
+
+00:09:00.760 --> 00:09:05.120
+ and then we're gonna connect the bottom connection
+
+00:09:05.120 --> 00:09:07.680
+ of the NMOS transistor to ground,
+
+00:09:07.680 --> 00:09:09.840
+ and then we're gonna take the output
+
+00:09:09.840 --> 00:09:11.400
+ of the NMOS transistor
+
+00:09:11.400 --> 00:09:13.760
+ and connect it to the PMOS transistor.
+
+00:09:13.760 --> 00:09:16.080
+ Now I say PMOS, the little circle is PMOS,
+
+00:09:16.080 --> 00:09:18.920
+ and the lack of the little circle is NMOS.
+
+00:09:18.920 --> 00:09:22.440
+ And so the output is going to be connected,
+
+00:09:22.440 --> 00:09:24.540
+ it can be connected either place,
+
+00:09:24.540 --> 00:09:28.200
+ but the output is basically connected
+
+00:09:28.200 --> 00:09:31.680
+ to the connection between the two transistors.
+
+00:09:31.680 --> 00:09:33.760
+ And then the last thing we have to do
+
+00:09:33.760 --> 00:09:37.040
+ is connect the switch to the grid
+
+00:09:37.040 --> 00:09:41.760
+ of each of these transistors, and now we have it.
+
+00:09:41.760 --> 00:09:45.600
+ So you can see that it's been sort of adapting and changing.
+
+00:09:45.600 --> 00:09:49.880
+ And the key thing is that the PMOS and NMOS transistors
+
+00:09:49.880 --> 00:09:51.840
+ have kind of opposite logic.
+
+00:09:51.840 --> 00:09:56.040
+ So the PMOS here is presented with a five volts,
+
+00:09:56.040 --> 00:09:57.440
+ which means it's an open circuit,
+
+00:09:57.440 --> 00:10:00.600
+ and the NMOS is presented with five volts,
+
+00:10:00.600 --> 00:10:01.760
+ which means it's a closed circuit.
+
+00:10:01.760 --> 00:10:03.840
+ And that's what this little green line is saying,
+
+00:10:03.840 --> 00:10:05.480
+ that it's a closed circuit.
+
+00:10:05.480 --> 00:10:10.480
+ So if I flip this, it means that the PMOS transistor conducts
+
+00:10:10.480 --> 00:10:14.720
+ and the NMOS transistor no longer conducts.
+
+00:10:14.720 --> 00:10:17.640
+ Okay, and so now the output is five volts
+
+00:10:17.640 --> 00:10:19.700
+ because the five volts is flowing
+
+00:10:19.700 --> 00:10:22.720
+ through the PMOS transistor to the output.
+
+00:10:22.720 --> 00:10:26.440
+ If I flip it, the PMOS transistor opens up
+
+00:10:26.440 --> 00:10:29.600
+ and the ground flows through the NMOS transistor
+
+00:10:29.600 --> 00:10:32.680
+ to the output.
+
+00:10:32.680 --> 00:10:35.780
+ And so that's it, and that's the picture
+
+00:10:35.780 --> 00:10:38.840
+ that I've been showing you that shows the PMOS and NMOS,
+
+00:10:38.840 --> 00:10:40.200
+ and there are no resistors in here,
+
+00:10:40.200 --> 00:10:42.000
+ so there's no dangerous heat.
+
+00:10:42.000 --> 00:10:45.540
+ So I can flip this as fast as I like.
+
+00:10:45.540 --> 00:10:47.360
+ And you can see it flipping back and forth,
+
+00:10:47.360 --> 00:10:51.560
+ and it's really activating or closing a closed circuit,
+
+00:10:51.560 --> 00:10:54.080
+ a circuit to close on either the NMOS or the PMOS,
+
+00:10:54.080 --> 00:10:55.480
+ but we've constructed it in a way
+
+00:10:55.480 --> 00:10:59.920
+ that it's like an if-then-else for circuit transmission.
+
+00:10:59.920 --> 00:11:02.400
+ And that's why I kind of call this NOT gate
+
+00:11:02.400 --> 00:11:04.640
+ an electrical if statement.
+
+00:11:04.640 --> 00:11:06.560
+ So basically that was a NOT gate,
+
+00:11:06.560 --> 00:11:09.520
+ and we're going to build much more complex digital gates,
+
+00:11:09.520 --> 00:11:11.480
+ but then we're gonna build circuits out of those gates.
+
+00:11:11.480 --> 00:11:15.040
+ We're not really gonna build very complex circuits
+
+00:11:15.040 --> 00:11:16.120
+ out of transistors,
+
+00:11:16.120 --> 00:11:19.240
+ although ultimately they're manufactured as transistors.
+
+00:11:19.240 --> 00:11:21.820
+ And so there is mathematical logic
+
+00:11:21.820 --> 00:11:24.920
+ that predates computers for AND and OR,
+
+00:11:24.920 --> 00:11:26.960
+ exclusive OR and NOT.
+
+00:11:26.960 --> 00:11:31.960
+ And then there's other logic that we kind of learn to use
+
+00:11:31.960 --> 00:11:34.120
+ because we could build them with fewer transistors,
+
+00:11:34.120 --> 00:11:37.960
+ NAND and NOR, and NAND is NOT AND, and NOR is NOR.
+
+00:11:37.960 --> 00:11:42.280
+ So our classic logic gates come from digital logic,
+
+00:11:42.280 --> 00:11:44.120
+ something that was a theoretical thing
+
+00:11:44.120 --> 00:11:46.720
+ that there was a pen and paper
+
+00:11:46.720 --> 00:11:49.160
+ well before computers came on the scene.
+
+00:11:49.160 --> 00:11:52.600
+ So the first digital logic gate is a NOT gate
+
+00:11:52.600 --> 00:11:54.120
+ that simply inverts its input.
+
+00:11:54.120 --> 00:11:56.480
+ Zero becomes one, one becomes zero.
+
+00:11:56.480 --> 00:11:58.560
+ An AND gate is simple.
+
+00:11:58.560 --> 00:12:01.120
+ If both of its inputs are one,
+
+00:12:01.120 --> 00:12:04.400
+ then the output is one, otherwise the output is zero.
+
+00:12:04.400 --> 00:12:07.340
+ The OR gate is if either of its inputs is one,
+
+00:12:07.340 --> 00:12:08.640
+ the output is one.
+
+00:12:08.640 --> 00:12:12.040
+ And if both inputs are zero, the output is zero.
+
+00:12:12.040 --> 00:12:13.560
+ And then there's the exclusive OR gate,
+
+00:12:13.560 --> 00:12:14.880
+ which we're gonna find really useful.
+
+00:12:14.880 --> 00:12:18.520
+ It's kind of a, it almost like counts its inputs.
+
+00:12:18.520 --> 00:12:21.240
+ It's not a counter in any way, but it counts its inputs.
+
+00:12:21.240 --> 00:12:24.280
+ If one of the inputs is one, its output is one.
+
+00:12:24.280 --> 00:12:27.080
+ If both the inputs are zero or both the inputs are one,
+
+00:12:27.080 --> 00:12:30.720
+ the output of an exclusive OR gate is zero.
+
+00:12:30.720 --> 00:12:35.720
+ Now, it turns out that we tended to use those AND, OR,
+
+00:12:35.720 --> 00:12:41.200
+ and NOT in classic digital logic math,
+
+00:12:41.200 --> 00:12:45.200
+ but it turns out that it's easier to build NAND and NOR,
+
+00:12:45.200 --> 00:12:47.740
+ which is really an inversion of the AND
+
+00:12:47.740 --> 00:12:49.160
+ and an inversion of the NOR.
+
+00:12:49.160 --> 00:12:51.720
+ Now, you could throw a NOT gate on the end of these things
+
+00:12:51.720 --> 00:12:53.400
+ to make them be ANDs and ORs,
+
+00:12:53.400 --> 00:12:56.020
+ but it turned out that early times,
+
+00:12:56.020 --> 00:12:58.680
+ we just could build NANDs and NORs
+
+00:12:58.680 --> 00:13:00.760
+ with a lot fewer transistors.
+
+00:13:00.760 --> 00:13:04.120
+ And so the NAND gate is the opposite of AND,
+
+00:13:04.120 --> 00:13:08.320
+ which means that if any of the inputs of a NAND is zero,
+
+00:13:08.320 --> 00:13:09.440
+ the output is a one.
+
+00:13:09.440 --> 00:13:12.000
+ And if both the inputs of a NAND are one,
+
+00:13:12.000 --> 00:13:13.000
+ the output is a zero.
+
+00:13:13.000 --> 00:13:14.420
+ And similarly for the OR.
+
+00:13:14.420 --> 00:13:16.960
+ If both the inputs are zero, the output's a one.
+
+00:13:16.960 --> 00:13:20.560
+ And if any of the inputs of the NOR are one,
+
+00:13:20.560 --> 00:13:21.660
+ the output is a zero.
+
+00:13:21.660 --> 00:13:26.280
+ It is literally NOT AND and NOT OR,
+
+00:13:26.280 --> 00:13:28.920
+ and can be turned into AND and OR with one more NOT gate,
+
+00:13:28.920 --> 00:13:31.800
+ which means that you would put two more transistors
+
+00:13:31.800 --> 00:13:34.740
+ at the end of each of these things.
+
+00:13:34.740 --> 00:13:38.880
+ I wanna show you how we can lay out a NOR gate.
+
+00:13:38.880 --> 00:13:41.160
+ And the basic idea of these things
+
+00:13:41.160 --> 00:13:43.280
+ is that it's kinda like a NOT gate,
+
+00:13:43.280 --> 00:13:44.920
+ and that's what's cool about it.
+
+00:13:44.920 --> 00:13:48.720
+ Except there are two PMOS transistors at the top
+
+00:13:48.720 --> 00:13:51.200
+ and two NMOS transistors at the bottom.
+
+00:13:51.200 --> 00:13:54.900
+ The bottom set of transistors decide
+
+00:13:54.900 --> 00:13:56.360
+ when it's connected to ground,
+
+00:13:56.360 --> 00:13:58.080
+ and the top set of transistors decide
+
+00:13:58.080 --> 00:14:00.640
+ when it's connected to five volts.
+
+00:14:00.640 --> 00:14:04.120
+ And they work in kinda parallel and opposite
+
+00:14:04.120 --> 00:14:06.460
+ to make sure that there's never a connection
+
+00:14:06.460 --> 00:14:10.200
+ from the voltage to the ground.
+
+00:14:10.200 --> 00:14:11.960
+ It's either the ground to the output
+
+00:14:11.960 --> 00:14:13.720
+ or the voltage to the output.
+
+00:14:13.720 --> 00:14:17.860
+ So let's do a real quick walkthrough of a NOR gate.
+
+00:14:17.860 --> 00:14:19.800
+ So NOT OR.
+
+00:14:19.800 --> 00:14:22.680
+ So right now we have inputs of one.
+
+00:14:22.680 --> 00:14:26.480
+ Now we've made the input zero, so when it's zero,
+
+00:14:26.480 --> 00:14:28.580
+ both are zeros, then the output is a one.
+
+00:14:28.580 --> 00:14:32.600
+ And if any of them are one, either of them are one,
+
+00:14:32.600 --> 00:14:34.520
+ then the output becomes zero.
+
+00:14:34.520 --> 00:14:36.920
+ And so it's not that tricky.
+
+00:14:36.920 --> 00:14:40.360
+ It sorta looks like an extended NOT gate
+
+00:14:40.360 --> 00:14:45.360
+ in that basically we've got two PMOS transistors at the top,
+
+00:14:45.360 --> 00:14:48.500
+ and if either of them are one,
+
+00:14:48.500 --> 00:14:51.840
+ that blocks the flow of electricity
+
+00:14:51.840 --> 00:14:54.920
+ from the five volts to the output.
+
+00:14:54.920 --> 00:15:00.800
+ And the same is true, we have in parallel NMOS gates
+
+00:15:00.800 --> 00:15:02.740
+ where if either of them is on,
+
+00:15:02.740 --> 00:15:05.520
+ that connects ground to the output.
+
+00:15:05.520 --> 00:15:08.720
+ So you can see that when I have them both,
+
+00:15:08.720 --> 00:15:12.280
+ with both of them on, both A and B on,
+
+00:15:12.280 --> 00:15:17.280
+ you see that both of the NMOS transistors are conducting
+
+00:15:17.280 --> 00:15:20.200
+ and so ground comes up.
+
+00:15:20.200 --> 00:15:22.600
+ But like if I just change one of them,
+
+00:15:22.600 --> 00:15:26.300
+ you see that the five volts is flowing through
+
+00:15:26.300 --> 00:15:30.560
+ the top PMOS, but it's being stopped by the second PMOS.
+
+00:15:30.560 --> 00:15:33.680
+ And so that means that the plus five
+
+00:15:33.680 --> 00:15:35.320
+ does not flow to the output.
+
+00:15:35.320 --> 00:15:38.840
+ And looking at the NMOS transistors,
+
+00:15:38.840 --> 00:15:42.120
+ you see that this one is not conducting,
+
+00:15:42.120 --> 00:15:45.440
+ but the other one, the B input is conducting.
+
+00:15:45.440 --> 00:15:50.440
+ And so there's at least one path from the output to ground.
+
+00:15:50.440 --> 00:15:55.560
+ If I flip these, you'll see that now that A is one
+
+00:15:56.040 --> 00:16:00.800
+ and B is zero, you see that the plus five is blocked
+
+00:16:00.800 --> 00:16:05.000
+ by the non-conducting first PMOS transistor
+
+00:16:05.000 --> 00:16:09.440
+ and the ground passes through the conducting NMOS transistor,
+
+00:16:09.440 --> 00:16:12.380
+ the first NMOS, the A NMOS transistor.
+
+00:16:12.380 --> 00:16:15.640
+ And so just kind of look at it,
+
+00:16:15.640 --> 00:16:18.440
+ you see that what it is is really just
+
+00:16:18.440 --> 00:16:21.040
+ kind of more not gates that has the,
+
+00:16:21.040 --> 00:16:23.240
+ it's either gonna conduct eventually from the top
+
+00:16:23.240 --> 00:16:27.000
+ or the bottom, and now we can have all the combinations
+
+00:16:27.000 --> 00:16:31.120
+ of the inputs that work and by creating this structure.
+
+00:16:31.120 --> 00:16:35.080
+ And so you could create a three input NOR gate,
+
+00:16:35.080 --> 00:16:38.880
+ a four input NOR gate, et cetera, et cetera, et cetera.
+
+00:16:38.880 --> 00:16:41.560
+ So this is just a look at an upcoming lecture
+
+00:16:41.560 --> 00:16:43.560
+ and an upcoming tool that you're going to use.
+
+00:16:43.560 --> 00:16:47.020
+ Now, once we have the abstraction of digital logic,
+
+00:16:47.020 --> 00:16:51.160
+ we can start designing circuits using digital logic design.
+
+00:16:51.160 --> 00:16:54.080
+ And all of a sudden, it just is a lot simpler
+
+00:16:54.080 --> 00:16:55.120
+ and a lot less cluttered.
+
+00:16:55.120 --> 00:16:59.300
+ So here is a NAND gate designed at the level of a gate
+
+00:16:59.300 --> 00:17:01.440
+ with inputs and outputs.
+
+00:17:01.440 --> 00:17:03.160
+ And you're gonna like it.
+
+00:17:03.160 --> 00:17:05.360
+ Well, we're not gonna build complex circuits
+
+00:17:05.360 --> 00:17:06.800
+ using transistors.
+
+00:17:06.800 --> 00:17:10.720
+ All we're trying to do right now is give you the mapping
+
+00:17:10.720 --> 00:17:14.200
+ from transistors to gates so that later when we use gates,
+
+00:17:14.200 --> 00:17:15.760
+ you just assume that it's okay
+
+00:17:15.760 --> 00:17:17.840
+ that there are transistors underneath.
+
+00:17:17.840 --> 00:17:20.420
+ (upbeat music)
+
+00:17:21.160 --> 00:17:23.760
+ (upbeat music)
+
+00:17:23.760 --> 00:17:26.340
+ (upbeat music)
+
+00:17:26.340 --> 00:17:27.560
+ (upbeat music)
+

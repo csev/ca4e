@@ -1,0 +1,104 @@
+ Hello, and welcome to our lecture on semiconductors. In this lecture, we go from tubes to transistors
+ and semiconductors. So transistors were something that was discovered at Bell Labs in the quest
+ to build a better triode. They were trying to build a better tube. And there are three
+ basic kinds of materials with respect to electricity. There are conductors, like metal, this is
+ a wire, inside the wire is metal. Then there are insulators, like plastic, the outside
+ of this wire is plastic. That's why if there's electricity inside the wire, you can grab
+ it by the plastic, because the plastic insulates you. But for transistors, there's this thing
+ called a semiconductor, and it's certain crystalline materials, like silicon, that can be modified
+ by adding certain impurities, they call that doping. So these conduct electricity under
+ certain conditions, and hence they call them semiconductors, sometimes conductors. Here's
+ the basic picture of a Nobel Prize. You can create a transistor by taking some silicon
+ with a particular kind of doping, and a silicon with different, and touching them. And so
+ when voltages are applied to these crystals, subatomic stuff happens at the boundary that
+ allows electricity to flow from one to the other. So it's actually at the boundaries,
+ right? So when these two kinds of material touch, that's what creates the transistor.
+ And in the early days, it was a kind of, it was a quest to take an input and a voltage
+ and make an amplified output. And so it turned out that transistors kind of did that, but
+ you can't, couldn't do what one tube did in a single transistor. And it turns out that
+ the single transistor can be used to amplify, but it then flips the signal, and you've got
+ to unflip the signal back up. And if you look at it, it's not quite as high a quality as
+ a tube, so you add a couple more transistors, and a diode here and there, and a capacitor
+ to affect the, to make sure that any large DC voltages don't go through, et cetera, et
+ cetera, and some resistors. And you add all that stuff up, and you can make a pretty decent
+ amplifier at that point out of transistors that you would have done originally with one
+ tube. And so one of the first things that I saw coming out were transistor radios. And
+ so what was a radio? Well, it used to be something that sat in your house and you turned knobs
+ and whatever, and you went to the store and bought tubes when the tubes broke down. But
+ a portable radio, if you could use transistors, they were much smaller, and you could have
+ a portable battery powered transistor radio. Transistors are so exotic that in the early
+ marketing of some of these radios, they told you how many transistors was in the radio.
+ So here is a Sony eight transistor radio. And if you look closely, you can see it says
+ eight transistors. Now let's turn this on, see what we're going to get. This is the only
+ radio station that I could get inside this room, et cetera, but that is real AM live
+ radio that is coming to this radio and being amplified by transistors. So let's take a
+ look at what's inside this. So now we have the back off of it, and you can see here,
+ some transistors, some capacitors, and some resistors, just like what was on that circuit.
+ So you can see these ones that have kind of the, they're round and they have a little
+ outline on top. Those are capacitors. So it has, you know, three, four, five, six capacitors.
+ They're used to filter out sort of high transient voltages. And then there's the transistors
+ are these little, there's the little things that don't have a circle on the top. They're
+ little metal. You can take a look at the side of them to see how the transistors are built
+ right there as a transistor. And then there's some resistors. You can kind of hard to see
+ them. They're kind of tucked in between things. And so we have, I don't know, I can count
+ like one, two. Well, there's eight transistors because that's what it said it did. And so
+ this is what's inside of it. It uses explicit transistors and it was able to create a radio.
+ The top, this top bit right here, that is the antenna for the radio. And so there you
+ go. An eight transistor radio, probably from the 1960s, that still works today. So for
+ a while it seemed like transistors were magic and everything that used to be done by tubes
+ was just slowly but surely replaced by transistors. The power was lower, everything lasted longer.
+ You didn't have to worry about replacing the tubes. But then what happened is if you look
+ at the complexity of that circuit, you find that there's too many things in that circuit
+ and purists who want perfect audio replication feel like so many transistors and resistors
+ and capacitors introduce noise. And so in recent years there has been sort of a throwback
+ to tube-based amplifiers. And so you can buy these things, a brand new one can be over
+ 50,000 and some of them are much higher than that. And so part of the reason is, is that
+ if you compare and contrast a single tube with a bunch of circuitry, you can see how
+ it might have some advantages. So I'll leave it up to the audiophiles to decide which is
+ better. Also, high-end musicians tend to like amps that have tubes in them because they
+ feel that they give a more pure sound. Before we completely leave tubes and say goodbye
+ and move on to transistors for the rest of the class, I want to show you one last tube.
+ It's called a Nixie tube. And it's going to appear later in the class when we do some
+ digital circuit design. This Nixie tube is a tube that has glowing numbers. And you can
+ see in the back, I have a working what we call Nixie tube clock. And I just want to
+ show it to you to show how these numbers have sort of a dimensionality when they're moving
+ forwards and backwards. But what I like about the whole thing is I want to just show you
+ the glow, right? That there's a certain glow and prettiness about tubes and those are electrons
+ that are making the shapes that glow. And I can kind of understand why it is that people
+ who love audio love tubes, because not only can you listen to the audio, but you can also
+ watch the tubes as almost living analog creature doing your amplification. This is not a high-end
+ audio class, but this is kind of where we're going to take our leave of tubes and move
+ forward into a transistor only world. So the first thing, this is a graph that shows input
+ voltage versus output voltage. And so you could think of the input voltage as something
+ we're driving on the horizontal axis. And much like when we talked about making digital
+ tubes, the earliest kind of transistor was very an amplifier style transistor and it
+ had a very much like a tube response and that it had a nice gradual slope, because you know,
+ you wanted the amplification of all the different frequencies and intensities of music to kind
+ of be consistent as you turn the volume up and down. But digital transistors, like digital
+ tubes, wanted to have a shorter transition. So again, you see this. Now I'll point out
+ that this is flipped from the tube one, because when a transistor is doing amplification,
+ it kind of inverts at first. And that's why we had to put extra transistors in to make
+ a real amplifier. But the picture is kind of the same. You want for a digital transistor,
+ you want it to have a quick transition from high to low in terms of the output. So as
+ the input voltage is increased, you want it, you know, high, high, high, high and snap
+ low as fast as possible. The other thing you want is a regeneration thing. So you want
+ it to kind of come down about one third of the input voltage. And so that way that you
+ have if you put these in a sequence from one to the other, you're kind of regenerating
+ the one and dealing with that sort of indeterminate state between zero and one. And so these are
+ just designed slightly differently with different impurities and different silicon and different
+ manufacturing techniques. So over time, there was a couple of different kinds of transistors.
+ One was the transistor called NMOS, which conducts with the input gate is high, and
+ the PMOS that conducts with the input is low. And the most modern chips use a combination
+ of NMOS and PMOS transistors. As a matter of fact, there are four general areas of transistor
+ manufacturing and usage. So the earliest was the bipolar junction transistor, which is
+ more like a tube with that kind of linear response. They were fast and they knew how
+ to make them or in the early days, but they were power hungry and hard to integrate. And
+ then what we did is we made a PMOS transistors, which were kind of large and clunky, but they
+ were easier to put together with early manufacturing imperfections. And they were slow. And then
+ we switched to NMOS, faster and simpler, but both PMOS and NMOS by themselves wasted power.
+ And about 1983, and like the Intel 486, we switched to what's called CMOS, complementary
+ metal on silicon. And it was very low power and it was very scalable. And really from
+ 1983 till now, we can, we have pretty much to use CMOS. And it really has to do with
+ improving manufacturing over time. So there's a whole bunch of different areas of manufacturing
+ for transistors. And we built computers throughout that whole era. And, but today we do CMOS
+ transistor technology and we'll talk about that in the next section.

@@ -1,0 +1,109 @@
+ So now we're going to bring this all together and we're going to build a simple, programmable, flexible programmable central processor, building it all with gates.
+ It's not going to be very sophisticated, but it's going to be a programmable processor.
+ So let's go back to the beginning of my Python class and look at this picture again,
+ where we have a central processing unit that has registers and arithmetic logic units and it processes instructions.
+ And in the main memory, we have the code and data.
+ And so when we write a program, we kind of are putting ourselves into that main memory.
+ The central processor asks, what next? And that says, give me the next instruction.
+ And that next instruction is a series of binary numbers, zeros and ones, coming out of the memory of the computer.
+ Then it decodes that instruction and it says, what am I going to do?
+ Maybe load some, load a value from memory, store a value from memory, perform a calculation inside the central processing unit.
+ And then when that's done, the central processing unit says, give me the next instruction.
+ And then the main memory gives the next instruction.
+ And so this is an oversimplified, generic computer, suitable for a very beginning Python programming class.
+ But let's use a little more advanced terminology that you will eventually hear.
+ So inside the CPU, there's a thing called the arithmetic logic unit.
+ We call it the ALU. It's like the adder code.
+ We've already built a three bit adder. That would be in the arithmetic logic unit.
+ When they mean logic, they mean comparison, like if tests, if tests are checked, like is X less than zero?
+ That's part of the logic, part of arithmetic logic.
+ Registers are temporary places to store data in the CPU that does not require going to and from memory all the time.
+ We've already built a register. We built a three bit latch, which I also told you was a three bit register.
+ And then what we have is programs and they come from the memory.
+ And so the memory has a series of program instructions. The CPU has what's called a program counter.
+ And it retrieves the next instruction, decides what kind of instruction it is,
+ and then sends signals to the registers and the ALU, whether it's loading data or storing data or making computations.
+ Coming up very soon, we're going to actually design a simple CPU that has machine language.
+ It's going to be a complete architecture. It will have a machine language and an assembly language completely defined.
+ And we will write programs in this little machine language.
+ Now, it's called the CDC 8512 because when I was young and just starting out,
+ I programmed on a computer called the Control Data Corporation CDC 6500.
+ And back when the computer museum in Seattle was open, they had a running one of these things.
+ And I have a video which I will share with you.
+ Unfortunately, with the passing of Paul L. and that museum closed, but that's unfortunate.
+ So I've seen one running recently. I've got some video and I will share that with you.
+ But that's not what we're doing right now.
+ I'm just telling you that what we're doing right now is a step toward building a real live, full function CPU with machine language and data, et cetera.
+ So but now we're going to build a really, really simple CPU.
+ It's going to have one register. It's a three bit latch.
+ It's going to have two machine instructions that we can inform the CPU what we want done.
+ It has a clock that happens every second. So it runs one of two instructions every second.
+ The zero instruction against machine language clears the latch and the one instruction tells the latch to add one to itself.
+ And like I said, this is going to happen once per second.
+ And we can submit a zero instruction or a one instruction once per second.
+ So we're going to have this built and it's going to run on our emulator.
+ This is the CPU. The emulator has a clock. It has a three bit latch, which is our register.
+ Then it has an adder. One of the operands to the adder is the output of the latch.
+ The other operand to the adder is a one, hard coded one.
+ And then you take the output of the adder.
+ Now, before we had run this straight into the latch so that it would just add one every time.
+ But now what we have is some decoding logic.
+ So if the instruction is zero, recall the latch is supposed to be set to zero.
+ If the instruction is one, we're adding one to the latch.
+ Every clock pulse and that clock is going up and down once per second.
+ The part that we've added here from the previous example is this logic.
+ When you look at real CPUs, you're going to see that they have a series of control logic.
+ And what does the control logic do?
+ It reads the next instruction from memory and it does what's called decoding it.
+ And then it distributes signals to give orders to the rest of it.
+ And so in this case, what's going to happen is this AND gate is going to block the output.
+ Because we just put ANDs, we are running the one, two, and four column of the sum through the AND gate.
+ And then we're hard coding zero, the instruction zero to the other inputs of the three AND gates.
+ And so the output of those AND gates, if the instruction is zero, is zero.
+ No matter what the other inputs are from the adder.
+ So we'll start this with instruction zero.
+ So every time the clock goes, the inputs to the latch are all zeros.
+ Because the instruction input is a zero and zero in anything is a zero.
+ So clock tick, tick, tick.
+ Every time this clock is ticking, that latch is resetting, meaning copying zero from its inputs.
+ So the adder is like happily adding one to the zero, but that's it.
+ Because the adder inputs are being blocked from coming back into the latch by the AND gates.
+ So you see when the instruction is zero, the AND gates function as a block.
+ In effect, turning off the data going into the latch.
+ Now we're going to switch the instruction to one and we wait one clock pulse.
+ So then what happens is the one instruction going to the three AND gates is no longer blocking data.
+ So whatever the outputs are coming from the adder are passing right through the gate.
+ Okay, in this particular case, the adder has a four.
+ That is presenting a four at the input.
+ Four's column is a one and the two's column is a zero and the one's column is a zero.
+ While the clock is low, that four is at the input to the register slash latch.
+ And then when the clock goes high, then we'll copy the four into the latch.
+ In the beginning, you start with the instruction zero, the latch is zero, the adder is one,
+ but the zero instruction is blocking data to go back into the latch.
+ It's blocked because it's a zero instruction.
+ On the other hand, if there is a one instruction, then this functions like a counter.
+ That means every second it goes up by one.
+ So when the clock is high, it copies the input.
+ Then the clock goes low, then the latch value goes to output, the adder adds one.
+ Then as long as the instruction stays one and the clock goes high,
+ the output of the adder is once again copied into the latch.
+ So it's a very simple two instruction computer.
+ We simply touch the instruction, we program this by touching the instruction value switch and setting it to zero or one.
+ So this is a two instruction computer.
+ What's missing?
+ Well, really, it's really hard to build a CPU where you can reach in and touch a button
+ and have the instruction be the button that you touched.
+ The clock rate is, you know, megahertz, not one hertz.
+ And so you can't send the instruction.
+ So really what you want is a flexible way to store and retrieve instructions
+ so that the instructions can be presented to the CPU fast enough to keep up with the clock rate.
+ So we really want a flexible, long sequence of many instructions executed one after another,
+ which we would call software or a program.
+ So next, we're going to think about how we might store sequences of instruction in the memory
+ and then retrieve those instructions from the memory and then execute them in the CPU.
+ Wait just a second.
+ There were a lot of switches on the front of a class's computer in a video from an earlier lecture.
+ Yes, the earliest computers did have switches on the front to control program behavior.
+ These switches often controlled conditional variables so program behavior could be changed
+ while flipping a switch while the program was running.
+ Actually, those switches were more like the variables that could be changed on the front panel.

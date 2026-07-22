@@ -1,0 +1,84 @@
+ hello and welcome to another walkthrough for computer architecture for everybody in this walkthrough we
+ are going to do some more work with our CDC 6504 emulator we're going to build our first loop so let
+ me go ahead and load that loop up and then turn on the assembler so we can see it oh not that one
+ we're going to change it that would be where we would change it let's view the assembly we just
+ want to be able to look at it when we're near it okay so this is not going to use any memory
+ so i can just kind of leave the view assembly over here actually can bring it all the way over here
+ because we're not going to get into the second half of the instruction memory because we're
+ done here so let's get a review of what we're going to do so this is kind of like a python for
+ the x register in range five there's going to be a loop that goes zero one two three four and then
+ when it hits five it's going to jump out it's not going to execute the body of the loop for the value
+ five as soon as it hits five as soon as it's equal to five we're going to jump out of the loop so the
+ first thing to note is this syntax of a label labels are not actually in the machine language
+ they're making it so that we don't have to put numbers in like this jump instruction or the
+ branch if equal instruction so we can basically say hey assembler you're pretty good at keeping
+ track of stuff this loop is going to turn into an address and we're going to jump to an address
+ which is a number or we're going to jump to an offset and please calculate the offset do all that
+ calculation for me so i don't have to put numbers in here so these aren't really instructions they're
+ kind of pseudo instructions much like the data pseudo instruction so let's take a look at how
+ these things end up in the machine language so let's take a look at the jump to loop that jump
+ to loop is the jump back up to the top and so we're sitting here at location 0x06 and that's
+ a jump instruction and the loop is the address which is what the program counter is going to get
+ set to and that's going to set the program counter to one which means it's going to jump
+ to instruction one and that is the compare instruction so the calculation of this number
+ one is done by the assembler as it looks at this loop symbol and it keeps track of it right so it
+ takes two two passes you can calculate it backwards jumps but forward jumps are a little bit harder now
+ the beq is even a little bit trickier okay because of course the beq checks the z flag if the two
+ last comparison was equal then the result of that subtraction would be zero and so we're going to be
+ eq so here's the beq at pc location 0x03 and then we take a look at the immediate so this immediate
+ you it's going to jump to location 8 which is the end of the program which is a break instruction
+ but you look at this offset and that's a three zero one one is a three and so what this is is
+ this is a relative offset again computed by the assembler on our behalf now it turns out that this
+ three is going to be added to the current program counter but it's not added to four it's actually
+ added to five and that's because the program counter retrieve the beq instruction then it
+ retrieve the immediate instruction and as a side effect it incremented the pc and so the pc once
+ this beq is executing is five so five plus three is eight and you'll listen as you read it it'll
+ it'll have computed the five plus three it'll know that this is five and it'll add three to it and
+ it'll know eight and so when we're narrating this execution you'll hear it talking up branching to
+ eight when eight is not really sitting here in the base two okay so let's go ahead and do some
+ steps i'll take it slow at the beginning and then we'll speed it up pc 0x00 clear x register so we
+ cleared the x register but again it already was zero because the program was just starting but the
+ pc has moved up to one the zero is set because we cleared the x register we touched the x register
+ we did a calculation which means we set it to zero okay and that sets the z flat the next
+ instruction is going to be compared to five pc 0x01 compare x register with immediate 0x05
+ okay now the interesting thing is that is not z because it's not equal it does a subtraction
+ so it takes zero minus five but it didn't store the result of that it just set the flags and so
+ that compare instruction doesn't change registers it just changes flags so now we're at the point
+ where z is not set and n is set and so the fix we're going to do is we're going to run this beq
+ instruction and that means if the z is set we're going to jump to end and end is three bytes beyond
+ location five but in this first time we're not going to jump because the z flag is not set so
+ let's do a step you'll see it's going to just jump over it to location five pc 0x03 branch if equal
+ address 0x08 so you notice it calculated the five plus three equals eight but because the z flag is
+ not set it just went to pc five and didn't touch the pc so you can always think of a branch or a
+ jump as like a setting of the pc value but in this case it computed a relative offset of the current
+ pc which was five plus three and that would have been where we jumped so the next thing we're going
+ to do after we didn't jump is we're going to increment x pc 0x05 increment x register so now
+ x is one it's not negative and it's not zero and the next thing we're going to do is we're going to
+ jump back up to location one so this is an absolute jump to location one whereas the branch eq was a
+ positive offset jump pc 0x06 jump to address one so we're back at one you see the pc is one
+ and now the next thing we're doing is going to do the comparison pc 0x01 compare x register
+ with immediate 0x05 now one is less than five so we get the end flag so we're not going to file this
+ branch pc 0x03 branch if equal address 0x08 didn't branch now we're going to increment pc 0x05
+ increment x register and now we're going to do an absolute jump like a go-to pc 0x06 jump to address
+ one so you let's let's go ahead and just run it for a while we'll wait maybe i'll try to stop it
+ when x is three and then see what's going on so let's just run it pc 0x01 compare x register with
+ immediate 0x05 pc 0x03 branch if equal address 0x08 pc 0x05 increment x register pc 0x06 jump
+ to address one pc 0x01 compare x register with immediate 0x05 pc 0x03 branch if equal address 0x08
+ pc 0x05 increment x register pc 0x06 jump to address one piece okay so now we are jumped to
+ address one i got i caught it halfway through it okay did the compare and it fell through still
+ because it's not equal and next time we're coming up x is going to be five so i'm going to start
+ stepping at this point uh we're going to i think this is uh oh no it's we i stopped it before the
+ beq okay so it's still negative because we checked to see if four was less than five and it is so that
+ the n is still so we're going to branch pc 0x03 branch if equal address 0x08 do one more this is
+ going to be the increment pc 0x05 increment x register now we're going to do an absolute
+ jump back up to the top of the loop pc 0x06 jump to address one okay here we are so look x is now
+ five this is a top tested loop the next thing we're going to do is we're going to compare it
+ and watch the little z flag happy little z flag turn on one step pc 0x01 compare x register with
+ immediate 0x05 there we go so the z register is now set and the beq is going to read the z
+ z flag actually not register i think them is like one bit registers okay and so the beq is going to
+ jump and remember it's going to take this three one one and add it to five and jump to eight so
+ let's party pc 0x03 branch if equal address 0x08 and now we're at x08 0x08 break no printed output
+ so there's no printed output because we didn't store anything in the memory we are just showing
+ you how loops work okay so i hope this has been helpful in a simple loop so this is both a loop
+ and an if test and then we're going to do a couple more that get a little bit more complicated so i
+ hope you found this useful

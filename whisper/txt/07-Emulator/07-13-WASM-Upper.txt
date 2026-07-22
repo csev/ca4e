@@ -1,0 +1,112 @@
+ Hello, and welcome to another code walkthrough for computer architecture for everybody.
+ In this walkthrough we're going to walk through the uppercase converter.
+ So what this is, is this is again WASM in the JavaScript environment, so it's output
+ is console.log and that's about it, we're not even taking some input, we're going to
+ hard code our input, and then what we're going to do is write a function called make an uppercase
+ copy of the string, okay, and so this gives us a little bit more time to take a bit more
+ look at WASM, not that I want you to understand or code WASM, you may even use AI to help
+ solve this one assignment, so you're going to take this uppercase code and you're going
+ to write a lowercase version of it, so you got to kind of dig through this code and figure
+ out where it's doing the uppercase, and then switch it to doing lowercase, and it might
+ be a little bit of work, and you might even use AI a little bit to help you do this, but
+ I'm just going to walk through this code to help you out.
+ Our output is going to go to console.log, we're going to create some memory, we're going
+ to put a string in there at location zero, and then we're going to make it so JavaScript
+ can execute it, and so we are going to then say copy and go to uppercase, and we're taking
+ some input variables, some making some local variables, so this parentheses func, it basically
+ WASM is a stack oriented language, so when you go into a func, you can think of a new
+ stack frame being created, just like you would in any other programming language, so in that
+ stack frame, there are variables that belong in that stack frame, and that's what we're
+ talking about here, and we're setting some values and getting things done, and then we
+ have some two instructions, or two instructions that might look a little weird to you, one
+ is the block, and so the idea, there are no labels in WASM, there are constructs, there
+ is an execution stack, and so when you start a block, and we'll go down to the bottom of
+ this block, where's the end of the block, I think the end of the block is right here,
+ oh wait, oh, I missed it, missed it, come back, come back, okay, I think the end of the block
+ is here, yeah, no, the end of the block is here, and this is the end of the loop, and
+ so what happens here is the block creates a temporary label that only exists in this
+ block, and you can branch to the loop end, it doesn't have to be named copy loop end,
+ they just named it copy loop end, because that's what's going on, so if this branch,
+ if true, this is doing a comparison between the character to see if it was a zero byte,
+ and if we hit the zero byte, we're gonna exit the loop, and we're gonna branch to this copy
+ end, now copy end is not the top of this, it is the next statement after the end of
+ the block, so when you say branch if copy loop end, you're exiting, so branches in WASM
+ are more about exiting where you're at and going to the next place, so that branch goes
+ to here, there is no label here, so if we were doing this in assembly language, we would
+ put a label here, and we would jump to the label, you're only allowed to jump out of
+ things or to the top of things, and so that's the way we exit it, so this is a loop that's
+ reading the data, and checking for a zero byte, and if we get a zero byte, we're done
+ with the loop, so that is the block, okay, block is something that can be exited, think
+ of it from a C perspective and a Python perspective, as this is like a break, it's a break out
+ of this block, BRF dollar copy loop end breaks out of the block that has the label dollar
+ copy loop end, so that is just a way to start a block and get out of the block, so that's
+ like a break statement, all of the looping in WASM is basically kind of like a wild true
+ loop, both in Python and in C, it's like an infinite loop, and all we're doing with this
+ loop statement, it has no logic to it, it is defining another label, this label is only
+ accessible between the beginning and the end of the loop, so here is the end of the loop,
+ and we have, we're jumping to the top, if you don't have this BR dollar copy underscore
+ loop, it's not gonna go back up, so the while loop is not automatic, you have to do something
+ at the bottom of the loop to go up, this is like a continue in either Python or C, so
+ continue the loop, go up to the top, now, there is no automatic incrementing, there
+ is no plus plus in here, no auto ion range of five, nothing, you have got to add one
+ to your, yeah, so we're gonna add one to our counter, they're adding one to the counter
+ with this little for statement bit of code, for instruction piece of code, so they're
+ doing the plus plus as it were, or advancing the iterator, you have to do it in WAT, and
+ you're seeing quickly like, whoa, this is a pain, why isn't there just an increment
+ instruction, there isn't, there's an add one, you put the current value of I on the stack,
+ put the one on the stack, you add the top two items of the stack, and then you set it
+ back into the I variable, and then you go up to the top of the loop, so this is like
+ an infinite loop, and it goes until at the top, of course, it reads the offset piece
+ of the, it takes the, it takes, it doesn't even have an offset lookup, 6502 had an offset
+ lookup in it, and it says, give me the variable and add the I to it, it's why you have zero
+ based arrays, add it, and then load that, I don't know what this T does, but then we're
+ gonna check to see if the character we just got is a zero, and then we're gonna branch
+ out of the loop, and you know, then there are things like this dollar char, this is
+ a local variable, and then when we finally get done with this function, we are going
+ to return at the end of the function, and then that's gonna kinda clear all that local
+ stuff off the stack, the stack frame, and then we're gonna go, so if we got our main
+ function, and this main function is what is gonna be called from the JavaScript, so we're
+ gonna grab the string, we're gonna grab its length, and we're gonna call the copy and
+ uppercase routine, push some things in and call copy and uppercase, and then we're going
+ to print out the output of our function and the length, and then we're going to be done,
+ so, this is, oh I need to talk about if, I didn't talk about if, oh here we go, this
+ is the if, so this if looks okay, it's got an if then else, by the way, there is no elif,
+ you just have to keep nesting your elses, else, else, else, else, it's like going back
+ 20 years, 30 years, okay, if, and then this, checking to see if it's greater, this is really,
+ this is a logic statement, we're grabbing the character, we're checking to see if it's
+ greater than a lowercase a, or, is it greater than lowercase a, and less than lowercase
+ c, less than or equal to, so it's doing a greater than or equal to, and a less than
+ or equal to, and this and is taking the two logic results that are sitting on the stack,
+ and then being true or false based on those two logic results popping it off, so it's
+ a stack oriented computation, and so if this resulted in a true, meaning it's greater than
+ or equal to a, and less than or equal to z, if it's true, we're going to convert that
+ character by subtracting 32, and then we're going to store it back in, and so that is
+ what we're going to do, well we're going to calculate the character, then we're going
+ to store it here, it's just really wordy, I mean a center language seems easier, now
+ the reality is most browsers don't execute this literally, it can, and it's still pretty
+ fast, you can execute this with an interpreter, and it runs plenty fine, but you can also
+ do what's called cross compiling it into native code, the key is that the way it's written,
+ a compiler can verify that this is not like doing naughty things, it's not like reading
+ memory doesn't belong to it, you can't jump to places that don't belong to you, you can't
+ execute code, there's so many things that stops you from doing, which is that sandboxing
+ thing, so we have gone through our loop, we've converted all the stuff to uppercase, left
+ the letters that are already uppercase alone, and then we print it all out, so with all
+ that, let's compile it and run it, so remember in this screen, the Watt is being assembled
+ inside the JavaScript, this is just a JavaScript button, the Watt is being assembled inside
+ the JavaScript, and then it is being executed inside the browser, and the results are coming
+ back to JavaScript, and that's it, so we got our uppercase, and your assignment is to adapt
+ this and adapt it so it does lowercase, it even tells you like, oh, it's a slightly different
+ number, maybe you wanna do a different if, there you go, so it's not trying to make it
+ super hard for you, but you gotta dig through here, look enough, and you'll mess it up,
+ and then you just go reload the sample code, and then you fix it again until when you run
+ it, it says the correct output happens, so that this could all be lowercase, and then
+ you will have passed the autograder, let's go ahead and run the autograder on this, it's
+ gonna fail, you gotta keep the original string, it compiled it, no, it didn't, we got the
+ wrong one, that's 'cause I didn't change the code, so there you go, now that's your job,
+ you're gonna fix that in the autograder, okay, so this is a little more detail in the walkthrough
+ where we build a function, we talk about the block, we talk about how break works, how
+ continue works, and then how if then, there is an else, but there is no else if, and we
+ talked about the stack and stack approach, you can talk a bunch to AI about this and
+ learn as much or as little as you want about Wasm, I just wanted to expose you to Wasm
+ because it is going to be increasingly important going forward when we talk about different
+ kinds of software systems, cheers.

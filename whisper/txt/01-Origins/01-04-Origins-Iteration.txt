@@ -1,0 +1,90 @@
+ the Babbage Difference Engine was an example of mechanical iteration where you make a motor or a crank or something to do something one of the earliest most powerful mechanical computers ever built was called the Bamba and it was used to
+ crack encrypted communications in World War II with Germans and Japanese that used a device called
+ the Enigma to encrypt these messages and send them using Morse code and radio. And the Bomba was a
+ British, Polish device that repeatedly tried to guess these settings for a day, like guessing a
+ password based only on the encrypted text. And so when you listen to a Bomba moving, it is lots of
+ clicking, lots of spinning and lots of rotation, because the iteration is kind of rotation.
+ So we think of a for loop as iteration, but in a physical computer a for loop is often rotation.
+ Another device that kind of approximates this same kind of computation with a little less high-end is
+ a pinball machine. So the Bomba was a very fast electromechanical computer in the 30s and the
+ 40s. The pinball machine is kind of like the 50s and the 60s, and it's just, it's a kind of a good
+ example of how state-of-the-art military technology becomes games later. Because a pinball machine
+ uses switches and relays and physical storage, like piles of balls, to track a score, award free
+ games and count the number of balls, start the game, stop the games, take your money and give
+ you credits. And these are all built by using relays and wiring and knowing things like the
+ response time of a relay when it's switching from sort of off to on, and then relay feedback
+ that once relay goes to on it stays on. And in many ways it's a throwback to the kind of technology
+ that the electromechanical computational technology similar to the Bomba. But the problem is that
+ the pure mechanical computations were just too slow. And if you take a machine like the Babbage
+ engine and you just make it go up 20 times faster, it's gonna fall apart in like less than a minute.
+ Might take you years to build, you go too fast in it and all the pieces come flying off.
+ And that's because the the energy to change the state, right, so changing state, again going back
+ to this, the changing of the state is me pushing on the thumb thing. But if I all of a sudden made
+ a really fast engine that would push this thing a thousand times a second, it would probably break.
+ It couldn't take the stress. And so the problem is is that physical and electromechanical computing
+ had just a limit of, there's like inertia, you know, physical problems like inertia.
+ And so you can, you have to limit the speed of like the difference engine so you don't, or the
+ Bomba, so you don't just physically damage the machine. If you go to the maximum speed and double
+ it you will break the machine very, very quickly. So what happened was is instead of storing data
+ and storing the zero or the one in something mechanical like a relay, they started using,
+ again in World War II at Bletchley Park, electronic switching using tubes. Now tubes are interesting
+ devices. They are, generally have a vacuum in them. And let me show you, let me show you this a little
+ bit more close up. So here's a tube, okay, and this is a vac, this is glass. It has a vacuum in it
+ and there are little plates in this tube that are heated up and glow and electrons flow between the
+ plates. There's a base and an emitter and then a grid that speeds or slows up the electrons.
+ And you know there's electric, electric is sent in. Sometimes it's heating, sometimes it's sort
+ of just a positive or negative. Sometimes it's to control it. Now the original idea of tubes
+ was to take sound waves from say a microphone and amplify them to be louder to go to a speaker.
+ And so tubes are analog and continuous amplifiers, meaning whatever you put in,
+ whatever signal you put in, could be a sort of a flat signal or a moving signal,
+ it's going to come out louder, increased. What happens is they can do some feedback in these
+ tubes and sort of tune them in such a way that you can have a certain level of voltage that is the
+ zero and a certain level of voltage is the one. And then with a little feedback you can make the
+ zero and the one sticky. And so it takes power and they generate heat but they have no moving
+ parts so they can switch way faster than any kind of a physical storage device. So one of the first
+ tube-based electronic computers was called the Colossus, also at Bletchley Park, currently at
+ the National Museum of Computing History at Bletchley Park. But it could do the other
+ computations way faster than the other electro-mechanical computer called the Bomba. But
+ they're pretty hot. If you stand by this thing you can feel heat coming off of it.
+ Power consumption and heat dissipation for tube-based computers, even though they're much faster,
+ are still a challenge. This is an electronic computer, the world's first computer for many
+ years because of the secrecy. It just seems that the American ENIAC computer was the world's first
+ computer, very check. In fact, this computer, I was there from this colleague of mine, this computer
+ predated it by three years but nobody knew that. So this man who designed and built the world's
+ first electronic computer went back to Dolittle and no one ever heard of him. He carried on designing
+ telephone exchange which was a real tragedy in me. Many years later, I'm really just walking by,
+ very timely, and I always wanted to build one of these things. But how do you build something
+ since there were no records? Well, not quite. How many flowers were put alive? He offered to help.
+ There were still 89 black and white sonographs.
+ Managed to find some of the engineers who were still alive. I was surprised to find so he had
+ kept notebooks. That second fragment up there had been kept. So he managed to get them all together
+ in a kind of a modern computer design package. They redesigned across the floor too from the
+ ground up. Having redesigned it, I hope I'm not making any mistakes. Having designed across it
+ from the ground up, of course they had to build it. This gentleman was clever enough. They, like with
+ the telephone exchanges, were de-commissioning all their own exchanges. They took a lorry,
+ went to the back door and said, "I'll get rid of all that old crap." And for free acquired the stock
+ of valves. I believe they started with the metalwork and the ground up. In a mere 14 years,
+ 15 years of it. 16 years. 16 years I had a working machine. But to prove this is a rebuild,
+ this is not a model or a simulation, you need to make it do what it was designed to do, work out
+ the break to Lorenz type of machine. Now we had a General Lorenz machine. They were captured in the
+ end of the war by a Gilmarchal tessering from Gilmarcher tessering. The machine was sent to
+ the Heinz-Dittsdorf competing museum in Germany. It generated a test message, intercepted here,
+ put on a bunch of tape, put the tape on the machine. Three and a half hours later,
+ via decrypted finessus. Okay.
+ Now, going back to programming, a big subplot in the Hidden Figures movie is the transition
+ from doing complex calculations manually by humans in a room with adding machines to doing them
+ by writing Fortran programs on IBM 7090. This was NASA. And the interesting thing is there's
+ such a natural parallel to writing Fortran instructions, to following some written
+ instructions by doing all the calculations. And it was very natural for these people who had
+ years of experience following instructions precisely to then start writing Fortran code
+ that the computer would follow. And so being a human computer was a natural training ground
+ for the emerging programming field. The basic idea of this first phase is kind of fun.
+ We have built endless physical devices over time to help us better understand our world.
+ Things like the passage of time, things like the solar systems, stars in the night sky,
+ things like how fast you can go through air, whether it's a boat or an airplane. We've always
+ been interested in money. Things like curved motion under the effect of gravity spacecraft,
+ like in the movie Hidden Figures. There was a lot of calculations that happened. And by the way,
+ the IBM 7090 in Hidden Figures was built using transistors, solid state electronics that
+ greatly reduced heat and power consumption and increased speed. And they could do basically
+ 24,000 multiplications per second. So in upcoming lectures, we're going to start exploring how we go
+ from relays and motors to solid state computation.

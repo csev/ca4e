@@ -1,0 +1,78 @@
+ Hello everybody and welcome to another walkthrough and this time we're going to do some walkthrough in the CDC 6504 machine language emulator.
+ So let's first just talk a little bit about all the things that we can do here.
+ So this is kind of our machine language emulator.
+ We have a series of instructions.
+ It starts out all zeros.
+ We have data memory.
+ We have 256 instructions.
+ We have 256 data memories.
+ We have an accumulator register, an X register, and a Y register taken from the 6502.
+ And then we have the program counter, which points to where we're at.
+ Our program counter currently says zero pointing at instruction memory zero.
+ The Z is a flag that once we do a calculation or store some stuff and the result of that is a zero, the Z will check and N stands for negative.
+ We can branch of negative, branch of positive, branch of zero.
+ And so these are used to do a pattern of compare, then branch.
+ We can load a program from here.
+ Let's just load a simple sample so you can see it.
+ You can also view the assembly language.
+ And so what I'll tend to do is I'll tend to put the assembly language over here and I've got this narrate execution.
+ You can hover over each of the memory locations and it tells you, for example, that this zero X zero zero location is a E2 in hex and it is a clear instruction.
+ Now, sometimes this is instruction, sometimes it's data when we're doing load immediates.
+ It tells you, you know, if it's ASCII, it'll tell you what the ASCII character is.
+ And so it has to interpret this.
+ But this is just zeros and ones in the computer memory and it's contextualized what's going on.
+ So this is just a clear instruction, an increment instruction and an increment instruction and then a break, which is just a zero, which stops the thing from running.
+ And we can see the same thing right here in the assemblies, clear, increment, increment, break.
+ Eventually, we're going to want to just look at the assembly.
+ It just makes our lives a lot simpler to watch what's going on.
+ But reality, it's zeros and ones.
+ And so we have a couple of options here.
+ We can start the application.
+ We can run it a single step.
+ We can reset it, but that clears everything and we've got to load a new program.
+ But we have this cool feature called narrate execution and it slows it down and describes everything that's going on.
+ And so I'm going to tell you in advance what's going to happen.
+ It's going to clear the X register and you've got to watch the X register here.
+ And it's going to add one to the X register, watch the X register and then add one again to the X register.
+ And when it's all said and done, it'll stop and nothing else will have changed except the X register will have a two in it.
+ So I'm going to move this over here and you can kind of watch as the program counter moves along and just kind of that assembly is there for you to remember.
+ Later, you can write assembly and get it assembled.
+ So let me go ahead. It's got narrate execution turned on and let me start it.
+ PC 0 X 0 0. Clear X register. PC 0 X 0 1. Increment X register. PC 0 X 0 2. Increment X register. PC 0 X 0 3. Break. No printed output.
+ OK, so you saw what happened there. Let me go and do this a little more slowly.
+ Let me reload it. Load simple sample and I'm going to instead when we narrate execution, I'm going to hit step.
+ So you saw it run automatically. And so I'm going to do step.
+ It's going to run one instruction and narrate it when I press step. PC 0 X 0 0. Clear X register.
+ OK, so notice that the Z flag, it's a one byte instruction.
+ So the PC went up by one. The Z flag is now set.
+ It's not a negative number because the X register is a zero, which is not negative.
+ And that is the result of that particular instruction.
+ So let's step again. PC 0 X 0 1. Increment X register.
+ So we incremented X. So if we look at X, X is now gone from zero to one.
+ The program counters ready for the next instruction.
+ But because X is now one, neither the Z nor the N flag is set.
+ So let's step one more time. PC 0 X 0 2. Increment X register.
+ OK, so now the next instruction is going to be 0 X 0 3.
+ And the X register is 2. The Z and the N flags are set accordingly.
+ When we step again, we're going to hit this break, which is a stop.
+ And then the program executions. PC 0 X 0 3. Break. No printed output.
+ And what it's talking about no printed output is in future ones, we put some data.
+ When we put data in here, the printed output comes out of the first few up to a zero byte in the memory.
+ But this one has no particular memory. OK, so let's just take a look at a couple of other things that we have.
+ It has a bunch of documentation. It's pretty cool.
+ It's probably more you can read this. AI can read this. It's pretty cool.
+ That's just a URL that you can go paste into AI if you want, and you can ask AI for help writing this code.
+ And we'll see how well AI does with this, but it has documentation.
+ We also need an ASCII chart, right? This is not a text one.
+ So but we have a little ASCII chart that tells that the space is 32 decimal.
+ It's 20 hex and 0 0 1 0 0.
+ And remember that hex, you can do a four bit to one column hex to binary conversion.
+ And for me, I start seeing things like I'll look at like this one here.
+ I know that's a seven, so that's twenty seven.
+ I'll see this one one one and I'll see that as an F.
+ So you'll start to see hopefully after a while, you'll kind of have a hex to binary conversion in your mind.
+ Decimal is a pain in the neck.
+ I just got a hand convert both decimal to hex and binary.
+ And so that's pretty much all of the features of the application.
+ And so next we're going to go through some of these things in a little bit more detail.
+ And so come to those in a bit.

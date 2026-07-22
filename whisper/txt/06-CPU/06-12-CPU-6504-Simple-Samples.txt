@@ -1,0 +1,65 @@
+ Hello and welcome to another computer architecture CPU emulator walkthrough.
+ And so in this one we are going to go through a number of simple samples.
+ And I will turn on the viewing of the assembly language down here, so we can see that.
+ This one here is really simple.
+ It is going to load a constant into the A register, 27, that's a decimal 27.
+ And then we're going to add 15, so this is going to be 27 plus 15.
+ And then we're going to store it into memory location 00, and then we're going to stop.
+ So this is going to cause a little bit of output.
+ So let's go ahead and narrate the execution, and then start it running.
+ I'll put this in a place where we don't want to hide the memory, because the action is
+ going to happen here in the memory.
+ So here we go.
+ PC 0x00, load the accumulator immediate 0x1B, PC 0x02, add will carry immediate 0x0F, PC
+ 0x04, store accumulator to address 0, PC 0x06, break printed output asterisk.
+ So this time we stored something in the memory, so the program will dump the memory up to
+ a 0 byte, kind of like C, right?
+ It will dump the memory up to a 0 byte, and 0x2A, let's go look at our ASCII chart.
+ 0x2A, 0x2A, 0x2A, there we go.
+ Is a 42 decimal, interesting choice of number, and it's an asterisk.
+ And so it's a 0x2A, you can see it in the memory, and when the program stops, it prints
+ it out.
+ Okay?
+ So then let's take a look at another simple example.
+ Let's take a look at the assembly language for it.
+ So this is going to basically stick that letter H into the accumulator, then store it in memory
+ location 0, and then put a high in the accumulator, and store that in memory location 1.
+ So let's go ahead and step that, PC 0x00, load accumulator immediately at 0x48.
+ I'll go to the next instruction, which is going to store that one.
+ PC 0x02, store accumulator to address 0.
+ So we took what was in the accumulator and stored it into memory address 0, and now we're
+ going to load the I.
+ PC 0x04, load accumulator immediately at 0x69.
+ So 0x69 is the letter I, and now we're going to store it.
+ PC 0x06, store accumulator to address 1.
+ We just put some data into memory location 1.
+ We're going to step one more, and it's going to stop, and it's going to print out what
+ is here in ASCII.
+ PC 0x08, break, print, hit output, hi.
+ So it said hi, okay.
+ And so let's do one more simple one, and this one's kind of weird.
+ So I have a single instruction, which is break, which is stop, and you'll notice it says zero
+ zero zero right away, but I use the assembly language data pseudo-op, we call these pseudo-ops,
+ and it preloads the data, and it says, and this is hello world, so you can see it's hello
+ world in ASCII, 0x20 is the space.
+ So we're just going to run this, but it's going to immediately stop, but it's going
+ to dump the memory because we preloaded data into memory, and so this is really showing
+ you more about how this data pseudo-operation works.
+ PC 0x00, break, print, hit output, hello world.
+ Okay, and so let me then show you one more thing in this.
+ You can write code in the assembler, okay.
+ This is a little text editor.
+ You read the assembly language, you go into the documentation, read the assembly language,
+ and then you can say take this code and assemble it.
+ So it assembled it, and so now it says hello CA for E, so there's the, so in location five
+ is the space, and then C is the 43.
+ Let's go ahead and bring up a ASCII chart so we can figure out what this memory location
+ six is.
+ It's a 0x43, and that's C, and then 41 is the A, right, so you can kind of see this,
+ and now we're going to run it.
+ It's only got one instruction, which is a stop instruction, but then it's going to print
+ out its.
+ PC 0x00, break, print, hit output, hello CA for E.
+ That's just really showing you the data thing, and later we will use this to preload data
+ and then write code that reads from memory and does something to that memory.
+ But for now, I hope you found this walkthrough with a couple of simple examples useful, cheers.

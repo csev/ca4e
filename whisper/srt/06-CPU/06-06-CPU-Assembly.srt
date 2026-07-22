@@ -1,0 +1,632 @@
+1
+00:00:00,000 --> 00:00:06,760
+ Now it is time to start building a little more complex machine language, assembly language, applications.
+
+2
+00:00:06,760 --> 00:00:10,440
+ And as always, these slides are not necessarily the best reference.
+
+3
+00:00:10,440 --> 00:00:19,000
+ Once you listen to them, you should probably start looking at the online documentation that I provide for the CDC 6504.
+
+4
+00:00:19,000 --> 00:00:21,660
+ So we'll start with another review of the architecture.
+
+5
+00:00:21,660 --> 00:00:24,400
+ By now, this should be pretty familiar to you.
+
+6
+00:00:24,400 --> 00:00:30,400
+ We have a program counter, which is telling us where in the instruction memory to retrieve the next instruction.
+
+7
+00:00:30,400 --> 00:00:34,200
+ We have the accumulated register, which is kind of the most flexible register.
+
+8
+00:00:34,200 --> 00:00:40,460
+ We have the Z and the N flags that tells whether last thing we did in a register was zero or negative or a compare instruction.
+
+9
+00:00:40,460 --> 00:00:46,100
+ The X and the Y registers are registers that are a little less capable than the accumulator.
+
+10
+00:00:46,100 --> 00:00:53,860
+ We show instruction memory in base two and data memory we show in hex because it usually contains ASCII.
+
+11
+00:00:53,860 --> 00:00:59,240
+ So there is a new thing that's only in assembly labels or something that's only in assembly.
+
+12
+00:00:59,240 --> 00:01:02,800
+ And this data directive is the thing that's only in assembly.
+
+13
+00:01:02,800 --> 00:01:13,300
+ Everything we've done so far in the assembler is populating the instruction memory by parsing the instruction, the assembly language instructions and producing the zeros and ones that are the machine language.
+
+14
+00:01:13,300 --> 00:01:21,300
+ But there's also this thing called a data directive where we can fill the data memory up with some pre before the program starts, we load.
+
+15
+00:01:21,300 --> 00:01:29,200
+ There's an act called loading. We load the program into the memory, load the instruction memory, and we can preload the data memory with this data directive.
+
+16
+00:01:29,200 --> 00:01:38,260
+ But it's not machine code. It is something that assemblers do and give us a loadable image that includes a data segment, basically.
+
+17
+00:01:38,260 --> 00:01:42,600
+ And it can either be a quoted string or a series of hex digits.
+
+18
+00:01:42,600 --> 00:01:55,300
+ And we mostly will use quoted strings so you can print hello world by having a single line of machine language break, which means halt, but then have the data filled with hello world.
+
+19
+00:01:55,300 --> 00:01:58,700
+ And it just turns out that the emulator dumps out the data when it's all done.
+
+20
+00:01:58,700 --> 00:02:02,200
+ So this is the simplest program.
+
+21
+00:02:02,200 --> 00:02:08,600
+ It's not really machine language, but it's the simplest program in the emulator to make it print hello world.
+
+22
+00:02:08,600 --> 00:02:16,500
+ So here's just a couple. So in this one, we're going to add 27 plus 15 and then store it in memory location zero.
+
+23
+00:02:16,500 --> 00:02:21,500
+ So we load 27, an immediate, immediate constant into the accumulator.
+
+24
+00:02:21,500 --> 00:02:25,100
+ Then we add 15, which is another immediate constant.
+
+25
+00:02:25,100 --> 00:02:29,700
+ So that's 42. And then we're going to store that in location memory location zero.
+
+26
+00:02:29,700 --> 00:02:32,300
+ So you can see by that. And then we halt.
+
+27
+00:02:32,300 --> 00:02:40,800
+ So by the time the program counter makes 0, 0, 5 hex, there is a single 0x2a, which is 42 in hex.
+
+28
+00:02:40,800 --> 00:02:49,000
+ And then you can see that that prints out asterisk, because if you go look at your ASCII chart, asterisk is 42 decimal.
+
+29
+00:02:49,000 --> 00:02:52,500
+ Our next example is just printing hello.
+
+30
+00:02:52,500 --> 00:03:00,900
+ And so we're going to end up putting this in memory so that the program will dump out the memory, starting at memory location zero after the program finishes.
+
+31
+00:03:00,900 --> 00:03:05,300
+ So we do an immediate load of the letter H and we start in memory location zero.
+
+32
+00:03:05,300 --> 00:03:09,200
+ We do an immediate load of the letter E and store that in location one.
+
+33
+00:03:09,200 --> 00:03:13,000
+ We do immediate load of the letter L and store that in location two.
+
+34
+00:03:13,000 --> 00:03:16,100
+ And then we store that again in location three because there's two L's.
+
+35
+00:03:16,100 --> 00:03:22,400
+ And then we do an immediate load of the letter O and we store that in location four and then we quit.
+
+36
+00:03:22,400 --> 00:03:26,600
+ And then if you look at the memory, there is H-E-L-L-O in the memory in hex.
+
+37
+00:03:26,600 --> 00:03:30,300
+ And then you can see that the program prints hello out when it's all done.
+
+38
+00:03:30,300 --> 00:03:36,000
+ And again, this is just exploring some assembly language slash machine language.
+
+39
+00:03:36,000 --> 00:03:42,500
+ So now we're going to do a little more complicated and a little more practical example.
+
+40
+00:03:42,500 --> 00:03:48,700
+ So we are going to uppercase a whole string of characters and we're going to take the characters from memory,
+
+41
+00:03:48,700 --> 00:03:55,200
+ read them all from memory in a loop, check them, convert them to uppercase and then store them back if necessary.
+
+42
+00:03:55,200 --> 00:04:03,500
+ So the key to this is our data is going to be preloaded using the data directive in memory locations zero through four.
+
+43
+00:04:03,500 --> 00:04:07,000
+ And that's the hello with the H uppercased already.
+
+44
+00:04:07,000 --> 00:04:12,000
+ So now we've run it. You can see the status is halted and you see that it printed out an uppercase hello.
+
+45
+00:04:12,000 --> 00:04:21,300
+ And the only real thing that it changed was memory location one, two, three and four are now the uppercase versions of those letters.
+
+46
+00:04:21,300 --> 00:04:27,700
+ Now, before we go through that code in some detail, let's think about uppercasing this string in other languages.
+
+47
+00:04:27,700 --> 00:04:31,100
+ Now, if you're a Python person, you'd be like hello dot upper.
+
+48
+00:04:31,100 --> 00:04:33,200
+ There's a method. Hello.
+
+49
+00:04:33,200 --> 00:04:37,400
+ The string is an object and you can call a method dot upper.
+
+50
+00:04:37,400 --> 00:04:40,500
+ Now, it's not changing the hello to upper.
+
+51
+00:04:40,500 --> 00:04:43,000
+ It is just giving you a copy of that.
+
+52
+00:04:43,000 --> 00:04:47,300
+ Now, if we didn't have upper, we would have some pretty ugly Python.
+
+53
+00:04:47,300 --> 00:04:51,200
+ So we couldn't you can't change a Python string in place.
+
+54
+00:04:51,200 --> 00:04:53,600
+ So you have to take and make a variable.
+
+55
+00:04:53,600 --> 00:04:56,200
+ In this case, I'll call it mem because it's like the memory.
+
+56
+00:04:56,200 --> 00:04:58,500
+ But you can't change memory in Python.
+
+57
+00:04:58,500 --> 00:05:00,400
+ You got to make a new one.
+
+58
+00:05:00,400 --> 00:05:10,400
+ So then we're going to have this for loop for XR, which kind of is my way of saying X X register is range len of mem.
+
+59
+00:05:10,400 --> 00:05:19,100
+ That's zero. That's going to run XR through zero through four up to but not including five.
+
+60
+00:05:19,100 --> 00:05:24,700
+ And then we're going to retrieve memory one character of memory from XR to XR plus one.
+
+61
+00:05:24,700 --> 00:05:26,400
+ Put that in the accumulator.
+
+62
+00:05:26,400 --> 00:05:32,800
+ And if the accumulator is greater than or equal to A and less than or equal to Z,
+
+63
+00:05:32,800 --> 00:05:39,300
+ which is between A and Z inclusive, then we're going to compute the new character.
+
+64
+00:05:39,300 --> 00:05:42,800
+ And now you'll see this CHR and ORD.
+
+65
+00:05:42,800 --> 00:05:47,100
+ And the problem is, is that in Python, we're not even using ASCII.
+
+66
+00:05:47,100 --> 00:05:48,900
+ The hello is Unicode.
+
+67
+00:05:48,900 --> 00:05:54,900
+ So ORD says, give me the ordinal of the current character I'm looking at, ACC.
+
+68
+00:05:54,900 --> 00:05:59,500
+ Subtract the ordinal of lowercase a and add the ordinal uppercase a.
+
+69
+00:05:59,500 --> 00:06:06,000
+ Now, this wouldn't necessarily work for any set of characters because Unicode can have a lot of things.
+
+70
+00:06:06,000 --> 00:06:11,600
+ And so the actual uppercase is a little more complex inside of Python.
+
+71
+00:06:11,600 --> 00:06:17,600
+ So we've computed the uppercase character if we know it's a lowercase character by mathematics.
+
+72
+00:06:17,600 --> 00:06:24,300
+ And then we append it to the new version of the memory, building that up one string at a time.
+
+73
+00:06:24,300 --> 00:06:26,100
+ And then we print it out.
+
+74
+00:06:26,100 --> 00:06:34,400
+ And so you can't even do this because Python is not really designed for low-level array-like things.
+
+75
+00:06:34,400 --> 00:06:36,200
+ Lists are not arrays.
+
+76
+00:06:36,200 --> 00:06:42,500
+ Although if you took my C programming class, you would understand that they're kind of arrays, okay?
+
+77
+00:06:42,500 --> 00:06:49,200
+ So let's take a look at this in C, which is a lot more like assembly language.
+
+78
+00:06:49,200 --> 00:06:54,600
+ So if we take a look at the top of this, we include the standard I/O and we have a main program.
+
+79
+00:06:54,600 --> 00:06:58,500
+ And we use the register, register int xr ACC.
+
+80
+00:06:58,500 --> 00:07:03,500
+ Now, for those of you who don't know C, the register is a keyword in the C language.
+
+81
+00:07:03,500 --> 00:07:08,100
+ And it says, this is going to be something that I'm going to want to make high performance.
+
+82
+00:07:08,100 --> 00:07:11,300
+ So put it in a register if you possibly can.
+
+83
+00:07:11,300 --> 00:07:15,000
+ Then I'm going to create a character array named mem.
+
+84
+00:07:15,000 --> 00:07:24,900
+ Now, this is going to be a six-character array with a zero termination, the letters hello followed by a zero.
+
+85
+00:07:24,900 --> 00:07:31,900
+ And so then what we're saying is we're saying for xr equals zero, as long as mem sub xr,
+
+86
+00:07:31,900 --> 00:07:40,600
+ we're now looking for that zero terminated string, as long as mem xr is non-zero, continue and then add one to xr.
+
+87
+00:07:40,600 --> 00:07:46,800
+ So then we take our, that's our index variable, our loop iteration variable.
+
+88
+00:07:46,800 --> 00:07:53,900
+ So we say, oh, let's take the accumulator and load in mem sub xr because xr is our sort of index variable.
+
+89
+00:07:53,900 --> 00:07:58,000
+ And in this case, we're dealing with ASCII and we know it.
+
+90
+00:07:58,000 --> 00:08:02,600
+ So if the accumulator minus a is less than zero, we continue.
+
+91
+00:08:02,600 --> 00:08:10,600
+ And if you recall and see the continue does mean that the increment part of the for loop is executed. So xr plus plus.
+
+92
+00:08:10,600 --> 00:08:17,700
+ If not, we're going to say mem x sub xr equals the accumulator minus zero x20.
+
+93
+00:08:17,700 --> 00:08:22,200
+ So we're doing the case conversion there and putting it right back into mem xr.
+
+94
+00:08:22,200 --> 00:08:28,200
+ That for loops runs five times and then we print out the uppercase.
+
+95
+00:08:28,200 --> 00:08:34,500
+ So now we are going to finally walk through the assembly language version of this.
+
+96
+00:08:34,500 --> 00:08:40,000
+ So I've got the code on the left and I've got the before memory and the after memory on the right.
+
+97
+00:08:40,000 --> 00:08:44,400
+ Now, one of the things that you'll notice is that I have given you on the right hand side,
+
+98
+00:08:44,400 --> 00:08:50,800
+ I've given you the sort of pseudo code for the C code that corresponds to the assembly language that we're going to do.
+
+99
+00:08:50,800 --> 00:08:57,400
+ So we're going to effectively construct a for loop that's going to loop through an array of characters.
+
+100
+00:08:57,400 --> 00:09:01,000
+ So the first thing we do is we're going to set x to zero, clear x.
+
+101
+00:09:01,000 --> 00:09:05,700
+ And then we're going to have a label to come back up to the top of our for loop.
+
+102
+00:09:05,700 --> 00:09:12,600
+ The next instruction, lda $00, x, is the new instruction we haven't used so far.
+
+103
+00:09:12,600 --> 00:09:16,400
+ And this is an index load into the accumulator.
+
+104
+00:09:16,400 --> 00:09:20,900
+ $00 is the starting address and the x register contains our offset.
+
+105
+00:09:20,900 --> 00:09:26,400
+ So it basically adds x to wherever we're at and then that becomes the address.
+
+106
+00:09:26,400 --> 00:09:29,600
+ And then we're going to load that into the accumulator.
+
+107
+00:09:29,600 --> 00:09:38,100
+ Now, that act of loading into the accumulator is going to set the z flag and the n flag as any change to any register does.
+
+108
+00:09:38,100 --> 00:09:41,900
+ And so we're going to use a BEQ, which is really kind of branch zero.
+
+109
+00:09:41,900 --> 00:09:46,500
+ That means if the accumulator is zero, we're going to follow the branch.
+
+110
+00:09:46,500 --> 00:09:52,800
+ But in this case, the accumulator is going to have uppercase H, 0x48.
+
+111
+00:09:52,800 --> 00:09:56,500
+ And so BEQ is not going to branch, so we're going to fall through.
+
+112
+00:09:56,500 --> 00:09:58,900
+ And then we're going to start our if test in a sense.
+
+113
+00:09:58,900 --> 00:10:04,000
+ Compare the accumulator to lowercase a.
+
+114
+00:10:04,000 --> 00:10:12,500
+ Now, recall that in ASCII, uppercase a is less than lowercase a in the ASCII chart.
+
+115
+00:10:12,500 --> 00:10:19,000
+ So if it's already uppercase, that comparison is going to be minus, right?
+
+116
+00:10:19,000 --> 00:10:21,200
+ It's going to be negative.
+
+117
+00:10:21,200 --> 00:10:27,500
+ And so we're going to branch to, in effect, a label that I called cont, which is sort of like a continue.
+
+118
+00:10:27,500 --> 00:10:33,700
+ So we're going to skip the subtract if it's already an uppercase.
+
+119
+00:10:33,700 --> 00:10:39,000
+ So BMI cont skips the subtraction if it's already uppercase.
+
+120
+00:10:39,000 --> 00:10:41,700
+ Then we come into the continue label.
+
+121
+00:10:41,700 --> 00:10:44,500
+ And then we are incrementing x.
+
+122
+00:10:44,500 --> 00:10:48,900
+ Now, remember that continue actually runs the increment of a for loop.
+
+123
+00:10:48,900 --> 00:10:53,700
+ And then we're going to jump back up to the top of the loop.
+
+124
+00:10:53,700 --> 00:10:55,700
+ But x is now 1.
+
+125
+00:10:55,700 --> 00:11:04,100
+ And now we're going to load index load from at location 0 with x of 1.
+
+126
+00:11:04,100 --> 00:11:10,800
+ And so now we get the 0x65, which is the lowercase e.
+
+127
+00:11:10,800 --> 00:11:13,500
+ And we're going to check to see if we're out of the loop or not.
+
+128
+00:11:13,500 --> 00:11:14,200
+ We're going to fall through.
+
+129
+00:11:14,200 --> 00:11:19,700
+ We're going to compare the lowercase e to lowercase a.
+
+130
+00:11:19,700 --> 00:11:25,700
+ And in this case, it's not minus because e is greater than a.
+
+131
+00:11:25,700 --> 00:11:27,000
+ And so we're going to do the subtraction.
+
+132
+00:11:27,000 --> 00:11:32,000
+ So we're going to convert that to uppercase by subtracting 20 hex.
+
+133
+00:11:32,000 --> 00:11:39,500
+ And then we're going to store it right back into that location, which is location 0 indexed by the x register, which is 1.
+
+134
+00:11:39,500 --> 00:11:44,000
+ And so that's going to put 0x45 into location 1.
+
+135
+00:11:44,000 --> 00:11:45,400
+ Then we drop into the continue.
+
+136
+00:11:45,400 --> 00:11:47,100
+ We add 1 to x.
+
+137
+00:11:47,100 --> 00:11:48,300
+ The x register becomes 2.
+
+138
+00:11:48,300 --> 00:11:50,000
+ And we jump to the top of the loop.
+
+139
+00:11:50,000 --> 00:11:52,300
+ So you see how this is kind of working, right?
+
+140
+00:11:52,300 --> 00:11:55,000
+ So now x is 2.
+
+141
+00:11:55,000 --> 00:12:02,100
+ And so we do an indexed load of location 0 plus 2.
+
+142
+00:12:02,100 --> 00:12:03,500
+ Branch if it's equal to done.
+
+143
+00:12:03,500 --> 00:12:07,300
+ Check to see if it's uppercase already.
+
+144
+00:12:07,300 --> 00:12:08,600
+ And in this case, it's not.
+
+145
+00:12:08,600 --> 00:12:09,800
+ So we subtract.
+
+146
+00:12:09,800 --> 00:12:11,800
+ So at some point, you can follow this.
+
+147
+00:12:11,800 --> 00:12:17,700
+ It will go round and round until we get to an offset of 5.
+
+148
+00:12:17,700 --> 00:12:19,000
+ Jump to the top of the loop.
+
+149
+00:12:19,000 --> 00:12:24,400
+ We're going to load location 0 plus x, which is 5.
+
+150
+00:12:24,400 --> 00:12:26,100
+ And in this case, it's going to be a 0.
+
+151
+00:12:26,100 --> 00:12:29,500
+ And then the BEQ is going to be true in a sense.
+
+152
+00:12:29,500 --> 00:12:31,600
+ And then we're going to jump to done.
+
+153
+00:12:31,600 --> 00:12:40,300
+ And then the application is going to finish and print out its after data, which is fully uppercased.
+
+154
+00:12:40,300 --> 00:12:41,000
+ Hello.
+
+155
+00:12:41,000 --> 00:12:44,500
+ That's a bunch of assembly language and C and Python.
+
+156
+00:12:44,500 --> 00:12:47,800
+ And I would say that you're going to spend a bunch of time with the emulator
+
+157
+00:12:47,800 --> 00:12:50,800
+ and a bunch of time with the emulator documentation.
+
+158
+00:12:50,800 --> 00:12:55,700
+ And hopefully, with some time, this will all make sense to you.
+

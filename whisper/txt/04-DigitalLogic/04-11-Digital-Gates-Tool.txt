@@ -1,0 +1,97 @@
+ and welcome to another walkthrough for computer architecture for everybody.
+ In this walkthrough we're going to cover the gates, the gate layout system and the gate simulation system.
+ It has an extensive help, probably more than you need if you get stuck or you want to paste some of this stuff into AI and figure out how to use it.
+ So I'm just going to walk through the basic features.
+ So we have a wide range of components, all the way from something as simple as a single AND gate, or an input or an output that we can put in,
+ or we can put something much more simpler like a Nixie display, right?
+ So if we take this Nixie display and you can drag things around and you can connect them to the input.
+ And so this is the Nixie display that's got a one, two and four input.
+ So let's play with that a little bit, give ourselves another input, click to connect them.
+ And then so I've got this Nixie input, it's a three because it's a one and a one.
+ So it's the two input is one and the one input is one.
+ Let's go ahead and bring another input in and connect it.
+ Oops, connect, connect.
+ There we go.
+ So now it is a seven, right?
+ You can do some practice.
+ So that's a four and a two and a zero, which is a six.
+ And you can rename these things.
+ So I'm going to call this one ones and call this one twos.
+ So this little tag, you can tag and then click on something and then fours.
+ So we can have the bits for the ones, twos and fours.
+ And if we turn it off, then that's going to be a two.
+ So that's a two.
+ If I add one to that, then that's three.
+ And you can just build these little circuits.
+ So one of the things that I'll just show you that is really weird is there's an automatic layout.
+ So like if I had to put this input over here, it's trying its hardest.
+ This laying out circuits is a hard thing and I've got it using spline curves.
+ But if you come over and you highlight and double click, you will create what's called a waypoint.
+ And then I can sort of route these wires creatively and then drag these waypoints.
+ It doesn't change the circuits at all.
+ And so I can make this look a little bit better using waypoints.
+ And so a couple other things, let's see.
+ We can get a component, a full ladder component.
+ So it's a carry-in, an A and a B, and then a sum and a carry-out.
+ And that is, you know, inside of that, inside of every one of these are transistors.
+ A Nixie tube has got some glowing stuff.
+ It's actually a tube. I just put it in because it's pretty.
+ We got a JK flip-flop.
+ And so a JK flip-flop, I'll go through this in a little bit more.
+ We've got even a thing called a three-bit latch, which we'll use later as a register.
+ It has some inputs and outputs and it has an internal state.
+ And the pulsing on the clock copies the input into the internal state.
+ Then letting go of the clock will copy the internal state to the output.
+ And we have a three-bit adder that takes A and B in the ones, twos, and fours column.
+ And then the sum comes out.
+ And so that is basically the kinds of things that you can do.
+ And remember that every one of these things eventually turns into transistors.
+ So I showed you the tag. The tag, you just grab something and then fun and you just give it a name.
+ And so that gives these things names.
+ You can delete something by clicking the trash can icon and then highlighting an item and it deletes it.
+ And if you click and delete something that has a wire associated with it, it deletes the wire as well.
+ You can save a circuit, stuff, and it saves the circuit inside your browser
+ and what's called local storage in your browser.
+ And then you can load it.
+ So if you're in the middle of working on something and you want to save it and load it,
+ well, let me do this.
+ I'm going to clear all of them, clear everything, get rid of everything.
+ And now I can reload that circuit from the storage that was called stuff.
+ It was a crazy circuit.
+ So I just loaded stuff back up.
+ And so that was that circuit.
+ I saved it. I loaded it.
+ You could load it. You could add a thing.
+ Let's add another input and then connect it up.
+ And then save it as stuff again.
+ Save.
+ OK, now let's clear everything again.
+ And then load stuff back up.
+ And you should see.
+ And it's edited.
+ See, I can load it.
+ I can edit it and then save it and then load it again.
+ If you are to go and relaunch this, I'll just refresh the page
+ and you'll see what happens here.
+ It's gone.
+ That's all just in the browser storage.
+ But if you were clever enough to save it, you can load it back up.
+ So again, depending on how complex the work that you're going to do,
+ you can use load and save.
+ So let's go through a couple of other things.
+ Like I mentioned, if you're trying to make the wires route nicely,
+ you can double click on the line and create a waypoint.
+ And I don't know why, but I have a thing to hide the waypoints
+ if you don't want to see them and then show them back.
+ There's also a command down here, and that's described in the help documentation.
+ So you can say place NAND.
+ And so it'll put a NAND in there.
+ If you really want to read the instructions,
+ and I did this to some degree for accessibility,
+ where you can place a NAND and give it a name,
+ and then you can connect the output of the NAND to the input of something.
+ We'll see how well people find that to use.
+ I put it in there.
+ I may have to work on it and improve it over time.
+ You can show how to hide the command line interface.
+ I hope that this basic walkthrough of the Gates layout tool has been helpful to you.

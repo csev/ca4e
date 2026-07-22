@@ -1,0 +1,124 @@
+ hello and welcome to the first lecture of computer architecture for everybody in
+ this lecture we're going to talk about the origins of data, computing, lines,
+ straight lines and curves and numbers and how our obsession with measuring our
+ real world led to eventually computing so we're going to cover a number of
+ different topics we're going to talk about measuring the solar system and how
+ looking up at the night sky and trying to understand how the night sky works
+ continuous physical analog computing using things like slide rules and how we
+ did multiplication using slide rules back in the day talk about digital
+ physical devices such as like even a clicky pen is kind of a digital physical
+ device and that it's it's it's not digital but it has two distinct states
+ and it's stable in both states and that's digital so pen clocks another
+ digital physical device is one of these little clicky things that people use to
+ calculate their grocery bill as they were shopping before we had hand
+ calculators the other thing that people did is before we had hand calculators
+ that could conveniently calculate sine and cosine we had these really big books
+ that had tables of numbers so that you could look up sine and cosine in those
+ books and so we'll eventually move from there on to human computers which is
+ iteration by lot rooms full of people doing calculations or the average
+ difference engine which was steam-powered that could calculate
+ polynomials and then we move into electromechanical computers like the
+ bomba or pinball machines and then eventually we end up on the first
+ electronic computer using tubes called colossus at Bletchley Park and so that
+ is leads us to the beginning of the electronic computer age now I really
+ want to tell you that this is not a class about mathematics numbers are kind
+ of the obsession in the beginning because computation in numbers were a
+ big deal but if you take my C class C programming for everybody I talk a lot
+ about how everything in computing changed in 1978 there's other important
+ moments where things changed in a dramatic way but before 1978 a lot of
+ computing had to do with numbers numbers were the focus there was no internet
+ there was no email computers were large filled a room they were very expensive
+ millions and millions of dollars and you use them to do numeric calculations that
+ were otherwise impractical but after 1978 computers got smaller and faster and the
+ internet kind of came along and people stopped doing numbers is the main thing
+ the computers did of course computers are still good at numbers but they're no
+ longer the main thing that we do we do it mostly for communication and data
+ artificial intelligence and those kinds of things although numbers are important
+ part of artificial intelligence but in general the arc of computers and
+ computing sort of starts and for its early early phases it's all about the
+ numbers and so there's a few math examples but I'll explain all the math
+ where it needs to be so the big problem that we humans are trying to solve with
+ numeric calculations and formulas etc is the notion of the fact that light
+ travels in straight lines and so when we see things with our eyes we see a world
+ that seems to be straight line but everything else in that world is moving
+ in a curved path so for example if I were to throw a softball to you that
+ softball would follow a parabola and so through millennia of evolution our eyes
+ have learned to calculate parabolas otherwise we would not be able to throw
+ and catch a ball and yes I'm using a sports analogy right now meaning that
+ how does one see a ball and hit it with a bat in a game of wheelchair softball
+ how does that happen but really a lot of what we do in sports today is something
+ that used to have to do with survival gathering food fighting other kinds of
+ things that were part of our survival so this notion that we are people with eyes
+ that see things in lines perceiving a world of curves so one of the first
+ fascinations with the world of curves has to do with stargazing
+ everybody who sits outside at night and looks up into a clear night sky with
+ various patterns of stars slowly moving around it's natural to wonder exactly
+ what's up there and humans throughout all of our history have you know come up
+ with explanations for why the stars were doing what they were doing one of the
+ things that we could look at and measure a little more easily than other things
+ in terms of the motion of the skies is the sunrise and the sunset of the well
+ the rise in the set of the moon and the stars and the Sun because they changed
+ but then after a while if you watch them and measure them they change in a very
+ very specific pattern and so here I'm showing you a picture of the series of
+ sunsets that I constructed underneath the Mackinac Bridge in northern Michigan I
+ took this picture in August and they're one of those sons is real the rest of
+ them are sort of made-up sons but you could at this point use the motion of
+ the sunset against the horizon as something that would tell you about the
+ season of the year and it turns out that tracking these seasons has been
+ important for all of our cultures for ten thousand years and the reason is is
+ the location of the sunset tells us about the weather when are the rains
+ going to happen when should we plant crops when is it dangerous and there's a
+ song that we in the state of Michigan of a certain age called the wreck of the
+ Edmund Fitzgerald that talks about how when you are in Lake Superior no matter
+ how large of a boat you have the gales of November will come after you and this
+ was a gigantic boat modern boat and there was enough wind in the November
+ storm that sunk the Edmund Fitzgerald and it was quite shocking because in the
+ 1970s we thought technology would solve everything and so but this is a good
+ example of how not knowing what time of year you're going to do something set
+ out on a long journey or whatever could have some significant consequences and
+ if we look back in history there are many artifacts across many cultures that
+ are based on tracking the Sun calendars of various kinds some are tracking the
+ Sun some of the Sun and the moon and they are solar calendars of one form or
+ another that look at the sunrise and sunset angles from various places
+ one of the older and most sophisticated ones is Stonehenge now these were all
+ over the world right just in all cultures of various sizes and forms etc
+ and so I've listed on this slide some of the various times that different
+ cultures invented various things having to do with the Sun and if you look at
+ some of those dates you're like whoa Stonehenge was pretty far pretty long
+ time ago compared to some of these other things and so we in the modern world we
+ have our fun time with modern hinges if you go to a certain street in Manhattan
+ on a certain day at a certain time you see this theme of light and I'm sure
+ that's what fascinated early people as they built these things was that you
+ know the light seems random and then all of a sudden like like a laser beam whoosh
+ the light comes down this long corridor and in the case of Manhattan it's like a
+ mile or so and the light just burst through and there's one in Chicago where
+ again you stand at a particular location and the Sun these are Sunrises comes
+ right to you in an otherwise dark thing and it again you could imagine that early
+ people would see this this burst of the Sun into a dark location is somehow a
+ very mystical moment in a very mystical event and Stonehenge a lot of folks
+ think that Stonehenge was there to decide when to have certain celebrations
+ right so a spring celebration a summer solstice celebration etc and so at the
+ bottom you can see a what I'll call a dr. Chuck's commute hinge where I just
+ happen to be driving in a while ago and the Sun was at a perfect angle that it
+ came up underneath it was just rising and it came up underneath a overpass and
+ I just kind of clicked the button on my cell phone so that I could capture this
+ moment again that's a that's a moment that has to be a location time time day
+ of year and then you could see that if you stood there and again I don't really
+ particularly celebrate or good I don't go down every fall to try to catch this
+ sunrise underneath this bridge but you get the idea that you're like whoa this
+ this object in this in the sky was moving randomly and now all of a sudden
+ today it's shooting right at me through a little tiny hole and you can you can
+ kind of imagine that the builders of Stonehenge were quite interested in the
+ moment that the Sun would appear and burst on to them and if you were
+ standing somewhere it'd be dark and then you would be like a beam of direct light
+ would be on you and so it's pretty exciting now there was a lot of
+ iteration in several kind of concentric structures at Stonehenge that were
+ built between 5100 years ago and 3600 years ago and so in to some degree you
+ could imagine that by the time they were done with this they had a pretty good
+ sense of where the Sun rose and sunset as it moved across the horizon around
+ Stonehenge and you can think of it as like it's a data table that's been
+ tracking the Sun had been tracking the Sun for 2500 years so up next we're
+ going to talk about moving things everything up to now I've talked about
+ is just like measuring the Sun a sundial but up next we'll talk about analog
+ devices with gears and pulleys etc that attempt to do some computations and
+ we'll stick with in the beginning the obsession with the location of the Sun

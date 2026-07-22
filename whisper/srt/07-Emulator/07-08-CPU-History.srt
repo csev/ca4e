@@ -1,0 +1,252 @@
+1
+00:00:00,000 --> 00:00:09,200
+ So now that you've learned to program a microprocessor from the 1970s, I'd like to take a quick fast forward from the 1970s to the present.
+
+2
+00:00:09,200 --> 00:00:16,060
+ Lots changed since the 6502 was available as a $25 microprocessor.
+
+3
+00:00:16,060 --> 00:00:20,700
+ Since the 1970s, there have been about 50 distinct CPU families.
+
+4
+00:00:20,700 --> 00:00:25,160
+ I've been part of this my whole career, lots of research and innovation,
+
+5
+00:00:25,160 --> 00:00:30,460
+ adoption, switching, computer vendors picking one CPU and then switching to another CPU,
+
+6
+00:00:30,460 --> 00:00:37,760
+ generational turnover and overall approach from complex instruction sets to simpler risk instruction sets,
+
+7
+00:00:37,760 --> 00:00:47,500
+ from large refrigerator size mainframes to small microprocessors, then larger microprocessors, faster microprocessors.
+
+8
+00:00:47,500 --> 00:00:52,060
+ Interestingly, after all that, things have settled down in the modern era.
+
+9
+00:00:52,060 --> 00:00:59,560
+ There are two major CPU families in use if you think about consumer and server and desktop.
+
+10
+00:00:59,560 --> 00:01:09,900
+ If you take computers and phones and bring them together, about 90% of the marketplace is ARM-based processors and the remaining 10% is Intel processors.
+
+11
+00:01:09,900 --> 00:01:13,560
+ ARM is very successful because it was focused on low power.
+
+12
+00:01:13,560 --> 00:01:20,260
+ And as computers have gotten faster and faster, we really care more and more about saving power,
+
+13
+00:01:20,260 --> 00:01:27,220
+ both for small handheld devices and for desktops and then even laptops.
+
+14
+00:01:27,220 --> 00:01:32,260
+ And so power savings is really important and ARM was designed to save power.
+
+15
+00:01:32,260 --> 00:01:37,900
+ So let's take a quick case study and look at Apple over the years.
+
+16
+00:01:37,900 --> 00:01:45,460
+ Apple, the Apple I was one of the early adopters of the 6502 in 1997.
+
+17
+00:01:45,460 --> 00:01:54,360
+ And the Apple II and the Apple II and its sort of whole family were a very successful set of microprocessors for a long time.
+
+18
+00:01:54,360 --> 00:02:01,560
+ Apple switched to a different processor, the Motorola 68000 from 1984 to 1994.
+
+19
+00:02:01,560 --> 00:02:12,620
+ During that time, they were playing with a project called the Newton, which was a handheld device, wasn't extremely popular, but it was a handheld device.
+
+20
+00:02:12,620 --> 00:02:18,560
+ Battery powered handheld sort of pocket, but that was using an ARM processor, an ARM processor.
+
+21
+00:02:18,560 --> 00:02:23,560
+ Then they switched from the Motorola to the PowerPC in 1994.
+
+22
+00:02:23,560 --> 00:02:35,660
+ And again, 12 more years they use the PowerPC and then the Intel x86 in 2006, they switched their Macintosh line from using PowerPC to Intel x86.
+
+23
+00:02:35,660 --> 00:02:41,720
+ I was actually in the audience when Steve Jobs announced the switch from PowerPC to Intel x86.
+
+24
+00:02:41,720 --> 00:02:49,700
+ I was amazed, I was sitting, I was working on my laptop, which had a PowerPC in it, had been using it for years.
+
+25
+00:02:49,700 --> 00:02:57,620
+ And at the end, he threw the doors open and we ran into some rooms and there were some prototype Intel x86 Macintoshes running Mac OS.
+
+26
+00:02:57,620 --> 00:03:04,020
+ And it was amazing to me that they could switch from PowerPC to Intel x86.
+
+27
+00:03:04,020 --> 00:03:12,120
+ Then the iPhone came out in 2007 and I was also in the audience when Steve Jobs announced the first iPhone, this iPhone 1.
+
+28
+00:03:12,120 --> 00:03:17,920
+ And I was carrying around at that point in time, I was carrying around a trio as my main computer.
+
+29
+00:03:17,920 --> 00:03:28,820
+ And the trio was one of the things he put up on the screen when he was talking about the iPhone, but the iPhone had an ARM, a Samsung ARM in it.
+
+30
+00:03:28,820 --> 00:03:39,520
+ And so this is an ARM processor. And then in 2020, the ARM came not just to the iPhone, but from the Macintosh.
+
+31
+00:03:39,520 --> 00:03:46,220
+ ARM is not manufactured by one organization. ARM is licensed to many folks to build them.
+
+32
+00:03:46,220 --> 00:03:50,820
+ And Apple builds its own hardware in the Macintosh from 2020 to present.
+
+33
+00:03:50,820 --> 00:03:55,820
+ And what's interesting about that is Apple is currently redesigning their CPUs continuously.
+
+34
+00:03:55,820 --> 00:04:02,720
+ Every year they have a new release. They call it the M1, the M2, the M2 Max, M2 3 Pro or whatever.
+
+35
+00:04:02,720 --> 00:04:08,320
+ And what they're doing is they're actually studying what needs to be in their microprocessor.
+
+36
+00:04:08,320 --> 00:04:15,820
+ And they add instructions to their ARM systems based on what they think we use these for,
+
+37
+00:04:15,820 --> 00:04:21,420
+ whether it's image processing or audio or video gaming or now increasingly artificial intelligence.
+
+38
+00:04:21,420 --> 00:04:28,420
+ And one of Apple's advantages is because they use the ARM and they licensed the core instructions to the ARM,
+
+39
+00:04:28,420 --> 00:04:31,920
+ but then they add their own instructions and then manufacture them.
+
+40
+00:04:31,920 --> 00:04:38,420
+ Another thing about Apple that's kind of interesting is you've been using an emulator,
+
+41
+00:04:38,420 --> 00:04:44,720
+ a code that's written in JavaScript that makes it look like you can run 6502 processors.
+
+42
+00:04:44,720 --> 00:04:53,120
+ Well, in 2005, as Apple was moving from PowerPC to Intel processors, they included a technology called Rosetta 1.
+
+43
+00:04:53,120 --> 00:05:00,020
+ And then when they were moving from Intel to ARM processors in 2020, they included a technology they called Rosetta 2.
+
+44
+00:05:00,020 --> 00:05:06,120
+ And of course, that's a reference to the Rosetta Stone, a famous stone with the connected multiple languages
+
+45
+00:05:06,120 --> 00:05:10,820
+ from sort of antiquity to Latin based languages.
+
+46
+00:05:10,820 --> 00:05:19,020
+ And so what Rosetta did in both cases, it translated the machine code from a previous computer to the modern one.
+
+47
+00:05:19,020 --> 00:05:25,020
+ And the interesting thing was, is it would often run because the modern processors they were choosing,
+
+48
+00:05:25,020 --> 00:05:28,020
+ whether it be the Intel initially or ARM later,
+
+49
+00:05:28,020 --> 00:05:36,620
+ they were so fast that they could emulate the previous generation processors almost at the same speed as the hardware of the previous generation.
+
+50
+00:05:36,620 --> 00:05:43,520
+ And so this really made it a lot easier for those of us who were Apple customers making a transition from architectures,
+
+51
+00:05:43,520 --> 00:05:56,120
+ which otherwise would have almost been impossible to go from one major CPU architecture to another architecture.
+
+52
+00:05:56,120 --> 00:06:04,820
+ So fun aside, there is sort of this indirect connection between the 6502 and the ARM.
+
+53
+00:06:04,820 --> 00:06:15,620
+ And ARM stands for Acorn Risk Microprocessor, and it was built in Cambridge, England by Acorn.
+
+54
+00:06:15,620 --> 00:06:25,020
+ And Acorn originally built a thing called the BBC Micro, which was a 6502 based microcomputer, more popular in the UK.
+
+55
+00:06:25,020 --> 00:06:32,420
+ And so they decided they were going to create a new microprocessor, so they knew a lot about 6502.
+
+56
+00:06:32,420 --> 00:06:40,520
+ The goal was not to make a better 6502, but there was a lot of homage to the 6502 in the ARM.
+
+57
+00:06:40,520 --> 00:06:44,720
+ And so they used BBC Micros to build and simulate the ARM design.
+
+58
+00:06:44,720 --> 00:06:53,120
+ ARM 1 had 25,000 transistors, the 6502 had 4,500 transistors, and the ARM 1 through whatever,
+
+59
+00:06:53,120 --> 00:06:58,820
+ there's many generations of ARMs, and they are the most widely used processors in the world.
+
+60
+00:06:58,820 --> 00:07:07,120
+ And for a good time, you can ask AI to make this historical leap connection between the 6502 ARM and the Raspberry Pi.
+
+61
+00:07:07,120 --> 00:07:15,920
+ And I have a picture of Sophie Wilson, one of the architecture designers of the initial ARM working at Acorn,
+
+62
+00:07:15,920 --> 00:07:20,320
+ working on both the BBC Micro and the building of the ARM microprocessor.
+
+63
+00:07:28,820 --> 00:07:30,880
+ you
+

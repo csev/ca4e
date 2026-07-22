@@ -1,0 +1,63 @@
+ So now that you've learned to program a microprocessor from the 1970s, I'd like to take a quick fast forward from the 1970s to the present.
+ Lots changed since the 6502 was available as a $25 microprocessor.
+ Since the 1970s, there have been about 50 distinct CPU families.
+ I've been part of this my whole career, lots of research and innovation,
+ adoption, switching, computer vendors picking one CPU and then switching to another CPU,
+ generational turnover and overall approach from complex instruction sets to simpler risk instruction sets,
+ from large refrigerator size mainframes to small microprocessors, then larger microprocessors, faster microprocessors.
+ Interestingly, after all that, things have settled down in the modern era.
+ There are two major CPU families in use if you think about consumer and server and desktop.
+ If you take computers and phones and bring them together, about 90% of the marketplace is ARM-based processors and the remaining 10% is Intel processors.
+ ARM is very successful because it was focused on low power.
+ And as computers have gotten faster and faster, we really care more and more about saving power,
+ both for small handheld devices and for desktops and then even laptops.
+ And so power savings is really important and ARM was designed to save power.
+ So let's take a quick case study and look at Apple over the years.
+ Apple, the Apple I was one of the early adopters of the 6502 in 1997.
+ And the Apple II and the Apple II and its sort of whole family were a very successful set of microprocessors for a long time.
+ Apple switched to a different processor, the Motorola 68000 from 1984 to 1994.
+ During that time, they were playing with a project called the Newton, which was a handheld device, wasn't extremely popular, but it was a handheld device.
+ Battery powered handheld sort of pocket, but that was using an ARM processor, an ARM processor.
+ Then they switched from the Motorola to the PowerPC in 1994.
+ And again, 12 more years they use the PowerPC and then the Intel x86 in 2006, they switched their Macintosh line from using PowerPC to Intel x86.
+ I was actually in the audience when Steve Jobs announced the switch from PowerPC to Intel x86.
+ I was amazed, I was sitting, I was working on my laptop, which had a PowerPC in it, had been using it for years.
+ And at the end, he threw the doors open and we ran into some rooms and there were some prototype Intel x86 Macintoshes running Mac OS.
+ And it was amazing to me that they could switch from PowerPC to Intel x86.
+ Then the iPhone came out in 2007 and I was also in the audience when Steve Jobs announced the first iPhone, this iPhone 1.
+ And I was carrying around at that point in time, I was carrying around a trio as my main computer.
+ And the trio was one of the things he put up on the screen when he was talking about the iPhone, but the iPhone had an ARM, a Samsung ARM in it.
+ And so this is an ARM processor. And then in 2020, the ARM came not just to the iPhone, but from the Macintosh.
+ ARM is not manufactured by one organization. ARM is licensed to many folks to build them.
+ And Apple builds its own hardware in the Macintosh from 2020 to present.
+ And what's interesting about that is Apple is currently redesigning their CPUs continuously.
+ Every year they have a new release. They call it the M1, the M2, the M2 Max, M2 3 Pro or whatever.
+ And what they're doing is they're actually studying what needs to be in their microprocessor.
+ And they add instructions to their ARM systems based on what they think we use these for,
+ whether it's image processing or audio or video gaming or now increasingly artificial intelligence.
+ And one of Apple's advantages is because they use the ARM and they licensed the core instructions to the ARM,
+ but then they add their own instructions and then manufacture them.
+ Another thing about Apple that's kind of interesting is you've been using an emulator,
+ a code that's written in JavaScript that makes it look like you can run 6502 processors.
+ Well, in 2005, as Apple was moving from PowerPC to Intel processors, they included a technology called Rosetta 1.
+ And then when they were moving from Intel to ARM processors in 2020, they included a technology they called Rosetta 2.
+ And of course, that's a reference to the Rosetta Stone, a famous stone with the connected multiple languages
+ from sort of antiquity to Latin based languages.
+ And so what Rosetta did in both cases, it translated the machine code from a previous computer to the modern one.
+ And the interesting thing was, is it would often run because the modern processors they were choosing,
+ whether it be the Intel initially or ARM later,
+ they were so fast that they could emulate the previous generation processors almost at the same speed as the hardware of the previous generation.
+ And so this really made it a lot easier for those of us who were Apple customers making a transition from architectures,
+ which otherwise would have almost been impossible to go from one major CPU architecture to another architecture.
+ So fun aside, there is sort of this indirect connection between the 6502 and the ARM.
+ And ARM stands for Acorn Risk Microprocessor, and it was built in Cambridge, England by Acorn.
+ And Acorn originally built a thing called the BBC Micro, which was a 6502 based microcomputer, more popular in the UK.
+ And so they decided they were going to create a new microprocessor, so they knew a lot about 6502.
+ The goal was not to make a better 6502, but there was a lot of homage to the 6502 in the ARM.
+ And so they used BBC Micros to build and simulate the ARM design.
+ ARM 1 had 25,000 transistors, the 6502 had 4,500 transistors, and the ARM 1 through whatever,
+ there's many generations of ARMs, and they are the most widely used processors in the world.
+ And for a good time, you can ask AI to make this historical leap connection between the 6502 ARM and the Raspberry Pi.
+ And I have a picture of Sophie Wilson, one of the architecture designers of the initial ARM working at Acorn,
+ working on both the BBC Micro and the building of the ARM microprocessor.
+ you

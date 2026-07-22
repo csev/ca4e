@@ -1,0 +1,28 @@
+1
+00:00:00,000 --> 00:00:11,520
+ hello everybody, this is chuck, i'm here at the mid ohio racetrack where my car is out
+
+2
+00:00:11,520 --> 00:00:18,120
+ there, i'll be driving in a little bit, i just want to welcome you to the computer architecture
+
+3
+00:00:18,120 --> 00:00:21,880
+ part of this class, where you're going to learn what the instructions are, what the fetch
+
+4
+00:00:21,880 --> 00:00:27,440
+ execute cycle is, and it's probably the most difficult part of the class, but i think it's
+
+5
+00:00:27,440 --> 00:00:33,740
+ worth it, i tried to put as much as i could in the parts building up to this, so good luck,
+
+6
+00:00:33,740 --> 00:00:38,360
+ take your time, it's a little bit more difficult than the other sections, but i'm confident
+
+7
+00:00:38,360 --> 00:00:39,600
+ that you're going to be able to do it.
+

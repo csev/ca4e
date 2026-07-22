@@ -1,0 +1,46 @@
+ Hello and welcome to another walkthrough for computer architecture for everybody.
+ In this walkthrough we are going to talk about WASM and we're going to talk a little bit
+ about the hello world code.
+ Now the first thing to say is that WASM, now WAT is just a sort of syntax, it's the assembly
+ language for the machine language and the first thing to say is that unlike microprocessors
+ and assembly language and machine language it was never intended to be handwritten and
+ so this is a lot less convenient than even assembly language.
+ Its goal is to be sort of verifiable and safe because JavaScript and WASM are intended to
+ run with code from many different sources that doesn't necessarily want to trust each
+ other or have one piece of code affect the other piece of code and so it has this concept
+ of sandboxed execution so that no matter what you do in your little sandbox you can take
+ stuff in and give stuff back but in your sandbox you can't sort of mess with anybody else's
+ sandbox so there's a goal of isolation.
+ So this language is designed for like isolation first, it's designed to not allow you to write
+ code that could touch memory that doesn't belong to you or anything like that and so
+ it's about this isolation.
+ The actual code model, first off you can see that it's very parenthesis based and the parenthesis
+ are kind of like curly braces, they're beginnings and ends so what we're looking at is hello
+ world WASM, it's not C, AI gave me just some simple hello world WASM.
+ Now in this case we are using things like console.log from JavaScript and passing into
+ that console the log message and the length of the log message so this is code that is
+ expecting to run in a JavaScript environment and that console.log will be available to
+ it and so there's an import statement that basically says pull in some code from JavaScript
+ or give me access to a log function from console.log function from JavaScript itself.
+ We're going to declare that we need some memory, we're going to fill that memory up starting
+ at zero with the string hello world, these are actually not zero terminated, this is
+ really a string that's 13 long and you'll see this 13 come in in a second and then we're
+ going to make it so that the memory is available to the JavaScript that's going to call us
+ and then we have a main function that's going to be called by the JavaScript and we're going
+ to call our log function and pass the string and the length of the string and then we're
+ going to return 42 even main functions like in C return values and then we're going to
+ export the function main and then there's JavaScript that's going to call this function
+ main.
+ Well let's go ahead and compile and run this, in this browser there is a full Watt to Wasm
+ compiler and then Wasm to machine code and then JavaScript to execute the resulting machine
+ code and here is the actual Wasm.
+ So Watt is sort of the assembly language but the ultimate thing is this is just a few bytes
+ looks like about 6 times 16, about 100 bytes of character and these are kind of like machine
+ code but it is interpreted so this is kind of like a byte code in Java but it's also
+ intended that it can be just in time compiled into the real machine code after validating
+ the safety of it okay and so we go from the Watt to the Wasm and then we execute this
+ Wasm in JavaScript and JavaScript has a Wasm execution environment for it and then the
+ output comes back to JavaScript and away we go so that is the hello world, simple hello
+ world, not a C hello world I'll show you that in a bit but a Wasm and JavaScript hello world
+ that does its printing using console.log.
+ Cheers!

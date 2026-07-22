@@ -1,0 +1,61 @@
+ Hello, and welcome to another walkthrough for computer architecture for everybody.
+ In the previous walkthrough, we went through a simple sort of WAT/WASM situation where we're
+ talking to JavaScript. This is not really C code. It's hello world, but it's not C code. This is
+ WASM plus being run in a JavaScript context, and the hello world is coming out of a console log
+ function in JavaScript. I want to shift gears a little bit, focusing still again on hello world,
+ and show you something for another one of my classes, C programming for everybody,
+ under the write C option. So in this course, I have a C auto grader. Right now I'm just using
+ the playground. You can write C programs and then compile them. So let's go ahead and write our C
+ program. Now I'm going to hit the run code here, and you'll see a little spinner going on, and
+ there's a bunch of work. And if you do the view source and you watch the network, I'm not going
+ to show you the whole network. What you'll see is this C code is being sent up to the CC4E server
+ using a piece of software called mscriptum, which compiles C code and other things into WASM. Then
+ this environment will download the WASM, and I've got it watching for a string WASM in the
+ network requests, and it will download that WASM, and then it will execute the WASM,
+ and it will put the output here. I mean, I already executed it, but I made a change,
+ hello world exclamation. So in the next click, it is going to compile it, compile to WASM
+ inside the server, download the WASM back into the browser, and then execute the WASM in JavaScript.
+ So it's going to be sort of boring, it's just going to work. But watch for the spinner in the
+ middle here. There goes, to see the spinner was there for just like a quarter of a second.
+ I ought to slow it down. But it did that, and there is this a.out WASM. And if we take a look
+ at the response, yeah, it's not going to show it to us because it's kind of binary stuff, okay? So
+ that was the WASM that came back. Now, that WASM executed with a JavaScript framework to start that
+ WASM up, and then it printed hello world. Now, standard io.h is in C, printf is in the C standard
+ library. So what has Inscriptium done? Well, what Inscriptium has done is it has compiled
+ all of the standard libraries into WASM. It has compiled our code into WASM. It's linked it all
+ together and sent down a really big WASM because this #include, if you know C, it just pulls a
+ file in. And so that got compiled into WASM too. So let's take a look at how much WASM really came
+ down. So let's take a look here. This is a dump of the WASM for hello world. And there's a lot here,
+ but it's not that much, right? We got, let's see, 3C00 hex. I don't know how big that is,
+ but I just scrolled through the whole thing. But this is not just my hello world code.
+ This is hello world plus some of the standard library and some of the standard io.h, all compiled
+ into WASM. Now, this now is self-contained as WASM code ready to run inside of the browser. And
+ that's of course what happened when it ran in the browser and out came hello world. But there's a
+ lot to it because we're pulling in the C libraries and converting them to WASM as well. So this is
+ kind of an ugly version of it. We can take a look at a little prettier version of it by looking at,
+ not much prettier, we can look at the Watt. And so we're looking at the Watt here. This was written
+ to be readable. This is the Watt code editor for the hello world. That's a pure WASM JavaScript
+ example and you can kind of read it and you'll change it in your auto grader in a bit. This is
+ more like what WASM does because it ran the in script and compiler and produced the WASM. And
+ then I converted the WASM to Watt so that we could see it. And we're not going to change this. There's
+ all kinds of stuff. FD write, FD close, FD seek. That's part of the standard library. And you see
+ it's really like busy stuff. It's calling things and setting parameters and pushing them on the
+ stack and calling them and making functions. And do we have any loops here? Let's see if we can get
+ to a loop. There's a block. There's some blocks. There's some loops and jumps and all kinds of
+ stuff. This is the output of a compiler that is writing to a pseudo machine language in Watt. So
+ I'll just scroll through this. That is a lot of Watt. And it's not very easy to see. But
+ it's pretty yummy and delicious to the runtime environment in JavaScript who has built an
+ interpreter, much like the interpreter we built for the CDC 6504. And it runs that as the
+ interpreter. So the key thing is that I'm not going to spend a lot of time having you kind
+ of learn to code Watt. It's not intended for you to code it. It's intended for compilers to produce
+ it. So just imagine that this C program that we're writing is really like a high performance,
+ maybe a video game shading library or something that would get compiled into Wasm, which would
+ be super high performant. And then that Wasm might be recompiled into raw machine language
+ by my browser. And then it'd be like super fast in the browser. And that's the whole,
+ that's literally the whole point of Wasm. The Wasm is to make it so you can write
+ approaching machine code speed code in a portable, safe, sandboxed way,
+ running in the browser under the rules of JavaScript. And inside that browser,
+ you can mix code from many sources and many trust domains. And they can't harm each other
+ because they're all running in individualized sandboxes. Okay. So I hope that was a bit
+ interesting about how we connect C programming and Wasm and how I use it in my C programming
+ for everybody course. Cheers.

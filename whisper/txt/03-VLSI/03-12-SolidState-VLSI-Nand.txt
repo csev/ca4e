@@ -1,0 +1,197 @@
+ - Hello and welcome through another walkthrough for computer architecture for everybody.
+ In this walkthrough, I am going to walk through the building
+ of a slightly more complex circuit.
+ In this case, we are going to build a NAND gate.
+ So NAND of course is the opposite of AND.
+ So if both inputs are one, the output is zero.
+ And if any of the outputs are zero, the output is one.
+ It's the opposite of AND.
+ And so let's take a look at the picture.
+ So the way this works is there are two inputs
+ and there is a set of PMOS transistors at the top,
+ kind of in parallel going from the positive voltage
+ to a common wire in the middle to out.
+ And then there is a set of NMOS transistors in series
+ between the out and the ground.
+ 'Cause this is CMOS circuitry.
+ The goal is to either have VDD come out or ground to come out,
+ depending on A and B in the combination,
+ based on the truth table.
+ So let's go ahead and draw this.
+ So I'm gonna draw this in a little more traditional way
+ than I did in my previous demonstration.
+ It's pretty common to just draw a line across the top
+ and put the VCC across the top.
+ So you see that we're sort of emulating
+ a lot of what these diagrams look like.
+ And then what I wanna do is I wanna create
+ two P transistors, so the A and the B.
+ And so I'm gonna drop a little bit of P-dope silicon down.
+ I'm gonna give myself plenty of space
+ and make these plenty long.
+ Okay.
+ And then I'm gonna make some transistors there
+ by putting some poly across.
+ I'm gonna put it like,
+ I'm gonna keep this really tiny for now, okay?
+ So there's some poly.
+ So there's two transistors.
+ So we just made, by crossing the P-dope silicon
+ and the poly silicon twice,
+ we now have transistors that we can hook A and B up to.
+ We'll wire them up later.
+ And then what we're gonna do is we're gonna make the output.
+ I'll just make the output be a horizontal piece
+ of metal wire.
+ Now I've gotta put some vias in here
+ so I can connect the P-dope silicon to the metal
+ where I need to.
+ So let's punch a couple of vias in.
+ Via, via, via, via.
+ So now the orange P-dope silicon
+ and the metals are connected.
+ Okay.
+ So the next thing we need to do
+ is we need to make some NMOS transistors down at the bottom.
+ So let's grab some N-dope silicon
+ and hook this up here.
+ And then, oops, I need to fix that.
+ I need to erase that.
+ I need to give myself a little space here.
+ So I wanna make some N-dope silicon
+ that kind of comes down from the center wire a little bit.
+ And then I am going to make some more N-dope silicon.
+ Actually, I don't know if I need to do that.
+ Let's try to make it in one big piece of N-dope silicon.
+ Let me make my N-dope silicon longer.
+ And now let's put some polysilicon in
+ to make two more transistors.
+ So we're gonna put transistor here
+ and then another transistor here.
+ So that's two transistors,
+ two NMOS transistors that are right there.
+ And I think I might as well put my ground in now.
+ The ground down here.
+ Traditionally, you sort of draw that
+ as a long horizontal line.
+ I will place some zero or ground voltage
+ and then I'll place a couple of vias
+ to make sure to connect the green N-dope silicon
+ to the metal in both of the places.
+ So I think we mostly have this,
+ except now we've gotta take our inputs
+ and connect them to those transistors.
+ So let's make an A input for now.
+ Let's make a little bit of metal.
+ This shouldn't be too hard.
+ So let's just say this is our A input
+ and then we're gonna hook that to here.
+ I wanna make that a little longer.
+ So I'm gonna make my pink a little bit longer.
+ I'm gonna put A on this one,
+ which is a little bit different.
+ So here's the thing.
+ I can paint this pink, so now I have an overlap.
+ See how I painted that pink
+ so it overlaps with the metal now?
+ So I can pop a via in there, punch, punch.
+ So that is my A.
+ Let's go ahead and mark that with a probe.
+ Let's mark that as A.
+ Okay, and now we've gotta have B.
+ B is a little bit trickier.
+ Where am I gonna, well, let's start with B, E.
+ Let's put B in easy.
+ Let's make B, B here.
+ Okay, so then let's put the contact of B,
+ the probe B right there.
+ So now I have B.
+ Now the key thing is I've got to get this B
+ up to this second PMOS gate.
+ So I could do a lot of things here.
+ I could route it up here, and I'll route it over there.
+ Or I could route it over here,
+ and then route it down to here.
+ So I think I'm gonna come through here.
+ So you're gonna see something.
+ I'm gonna take this polysilicon.
+ And in a real circuit, you might find that this is kinda,
+ oh, look what I can do.
+ Because when I make this polysilicon
+ come across the metal right there,
+ it's not actually connected.
+ And then look, ooh, no, ooh, yikes.
+ I gotta erase it 'cause I made a kind of a blob.
+ I spilled some, I spilled some polysilicon.
+ So now I can actually connect this together.
+ Wow, I think that looks pretty easy at this point.
+ Did it work?
+ So I have my A connected to one of the PMOS transistors
+ and one of the NMOS transistors.
+ And then I have my B connected to one
+ of the NMOS transistors and one of the PMOS transistors.
+ I have a feeling that it is right.
+ And I think if we look at our assignment,
+ we're supposed to make a Q as the output.
+ So let's put another probe here on the output, Q.
+ So I could run the autograder.
+ I think I got it.
+ I think I made one.
+ It's pretty good here.
+ But one of the things I do to test these things is,
+ oh, I didn't mean to put that via there.
+ Put a VCC there.
+ So now I can see that I put a plus in the A area
+ and it stops the PMOS, but it does transmit.
+ But then I have to put, like, let's put a VCC
+ where the B is now.
+ Oh, I'm missing a via.
+ See how the voltage comes here from the one
+ and it hits this overlap?
+ I gotta put a via there because it doesn't really touch.
+ Boop.
+ So now I think we got it.
+ A is one and B is one and the output is zero,
+ which is good.
+ So we can keep testing it.
+ I just tested by popping a ground in here.
+ So now we have A is zero and B is one
+ and the output is one, which is what it's supposed to be
+ because it's a NAND gate.
+ So I'm gonna go back to putting the probes in.
+ So you notice how I can just kind of overwrite this stuff.
+ So there's A and I got the probe B now.
+ Now I can actually start the grader.
+ I think it'll go through all the combinations
+ in the truth table and it will tell us
+ if it likes the circuit that we built.
+ So let's go ahead.
+ Check for the A, B and Q probes.
+ They seem to be there.
+ Test, let's set A to zero and B to zero.
+ And is the output one?
+ A is zero, B is zero, output's one.
+ Yes it is.
+ Set A to zero and B to one.
+ Is the output zero?
+ Oh no, the output's supposed to be one in that case.
+ Yep.
+ So this is a, and then if we do A to one and B to zero,
+ the output is one.
+ And then if we set them both to one, the output is zero,
+ which it's a NAND gate.
+ And so we finished and away we go.
+ So there we did, we took and viewed this image
+ and made ourselves the gate by laying it out.
+ And again, I tend to start by laying transistors out,
+ but you gotta give yourself a little space
+ as you lay these things out and put them together.
+ Now I've built them a few times.
+ The first few that you're gonna build
+ are going to be a little tricky,
+ but it's very satisfying when you get them finished.
+ So I hope you enjoyed this walkthrough
+ for computer architecture on the building of a gate
+ using a VLSI design tool.
+ (upbeat music)
+ [BLANK_AUDIO]

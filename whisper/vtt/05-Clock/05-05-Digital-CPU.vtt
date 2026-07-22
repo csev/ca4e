@@ -1,0 +1,329 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:12.000
+ So now we're going to bring this all together and we're going to build a simple, programmable, flexible programmable central processor, building it all with gates.
+
+00:00:12.000 --> 00:00:18.000
+ It's not going to be very sophisticated, but it's going to be a programmable processor.
+
+00:00:18.000 --> 00:00:26.000
+ So let's go back to the beginning of my Python class and look at this picture again,
+
+00:00:26.000 --> 00:00:33.000
+ where we have a central processing unit that has registers and arithmetic logic units and it processes instructions.
+
+00:00:33.000 --> 00:00:37.000
+ And in the main memory, we have the code and data.
+
+00:00:37.000 --> 00:00:42.000
+ And so when we write a program, we kind of are putting ourselves into that main memory.
+
+00:00:42.000 --> 00:00:48.000
+ The central processor asks, what next? And that says, give me the next instruction.
+
+00:00:48.000 --> 00:00:55.000
+ And that next instruction is a series of binary numbers, zeros and ones, coming out of the memory of the computer.
+
+00:00:55.000 --> 00:00:59.000
+ Then it decodes that instruction and it says, what am I going to do?
+
+00:00:59.000 --> 00:01:06.000
+ Maybe load some, load a value from memory, store a value from memory, perform a calculation inside the central processing unit.
+
+00:01:06.000 --> 00:01:10.000
+ And then when that's done, the central processing unit says, give me the next instruction.
+
+00:01:10.000 --> 00:01:13.000
+ And then the main memory gives the next instruction.
+
+00:01:13.000 --> 00:01:22.000
+ And so this is an oversimplified, generic computer, suitable for a very beginning Python programming class.
+
+00:01:22.000 --> 00:01:28.000
+ But let's use a little more advanced terminology that you will eventually hear.
+
+00:01:28.000 --> 00:01:33.000
+ So inside the CPU, there's a thing called the arithmetic logic unit.
+
+00:01:33.000 --> 00:01:36.000
+ We call it the ALU. It's like the adder code.
+
+00:01:36.000 --> 00:01:40.000
+ We've already built a three bit adder. That would be in the arithmetic logic unit.
+
+00:01:40.000 --> 00:01:46.000
+ When they mean logic, they mean comparison, like if tests, if tests are checked, like is X less than zero?
+
+00:01:46.000 --> 00:01:49.000
+ That's part of the logic, part of arithmetic logic.
+
+00:01:49.000 --> 00:01:58.000
+ Registers are temporary places to store data in the CPU that does not require going to and from memory all the time.
+
+00:01:58.000 --> 00:02:05.000
+ We've already built a register. We built a three bit latch, which I also told you was a three bit register.
+
+00:02:05.000 --> 00:02:11.000
+ And then what we have is programs and they come from the memory.
+
+00:02:11.000 --> 00:02:21.000
+ And so the memory has a series of program instructions. The CPU has what's called a program counter.
+
+00:02:21.000 --> 00:02:27.000
+ And it retrieves the next instruction, decides what kind of instruction it is,
+
+00:02:27.000 --> 00:02:36.000
+ and then sends signals to the registers and the ALU, whether it's loading data or storing data or making computations.
+
+00:02:36.000 --> 00:02:41.000
+ Coming up very soon, we're going to actually design a simple CPU that has machine language.
+
+00:02:41.000 --> 00:02:47.000
+ It's going to be a complete architecture. It will have a machine language and an assembly language completely defined.
+
+00:02:47.000 --> 00:02:50.000
+ And we will write programs in this little machine language.
+
+00:02:50.000 --> 00:02:56.000
+ Now, it's called the CDC 8512 because when I was young and just starting out,
+
+00:02:56.000 --> 00:03:02.000
+ I programmed on a computer called the Control Data Corporation CDC 6500.
+
+00:03:02.000 --> 00:03:07.000
+ And back when the computer museum in Seattle was open, they had a running one of these things.
+
+00:03:07.000 --> 00:03:10.000
+ And I have a video which I will share with you.
+
+00:03:10.000 --> 00:03:17.000
+ Unfortunately, with the passing of Paul L. and that museum closed, but that's unfortunate.
+
+00:03:17.000 --> 00:03:22.000
+ So I've seen one running recently. I've got some video and I will share that with you.
+
+00:03:22.000 --> 00:03:24.000
+ But that's not what we're doing right now.
+
+00:03:24.000 --> 00:03:36.000
+ I'm just telling you that what we're doing right now is a step toward building a real live, full function CPU with machine language and data, et cetera.
+
+00:03:36.000 --> 00:03:41.000
+ So but now we're going to build a really, really simple CPU.
+
+00:03:41.000 --> 00:03:44.000
+ It's going to have one register. It's a three bit latch.
+
+00:03:44.000 --> 00:03:51.000
+ It's going to have two machine instructions that we can inform the CPU what we want done.
+
+00:03:51.000 --> 00:03:57.000
+ It has a clock that happens every second. So it runs one of two instructions every second.
+
+00:03:57.000 --> 00:04:05.000
+ The zero instruction against machine language clears the latch and the one instruction tells the latch to add one to itself.
+
+00:04:05.000 --> 00:04:08.000
+ And like I said, this is going to happen once per second.
+
+00:04:08.000 --> 00:04:14.000
+ And we can submit a zero instruction or a one instruction once per second.
+
+00:04:14.000 --> 00:04:20.000
+ So we're going to have this built and it's going to run on our emulator.
+
+00:04:20.000 --> 00:04:26.000
+ This is the CPU. The emulator has a clock. It has a three bit latch, which is our register.
+
+00:04:26.000 --> 00:04:31.000
+ Then it has an adder. One of the operands to the adder is the output of the latch.
+
+00:04:31.000 --> 00:04:35.000
+ The other operand to the adder is a one, hard coded one.
+
+00:04:35.000 --> 00:04:38.000
+ And then you take the output of the adder.
+
+00:04:38.000 --> 00:04:44.000
+ Now, before we had run this straight into the latch so that it would just add one every time.
+
+00:04:44.000 --> 00:04:48.000
+ But now what we have is some decoding logic.
+
+00:04:48.000 --> 00:04:53.000
+ So if the instruction is zero, recall the latch is supposed to be set to zero.
+
+00:04:53.000 --> 00:04:57.000
+ If the instruction is one, we're adding one to the latch.
+
+00:04:57.000 --> 00:05:01.000
+ Every clock pulse and that clock is going up and down once per second.
+
+00:05:01.000 --> 00:05:05.000
+ The part that we've added here from the previous example is this logic.
+
+00:05:05.000 --> 00:05:09.000
+ When you look at real CPUs, you're going to see that they have a series of control logic.
+
+00:05:09.000 --> 00:05:11.000
+ And what does the control logic do?
+
+00:05:11.000 --> 00:05:16.000
+ It reads the next instruction from memory and it does what's called decoding it.
+
+00:05:16.000 --> 00:05:20.000
+ And then it distributes signals to give orders to the rest of it.
+
+00:05:20.000 --> 00:05:28.000
+ And so in this case, what's going to happen is this AND gate is going to block the output.
+
+00:05:28.000 --> 00:05:35.000
+ Because we just put ANDs, we are running the one, two, and four column of the sum through the AND gate.
+
+00:05:35.000 --> 00:05:40.000
+ And then we're hard coding zero, the instruction zero to the other inputs of the three AND gates.
+
+00:05:40.000 --> 00:05:43.000
+ And so the output of those AND gates, if the instruction is zero, is zero.
+
+00:05:43.000 --> 00:05:48.000
+ No matter what the other inputs are from the adder.
+
+00:05:48.000 --> 00:05:51.000
+ So we'll start this with instruction zero.
+
+00:05:51.000 --> 00:05:56.000
+ So every time the clock goes, the inputs to the latch are all zeros.
+
+00:05:56.000 --> 00:06:02.000
+ Because the instruction input is a zero and zero in anything is a zero.
+
+00:06:02.000 --> 00:06:05.000
+ So clock tick, tick, tick.
+
+00:06:05.000 --> 00:06:11.000
+ Every time this clock is ticking, that latch is resetting, meaning copying zero from its inputs.
+
+00:06:11.000 --> 00:06:15.000
+ So the adder is like happily adding one to the zero, but that's it.
+
+00:06:15.000 --> 00:06:22.000
+ Because the adder inputs are being blocked from coming back into the latch by the AND gates.
+
+00:06:22.000 --> 00:06:26.000
+ So you see when the instruction is zero, the AND gates function as a block.
+
+00:06:26.000 --> 00:06:33.000
+ In effect, turning off the data going into the latch.
+
+00:06:33.000 --> 00:06:40.000
+ Now we're going to switch the instruction to one and we wait one clock pulse.
+
+00:06:40.000 --> 00:06:47.000
+ So then what happens is the one instruction going to the three AND gates is no longer blocking data.
+
+00:06:47.000 --> 00:06:53.000
+ So whatever the outputs are coming from the adder are passing right through the gate.
+
+00:06:53.000 --> 00:06:55.000
+ Okay, in this particular case, the adder has a four.
+
+00:06:55.000 --> 00:06:59.000
+ That is presenting a four at the input.
+
+00:06:59.000 --> 00:07:03.000
+ Four's column is a one and the two's column is a zero and the one's column is a zero.
+
+00:07:03.000 --> 00:07:09.000
+ While the clock is low, that four is at the input to the register slash latch.
+
+00:07:09.000 --> 00:07:15.000
+ And then when the clock goes high, then we'll copy the four into the latch.
+
+00:07:15.000 --> 00:07:19.000
+ In the beginning, you start with the instruction zero, the latch is zero, the adder is one,
+
+00:07:19.000 --> 00:07:24.000
+ but the zero instruction is blocking data to go back into the latch.
+
+00:07:24.000 --> 00:07:27.000
+ It's blocked because it's a zero instruction.
+
+00:07:27.000 --> 00:07:33.000
+ On the other hand, if there is a one instruction, then this functions like a counter.
+
+00:07:33.000 --> 00:07:36.000
+ That means every second it goes up by one.
+
+00:07:36.000 --> 00:07:40.000
+ So when the clock is high, it copies the input.
+
+00:07:40.000 --> 00:07:44.000
+ Then the clock goes low, then the latch value goes to output, the adder adds one.
+
+00:07:44.000 --> 00:07:50.000
+ Then as long as the instruction stays one and the clock goes high,
+
+00:07:50.000 --> 00:07:54.000
+ the output of the adder is once again copied into the latch.
+
+00:07:54.000 --> 00:07:57.000
+ So it's a very simple two instruction computer.
+
+00:07:57.000 --> 00:08:05.000
+ We simply touch the instruction, we program this by touching the instruction value switch and setting it to zero or one.
+
+00:08:05.000 --> 00:08:07.000
+ So this is a two instruction computer.
+
+00:08:07.000 --> 00:08:09.000
+ What's missing?
+
+00:08:09.000 --> 00:08:16.000
+ Well, really, it's really hard to build a CPU where you can reach in and touch a button
+
+00:08:16.000 --> 00:08:19.000
+ and have the instruction be the button that you touched.
+
+00:08:19.000 --> 00:08:22.000
+ The clock rate is, you know, megahertz, not one hertz.
+
+00:08:22.000 --> 00:08:24.000
+ And so you can't send the instruction.
+
+00:08:24.000 --> 00:08:30.000
+ So really what you want is a flexible way to store and retrieve instructions
+
+00:08:30.000 --> 00:08:37.000
+ so that the instructions can be presented to the CPU fast enough to keep up with the clock rate.
+
+00:08:37.000 --> 00:08:43.000
+ So we really want a flexible, long sequence of many instructions executed one after another,
+
+00:08:43.000 --> 00:08:47.000
+ which we would call software or a program.
+
+00:08:47.000 --> 00:08:53.000
+ So next, we're going to think about how we might store sequences of instruction in the memory
+
+00:08:53.000 --> 00:08:58.000
+ and then retrieve those instructions from the memory and then execute them in the CPU.
+
+00:09:01.000 --> 00:09:02.000
+ Wait just a second.
+
+00:09:02.000 --> 00:09:08.000
+ There were a lot of switches on the front of a class's computer in a video from an earlier lecture.
+
+00:09:08.000 --> 00:09:24.000
+ Yes, the earliest computers did have switches on the front to control program behavior.
+
+00:09:24.000 --> 00:09:30.000
+ These switches often controlled conditional variables so program behavior could be changed
+
+00:09:30.000 --> 00:09:33.000
+ while flipping a switch while the program was running.
+
+00:09:33.000 --> 00:09:39.000
+ Actually, those switches were more like the variables that could be changed on the front panel.
+

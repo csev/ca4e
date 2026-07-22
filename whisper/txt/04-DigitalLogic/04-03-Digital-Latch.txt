@@ -1,0 +1,90 @@
+ so we just got done adding numbers with gates with carry but now we're going to do something a little
+ more difficult which is storing data with gates and so that basically is a way we can create memory
+ systems whether it's registers inside of the cpu or high speed memory we can create ways to store
+ zeros and ones over time the key there is over time so it'll take us a while to develop this concept
+ but the key thing here is that we use feedback loops and in this circuit which calls is called
+ a set reset latch it basically has this q output and the q not output and you'll notice that the
+ there's a top NOR gate and a bottom NOR gate and the top output is get put as one of the inputs
+ to the bottom NOR gate and the bottom output is put as one of the inputs to the top NOR gate
+ now you'll look at the little srq truth table and and what happens is if q has a value
+ and s and r are zero the value of q will be maintained so let's just let's just trace that
+ through so let's just assume that r and s are zero and q is one so the the one from q is the
+ second input to the lower NOR gate and that is a one input so the output of this lower NOR gate
+ is a zero which is then the input to the top NOR gate and as soon as the the the input the
+ the q not input to the top NOR gate is zero and r is zero as well then that means that q is one
+ because it's a NOR gate and q is one so it goes to the bottom but q q being one and s being zero
+ means that q not is zero the zero goes back up r being zero and a zero zero zero equals one
+ so what happens is once q is one it stays one it's sticky now you can put in combinations
+ of s and r to set the value for q if you look at the truth table if you set s to zero and r to one
+ then the q becomes a zero and then if you set the r back to zero it's q stays zero and if you set
+ s to one and r to zero then q becomes a one but then if you set that s back to zero then q maintains
+ so we can store either a zero in the q or a one in q and then as long as we keep the inputs
+ s and r zero that one just goes round and round and round between those two NOR gates
+ so we're going to cover this a little bit more here's the truth table now we're just not going
+ to show those NOR gates we're just going to call this an sr latch again that's what we do we make
+ take two gates and make a component so we can talk about it when s and r are zero the latch
+ maintains its internal state that q output of one says that means that we set it to one at some
+ previous time and now we're just putting inputs of zero zero and the output stays one so if we have
+ s of one and r of zero then that makes the internal storage to one and then what you've got to do
+ is you've got to take that s down to zero but then the output maintains so two zeros means
+ keep your state now if we make the s be a zero and the r be a one that's going to set the output
+ to zero and then the next thing you do is you set r to zero and then the output stays now how we
+ do this is a little bit tricky right and we'll we'll make smarter latches but this is the simplest
+ latch and it's literally two NOR gates okay that's it now we're gonna have to build some more logic
+ because this is kind of inconvenient because that 2-1 situation is kind of a pain in the neck now
+ i'll just let you know that you can try to build an sr latch using two NOR gates in my simulator
+ and it won't work now maybe someday i will make the circuit emulation of my digital logic simulator
+ better but the problem is is that because this is a time-based circuit with feedback you have to build
+ a circuit emulation that understands that these two things are happening round and round and round
+ and round and you can build them but it's a lot harder to build them because you have to deal with
+ time rather than just zeros and ones flowing through a circuit so my circuit emulator because
+ i want to keep it simple and easy to use it really deals with what we call combinatoric circuits which
+ kind of the ones and the zeros move from one side to the other but the feedback ones i can't do it
+ so what you have to do in my circuit emulator is use the sr component which does work because it's
+ not really two NOR gates it's a little component that the software understands so don't yell at me
+ and don't file a github issue if you try to build an sr latch and it doesn't work and that's under
+ under unfortunate okay so i mentioned that the sr latch is kind of clunky right the sr latch is
+ you're you're not allowed to give it one one as input okay and so the latch that is more useful
+ is what we call a gated d latch and the gated d latch has basically a clock input and a data input
+ and the way it works is as long as the clock is zero q stays the same thing right so whatever
+ it was before and as soon as clock is set to one that then copies d into the internal state so if
+ you set clock to one and d to zero the internal state becomes zero and if you set clock equals one
+ and d equals one then the internal state is one and then you set clock back to zero and that zero
+ or one stays over time if you look at it there's several ways to build it but in this case i'm
+ using two NAND gates with the feedback loop and then you're kind of there's like an s and an r in
+ the middle of it but then there's this the d and the c are set up so that it can never send the wrong
+ value into the the sr like latch right so you have this bit of logic in the beginning that says
+ when c is one copy d into the latch part and when c is zero ignore what is happening on d
+ so that's another way to look at this if we start with one in the state in the internal value
+ and we have the clock of zero and the d is zero that at this point d is being ignored because the
+ clock is zero then what we want to do is we want to store a zero in it so we we pulse the clock to
+ be one and that at that moment copies the zero into the one bit latch and then we can set the
+ clock back to zero and then the zero will be remembered so we don't really care what the d
+ value is once the clock is back to zero you can flip the d value back as much as you like when the
+ clock is zero so you can set d to one the clock is still zero and the output is still zero then you
+ pulse the clock by setting it to one and then the one is copied into it and to the output and then
+ when we're done copying we set the clock back to zero and the d is one but then you can set the d
+ to zero because as the while the clock is zero the d is being ignored and so you can see how the
+ you put whatever value you want on the d and then you pulse the clock to copy d into the latch
+ that's why they called it a gated d latch the clock acts as the gate when the clock is high
+ it copies its input when the clock is low it ignores its input and we're going to do what we
+ always do and that is combine these things 3d latches and we're going to make a three
+ bit register and we're going to represent in this three bit register numbers from zero through seven
+ so we have three bits a ones bit a twos bit and a fours bit and we're going to have a switch that
+ has ones twos and fours that's going into the d of each of the corresponding ones and then we
+ have a single clock pulse we're going to pulse them all at the same time so the internal storage
+ of the bits is one zero one and so we can take the output of the three bits and feed it into a nixie
+ tube and get it out once we can build this we don't need to make three one bit latches we can
+ make a three bit latch and that's what we're going to use going forward and that's pretty much what a
+ register is inside of a microprocessor in that it's a three bit latch and somewhere it's getting its
+ operands a ones column a twos column and a fours column and then we pulse the clock to copy from
+ those inputs into the register so the register then the clock goes back to zero so the register
+ stores a value for a while until we hit the clock button and it copies its inputs again then we take
+ the clock back to zero and then it stays the same after a while we'll we'll use the convenience
+ stuff now we have registers and we have nixie tubes and we can copy the output of the register
+ to the nixie tube and we can see what the value is inside of the nixie tube and so you can see
+ that we're slowly but surely you know building all the stuff that might eventually become a
+ microprocessor right you know we're building logic putting them together i don't know what this might
+ be this might be a half adder for all i know from an old 1970s computer but slowly but surely we
+ are deciding what to put on our cpu traces which is wires and gates transistors to do addition
+ subtraction jumping the kinds of things that computers want to do

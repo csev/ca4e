@@ -1,0 +1,67 @@
+ so welcome to our lecture where we start talking about the speed, clock speed, how circuits have delay
+ in the previous lecture we introduced for the first time the notion of a clock and that is
+ a value that is at zero and then when we want something to happen we set it to one and when we're done we set it back to zero
+ now this is a circuit it's a combinatoric circuit and
+ if you play with this online you'll see that it you change a number and it takes a little bit of time for the
+ propagation to end up at the output of this circuit
+ and that's just because it's kind of slow in my online emulator this is a full adder circuit and
+ this is not a very long circuit but you can see over time how these are going to get longer especially
+ when we start chaining them right so if we make a four bit adder that's
+ four full adders where the carry out goes to the carry in
+ the carry out of the second one goes to carry into the third and the carry out of the third one goes to the fourth
+ now those values will only settle down after the carries have propagated all the way down that chain and that's just a four bit adder
+ you could have a 32 bit adder or a 64 bit adder or even a multiplier in hardware and so the
+ the propagation through a 64 bit multiplier is going to take a little while
+ and so these circuits get more complex than what we've done
+ but when they build them they'll make a 64 bit adder it takes two operands and produces a result
+ and the designers of the chip hardware will simulate and simulate and tweak it and simulate and simulate it
+ how long is it that if you present inputs to a 64 bit adder until the outputs are reliable and no longer changing
+ and that's called the clock rate and if we take a microprocessor
+ we compute the delay of the slowest element or longest path in the arithmetic and logic unit
+ we can determine the number of times per second we can reliably do computations
+ and then we set the clock rate to be a little conservative okay
+ and so this is another example of the intel 4004 which is our favorite little first widely available commercial microprocessor
+ and so as microprocessors have gotten smaller as the width of each wire and with the transistors have gotten smaller
+ you can make the distances between the transistors smaller
+ as we went to CMOS and we could manage heat better we could put things more tightly packed
+ the more tightly packed we do the faster they go and so this is a graph of a thing called Moore's law
+ and it was something that people just started seeing once we would improve the technology
+ then we would build microprocessors with that new technology then we improve the architecture of those microprocessors
+ and then we would do new technology it turned out that the number of integrated circuits
+ and pretty much for a while the clock speed of them would double about every two years
+ so how do we know what the clock rate is like I mentioned the size of the chip because when we're doing things this fast the speed of light matters
+ the number of transistors because each transistor takes a little while to flip as you change its input and its output needs to change
+ the physical length of any long path and just because a chip is one inch wide doesn't mean there's not paths that are several inches
+ because they go round and go back and forth and the speed at which transistors switch and this depends on the technology and it gets better over time
+ and like I said these chips are laid out and simulated endlessly during development to figure out how we can take this chip
+ and then you've probably heard about people overclocking their chips and that's when someone changes the clock
+ because they think that the factory was being too conservative on the clock rate so let's add 10% and see if it starts blowing up
+ and that's called overclocking so let's play with a simple circuit
+ we're going to take two of the circuits that we built in previous lectures and combine them together
+ so what we're going to do is we're going to take an adder and a clock and a register
+ so the adder simply takes two 3-bit numbers from 0 through 7 on the A 1s 2s and 4s for the A and 1s 2s and 4s for the B
+ and so we have our two operands we have our sum values which are the sum and they are copied to the input values of our latch
+ and we have a clock on the latch because if you recall while the clock is low we don't care about the input changes
+ so right now our adder is 0 we are adding 0 plus 0 and getting 0 our latch is still a 0
+ not because the adder is 0 but because the clock is 0 and the latch was 0 before
+ if we change the input on the adder we are going to do a 2 plus 4 A is 2 B is 4 and the adder now has produced it
+ there's a delay there but you'll notice the latch hasn't changed because we haven't pressed the clock yet
+ the clock is still at 0 and the definition of the clock in a latch is that the latch is ignoring its input change
+ any changes on input until the clock goes 1 so when the clock goes 1 the sum values are latched into the latch memory
+ now if you keep the clock 1 and fiddle with the inputs of the adder then you're not sure what's happening
+ because it may take a while to go through the adder or it might come through very quickly
+ but the smart thing to do is then set the clock back to 0 because we have the sum copied from the adder
+ and now we can change the inputs right once we have the clock at 0 we can just feed different inputs into the adder
+ so now we're adding 4 plus 3 now the clock is still 0 and we have changed the inputs to the adder
+ we are now adding 4 plus 3 what the adder is reflecting the sum as soon as we change those inputs right
+ the adder just as a combinatoric circuit takes its inputs produces the output
+ but because the clock is still 0 the clock is low the latch hasn't accepted those values yet right
+ when the clock goes high the 7 is going to be copied into the new latch value
+ now if we do this you can build this circuit with my little circuit emulator
+ you can build the circuit where you have the adder you have a latch
+ and you can interactively play with the ones twos and fours for both the A input and the B input
+ but instead of having a button for the clock we have a programmable clock
+ and the clock object goes from 0 to 1 back to 0 every second
+ so what happens is you can fiddle with the inputs of this see how fast you can change them
+ and every second whatever is in the adder is going to be copied into the latch
+ now we're going to go a little farther in the next lecture with what we're doing with clocks and gates and adders and latches

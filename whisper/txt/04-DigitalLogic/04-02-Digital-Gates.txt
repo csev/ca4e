@@ -1,0 +1,286 @@
+ So now we're going to start building things with gates.
+ Gates are our new low-level building blocks.
+ So the first thing we're going to do
+ is add some numbers with gates.
+ And we're going to basically use a pattern much like this,
+ except that this little adding hand calculator
+ does numbers from zero through nine.
+ We're gonna do the same thing with just zero and one,
+ so they're gonna do base to addition,
+ but we're still gonna do things like carry.
+ So when we click over to the next one,
+ it carries and goes on to the next number.
+ And so we're gonna solve the carry problem.
+ At this point, you should know the truth tables
+ for not an and, an or, and exclusive or.
+ Now, not an and and or are kinda like
+ what you've done in programming for a long time now.
+ Exclusive or is just kinda weird,
+ meaning that it's more of a counter than a simple or,
+ which means if one of them is true, the output is true,
+ and if both are zero or both are one, the output is zero.
+ And of course, and and nor
+ are just kind of inverted versions of and and or.
+ So at this point, I think you should be able to
+ fill these in and I probably won't need
+ to explain these to you much more.
+ But we do wanna represent numbers larger than zero and one.
+ That would be kind of a limited range.
+ So what we use is we use base two numbers,
+ and we take different wires and give them different values.
+ And so in base two, there's a one's position,
+ a two's position, a four's, and an eight's position.
+ And so you can think of three wires
+ can represent a number from zero through seven.
+ So in base 10, 123 is one times 100, two times 10,
+ and three times one, which adds up to 123,
+ which is kind of redundant.
+ But if you look at base two, one, one, zero,
+ that's one times four, which is four,
+ plus one times two, which is two,
+ plus zero times one, which is zero, four plus two equals six.
+ So to convert one, one, zero base two into base 10,
+ it's six base 10.
+ We're gonna make things simple for now.
+ We're not gonna make you generally be able to convert
+ any base 10 number.
+ As a matter of fact, for most of the rest of this section
+ of the class, we will never encounter a number
+ higher than zero through eight.
+ Mostly it will be zero through seven, and then once in a while
+ we'll carry into the eight's position.
+ So we represent the four's position, the two's position,
+ and the one's position.
+ So one, one, zero equals six.
+ But you can quickly say, oh, that's a four, that's a two,
+ and no one, which is four plus two equals six.
+ So you can quickly convert from that.
+ So the idea of having one wire represent
+ the ones of a number, another wire representing
+ the two's of the number, and another wire representing
+ the four's of the number, is how we can represent
+ a number from zero through seven.
+ So in this example that I've given you,
+ the two's wire is a one, and the four's wire is a one,
+ and we hook that to a Nixie tube.
+ Remember Nixie tubes?
+ The Nixie tube decodes the ones, two's, and four's,
+ and converts it to base 10.
+ So if we're putting in zero ones, one two's, and one four's,
+ well that's two plus four equals six.
+ And the Nixie tube has the logic to simply display that.
+ So if we can send it a set of wires, three wires,
+ it will show us the base 10.
+ And in order to help you have a good understanding
+ of quick conversion from base two to base 10,
+ at least for numbers between zero and seven,
+ I've got a little game called the Nixie Challenge
+ that both converts base two to base 10, base 10 to base two,
+ and adding of base two numbers.
+ Now speaking of adding base two numbers,
+ let's start at the very beginning.
+ One plus one equals two.
+ That's true in base 10, but it's not true in base two.
+ 'Cause you don't have the digit two in base two.
+ So one plus one is zero, carry the one.
+ Just like five plus five is, in base 10,
+ is zero, carry the one, or 10.
+ So one zero base two is two,
+ because that's a one in the two's position
+ and a zero in the one's position.
+ So remember, one plus one equals zero, carry the one.
+ You see the same pattern when you do two plus two
+ equals four, zero plus zero equals zero,
+ one plus one equals zero, carry the one.
+ And again, the same thing happens
+ when you do four plus four equals eight.
+ And so now we've seen our first number greater than seven.
+ Four plus four equals eight.
+ Now you gotta carry, you gotta ripple carry
+ in the three plus one equals four example.
+ One plus one equals zero, carry the one.
+ Now in the second column, you gotta add that carry.
+ The carry one plus the top one equals zero, carry the one.
+ So now we end up with one, zero, zero, or four.
+ And so these carries can cruise along.
+ Three plus two equals five.
+ You can see there's a one plus zero equals one.
+ One plus one equals zero, carry the one,
+ which gives us one, zero, one, which is a four and a one,
+ which is five.
+ And then the last one, which is seven, all ones,
+ which is a four plus a two plus a one, which is seven.
+ Seven plus one, you start with one plus one equals zero,
+ carry the one, but then the carry plus the other one
+ is zero again, carry the one again,
+ and then the carry plus the one is a zero,
+ carry the one again, and then you end up with the one.
+ So seven plus one equals eight.
+ So the logic that we do here to do one of these columns,
+ so just the columns, is a thing we call the half adder.
+ And half adder is a logic circuit that takes as its inputs
+ the A and the B, and as output,
+ comes up with the sum and the carry.
+ Now for now, we're only thinking about one column
+ of addition, zero plus zero is zero, carry the zero.
+ Zero plus one is one, carry the zero.
+ One plus zero equals one, carry the zero.
+ One plus one equals zero, carry the one.
+ So if we look at the circuit,
+ the circuit is a combination of the and and an exclusive or.
+ And if you look at the two columns,
+ you look at the sum column, the sum column,
+ zero, one, one, zero, is just the same as a close of or,
+ and the carry column is just the same as the and.
+ So we simply take the A and the B,
+ both to an exclusive or gate and both to an and gate,
+ and out comes a sum and a carry.
+ So two gates gives us a half adder.
+ So if we look at the different values,
+ zero plus zero equals zero, carry the zero.
+ One plus zero equals one, carry the zero.
+ And one plus one equals zero, carry the one.
+ So this solves one column of addition.
+ But if you think about one column of addition
+ other than the first column, there's also a carry in.
+ And that's how we solve it with the full adder.
+ So the full adder, its truth table has a carry in,
+ a sum A, sum B, and then a sum total and a carry out.
+ So operands A and B, a carry in, sum and carry out.
+ So if you get a carry in, that's a one.
+ If you get an A of one and a B of one,
+ well that is three, which is the sum is one, carry the one.
+ So that's a little different, right?
+ So now we have up to three numbers.
+ It's kind of like a counter of three bits, right?
+ And it's showing us that.
+ But we have a carry in, A and B,
+ and then a sum and a carry out, okay?
+ And so it's pretty much what you would expect.
+ You can think of the sum and the carry out as like,
+ the carry out is kind of like a two.
+ When you're carrying to the next column, okay?
+ So let's take a look at the circuit
+ that needs to solve this problem.
+ A full adder compensates for a carry in.
+ So we call a full adder, a full adder
+ because it really is two half adders plus a little bit.
+ So if you look at the section, that's the A and the B,
+ that's just a half adder.
+ It's got an exclusivore and an and.
+ And then what we have is another half adder at the top,
+ exclusivore two and and two.
+ And the input to that half adder is the carry in
+ plus the output of exclusivore one.
+ Exclusivore two produces the overall sum
+ of the three numbers.
+ And then we have to add an or gate
+ that takes the output of the A and B and,
+ as well as the and,
+ and we or it all together and get a carry out.
+ And you can look at that or as,
+ did we generate a carry out by A and B?
+ Or did we generate a carry out because A or B was one
+ and the carry in was one.
+ And that's what that or is doing.
+ So it's probably best to take a quick look
+ at how this works with a working circuit.
+ So here is a full adder circuit.
+ And so we're gonna start and work through carry in,
+ A and B and then the sum and the carry out.
+ So we're set them all to zero, so the sum is zero.
+ So let's just exercise this as a half adder, for example.
+ So if we make A be one,
+ then we get a sum of one and a carry out of zero.
+ And if we make B be one,
+ then we get a sum of zero and a carry out of one.
+ And so the carry in is not participating in any way.
+ This is just a half adder that's working.
+ So now if we add the carry in,
+ so now we have carry in of one,
+ A of one, B of one and sum is one and carry out is one.
+ And now you can pretty much put any combination
+ of ones and zeros, and this is kind of a counter
+ where the carry out plus the sum is like how many.
+ Carry in is one and A is zero and B is one.
+ We kind of have two ones,
+ and so we get a carry out of one and a sum of zero.
+ That's kind of one zero, which is a two, okay?
+ So that's a full adder.
+ It's basically two half adders plus an OR gate.
+ Now that we built this full adder,
+ now we won't go into too much detail here,
+ but this carry out was designed
+ to become the carry in for the next digit.
+ So if we look at two plus five equals seven,
+ we can see the full adder has the A for the ones column
+ and the B for the ones column,
+ A for the twos column and B for the twos column
+ and A for the fours column and B for the fours column.
+ And so because A is two, A one is zero,
+ A two is one and A four is zero, so zero one zero.
+ B is five and so it's one zero one.
+ So B one is one, B two, the twos column of B is zero
+ and the fours column of B is one.
+ And so they just go into these full adders.
+ And when we say full one in here,
+ that is those gates that we just got done describing.
+ And they have a sum out and that goes to our ultimate sum,
+ but the carry out of each column
+ goes to the carry in of the next column.
+ That's what's clever about the full adder.
+ So this is a ripple carry.
+ The carry is rippling from one column to the next.
+ On the screen, it's the top to the bottom.
+ So you just copy, you connect the carry outs
+ to the carry in of the next full adder.
+ And then that full adder has a carry out and away it goes.
+ Now, if you look at the third one,
+ you have the carry out that indicates an overflow indicator.
+ And that is this can only handle numbers from zero through seven.
+ But if you add five plus five,
+ that's bigger than seven and the overflow indicator.
+ We're like, oh, now we just figured out
+ how to take three full adders and make a three bit adder.
+ So this is a three bit adder
+ with the A's on the left-hand side, zero, one, zero or two.
+ And the B's on the right-hand side, one, zero, one or five.
+ And you can see the adder has a seven.
+ We put a little display in there
+ so you can see the number seven
+ and it has sums coming out the bottom
+ and it has overflows coming out the top.
+ And so this is part of how digital logic works
+ is that we build something cool like a three bit adder
+ that's made up of three full adders,
+ which each full adder is made up of two half adders
+ plus an OR gate, but we don't have to draw that.
+ We just say, give me a three bit adder and away you go.
+ And so we can quickly build abstractions
+ that are all really cool, reusable componentry.
+ And so we only build a full adder long enough
+ to build a three bit adder
+ to build then a three bit adder component.
+ And so we can build these things pretty rapidly
+ and now you can start to see
+ how we might eventually build a microprocessor.
+ At least now we have a three bit adder.
+ And if you listen carefully,
+ maybe go back and watch this again.
+ If you look at it carefully, you'll see, you know,
+ if you go all the way back, you know how many transistors
+ that you could make a three bit adder.
+ But it would be a bunch of them.
+ It would be a bunch of them.
+ 'Cause remember an AND gate is
+ four transistors plus the NOT, which is two transistors.
+ So an AND gate is six transistors.
+ And that's just an AND gate.
+ So you figure out after a while that building gates
+ and then building reusable components,
+ you know how to build them,
+ but you don't have to know how to build them
+ to use a component like a three bit adder in a circuit.
+ And that's the fun of it all.
+ And we're gonna keep doing this as we go forward.
+ (upbeat music)

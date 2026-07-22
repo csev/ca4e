@@ -1,0 +1,296 @@
+1
+00:00:00,000 --> 00:00:04,480
+ Hello and welcome to another walkthrough for computer architecture for everybody.
+
+2
+00:00:04,480 --> 00:00:12,000
+ We're playing with our 6504 emulator programming and kind of working through some increasingly complex samples as we go.
+
+3
+00:00:12,000 --> 00:00:14,560
+ So we're going to go into the uppercase sample.
+
+4
+00:00:14,560 --> 00:00:18,720
+ Now, the previous thing we did was a loop and this is really more of an if test.
+
+5
+00:00:18,720 --> 00:00:23,680
+ We're not going to do a loop and the next thing we're going to have an if test and a loop.
+
+6
+00:00:23,680 --> 00:00:27,440
+ So we're going to, we're not going to store any data here.
+
+7
+00:00:27,440 --> 00:00:29,360
+ It's really simple. We're just doing an if statement.
+
+8
+00:00:29,360 --> 00:00:32,080
+ We're going to check in this one, hard coded valuables.
+
+9
+00:00:32,080 --> 00:00:36,880
+ We're going to check to see if p is greater than or less than a.
+
+10
+00:00:36,880 --> 00:00:40,720
+ So we're going to load into a the constant p.
+
+11
+00:00:40,720 --> 00:00:44,320
+ We're going to compare the constant a with the accumulator.
+
+12
+00:00:44,320 --> 00:00:47,040
+ We're doing a convert to uppercase here.
+
+13
+00:00:47,040 --> 00:00:53,840
+ If it's already uppercase, we're going to skip down and if it's not uppercase, we're going to convert it to uppercase.
+
+14
+00:00:53,840 --> 00:00:57,840
+ And this will only work for lowercase a through z, but you get the idea.
+
+15
+00:00:57,840 --> 00:01:01,360
+ Okay, so let's take a look here, convert to uppercase.
+
+16
+00:01:01,360 --> 00:01:05,120
+ So let's go ahead and so if we look at these things, we got a load.
+
+17
+00:01:05,120 --> 00:01:06,400
+ We got our immediate.
+
+18
+00:01:06,400 --> 00:01:07,600
+ So that's the letter p.
+
+19
+00:01:07,600 --> 00:01:11,760
+ We got our compare and then we have our immediate, which is the letter a.
+
+20
+00:01:11,760 --> 00:01:19,760
+ And then we have the branch of minus down two and the branch of minus is really skipping
+
+21
+00:01:19,760 --> 00:01:22,880
+ this subtraction and going all the way to eight.
+
+22
+00:01:22,880 --> 00:01:31,200
+ So the if then else that we've kind of got here is if it's minus, we're going to skip down two instructions to eight.
+
+23
+00:01:31,200 --> 00:01:39,440
+ If it is not minus, we're going to run six and then that's going to be a subtract immediate of zero x 20.
+
+24
+00:01:39,440 --> 00:01:45,840
+ Hopefully you kind of see that that's a two and that's a zero because the zero x 20.
+
+25
+00:01:45,840 --> 00:01:47,920
+ You can see those at some point.
+
+26
+00:01:47,920 --> 00:01:49,680
+ You should start seeing the hex.
+
+27
+00:01:49,680 --> 00:01:56,320
+ Okay, let's go ahead and just run this at full speed and maybe I'll talk a little bit about it afterwards.
+
+28
+00:01:56,320 --> 00:01:58,960
+ I'm just going to turn on narration and fire.
+
+29
+00:01:58,960 --> 00:01:59,920
+ Oh, no, I'm going to step.
+
+30
+00:01:59,920 --> 00:02:00,480
+ I'm going to step.
+
+31
+00:02:00,480 --> 00:02:03,120
+ So let's do the first one.
+
+32
+00:02:03,120 --> 00:02:06,560
+ Let's load the letter p into the accumulator.
+
+33
+00:02:06,560 --> 00:02:12,880
+ PC zero x zero zero load accumulator immediate zero x seven zero.
+
+34
+00:02:12,880 --> 00:02:16,400
+ So that's a zero x seven zero, which is lowercase p and ASCII.
+
+35
+00:02:16,400 --> 00:02:16,960
+ Oh, hang on.
+
+36
+00:02:16,960 --> 00:02:19,200
+ Let me bring up the ASCII chart, right?
+
+37
+00:02:19,200 --> 00:02:20,880
+ So now we can bring up the ASCII chart.
+
+38
+00:02:20,880 --> 00:02:22,160
+ So that's kind of fun.
+
+39
+00:02:22,160 --> 00:02:23,920
+ So I got this little ASCII chart for you.
+
+40
+00:02:23,920 --> 00:02:25,120
+ Quick computation.
+
+41
+00:02:25,120 --> 00:02:30,320
+ So zero x seven zero is a hopefully a lowercase p.
+
+42
+00:02:30,320 --> 00:02:30,880
+ Look at that.
+
+43
+00:02:30,880 --> 00:02:33,280
+ So zero x seven zero is a lowercase p.
+
+44
+00:02:33,280 --> 00:02:39,760
+ The assembler converted this from a quote p quote, which is one of its many load accumulator
+
+45
+00:02:39,760 --> 00:02:46,000
+ syntaxes and it changed it into zero one one one zero zero zero and which is the letter p.
+
+46
+00:02:46,000 --> 00:02:49,040
+ Now we're going to compare this with the letter a.
+
+47
+00:02:49,040 --> 00:02:49,920
+ So where is that?
+
+48
+00:02:49,920 --> 00:02:53,600
+ We're instruction two now and we're going to compare it with the a.
+
+49
+00:02:53,600 --> 00:02:54,480
+ And a is just
+
+50
+00:02:54,480 --> 00:02:59,600
+ 61 hex and there it is.
+
+51
+00:02:59,600 --> 00:03:00,880
+ It's 61 hex.
+
+52
+00:03:00,880 --> 00:03:02,480
+ And so let's just compare it.
+
+53
+00:03:02,480 --> 00:03:04,960
+ Run one instruction.
+
+54
+00:03:04,960 --> 00:03:10,960
+ PC zero x zero two compare accumulator with immediate zero x six one.
+
+55
+00:03:11,600 --> 00:03:22,320
+ OK, so now we basically have it set so that p, which was in the accumulator, is greater than a.
+
+56
+00:03:22,320 --> 00:03:25,520
+ We didn't set the zero flag and we didn't set the negative flag.
+
+57
+00:03:25,520 --> 00:03:34,800
+ OK, and if this character that we just compared is less than a, then we're going to skip.
+
+58
+00:03:34,800 --> 00:03:37,520
+ If it's not, we're going to subtract 20 from it.
+
+59
+00:03:37,520 --> 00:03:39,120
+ So it's not going to be very exciting.
+
+60
+00:03:39,680 --> 00:03:45,200
+ This is going to become zero x 50 because we're going to subtract zero x 20.
+
+61
+00:03:45,200 --> 00:03:46,880
+ So let's go ahead and run that step.
+
+62
+00:03:46,880 --> 00:03:55,120
+ Branch didn't get taken.
+
+63
+00:03:55,120 --> 00:03:58,480
+ It fell right through into position zero x zero six.
+
+64
+00:03:58,480 --> 00:04:00,000
+ And now we're going to do a subtract.
+
+65
+00:04:07,200 --> 00:04:12,160
+ So now the next instruction is to stop, but you'll notice that we did subtract that 70.
+
+66
+00:04:12,160 --> 00:04:16,800
+ The accumulator was 70, which is the letter where were we the letter p.
+
+67
+00:04:16,800 --> 00:04:23,200
+ And we subtracted 20 hex to it, which just happens to be uppercase p.
+
+68
+00:04:23,200 --> 00:04:26,720
+ So this was a convert to uppercase operation.
+
+69
+00:04:26,720 --> 00:04:33,920
+ And the last step is just to stop PC zero x zero eight break no printed output.
+
+70
+00:04:33,920 --> 00:04:35,680
+ So we didn't store anything.
+
+71
+00:04:35,680 --> 00:04:38,480
+ We just are showing a simple if then else,
+
+72
+00:04:38,480 --> 00:04:43,840
+ which turns into a sort of compare and skip based on flag values.
+
+73
+00:04:43,840 --> 00:04:48,880
+ OK, so I hope you found this particular useful in the walkthrough.
+
+74
+00:04:48,880 --> 00:04:58,160
+ And cheers and see you on the net.
+

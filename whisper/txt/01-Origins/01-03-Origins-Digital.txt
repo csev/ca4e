@@ -1,0 +1,97 @@
+ now we're going to talk about physical digital devices so it there are no real digital devices
+ everything in this world is analog so we sort of layer an abstraction on top of an analog world
+ and so think of digital as analog systems that are built to have two relatively stable states
+ and they require some kind of an input to change the state but once the state is changed
+ it's stable again okay so it there's a state state transition so if we look at a pen by the way
+ capturing the new state the technical term for that is called latching you know you here comes a
+ change state you like latch it you grab it and you keep it and then the stable time is when you've
+ kept the state so you often find at least in physical digital devices that there is a clicking
+ associated with it so here's a pen a retractable pen all right there you go retractable pen
+ click click click click okay now so we'll decide that zero is when it's retracted and one is when
+ it's not and so it's stable i don't have to touch it to keep the one and when it's zero i don't have
+ to touch it to keep the zero but it's also you have to put input to switch it from zero to one
+ but if you don't push it far enough it goes back to zero so zero is stable and slight variations
+ of input does not disturb the zero it comes back to zero but if you put enough input hear the click
+ then it's a one right and so there is a two states and a transition period and that transition period
+ is when there is some input required to change the state and so that is the notion of digital
+ we call one of the states one and one of the states zero so a classic use of this for
+ hundreds of years is clocks so clocks are sort of a digital where the pendulum would go back and
+ forth tick tock tick tock and then inside of it a little gear would move for each second and then
+ that would count up the seconds to make a minute and then count up to minutes to make an hour with
+ a series of gears very much like the antikythera mechanism and what's even cooler for a cuckoo clock
+ is that at particular moments in time it runs a little mechanical program to make a little birdie
+ come out and tweet so cuckoo clocks are an early form of of programming that's all hardware and
+ all analog but it's analog digital because of the tick tock and the counters that count the ticks
+ and the tocks so another device that is a counter that carries and frankly this device could be the
+ inside of a cuckoo clock it's just a little easier for us to understand it so what these are let me
+ show you close up here so these are little devices that are used for shopping and they have dollars
+ let me get my pen here they have dollars dimes and cents and if you're going to buy something for
+ 15 cents you can put the five in for five cents and then one in and then I buy something for
+ 25 cents put two dimes and five five cents and it's carrying all along okay now how does this work it
+ is a physical digital device you can see that it's clicking so let's take a look inside the device
+ so here's the inside of the device and you can see right away that there is some springs in here
+ each one has a spring and there's a specific shape of the of the thing we're pushing down and there's
+ some flexibility in it so all of this is to get to the point where we can press an input and that
+ input changes it right so if I press it down it doesn't quite change that's the old stable part
+ but if I press it far enough it clicks and then it changes now we're about to see we're on nine
+ right now you want to click one more time and we're going to see the carry this is a ripple carry
+ we're going to learn about later in half adders and full adders we're going to learn about ripple
+ carry but you can watch as the ripple carry happens this little white thing here is going to
+ go up and push it's going to act as if it pushed the middle one it's going to move it but instead
+ pushing the sense is going to oops I pushed the wrong one pushing the sense is going to move that
+ so if I go around and do 10 more of these you'll see it'll come down it's seven and now it's clicked
+ to eight so that that's how we carry when we get beyond 10 and so this notion of ripple carry and
+ multiple values we're going to build this into actually electronic hardware coming up so once
+ you can build an adding machine with some kind of iteration you can turn addition into multiplication
+ and that's because multiplication is merely repeated addition now I don't have a multiplier
+ but I do have a an adder that's a little tougher this is metal it's many things it can do addition
+ it can do subtraction and then eventually you would put something like this with a motor on it
+ or a crank on it and then you could build a physical mechanical multiplier addition and
+ subtraction and multiplication are not the only things that we needed to do we need to do things
+ like logarithms sine and cosine and today we would just use a hand calculator and we put in whatever
+ and we click the sign button and out it comes now that does someone in the 1930s would be a miracle
+ that you can ask for the sine or cosine or logarithm of any number and it just comes out
+ on a little screen this is more powerful than any computer in 1930 so what they had to do though
+ those functions are still there sine and cosine and logarithms have to do with things like curves
+ and the motion of spacecraft etc and so we needed to know all this stuff so there's a couple ways
+ to do it now one of the things we talked about already with logarithms was the fact that we have
+ a slide rule and the slide rules so slide rule upside no slide rule is not upside down the slide
+ rule that basically just converts linear numbers to logarithmic numbers and then it uses sliding
+ and addition adding by moving along this line that equates to multiplication so logarithms we we in
+ in the 30s 40s and 50s we use slide rules with carefully crafted scales and movement to turn the
+ more complex multiplication into addition but for things like sine and cosine and just looking up
+ logarithms a little more precisely we basically created this book we had this book standard
+ mathematical tables and this was a thing you every engineer would buy and if you wanted to
+ look logarithms up this is a book of four place decimal common logarithms and you would look things
+ up and you would find four or five digits of precision and if you keep going you got logarithms
+ of trigonometric functions square sine and cosine in their product hyperbolic functions okay we
+ didn't want to know that stuff integrals okay so this was the way you did complex calculations
+ before we had hand calculators this is all replaced for all intents and purposes
+ by modern hand calculators but the transistor hasn't been invented yet now there were devices
+ that were designed in a sense to create that book the babbage difference engine was something that
+ was imagined in the 1820s that was had gears and little cogs little carry adders just like the stuff
+ we just saw that could compute up to seventh order polynomials like x to the seventh x to the six x
+ the fifth and the reason that was so important is you can approximate a lot of functions using
+ polynomials with various constants on those polynomials so if you could put a seventh order
+ polynomial into this machine and then run it for a while you could generate a table of sine or
+ different polynomial would generate a table of cosine or logarithms and the cool thing about
+ this is this was designed to actually have a printer which would do the computation and then
+ print the result out so that you could make a book out of this thing and and charles babbage
+ designed it all in the 1800s and he built a tiny prototype but turns out that you know ran out of
+ money ran out of time a full-scale system based on his designs was built in 1991 and it worked
+ exactly as babbage expected it it was intended to be powered by a steam engine although
+ if you ever see one running usually it's a human that's cranking it
+ now another way that we built the content of these tables in these books is using computers
+ except in the early days computer was a word for a job description for a human being
+ so the idea of a computer is they would have some kind of calculator probably could do addition and
+ multiplication and this person would carefully put numbers in run the calculator and compute
+ using some of those polynomial things often sign and log and then record the results and these
+ these rooms full of people would do these calculations over and over and over for different input values
+ and get the output values for various functions and then write them down and that's what built
+ human computers built many of the early data in or these early books now computers when computers
+ started electronic computers started to happen it was natural to think of the task that these
+ electronic computers were doing as very similar to the task the repetitive tasks that the human
+ computers were doing and so that's how things we call computers today were named computers
+ they're named after people and the movie one of my favorite movies hidden figures explores the
+ shift from sort of human to electronic computers where they were a bunch of people and they were
+ doing human computer work and then they moved into the electronic computer work and using Fortran etc.

@@ -1,0 +1,107 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:05.400
+ hello and welcome to another walkthrough for computer architecture for everybody.
+
+00:00:05.400 --> 00:00:10.040
+ So in this walkthrough we are going to walk through the assignment of building a half adder.
+
+00:00:10.040 --> 00:00:13.700
+ So in the instructions for this half adder we are seeing the reference diagram.
+
+00:00:13.700 --> 00:00:20.600
+ So it's really nothing more than exclusive OR at the top and an AND at the bottom with the input of A and B and a sum and carry as the output.
+
+00:00:20.600 --> 00:00:25.040
+ The output of the exclusive OR is the sum and the output of the AND is the carry.
+
+00:00:25.040 --> 00:00:28.480
+ And we just run the inputs to both of the gates and away we go.
+
+00:00:28.480 --> 00:00:33.180
+ So I can just leave this up and so let's just go ahead and start putting this in.
+
+00:00:33.180 --> 00:00:40.040
+ Input, put place an input, place another input, let's place an exclusive OR.
+
+00:00:40.040 --> 00:00:45.880
+ And again remember these are just transistors, they're just kind of in functional block diagrams that are useful to us.
+
+00:00:45.880 --> 00:00:49.440
+ And then let's do an AND, place an AND.
+
+00:00:49.440 --> 00:00:56.740
+ And then wire up the inputs to the two inputs of the exclusive OR, oops, there we go.
+
+00:00:56.740 --> 00:01:02.980
+ That input goes to the other input to the exclusive OR, then the input to the AND, both of them go to the AND.
+
+00:01:02.980 --> 00:01:09.680
+ I mean and really what we're doing is we're just making the truth table work, then we need an output.
+
+00:01:09.680 --> 00:01:21.280
+ The sum output is the exclusive OR and then the carry out output is the AND.
+
+00:01:21.280 --> 00:01:27.220
+ So both are true, so one plus one equals two, so that's a zero one, that's two.
+
+00:01:27.220 --> 00:01:30.780
+ So let's go ahead and tag these correctly.
+
+00:01:30.780 --> 00:01:37.140
+ Let's tag the top one sum, let's tag the bottom one carry.
+
+00:01:37.140 --> 00:01:40.520
+ Oh, wait a sec, are we supposed to call it carry or carry out?
+
+00:01:40.520 --> 00:01:46.280
+ C out, so we're supposed to call that one C out, so the reference diagram is not quite right.
+
+00:01:46.280 --> 00:01:52.240
+ That's okay, C-O-U-T, that reference diagram was just from the lecture, so we got C out.
+
+00:01:52.240 --> 00:02:03.120
+ And then we have, let's go back to the specs, got inputs of A and B, let's tag the input of A, tag the input of B.
+
+00:02:03.120 --> 00:02:13.080
+ Okay, so we have one plus one equals zero carry the one, zero plus zero is zero carry the zero, zero plus one is one carry the zero.
+
+00:02:13.080 --> 00:02:16.120
+ So this looks like it's working pretty well.
+
+00:02:16.120 --> 00:02:18.580
+ You can take a look at the truth table, right?
+
+00:02:18.580 --> 00:02:26.840
+ So this truth table is zero of A and a one of B and the sum should be one and the carry out should be one and so it looks good.
+
+00:02:26.840 --> 00:02:30.780
+ So you can sort of verify this, you can manually manipulate the one and the zero.
+
+00:02:30.780 --> 00:02:34.780
+ It's a good way to remember how half adders work, so let's go ahead and start the grading.
+
+00:02:34.780 --> 00:02:40.620
+ It says we got all required components are properly labeled, we got an A and a B and a sum and a C out.
+
+00:02:40.620 --> 00:02:43.940
+ And then we got an XOR and AND gate, that's good.
+
+00:02:43.940 --> 00:02:51.540
+ And now it's going to do all the four truth tables, zero zero turns into A of zero, B of zero turns into sum of zero, C out of zero.
+
+00:02:51.540 --> 00:02:55.220
+ A of zero, B of one turns into a sum of one and a C out of zero.
+
+00:02:55.220 --> 00:02:59.580
+ A of one and B of zero is sum of one, C out is zero.
+
+00:02:59.580 --> 00:03:02.280
+ And then we finish and away we go.
+
+00:03:02.280 --> 00:03:11.120
+ So I hope this little walkthrough of how to do a half adder assignment in the gates layout tool for computer architecture for everybody has been helpful to you.
+
+00:03:14.180 --> 00:03:18.180
+ [ Music ]
+

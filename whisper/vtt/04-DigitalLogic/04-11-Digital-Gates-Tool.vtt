@@ -1,0 +1,293 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.560
+ and welcome to another walkthrough for computer architecture for everybody.
+
+00:00:04.560 --> 00:00:10.200
+ In this walkthrough we're going to cover the gates, the gate layout system and the gate simulation system.
+
+00:00:10.200 --> 00:00:17.200
+ It has an extensive help, probably more than you need if you get stuck or you want to paste some of this stuff into AI and figure out how to use it.
+
+00:00:17.200 --> 00:00:19.360
+ So I'm just going to walk through the basic features.
+
+00:00:19.360 --> 00:00:28.360
+ So we have a wide range of components, all the way from something as simple as a single AND gate, or an input or an output that we can put in,
+
+00:00:28.360 --> 00:00:31.360
+ or we can put something much more simpler like a Nixie display, right?
+
+00:00:31.360 --> 00:00:37.360
+ So if we take this Nixie display and you can drag things around and you can connect them to the input.
+
+00:00:37.360 --> 00:00:40.360
+ And so this is the Nixie display that's got a one, two and four input.
+
+00:00:40.360 --> 00:00:45.360
+ So let's play with that a little bit, give ourselves another input, click to connect them.
+
+00:00:45.360 --> 00:00:50.360
+ And then so I've got this Nixie input, it's a three because it's a one and a one.
+
+00:00:50.360 --> 00:00:53.360
+ So it's the two input is one and the one input is one.
+
+00:00:53.360 --> 00:00:56.360
+ Let's go ahead and bring another input in and connect it.
+
+00:00:56.360 --> 00:00:58.360
+ Oops, connect, connect.
+
+00:00:58.360 --> 00:00:59.360
+ There we go.
+
+00:00:59.360 --> 00:01:03.360
+ So now it is a seven, right?
+
+00:01:03.360 --> 00:01:04.360
+ You can do some practice.
+
+00:01:04.360 --> 00:01:11.360
+ So that's a four and a two and a zero, which is a six.
+
+00:01:11.360 --> 00:01:13.360
+ And you can rename these things.
+
+00:01:13.360 --> 00:01:20.360
+ So I'm going to call this one ones and call this one twos.
+
+00:01:20.360 --> 00:01:26.360
+ So this little tag, you can tag and then click on something and then fours.
+
+00:01:26.360 --> 00:01:30.360
+ So we can have the bits for the ones, twos and fours.
+
+00:01:30.360 --> 00:01:32.360
+ And if we turn it off, then that's going to be a two.
+
+00:01:32.360 --> 00:01:33.360
+ So that's a two.
+
+00:01:33.360 --> 00:01:35.360
+ If I add one to that, then that's three.
+
+00:01:35.360 --> 00:01:37.360
+ And you can just build these little circuits.
+
+00:01:37.360 --> 00:01:42.360
+ So one of the things that I'll just show you that is really weird is there's an automatic layout.
+
+00:01:42.360 --> 00:01:48.360
+ So like if I had to put this input over here, it's trying its hardest.
+
+00:01:48.360 --> 00:01:52.360
+ This laying out circuits is a hard thing and I've got it using spline curves.
+
+00:01:52.360 --> 00:01:57.360
+ But if you come over and you highlight and double click, you will create what's called a waypoint.
+
+00:01:57.360 --> 00:02:03.360
+ And then I can sort of route these wires creatively and then drag these waypoints.
+
+00:02:03.360 --> 00:02:04.360
+ It doesn't change the circuits at all.
+
+00:02:04.360 --> 00:02:09.360
+ And so I can make this look a little bit better using waypoints.
+
+00:02:09.360 --> 00:02:12.360
+ And so a couple other things, let's see.
+
+00:02:12.360 --> 00:02:16.360
+ We can get a component, a full ladder component.
+
+00:02:16.360 --> 00:02:21.360
+ So it's a carry-in, an A and a B, and then a sum and a carry-out.
+
+00:02:21.360 --> 00:02:25.360
+ And that is, you know, inside of that, inside of every one of these are transistors.
+
+00:02:25.360 --> 00:02:27.360
+ A Nixie tube has got some glowing stuff.
+
+00:02:27.360 --> 00:02:30.360
+ It's actually a tube. I just put it in because it's pretty.
+
+00:02:30.360 --> 00:02:32.360
+ We got a JK flip-flop.
+
+00:02:32.360 --> 00:02:36.360
+ And so a JK flip-flop, I'll go through this in a little bit more.
+
+00:02:36.360 --> 00:02:40.360
+ We've got even a thing called a three-bit latch, which we'll use later as a register.
+
+00:02:40.360 --> 00:02:43.360
+ It has some inputs and outputs and it has an internal state.
+
+00:02:43.360 --> 00:02:47.360
+ And the pulsing on the clock copies the input into the internal state.
+
+00:02:47.360 --> 00:02:51.360
+ Then letting go of the clock will copy the internal state to the output.
+
+00:02:51.360 --> 00:02:58.360
+ And we have a three-bit adder that takes A and B in the ones, twos, and fours column.
+
+00:02:58.360 --> 00:02:59.360
+ And then the sum comes out.
+
+00:02:59.360 --> 00:03:04.360
+ And so that is basically the kinds of things that you can do.
+
+00:03:04.360 --> 00:03:09.360
+ And remember that every one of these things eventually turns into transistors.
+
+00:03:09.360 --> 00:03:17.360
+ So I showed you the tag. The tag, you just grab something and then fun and you just give it a name.
+
+00:03:17.360 --> 00:03:19.360
+ And so that gives these things names.
+
+00:03:19.360 --> 00:03:24.360
+ You can delete something by clicking the trash can icon and then highlighting an item and it deletes it.
+
+00:03:24.360 --> 00:03:30.360
+ And if you click and delete something that has a wire associated with it, it deletes the wire as well.
+
+00:03:30.360 --> 00:03:37.360
+ You can save a circuit, stuff, and it saves the circuit inside your browser
+
+00:03:37.360 --> 00:03:39.360
+ and what's called local storage in your browser.
+
+00:03:39.360 --> 00:03:40.360
+ And then you can load it.
+
+00:03:40.360 --> 00:03:44.360
+ So if you're in the middle of working on something and you want to save it and load it,
+
+00:03:44.360 --> 00:03:45.360
+ well, let me do this.
+
+00:03:45.360 --> 00:03:49.360
+ I'm going to clear all of them, clear everything, get rid of everything.
+
+00:03:49.360 --> 00:03:53.360
+ And now I can reload that circuit from the storage that was called stuff.
+
+00:03:53.360 --> 00:03:55.360
+ It was a crazy circuit.
+
+00:03:55.360 --> 00:03:57.360
+ So I just loaded stuff back up.
+
+00:03:57.360 --> 00:03:58.360
+ And so that was that circuit.
+
+00:03:58.360 --> 00:03:59.360
+ I saved it. I loaded it.
+
+00:03:59.360 --> 00:04:01.360
+ You could load it. You could add a thing.
+
+00:04:01.360 --> 00:04:05.360
+ Let's add another input and then connect it up.
+
+00:04:05.360 --> 00:04:10.360
+ And then save it as stuff again.
+
+00:04:10.360 --> 00:04:11.360
+ Save.
+
+00:04:11.360 --> 00:04:17.360
+ OK, now let's clear everything again.
+
+00:04:17.360 --> 00:04:20.360
+ And then load stuff back up.
+
+00:04:20.360 --> 00:04:25.360
+ And you should see.
+
+00:04:25.360 --> 00:04:26.360
+ And it's edited.
+
+00:04:26.360 --> 00:04:27.360
+ See, I can load it.
+
+00:04:27.360 --> 00:04:31.360
+ I can edit it and then save it and then load it again.
+
+00:04:31.360 --> 00:04:34.360
+ If you are to go and relaunch this, I'll just refresh the page
+
+00:04:34.360 --> 00:04:36.360
+ and you'll see what happens here.
+
+00:04:36.360 --> 00:04:37.360
+ It's gone.
+
+00:04:37.360 --> 00:04:39.360
+ That's all just in the browser storage.
+
+00:04:39.360 --> 00:04:44.360
+ But if you were clever enough to save it, you can load it back up.
+
+00:04:44.360 --> 00:04:48.360
+ So again, depending on how complex the work that you're going to do,
+
+00:04:48.360 --> 00:04:50.360
+ you can use load and save.
+
+00:04:50.360 --> 00:04:52.360
+ So let's go through a couple of other things.
+
+00:04:52.360 --> 00:04:55.360
+ Like I mentioned, if you're trying to make the wires route nicely,
+
+00:04:55.360 --> 00:04:57.360
+ you can double click on the line and create a waypoint.
+
+00:04:57.360 --> 00:05:00.360
+ And I don't know why, but I have a thing to hide the waypoints
+
+00:05:00.360 --> 00:05:02.360
+ if you don't want to see them and then show them back.
+
+00:05:02.360 --> 00:05:07.360
+ There's also a command down here, and that's described in the help documentation.
+
+00:05:07.360 --> 00:05:09.360
+ So you can say place NAND.
+
+00:05:09.360 --> 00:05:12.360
+ And so it'll put a NAND in there.
+
+00:05:12.360 --> 00:05:14.360
+ If you really want to read the instructions,
+
+00:05:14.360 --> 00:05:18.360
+ and I did this to some degree for accessibility,
+
+00:05:18.360 --> 00:05:21.360
+ where you can place a NAND and give it a name,
+
+00:05:21.360 --> 00:05:24.360
+ and then you can connect the output of the NAND to the input of something.
+
+00:05:24.360 --> 00:05:26.360
+ We'll see how well people find that to use.
+
+00:05:26.360 --> 00:05:27.360
+ I put it in there.
+
+00:05:27.360 --> 00:05:29.360
+ I may have to work on it and improve it over time.
+
+00:05:29.360 --> 00:05:31.360
+ You can show how to hide the command line interface.
+
+00:05:31.360 --> 00:05:37.360
+ I hope that this basic walkthrough of the Gates layout tool has been helpful to you.
+

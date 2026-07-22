@@ -1,0 +1,79 @@
+ so now i want to talk to you about how manufacturing transistors evolved go from sort of the earliest
+ manufactured transistors to sort of the modern day and how we manufacture transistors so the key thing
+ that has made the difference is transistors started with a certain size and the goal was to make them
+ smaller and smaller and package them in different ways over time so originally there were individual
+ transistors connected on a circuit board to other transistors and resistors etc then after a while
+ we would buy these things called integrated circuits ICs little black things with the legs on them
+ and they would have some gates inside of them you know maybe a couple of AND gates or a couple of
+ NOT gates or a NOR gate or something and the little we could connect up and make use of these gates
+ by connecting to the little legs and then we'd have traces on the underlying medium to make sure
+ that we connected the right signals to the right gates much like we've been doing
+ now at some point things changed so prior to 1960s the transistors were assembled
+ sort of i'll show you in a sec kind of like lego blocks and they were three-dimensional objects you
+ would manufacture different materials and then you would kind of put those materials together like
+ lego blocks in 1960 fairchild introduced the 2N1613 transistor and this was manufactured by a
+ two-dimensional process meaning that there was a substrate underneath of it and then they did
+ stuff on that substrate with manufacturing and out came a transistor instead of like assembling
+ transistors they would like lay down transistors almost like painting transistors versus building
+ transistors and this led eventually to very large-scale integration where you could in a
+ three millimeter by four millimeter chunk put 2,300 transistors plus associated resistors etc
+ and so that's what led to the the intel 4004 and which was the first commercially available single
+ chip microprocessor the thing that eventually made this all possible was a thing called
+ photolithography i mentioned that planar transistors are in effect manufactured almost like
+ with a paint roller on it but they weren't exactly a paint roller they had these masks
+ so the paint didn't roll on everywhere so their paint rolled on where there were no
+ where there were no lines and so we would produce these VLSI layouts and then we would make in a
+ sense transparencies with clear areas and then dark areas and then we would project light through
+ and then with lenses make it small and then plate and then project this onto a substrate and then
+ expose that substrate to various chemicals with various processes and the net result was flat
+ transistors okay and that that really made it a lot easier than sort of assembling tiny little
+ precise pieces and that led us to ultimately VLSI design so let me show you a few artifacts and
+ explain them to you so let's start here this is the Fairchild 2N1613 let's see if you can see it
+ it looks kind of like a spacecraft it also looks like war of the worlds they used to come through
+ and scare us so that is an actual transistor from 1960 which was the first widely available
+ planar transistor before that i've shown you things like so this sony radio that i showed you
+ earlier this has bjt transistors now they don't look all that different on the outside but inside
+ they are constructed very differently and so let me grab these legos here and show you how the
+ bjt's were constructed you would get various materials right and then you would you would
+ basically have to kind of construct them together and make like a sandwich and then you would
+ contact wires to make this little sandwich and you would connect a wire to the middle part the
+ top part and the bottom part and that's how you would make a bjt transistor okay so it's like a
+ lego block it's like a stack with different materials that are in a sense combined together
+ to make a transistor now what they did instead and i don't really have anything to show you though
+ to the planar transistor started with a flat substrate okay and so the flat substrate would
+ look somewhat like this this is a piece of silicon and then what they would do is they would sort of
+ paint the lines on it and then they would expose it through photolithography and then they would
+ put get circuits and then we'll cut them up and then you'll put each little one inside one of
+ these transistors again the manufacturing is not lego like it's more painting like spray painting
+ with masking okay and then that what that did was that led to making the chips or the transistor
+ smaller and smaller and smaller and more vlsi design again that you're going to play with in
+ this course this is a 1986 rockwell silicon wafer and on this you can see there's just about 120
+ chips they're about a quarter inch on each side let's zoom in as much as we can
+ so
+ these transistors are very small but this is 100 chips and then what they would do is they would
+ come through and they would cut along these lines and they would solder little tiny wires at the edge
+ of each of these chips and then they would put the chips inside of the package with the little legs
+ so i'm mixing my technologies here but here is a intel 404 and inside this little tiny package
+ come on little tiny package so you can see this little tiny package and you can see the little
+ legs on the tiny package so there were tiny little wires it's all very small the little
+ chip is inside here and then the wires would go from the outside and be soldered onto the chip
+ and then the chip would be covered and that's kind of what this looks like so i can show you a much
+ more modern chip and so you can kind of see it so that the piece that gets cut out of the silicon
+ wafer on this amd processor is here and then all these wires and pins eventually find their way
+ to the inputs and outputs of the actual chip but these trans each one of these little quarter
+ inch chips now that was a 2008 processor but this is a 1986 processor so that is an example of how
+ photolithography can build a lot of chips quickly with a two-dimensional process sort of painting
+ with masks painting with chemicals and masks that create these chips that we then cut out and put
+ into little tiny packages or medium-sized packages so that we can install them into motherboards
+ into computers and connect them up to the outside world with all of these technologies transistor
+ count went crazy so if you think about 1971 the intel 4004 had 2300 transistors the first billion
+ transistor chip was the intel itanium and there's some of these deep learning are are basically
+ wafer style integration so you build a wafer like this and you have these wafers not just connected
+ these this wafer was designed to be cut into pieces but imagine building a chip that's the size
+ of a wafer a deep learning wafer scale engine by service has 2.6 trillion transistors in 2020
+ the two terabyte flash memory with 5.3 trillion gates and the blackwell b1000 b100 cpu with 208
+ billion transistors in 2024 so we've got a lot and we're starting to create things that make use
+ of the entire wafer there's a lot of complexity and a lot of reliability because a lot of these
+ chips turn out wrong in the wafer scale and so up next you're going to learn about vlsi
+ design and how you draw the pictures that become the patterns that create the gates and the traces
+ in a chip on one of these silicon wafers

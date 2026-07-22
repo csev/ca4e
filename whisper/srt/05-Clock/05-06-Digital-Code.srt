@@ -1,0 +1,372 @@
+1
+00:00:00,000 --> 00:00:02,240
+ So we're gonna wrap up this section
+
+2
+00:00:02,240 --> 00:00:05,680
+ talking a little bit more about what we would do
+
+3
+00:00:05,680 --> 00:00:07,400
+ in order to get the instructions,
+
+4
+00:00:07,400 --> 00:00:09,320
+ the machine language instructions,
+
+5
+00:00:09,320 --> 00:00:10,940
+ instead of coming from a little switch
+
+6
+00:00:10,940 --> 00:00:14,580
+ which is completely fake, but instead coming from the memory.
+
+7
+00:00:14,580 --> 00:00:17,340
+ And so to do that, we look a little bit more
+
+8
+00:00:17,340 --> 00:00:19,960
+ into computer architecture.
+
+9
+00:00:19,960 --> 00:00:22,520
+ We talked before about the ALU,
+
+10
+00:00:22,520 --> 00:00:25,960
+ the arithmetic and logic unit, as well as the registers.
+
+11
+00:00:25,960 --> 00:00:28,280
+ So the ALU has like an adder in it,
+
+12
+00:00:28,280 --> 00:00:32,680
+ maybe a multiplier or a comparison module, all in hardware.
+
+13
+00:00:32,680 --> 00:00:34,960
+ Then we have registers which have, you know,
+
+14
+00:00:34,960 --> 00:00:38,960
+ bits in them like numbers and their temporary storage.
+
+15
+00:00:38,960 --> 00:00:41,160
+ And in addition, we're gonna talk a little more now
+
+16
+00:00:41,160 --> 00:00:42,200
+ about the logic.
+
+17
+00:00:42,200 --> 00:00:45,120
+ Now the load and store, the way we're gonna do it
+
+18
+00:00:45,120 --> 00:00:48,480
+ goes to and from registers for like data memory,
+
+19
+00:00:48,480 --> 00:00:51,320
+ but for program memory, there's a couple of things
+
+20
+00:00:51,320 --> 00:00:55,360
+ that the CPU uses to control program memory.
+
+21
+00:00:55,360 --> 00:00:59,480
+ So one is the PC or program counter register.
+
+22
+00:00:59,480 --> 00:01:04,040
+ So this is a register that points to the next instruction
+
+23
+00:01:04,040 --> 00:01:05,760
+ we're supposed to execute.
+
+24
+00:01:05,760 --> 00:01:10,280
+ So the CPU, when it's ready to execute an instruction,
+
+25
+00:01:10,280 --> 00:01:12,260
+ it says, oh, the PC tells me where to load it.
+
+26
+00:01:12,260 --> 00:01:14,920
+ So I'm gonna load that instruction from the memory
+
+27
+00:01:14,920 --> 00:01:18,120
+ into CIR, current instruction register.
+
+28
+00:01:18,120 --> 00:01:21,040
+ And that's just some bits, zeros and one.
+
+29
+00:01:21,040 --> 00:01:23,760
+ And then I mentioned the idea of a decoder.
+
+30
+00:01:23,760 --> 00:01:26,100
+ And in the previous example, we had some AND gates
+
+31
+00:01:26,100 --> 00:01:28,360
+ that were in a sense our decoder.
+
+32
+00:01:28,360 --> 00:01:30,840
+ So when you have a real CPU,
+
+33
+00:01:30,840 --> 00:01:32,760
+ it has a lot more than two instructions.
+
+34
+00:01:32,760 --> 00:01:35,960
+ And the decoder is looking at the pattern of bits
+
+35
+00:01:35,960 --> 00:01:38,440
+ in the instruction, decoding it,
+
+36
+00:01:38,440 --> 00:01:42,840
+ and then sending logic to the ALU and the registers
+
+37
+00:01:42,840 --> 00:01:46,200
+ to activate the right thing to get the right thing to happen.
+
+38
+00:01:46,200 --> 00:01:48,500
+ So maybe we're gonna add two registers together
+
+39
+00:01:48,500 --> 00:01:52,240
+ and store the result in a different register, okay?
+
+40
+00:01:52,240 --> 00:01:54,760
+ And the decoder sees that instruction
+
+41
+00:01:54,760 --> 00:01:57,800
+ that is the add two registers
+
+42
+00:01:57,800 --> 00:01:59,760
+ and store in another register instruction.
+
+43
+00:01:59,760 --> 00:02:02,800
+ And then the decoder sees the pattern of that,
+
+44
+00:02:02,800 --> 00:02:05,240
+ and then it activates the right registers,
+
+45
+00:02:05,240 --> 00:02:07,040
+ the right arithmetic logic unit,
+
+46
+00:02:07,040 --> 00:02:09,380
+ and then causes the instruction to happen
+
+47
+00:02:09,380 --> 00:02:12,280
+ in one or a couple of clock cycles,
+
+48
+00:02:12,280 --> 00:02:14,640
+ depending on how difficult it is.
+
+49
+00:02:14,640 --> 00:02:17,740
+ In the previous example, we had like a zero to reset
+
+50
+00:02:17,740 --> 00:02:20,120
+ and a one to add one every clock cycle.
+
+51
+00:02:20,120 --> 00:02:23,600
+ So it incremented or it stopped, it went back to zero.
+
+52
+00:02:23,600 --> 00:02:25,400
+ But in reality, you need a series
+
+53
+00:02:25,400 --> 00:02:27,920
+ of machine language instructions,
+
+54
+00:02:27,920 --> 00:02:31,780
+ like set register four to zero,
+
+55
+00:02:31,780 --> 00:02:35,120
+ compare register four to zero,
+
+56
+00:02:35,120 --> 00:02:38,440
+ increment register four, decrement register four.
+
+57
+00:02:38,440 --> 00:02:40,460
+ And so there are binary patterns,
+
+58
+00:02:40,460 --> 00:02:43,780
+ which are part of the documentation of a microprocessor.
+
+59
+00:02:43,780 --> 00:02:48,780
+ So if the decode unit looks at 0100 for the instruction,
+
+60
+00:02:49,200 --> 00:02:50,820
+ it says, oh, that's a zero instruction.
+
+61
+00:02:50,820 --> 00:02:53,960
+ And then RRR is three bits for a register
+
+62
+00:02:53,960 --> 00:02:54,960
+ from zero through seven.
+
+63
+00:02:54,960 --> 00:02:57,920
+ So you're setting register three to zero.
+
+64
+00:02:57,920 --> 00:03:02,260
+ And so these are just simple patterns,
+
+65
+00:03:02,260 --> 00:03:04,280
+ and they might seem really complex to you,
+
+66
+00:03:04,280 --> 00:03:07,320
+ but in some ways, they're actually really easy.
+
+67
+00:03:07,320 --> 00:03:08,480
+ The number of things you can do
+
+68
+00:03:08,480 --> 00:03:12,420
+ in this machine language is really limited.
+
+69
+00:03:12,420 --> 00:03:16,560
+ Now it makes programs a lot more verbose.
+
+70
+00:03:16,560 --> 00:03:19,480
+ And usually we don't even write the zeros and ones,
+
+71
+00:03:19,480 --> 00:03:20,920
+ we write this stuff called assembly,
+
+72
+00:03:20,920 --> 00:03:22,800
+ which we'll talk about coming up.
+
+73
+00:03:22,800 --> 00:03:25,160
+ Or we write C, which is a higher level language
+
+74
+00:03:25,160 --> 00:03:26,640
+ that then generates assembly,
+
+75
+00:03:26,640 --> 00:03:28,420
+ which generates machine language.
+
+76
+00:03:28,420 --> 00:03:30,000
+ Or we take a language like Python,
+
+77
+00:03:30,000 --> 00:03:32,840
+ which sort of almost completely separates us
+
+78
+00:03:32,840 --> 00:03:34,000
+ from the machine language.
+
+79
+00:03:34,000 --> 00:03:36,360
+ But then Python itself is written in machine language
+
+80
+00:03:36,360 --> 00:03:38,120
+ so that it's really fast.
+
+81
+00:03:38,120 --> 00:03:40,560
+ So coming up next, we're going to design
+
+82
+00:03:40,560 --> 00:03:43,080
+ a very simple central processing unit.
+
+83
+00:03:43,080 --> 00:03:48,080
+ I call it the CDC 8512, inspired by my first computer,
+
+84
+00:03:48,080 --> 00:03:51,720
+ the Controlled Data Corporation, CDC 6500.
+
+85
+00:03:51,720 --> 00:03:53,500
+ It'll have a complete architecture.
+
+86
+00:03:53,500 --> 00:03:54,920
+ It'll be completely defined.
+
+87
+00:03:54,920 --> 00:03:56,240
+ It'll have a program counter.
+
+88
+00:03:56,240 --> 00:03:58,080
+ It'll have an instruction register.
+
+89
+00:03:58,080 --> 00:04:01,280
+ And we will write real, very small programs
+
+90
+00:04:01,280 --> 00:04:04,640
+ in CDC 8512 machine code,
+
+91
+00:04:04,640 --> 00:04:07,340
+ and then run them on an emulator.
+
+92
+00:04:07,340 --> 00:04:09,920
+ (upbeat music)
+
+93
+00:04:13,080 --> 00:04:15,660
+ (upbeat music)
+

@@ -1,0 +1,560 @@
+1
+00:00:00,000 --> 00:00:04,300
+ So let's learn base sixteen, otherwise known as hexadecimal.
+
+2
+00:00:04,300 --> 00:00:10,900
+ So the key to, it would be nice if we could just use base two for everything, but zeros and ones are easy to understand,
+
+3
+00:00:10,900 --> 00:00:19,300
+ but when numbers get larger, like characters for example are eight bits, it's really hard to represent that all in base two.
+
+4
+00:00:19,300 --> 00:00:26,700
+ So we tend to see in the real world that most machine language and other things require you to understand hexadecimal.
+
+5
+00:00:26,700 --> 00:00:35,300
+ So if you take a look at base two, it was easy. We had a simple conversion table, and I hope by now some of you have memorized this little table.
+
+6
+00:00:35,300 --> 00:00:41,700
+ I know I've memorized. I just, you know, when I see seven, I see three ones. When I see six, I see one, one, zero.
+
+7
+00:00:41,700 --> 00:00:49,000
+ I know this by heart, okay? Now, that's cool. We're seeing all numbers that we're familiar with.
+
+8
+00:00:49,000 --> 00:00:56,800
+ Base sixteen says we are going to represent zero through fifteen with a single digit, right?
+
+9
+00:00:56,800 --> 00:01:03,700
+ So fifteen is fifteen, but with two digits, and so the whole idea of changing bases is that we have digits.
+
+10
+00:01:03,700 --> 00:01:11,500
+ So we need to come up with a single digit that represents nine, ten, eleven, twelve, thirteen, fourteen, and fifteen.
+
+11
+00:01:11,500 --> 00:01:20,100
+ And so I basically said, okay, wouldn't it be cool if we would use emojis for that, because I have trouble remembering hexadecimal.
+
+12
+00:01:20,100 --> 00:01:33,600
+ So if we imagine that ten, which is kind of zero, eleven, twelve, thirteen, they don't have an emoji for four fingers, and then fifteen.
+
+13
+00:01:33,600 --> 00:01:43,000
+ So I put a shamrock in for fourteen, and so the point here is you need a single character to represent it.
+
+14
+00:01:43,000 --> 00:01:51,800
+ And so I made this up, and then I'm like, hey, AI, what emojis would you use to represent ten through fifteen?
+
+15
+00:01:51,800 --> 00:01:58,900
+ So there is an actual emoji that's ten, but there is no emoji for eleven, and so they use the pause emoji.
+
+16
+00:01:58,900 --> 00:02:06,900
+ And then they used a clock, twelve o'clock, one o'clock, two o'clock, and three o'clock, and it's not too bad.
+
+17
+00:02:06,900 --> 00:02:15,500
+ And American Sign Languages uses one hand, I think this is eleven, or maybe, yeah, I think this is eleven.
+
+18
+00:02:15,500 --> 00:02:18,300
+ And so British Sign Language is different.
+
+19
+00:02:18,300 --> 00:02:25,300
+ The problem is we don't get motion when we make emojis, so we can't really use American Sign Language,
+
+20
+00:02:25,300 --> 00:02:32,500
+ even though American Sign Language has way to represent eleven, twelve, thirteen, fourteen, and fifteen with kind of a gesture.
+
+21
+00:02:32,500 --> 00:02:42,500
+ So the problem was, is basically whatever, 1930, 1940, when we started using hexadecimal, we didn't have emojis, it was just too early.
+
+22
+00:02:42,500 --> 00:02:52,700
+ And so all we had was ASCII characters, and so we have repurposed A through F to represent ten through fifteen for base sixteen numbers.
+
+23
+00:02:52,700 --> 00:03:04,700
+ So A is ten, the first number that is not a single digit, right, and F is fifteen, and F is all ones, four ones is one, one, one, one, one, is F.
+
+24
+00:03:04,700 --> 00:03:12,700
+ Okay, so we just used A through F. It's a little weird, because there's the letter A, and then there is the hexadecimal digit A,
+
+25
+00:03:12,700 --> 00:03:19,400
+ but you have to kind of get used to it and say, oh, we're in the context of a number here, so that means ten, A means ten.
+
+26
+00:03:19,400 --> 00:03:27,100
+ So if we look at the conversion between base sixteen and base ten, and I've got my little cheat sheet here of ten through fifteen,
+
+27
+00:03:27,100 --> 00:03:37,200
+ because zero through nine is pretty easy. Again, base ten says that each column is a power of ten, so the far right column is ten to the zero, which is the ones column.
+
+28
+00:03:37,200 --> 00:03:44,400
+ The middle column is ten to the one, which is the tens column, and then the third column is ten squared, which is the hundreds column.
+
+29
+00:03:44,400 --> 00:03:54,400
+ So a hundred and twenty-three is one times a hundred, two times ten, plus three times one, which is one twenty-three base ten, which of course it is.
+
+30
+00:03:54,400 --> 00:04:00,300
+ In base sixteen now, we have more digits to work with. So we have seven be base sixteen.
+
+31
+00:04:00,300 --> 00:04:09,900
+ Well, the far right is sixteen to the zero, or one, and then the second digit is sixteen to the first power.
+
+32
+00:04:09,900 --> 00:04:19,700
+ So the result is seven times sixteen plus eleven times one, which is one hundred and twelve plus eleven, which is one hundred and twenty-three.
+
+33
+00:04:19,700 --> 00:04:26,300
+ Now, one thing we like about base sixteen is it's easily converted to and from base two.
+
+34
+00:04:26,300 --> 00:04:32,700
+ And so if you have eight bit numbers, you can represent them with two base sixteen digits.
+
+35
+00:04:32,700 --> 00:04:36,100
+ And that's what we're going to work with a lot going forward is eight bit numbers.
+
+36
+00:04:36,100 --> 00:04:42,300
+ So you can take and convert like seven be base sixteen, which is a byte.
+
+37
+00:04:42,300 --> 00:04:47,100
+ And you can convert the seven and then you convert the B and that's the base two.
+
+38
+00:04:47,100 --> 00:04:58,300
+ And so to some degree, hexadecimal is just a more succinct base two, where four digits of base two become one digit of base sixteen.
+
+39
+00:04:58,300 --> 00:05:04,500
+ If we did this on base ten, there wouldn't be this nice lineup because you can make really long hexadecimal numbers.
+
+40
+00:05:04,500 --> 00:05:09,400
+ And they still line up on every four bit boundary with base two.
+
+41
+00:05:09,400 --> 00:05:16,900
+ So for now, keep it simple. I tend to have to go through base ten.
+
+42
+00:05:16,900 --> 00:05:19,100
+ You know, we have eight's column now.
+
+43
+00:05:19,100 --> 00:05:27,700
+ So the top line is one eight plus one two, which is ten, eight plus two is ten, and that is a base sixteen.
+
+44
+00:05:27,700 --> 00:05:35,300
+ Eight, which is one zero zero zero is eight base ten and eight base sixteen. So all the numbers zero through nine are easy.
+
+45
+00:05:35,300 --> 00:05:41,300
+ And then all ones one one one one is eight plus four plus two plus one, which is fifteen.
+
+46
+00:05:41,300 --> 00:05:43,500
+ And that's F and base sixteen.
+
+47
+00:05:43,500 --> 00:05:49,800
+ So I've told you that I'm pretty much a whiz at base eight, which is three base two digits.
+
+48
+00:05:49,800 --> 00:05:55,000
+ I can kind of do that in my sleep. I am not very good at base sixteen.
+
+49
+00:05:55,000 --> 00:05:57,800
+ Hopefully you'll be better at it or maybe not.
+
+50
+00:05:57,800 --> 00:06:03,600
+ So this is my this is how I do base sixteen in my head and it's not pretty.
+
+51
+00:06:03,600 --> 00:06:07,300
+ So F is easy because that's fifteen.
+
+52
+00:06:07,300 --> 00:06:11,400
+ That's the largest base sixteen digit and it's all ones. Right.
+
+53
+00:06:11,400 --> 00:06:15,200
+ That's cool. It's base sixteen. F is one less. It's all ones.
+
+54
+00:06:15,200 --> 00:06:19,000
+ If you add one to it, it's it turns into the sixteen column.
+
+55
+00:06:19,000 --> 00:06:25,200
+ So an E I can do E because I just take the all the digits and I take off the one bit.
+
+56
+00:06:25,200 --> 00:06:27,600
+ Right. So that's like fourteen.
+
+57
+00:06:27,600 --> 00:06:32,200
+ I can get that. A is easy because it's like nine.
+
+58
+00:06:32,200 --> 00:06:35,500
+ What's after nine? Oh, it's A. And so I can do that.
+
+59
+00:06:35,500 --> 00:06:42,400
+ So I understand that's ten and B is eleven and is like it's kind of like one beyond A.
+
+60
+00:06:42,400 --> 00:06:47,700
+ And so I can see what B is. I have problems with C and D. Right.
+
+61
+00:06:47,700 --> 00:06:54,300
+ I mean, I eventually have to slow down and use my brain and go A ten B eleven C twelve.
+
+62
+00:06:54,300 --> 00:06:57,300
+ And then I have to convert to base two, which is one one zero.
+
+63
+00:06:57,300 --> 00:06:59,200
+ And then I'm like, oh, that's a plus four. Oh, yeah.
+
+64
+00:06:59,200 --> 00:07:03,500
+ Twelve. Yeah. There you go. And D just makes me crazy. Right.
+
+65
+00:07:03,500 --> 00:07:09,200
+ I sooner or later, sometimes with D, I'm like, oh, what is it?
+
+66
+00:07:09,200 --> 00:07:12,900
+ And then I have to write it down. So for a good time,
+
+67
+00:07:12,900 --> 00:07:20,900
+ you can go ahead and ask AI what is a good way to do hex to base two conversions in your head.
+
+68
+00:07:20,900 --> 00:07:23,800
+ I did that and it was really complex.
+
+69
+00:07:23,800 --> 00:07:27,000
+ So no. So maybe I'm OK by being confused about this.
+
+70
+00:07:27,000 --> 00:07:33,500
+ So just make yourself a little cheat sheet whenever you have to do hex or just get used to it or look at a table.
+
+71
+00:07:33,500 --> 00:07:40,200
+ A lot of what we're going to do is represent characters and characters are asking characters are eight bits
+
+72
+00:07:40,200 --> 00:07:44,800
+ and can really nicely and densely be represented by two hex digits.
+
+73
+00:07:44,800 --> 00:07:48,000
+ We call these half bytes nibbles.
+
+74
+00:07:48,000 --> 00:07:54,500
+ Not that it matters much, but this ASCII chart shows the decimal, the hex
+
+75
+00:07:54,500 --> 00:07:57,000
+ octal, which we tend not to use, and then the binary.
+
+76
+00:07:57,000 --> 00:08:00,700
+ So if you look at forty two, it's kind of small on the screen.
+
+77
+00:08:00,700 --> 00:08:08,100
+ But you see that it's forty two decimal and zero X to a hexadecimal, which is asterisk.
+
+78
+00:08:08,100 --> 00:08:12,900
+ And so I tend to just look these things up and I don't really convert them
+
+79
+00:08:12,900 --> 00:08:17,900
+ and just use hex as a way to look things up in things like ASCII tables.
+
+80
+00:08:17,900 --> 00:08:26,100
+ Now, while we're speaking about ASCII, so ASCII is a historical code set,
+
+81
+00:08:26,100 --> 00:08:32,500
+ basically, that is very Western and really goes back to Latin, really.
+
+82
+00:08:32,500 --> 00:08:39,800
+ And because we have eight bit bytes and the West built computers early on,
+
+83
+00:08:39,800 --> 00:08:43,800
+ we tended to have ASCII character sets were universal across computers.
+
+84
+00:08:43,800 --> 00:08:45,500
+ But that's not real.
+
+85
+00:08:45,500 --> 00:08:51,700
+ There's Asian character sets and Indian character sets and Arabic and Persian character sets.
+
+86
+00:08:51,700 --> 00:08:54,000
+ They're they're all kind of different.
+
+87
+00:08:54,000 --> 00:09:01,400
+ And so what happened was in in the time where computing became a world wide activity,
+
+88
+00:09:01,400 --> 00:09:08,200
+ we needed to come up with a way to interchange characters that are way bigger than eight bits.
+
+89
+00:09:08,200 --> 00:09:11,400
+ And somebody came up with the idea of Unicode.
+
+90
+00:09:11,400 --> 00:09:17,900
+ And Unicode has all kinds of character sets, you know, Latin and ASCII start.
+
+91
+00:09:17,900 --> 00:09:20,400
+ And then they just have all kinds of character sets.
+
+92
+00:09:20,400 --> 00:09:24,500
+ Some of these are Latin characters with like umlauts and all things like that.
+
+93
+00:09:24,500 --> 00:09:28,200
+ And some of them are like Asian characters that are pictograms.
+
+94
+00:09:28,200 --> 00:09:31,400
+ Now, recently, emojis are in Unicode as well.
+
+95
+00:09:31,400 --> 00:09:36,200
+ And so some of the emojis that I've showed you are actually have a Unicode code.
+
+96
+00:09:36,200 --> 00:09:40,400
+ Unicode represents things by 32 bits.
+
+97
+00:09:40,400 --> 00:09:45,900
+ That's pretty large, given that eight bits is how ASCII is represented in Unicode is 32 bits.
+
+98
+00:09:45,900 --> 00:09:51,600
+ But the idea is, is there's a lot of characters sets around this universe.
+
+99
+00:09:51,600 --> 00:09:54,000
+ Now, we're not inventing too many more.
+
+100
+00:09:54,000 --> 00:09:56,800
+ And they did things like added emojis to Unicode.
+
+101
+00:09:56,800 --> 00:10:01,600
+ But basically, 32 bits is like in the billions of possible characters.
+
+102
+00:10:01,600 --> 00:10:03,500
+ So I think we're probably okay.
+
+103
+00:10:03,500 --> 00:10:09,800
+ The problem is, is as we move between computers or store data on hard drives,
+
+104
+00:10:09,800 --> 00:10:13,000
+ we don't really want every character to take up 32 bits.
+
+105
+00:10:13,000 --> 00:10:18,000
+ So for example, Python 3 internally represents strings as Unicode,
+
+106
+00:10:18,000 --> 00:10:20,400
+ which means they're pretty large.
+
+107
+00:10:20,400 --> 00:10:25,300
+ Okay, but then before we stick them on a hard drive or send them across a network,
+
+108
+00:10:25,300 --> 00:10:27,000
+ we condense them.
+
+109
+00:10:27,000 --> 00:10:34,900
+ And there are ways to compress these 32-bit Unicodes into shorter.
+
+110
+00:10:34,900 --> 00:10:38,100
+ So one is UTF-32, which is four-byte stuff.
+
+111
+00:10:38,100 --> 00:10:38,900
+ That's the long one.
+
+112
+00:10:38,900 --> 00:10:40,200
+ It's fixed length.
+
+113
+00:10:40,200 --> 00:10:43,800
+ And it just says we'll take that whole Unicode and send it along.
+
+114
+00:10:43,800 --> 00:10:46,000
+ UTF-16 is fixed length.
+
+115
+00:10:46,000 --> 00:10:47,200
+ It's two bytes.
+
+116
+00:10:47,200 --> 00:10:49,100
+ It's a lot denser.
+
+117
+00:10:49,100 --> 00:10:52,800
+ And there's a mapping.
+
+118
+00:10:52,800 --> 00:10:57,000
+ But the most successful one of these is a thing called UTF-8,
+
+119
+00:10:57,000 --> 00:10:58,600
+ which might not be intuitive.
+
+120
+00:10:58,600 --> 00:11:02,700
+ But basically, UTF-8 is one to four bytes.
+
+121
+00:11:02,700 --> 00:11:08,900
+ And it is for most ASCII, UTF-8 and ASCII are the same things.
+
+122
+00:11:08,900 --> 00:11:11,900
+ And then there's these little extension codes.
+
+123
+00:11:11,900 --> 00:11:15,100
+ I mean, this is a 16-bit code or a 32-bit code.
+
+124
+00:11:15,100 --> 00:11:19,800
+ And so you can represent all of Unicode with UTF-8.
+
+125
+00:11:19,800 --> 00:11:23,400
+ Sometimes you're sending one byte if it's ASCII, sometimes two,
+
+126
+00:11:23,400 --> 00:11:26,300
+ three, and even four bytes are being sent across.
+
+127
+00:11:26,300 --> 00:11:30,900
+ And so UTF-8 is pretty much the practice for encoding data
+
+128
+00:11:30,900 --> 00:11:32,900
+ to be exchanged across systems.
+
+129
+00:11:32,900 --> 00:11:37,600
+ So I've got to have a graph here that sort of shows that in 2008,
+
+130
+00:11:37,600 --> 00:11:39,900
+ there was choices to be made.
+
+131
+00:11:39,900 --> 00:11:44,300
+ But since then, everything is pretty much UTF-8.
+
+132
+00:11:44,300 --> 00:11:48,600
+ And so the point now where systems that are reading and writing data
+
+133
+00:11:48,600 --> 00:11:52,200
+ to disk or the network only pretty much use UTF-8.
+
+134
+00:11:52,200 --> 00:11:54,700
+ And it happens to be ASCII, that works okay.
+
+135
+00:11:54,700 --> 00:11:58,500
+ But what we're doing is we're working on a computer from the 1970s,
+
+136
+00:11:58,500 --> 00:12:01,300
+ which is the 6502 computer.
+
+137
+00:12:01,300 --> 00:12:05,200
+ And so we're going to just accept that it's ASCII for now.
+
+138
+00:12:05,200 --> 00:12:10,000
+ But real computers tend to work in UTF-8 and can convert from ASCII
+
+139
+00:12:10,000 --> 00:12:13,400
+ or Unicode to UTF-8 quite nicely.
+
+140
+00:12:13,400 --> 00:12:23,400
+ [ Music ]
+

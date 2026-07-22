@@ -1,0 +1,158 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.560
+ hello and welcome to another walkthrough for computer architecture for everybody so now what
+
+00:00:04.560 --> 00:00:12.240
+ we're going to do is we're going to do the single instruction CPU and so before we walk through the
+
+00:00:12.240 --> 00:00:19.360
+ counter circuit and the counter basically takes an adder and a register and takes the outputs of the
+
+00:00:19.360 --> 00:00:23.280
+ register one of the inputs of the adder and then hardcodes the other one to one so it's like an
+
+00:00:23.280 --> 00:00:28.160
+ increment instruction okay so it's incrementing whatever was in the register and then we have a
+
+00:00:28.160 --> 00:00:33.760
+ clock and once the clock starts it starts doing its increment thing so you can see it's running low
+
+00:00:33.760 --> 00:00:39.520
+ to high low to high and then it every on every clock pulse the registers goes up by one and the
+
+00:00:39.520 --> 00:00:44.640
+ speed of our clock is one second and again what we did is we made a simple wristwatch but this is
+
+00:00:44.640 --> 00:00:52.400
+ like a wristwatch this is not a programmable CPU so what i talked about in lecture is i talked about
+
+00:00:52.400 --> 00:01:00.000
+ the simplest possible two instruction CPU so we need something where it does something different
+
+00:01:00.000 --> 00:01:07.600
+ based on input from the outside world what did happen there instruction did i type it wrong
+
+00:01:07.600 --> 00:01:15.520
+ yeah okay so here we have an instruction this is the the single instruction computer i'm gonna
+
+00:01:15.520 --> 00:01:23.440
+ let's add another output here so we can watch the clock going high and low just so that you can see
+
+00:01:23.440 --> 00:01:30.400
+ that clock going high and low so the clock is high and so it's copied this in so it's exactly like
+
+00:01:30.400 --> 00:01:37.520
+ the counter except it has some decode logic we think of this in a cpu as decode logic where
+
+00:01:37.520 --> 00:01:44.160
+ we have an instruction and an instruction can be either a zero or a one and when the instruction is
+
+00:01:44.160 --> 00:01:50.800
+ a zero we are clearing the register so let's go ahead and start the clock and so now the register
+
+00:01:50.800 --> 00:01:57.760
+ is zero and so the instruction is zero so the way it works is the output of the adder is in effect
+
+00:01:57.760 --> 00:02:03.040
+ blocked because we're taking the output of an adder and running it through three and gates and
+
+00:02:03.040 --> 00:02:09.840
+ then the input to the register is all zeros when the instruction is zero that's the reset case and
+
+00:02:09.840 --> 00:02:14.800
+ as soon as we set the instruction to one then it becomes an increment instruction and so you can
+
+00:02:14.800 --> 00:02:20.400
+ now see the thing we saw before except the and gates the decode logic is seeing an instruction
+
+00:02:20.400 --> 00:02:26.240
+ that is increment and it's now passing every second it's passing through the data from the
+
+00:02:26.240 --> 00:02:32.000
+ output and now we're doing just the increment but it's incrementing but only when the instruction
+
+00:02:32.000 --> 00:02:37.360
+ is one so that's like one instruction one instruction one instruction one instruction
+
+00:02:37.360 --> 00:02:43.120
+ and now oh now your instruction are a reset and so no matter what the value was as the clock continues
+
+00:02:43.120 --> 00:02:48.000
+ to click it's running reset instructions which is setting the register to zero and again all it's
+
+00:02:48.000 --> 00:02:54.000
+ really doing is every time the clock ticks it's copying from the inputs into the register but
+
+00:02:54.000 --> 00:02:58.880
+ because the and gates are suppressing the output of the adder in a sense they're blocking it and
+
+00:02:58.880 --> 00:03:08.240
+ so let's go ahead and send some increment instructions increment increment increment
+
+00:03:08.240 --> 00:03:16.800
+ increment increment and so you'll see that it copies it and away it goes and so that is our
+
+00:03:16.800 --> 00:03:24.720
+ little two instruction central processing unit with a one second one hertz clock it's adding one
+
+00:03:24.720 --> 00:03:31.600
+ hey so let's just do something fun let's just add two let's uh let's tell it to stop first oh wait
+
+00:03:31.600 --> 00:03:37.840
+ wait oh crap i didn't mean to delete it ah hey wait i can reload it again there we go let's
+
+00:03:37.840 --> 00:03:44.240
+ reload the instruction circuit i deleted it that's a good reason to save and reload it see how easy
+
+00:03:44.240 --> 00:03:50.320
+ that was so let's go ahead and i'll have the clock be off so what i'm going to do is i'm going to
+
+00:03:50.320 --> 00:03:59.680
+ delete this input and i'm going to put the input here on to the two so now we're going to be adding
+
+00:03:59.680 --> 00:04:04.400
+ two it's going to be like two four six eight kind of a thing now we have to put a one here so that's
+
+00:04:04.400 --> 00:04:10.080
+ like b1 is zero b2 is one and b3 is zero so that's adding two so you'll notice we're not even starting
+
+00:04:10.080 --> 00:04:16.080
+ yet because the register has the value of zero inside of it and it's sending that to the adder
+
+00:04:16.080 --> 00:04:22.480
+ and the adder is adding zero on the a's plus two on the b's and so it's got zero plus two so now
+
+00:04:22.480 --> 00:04:27.600
+ we're going to have a counter that counts two four six eight which is too high and overflows and then
+
+00:04:27.600 --> 00:04:32.720
+ two four zero two four six overflow i think is what we're going to get so let's turn this baby on
+
+00:04:32.720 --> 00:04:37.600
+ so the clock is starting but we still are sending the clear instruction so the two is being ignored
+
+00:04:37.600 --> 00:04:43.280
+ because the and gates the decode logic in this little baby cpu is blocking it so let's go ahead
+
+00:04:43.280 --> 00:04:49.760
+ and turn it into the increment and we'll start seeing this thing go up by two zero two clock
+
+00:04:49.760 --> 00:04:57.360
+ clock four so we're making a we're making an adder that counts by twos six the next thing will be
+
+00:04:57.360 --> 00:05:08.640
+ overflow and it's a zero again right and so it goes zero two four six overflow zero two four six
+
+00:05:09.280 --> 00:05:16.160
+ overflow okay so i hope that you found this a little thing interesting you don't have to do it
+
+00:05:16.160 --> 00:05:20.080
+ you could you can build it it's not that hard to build this one's a little hard because you got all
+
+00:05:20.080 --> 00:05:23.840
+ these little wires you got to get them to look pretty but you can always just load one up and
+
+00:05:23.840 --> 00:05:34.000
+ then play with it yourself okay cheers see you on the net
+

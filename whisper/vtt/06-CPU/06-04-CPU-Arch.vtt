@@ -1,0 +1,260 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:07.200
+ Hello and welcome to our lecture on the CDC 6504 architecture. So as you'll soon see, this is a
+
+00:00:07.200 --> 00:00:12.560
+ blend of two names so that I can avoid confusion with the actual processor that you're simulating.
+
+00:00:12.560 --> 00:00:21.200
+ So the processor that we're simulating is the MOS Technology 6502. There are many microprocessors
+
+00:00:21.200 --> 00:00:28.080
+ that have deep historical significance. The 6502 is a very significant processor in terms of the
+
+00:00:28.080 --> 00:00:34.960
+ history of CPU architecture and its evolution. It was launched in 1975 and the key to it was low
+
+00:00:34.960 --> 00:00:42.000
+ cost of manufacture. It was simple. It only had four thousand transistors. Remember the Intel 4004
+
+00:00:42.000 --> 00:00:47.440
+ had two thousand three hundred transistors. This ran into megahertz and they kept the price low at
+
+00:00:47.440 --> 00:00:54.080
+ twenty five dollars. So it just allowed a whole series of hobbyist computers like the Apple One.
+
+00:00:54.080 --> 00:01:00.560
+ That was a hobbyist computer. And so it sort of just opened up a whole bunch of things.
+
+00:01:00.560 --> 00:01:07.120
+ And so the problem is, is that if I name my emulator the 6502 emulator, it would get lost
+
+00:01:07.120 --> 00:01:16.080
+ in all of the confusion. So I changed it to the CDC 6504 to pay homage to the first computer that
+
+00:01:16.080 --> 00:01:23.200
+ I ever used in the 1970s from Control Data Corporation. I learned Fortran on it. I learned
+
+00:01:23.200 --> 00:01:27.200
+ assembly language on it. I learned machine language on it. And I have a picture here
+
+00:01:27.200 --> 00:01:32.240
+ of a running version of this computer at the Living Computer Museum in Seattle,
+
+00:01:32.240 --> 00:01:38.160
+ Washington that sadly is now closed after Paul Allen passed away. But I have a video that I
+
+00:01:38.160 --> 00:01:46.720
+ will share with you that is a video of a running CDC 6500 from a couple of years ago. I further was
+
+00:01:46.720 --> 00:01:56.000
+ lucky to meet an important influencer in the CDC 6500 history, Nicholas Werth, and he invented
+
+00:01:56.000 --> 00:02:04.000
+ Pascal. I used Pascal. I supported the Pascal compiler. It was a really important part of my
+
+00:02:04.000 --> 00:02:11.760
+ own sort of education was to build compilers. And so I'm going to show you an artifact from
+
+00:02:11.760 --> 00:02:17.840
+ that time period. So this is from-- I don't know if you can see it. Let's see if you can see it
+
+00:02:17.840 --> 00:02:26.960
+ here. This is from-- yeah, there you go-- 1980. This was a one-year project in computer science
+
+00:02:26.960 --> 00:02:34.720
+ where I-- this is assembly language from the CDC 6500. This is a compiler and an optimizer,
+
+00:02:34.720 --> 00:02:40.880
+ and so it was written in Fortran. These are line printers. Let's see if I can find something
+
+00:02:40.880 --> 00:02:47.040
+ interesting to show you with all kinds of documentation. And so we wrote all this stuff
+
+00:02:47.040 --> 00:02:54.480
+ in 1979 and 1980. It was a two-student project, and I have kept it for all this time.
+
+00:02:54.480 --> 00:03:04.880
+ There we go. So that's an artifact from the CDC 6500. And again, I named the CDC 6504
+
+00:03:04.880 --> 00:03:11.280
+ just so I had something to search on. So this is the architecture of the CDC 6504.
+
+00:03:11.280 --> 00:03:16.000
+ And the first thing you have to understand is the registers. And when you start using this
+
+00:03:16.000 --> 00:03:20.800
+ interactively online, you'll be reading these registers. So the most important register, the
+
+00:03:20.800 --> 00:03:27.040
+ what next register, is the program counter, also known as the PC. As we've seen in some earlier
+
+00:03:27.040 --> 00:03:31.680
+ lectures, there's the current instruction register, which is important. And it often is not shown on
+
+00:03:31.680 --> 00:03:37.920
+ architecture diagrams, even though it's very important. The accumulator. So the CDC 6504 and
+
+00:03:37.920 --> 00:03:45.200
+ the 6502 is an accumulator-based system. And that's sort of like the most power. They have one single
+
+00:03:45.200 --> 00:03:52.320
+ most powerful register, and that is the accumulator. As you do operations, they set flags after every
+
+00:03:52.320 --> 00:03:57.840
+ operation so that you can do if tests. So was the last result zero? Was the last result negative?
+
+00:03:57.840 --> 00:04:02.640
+ It has two more registers that are a little less powerful than the accumulator called the X and Y
+
+00:04:02.640 --> 00:04:08.880
+ registers. And on the emulator itself that I've built, it shows the instructions in base two,
+
+00:04:08.880 --> 00:04:14.320
+ which makes it easier to decode. And the data memory will be shown in hex, given that most of
+
+00:04:14.320 --> 00:04:21.840
+ the time we're just going to be putting characters into the data memory. So we program the CDC 6504
+
+00:04:21.840 --> 00:04:27.280
+ in machine language. And so there's some really good documentation that is that I built with the
+
+00:04:27.280 --> 00:04:33.520
+ help of AI. So this is a similar language for the clear instruction, clear X, increment X,
+
+00:04:33.520 --> 00:04:40.160
+ et cetera, et cetera. So we'll cover these in much more detail. So let's start right away
+
+00:04:40.160 --> 00:04:47.600
+ with our first program. So you can kind of go back. So our program is going to compute one plus one
+
+00:04:47.600 --> 00:04:57.520
+ equals two in the X register. So the PC tells the system where to retrieve the next instruction from.
+
+00:04:57.520 --> 00:05:01.760
+ So when the program, when the computer starts, before we start it running,
+
+00:05:01.760 --> 00:05:08.480
+ the PC starts at zero. And so the first instruction is one, one, one, zero, zero, one, zero,
+
+00:05:08.480 --> 00:05:14.400
+ which is clearing the X register. Now the system starts at zeros in there, but it's probably smart
+
+00:05:14.400 --> 00:05:19.920
+ just to clear it anywhere, anyway. Then it has two increment instructions, and then it has an all
+
+00:05:19.920 --> 00:05:27.600
+ zeros instruction, which says stop. Okay. So let's walk this through. So when the first execution of
+
+00:05:27.600 --> 00:05:33.760
+ the first instruction is done, well, that sets the X register to zero. But then the side effect of
+
+00:05:33.760 --> 00:05:40.960
+ that is to increment the PC register to one and then run that instruction. And so when that
+
+00:05:40.960 --> 00:05:47.120
+ instruction runs, we increment X. And so you can see that X is now incremented to one. But then once
+
+00:05:47.120 --> 00:05:53.920
+ that instruction is run, then it moves to the O2 instruction. And that is also an increment,
+
+00:05:53.920 --> 00:05:59.600
+ which it reads, and then it increments X to two. And then it runs to the last instruction, which is
+
+00:05:59.600 --> 00:06:06.720
+ a break. And then that stops our program. So it runs, runs three instructions, and then stops.
+
+00:06:08.480 --> 00:06:14.400
+ So at this point, you might say to yourself, "Oh, wait a second. This seems familiar."
+
+00:06:14.400 --> 00:06:23.760
+ Clearing a register and incrementing a register, and then stopping, that's something we've done
+
+00:06:23.760 --> 00:06:30.640
+ before. Literally, in previous lectures, you have built a two instruction computer with a latch,
+
+00:06:30.640 --> 00:06:37.440
+ and an adder, and a clock. And so you can say, "Oh, well, what is this?" Well, the register is
+
+00:06:37.440 --> 00:06:44.320
+ like the latch. The adder is the thing that does the increment for us, because the latch's output
+
+00:06:44.320 --> 00:06:50.640
+ goes into the adder, and we've hard-coded a one to the other input of the adder. And then we have a
+
+00:06:50.640 --> 00:06:56.960
+ clock that decides when things are going to run. And then we have an instruction, which is either
+
+00:06:56.960 --> 00:07:03.600
+ zero or one. This is a one-bit computer, right? And the thing that I complained about several times
+
+00:07:03.600 --> 00:07:08.080
+ in previous lectures is that it's not reading instructions from memory. What we just got done
+
+00:07:08.080 --> 00:07:12.160
+ doing is reading instructions from memory. And then there's the decode logic, which is always
+
+00:07:12.160 --> 00:07:16.560
+ a difficult thing for students to understand, where it is looking at literally the bits of
+
+00:07:16.560 --> 00:07:24.240
+ the instruction and using AND gates and OR gates, actually enabling or disabling parts of the
+
+00:07:24.240 --> 00:07:30.560
+ processor. So the increment instruction, or the loading into the latch based on the clock,
+
+00:07:30.560 --> 00:07:37.520
+ is turned off based on the instruction. So the decoding, and if you look at the decoding of a
+
+00:07:37.520 --> 00:07:46.000
+ typical microprocessor, it's like a whole city block, right? And so the instructions in a real
+
+00:07:46.000 --> 00:07:53.520
+ computer sitting in memory, the decoding has to look at all eight of those bits in our 6502,
+
+00:07:53.520 --> 00:08:00.240
+ and it has to send all those bits to various places to turn on and off elements of the registers
+
+00:08:00.240 --> 00:08:05.840
+ and elements of the arithmetic logic unit. And so we had it, this is eight-bit instructions,
+
+00:08:05.840 --> 00:08:10.960
+ which means we have a whole bunch of things that we can do and control. Now,
+
+00:08:10.960 --> 00:08:18.400
+ if you think about it, at this point, if you had enough time,
+
+00:08:18.400 --> 00:08:28.560
+ you could build a CDC 6504 and manufacturing capability. Because if you go to that simple CPU
+
+00:08:29.360 --> 00:08:37.040
+ and that simple CPU, the latch, the adder, and the clock can be mapped to transistors,
+
+00:08:37.040 --> 00:08:43.360
+ because underneath them they're transistors, and we covered that. And then we showed you how to make
+
+00:08:43.360 --> 00:08:49.520
+ VLSI logic design, where you can lay out in a two-dimensional grid different materials that
+
+00:08:49.520 --> 00:08:57.360
+ cause transistors, right? And then all you would need is a billion dollar personal manufacturing
+
+00:08:57.360 --> 00:09:06.000
+ facility to turn those transistor layouts into chips. And then you could cut those chips up,
+
+00:09:06.000 --> 00:09:14.240
+ and then you could manufacture a 6502. Now, the goal of this course is not for you to go
+
+00:09:14.240 --> 00:09:20.000
+ and build a two billion dollar microprocessor fabrication facility, but to understand that
+
+00:09:20.000 --> 00:09:29.600
+ really you know the essence of the entire process to build a complex CPU and produce it. It's
+
+00:09:29.600 --> 00:09:35.200
+ possible, and you understand the basics of it. So up next we're just going to start going into
+
+00:09:35.200 --> 00:09:48.160
+ more detail of the entire machine language.
+

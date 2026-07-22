@@ -1,0 +1,44 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:08.660
+ so hello everybody I'm coming you to you from Firewell Lake I just got the boat
+
+00:00:08.660 --> 00:00:15.200
+ out of storage and taking it so the next section you're working on is about
+
+00:00:15.200 --> 00:00:19.640
+ clocks about circuits that are clocked it's about timing the timing is it's
+
+00:00:19.640 --> 00:00:24.400
+ spring it's time to get the boat out clock stuff may seem a little bit weird
+
+00:00:24.400 --> 00:00:29.960
+ to you it has to do with as circuits get longer and more complex we to predict
+
+00:00:29.960 --> 00:00:34.360
+ the output to make sure we don't have tiny errors creeping in we have to wait
+
+00:00:34.360 --> 00:00:38.320
+ until the circuit stabilizes and everything you've seen so far everything
+
+00:00:38.320 --> 00:00:42.600
+ seems instant but nothing is really instant and so clocks has to do with
+
+00:00:42.600 --> 00:00:46.840
+ measuring sort of the worst-case propagation delay and setting a clock
+
+00:00:46.840 --> 00:00:51.320
+ rate and using the clock rate or certain values to stabilize to a zero or a one
+
+00:00:51.320 --> 00:00:56.680
+ and then we grab them okay so this section is a little weird but it's an
+
+00:00:56.680 --> 00:01:01.640
+ essential part of computers an essential part of the fetch execute cycle and
+
+00:01:01.640 --> 00:01:04.800
+ then we're going to after this we're going to work into the fetch execute
+
+00:01:04.800 --> 00:01:07.800
+ cycle cheers
+
