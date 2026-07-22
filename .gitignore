@@ -7,4 +7,9 @@ a.out
 *.s
 mod/*
 book-en/build
+__pycache__
+.whisper-tmp
+youtube/client_secret.json
+youtube/youtube-oauth-token.json
+**/client_secret*.json
 

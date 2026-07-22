@@ -1,0 +1,150 @@
+# Course / branding
+Computer Architecture for Everybody
+CA4E
+Dr. Chuck
+Chuck Severance
+
+# General computing
+computer architecture
+hardware
+software
+firmware
+analog
+digital
+iteration
+abstraction
+binary
+bit
+bits
+byte
+bytes
+hex
+hexadecimal
+opcode
+operand
+mnemonic
+instruction
+instruction set
+register
+accumulator
+program counter
+address bus
+data bus
+control bus
+clock cycle
+fetch decode execute cycle
+
+# History / origins
+Stonehenge
+slide rule
+abacus
+Napier
+Babbage
+Ada Lovelace
+Boolean algebra
+George Boole
+
+# Electronics / solid state
+vacuum tube
+vacuum tubes
+thermionic
+transistor
+transistors
+semiconductor
+semiconductors
+silicon
+silicon wafer
+wafer
+wafers
+integrated circuit
+integrated circuits
+solid state
+CMOS
+MOSFET
+PMOS
+NMOS
+gate oxide
+dopant
+diffusion
+photolithography
+mask
+masks
+die
+dies
+fab
+fabrication
+VLSI
+very large scale integration
+
+# Logic
+logic gate
+logic gates
+AND gate
+OR gate
+NOT gate
+NAND gate
+NOR gate
+XOR gate
+truth table
+combinational logic
+sequential logic
+latch
+latches
+flip-flop
+flip-flops
+half adder
+full adder
+counter
+register file
+
+# CPU / assembly
+CPU
+ALU
+arithmetic logic unit
+machine language
+assembly language
+assembler
+microcode
+instruction decoder
+branch
+jump
+conditional branch
+memory map
+load store
+immediate value
+
+# Number systems / coding
+base two
+base ten
+base sixteen
+two's complement
+ASCII
+Unicode
+character encoding
+
+# Course-specific processor / emulator terms
+6504
+6502
+CDC 6504
+emulator
+simulator
+UI walkthrough
+for loop
+if test
+uppercase
+
+# Web / modern tools
+WASM
+WAT
+WebAssembly
+JavaScript
+C language
+hello world
+
+# Teaching vocabulary
+office hours
+lecture
+quiz
+assignment
+autograder
+

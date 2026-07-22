@@ -1,0 +1,1046 @@
+course_root: /Users/csev/htdocs/ca4e
+media_root: /Users/csev/Desktop/teach/ca4e-media
+whisper_root: /Users/csev/htdocs/ca4e/whisper
+youtube_dir: /Users/csev/htdocs/ca4e/youtube
+youtube_playlist: https://www.youtube.com/playlist?list=PLa58EAvBOOSJjrzDrl9eVigR5SQQ0W-3D
+kaltura_partner_id: '1038472'
+kaltura_service_url: https://www.kaltura.com
+kaltura_category_id: null
+kaltura_playlist_id: 1_p8621h63
+course_hint: Computer Architecture for Everybody, CA4E, computer architecture, hardware, digital logic, VLSI, Dr. Chuck, Chuck Severance
+title_prefix: CA
+extra_tags: ca4e, ca4e-lecture
+extra_description: For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+entries:
+  00-Welcome/00-01-Intro-NoBrand.m4v:
+    title: CA 00 01 Intro NoBrand (3:32)
+    ai_title: null
+    youtube_id: null
+    kaltura_id: null
+    size: 255222702
+    md5: bc6de72f6d5014cf2a882be8a63e4a73
+    duration: 212
+    duration_text: 03:32
+    container_creation: '2026-03-26T00:59:44Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  00-Welcome/00-01-Intro.m4v:
+    title: CA 00 01 Intro (3:32)
+    ai_title: null
+    youtube_id: null
+    kaltura_id: null
+    size: 255270121
+    md5: 7ae914b12d82c968dcf16e869282f279
+    duration: 212
+    duration_text: 03:32
+    container_creation: '2026-02-28T23:08:16Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  01-Origins/01-01-Origins-StoneHenge.m4v:
+    title: 'CA Origins of Data, Computing: Lines, Curves, and Numbers - Part 1 (11:04)'
+    ai_title: null
+    youtube_id: TorNiFp_hyY
+    kaltura_id: 1_fow2em5j
+    size: 785531092
+    md5: e0f57a1692d69c4d899191184768d30e
+    duration: 664
+    duration_text: 11:04
+    container_creation: '2025-10-27T04:17:57Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this video we look at how ancient humans tried to measure and understand the movent of the sun, moon, stars and other objects in the sky.  We look at Stonehenge as an early "data table" of solar and lunar movements throughout a 12-month period.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      Gordon Lightfoot -  Summertime Dream Album: https://amzn.to/49nOyIJ
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  01-Origins/01-02-Origins-SlideRule.m4v:
+    title: CA Exploring Analog / Continuous Computing Devices - Part 2 (14:14)
+    ai_title: null
+    youtube_id: BruoDcgZzPQ
+    kaltura_id: 1_610claom
+    size: 1074086186
+    md5: cde48fae8dd32ce9c3ea41f39a2a2ba1
+    duration: 854
+    duration_text: 14:14
+    container_creation: '2025-10-27T15:48:09Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this video we look at analog computing devices that use mechanical mechanisms like slides, gears or rotation to do complex calculations physically.  Precision construction and precise scales on these devices is an important aspect of continuous analog computation devices.  We look at the Antikythera, Slide Rule, and the E6B calculator that pilots use to compute how airplanes adjust their heading to compensate for winds while in the air.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      Antikythera Solar System Model on Amazon: https://amzn.to/430lHGz
+
+      E6B Pilot Calculator on Amazon: https://amzn.to/47vQvR7
+
+      A book about Slide Rules on Amazon: https://amzn.to/47JW9A4
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  01-Origins/01-03-Origins-Digital.m4v:
+    title: CA Exploring Physical Digital Devices - Part 3 (11:03)
+    ai_title: null
+    youtube_id: w5eWEZ4o6KM
+    kaltura_id: 1_bznlkgqc
+    size: 828774686
+    md5: 9c98c7ede73e79a4efa7e0e32dab1c07
+    duration: 663
+    duration_text: 11:03
+    container_creation: '2025-10-30T13:24:15Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      We look at the abstraction that identifies a device as digital.  A "digital" device has two stable states and with some input can be changed from one state to another.  We look at retractable pens, simple pocket adders, the Babbage Engine, and Human Computers.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  01-Origins/01-04-Origins-Iteration.m4v:
+    title: CA Exploring Hardware Iteration - Part 4 (10:58)
+    ai_title: null
+    youtube_id: Um4UyGvlc44
+    kaltura_id: 1_kdbma5ga
+    size: 822018160
+    md5: a4ea3718c1c36000d0c3722855dbe0f7
+    duration: 658
+    duration_text: 10:58
+    container_creation: '2025-11-10T03:10:06Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this video we look at how the addition of motors or cranks can speed up calculations.  Doing calculations over and over is iteration.  We look at the BOMBE, Colossus, Human Computers and the IBM 7090 from the Hidden Figures movie as examples of  Iteration in digital devices.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  02-SolidState/02-01-SolidState-Tubes.m4v:
+    title: 'CA Solid State: Starting with Tubes - Part 1 (10:29)'
+    ai_title: null
+    youtube_id: eRDh3t1QL5Y
+    kaltura_id: 1_1inn4m1p
+    size: 701366714
+    md5: fb488be62d1e27f9c690b46a31f8cc30
+    duration: 629
+    duration_text: 10:29
+    container_creation: '2025-11-03T22:12:47Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      We look at the late 1940's digital technology and the transmission from relays to Tubes.    We continue on the theme of "what makes a device digital?" given that all devices are inherently analog.  We talk about indeterminate states between 0 and 1 and how tubes can be tuned to work well in digital applications.   
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  02-SolidState/02-02-SolidState-Transistor.m4v:
+    title: 'CA Solid State: From Tubes to Transistors - Part 2 (10:23)'
+    ai_title: null
+    youtube_id: V1BzdYrDakI
+    kaltura_id: 1_wx51l1xo
+    size: 688186842
+    md5: 9fabeb54c719f9cac2b7666ced469c74
+    duration: 623
+    duration_text: 10:23
+    container_creation: '2026-03-19T14:53:54Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      We look at the invention of transistors and the relationship between tubes and transistors.  We look at how the transistor enabled portable battery powered radio receivers and ho transistors are used in an analog audio amplification application.  We look at how transistors and their manufacturing evolved from BJT (Binary Junction Transistors) to NMOS,  PMOS, and eventually CMOS (Complimentary Metal on Silicon) that is in use inc chips today.  We look at how BJT transistors differ from digital transistors like NMOS and PMOS.
+
+      We bid a fond farewell to tubes acknowledging their contribution to high-end audio amplifiers and how pretty they look in Nixie tube clocks.
+
+      After this lecture we focus on transistors and adding the gate abstraction on top of transistors that allows us to design digital circuits without concern for the underlying transistor technology (BJT, PMOS, NMOS, CMOS).
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  02-SolidState/02-03-SolidState-Gates.m4v:
+    title: 'CA Solid State: From Transistors to Gates - Part 3 (17:28)'
+    ai_title: null
+    youtube_id: -qNm_MewmzM
+    kaltura_id: 1_4bltz2at
+    size: 565291816
+    md5: 8abd5e611d6fe8bb5556faef9df71155
+    duration: 1048
+    duration_text: 17:28
+    container_creation: '2026-03-31T23:53:19Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this lecture we explore the logic gate abstraction that we use to design digital circuity without worrying about the underlying transistor technology.  We look a the evolution from PMOS to NMOS to CMOS and how to implement a Not gate in each of those technologies.  We look at Note, And, Or, Exlcusive Or, Nand and Nor gates and then use an interactive CMOS 
+      layout tool to build Not and Nor gates.
+
+      CMOS Layout Tool: https://www.ca4e.com/tools/cmos/
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  02-SolidState/02-10-SolidState-CMOS-Nor.m4v:
+    title: CA Building a CMOS Nor Gate From Transistors (7:28)
+    ai_title: null
+    youtube_id: DBtucp_ukSE
+    kaltura_id: 1_fexo85bi
+    size: 210883211
+    md5: 6d9933cc91556bb06a440c7cf399f192
+    duration: 448
+    duration_text: 07:28
+    container_creation: '2026-03-16T12:34:00Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For more information and assessment and the CMOS layout editor used in this demonstration, see www.ca4e.com.
+
+      In this walk through, we build a CMOS NOR gate step by step using the CMOS layout editor from Computer Architecture for Everybody. This video serves both as an assignment example and a guided tour of the layout tool’s core features.
+
+      You’ll learn how to:
+
+      Add switches for inputs and probes for outputs
+
+      Place and wire NMOS and PMOS transistors
+
+      Understand how CMOS behavior maps directly to logic gates
+
+      Save and reload circuits using browser-based local storage
+
+      We follow the reference diagram from lecture, test all input combinations, and verify that the circuit behaves exactly as a NOR gate should—outputting HIGH only when both inputs are LOW.
+
+      This video is ideal if you’re:
+
+      Working through the CMOS layout assignment
+
+      Learning how NMOS and PMOS devices work together
+
+      Wanting a visual, hands-on approach to digital logic
+
+      Cheers, and happy building!
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  03-VLSI/03-04-SolidState-Wafers.m4v:
+    title: 'CA Solid State: From Transistors to Wafers - Part 4 (9:18)'
+    ai_title: null
+    youtube_id: z4U3el4fgXo
+    kaltura_id: 1_kwcvdjq0
+    size: 700122317
+    md5: 5da9f193a10e113f43a587f4e8a3c43a
+    duration: 558
+    duration_text: 09:18
+    container_creation: '2025-11-17T15:03:15Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this lecture we explore how transistor manufacturing went from bipolar junction transistors, to planar transistors and eventually photo-lithography and wafer scale manufacturing.  All of these innovations meant that transistors became smaller, denser and less expensive to make.  Coupling that with the improvements in power consumption and heat, led to the almost exponential increase in computing power from the 1950's to the present.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  03-VLSI/03-05-SolidState-VLSI.m4v:
+    title: 'CA Solid State: VLSI Design Layout - Part 5 (10:44)'
+    ai_title: null
+    youtube_id: 8pVwRnKecgc
+    kaltura_id: 1_leysuek6
+    size: 188388819
+    md5: 61c9e6c193576fbd6c8153428159447e
+    duration: 644
+    duration_text: 10:44
+    container_creation: '2026-04-07T19:17:13Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this lecture we explore the Mistic VLSI layout tool and construct a NOT and NAND gate using the tool.  Mistic can lay out Metal, Polysilicon, N-Doped silicon and P-Doped silicon and includes a simple circuit emulator.  Mistic works in the browser and is inspired by the open source Magic VLSI layout tool and circuit emulator developed at Berkeley in the 1980's.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      03 05 SolidState VLSI
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  03-VLSI/03-11-SolidState-VLSI-Not.m4v:
+    title: CA VLSI Not Gate Layout (8:29)
+    ai_title: null
+    youtube_id: qdpnzRvoGtk
+    kaltura_id: 1_ksiszsir
+    size: 118027184
+    md5: 16f784aa62495f854d7915d6bfb8258e
+    duration: 509
+    duration_text: 08:29
+    container_creation: '2026-02-02T14:32:11Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For more information and assessment and the VLSI layout editor used in this demonstration, see www.ca4e.com.
+
+      In this walk through, we explore the VLSI layout design tool used in Computer Architecture for Everybody, where circuits are built by painting layers that model real photolithography-based chip fabrication.
+
+      Using a CMOS NOT gate as an example, this video shows how:
+
+      P-diffusion, N-diffusion, polysilicon, and metal layers interact
+
+      Transistors are formed at diffusion–polysilicon intersections
+
+      Vias connect layers in a true 3-D layout
+
+      Voltage and ground propagate through metal and diffusion
+
+      CMOS behavior emerges naturally from the physical layout
+
+      We build the NOT gate from scratch, test its behavior by toggling inputs, and submit it to the autograder to verify correctness.
+
+      The walkthrough also demonstrates advanced tool features, including:
+
+      Layer inspection with the layer viewer
+
+      Saving and loading circuits using browser local storage
+
+      Automatically reading a circuit as commands
+
+      Manually editing layouts using the built-in command line
+
+      This video is ideal for students who want a deeper, more physical understanding of how logic gates become silicon, and how VLSI layout connects device physics to digital logic.
+
+      Cheers, and happy designing.
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  03-VLSI/03-12-SolidState-VLSI-Nand.m4v:
+    title: CA VLSI NAND Gate Layout | Computer Architecture for Everybody (7:45)
+    ai_title: null
+    youtube_id: wb3MH8Lr6oM
+    kaltura_id: 1_pkn1ymlh
+    size: 118193554
+    md5: aed3d55cff36cabacdf05570c8d89bc1
+    duration: 465
+    duration_text: 07:45
+    container_creation: '2026-02-02T14:48:07Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For more information and assessment and the VLSI layout editor used in this demonstration, see www.ca4e.com.
+
+      In this walkthrough, we build a CMOS NAND gate step by step using the VLSI layout design tool from Computer Architecture for Everybody.
+
+      Starting from the reference diagram, we lay out:
+
+      PMOS transistors in parallel connected to VDD
+
+      NMOS transistors in series connected to ground
+
+      Polysilicon gates that form the transistors
+
+      Metal routing and vias to connect layers correctly
+
+      Along the way, we route inputs A and B, create a labeled output Q, and test the circuit by manually applying voltages to verify the NAND truth table. Once complete, we submit the design to the autograder, which checks all input combinations and confirms correct behavior.
+
+      This walkthrough focuses on:
+
+      Translating logic diagrams into physical VLSI layouts
+
+      Understanding how CMOS structure enforces logic behavior
+
+      Practical layout techniques like spacing, routing, and fixing mistakes
+
+      Building confidence with slightly more complex gates
+
+      If you’re learning how logic gates become silicon—or want hands-on practice with CMOS layout—this video is for you.
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  04-DigitalLogic/04-01-Digital-Arch.m4v:
+    title: 'CA Digital Logic: Computer Architecture - Part 1 (7:23)'
+    ai_title: null
+    youtube_id: nZlKs4_ic14
+    kaltura_id: 1_4jrcs6pw
+    size: 479695487
+    md5: 71c12db87350985065411f457200bb54
+    duration: 443
+    duration_text: 07:23
+    container_creation: '2025-11-12T05:52:23Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this lecture we switch to talking mostly about gates.  Starting with gates we will move from half adders all the way up to a complete but very simple CPU.  This and following lectures build on the foundation of the first half of the class.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  04-DigitalLogic/04-02-Digital-Gates.m4v:
+    title: 'CA Digital Logic: Adding Numbers with Gates - Part 2 (14:04)'
+    ai_title: null
+    youtube_id: hkeYhDXvc2k
+    kaltura_id: 1_gzb9v2hm
+    size: 585351589
+    md5: 496fb605a71d803c8cc4bc96d44c95ab
+    duration: 844
+    duration_text: 14:04
+    container_creation: '2025-11-12T03:24:02Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this lecture we focus on representing numbers with 0's and 1's using base-2.  Then we look at who we can add base-2 numbers with gates (and transistors) using half-adder and full adder circuits.   We ultimately explore a reusable three-bit adder component.  Nixie tubes make a reappearance in the "Nixie Challenge" - a game to learn base-2 conversions.  There is also a game called "Truth" that helps students learn the truth tables of the various logic gates.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  04-DigitalLogic/04-03-Digital-Latch.m4v:
+    title: 'CA Digital Logic: Storing Data with Gates - Part 3 (11:07)'
+    ai_title: null
+    youtube_id: a_EjfUA0Fpc
+    kaltura_id: 1_s7o4ivrz
+    size: 528111660
+    md5: bd8c1bb36925f95ac93561fc4ec5de6f
+    duration: 667
+    duration_text: 11:07
+    container_creation: '2025-11-12T06:07:58Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this lecture we look at how we can create feedback loops taking the outputs of gates and feeding them into inputs of gates.   We look at SR latches, Gated D latches and eventually construct a three-bit register component.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  04-DigitalLogic/04-11-Digital-Gates-Tool.m4v:
+    title: CA Gates Layout Tool Walkthrough (5:45)
+    ai_title: null
+    youtube_id: t3zuq1fu_mA
+    kaltura_id: 1_e7a22wyt
+    size: 101268718
+    md5: 60e92efda216efc1c3422f343ba97d6b
+    duration: 345
+    duration_text: 05:45
+    container_creation: '2026-02-02T14:52:21Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this walkthrough for Computer Architecture for Everybody, we explore the Gates Layout and Simulation Tool and demonstrate how to build, connect, and experiment with digital logic circuits.
+
+      The video covers a wide range of features, including placing inputs and outputs, logic gates, adders, latches, and visual components like Nixie displays. We look at how to wire circuits, rename and tag signals, use automatic layout and waypoints to improve readability, and understand how higher-level components ultimately map down to transistors.
+
+      You’ll also see how to save and load circuits using browser local storage, edit existing designs, and experiment safely without losing your work. The walkthrough briefly touches on accessibility features, command-based component placement, and circuit simulation behavior.
+
+      This video is designed to give you a practical introduction to the Gates Layout Tool and help you feel comfortable experimenting with logic circuits as you move deeper into computer architecture concepts.
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  04-DigitalLogic/04-12-Digital-Gates-And.m4v:
+    title: CA Autograded AND Gate Assignment Walkthrough (2:52)
+    ai_title: null
+    youtube_id: Q_e187MplhI
+    kaltura_id: 1_0k5c2ot8
+    size: 54995414
+    md5: 8ea7427b388d9c080a9e6881676fc389
+    duration: 172
+    duration_text: 02:52
+    container_creation: '2026-02-02T14:59:25Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      You can see additional materials and assessments at www.ca4e.com
+
+      In this walkthrough for Computer Architecture for Everybody, we complete a simple autograded logic assignment by building a two-input AND gate with one output.
+
+      The video shows how to place components using both the palette and the command interface, connect inputs and outputs, and test the circuit interactively. We then walk through the autograder process, including common mistakes such as missing or incorrect signal labels, and how to fix them using the tag tool.
+
+      You’ll see how the autograder checks for required components, verifies correct labeling (A, B, and Q), evaluates the truth table, and finally sends the grade back to the learning management system.
+
+      This walkthrough is designed to help you understand not just how to build the circuit, but how the assignment and grading system works, so you know exactly what the tool is looking for and how to succeed on similar exercises.
+
+      Cheers, and happy building!
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  04-DigitalLogic/04-13-Digital-Gates-Half.m4v:
+    title: CA Half Adder Assignment Walkthrough (3:19)
+    ai_title: null
+    youtube_id: 1rFMW0ubwp8
+    kaltura_id: 1_rdpvasr0
+    size: 62179050
+    md5: b257194aa2b1672a23ed81ee7201e400
+    duration: 199
+    duration_text: 03:19
+    container_creation: '2026-02-02T15:10:15Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For additional course materials and assessments, please see www.ca4e.com.
+
+      In this walkthrough for Computer Architecture for Everybody, we build and autograde a half adder using the Gates Layout Tool.
+
+      The video walks step by step through the assignment, starting from the reference diagram and implementing the circuit using an exclusive OR (XOR) gate for the sum and an AND gate for the carry out. We connect inputs A and B to both gates, label all required signals, and verify the circuit by manually testing the truth table.
+
+      You’ll see how the sum and carry outputs behave for all input combinations, how to fix common labeling mistakes, and how the autograder validates both the circuit structure and its logic before sending the grade back to the learning management system.
+
+      This walkthrough is designed to reinforce how half adders work at a logical level while showing exactly what the assignment expects and how to succeed.
+
+      I hope you find this half adder walkthrough helpful—happy building!
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  05-Clock/05-00-Hi.m4v:
+    title: CA Welcome to Clocked Circuits (1:11)
+    ai_title: null
+    youtube_id: YOwm_Ux9zKQ
+    kaltura_id: 1_axapkz7p
+    size: 90010097
+    md5: d5b2f81c60a559b4419a6670c0cc5d57
+    duration: 71
+    duration_text: 01:11
+    container_creation: '2026-04-16T04:20:48Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      This is a quick intro to the Clocked Circuits module in Computer Architecture for Everybody.
+
+      https://online.dr-chuck.com/
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  05-Clock/05-04-Digital-Clock.m4v:
+    title: 'CA Digital Logic: Clocked Circuits and Clock Rates - Part 4 (7:34)'
+    ai_title: null
+    youtube_id: 7HeXWTR6kxc
+    kaltura_id: 1_is6b1sa2
+    size: 293187281
+    md5: 9b4474c28cc2a9b778f97e907bc0239f
+    duration: 454
+    duration_text: 07:34
+    container_creation: '2025-11-13T05:09:56Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this lecture we look at how how delay and speed is measured in circuits.  Once the delay in a particular CPU is determined, it is used to choose a clock rate for the circuit.  We take a quick look at Moore's Law where for a relatively long period transistor density doubled approximately every two years.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  05-Clock/05-05-Digital-CPU.m4v:
+    title: 'CA Digital: Building a Two Instruction CPU with Gates - Part 5 (9:49)'
+    ai_title: null
+    youtube_id: MmIEGsTQp-Q
+    kaltura_id: 1_9f9253pr
+    size: 396183246
+    md5: 4a7dc30a328aa3a5d95cd7eb03de96b8
+    duration: 589
+    duration_text: 09:49
+    container_creation: '2025-11-13T15:57:36Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this lecture we build a CPU that executes one instruction per second.  The CPU as a single three-bit register and supports two instructions.  One instruction increments the current value in the register and the other instruction resets the register to zero.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  05-Clock/05-06-Digital-Code.m4v:
+    title: 'CA Digital: CPU Architecture - Storing Code in Memory - Part 6 (4:17)'
+    ai_title: null
+    youtube_id: fM0-1Hc8vKM
+    kaltura_id: 1_m8wwvl1l
+    size: 213243267
+    md5: dc64b2efd1e708d17faf2c7c0e2981de
+    duration: 257
+    duration_text: 04:17
+    container_creation: '2025-11-13T17:15:11Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this lecture we build a CPU that executes one instruction per second.  The CPU as a single three-bit register and supports two instructions.  One instruction increments the current value in the register and the other instruction resets the register to zero.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  05-Clock/05-14-Digital-Gates-Counter.m4v:
+    title: CA Building a Clocked Counter with Adders and Latches (9:26)
+    ai_title: null
+    youtube_id: AkkL4aOWfSI
+    kaltura_id: 1_4diegzj0
+    size: 143503256
+    md5: fb0a0d4e12d3760051e8540f2777bea6
+    duration: 566
+    duration_text: 09:26
+    container_creation: '2026-02-02T15:10:50Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For additional course materials and assessments, please see www.ca4e.com.
+
+      In this walkthrough for Computer Architecture for Everybody, we explore how to build a clocked counter using a three-bit adder, a latch (register), and a clock signal in the Gates Layout Tool.
+
+      Starting from basic components, we connect an adder and a three-bit latch to create a circuit that counts from 0 to 7. Along the way, we examine how latches store state, how clock signals control when values are copied, and why clocked circuits are essential to making counters—and CPUs—work reliably.
+
+      The video demonstrates:
+
+      How a three-bit adder produces sums from binary inputs
+
+      How a latch functions as a small register
+
+      How feedback loops work safely when controlled by a clock
+
+      Using waypoints to clean up wiring and improve readability
+
+      Turning a manually clocked circuit into an automatic, timed counter
+
+      Visualizing the counter with outputs (and a Nixie display for fun)
+
+      We also show how to load a prebuilt counter as a reference and compare it to the hand-constructed version.
+
+      This walkthrough is intended to build intuition about state, timing, and clocked logic, which are foundational ideas in computer architecture.
+
+      Thanks for watching, and happy circuit building!
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  05-Clock/05-15-Digital-Gates-Instruction.m4v:
+    title: 'CA Building a Tiny CPU: A Two-Instruction Computer Walkthrough (5:34)'
+    ai_title: null
+    youtube_id: EnZtPJLPbho
+    kaltura_id: 1_ucrrf6kh
+    size: 100749982
+    md5: 12885d3b3b201a3c4c99ff2ca22610e5
+    duration: 334
+    duration_text: 05:34
+    container_creation: '2026-02-02T15:22:19Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For additional material and exercises - please see www.ca4e.com
+
+      In this walkthrough for Computer Architecture for Everybody, we build a minimal two-instruction CPU starting from a simple counter circuit.
+
+      We begin by reviewing how an adder and register form an incrementing counter, then extend the design with instruction decoding logic that allows the circuit to behave differently based on an external instruction input.
+
+      This video demonstrates:
+
+      How a counter works using a register, adder, and clock
+
+      How decode logic turns a counter into a CPU
+
+      A two-instruction architecture: reset and increment
+
+      Instruction-controlled data flow using AND gates
+
+      Modifying the CPU to increment by values other than one
+
+      Overflow behavior in small registers
+
+      By the end, you’ll see how surprisingly little hardware is required to create something that genuinely qualifies as a CPU — and how instruction decoding is the key difference between a circuit and a processor.
+
+      Perfect for students learning how CPUs work from the ground up, or anyone curious about how computation emerges from simple digital logic.
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  06-CPU/06-00-Hi.m4v:
+    title: CA Welcome to CPU Design (0:45)
+    ai_title: null
+    youtube_id: 3yawCNgikLQ
+    kaltura_id: 1_c97w0emk
+    size: 57847232
+    md5: 17198fa9f70086f378478b2bcebd55cc
+    duration: 45
+    duration_text: 00:45
+    container_creation: '2026-04-16T04:19:02Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      This is a quick intro to the Microprocessor Architecture module in Computer Architecture for Everybody.
+
+      https://online.dr-chuck.com/
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  06-CPU/06-01-CPU-Intro.m4v:
+    title: 'CA Exploring Microprocessors: From Python to Machine Language & the 6502 CPU - Part 1 (5:37)'
+    ai_title: null
+    youtube_id: hVWUQfINmYk
+    kaltura_id: 1_lmfnj5gf
+    size: 230497975
+    md5: f4fb9e7dfe1d4a4d0d85bf1f4a0f3ed5
+    duration: 337
+    duration_text: 05:37
+    container_creation: '2026-04-24T12:27:44Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this lecture, we dive deep into how computers really work — by exploring microprocessors through machine language, assembly language, and CPU architecture. We begin with a simple two-instruction CPU from the previous section and gradually build toward a simulated 6502-style CPU — the CDC 6504, inspired by the classic CDC 6500 and the legendary MOS 6502.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  06-CPU/06-02-CPU-Hex.m4v:
+    title: CA Understanding Hexadecimal (Base 16) — Why Computers Use It & How to Think in It - Part 2 (12:24)
+    ai_title: null
+    youtube_id: V_4Ord6x9H4
+    kaltura_id: 1_96zx5a22
+    size: 578521337
+    md5: 033b188011317d07b2b04e2de188a614
+    duration: 744
+    duration_text: 12:24
+    container_creation: '2025-11-23T05:21:11Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this lecture, we explore base 16 (hexadecimal) — the number system widely used in machine language, character encoding, memory addresses, and CPU design. While binary (base 2) is foundational, it's too cumbersome to use directly for larger values like 8-bit characters, so hexadecimal becomes a practical and compact alternative.  We cover hexadecimal in anticipation of learning the architecture and instruction set of the CDC6504.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  06-CPU/06-03-CPU-Coding.m4v:
+    title: CA What Is Programming? From Python to Machine Language & Into the CPU - Part 3 (11:10)
+    ai_title: null
+    youtube_id: dh6pI8Xjysc
+    kaltura_id: 1_380jkpmz
+    size: 718702878
+    md5: d3b299f3d1ad1e2516f11434e8f19061
+    duration: 670
+    duration_text: 11:10
+    container_creation: '2025-11-24T01:23:49Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this lecture, we connect high-level programming (Python & C) to the machine language that ultimately controls real computer hardware. Every line of code — no matter how elegant — must eventually be converted into zeros and ones that the CPU executes via wires and memory.
+
+      To truly understand programming, we must understand the machine that runs it - in this case we will learning to write machine code and assembly language using the CDC6504 - an emulator based on the MOS6502 microprocessor.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  06-CPU/06-04-CPU-Arch.m4v:
+    title: CA Exploring the 6502 Architecture in the CDC6504 Emulator - Part 4 (9:48)
+    ai_title: null
+    youtube_id: L2fzgapBoOg
+    kaltura_id: 1_grjvgjbb
+    size: 610265090
+    md5: 06af1b4ef79db627772b7ce7fc9183cd
+    duration: 588
+    duration_text: 09:48
+    container_creation: '2025-11-24T18:09:17Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this lecture, we explore the CDC 6504 architecture—an emulator based on the historic MOS Technology 6502 and named in homage to the CDC 6500, the first computer I ever used. You’ll hear the story behind the 6502’s impact, why the emulator needed a unique name, and see artifacts from my own 1979–1980 compiler work on the CDC 6500. We then examine the key CPU registers, walk through a simple machine language program that computes 1 + 1 = 2, and connect it back to earlier latch-and-adder designs. By the end, you’ll understand how the foundations of transistor-level logic grow into a full working CPU—without needing a billion-dollar fabrication facility.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  06-CPU/06-05-CPU-Machine.m4v:
+    title: CA Machine Language — Loops, Branching & Assembly vs. Machine Code - Part 5 (18:43)
+    ai_title: null
+    youtube_id: h92PhKl2elU
+    kaltura_id: 1_1vc735bs
+    size: 915684096
+    md5: c6a730f91dd6dcdaf9dbdf1117165c69
+    duration: 1123
+    duration_text: 18:43
+    container_creation: '2025-11-24T20:40:14Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this lecture, we take a focused dive into the machine language of the CDC 6504 emulator. Building on previous lectures, we review the key CPU registers, explain immediate 16-bit instructions, and explore how index registers enable loops and array access. From comparisons and flag setting (Z and N) to conditional jumps, we see how branching replaces high-level constructs like if, for, and while. We then transition to assembly language, showing how labels and two-pass assembly remove the pain of calculating jump addresses by hand. By the end, you'll understand how simple instructions—load, compare, jump, and increment—combine to form full control structures in assembly.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  06-CPU/06-06-CPU-Assembly.m4v:
+    title: 'CA CDC 6504 Assembly Language: Hello World, Math, and Upper Casing Strings - Part 6 (13:05)'
+    ai_title: null
+    youtube_id: BGIr2P2bpUY
+    kaltura_id: 1_ibllrehz
+    size: 404751871
+    md5: c2fa6f53d059ce010a6b6ab5dd7e8024
+    duration: 785
+    duration_text: 13:05
+    container_creation: '2025-11-25T16:41:54Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      In this tutorial, we dive into building more advanced machine language programs on the CDC 6504 emulator. We start with a quick review of the architecture, including the program counter, accumulator, X and Y registers, and flags, before exploring how to use DATA directives to preload memory with strings and constants. You’ll see simple programs in action, from adding numbers to printing “HELLO,” and then progress to a more complex example that converts a string to uppercase. Along the way, we compare how this same task would look in C and Python, and break down the assembly language step by step, including loops, indexed memory access, and conditional branching. By the end, you’ll have a clear understanding of how to work with the CDC 6504 emulator and write practical machine language programs.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  06-CPU/06-11-CPU-6504-UI-Walkthrough.m4v:
+    title: 'CA Learning CPU Emulation with the CDC6504: Registers, Memory, and Instructions (5:55)'
+    ai_title: null
+    youtube_id: EXRg96qoX2Y
+    kaltura_id: 1_as6u5h0y
+    size: 150199936
+    md5: 3a8866f5d6946cdaabd552ac3232b4a7
+    duration: 355
+    duration_text: 05:55
+    container_creation: '2026-02-02T15:30:34Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For additional materials and assessments please see www.ca4e.com
+      In this video we switch to a new topic: CPU emulation — using the CDC6504 machine language emulator to explore how a simple CPU executes instructions step-by-step.
+
+      We’ll walk through the emulator interface, look at registers and memory, and see how a program moves through the instruction stream while changing CPU state (PC, flags, accumulator, and index registers).
+
+      If you’ve been following the earlier logic-gates / counter material, this is the moment where the pieces start to feel like a real computer.
+
+      Topics covered
+
+      What CPU “emulation” means (and why it’s useful)
+
+      The CDC6504 emulator interface
+
+      Instructions vs data memory
+
+      Registers (ACC, X, Y), flags, and the program counter
+
+      Stepping through execution and observing state changes
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  06-CPU/06-12-CPU-6504-Simple-Samples.m4v:
+    title: 'CA Stepping Through a CPU Emulator: CDC6504 Instructions, Memory, and State (4:53)'
+    ai_title: null
+    youtube_id: UwOHhsQe4QU
+    kaltura_id: 1_2kas3f8j
+    size: 120809074
+    md5: fa7ac3debc41d33b7a192c1578d69bc9
+    duration: 293
+    duration_text: 04:53
+    container_creation: '2026-02-02T16:25:16Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For additional materials and assessments please see www.ca4e.com
+
+      In this video we continue our exploration of CPU emulation using the CDC6504 machine language emulator.
+
+      This time the focus is on execution: stepping through instructions one at a time and watching how CPU state changes as the program runs. By slowing the machine down, we can clearly see how registers, memory, and the program counter interact during real instruction execution.
+
+      This approach helps bridge the gap between earlier topics like logic gates and counters and the behavior of an actual stored-program computer.
+
+      Topics covered
+
+      Stepping through instructions in the CDC6504 emulator
+
+      Program counter movement and control flow
+
+      Register and memory changes during execution
+
+      Why emulation is such a powerful learning tool
+
+      This video is part of a beginner-friendly computer architecture series focused on understanding how computers actually work.
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  06-CPU/06-13-CPU-6504-For-Loop.m4v:
+    title: 'CA Loops in Machine Language: Branching in the CDC6504 Emulator (9:09)'
+    ai_title: null
+    youtube_id: -5CVRhmOFoU
+    kaltura_id: 1_r73zcpm9
+    size: 223054264
+    md5: 89adf2307855c37b5d71aabd2c36fa71
+    duration: 549
+    duration_text: 09:09
+    container_creation: '2026-02-02T16:50:39Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For additional materials and assessments please see www.ca4e.com
+
+      Using the CDC6504 machine language emulator, we build and trace looping behavior step-by-step by watching how branch instructions change the program counter and cause the CPU to repeat a sequence of instructions. You’ll see exactly what makes a loop a loop — not magic, just control flow.
+
+      Topics covered
+
+      What a loop really is at the machine-language level
+
+      The program counter (PC) and how branching changes execution flow
+
+      Counting loops and “repeat until” style loops
+
+      How flags / conditions influence whether a branch is taken
+
+      Debugging loops by single-stepping in the emulator
+
+      This is part of a beginner-friendly computer architecture sequence, connecting gates and counters to real stored-program execution.
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  06-CPU/06-14-CPU-6504-If-Test.m4v:
+    title: CA Understanding Conditional Branches in a CDC6504 (4:58)
+    ai_title: null
+    youtube_id: WIBdo1Dh9cE
+    kaltura_id: 1_24v2g9kt
+    size: 128617426
+    md5: 2261c6afc9db5e2723d5dc914c794ed3
+    duration: 298
+    duration_text: 04:58
+    container_creation: '2026-02-02T16:52:08Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For additional materials and assessments please see www.ca4e.com
+
+      In this video we introduce a key idea in computer architecture: conditional execution, the foundation of if statements.
+
+      Using the CDC6504 machine language emulator, we explore how a CPU makes decisions by testing conditions and selectively changing the program counter. By stepping through instructions one at a time, you can see exactly how comparisons, flags, and conditional branches work together to control execution flow.
+
+      This makes high-level concepts like if, else, and decision-making feel concrete and mechanical rather than mysterious.
+
+      Topics covered
+
+      What conditional execution means at the CPU level
+
+      How comparisons set CPU flags
+
+      Conditional branches and program counter changes
+
+      Building simple “if” behavior in machine language
+
+      Debugging decision logic by single-stepping the emulator
+
+      This video is part of a beginner-friendly computer architecture series focused on understanding how computers really work, from gates to programs.
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  06-CPU/06-15-CPU-6504-Upper.m4v:
+    title: 'CA String Processing in Machine Language: CDC6504 Uppercase Example (12:05)'
+    ai_title: null
+    youtube_id: pccnXG8pooA
+    kaltura_id: 1_6067g0zy
+    size: 370457678
+    md5: ca4e998845caee5d0ce80535bcf089e2
+    duration: 725
+    duration_text: 12:05
+    container_creation: '2026-02-02T16:52:57Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For additional materials and assessments www.ca4e.com
+
+      In this video we put everything together by writing a small but meaningful machine-language program: converting a string to uppercase.
+
+      Using the CDC6504 emulator, we step through code that reads characters from memory, tests their values, conditionally modifies them, and writes the results back. Along the way, you’ll see how loops, conditional execution, and memory access combine to perform real string processing — one instruction at a time.
+
+      This example ties together several core CPU concepts and shows how familiar high-level ideas emerge from simple low-level operations.
+
+      Topics covered
+
+      Iterating over a string in memory
+
+      Conditional execution for character tests
+
+      Converting ASCII lowercase to uppercase
+
+      Loops, branches, and the program counter
+
+      Debugging machine-language code by single-stepping
+
+      This video is part of a beginner-friendly computer architecture series focused on understanding how computers really work, from gates to programs.
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  07-Emulator/07-07-CPU-Emulator.m4v:
+    title: 'CA From 6502 to Web Assembly: Modern Day Emulators - Part 7 (10:56)'
+    ai_title: null
+    youtube_id: WwHwIBlmWWM
+    kaltura_id: 1_gb7rsoul
+    size: 450446633
+    md5: a9db76333c66bb1fe62dd4530969c231
+    duration: 656
+    duration_text: 10:56
+    container_creation: '2025-11-30T05:01:41Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      Course materials and assessments: https://www.ca4e.com
+
+      07 07 CPU Emulator
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  07-Emulator/07-08-CPU-History.m4v:
+    title: 'CA From 6502 to ARM: The 50-Year Journey of CPU Evolution & Apple’s CPU Strategy- Part 8 (7:30)'
+    ai_title: null
+    youtube_id: bsUKo48cMrA
+    kaltura_id: 1_ysw5gqeq
+    size: 482955159
+    md5: a6c22bbd1bb13c545e4fb76ba41dbad0
+    duration: 450
+    duration_text: 07:30
+    container_creation: '2025-11-30T01:17:30Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      Additional materials and assessments are available at www.ca4e.com
+
+      You've just learned how to program a 1970s microprocessor — the legendary 6502. Now let’s fast-forward 50 years.
+
+      In this video, we explore the major evolution of CPU architectures — from the rise of RISC vs CISC, to the great consolidation into only two dominant CPU families today: ARM and Intel. We walk through Apple’s fascinating processor history — switching from 6502 → Motorola 68000 → PowerPC → Intel x86 → ARM (Apple Silicon) — and how Rosetta 1 & 2 made the impossible transitions between CPU architectures possible.
+
+      Course materials and assessments: https://www.ca4e.com
+
+      You’ll also learn:
+
+      Why ARM controls ~90% of the modern CPU market
+
+      How power efficiency became more important than raw speed
+
+      Why Apple designs custom ARM processors (M1, M2, M3…) - How emulation and Rosetta helped Apple survive huge architecture jumps
+
+      The surprising historical link between 6502, BBC Micro, ARM, and Raspberry Pi, the iPhone, and modern Apple laptops and desktops.
+
+      Fun fact: ARM was designed using BBC Micros running on 6502s!
+
+      If you’re interested in computer history, CPU design, Apple engineering, or modern processor strategy, this video connects the dots across five decades.
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  07-Emulator/07-11-WASM-Hello-JS.m4v:
+    title: 'CA Introducing WebAssembly (WASM): From Hello World Source Code to Execution (3:58)'
+    ai_title: null
+    youtube_id: Gr7uTE0CUfI
+    kaltura_id: 1_ppb4itzw
+    size: 72012105
+    md5: 5f438d6429479f1a14f182703c572c94
+    duration: 238
+    duration_text: 03:58
+    container_creation: '2026-02-02T17:03:30Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For more materials and assessments, please see www.ca4e.com
+
+      In this lecture, we use a small JavaScript example to introduce WebAssembly (WASM) and talk about how code moves from source text to something that can actually run on a machine.
+
+      We look at the role of programming languages, functions, and execution, and how WASM fits between high-level code and low-level machine instructions. This sets the stage for later lectures where we explore what WASM looks like inside and how it maps to computer architecture concepts.
+
+      This video is part of a larger sequence connecting software to the hardware it runs on, one step at a time.
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  07-Emulator/07-12-WASM-Hello-C.m4v:
+    title: CA Compiling C to WebAssembly (WASM) and Running It in the Browser (6:49)
+    ai_title: null
+    youtube_id: _ce9ty_4TfM
+    kaltura_id: 1_olfxzim0
+    size: 213121883
+    md5: b04be4047c3eac804cdfbe5db8ad56b0
+    duration: 409
+    duration_text: 06:49
+    container_creation: '2026-02-02T17:10:51Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For additional materials and assessments see www.ca4e.com - to learn C using WASM-based autograders, please see www.cc4e.com
+
+      In this walkthrough, we look at how C programs can be compiled to WebAssembly (WASM) and executed directly in the browser, just like the examples used on www.ca4e.com
+
+      We step through the compilation process, talk about what the browser actually loads and runs, and connect traditional compiled languages like C to the WebAssembly execution model. This helps bridge the gap between classic systems programming and modern web-based execution environments.
+
+      This video is part of a larger sequence exploring how high-level code becomes low-level instructions, and how WebAssembly fits into computer architecture concepts.
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.
+  07-Emulator/07-13-WASM-Upper.m4v:
+    title: 'CA Loops and the Stack: A String-to-Uppercase Example in WASM (10:39)'
+    ai_title: null
+    youtube_id: vS4rty2_xys
+    kaltura_id: 1_4m12wntv
+    size: 230372594
+    md5: 1f198cbfcdabcd12cba38aede9a35b80
+    duration: 639
+    duration_text: 10:39
+    container_creation: '2026-02-02T17:23:00Z'
+    qt_creation: null
+    tags: ca4e, ca4e-lecture
+    description: |
+      For more materials and assessments please see www.ca4e.com
+
+      In this walkthrough, we build a simple function that converts a string to upper case and use it to explore how loops, break, and continue work at runtime.
+
+      As the code runs, we look at how function calls use the stack and stack frames, and how control flow moves through the loop. This provides a concrete way to connect everyday programming constructs to what’s happening during execution in WebAssembly (WASM).
+
+      This video is part of a larger sequence connecting high-level code to low-level execution concepts, including memory, control flow, and the call stack.
+
+      For more materials, auto graders, and more courses, please see www.masterprogrammer.com.

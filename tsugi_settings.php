@@ -42,6 +42,9 @@ $CFG->lessons = $CFG->dirroot.'/../lessons.json';
 
 $CFG->youtube_playlist = 'PLa58EAvBOOSJjrzDrl9eVigR5SQQ0W-3D';
 
+$CFG->setExtension('kaltura_embed', 'https://cdnapisec.kaltura.com/p/1038472/embedPlaykitJs/uiconf_id/58045402?iframeembed=true&entry_id={id}');
+$CFG->setExtension('kaltura_tab', 'https://umsiali.mivideo.it.umich.edu/playlist/dedicated/410698932/1_p8621h63/{id}');
+
 // Information on the owner of this system
 $CFG->ownername = 'Charles Severance';
 $CFG->owneremail = 'drchuck@learnxp.com';
