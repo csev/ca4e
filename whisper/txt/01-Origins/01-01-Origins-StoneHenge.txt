@@ -1,4 +1,4 @@
- hello and welcome to the first lecture of computer architecture for everybody in
+ hello and welcome to the first lecture of Computer Architecture for Everybody in
  this lecture we're going to talk about the origins of data, computing, lines,
  straight lines and curves and numbers and how our obsession with measuring our
  real world led to eventually computing so we're going to cover a number of
@@ -18,12 +18,12 @@
  iteration by lot rooms full of people doing calculations or the average
  difference engine which was steam-powered that could calculate
  polynomials and then we move into electromechanical computers like the
- bomba or pinball machines and then eventually we end up on the first
+ Bombe or pinball machines and then eventually we end up on the first
  electronic computer using tubes called colossus at Bletchley Park and so that
  is leads us to the beginning of the electronic computer age now I really
  want to tell you that this is not a class about mathematics numbers are kind
  of the obsession in the beginning because computation in numbers were a
- big deal but if you take my C class C programming for everybody I talk a lot
+ big deal but if you take my C class C Programming for Everybody I talk a lot
  about how everything in computing changed in 1978 there's other important
  moments where things changed in a dramatic way but before 1978 a lot of
  computing had to do with numbers numbers were the focus there was no internet
@@ -61,8 +61,8 @@
  but then after a while if you watch them and measure them they change in a very
  very specific pattern and so here I'm showing you a picture of the series of
  sunsets that I constructed underneath the Mackinac Bridge in northern Michigan I
- took this picture in August and they're one of those sons is real the rest of
- them are sort of made-up sons but you could at this point use the motion of
+ took this picture in August and they're one of those suns is real the rest of
+ them are sort of made-up suns but you could at this point use the motion of
  the sunset against the horizon as something that would tell you about the
  season of the year and it turns out that tracking these seasons has been
  important for all of our cultures for ten thousand years and the reason is is
@@ -86,7 +86,7 @@
  cultures invented various things having to do with the Sun and if you look at
  some of those dates you're like whoa Stonehenge was pretty far pretty long
  time ago compared to some of these other things and so we in the modern world we
- have our fun time with modern hinges if you go to a certain street in Manhattan
+ have our fun time with modern henges if you go to a certain street in Manhattan
  on a certain day at a certain time you see this theme of light and I'm sure
  that's what fascinated early people as they built these things was that you
  know the light seems random and then all of a sudden like like a laser beam whoosh

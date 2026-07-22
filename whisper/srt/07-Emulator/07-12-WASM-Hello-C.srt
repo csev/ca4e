@@ -1,6 +1,6 @@
 1
 00:00:00,000 --> 00:00:06,000
- Hello, and welcome to another walkthrough for computer architecture for everybody.
+ Hello, and welcome to another walkthrough for Computer Architecture for Everybody.
 
 2
 00:00:06,000 --> 00:00:11,680
@@ -20,7 +20,7 @@
 
 6
 00:00:30,960 --> 00:00:36,080
- and show you something for another one of my classes, C programming for everybody,
+ and show you something for another one of my classes, C Programming for Everybody,
 
 7
 00:00:36,080 --> 00:00:41,680
@@ -44,7 +44,7 @@
 
 12
 00:01:06,880 --> 00:01:18,320
- using a piece of software called mscriptum, which compiles C code and other things into WASM. Then
+ using a piece of software called Emscripten, which compiles C code and other things into WASM. Then
 
 13
 00:01:20,080 --> 00:01:24,800
@@ -140,11 +140,11 @@
 
 36
 00:03:52,320 --> 00:03:59,920
- not much prettier, we can look at the Watt. And so we're looking at the Watt here. This was written
+ not much prettier, we can look at the WAT. And so we're looking at the WAT here. This was written
 
 37
 00:03:59,920 --> 00:04:05,360
- to be readable. This is the Watt code editor for the hello world. That's a pure WASM JavaScript
+ to be readable. This is the WAT code editor for the hello world. That's a pure WASM JavaScript
 
 38
 00:04:05,360 --> 00:04:11,040
@@ -156,7 +156,7 @@
 
 40
 00:04:17,120 --> 00:04:23,120
- then I converted the WASM to Watt so that we could see it. And we're not going to change this. There's
+ then I converted the WASM to WAT so that we could see it. And we're not going to change this. There's
 
 41
 00:04:23,120 --> 00:04:28,560
@@ -176,11 +176,11 @@
 
 45
 00:04:50,400 --> 00:04:59,520
- stuff. This is the output of a compiler that is writing to a pseudo machine language in Watt. So
+ stuff. This is the output of a compiler that is writing to a pseudo machine language in WAT. So
 
 46
 00:04:59,520 --> 00:05:09,840
- I'll just scroll through this. That is a lot of Watt. And it's not very easy to see. But
+ I'll just scroll through this. That is a lot of WAT. And it's not very easy to see. But
 
 47
 00:05:09,840 --> 00:05:18,640
@@ -196,7 +196,7 @@
 
 50
 00:05:31,760 --> 00:05:37,760
- of learn to code Watt. It's not intended for you to code it. It's intended for compilers to produce
+ of learn to code WAT. It's not intended for you to code it. It's intended for compilers to produce
 
 51
 00:05:37,760 --> 00:05:43,680
@@ -204,11 +204,11 @@
 
 52
 00:05:43,680 --> 00:05:51,760
- maybe a video game shading library or something that would get compiled into Wasm, which would
+ maybe a video game shading library or something that would get compiled into WASM, which would
 
 53
 00:05:51,760 --> 00:05:58,240
- be super high performant. And then that Wasm might be recompiled into raw machine language
+ be super high performant. And then that WASM might be recompiled into raw machine language
 
 54
 00:05:58,240 --> 00:06:04,080
@@ -216,7 +216,7 @@
 
 55
 00:06:04,080 --> 00:06:08,000
- that's literally the whole point of Wasm. The Wasm is to make it so you can write
+ that's literally the whole point of WASM. The WASM is to make it so you can write
 
 56
 00:06:08,880 --> 00:06:14,560
@@ -236,7 +236,7 @@
 
 60
 00:06:32,320 --> 00:06:38,720
- interesting about how we connect C programming and Wasm and how I use it in my C programming
+ interesting about how we connect C programming and WASM and how I use it in my C programming
 
 61
 00:06:38,720 --> 00:06:48,560

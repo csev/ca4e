@@ -1,6 +1,6 @@
 1
 00:00:00,000 --> 00:00:17,080
- the Babbage Difference Engine was an example of mechanical iteration where you make a motor or a crank or something to do something one of the earliest most powerful mechanical computers ever built was called the Bamba and it was used to
+ the Babbage Difference Engine was an example of mechanical iteration where you make a motor or a crank or something to do something one of the earliest most powerful mechanical computers ever built was called the Bombe and it was used to
 
 2
 00:00:17,080 --> 00:00:23,560
@@ -8,7 +8,7 @@
 
 3
 00:00:23,560 --> 00:00:28,600
- the Enigma to encrypt these messages and send them using Morse code and radio. And the Bomba was a
+ the Enigma to encrypt these messages and send them using Morse code and radio. And the Bombe was a
 
 4
 00:00:28,600 --> 00:00:33,960
@@ -16,7 +16,7 @@
 
 5
 00:00:33,960 --> 00:00:41,960
- password based only on the encrypted text. And so when you listen to a Bomba moving, it is lots of
+ password based only on the encrypted text. And so when you listen to a Bombe moving, it is lots of
 
 6
 00:00:41,960 --> 00:00:48,120
@@ -32,7 +32,7 @@
 
 9
 00:01:25,880 --> 00:01:33,160
- a pinball machine. So the Bomba was a very fast electromechanical computer in the 30s and the
+ a pinball machine. So the Bombe was a very fast electromechanical computer in the 30s and the
 
 10
 00:01:33,160 --> 00:01:39,480
@@ -64,7 +64,7 @@
 
 17
 00:02:30,680 --> 00:02:37,160
- that the electromechanical computational technology similar to the Bomba. But the problem is that
+ that the electromechanical computational technology similar to the Bombe. But the problem is that
 
 18
 00:02:37,160 --> 00:02:47,720
@@ -72,7 +72,7 @@
 
 19
 00:02:47,720 --> 00:02:56,760
- engine and you just make it go up 20 times faster, it's gonna fall apart in like less than a minute.
+ engine and you just make it go up 20 times faster, it's going to fall apart in like less than a minute.
 
 20
 00:02:56,760 --> 00:03:01,720
@@ -104,7 +104,7 @@
 
 27
 00:03:39,640 --> 00:03:44,360
- Bomba, so you don't just physically damage the machine. If you go to the maximum speed and double
+ Bombe, so you don't just physically damage the machine. If you go to the maximum speed and double
 
 28
 00:03:44,360 --> 00:03:53,000
@@ -184,7 +184,7 @@
 
 47
 00:06:01,560 --> 00:06:08,360
- computations way faster than the other electro-mechanical computer called the Bomba. But
+ computations way faster than the other electro-mechanical computer called the Bombe. But
 
 48
 00:06:08,360 --> 00:06:12,840

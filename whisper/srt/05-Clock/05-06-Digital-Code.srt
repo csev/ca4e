@@ -1,6 +1,6 @@
 1
 00:00:00,000 --> 00:00:02,240
- So we're gonna wrap up this section
+ So we're going to wrap up this section
 
 2
 00:00:02,240 --> 00:00:05,680
@@ -56,7 +56,7 @@
 
 15
 00:00:38,960 --> 00:00:41,160
- And in addition, we're gonna talk a little more now
+ And in addition, we're going to talk a little more now
 
 16
 00:00:41,160 --> 00:00:42,200
@@ -64,7 +64,7 @@
 
 17
 00:00:42,200 --> 00:00:45,120
- Now the load and store, the way we're gonna do it
+ Now the load and store, the way we're going to do it
 
 18
 00:00:45,120 --> 00:00:48,480
@@ -100,7 +100,7 @@
 
 26
 00:01:12,260 --> 00:01:14,920
- So I'm gonna load that instruction from the memory
+ So I'm going to load that instruction from the memory
 
 27
 00:01:14,920 --> 00:01:18,120
@@ -148,7 +148,7 @@
 
 38
 00:01:46,200 --> 00:01:48,500
- So maybe we're gonna add two registers together
+ So maybe we're going to add two registers together
 
 39
 00:01:48,500 --> 00:01:52,240
@@ -332,7 +332,7 @@
 
 84
 00:03:48,080 --> 00:03:51,720
- the Controlled Data Corporation, CDC 6500.
+ the Control Data Corporation, CDC 6500.
 
 85
 00:03:51,720 --> 00:03:53,500

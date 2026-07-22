@@ -1,4 +1,4 @@
- hello and welcome to a hardware layout walkthrough for computer architecture for everybody this
+ hello and welcome to a hardware layout walkthrough for Computer Architecture for Everybody this
  walkthrough is going to design a CMOS NOR gate circuit which is actually one of the assignments
  but i'm going to use this to show you how the tool works so let's go across the top we have a button
  to add a switch so that's how we give inputs we have a button to add a probe that's how we measure
@@ -36,7 +36,7 @@
  two switches so I'm going to put a second switch in and then I'm going to put labels on those
  switches so I'm going to say this switch is A so the top switch is A and then press the label button
  again and then I say that's bottoms I select the bottom switch and that is B and uh let's see here
- I'm gonna I'm gonna start over fresh let me just delete let me delete the transistors so we can
+ I'm going to I'm going to start over fresh let me just delete let me delete the transistors so we can
  sort of file the diagram so we've got an A and a B input and then we're going to put two PMOS
  transistors at the top kind of in series so we just kind of connect them end to end and we'll
  just connect from the in between them we take the S and the D and we connect them in between
@@ -68,4 +68,4 @@
  load this back up so if you're fooling around and you're building your own circuits and so you can
  save things or if you're working on it and you're not sure you got it right you want to go back and
  watch the lecture so i think that pretty much covers all of the feature of our
- CMOS layout editor for computer architecture for everybody cheers
+ CMOS layout editor for Computer Architecture for Everybody cheers

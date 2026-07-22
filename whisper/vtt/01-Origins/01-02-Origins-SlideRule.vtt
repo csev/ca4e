@@ -7,13 +7,13 @@ WEBVTT
  on continuous analog computing.
 
 00:00:04.640 --> 00:00:07.320
- So there's a lot of things I'm gonna show you.
+ So there's a lot of things I'm going to show you.
 
 00:00:07.320 --> 00:00:08.640
  They don't matter too much
 
 00:00:08.640 --> 00:00:10.880
- 'cause the real overall theme here is
+ because the real overall theme here is
 
 00:00:10.880 --> 00:00:13.760
  continuous means that these are devices
@@ -280,7 +280,7 @@ WEBVTT
  One's not quite so modern.
 
 00:04:40.200 --> 00:04:42.120
- It's been replaced by the Hampton calculator,
+ It's been replaced by the hand calculator,
 
 00:04:42.120 --> 00:04:43.400
  which is the slide rule.
@@ -442,7 +442,7 @@ WEBVTT
  And not only it'll take me more than an hour,
 
 00:06:56.920 --> 00:06:59.040
- 'cause the wind is actually not just moving me,
+ because the wind is actually not just moving me,
 
 00:06:59.040 --> 00:07:00.560
  but slowing me down.
@@ -496,7 +496,7 @@ WEBVTT
  and what is our effective speed
 
 00:07:44.360 --> 00:07:47.160
- so we can calculate how long it's gonna take us
+ so we can calculate how long it's going to take us
 
 00:07:47.160 --> 00:07:48.760
  to get there, okay?
@@ -562,7 +562,7 @@ WEBVTT
  And you have to calculate all those things
 
 00:08:42.760 --> 00:08:45.240
- 'cause your plane may speed up or slow down
+ because your plane may speed up or slow down
 
 00:08:45.240 --> 00:08:48.720
  and it might affect where you have to point the plane.
@@ -619,7 +619,7 @@ WEBVTT
  And you got to recalculate where you're at
 
 00:09:39.280 --> 00:09:42.200
- 'cause you're like, you know you've gone a certain distance.
+ because you're like, you know you've gone a certain distance.
 
 00:09:42.200 --> 00:09:45.200
  You got to recalculate where you're going to point the plane.
@@ -700,7 +700,7 @@ WEBVTT
  So let me show you how this works.
 
 00:10:56.440 --> 00:10:58.200
- We're gonna do a simple calculation
+ We're going to do a simple calculation
 
 00:10:58.200 --> 00:11:02.680
  for airspeed correction and heading correction on an E6B.
@@ -739,13 +739,13 @@ WEBVTT
  so it'd be going 85 on the ground.
 
 00:11:31.960 --> 00:11:33.740
- But that's not where we wanna go.
+ But that's not where we want to go.
 
 00:11:33.740 --> 00:11:35.880
- We don't wanna fly to 300.
+ We don't want to fly to 300.
 
 00:11:35.880 --> 00:11:38.200
- We wanna fly to 270.
+ We want to fly to 270.
 
 00:11:38.200 --> 00:11:40.360
  Now as we're moving this,
@@ -772,7 +772,7 @@ WEBVTT
  that we intend to fly up there at the true index.
 
 00:11:59.260 --> 00:12:03.440
- So we're gonna fly 270 or westerly.
+ So we're going to fly 270 or westerly.
 
 00:12:03.440 --> 00:12:07.320
  Then what we've got to do is we've got to take the point,
@@ -781,7 +781,7 @@ WEBVTT
  this point here, and we gotta move it down to 100 knots
 
 00:12:10.800 --> 00:12:12.760
- 'cause that's how fast our plane is.
+ because that's how fast our plane is.
 
 00:12:12.760 --> 00:12:17.200
  And you can see that the headwind is slowing us down.
@@ -796,7 +796,7 @@ WEBVTT
  but with this particular wind, this 15 knot wind,
 
 00:12:27.120 --> 00:12:29.540
- it's gonna do 86, 87 knots.
+ it's going to do 86, 87 knots.
 
 00:12:29.540 --> 00:12:33.920
  And we also have to figure out what we call the crab angle,
@@ -868,7 +868,7 @@ WEBVTT
  at analog computing devices.
 
 00:13:38.920 --> 00:13:42.440
- Up next, we're gonna talk about digital computing devices.
+ Up next, we're going to talk about digital computing devices.
 
 00:13:42.440 --> 00:13:45.460
  And digital computing devices are things

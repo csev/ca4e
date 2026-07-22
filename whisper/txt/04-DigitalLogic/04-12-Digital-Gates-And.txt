@@ -1,4 +1,4 @@
- Welcome to another walkthrough for computer architecture for everybody.
+ Welcome to another walkthrough for Computer Architecture for Everybody.
  In this, I want to do an assignment.
  And so, sometimes when you launch this, you will have an assignment.
  And that assignment will be auto-graded.

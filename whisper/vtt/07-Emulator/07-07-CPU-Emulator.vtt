@@ -37,13 +37,13 @@ WEBVTT
  doing your assignments or just playing with it
 
 00:00:50.000 --> 00:00:53.760
- so if you go look at that it's javascript and you've learned javascript
+ so if you go look at that it's JavaScript and you've learned JavaScript
 
 00:00:53.760 --> 00:00:57.200
  and it has to run in the browser so i have implemented
 
 00:00:57.200 --> 00:01:03.520
- a 6502 instruction set in javascript in a browser the core of this is a
+ a 6502 instruction set in JavaScript in a browser the core of this is a
 
 00:01:03.520 --> 00:01:07.600
  function called execute step which should be called like fetch execute
@@ -238,7 +238,7 @@ WEBVTT
  thing is that most modern processors on phones and computers
 
 00:05:23.040 --> 00:05:26.400
- are so fast that even if we're writing something in javascript
+ are so fast that even if we're writing something in JavaScript
 
 00:05:26.400 --> 00:05:30.160
  that's emulating historical machine code it can do that
@@ -313,19 +313,19 @@ WEBVTT
  running it in the browser using a piece of software
 
 00:07:07.600 --> 00:07:12.320
- written in wasm now it's not written in javascript it's written in wasm what is
+ written in wasm now it's not written in JavaScript it's written in wasm what is
 
 00:07:12.320 --> 00:07:18.800
- wasm wasm is web assembly so i built a machine language emulator
+ wasm wasm is WebAssembly so i built a machine language emulator
 
 00:07:18.800 --> 00:07:22.400
- in javascript that you are using but there is a low level high
+ in JavaScript that you are using but there is a low level high
 
 00:07:22.400 --> 00:07:26.480
  performance machine language emulator built into web browsers
 
 00:07:26.480 --> 00:07:32.080
- recent web browsers called web assembly so web assembly is a machine code that
+ recent web browsers called WebAssembly so WebAssembly is a machine code that
 
 00:07:32.080 --> 00:07:34.960
  is not intended to be built in hardware but intended to be
@@ -340,7 +340,7 @@ WEBVTT
  them into a browser and run them in a browser with a little
 
 00:07:51.360 --> 00:07:56.320
- javascript library that provides things like file opening etc etc
+ JavaScript library that provides things like file opening etc etc
 
 00:07:56.320 --> 00:07:59.600
  now i want to show you a bit of wasm it's got a little bit different syntax
@@ -370,7 +370,7 @@ WEBVTT
  infinite loop and break your browser but that is your browser so let's take a
 
 00:08:32.960 --> 00:08:36.960
- little bit of a look at web assembly wasm is a little bit different so you
+ little bit of a look at WebAssembly wasm is a little bit different so you
 
 00:08:36.960 --> 00:08:40.320
  don't see for example an accumulator it actually has a stack and it has

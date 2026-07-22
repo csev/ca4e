@@ -30,7 +30,7 @@
  keep your state now if we make the s be a zero and the r be a one that's going to set the output
  to zero and then the next thing you do is you set r to zero and then the output stays now how we
  do this is a little bit tricky right and we'll we'll make smarter latches but this is the simplest
- latch and it's literally two NOR gates okay that's it now we're gonna have to build some more logic
+ latch and it's literally two NOR gates okay that's it now we're going to have to build some more logic
  because this is kind of inconvenient because that 2-1 situation is kind of a pain in the neck now
  i'll just let you know that you can try to build an sr latch using two NOR gates in my simulator
  and it won't work now maybe someday i will make the circuit emulation of my digital logic simulator

@@ -180,7 +180,7 @@
 
 46
 00:01:43,600 --> 00:01:46,120
- We're gonna see much more complex gates.
+ We're going to see much more complex gates.
 
 47
 00:01:46,120 --> 00:01:50,840
@@ -380,7 +380,7 @@
 
 96
 00:03:53,440 --> 00:03:55,280
- 'cause all that output is being as connected
+ because all that output is being as connected
 
 97
 00:03:55,280 --> 00:03:57,840
@@ -684,7 +684,7 @@
 
 172
 00:07:20,720 --> 00:07:25,200
- So now what I wanna show you is a tool that I built
+ So now what I want to show you is a tool that I built
 
 173
 00:07:25,200 --> 00:07:27,280
@@ -744,7 +744,7 @@
 
 187
 00:08:02,880 --> 00:08:05,120
- So part of what we're gonna do in the NOT gate
+ So part of what we're going to do in the NOT gate
 
 188
 00:08:05,120 --> 00:08:08,920
@@ -784,7 +784,7 @@
 
 197
 00:08:27,600 --> 00:08:29,640
- So what we're gonna do is build a circuit
+ So what we're going to do is build a circuit
 
 198
 00:08:30,760 --> 00:08:35,520
@@ -812,7 +812,7 @@
 
 204
 00:08:50,960 --> 00:08:54,840
- So we're gonna connect the voltage
+ So we're going to connect the voltage
 
 205
 00:08:55,760 --> 00:09:00,760
@@ -820,7 +820,7 @@
 
 206
 00:09:00,760 --> 00:09:05,120
- and then we're gonna connect the bottom connection
+ and then we're going to connect the bottom connection
 
 207
 00:09:05,120 --> 00:09:07,680
@@ -828,7 +828,7 @@
 
 208
 00:09:07,680 --> 00:09:09,840
- and then we're gonna take the output
+ and then we're going to take the output
 
 209
 00:09:09,840 --> 00:09:11,400
@@ -1000,11 +1000,11 @@
 
 251
 00:11:09,520 --> 00:11:11,480
- but then we're gonna build circuits out of those gates.
+ but then we're going to build circuits out of those gates.
 
 252
 00:11:11,480 --> 00:11:15,040
- We're not really gonna build very complex circuits
+ We're not really going to build very complex circuits
 
 253
 00:11:15,040 --> 00:11:16,120
@@ -1096,7 +1096,7 @@
 
 275
 00:12:13,560 --> 00:12:14,880
- which we're gonna find really useful.
+ which we're going to find really useful.
 
 276
 00:12:14,880 --> 00:12:18,520
@@ -1212,7 +1212,7 @@
 
 304
 00:13:34,740 --> 00:13:38,880
- I wanna show you how we can lay out a NOR gate.
+ I want to show you how we can lay out a NOR gate.
 
 305
 00:13:38,880 --> 00:13:41,160
@@ -1420,7 +1420,7 @@
 
 356
 00:16:21,040 --> 00:16:23,240
- it's either gonna conduct eventually from the top
+ it's either going to conduct eventually from the top
 
 357
 00:16:23,240 --> 00:16:27,000
@@ -1472,11 +1472,11 @@
 
 369
 00:17:01,440 --> 00:17:03,160
- And you're gonna like it.
+ And you're going to like it.
 
 370
 00:17:03,160 --> 00:17:05,360
- Well, we're not gonna build complex circuits
+ Well, we're not going to build complex circuits
 
 371
 00:17:05,360 --> 00:17:06,800

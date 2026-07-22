@@ -280,7 +280,7 @@
 
 71
 00:07:58,320 --> 00:08:05,040
- that were designed in a sense to create that book the babbage difference engine was something that
+ that were designed in a sense to create that book the Babbage Difference Engine was something that
 
 72
 00:08:05,040 --> 00:08:12,080

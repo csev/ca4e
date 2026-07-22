@@ -1,4 +1,4 @@
- Hello and welcome to another walkthrough for computer architecture for everybody.
+ Hello and welcome to another walkthrough for Computer Architecture for Everybody.
  In this walkthrough we are going to talk about WASM and we're going to talk a little bit
  about the hello world code.
  Now the first thing to say is that WASM, now WAT is just a sort of syntax, it's the assembly
@@ -31,16 +31,16 @@
  going to return 42 even main functions like in C return values and then we're going to
  export the function main and then there's JavaScript that's going to call this function
  main.
- Well let's go ahead and compile and run this, in this browser there is a full Watt to Wasm
- compiler and then Wasm to machine code and then JavaScript to execute the resulting machine
- code and here is the actual Wasm.
- So Watt is sort of the assembly language but the ultimate thing is this is just a few bytes
+ Well let's go ahead and compile and run this, in this browser there is a full WAT-to-WASM
+ compiler and then WASM to machine code and then JavaScript to execute the resulting machine
+ code and here is the actual WASM.
+ So WAT is sort of the assembly language but the ultimate thing is this is just a few bytes
  looks like about 6 times 16, about 100 bytes of character and these are kind of like machine
  code but it is interpreted so this is kind of like a byte code in Java but it's also
  intended that it can be just in time compiled into the real machine code after validating
- the safety of it okay and so we go from the Watt to the Wasm and then we execute this
- Wasm in JavaScript and JavaScript has a Wasm execution environment for it and then the
+ the safety of it okay and so we go from the WAT to the WASM and then we execute this
+ WASM in JavaScript and JavaScript has a WASM execution environment for it and then the
  output comes back to JavaScript and away we go so that is the hello world, simple hello
- world, not a C hello world I'll show you that in a bit but a Wasm and JavaScript hello world
+ world, not a C hello world I'll show you that in a bit but a WASM and JavaScript hello world
  that does its printing using console.log.
  Cheers!

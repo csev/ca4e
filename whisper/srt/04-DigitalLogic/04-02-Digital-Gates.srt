@@ -28,15 +28,15 @@
 
 8
 00:00:18,480 --> 00:00:21,560
- We're gonna do the same thing with just zero and one,
+ We're going to do the same thing with just zero and one,
 
 9
 00:00:21,560 --> 00:00:23,280
- so they're gonna do base to addition,
+ so they're going to do base to addition,
 
 10
 00:00:23,280 --> 00:00:25,840
- but we're still gonna do things like carry.
+ but we're still going to do things like carry.
 
 11
 00:00:25,840 --> 00:00:28,160
@@ -48,7 +48,7 @@
 
 13
 00:00:31,480 --> 00:00:33,720
- And so we're gonna solve the carry problem.
+ And so we're going to solve the carry problem.
 
 14
 00:00:33,720 --> 00:00:37,100
@@ -104,7 +104,7 @@
 
 27
 00:01:09,320 --> 00:01:13,720
- But we do wanna represent numbers larger than zero and one.
+ But we do want to represent numbers larger than zero and one.
 
 28
 00:01:13,720 --> 00:01:16,600
@@ -172,11 +172,11 @@
 
 44
 00:02:05,740 --> 00:02:07,440
- We're gonna make things simple for now.
+ We're going to make things simple for now.
 
 45
 00:02:07,440 --> 00:02:10,280
- We're not gonna make you generally be able to convert
+ We're not going to make you generally be able to convert
 
 46
 00:02:10,280 --> 00:02:11,860
@@ -752,7 +752,7 @@
 
 189
 00:09:07,460 --> 00:09:10,840
- And so we're gonna start and work through carry in,
+ And so we're going to start and work through carry in,
 
 190
 00:09:10,840 --> 00:09:14,980
@@ -1136,7 +1136,7 @@
 
 285
 00:13:50,320 --> 00:13:53,300
- And we're gonna keep doing this as we go forward.
+ And we're going to keep doing this as we go forward.
 
 286
 00:13:53,300 --> 00:13:55,880

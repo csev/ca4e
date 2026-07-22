@@ -13,7 +13,7 @@ WEBVTT
  We can just barely see all the instructions. This is our first thing.
 
 00:00:23.460 --> 00:00:28.300
- That's so long that we're gonna end up in the second column of the instructions. So to start at what we've got here,
+ That's so long that we're going to end up in the second column of the instructions. So to start at what we've got here,
 
 00:00:28.300 --> 00:00:32.980
  we got a data pseudo operation that fills the data memory with the string "hello"
@@ -22,16 +22,16 @@ WEBVTT
  H-E-L-L-O with H being uppercase already and E-L-L-O. When we're done,
 
 00:00:37.680 --> 00:00:43.500
- we want all these characters to be uppercase, and so we're gonna write a loop that's going to go through
+ we want all these characters to be uppercase, and so we're going to write a loop that's going to go through
 
 00:00:43.500 --> 00:00:50.300
- from 0 until it's, and it's gonna stop at a 0 byte, and it's gonna load the value, check if it's already uppercase.
+ from 0 until it's, and it's going to stop at a 0 byte, and it's going to load the value, check if it's already uppercase.
 
 00:00:50.300 --> 00:00:56.700
- If it's not, it's gonna subtract 20 to it, which we did before because that's the mapping between uppercase and lowercase,
+ If it's not, it's going to subtract 20 to it, which we did before because that's the mapping between uppercase and lowercase,
 
 00:00:56.700 --> 00:01:01.200
- and then we're gonna store it back in. So when we're done, 48 won't change because that's already uppercase.
+ and then we're going to store it back in. So when we're done, 48 won't change because that's already uppercase.
 
 00:01:01.200 --> 00:01:07.300
  65 will become 45, 6C will become 4C, etc., and then it'll stop and it'll print out the uppercase.
@@ -49,7 +49,7 @@ WEBVTT
  offset by the current value in X.
 
 00:01:28.140 --> 00:01:34.640
- Okay, so X is gonna start at 0 because we're gonna clear it, and then we're gonna slowly but surely add X.
+ Okay, so X is going to start at 0 because we're going to clear it, and then we're going to slowly but surely add X.
 
 00:01:34.640 --> 00:01:37.980
  So this is like X equals X plus 1 each time through the loop.
@@ -58,10 +58,10 @@ WEBVTT
  So this is the bottom of the loop, kind of the continue area, where we're saying X plus plus or X equals X plus 1 to
 
 00:01:44.500 --> 00:01:51.120
- advance X through the string because we're gonna use X as the array offset as it's going through our little array.
+ advance X through the string because we're going to use X as the array offset as it's going through our little array.
 
 00:01:51.120 --> 00:01:57.620
- We're gonna load the value, offset by X, and then we're gonna immediately check to see if we got a 0 byte,
+ We're going to load the value, offset by X, and then we're going to immediately check to see if we got a 0 byte,
 
 00:01:57.620 --> 00:02:00.860
  and that's how we terminate this loop when we hit a 0 byte.
@@ -73,7 +73,7 @@ WEBVTT
  So we don't want to run out of memory or blow up or run into something else.
 
 00:02:07.380 --> 00:02:13.780
- We stop at a 0 byte, and then we're gonna check to see if the letter we just got is already uppercase.
+ We stop at a 0 byte, and then we're going to check to see if the letter we just got is already uppercase.
 
 00:02:13.780 --> 00:02:18.020
  If it is, that means it's less than lowercase a. That's how ASCII works, right?
@@ -94,16 +94,16 @@ WEBVTT
  So we're checking to see if we are above or below lowercase a, if we're below lowercase a already,
 
 00:02:50.860 --> 00:02:54.880
- we're gonna do a branch minus down here and then increment to go to the next one.
+ we're going to do a branch minus down here and then increment to go to the next one.
 
 00:02:54.880 --> 00:03:00.960
  If, on the other hand, we are above the letter a, then we're going to subtract 20,
 
 00:03:00.960 --> 00:03:04.760
- and then we're gonna store that using our index again as X.
+ and then we're going to store that using our index again as X.
 
 00:03:04.760 --> 00:03:07.100
- So X is really cool. It's just gonna be our counter.
+ So X is really cool. It's just going to be our counter.
 
 00:03:07.100 --> 00:03:12.580
  And so this register is kind of like the iteration variable. Well, it is the iteration variable of our loop.
@@ -118,7 +118,7 @@ WEBVTT
  PC 0X 00, clear X register.
 
 00:03:24.320 --> 00:03:31.600
- So now we're at the top of the loop, and we're gonna do a load from memory location 0, offset by X register.
+ So now we're at the top of the loop, and we're going to do a load from memory location 0, offset by X register.
 
 00:03:31.600 --> 00:03:37.480
  The X register is actually part of this instruction, okay? So let's go ahead and load that.
@@ -142,22 +142,22 @@ WEBVTT
  Now 0X 10 would have been this exit of the loop, but it didn't because we're not minus yet.
 
 00:04:13.680 --> 00:04:21.780
- And so that's our top tested loop, and now what we're gonna do is we're gonna say if this is greater than A,
+ And so that's our top tested loop, and now what we're going to do is we're going to say if this is greater than A,
 
 00:04:21.780 --> 00:04:27.980
- if it's less than A, we're gonna skip these next two lines, and the next two lines are a subtract of 0X 20,
+ if it's less than A, we're going to skip these next two lines, and the next two lines are a subtract of 0X 20,
 
 00:04:27.980 --> 00:04:33.960
  and then an index store into memory location 0 offset by X, but X is still position 0.
 
 00:04:33.960 --> 00:04:40.720
- So this is the letter H, and it is already uppercase, so we're gonna skip around this subtraction calculation.
+ So this is the letter H, and it is already uppercase, so we're going to skip around this subtraction calculation.
 
 00:04:40.720 --> 00:04:47.160
  PC 0X 05, compare accumulator with immediate 0X 61.
 
 00:04:47.160 --> 00:04:54.800
- And now we're gonna branch because it is N, so we're gonna branch if minus, and that means we're already uppercase.
+ And now we're going to branch because it is N, so we're going to branch if minus, and that means we're already uppercase.
 
 00:04:54.800 --> 00:05:00.920
  PC 0X 07, branch if minus address 0X 0D.
@@ -166,7 +166,7 @@ WEBVTT
  So it went to 0X 0D, which skipped around the subtraction, and now we're at the kind of continue or the loop bottom,
 
 00:05:08.240 --> 00:05:12.680
- in the increment part of the loop, and we're gonna add 1 to X.
+ in the increment part of the loop, and we're going to add 1 to X.
 
 00:05:12.680 --> 00:05:21.280
  PC 0X 0D, increment X register PC 0X 0E, jump to address 1.
@@ -178,13 +178,13 @@ WEBVTT
  so it already went, and X is now 1, so it's loading memory location 1 into the accumulator.
 
 00:05:35.280 --> 00:05:42.920
- Okay, and so the accumulator now is non-zero, so we're gonna check to see if the loop is done.
+ Okay, and so the accumulator now is non-zero, so we're going to check to see if the loop is done.
 
 00:05:42.920 --> 00:05:49.120
  PC 0X 03, branch if equal address 0X 10.
 
 00:05:49.120 --> 00:05:54.440
- And it didn't, so now we're gonna check to see the case of our current character.
+ And it didn't, so now we're going to check to see the case of our current character.
 
 00:05:54.440 --> 00:06:00.880
  PC 0X 05, compare accumulator with immediate 0X 61.
@@ -193,7 +193,7 @@ WEBVTT
  So that is checking to see if it's above or below A, and this one is above A,
 
 00:06:06.920 --> 00:06:13.800
- and so we're gonna have to map it into uppercase, so you'll notice that this BMI does not jump to the CONT label.
+ and so we're going to have to map it into uppercase, so you'll notice that this BMI does not jump to the CONT label.
 
 00:06:13.800 --> 00:06:15.040
  This one falls through.
@@ -202,16 +202,16 @@ WEBVTT
  PC 0X 07, branch if minus address 0X 0D.
 
 00:06:20.760 --> 00:06:26.520
- So now we're at 0X 09, not 0X 0D, and now we're gonna do the subtract of 20,
+ So now we're at 0X 09, not 0X 0D, and now we're going to do the subtract of 20,
 
 00:06:26.520 --> 00:06:29.920
- and then we're gonna store it into the memory.
+ and then we're going to store it into the memory.
 
 00:06:29.920 --> 00:06:35.880
  PC 0X 09, subtract with carry immediate 0X 20.
 
 00:06:35.880 --> 00:06:37.600
- And now we're gonna store it.
+ And now we're going to store it.
 
 00:06:37.600 --> 00:06:43.600
  PC 0X 0B, store accumulator to address 0 and X with X.
@@ -235,16 +235,16 @@ WEBVTT
  So now we're at the top of the loop.
 
 00:07:08.680 --> 00:07:11.480
- We're gonna grab the next character, 'cause X is now 2,
+ We're going to grab the next character, because X is now 2,
 
 00:07:11.480 --> 00:07:14.480
- so we're gonna grab the 2 offset from our array.
+ so we're going to grab the 2 offset from our array.
 
 00:07:14.480 --> 00:07:20.760
  PC 0X 01, load accumulator from address 0 and X with X.
 
 00:07:20.760 --> 00:07:25.360
- So we got 60, so I'm gonna just run this a bit, okay?
+ So we got 60, so I'm going to just run this a bit, okay?
 
 00:07:25.360 --> 00:07:30.120
  And I'll try to stop it so that I can show you kind of the last iteration of the loop.

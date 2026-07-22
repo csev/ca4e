@@ -1,4 +1,4 @@
- welcome to yet another gate layout walkthrough for computer architecture for everybody. In this we're
+ welcome to yet another gate layout walkthrough for Computer Architecture for Everybody. In this we're
  going to play with several of the circuits, the counter and the single instruction. So if you go
  back and you take a look at the counter, I'm going to build one and then I'm going to actually load
  it. So we're just going to do a three bit adder, put the three bit adder in the middle here. And so

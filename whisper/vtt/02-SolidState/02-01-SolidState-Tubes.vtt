@@ -40,7 +40,7 @@ WEBVTT
  irrespective of the underlying technology or manufacturing technology. And then transistors
 
 00:01:10.840 --> 00:01:17.000
- increased in density and scale and eventually we will learn about very large scale integration,
+ increased in density and scale and eventually we will learn about Very Large Scale Integration,
 
 00:01:17.000 --> 00:01:22.240
  VLSI and learn how we lay out chips and how to manufacture them and just play with that
@@ -109,7 +109,7 @@ WEBVTT
  click to the other way. You can kind of see the contacts moving back and forth and you
 
 00:03:25.840 --> 00:03:31.280
- can think of that as a zero and a one and on things like the Bomba we use these kinds
+ can think of that as a zero and a one and on things like the Bombe we use these kinds
 
 00:03:31.280 --> 00:03:37.040
  of relays to capture zeros and ones and you can even use these eventually to do addition.

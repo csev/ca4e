@@ -1,12 +1,12 @@
- the Babbage Difference Engine was an example of mechanical iteration where you make a motor or a crank or something to do something one of the earliest most powerful mechanical computers ever built was called the Bamba and it was used to
+ the Babbage Difference Engine was an example of mechanical iteration where you make a motor or a crank or something to do something one of the earliest most powerful mechanical computers ever built was called the Bombe and it was used to
  crack encrypted communications in World War II with Germans and Japanese that used a device called
- the Enigma to encrypt these messages and send them using Morse code and radio. And the Bomba was a
+ the Enigma to encrypt these messages and send them using Morse code and radio. And the Bombe was a
  British, Polish device that repeatedly tried to guess these settings for a day, like guessing a
- password based only on the encrypted text. And so when you listen to a Bomba moving, it is lots of
+ password based only on the encrypted text. And so when you listen to a Bombe moving, it is lots of
  clicking, lots of spinning and lots of rotation, because the iteration is kind of rotation.
  So we think of a for loop as iteration, but in a physical computer a for loop is often rotation.
  Another device that kind of approximates this same kind of computation with a little less high-end is
- a pinball machine. So the Bomba was a very fast electromechanical computer in the 30s and the
+ a pinball machine. So the Bombe was a very fast electromechanical computer in the 30s and the
  40s. The pinball machine is kind of like the 50s and the 60s, and it's just, it's a kind of a good
  example of how state-of-the-art military technology becomes games later. Because a pinball machine
  uses switches and relays and physical storage, like piles of balls, to track a score, award free
@@ -14,9 +14,9 @@
  you credits. And these are all built by using relays and wiring and knowing things like the
  response time of a relay when it's switching from sort of off to on, and then relay feedback
  that once relay goes to on it stays on. And in many ways it's a throwback to the kind of technology
- that the electromechanical computational technology similar to the Bomba. But the problem is that
+ that the electromechanical computational technology similar to the Bombe. But the problem is that
  the pure mechanical computations were just too slow. And if you take a machine like the Babbage
- engine and you just make it go up 20 times faster, it's gonna fall apart in like less than a minute.
+ engine and you just make it go up 20 times faster, it's going to fall apart in like less than a minute.
  Might take you years to build, you go too fast in it and all the pieces come flying off.
  And that's because the the energy to change the state, right, so changing state, again going back
  to this, the changing of the state is me pushing on the thumb thing. But if I all of a sudden made
@@ -24,7 +24,7 @@
  It couldn't take the stress. And so the problem is is that physical and electromechanical computing
  had just a limit of, there's like inertia, you know, physical problems like inertia.
  And so you can, you have to limit the speed of like the difference engine so you don't, or the
- Bomba, so you don't just physically damage the machine. If you go to the maximum speed and double
+ Bombe, so you don't just physically damage the machine. If you go to the maximum speed and double
  it you will break the machine very, very quickly. So what happened was is instead of storing data
  and storing the zero or the one in something mechanical like a relay, they started using,
  again in World War II at Bletchley Park, electronic switching using tubes. Now tubes are interesting
@@ -44,7 +44,7 @@
  parts so they can switch way faster than any kind of a physical storage device. So one of the first
  tube-based electronic computers was called the Colossus, also at Bletchley Park, currently at
  the National Museum of Computing History at Bletchley Park. But it could do the other
- computations way faster than the other electro-mechanical computer called the Bomba. But
+ computations way faster than the other electro-mechanical computer called the Bombe. But
  they're pretty hot. If you stand by this thing you can feel heat coming off of it.
  Power consumption and heat dissipation for tube-based computers, even though they're much faster,
  are still a challenge. This is an electronic computer, the world's first computer for many

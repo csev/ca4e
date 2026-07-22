@@ -136,7 +136,7 @@ WEBVTT
  So we'll build much more complex logic circuits.
 
 00:01:43.600 --> 00:01:46.120
- We're gonna see much more complex gates.
+ We're going to see much more complex gates.
 
 00:01:46.120 --> 00:01:50.840
  But I can't really run away from history quite yet.
@@ -286,7 +286,7 @@ WEBVTT
  it's not really sending as much current to the output,
 
 00:03:53.440 --> 00:03:55.280
- 'cause all that output is being as connected
+ because all that output is being as connected
 
 00:03:55.280 --> 00:03:57.840
  to the input of another transistor later in the circuit.
@@ -514,7 +514,7 @@ WEBVTT
  we'll do CMOS, okay?
 
 00:07:20.720 --> 00:07:25.200
- So now what I wanna show you is a tool that I built
+ So now what I want to show you is a tool that I built
 
 00:07:25.200 --> 00:07:27.280
  called a CMOS layout tool.
@@ -559,7 +559,7 @@ WEBVTT
  and connect it to the negative, it's zero.
 
 00:08:02.880 --> 00:08:05.120
- So part of what we're gonna do in the NOT gate
+ So part of what we're going to do in the NOT gate
 
 00:08:05.120 --> 00:08:08.920
  is have a switch as input.
@@ -589,7 +589,7 @@ WEBVTT
  so that we can test our circuits.
 
 00:08:27.600 --> 00:08:29.640
- So what we're gonna do is build a circuit
+ So what we're going to do is build a circuit
 
 00:08:30.760 --> 00:08:35.520
  that can create the logic so that whatever we have here
@@ -610,19 +610,19 @@ WEBVTT
  and then put a NMOS transistor below it.
 
 00:08:50.960 --> 00:08:54.840
- So we're gonna connect the voltage
+ So we're going to connect the voltage
 
 00:08:55.760 --> 00:09:00.760
  to the top connector of the PMOS transistor,
 
 00:09:00.760 --> 00:09:05.120
- and then we're gonna connect the bottom connection
+ and then we're going to connect the bottom connection
 
 00:09:05.120 --> 00:09:07.680
  of the NMOS transistor to ground,
 
 00:09:07.680 --> 00:09:09.840
- and then we're gonna take the output
+ and then we're going to take the output
 
 00:09:09.840 --> 00:09:11.400
  of the NMOS transistor
@@ -751,10 +751,10 @@ WEBVTT
  and we're going to build much more complex digital gates,
 
 00:11:09.520 --> 00:11:11.480
- but then we're gonna build circuits out of those gates.
+ but then we're going to build circuits out of those gates.
 
 00:11:11.480 --> 00:11:15.040
- We're not really gonna build very complex circuits
+ We're not really going to build very complex circuits
 
 00:11:15.040 --> 00:11:16.120
  out of transistors,
@@ -823,7 +823,7 @@ WEBVTT
  And then there's the exclusive OR gate,
 
 00:12:13.560 --> 00:12:14.880
- which we're gonna find really useful.
+ which we're going to find really useful.
 
 00:12:14.880 --> 00:12:18.520
  It's kind of a, it almost like counts its inputs.
@@ -910,7 +910,7 @@ WEBVTT
  at the end of each of these things.
 
 00:13:34.740 --> 00:13:38.880
- I wanna show you how we can lay out a NOR gate.
+ I want to show you how we can lay out a NOR gate.
 
 00:13:38.880 --> 00:13:41.160
  And the basic idea of these things
@@ -1066,7 +1066,7 @@ WEBVTT
  kind of more not gates that has the,
 
 00:16:21.040 --> 00:16:23.240
- it's either gonna conduct eventually from the top
+ it's either going to conduct eventually from the top
 
 00:16:23.240 --> 00:16:27.000
  or the bottom, and now we can have all the combinations
@@ -1105,10 +1105,10 @@ WEBVTT
  with inputs and outputs.
 
 00:17:01.440 --> 00:17:03.160
- And you're gonna like it.
+ And you're going to like it.
 
 00:17:03.160 --> 00:17:05.360
- Well, we're not gonna build complex circuits
+ Well, we're not going to build complex circuits
 
 00:17:05.360 --> 00:17:06.800
  using transistors.

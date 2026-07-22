@@ -1,10 +1,10 @@
 WEBVTT
 
 00:00:00.000 --> 00:00:05.120
- hello, and welcome to another walkthrough of computer architecture for everybody this is a
+ hello, and welcome to another walkthrough of Computer Architecture for Everybody this is a
 
 00:00:05.120 --> 00:00:10.560
- walkthrough of our VLSI design layout tool, very large scale integration, the tool where we sort of
+ walkthrough of our VLSI design layout tool, Very Large Scale Integration, the tool where we sort of
 
 00:00:10.560 --> 00:00:16.400
  build circuits by painting layers that turn into photolithography although it's probably these days
@@ -112,31 +112,31 @@ WEBVTT
  that the voltage is flowing but because there's no voltage on the transistor the transistor ends up
 
 00:03:23.360 --> 00:03:33.440
- being a block to the whole thing okay so if you recall the p-moss is open on ground and closed on
+ being a block to the whole thing okay so if you recall the PMOS is open on ground and closed on
 
 00:03:33.440 --> 00:03:38.400
- positive and the n-moss is the opposite where it is closed on ground and opened on positive so let's
+ positive and the NMOS is the opposite where it is closed on ground and opened on positive so let's
 
 00:03:38.400 --> 00:03:42.560
  just go ahead and put some voltage in i probably should have done that so now you see the transistor
 
 00:03:42.560 --> 00:03:49.760
- in operation so i've got voltage on the input and that is causing the upper p-moss transition
+ in operation so i've got voltage on the input and that is causing the upper PMOS transition
 
 00:03:49.760 --> 00:03:53.840
- to block voltage from flowing so voltage would come into the p-moss transistor but not leave
+ to block voltage from flowing so voltage would come into the PMOS transistor but not leave
 
 00:03:53.840 --> 00:03:58.640
- the transistor if we then look at the n-moss transistor in the bottom you see the ground is
+ the transistor if we then look at the NMOS transistor in the bottom you see the ground is
 
 00:03:58.640 --> 00:04:03.840
- flowing up but in this case it's flowing through the n-moss transistor to the output and so the
+ flowing up but in this case it's flowing through the NMOS transistor to the output and so the
 
 00:04:03.840 --> 00:04:10.480
  output is negative now if we switch and put ground as the input which we do like that then you see
 
 00:04:10.480 --> 00:04:15.840
- that the p-moss at the top is conducting and the plus is going all the way out to the output oops
+ that the PMOS at the top is conducting and the plus is going all the way out to the output oops
 
 00:04:15.840 --> 00:04:20.640
  i just put a ground there that messes that thing up and but i can fix that watch i can just say
@@ -175,7 +175,7 @@ WEBVTT
  before i stop here a couple other things to show you there is this really cool feature called
 
 00:05:26.160 --> 00:05:36.800
- read circuit and i'm gonna press it and then just stay quiet draw vcc eight one draw probe a at four
+ read circuit and i'm going to press it and then just stay quiet draw vcc eight one draw probe a at four
 
 00:05:36.800 --> 00:05:47.840
  six with voltage vcc draw p plus diffusion from eight one two eight five draw polysilicon from
@@ -229,5 +229,5 @@ WEBVTT
  do stuff it gives you hints as to how to complete your homework etc so i hope you found this
 
 00:08:16.720 --> 00:08:27.840
- interesting this walkthrough on the vlsi design system for computer architecture for everybody
+ interesting this walkthrough on the vlsi design system for Computer Architecture for Everybody
 

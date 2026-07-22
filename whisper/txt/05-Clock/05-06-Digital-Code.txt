@@ -1,4 +1,4 @@
- So we're gonna wrap up this section
+ So we're going to wrap up this section
  talking a little bit more about what we would do
  in order to get the instructions,
  the machine language instructions,
@@ -12,9 +12,9 @@
  maybe a multiplier or a comparison module, all in hardware.
  Then we have registers which have, you know,
  bits in them like numbers and their temporary storage.
- And in addition, we're gonna talk a little more now
+ And in addition, we're going to talk a little more now
  about the logic.
- Now the load and store, the way we're gonna do it
+ Now the load and store, the way we're going to do it
  goes to and from registers for like data memory,
  but for program memory, there's a couple of things
  that the CPU uses to control program memory.
@@ -23,7 +23,7 @@
  we're supposed to execute.
  So the CPU, when it's ready to execute an instruction,
  it says, oh, the PC tells me where to load it.
- So I'm gonna load that instruction from the memory
+ So I'm going to load that instruction from the memory
  into CIR, current instruction register.
  And that's just some bits, zeros and one.
  And then I mentioned the idea of a decoder.
@@ -35,7 +35,7 @@
  in the instruction, decoding it,
  and then sending logic to the ALU and the registers
  to activate the right thing to get the right thing to happen.
- So maybe we're gonna add two registers together
+ So maybe we're going to add two registers together
  and store the result in a different register, okay?
  And the decoder sees that instruction
  that is the add two registers
@@ -81,7 +81,7 @@
  So coming up next, we're going to design
  a very simple central processing unit.
  I call it the CDC 8512, inspired by my first computer,
- the Controlled Data Corporation, CDC 6500.
+ the Control Data Corporation, CDC 6500.
  It'll have a complete architecture.
  It'll be completely defined.
  It'll have a program counter.

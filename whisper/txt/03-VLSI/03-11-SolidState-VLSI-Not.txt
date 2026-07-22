@@ -1,5 +1,5 @@
- hello, and welcome to another walkthrough of computer architecture for everybody this is a
- walkthrough of our VLSI design layout tool, very large scale integration, the tool where we sort of
+ hello, and welcome to another walkthrough of Computer Architecture for Everybody this is a
+ walkthrough of our VLSI design layout tool, Very Large Scale Integration, the tool where we sort of
  build circuits by painting layers that turn into photolithography although it's probably these days
  laser lithography but you get the idea the basic idea is you can draw these pure areas that are
  going to have metal placed on them you can also erase them and it doesn't really matter how you
@@ -35,15 +35,15 @@
  a via so we're pretty much almost done at this point if we put some voltage up here in the orange
  in the p-dope silicon and we put some ground at the bottom in the n-dope silicon what you see is
  that the voltage is flowing but because there's no voltage on the transistor the transistor ends up
- being a block to the whole thing okay so if you recall the p-moss is open on ground and closed on
- positive and the n-moss is the opposite where it is closed on ground and opened on positive so let's
+ being a block to the whole thing okay so if you recall the PMOS is open on ground and closed on
+ positive and the NMOS is the opposite where it is closed on ground and opened on positive so let's
  just go ahead and put some voltage in i probably should have done that so now you see the transistor
- in operation so i've got voltage on the input and that is causing the upper p-moss transition
- to block voltage from flowing so voltage would come into the p-moss transistor but not leave
- the transistor if we then look at the n-moss transistor in the bottom you see the ground is
- flowing up but in this case it's flowing through the n-moss transistor to the output and so the
+ in operation so i've got voltage on the input and that is causing the upper PMOS transition
+ to block voltage from flowing so voltage would come into the PMOS transistor but not leave
+ the transistor if we then look at the NMOS transistor in the bottom you see the ground is
+ flowing up but in this case it's flowing through the NMOS transistor to the output and so the
  output is negative now if we switch and put ground as the input which we do like that then you see
- that the p-moss at the top is conducting and the plus is going all the way out to the output oops
+ that the PMOS at the top is conducting and the plus is going all the way out to the output oops
  i just put a ground there that messes that thing up and but i can fix that watch i can just say
  erase come back come back i just hovered and hit it so i erased that guy so now it's back to being
  a happy little not gate okay so that's a happy little not gate um let's go ahead and turn this
@@ -56,7 +56,7 @@
  right that's the first half of the knot now it checks sets a to vcc and then set checks to see
  if the q is ground and that's correct and so we are done and we have earned our grade in that so
  before i stop here a couple other things to show you there is this really cool feature called
- read circuit and i'm gonna press it and then just stay quiet draw vcc eight one draw probe a at four
+ read circuit and i'm going to press it and then just stay quiet draw vcc eight one draw probe a at four
  six with voltage vcc draw p plus diffusion from eight one two eight five draw polysilicon from
  six three two ten three draw polysilicon from six nine two ten nine draw metal from six three two
  six nine draw metal from eight five two eight seven draw metal from four six two six six draw metal from
@@ -74,4 +74,4 @@
  could draw all those things that's actually what the save and the restore actually knows all of
  those items so there's some help for this that you might find useful talks a lot about how to
  do stuff it gives you hints as to how to complete your homework etc so i hope you found this
- interesting this walkthrough on the vlsi design system for computer architecture for everybody
+ interesting this walkthrough on the vlsi design system for Computer Architecture for Everybody

@@ -1,4 +1,4 @@
- hello and welcome to another walkthrough for computer architecture for everybody.
+ hello and welcome to another walkthrough for Computer Architecture for Everybody.
  So in this walkthrough we are going to walk through the assignment of building a half adder.
  So in the instructions for this half adder we are seeing the reference diagram.
  So it's really nothing more than exclusive OR at the top and an AND at the bottom with the input of A and B and a sum and carry as the output.
@@ -31,5 +31,5 @@
  A of zero, B of one turns into a sum of one and a C out of zero.
  A of one and B of zero is sum of one, C out is zero.
  And then we finish and away we go.
- So I hope this little walkthrough of how to do a half adder assignment in the gates layout tool for computer architecture for everybody has been helpful to you.
+ So I hope this little walkthrough of how to do a half adder assignment in the gates layout tool for Computer Architecture for Everybody has been helpful to you.
  [ Music ]

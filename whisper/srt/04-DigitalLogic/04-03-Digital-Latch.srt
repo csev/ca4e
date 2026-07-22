@@ -128,7 +128,7 @@
 
 33
 00:04:05,120 --> 00:04:11,520
- latch and it's literally two NOR gates okay that's it now we're gonna have to build some more logic
+ latch and it's literally two NOR gates okay that's it now we're going to have to build some more logic
 
 34
 00:04:11,520 --> 00:04:16,640

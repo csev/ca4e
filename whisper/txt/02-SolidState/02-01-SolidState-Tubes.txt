@@ -11,7 +11,7 @@
  which is the same and the underlying transistor technology for a digital logic gate can be
  very different but the way we think about digital logic gates is the way we can, it's
  irrespective of the underlying technology or manufacturing technology. And then transistors
- increased in density and scale and eventually we will learn about very large scale integration,
+ increased in density and scale and eventually we will learn about Very Large Scale Integration,
  VLSI and learn how we lay out chips and how to manufacture them and just play with that
  just a little bit. But let's start at the beginning with vacuum tubes, right? So the
  Colossus used valves, the more British way to call it is valves and I think that to some
@@ -34,7 +34,7 @@
  simple little DC power supply. It's pretty safe. And I'm going to activate this and so
  right now the contacts, right there, the contacts are one way and when I activate this the contacts
  click to the other way. You can kind of see the contacts moving back and forth and you
- can think of that as a zero and a one and on things like the Bomba we use these kinds
+ can think of that as a zero and a one and on things like the Bombe we use these kinds
  of relays to capture zeros and ones and you can even use these eventually to do addition.
  The problem with relays and why tubes are better is how fast can you move this back and forth,
  right? It's like I'm a video gamer pushing the keys as fast as I can. The problem is is because

@@ -1,4 +1,4 @@
- welcome to our lecture on VLSI, very large scale integration we're going to lay out some circuits
+ welcome to our lecture on VLSI, Very Large Scale Integration we're going to lay out some circuits
  using basically a paint program to build millions of transistors and use photolithography so when i was
  in master's degree long time ago i used a tool called magic this was an open source VLSI layout
  tool that's created at berkeley in 1983 and it's very very popular because it's free and if you
@@ -27,17 +27,17 @@
  positive charge that's because they're not really connected to the metal but if you put vias at each
  of the connections then the positive charge moves from the metal to the poly silicon n-doped silicon
  and p-doped silicon now to make a transistor it takes polysilicon plus n-doped or p-doped silicon
- and you create the transistor whether it's an n-moss transistor or p-moss transistor when you cross
- polysilicon crosses n-doped it makes an n-moss transistor and when polysilicon crosses p-doped
- it produces a p-moss transistor so if we look we see metal across the top we see a vertical n-doped
+ and you create the transistor whether it's an NMOS transistor or PMOS transistor when you cross
+ polysilicon crosses n-doped it makes an NMOS transistor and when polysilicon crosses p-doped
+ it produces a PMOS transistor so if we look we see metal across the top we see a vertical n-doped
  and a vertical p-doped coming down with a via and then we have a horizontal polysilicon with a plus
  charge on it and at the moment that it's crossing the green or the n-doped it causes a transistor
- and given that that is an n-moss transistor when positive voltage is transmitted to through it
- then it copies the voltage through it the p-moss on the other hand when it's presented with a one
- basically it blocks and so you can see the positive voltage flowing down the bound to p-moss
+ and given that that is an NMOS transistor when positive voltage is transmitted to through it
+ then it copies the voltage through it the PMOS on the other hand when it's presented with a one
+ basically it blocks and so you can see the positive voltage flowing down the bound to PMOS
  but stopping at the transistor and so these overlaps between the n-doped and p-doped and the
  polysilicon are the transistors and if you look at the bottom one you see the exact same circuit
- that has a zero or negative on it and you see that the n-moss transistor is blocking and the p-moss
+ that has a zero or negative on it and you see that the NMOS transistor is blocking and the PMOS
  transistor is conducting now the layout here my little layout is greatly simplified and my
  circuit emulation is greatly simplified it's good enough to do not gates and NAND gates and NOR gates
  and if you're really interested you can ask AI to explain the differences between VLSI layout and
@@ -48,25 +48,25 @@
  using the circuit simulation software you can turn on this layer mode where you point at a layer and
  it shows the layers from top to bottom and again this isn't perfectly right but you can see like
  on the left you can see a polysilicon and a p-doped silicon and you see them connect
- and that makes a p-moss transistor you can see that on the on the layer chart where the p and
+ and that makes a PMOS transistor you can see that on the on the layer chart where the p and
  the poly are touching and that's where the transistor is being created and then if you look on the right
  where you have the metal and the p-doped silicon they are connected via a via and you can think of
  the via as a little hole that's drilled through all the layers with a little kind of bit of metal
  poured in so they're all actually connected and so that via is how the metal the positive charge
  goes from the metal at the top to the p-doped silicon going down vertically so here is a
- c-moss knot and you you can see that it creates a p-moss transistor at the top and an n-moss
+ CMOS knot and you you can see that it creates a PMOS transistor at the top and an NMOS
  transistor at the bottom it uses metal to move the voltages around and via is to connect the
  various silicon layers at the right point and so you see the input on the right on the left side
- is a zero and then goes to the two transistors the p-moss at the top and the n-moss at the bottom
- and you can see one of them in the case of the input zero the n-moss at the bottom is non-conducting
- and so the ground is not going to output but the top p-moss transistor is conducting so the positive
+ is a zero and then goes to the two transistors the PMOS at the top and the NMOS at the bottom
+ and you can see one of them in the case of the input zero the NMOS at the bottom is non-conducting
+ and so the ground is not going to output but the top PMOS transistor is conducting so the positive
  is is then copied to the output just like in the circuits we were looking at before
- and if you switch the input to one then the p-moss transistor at the top stops conducting
- and the n-moss transistor at the bottom starts conducting and so the the negative the ground that's
- coming up from the bottom is conducted through the n-moss transistor to the output and so now
+ and if you switch the input to one then the PMOS transistor at the top stops conducting
+ and the NMOS transistor at the bottom starts conducting and so the the negative the ground that's
+ coming up from the bottom is conducted through the NMOS transistor to the output and so now
  we have a knot and i won't go through everything about this but you can then extend this to make
  things more complex than not and so we talked a little bit about nan gates nan gates have
- two p-moss transistors at the top and two n-moss transistors at the bottom it's kind of like
+ two PMOS transistors at the top and two NMOS transistors at the bottom it's kind of like
  kind of half parallel half in series not gate and and if you trace the little picture you can see
  that i've i've created that you can see there's four transistors and i will do a demonstration
  where it actually reads the whole circuit so you can watch it in slow motion but you can see the
@@ -75,16 +75,16 @@
  see them in this case they're both one and they are in effect being transported you see it a place
  where the the second input is being connected to polysilicon then it's going over top of a
  different polysilicon then it is going on top of a p-doped silicon and then it is connecting to a
- horizontal polysilicon so that it can be make a transistor for the other of the p-moss transistors
+ horizontal polysilicon so that it can be make a transistor for the other of the PMOS transistors
  that make the nan gate up now if we look at the bottom the bottom is thing where we're deciding
  whether negative is going out or not and in this case because they're both positive there's two
- n-moss transistors you can see the the green n-doped silicon going up and because both inputs are
+ NMOS transistors you can see the the green n-doped silicon going up and because both inputs are
  positive both of those transistors are transmitting and so what's being copied to output is the
  negative from ground so if we switch to a different row in the truth table a of zero and b of one
  we can see how the nan gate changes a little bit right so the zero goes and makes it so that the
  p plus is conducting at the top that's conducting a plus down then that is going to make the output
- be plus and then you watch that same ground that same zero go down to the top n-moss transistor and
- then that blocks that n-moss transistor that keeps ground from flowing out and so it's you can trace
+ be plus and then you watch that same ground that same zero go down to the top NMOS transistor and
+ then that blocks that NMOS transistor that keeps ground from flowing out and so it's you can trace
  all of the traces and all the connections and all the vias and see there's transistors and connections
  and they basically implement the circuit diagram of the nand this has been a long series of lectures
  talking about semiconductors we started about tubes and how do tubes and transistors need to
@@ -92,7 +92,7 @@
  point for digital applications again these are analog devices although we want to treat them and
  think of them as digital then we go from transistors to gates which makes it so that we can think
  digital even though the underlying thing is an analog transistor then we watch the evolution of
- transistor technology from p-moss to n-moss and then currently c-moss and how photolithography
+ transistor technology from PMOS to NMOS and then currently CMOS and how photolithography
  makes it so we can put more and more transistors on the chip over time and manufacturing has gotten
  better over time and we did a really brief introduction to how to design vlsi design chips
  using vlsi layout tools so i hope you found that interesting up next we're going to switch from

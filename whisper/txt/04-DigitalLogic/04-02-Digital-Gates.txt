@@ -5,12 +5,12 @@
  And we're going to basically use a pattern much like this,
  except that this little adding hand calculator
  does numbers from zero through nine.
- We're gonna do the same thing with just zero and one,
- so they're gonna do base to addition,
- but we're still gonna do things like carry.
+ We're going to do the same thing with just zero and one,
+ so they're going to do base to addition,
+ but we're still going to do things like carry.
  So when we click over to the next one,
  it carries and goes on to the next number.
- And so we're gonna solve the carry problem.
+ And so we're going to solve the carry problem.
  At this point, you should know the truth tables
  for not an and, an or, and exclusive or.
  Now, not an and and or are kinda like
@@ -24,7 +24,7 @@
  So at this point, I think you should be able to
  fill these in and I probably won't need
  to explain these to you much more.
- But we do wanna represent numbers larger than zero and one.
+ But we do want to represent numbers larger than zero and one.
  That would be kind of a limited range.
  So what we use is we use base two numbers,
  and we take different wires and give them different values.
@@ -41,8 +41,8 @@
  plus zero times one, which is zero, four plus two equals six.
  So to convert one, one, zero base two into base 10,
  it's six base 10.
- We're gonna make things simple for now.
- We're not gonna make you generally be able to convert
+ We're going to make things simple for now.
+ We're not going to make you generally be able to convert
  any base 10 number.
  As a matter of fact, for most of the rest of this section
  of the class, we will never encounter a number
@@ -186,7 +186,7 @@
  So it's probably best to take a quick look
  at how this works with a working circuit.
  So here is a full adder circuit.
- And so we're gonna start and work through carry in,
+ And so we're going to start and work through carry in,
  A and B and then the sum and the carry out.
  So we're set them all to zero, so the sum is zero.
  So let's just exercise this as a half adder, for example.
@@ -282,5 +282,5 @@
  but you don't have to know how to build them
  to use a component like a three bit adder in a circuit.
  And that's the fun of it all.
- And we're gonna keep doing this as we go forward.
+ And we're going to keep doing this as we go forward.
  (upbeat music)

@@ -1,8 +1,8 @@
  - Hello, and welcome to our lecture
  on continuous analog computing.
- So there's a lot of things I'm gonna show you.
+ So there's a lot of things I'm going to show you.
  They don't matter too much
- 'cause the real overall theme here is
+ because the real overall theme here is
  continuous means that these are devices
  that have sort of knobs or gears or sliders
  that use physical movement to approximate a computation.
@@ -91,7 +91,7 @@
  Now, I want to talk a little bit about modern, continuous analog
  devices.
  One's not quite so modern.
- It's been replaced by the Hampton calculator,
+ It's been replaced by the hand calculator,
  which is the slide rule.
  And the other is a wind calculator for airplane pilots
  that uses a circular calculator to do trigonometry
@@ -145,7 +145,7 @@
  the wind is just going to push me,
  and I'm not going to get to you.
  And not only it'll take me more than an hour,
- 'cause the wind is actually not just moving me,
+ because the wind is actually not just moving me,
  but slowing me down.
  So when that hour is done,
  I will not be where you're at.
@@ -163,7 +163,7 @@
  So where should we actually point the plane
  to actually have a ground track that is west,
  and what is our effective speed
- so we can calculate how long it's gonna take us
+ so we can calculate how long it's going to take us
  to get there, okay?
  So one way to do this is the law of signs.
  Everybody knows the law of signs.
@@ -185,7 +185,7 @@
  And then we have a tailwind
  which is coming from our right and behind us.
  And you have to calculate all those things
- 'cause your plane may speed up or slow down
+ because your plane may speed up or slow down
  and it might affect where you have to point the plane.
  And I provide there some simple,
  beautiful mathematics in Python.
@@ -204,7 +204,7 @@
  the wind is no longer out of 300 at 15 knots.
  It's out of 243 at 80 knots or whatever.
  And you got to recalculate where you're at
- 'cause you're like, you know you've gone a certain distance.
+ because you're like, you know you've gone a certain distance.
  You got to recalculate where you're going to point the plane.
  All those things.
  And as interesting, as complex as the trigonometry
@@ -231,7 +231,7 @@
  It's a really cool analog computer
  that we learned today as pilots.
  So let me show you how this works.
- We're gonna do a simple calculation
+ We're going to do a simple calculation
  for airspeed correction and heading correction on an E6B.
  Our problem is a 15 knot headwind.
  So we put our little hole at 100
@@ -244,9 +244,9 @@
  which would slow us down.
  Our plane goes 100 knots,
  so it'd be going 85 on the ground.
- But that's not where we wanna go.
- We don't wanna fly to 300.
- We wanna fly to 270.
+ But that's not where we want to go.
+ We don't want to fly to 300.
+ We want to fly to 270.
  Now as we're moving this,
  in a sense this analog calculator
  is doing a bunch of sines and cosines,
@@ -255,15 +255,15 @@
  It is a physical thing and it is recalculated.
  So the first thing we do is we put the heading
  that we intend to fly up there at the true index.
- So we're gonna fly 270 or westerly.
+ So we're going to fly 270 or westerly.
  Then what we've got to do is we've got to take the point,
  this point here, and we gotta move it down to 100 knots
- 'cause that's how fast our plane is.
+ because that's how fast our plane is.
  And you can see that the headwind is slowing us down.
  So now we've compensated for the headwind.
  And so if you look, our plane normally goes 100 knots,
  but with this particular wind, this 15 knot wind,
- it's gonna do 86, 87 knots.
+ it's going to do 86, 87 knots.
  And we also have to figure out what we call the crab angle,
  which is the way we have to fly to go to the west
  to compensate for the wind.
@@ -287,7 +287,7 @@
  with things like water and pulleys.
  So this kind of concludes our brief look
  at analog computing devices.
- Up next, we're gonna talk about digital computing devices.
+ Up next, we're going to talk about digital computing devices.
  And digital computing devices are things
  that make clicking noises.
  They're still physical devices.

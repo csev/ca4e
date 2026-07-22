@@ -1,7 +1,7 @@
 WEBVTT
 
 00:00:00.000 --> 00:00:06.920
- Hello, and welcome to another code walkthrough for computer architecture for everybody.
+ Hello, and welcome to another code walkthrough for Computer Architecture for Everybody.
 
 00:00:06.920 --> 00:00:10.140
  In this walkthrough we're going to walk through the uppercase converter.
@@ -91,7 +91,7 @@ WEBVTT
  if true, this is doing a comparison between the character to see if it was a zero byte,
 
 00:02:41.600 --> 00:02:46.560
- and if we hit the zero byte, we're gonna exit the loop, and we're gonna branch to this copy
+ and if we hit the zero byte, we're going to exit the loop, and we're going to branch to this copy
 
 00:02:46.560 --> 00:02:52.120
  end, now copy end is not the top of this, it is the next statement after the end of
@@ -127,7 +127,7 @@ WEBVTT
  copy loop end, so that is just a way to start a block and get out of the block, so that's
 
 00:03:51.960 --> 00:03:59.500
- like a break statement, all of the looping in WASM is basically kind of like a wild true
+ like a break statement, all of the looping in WASM is basically kind of like a while true
 
 00:03:59.500 --> 00:04:05.500
  loop, both in Python and in C, it's like an infinite loop, and all we're doing with this
@@ -142,7 +142,7 @@ WEBVTT
  and we have, we're jumping to the top, if you don't have this BR dollar copy underscore
 
 00:04:22.360 --> 00:04:28.400
- loop, it's not gonna go back up, so the while loop is not automatic, you have to do something
+ loop, it's not going to go back up, so the while loop is not automatic, you have to do something
 
 00:04:28.400 --> 00:04:36.280
  at the bottom of the loop to go up, this is like a continue in either Python or C, so
@@ -154,7 +154,7 @@ WEBVTT
  is no plus plus in here, no auto ion range of five, nothing, you have got to add one
 
 00:04:50.480 --> 00:04:57.680
- to your, yeah, so we're gonna add one to our counter, they're adding one to the counter
+ to your, yeah, so we're going to add one to our counter, they're adding one to the counter
 
 00:04:57.680 --> 00:05:03.160
  with this little for statement bit of code, for instruction piece of code, so they're
@@ -187,7 +187,7 @@ WEBVTT
  based arrays, add it, and then load that, I don't know what this T does, but then we're
 
 00:05:56.020 --> 00:06:01.240
- gonna check to see if the character we just got is a zero, and then we're gonna branch
+ going to check to see if the character we just got is a zero, and then we're going to branch
 
 00:06:01.240 --> 00:06:05.360
  out of the loop, and you know, then there are things like this dollar char, this is
@@ -196,16 +196,16 @@ WEBVTT
  a local variable, and then when we finally get done with this function, we are going
 
 00:06:11.080 --> 00:06:15.680
- to return at the end of the function, and then that's gonna kinda clear all that local
+ to return at the end of the function, and then that's going to kinda clear all that local
 
 00:06:15.680 --> 00:06:20.800
- stuff off the stack, the stack frame, and then we're gonna go, so if we got our main
+ stuff off the stack, the stack frame, and then we're going to go, so if we got our main
 
 00:06:20.800 --> 00:06:25.240
- function, and this main function is what is gonna be called from the JavaScript, so we're
+ function, and this main function is what is going to be called from the JavaScript, so we're
 
 00:06:25.240 --> 00:06:29.960
- gonna grab the string, we're gonna grab its length, and we're gonna call the copy and
+ going to grab the string, we're going to grab its length, and we're going to call the copy and
 
 00:06:29.960 --> 00:06:35.040
  uppercase routine, push some things in and call copy and uppercase, and then we're going
@@ -280,10 +280,10 @@ WEBVTT
  the letters that are already uppercase alone, and then we print it all out, so with all
 
 00:08:48.200 --> 00:08:54.940
- that, let's compile it and run it, so remember in this screen, the Watt is being assembled
+ that, let's compile it and run it, so remember in this screen, the WAT is being assembled
 
 00:08:54.940 --> 00:09:00.240
- inside the JavaScript, this is just a JavaScript button, the Watt is being assembled inside
+ inside the JavaScript, this is just a JavaScript button, the WAT is being assembled inside
 
 00:09:00.240 --> 00:09:06.680
  the JavaScript, and then it is being executed inside the browser, and the results are coming
@@ -295,7 +295,7 @@ WEBVTT
  this and adapt it so it does lowercase, it even tells you like, oh, it's a slightly different
 
 00:09:20.120 --> 00:09:25.280
- number, maybe you wanna do a different if, there you go, so it's not trying to make it
+ number, maybe you want to do a different if, there you go, so it's not trying to make it
 
 00:09:25.280 --> 00:09:29.920
  super hard for you, but you gotta dig through here, look enough, and you'll mess it up,
@@ -310,13 +310,13 @@ WEBVTT
  you will have passed the autograder, let's go ahead and run the autograder on this, it's
 
 00:09:45.040 --> 00:09:51.880
- gonna fail, you gotta keep the original string, it compiled it, no, it didn't, we got the
+ going to fail, you gotta keep the original string, it compiled it, no, it didn't, we got the
 
 00:09:51.880 --> 00:09:56.040
- wrong one, that's 'cause I didn't change the code, so there you go, now that's your job,
+ wrong one, that's because I didn't change the code, so there you go, now that's your job,
 
 00:09:56.040 --> 00:10:01.080
- you're gonna fix that in the autograder, okay, so this is a little more detail in the walkthrough
+ you're going to fix that in the autograder, okay, so this is a little more detail in the walkthrough
 
 00:10:01.080 --> 00:10:06.600
  where we build a function, we talk about the block, we talk about how break works, how
@@ -328,7 +328,7 @@ WEBVTT
  talked about the stack and stack approach, you can talk a bunch to AI about this and
 
 00:10:18.080 --> 00:10:24.480
- learn as much or as little as you want about Wasm, I just wanted to expose you to Wasm
+ learn as much or as little as you want about WASM, I just wanted to expose you to WASM
 
 00:10:24.480 --> 00:10:29.140
  because it is going to be increasingly important going forward when we talk about different

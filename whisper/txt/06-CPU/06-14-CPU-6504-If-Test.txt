@@ -1,4 +1,4 @@
- Hello and welcome to another walkthrough for computer architecture for everybody.
+ Hello and welcome to another walkthrough for Computer Architecture for Everybody.
  We're playing with our 6504 emulator programming and kind of working through some increasingly complex samples as we go.
  So we're going to go into the uppercase sample.
  Now, the previous thing we did was a loop and this is really more of an if test.

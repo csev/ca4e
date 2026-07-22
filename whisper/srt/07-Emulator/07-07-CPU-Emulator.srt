@@ -48,7 +48,7 @@
 
 13
 00:00:50,000 --> 00:00:53,760
- so if you go look at that it's javascript and you've learned javascript
+ so if you go look at that it's JavaScript and you've learned JavaScript
 
 14
 00:00:53,760 --> 00:00:57,200
@@ -56,7 +56,7 @@
 
 15
 00:00:57,200 --> 00:01:03,520
- a 6502 instruction set in javascript in a browser the core of this is a
+ a 6502 instruction set in JavaScript in a browser the core of this is a
 
 16
 00:01:03,520 --> 00:01:07,600
@@ -316,7 +316,7 @@
 
 80
 00:05:23,040 --> 00:05:26,400
- are so fast that even if we're writing something in javascript
+ are so fast that even if we're writing something in JavaScript
 
 81
 00:05:26,400 --> 00:05:30,160
@@ -416,15 +416,15 @@
 
 105
 00:07:07,600 --> 00:07:12,320
- written in wasm now it's not written in javascript it's written in wasm what is
+ written in wasm now it's not written in JavaScript it's written in wasm what is
 
 106
 00:07:12,320 --> 00:07:18,800
- wasm wasm is web assembly so i built a machine language emulator
+ wasm wasm is WebAssembly so i built a machine language emulator
 
 107
 00:07:18,800 --> 00:07:22,400
- in javascript that you are using but there is a low level high
+ in JavaScript that you are using but there is a low level high
 
 108
 00:07:22,400 --> 00:07:26,480
@@ -432,7 +432,7 @@
 
 109
 00:07:26,480 --> 00:07:32,080
- recent web browsers called web assembly so web assembly is a machine code that
+ recent web browsers called WebAssembly so WebAssembly is a machine code that
 
 110
 00:07:32,080 --> 00:07:34,960
@@ -452,7 +452,7 @@
 
 114
 00:07:51,360 --> 00:07:56,320
- javascript library that provides things like file opening etc etc
+ JavaScript library that provides things like file opening etc etc
 
 115
 00:07:56,320 --> 00:07:59,600
@@ -492,7 +492,7 @@
 
 124
 00:08:32,960 --> 00:08:36,960
- little bit of a look at web assembly wasm is a little bit different so you
+ little bit of a look at WebAssembly wasm is a little bit different so you
 
 125
 00:08:36,960 --> 00:08:40,320

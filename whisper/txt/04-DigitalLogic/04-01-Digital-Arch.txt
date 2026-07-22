@@ -3,15 +3,15 @@
  course is computer architecture but we're kind of at the point where we have
  gotten to the level where we've built up enough basic stuff to really start
  talking about computer architecture like what's a central processing unit we know
- what gates are we're gonna start with the gates we're not gonna worry about
- transistors we're not gonna worry about tubes we're not gonna worry about slide
- rules and then we're gonna just go from there actually for me this phase is a
+ what gates are we're going to start with the gates we're not going to worry about
+ transistors we're not going to worry about tubes we're not going to worry about slide
+ rules and then we're going to just go from there actually for me this phase is a
  little more comfortable I was never a computer engineer or electrical
  engineer and I kind of understand transistors and so that first half was
  kind of fun for me to do a bunch of research for you and share with you what
  I thought was important about transistors and tubes etc but now we're
- gonna start with gates what can we do with an and gate and or gate not gate
- exclusive or etc first we're gonna learn how to start adding numbers because
+ going to start with gates what can we do with an and gate and or gate not gate
+ exclusive or etc first we're going to learn how to start adding numbers because
  calculation and multiplication and addition are important what about the
  full adders and half adders we have to learn about number representation how do
  computers represent numbers base 2 base 10 and hexadecimal then we're going to

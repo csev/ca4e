@@ -1,6 +1,6 @@
 1
 00:00:00,000 --> 00:00:05,120
- welcome to yet another gate layout walkthrough for computer architecture for everybody. In this we're
+ welcome to yet another gate layout walkthrough for Computer Architecture for Everybody. In this we're
 
 2
 00:00:05,120 --> 00:00:10,160

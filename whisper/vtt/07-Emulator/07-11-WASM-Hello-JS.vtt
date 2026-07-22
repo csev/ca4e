@@ -1,7 +1,7 @@
 WEBVTT
 
 00:00:00.000 --> 00:00:04.040
- Hello and welcome to another walkthrough for computer architecture for everybody.
+ Hello and welcome to another walkthrough for Computer Architecture for Everybody.
 
 00:00:04.040 --> 00:00:08.920
  In this walkthrough we are going to talk about WASM and we're going to talk a little bit
@@ -100,16 +100,16 @@ WEBVTT
  main.
 
 00:02:38.560 --> 00:02:44.760
- Well let's go ahead and compile and run this, in this browser there is a full Watt to Wasm
+ Well let's go ahead and compile and run this, in this browser there is a full WAT-to-WASM
 
 00:02:44.760 --> 00:02:50.960
- compiler and then Wasm to machine code and then JavaScript to execute the resulting machine
+ compiler and then WASM to machine code and then JavaScript to execute the resulting machine
 
 00:02:50.960 --> 00:02:53.820
- code and here is the actual Wasm.
+ code and here is the actual WASM.
 
 00:02:53.820 --> 00:03:00.160
- So Watt is sort of the assembly language but the ultimate thing is this is just a few bytes
+ So WAT is sort of the assembly language but the ultimate thing is this is just a few bytes
 
 00:03:00.160 --> 00:03:07.480
  looks like about 6 times 16, about 100 bytes of character and these are kind of like machine
@@ -121,16 +121,16 @@ WEBVTT
  intended that it can be just in time compiled into the real machine code after validating
 
 00:03:17.760 --> 00:03:25.600
- the safety of it okay and so we go from the Watt to the Wasm and then we execute this
+ the safety of it okay and so we go from the WAT to the WASM and then we execute this
 
 00:03:25.600 --> 00:03:31.640
- Wasm in JavaScript and JavaScript has a Wasm execution environment for it and then the
+ WASM in JavaScript and JavaScript has a WASM execution environment for it and then the
 
 00:03:31.640 --> 00:03:38.960
  output comes back to JavaScript and away we go so that is the hello world, simple hello
 
 00:03:38.960 --> 00:03:46.160
- world, not a C hello world I'll show you that in a bit but a Wasm and JavaScript hello world
+ world, not a C hello world I'll show you that in a bit but a WASM and JavaScript hello world
 
 00:03:46.160 --> 00:03:49.040
  that does its printing using console.log.

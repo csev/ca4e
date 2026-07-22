@@ -14,7 +14,7 @@
  in chapter one slide 19 those instructions are zeros and ones and they are what is called
  machine language and those instructions are moved from the main memory to the central processing unit
  using wires and that was like the first half hour of the first day of programming and now some of
- you have been with me for some time and now we're at the point where we're gonna understand what
+ you have been with me for some time and now we're at the point where we're going to understand what
  exactly a central processing unit is okay so let me show you some of the artifacts that I used when
  teaching that class so let's start with the central processor I've shown you this AMD central processor
  before we now know how to build this chip we understand that instructions will come into these
@@ -30,7 +30,7 @@
  also load and store the you know the things we're going to compute from the memory as well and so if
  you look at this it's got like big and small wires it's mostly wires with these little through holes
  that are soldered into the wires you can see kind of big things they're like roads and lakes but
- these wires go and so again i'm gonna sorry i'm gonna get all stuck on this four of these little
+ these wires go and so again i'm going to sorry i'm going to get all stuck on this four of these little
  pins i mean eight of these little pins are two hex digits so we can represent all these pins perhaps
  with a big long hex string and that's kind of why we're so obsessed with hexadecimal i'm clearly
  obsessed with hexadecimal and the other thing that i showed students in the very beginning

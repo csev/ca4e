@@ -68,7 +68,7 @@
  didn't want to know that stuff integrals okay so this was the way you did complex calculations
  before we had hand calculators this is all replaced for all intents and purposes
  by modern hand calculators but the transistor hasn't been invented yet now there were devices
- that were designed in a sense to create that book the babbage difference engine was something that
+ that were designed in a sense to create that book the Babbage Difference Engine was something that
  was imagined in the 1820s that was had gears and little cogs little carry adders just like the stuff
  we just saw that could compute up to seventh order polynomials like x to the seventh x to the six x
  the fifth and the reason that was so important is you can approximate a lot of functions using

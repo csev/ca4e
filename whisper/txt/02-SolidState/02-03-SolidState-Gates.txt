@@ -43,7 +43,7 @@
  It's doing something.
  It's not just copying something.
  So we'll build much more complex logic circuits.
- We're gonna see much more complex gates.
+ We're going to see much more complex gates.
  But I can't really run away from history quite yet.
  Over time, as manufacturing capabilities changed
  from PMOS to NMOS to CMOS,
@@ -93,7 +93,7 @@
  the voltage to the output.
  And the cool thing there is,
  it's not really sending as much current to the output,
- 'cause all that output is being as connected
+ because all that output is being as connected
  to the input of another transistor later in the circuit.
  And so that doesn't really heat up so badly.
  Now, if you look at CMOS,
@@ -169,7 +169,7 @@
  we just pretty much make CMOS
  because once we could manufacture it reliably,
  we'll do CMOS, okay?
- So now what I wanna show you is a tool that I built
+ So now what I want to show you is a tool that I built
  called a CMOS layout tool.
  And so this way you can connect them
  and put them together and simulate circuits.
@@ -184,7 +184,7 @@
  that now it's got five volts.
  Now, if we delete that and we place a probe
  and connect it to the negative, it's zero.
- So part of what we're gonna do in the NOT gate
+ So part of what we're going to do in the NOT gate
  is have a switch as input.
  A switch is in effect a switch
  that either goes to the positive or the ground.
@@ -194,18 +194,18 @@
  It's just sort of like another little,
  it's connected either to the top or the bottom
  so that we can test our circuits.
- So what we're gonna do is build a circuit
+ So what we're going to do is build a circuit
  that can create the logic so that whatever we have here
  as input, we're going to have output
  that is the opposite of that.
  So these, after a while you get used to these.
  So let's first put a PMOS transistor at the top
  and then put a NMOS transistor below it.
- So we're gonna connect the voltage
+ So we're going to connect the voltage
  to the top connector of the PMOS transistor,
- and then we're gonna connect the bottom connection
+ and then we're going to connect the bottom connection
  of the NMOS transistor to ground,
- and then we're gonna take the output
+ and then we're going to take the output
  of the NMOS transistor
  and connect it to the PMOS transistor.
  Now I say PMOS, the little circle is PMOS,
@@ -248,8 +248,8 @@
  an electrical if statement.
  So basically that was a NOT gate,
  and we're going to build much more complex digital gates,
- but then we're gonna build circuits out of those gates.
- We're not really gonna build very complex circuits
+ but then we're going to build circuits out of those gates.
+ We're not really going to build very complex circuits
  out of transistors,
  although ultimately they're manufactured as transistors.
  And so there is mathematical logic
@@ -272,7 +272,7 @@
  the output is one.
  And if both inputs are zero, the output is zero.
  And then there's the exclusive OR gate,
- which we're gonna find really useful.
+ which we're going to find really useful.
  It's kind of a, it almost like counts its inputs.
  It's not a counter in any way, but it counts its inputs.
  If one of the inputs is one, its output is one.
@@ -301,7 +301,7 @@
  and can be turned into AND and OR with one more NOT gate,
  which means that you would put two more transistors
  at the end of each of these things.
- I wanna show you how we can lay out a NOR gate.
+ I want to show you how we can lay out a NOR gate.
  And the basic idea of these things
  is that it's kinda like a NOT gate,
  and that's what's cool about it.
@@ -353,7 +353,7 @@
  And so just kind of look at it,
  you see that what it is is really just
  kind of more not gates that has the,
- it's either gonna conduct eventually from the top
+ it's either going to conduct eventually from the top
  or the bottom, and now we can have all the combinations
  of the inputs that work and by creating this structure.
  And so you could create a three input NOR gate,
@@ -366,8 +366,8 @@
  and a lot less cluttered.
  So here is a NAND gate designed at the level of a gate
  with inputs and outputs.
- And you're gonna like it.
- Well, we're not gonna build complex circuits
+ And you're going to like it.
+ Well, we're not going to build complex circuits
  using transistors.
  All we're trying to do right now is give you the mapping
  from transistors to gates so that later when we use gates,

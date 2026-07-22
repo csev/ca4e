@@ -97,7 +97,7 @@ WEBVTT
  do this is a little bit tricky right and we'll we'll make smarter latches but this is the simplest
 
 00:04:05.120 --> 00:04:11.520
- latch and it's literally two NOR gates okay that's it now we're gonna have to build some more logic
+ latch and it's literally two NOR gates okay that's it now we're going to have to build some more logic
 
 00:04:11.520 --> 00:04:16.640
  because this is kind of inconvenient because that 2-1 situation is kind of a pain in the neck now

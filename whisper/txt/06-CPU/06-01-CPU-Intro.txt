@@ -13,7 +13,7 @@
  assembly language it's a very low level language which has a one-to-one correspondence with machine
  language and after we've played with an emulator long enough we'll realize that you know emulators
  can be a pretty cool thing and they're actually not that hard to not that hard to write and we'll
- look at some of the emulators like WASM emulators and javascript we'll take a look at how
+ look at some of the emulators like WASM emulators and JavaScript we'll take a look at how
  internet archive keeps old games alive using a series of emulators that run all inside your browser
  and then we're going to finish up talking about CPU evolution over the decades so if we take a
  look at the end of the lecture in the previous section we had built a CPU that had in effect

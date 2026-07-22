@@ -1,6 +1,6 @@
 1
 00:00:00,000 --> 00:00:04,600
- hello and welcome to the first lecture of computer architecture for everybody in
+ hello and welcome to the first lecture of Computer Architecture for Everybody in
 
 2
 00:00:04,600 --> 00:00:10,160
@@ -80,7 +80,7 @@
 
 21
 00:01:41,520 --> 00:01:45,000
- bomba or pinball machines and then eventually we end up on the first
+ Bombe or pinball machines and then eventually we end up on the first
 
 22
 00:01:45,000 --> 00:01:50,160
@@ -100,7 +100,7 @@
 
 26
 00:02:02,840 --> 00:02:07,880
- big deal but if you take my C class C programming for everybody I talk a lot
+ big deal but if you take my C class C Programming for Everybody I talk a lot
 
 27
 00:02:07,880 --> 00:02:13,120
@@ -252,11 +252,11 @@
 
 64
 00:05:47,720 --> 00:05:51,680
- took this picture in August and they're one of those sons is real the rest of
+ took this picture in August and they're one of those suns is real the rest of
 
 65
 00:05:51,680 --> 00:05:56,920
- them are sort of made-up sons but you could at this point use the motion of
+ them are sort of made-up suns but you could at this point use the motion of
 
 66
 00:05:56,920 --> 00:06:02,560
@@ -352,7 +352,7 @@
 
 89
 00:07:59,560 --> 00:08:05,520
- have our fun time with modern hinges if you go to a certain street in Manhattan
+ have our fun time with modern henges if you go to a certain street in Manhattan
 
 90
 00:08:05,520 --> 00:08:10,620

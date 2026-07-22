@@ -1,4 +1,4 @@
- - Hello and welcome through another walkthrough for computer architecture for everybody.
+ - Hello and welcome through another walkthrough for Computer Architecture for Everybody.
  In this walkthrough, I am going to walk through the building
  of a slightly more complex circuit.
  In this case, we are going to build a NAND gate.
@@ -18,29 +18,29 @@
  depending on A and B in the combination,
  based on the truth table.
  So let's go ahead and draw this.
- So I'm gonna draw this in a little more traditional way
+ So I'm going to draw this in a little more traditional way
  than I did in my previous demonstration.
  It's pretty common to just draw a line across the top
  and put the VCC across the top.
  So you see that we're sort of emulating
  a lot of what these diagrams look like.
- And then what I wanna do is I wanna create
+ And then what I want to do is I want to create
  two P transistors, so the A and the B.
- And so I'm gonna drop a little bit of P-dope silicon down.
- I'm gonna give myself plenty of space
+ And so I'm going to drop a little bit of P-dope silicon down.
+ I'm going to give myself plenty of space
  and make these plenty long.
  Okay.
- And then I'm gonna make some transistors there
+ And then I'm going to make some transistors there
  by putting some poly across.
- I'm gonna put it like,
- I'm gonna keep this really tiny for now, okay?
+ I'm going to put it like,
+ I'm going to keep this really tiny for now, okay?
  So there's some poly.
  So there's two transistors.
  So we just made, by crossing the P-dope silicon
  and the poly silicon twice,
  we now have transistors that we can hook A and B up to.
  We'll wire them up later.
- And then what we're gonna do is we're gonna make the output.
+ And then what we're going to do is we're going to make the output.
  I'll just make the output be a horizontal piece
  of metal wire.
  Now I've gotta put some vias in here
@@ -58,7 +58,7 @@
  And then, oops, I need to fix that.
  I need to erase that.
  I need to give myself a little space here.
- So I wanna make some N-dope silicon
+ So I want to make some N-dope silicon
  that kind of comes down from the center wire a little bit.
  And then I am going to make some more N-dope silicon.
  Actually, I don't know if I need to do that.
@@ -66,7 +66,7 @@
  Let me make my N-dope silicon longer.
  And now let's put some polysilicon in
  to make two more transistors.
- So we're gonna put transistor here
+ So we're going to put transistor here
  and then another transistor here.
  So that's two transistors,
  two NMOS transistors that are right there.
@@ -85,10 +85,10 @@
  Let's make a little bit of metal.
  This shouldn't be too hard.
  So let's just say this is our A input
- and then we're gonna hook that to here.
- I wanna make that a little longer.
- So I'm gonna make my pink a little bit longer.
- I'm gonna put A on this one,
+ and then we're going to hook that to here.
+ I want to make that a little longer.
+ So I'm going to make my pink a little bit longer.
+ I'm going to put A on this one,
  which is a little bit different.
  So here's the thing.
  I can paint this pink, so now I have an overlap.
@@ -100,7 +100,7 @@
  Let's mark that as A.
  Okay, and now we've gotta have B.
  B is a little bit trickier.
- Where am I gonna, well, let's start with B, E.
+ Where am I going to, well, let's start with B, E.
  Let's put B in easy.
  Let's make B, B here.
  Okay, so then let's put the contact of B,
@@ -112,16 +112,16 @@
  I could route it up here, and I'll route it over there.
  Or I could route it over here,
  and then route it down to here.
- So I think I'm gonna come through here.
- So you're gonna see something.
- I'm gonna take this polysilicon.
+ So I think I'm going to come through here.
+ So you're going to see something.
+ I'm going to take this polysilicon.
  And in a real circuit, you might find that this is kinda,
  oh, look what I can do.
  Because when I make this polysilicon
  come across the metal right there,
  it's not actually connected.
  And then look, ooh, no, ooh, yikes.
- I gotta erase it 'cause I made a kind of a blob.
+ I gotta erase it because I made a kind of a blob.
  I spilled some, I spilled some polysilicon.
  So now I can actually connect this together.
  Wow, I think that looks pretty easy at this point.
@@ -158,7 +158,7 @@
  So now we have A is zero and B is one
  and the output is one, which is what it's supposed to be
  because it's a NAND gate.
- So I'm gonna go back to putting the probes in.
+ So I'm going to go back to putting the probes in.
  So you notice how I can just kind of overwrite this stuff.
  So there's A and I got the probe B now.
  Now I can actually start the grader.
@@ -187,7 +187,7 @@
  but you gotta give yourself a little space
  as you lay these things out and put them together.
  Now I've built them a few times.
- The first few that you're gonna build
+ The first few that you're going to build
  are going to be a little tricky,
  but it's very satisfying when you get them finished.
  So I hope you enjoyed this walkthrough

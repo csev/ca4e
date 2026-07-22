@@ -1,6 +1,6 @@
 1
 00:00:00,000 --> 00:00:08,560
- hello and welcome to a hardware layout walkthrough for computer architecture for everybody this
+ hello and welcome to a hardware layout walkthrough for Computer Architecture for Everybody this
 
 2
 00:00:08,560 --> 00:00:15,040
@@ -152,7 +152,7 @@
 
 39
 00:03:42,160 --> 00:03:49,920
- I'm gonna I'm gonna start over fresh let me just delete let me delete the transistors so we can
+ I'm going to I'm going to start over fresh let me just delete let me delete the transistors so we can
 
 40
 00:03:49,920 --> 00:03:56,320
@@ -280,5 +280,5 @@
 
 71
 00:07:07,600 --> 00:07:27,360
- CMOS layout editor for computer architecture for everybody cheers
+ CMOS layout editor for Computer Architecture for Everybody cheers
 

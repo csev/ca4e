@@ -8,7 +8,7 @@
 
 3
 00:00:04,640 --> 00:00:07,320
- So there's a lot of things I'm gonna show you.
+ So there's a lot of things I'm going to show you.
 
 4
 00:00:07,320 --> 00:00:08,640
@@ -16,7 +16,7 @@
 
 5
 00:00:08,640 --> 00:00:10,880
- 'cause the real overall theme here is
+ because the real overall theme here is
 
 6
 00:00:10,880 --> 00:00:13,760
@@ -372,7 +372,7 @@
 
 94
 00:04:40,200 --> 00:04:42,120
- It's been replaced by the Hampton calculator,
+ It's been replaced by the hand calculator,
 
 95
 00:04:42,120 --> 00:04:43,400
@@ -588,7 +588,7 @@
 
 148
 00:06:56,920 --> 00:06:59,040
- 'cause the wind is actually not just moving me,
+ because the wind is actually not just moving me,
 
 149
 00:06:59,040 --> 00:07:00,560
@@ -660,7 +660,7 @@
 
 166
 00:07:44,360 --> 00:07:47,160
- so we can calculate how long it's gonna take us
+ so we can calculate how long it's going to take us
 
 167
 00:07:47,160 --> 00:07:48,760
@@ -748,7 +748,7 @@
 
 188
 00:08:42,760 --> 00:08:45,240
- 'cause your plane may speed up or slow down
+ because your plane may speed up or slow down
 
 189
 00:08:45,240 --> 00:08:48,720
@@ -824,7 +824,7 @@
 
 207
 00:09:39,280 --> 00:09:42,200
- 'cause you're like, you know you've gone a certain distance.
+ because you're like, you know you've gone a certain distance.
 
 208
 00:09:42,200 --> 00:09:45,200
@@ -932,7 +932,7 @@
 
 234
 00:10:56,440 --> 00:10:58,200
- We're gonna do a simple calculation
+ We're going to do a simple calculation
 
 235
 00:10:58,200 --> 00:11:02,680
@@ -984,15 +984,15 @@
 
 247
 00:11:31,960 --> 00:11:33,740
- But that's not where we wanna go.
+ But that's not where we want to go.
 
 248
 00:11:33,740 --> 00:11:35,880
- We don't wanna fly to 300.
+ We don't want to fly to 300.
 
 249
 00:11:35,880 --> 00:11:38,200
- We wanna fly to 270.
+ We want to fly to 270.
 
 250
 00:11:38,200 --> 00:11:40,360
@@ -1028,7 +1028,7 @@
 
 258
 00:11:59,260 --> 00:12:03,440
- So we're gonna fly 270 or westerly.
+ So we're going to fly 270 or westerly.
 
 259
 00:12:03,440 --> 00:12:07,320
@@ -1040,7 +1040,7 @@
 
 261
 00:12:10,800 --> 00:12:12,760
- 'cause that's how fast our plane is.
+ because that's how fast our plane is.
 
 262
 00:12:12,760 --> 00:12:17,200
@@ -1060,7 +1060,7 @@
 
 266
 00:12:27,120 --> 00:12:29,540
- it's gonna do 86, 87 knots.
+ it's going to do 86, 87 knots.
 
 267
 00:12:29,540 --> 00:12:33,920
@@ -1156,7 +1156,7 @@
 
 290
 00:13:38,920 --> 00:13:42,440
- Up next, we're gonna talk about digital computing devices.
+ Up next, we're going to talk about digital computing devices.
 
 291
 00:13:42,440 --> 00:13:45,460

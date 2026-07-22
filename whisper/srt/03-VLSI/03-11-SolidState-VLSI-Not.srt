@@ -1,10 +1,10 @@
 1
 00:00:00,000 --> 00:00:05,120
- hello, and welcome to another walkthrough of computer architecture for everybody this is a
+ hello, and welcome to another walkthrough of Computer Architecture for Everybody this is a
 
 2
 00:00:05,120 --> 00:00:10,560
- walkthrough of our VLSI design layout tool, very large scale integration, the tool where we sort of
+ walkthrough of our VLSI design layout tool, Very Large Scale Integration, the tool where we sort of
 
 3
 00:00:10,560 --> 00:00:16,400
@@ -148,11 +148,11 @@
 
 38
 00:03:23,360 --> 00:03:33,440
- being a block to the whole thing okay so if you recall the p-moss is open on ground and closed on
+ being a block to the whole thing okay so if you recall the PMOS is open on ground and closed on
 
 39
 00:03:33,440 --> 00:03:38,400
- positive and the n-moss is the opposite where it is closed on ground and opened on positive so let's
+ positive and the NMOS is the opposite where it is closed on ground and opened on positive so let's
 
 40
 00:03:38,400 --> 00:03:42,560
@@ -160,19 +160,19 @@
 
 41
 00:03:42,560 --> 00:03:49,760
- in operation so i've got voltage on the input and that is causing the upper p-moss transition
+ in operation so i've got voltage on the input and that is causing the upper PMOS transition
 
 42
 00:03:49,760 --> 00:03:53,840
- to block voltage from flowing so voltage would come into the p-moss transistor but not leave
+ to block voltage from flowing so voltage would come into the PMOS transistor but not leave
 
 43
 00:03:53,840 --> 00:03:58,640
- the transistor if we then look at the n-moss transistor in the bottom you see the ground is
+ the transistor if we then look at the NMOS transistor in the bottom you see the ground is
 
 44
 00:03:58,640 --> 00:04:03,840
- flowing up but in this case it's flowing through the n-moss transistor to the output and so the
+ flowing up but in this case it's flowing through the NMOS transistor to the output and so the
 
 45
 00:04:03,840 --> 00:04:10,480
@@ -180,7 +180,7 @@
 
 46
 00:04:10,480 --> 00:04:15,840
- that the p-moss at the top is conducting and the plus is going all the way out to the output oops
+ that the PMOS at the top is conducting and the plus is going all the way out to the output oops
 
 47
 00:04:15,840 --> 00:04:20,640
@@ -232,7 +232,7 @@
 
 59
 00:05:26,160 --> 00:05:36,800
- read circuit and i'm gonna press it and then just stay quiet draw vcc eight one draw probe a at four
+ read circuit and i'm going to press it and then just stay quiet draw vcc eight one draw probe a at four
 
 60
 00:05:36,800 --> 00:05:47,840
@@ -304,5 +304,5 @@
 
 77
 00:08:16,720 --> 00:08:27,840
- interesting this walkthrough on the vlsi design system for computer architecture for everybody
+ interesting this walkthrough on the vlsi design system for Computer Architecture for Everybody
 

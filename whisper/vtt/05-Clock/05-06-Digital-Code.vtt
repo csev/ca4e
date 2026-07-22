@@ -1,7 +1,7 @@
 WEBVTT
 
 00:00:00.000 --> 00:00:02.240
- So we're gonna wrap up this section
+ So we're going to wrap up this section
 
 00:00:02.240 --> 00:00:05.680
  talking a little bit more about what we would do
@@ -43,13 +43,13 @@ WEBVTT
  bits in them like numbers and their temporary storage.
 
 00:00:38.960 --> 00:00:41.160
- And in addition, we're gonna talk a little more now
+ And in addition, we're going to talk a little more now
 
 00:00:41.160 --> 00:00:42.200
  about the logic.
 
 00:00:42.200 --> 00:00:45.120
- Now the load and store, the way we're gonna do it
+ Now the load and store, the way we're going to do it
 
 00:00:45.120 --> 00:00:48.480
  goes to and from registers for like data memory,
@@ -76,7 +76,7 @@ WEBVTT
  it says, oh, the PC tells me where to load it.
 
 00:01:12.260 --> 00:01:14.920
- So I'm gonna load that instruction from the memory
+ So I'm going to load that instruction from the memory
 
 00:01:14.920 --> 00:01:18.120
  into CIR, current instruction register.
@@ -112,7 +112,7 @@ WEBVTT
  to activate the right thing to get the right thing to happen.
 
 00:01:46.200 --> 00:01:48.500
- So maybe we're gonna add two registers together
+ So maybe we're going to add two registers together
 
 00:01:48.500 --> 00:01:52.240
  and store the result in a different register, okay?
@@ -250,7 +250,7 @@ WEBVTT
  I call it the CDC 8512, inspired by my first computer,
 
 00:03:48.080 --> 00:03:51.720
- the Controlled Data Corporation, CDC 6500.
+ the Control Data Corporation, CDC 6500.
 
 00:03:51.720 --> 00:03:53.500
  It'll have a complete architecture.

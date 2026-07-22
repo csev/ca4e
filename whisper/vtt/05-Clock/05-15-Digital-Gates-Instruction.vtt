@@ -1,7 +1,7 @@
 WEBVTT
 
 00:00:00.000 --> 00:00:04.560
- hello and welcome to another walkthrough for computer architecture for everybody so now what
+ hello and welcome to another walkthrough for Computer Architecture for Everybody so now what
 
 00:00:04.560 --> 00:00:12.240
  we're going to do is we're going to do the single instruction CPU and so before we walk through the
@@ -34,7 +34,7 @@ WEBVTT
  based on input from the outside world what did happen there instruction did i type it wrong
 
 00:01:07.600 --> 00:01:15.520
- yeah okay so here we have an instruction this is the the single instruction computer i'm gonna
+ yeah okay so here we have an instruction this is the the single instruction computer i'm going to
 
 00:01:15.520 --> 00:01:23.440
  let's add another output here so we can watch the clock going high and low just so that you can see

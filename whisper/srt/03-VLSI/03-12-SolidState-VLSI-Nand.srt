@@ -1,6 +1,6 @@
 1
 00:00:00,000 --> 00:00:05,580
- - Hello and welcome through another walkthrough for computer architecture for everybody.
+ - Hello and welcome through another walkthrough for Computer Architecture for Everybody.
 
 2
 00:00:05,580 --> 00:00:08,780
@@ -80,7 +80,7 @@
 
 21
 00:00:52,300 --> 00:00:54,820
- So I'm gonna draw this in a little more traditional way
+ So I'm going to draw this in a little more traditional way
 
 22
 00:00:54,820 --> 00:00:56,820
@@ -104,7 +104,7 @@
 
 27
 00:01:07,140 --> 00:01:09,460
- And then what I wanna do is I wanna create
+ And then what I want to do is I want to create
 
 28
 00:01:09,460 --> 00:01:12,820
@@ -112,11 +112,11 @@
 
 29
 00:01:12,820 --> 00:01:16,220
- And so I'm gonna drop a little bit of P-dope silicon down.
+ And so I'm going to drop a little bit of P-dope silicon down.
 
 30
 00:01:16,220 --> 00:01:18,320
- I'm gonna give myself plenty of space
+ I'm going to give myself plenty of space
 
 31
 00:01:18,320 --> 00:01:20,200
@@ -128,7 +128,7 @@
 
 33
 00:01:22,420 --> 00:01:24,460
- And then I'm gonna make some transistors there
+ And then I'm going to make some transistors there
 
 34
 00:01:24,460 --> 00:01:26,380
@@ -136,11 +136,11 @@
 
 35
 00:01:26,380 --> 00:01:27,340
- I'm gonna put it like,
+ I'm going to put it like,
 
 36
 00:01:27,340 --> 00:01:29,620
- I'm gonna keep this really tiny for now, okay?
+ I'm going to keep this really tiny for now, okay?
 
 37
 00:01:29,620 --> 00:01:30,700
@@ -168,7 +168,7 @@
 
 43
 00:01:41,820 --> 00:01:44,220
- And then what we're gonna do is we're gonna make the output.
+ And then what we're going to do is we're going to make the output.
 
 44
 00:01:44,220 --> 00:01:46,980
@@ -240,7 +240,7 @@
 
 61
 00:02:26,020 --> 00:02:27,900
- So I wanna make some N-dope silicon
+ So I want to make some N-dope silicon
 
 62
 00:02:27,900 --> 00:02:30,360
@@ -272,7 +272,7 @@
 
 69
 00:02:46,180 --> 00:02:49,120
- So we're gonna put transistor here
+ So we're going to put transistor here
 
 70
 00:02:49,120 --> 00:02:51,000
@@ -348,19 +348,19 @@
 
 88
 00:03:29,000 --> 00:03:31,920
- and then we're gonna hook that to here.
+ and then we're going to hook that to here.
 
 89
 00:03:31,920 --> 00:03:34,240
- I wanna make that a little longer.
+ I want to make that a little longer.
 
 90
 00:03:34,240 --> 00:03:36,600
- So I'm gonna make my pink a little bit longer.
+ So I'm going to make my pink a little bit longer.
 
 91
 00:03:36,600 --> 00:03:38,120
- I'm gonna put A on this one,
+ I'm going to put A on this one,
 
 92
 00:03:38,120 --> 00:03:39,760
@@ -408,7 +408,7 @@
 
 103
 00:04:03,640 --> 00:04:05,560
- Where am I gonna, well, let's start with B, E.
+ Where am I going to, well, let's start with B, E.
 
 104
 00:04:05,560 --> 00:04:07,020
@@ -456,15 +456,15 @@
 
 115
 00:04:34,660 --> 00:04:36,340
- So I think I'm gonna come through here.
+ So I think I'm going to come through here.
 
 116
 00:04:36,340 --> 00:04:37,600
- So you're gonna see something.
+ So you're going to see something.
 
 117
 00:04:37,600 --> 00:04:39,120
- I'm gonna take this polysilicon.
+ I'm going to take this polysilicon.
 
 118
 00:04:39,120 --> 00:04:41,720
@@ -492,7 +492,7 @@
 
 124
 00:04:50,080 --> 00:04:52,240
- I gotta erase it 'cause I made a kind of a blob.
+ I gotta erase it because I made a kind of a blob.
 
 125
 00:04:52,240 --> 00:04:55,860
@@ -640,7 +640,7 @@
 
 161
 00:06:18,280 --> 00:06:21,260
- So I'm gonna go back to putting the probes in.
+ So I'm going to go back to putting the probes in.
 
 162
 00:06:21,260 --> 00:06:24,520
@@ -756,7 +756,7 @@
 
 190
 00:07:23,880 --> 00:07:25,360
- The first few that you're gonna build
+ The first few that you're going to build
 
 191
 00:07:25,360 --> 00:07:26,600

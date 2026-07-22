@@ -1,4 +1,4 @@
- and welcome to another walkthrough for computer architecture for everybody.
+ and welcome to another walkthrough for Computer Architecture for Everybody.
  In this walkthrough we're going to cover the gates, the gate layout system and the gate simulation system.
  It has an extensive help, probably more than you need if you get stuck or you want to paste some of this stuff into AI and figure out how to use it.
  So I'm just going to walk through the basic features.

@@ -1,7 +1,7 @@
 WEBVTT
 
 00:00:00.000 --> 00:00:06.000
- Hello, and welcome to another walkthrough for computer architecture for everybody.
+ Hello, and welcome to another walkthrough for Computer Architecture for Everybody.
 
 00:00:06.000 --> 00:00:11.680
  In the previous walkthrough, we went through a simple sort of WAT/WASM situation where we're
@@ -16,7 +16,7 @@ WEBVTT
  function in JavaScript. I want to shift gears a little bit, focusing still again on hello world,
 
 00:00:30.960 --> 00:00:36.080
- and show you something for another one of my classes, C programming for everybody,
+ and show you something for another one of my classes, C Programming for Everybody,
 
 00:00:36.080 --> 00:00:41.680
  under the write C option. So in this course, I have a C auto grader. Right now I'm just using
@@ -34,7 +34,7 @@ WEBVTT
  to show you the whole network. What you'll see is this C code is being sent up to the CC4E server
 
 00:01:06.880 --> 00:01:18.320
- using a piece of software called mscriptum, which compiles C code and other things into WASM. Then
+ using a piece of software called Emscripten, which compiles C code and other things into WASM. Then
 
 00:01:20.080 --> 00:01:24.800
  this environment will download the WASM, and I've got it watching for a string WASM in the
@@ -106,10 +106,10 @@ WEBVTT
  kind of an ugly version of it. We can take a look at a little prettier version of it by looking at,
 
 00:03:52.320 --> 00:03:59.920
- not much prettier, we can look at the Watt. And so we're looking at the Watt here. This was written
+ not much prettier, we can look at the WAT. And so we're looking at the WAT here. This was written
 
 00:03:59.920 --> 00:04:05.360
- to be readable. This is the Watt code editor for the hello world. That's a pure WASM JavaScript
+ to be readable. This is the WAT code editor for the hello world. That's a pure WASM JavaScript
 
 00:04:05.360 --> 00:04:11.040
  example and you can kind of read it and you'll change it in your auto grader in a bit. This is
@@ -118,7 +118,7 @@ WEBVTT
  more like what WASM does because it ran the in script and compiler and produced the WASM. And
 
 00:04:17.120 --> 00:04:23.120
- then I converted the WASM to Watt so that we could see it. And we're not going to change this. There's
+ then I converted the WASM to WAT so that we could see it. And we're not going to change this. There's
 
 00:04:23.120 --> 00:04:28.560
  all kinds of stuff. FD write, FD close, FD seek. That's part of the standard library. And you see
@@ -133,10 +133,10 @@ WEBVTT
  to a loop. There's a block. There's some blocks. There's some loops and jumps and all kinds of
 
 00:04:50.400 --> 00:04:59.520
- stuff. This is the output of a compiler that is writing to a pseudo machine language in Watt. So
+ stuff. This is the output of a compiler that is writing to a pseudo machine language in WAT. So
 
 00:04:59.520 --> 00:05:09.840
- I'll just scroll through this. That is a lot of Watt. And it's not very easy to see. But
+ I'll just scroll through this. That is a lot of WAT. And it's not very easy to see. But
 
 00:05:09.840 --> 00:05:18.640
  it's pretty yummy and delicious to the runtime environment in JavaScript who has built an
@@ -148,22 +148,22 @@ WEBVTT
  interpreter. So the key thing is that I'm not going to spend a lot of time having you kind
 
 00:05:31.760 --> 00:05:37.760
- of learn to code Watt. It's not intended for you to code it. It's intended for compilers to produce
+ of learn to code WAT. It's not intended for you to code it. It's intended for compilers to produce
 
 00:05:37.760 --> 00:05:43.680
  it. So just imagine that this C program that we're writing is really like a high performance,
 
 00:05:43.680 --> 00:05:51.760
- maybe a video game shading library or something that would get compiled into Wasm, which would
+ maybe a video game shading library or something that would get compiled into WASM, which would
 
 00:05:51.760 --> 00:05:58.240
- be super high performant. And then that Wasm might be recompiled into raw machine language
+ be super high performant. And then that WASM might be recompiled into raw machine language
 
 00:05:58.240 --> 00:06:04.080
  by my browser. And then it'd be like super fast in the browser. And that's the whole,
 
 00:06:04.080 --> 00:06:08.000
- that's literally the whole point of Wasm. The Wasm is to make it so you can write
+ that's literally the whole point of WASM. The WASM is to make it so you can write
 
 00:06:08.880 --> 00:06:14.560
  approaching machine code speed code in a portable, safe, sandboxed way,
@@ -178,7 +178,7 @@ WEBVTT
  because they're all running in individualized sandboxes. Okay. So I hope that was a bit
 
 00:06:32.320 --> 00:06:38.720
- interesting about how we connect C programming and Wasm and how I use it in my C programming
+ interesting about how we connect C programming and WASM and how I use it in my C programming
 
 00:06:38.720 --> 00:06:48.560
  for everybody course. Cheers.

@@ -14,7 +14,7 @@
  of a running version of this computer at the Living Computer Museum in Seattle,
  Washington that sadly is now closed after Paul Allen passed away. But I have a video that I
  will share with you that is a video of a running CDC 6500 from a couple of years ago. I further was
- lucky to meet an important influencer in the CDC 6500 history, Nicholas Werth, and he invented
+ lucky to meet an important influencer in the CDC 6500 history, Niklaus Wirth, and he invented
  Pascal. I used Pascal. I supported the Pascal compiler. It was a really important part of my
  own sort of education was to build compilers. And so I'm going to show you an artifact from
  that time period. So this is from-- I don't know if you can see it. Let's see if you can see it

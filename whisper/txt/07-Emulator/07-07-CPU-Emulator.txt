@@ -10,9 +10,9 @@
  we can also look at the emulator code itself and i've got in the upper corner
  a url that is the actual machine code emulator that's running when you're
  doing your assignments or just playing with it
- so if you go look at that it's javascript and you've learned javascript
+ so if you go look at that it's JavaScript and you've learned JavaScript
  and it has to run in the browser so i have implemented
- a 6502 instruction set in javascript in a browser the core of this is a
+ a 6502 instruction set in JavaScript in a browser the core of this is a
  function called execute step which should be called like fetch execute
  cycle because what it really does is it's going to run one instruction so
  which instruction is it going to run well you can see in that first
@@ -77,7 +77,7 @@
  probably be three or four times larger maybe five
  thousand lines of code that's not a lot of code the interesting
  thing is that most modern processors on phones and computers
- are so fast that even if we're writing something in javascript
+ are so fast that even if we're writing something in JavaScript
  that's emulating historical machine code it can do that
  far faster than the original hardware so if you build an emulator for a 6502
  and you want to do one megahertz well you probably will have to slow it down
@@ -102,16 +102,16 @@
  you can see what's going on as the game is being loaded
  it's looking at the files it's the the machine code for the game and it's
  running it in the browser using a piece of software
- written in wasm now it's not written in javascript it's written in wasm what is
- wasm wasm is web assembly so i built a machine language emulator
- in javascript that you are using but there is a low level high
+ written in wasm now it's not written in JavaScript it's written in wasm what is
+ wasm wasm is WebAssembly so i built a machine language emulator
+ in JavaScript that you are using but there is a low level high
  performance machine language emulator built into web browsers
- recent web browsers called web assembly so web assembly is a machine code that
+ recent web browsers called WebAssembly so WebAssembly is a machine code that
  is not intended to be built in hardware but intended to be
  emulated very very rapidly by hardware so for a wide range of software you can
  do surprisingly complex things and then compile them to wasm download
  them into a browser and run them in a browser with a little
- javascript library that provides things like file opening etc etc
+ JavaScript library that provides things like file opening etc etc
  now i want to show you a bit of wasm it's got a little bit different syntax
  than most assembly languages but it still is a very succinct one-to-one
  correspondence to binary machine code i will also show you in the c programming
@@ -121,7 +121,7 @@
  browser so you can't run an infinite loop in my c
  programming for everybody course and break my server you can write an
  infinite loop and break your browser but that is your browser so let's take a
- little bit of a look at web assembly wasm is a little bit different so you
+ little bit of a look at WebAssembly wasm is a little bit different so you
  don't see for example an accumulator it actually has a stack and it has
  operands on the stack and it you put operands on the stack
  and then you operate on the operands of the stack and they replace things on the

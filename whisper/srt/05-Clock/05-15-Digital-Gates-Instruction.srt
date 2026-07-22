@@ -1,6 +1,6 @@
 1
 00:00:00,000 --> 00:00:04,560
- hello and welcome to another walkthrough for computer architecture for everybody so now what
+ hello and welcome to another walkthrough for Computer Architecture for Everybody so now what
 
 2
 00:00:04,560 --> 00:00:12,240
@@ -44,7 +44,7 @@
 
 12
 00:01:07,600 --> 00:01:15,520
- yeah okay so here we have an instruction this is the the single instruction computer i'm gonna
+ yeah okay so here we have an instruction this is the the single instruction computer i'm going to
 
 13
 00:01:15,520 --> 00:01:23,440
