@@ -58,9 +58,7 @@ try {
         }
     }
 
-    $wat2wasmPath = '/opt/homebrew/bin/wat2wasm';
-    
-    if (empty($wat2wasmPath)) {
+    if ($wat2wasmPath === '') {
         throw new Exception('wat2wasm command not found. Please install WebAssembly Binary Toolkit (wabt).');
     }
     
@@ -112,4 +110,3 @@ try {
     header('Content-Type: text/plain');
     echo "Compilation error: " . $e->getMessage();
 }
-?> 
